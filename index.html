@@ -8080,20 +8080,7 @@ function onSvgNodeClick(stageId) {
 // ──────────────────────────────────────────────────────────────────
 
 // Decisions that are NOT backed by a dropdown live here as state.
-const DECISION_STATE = {
-  shape:     'fullstack',
-  ide:       'snyk',
-  precommit: 'precommit',
-  localsecret:'gitleaks',
-  build:     'auto',
-  cd:        'argocd',
-  baseimage: 'distroless',
-  sbom:      'syft',
-  scanner:   'trivy',
-  signing:   'cosign',
-  cloud:     'aws',
-  promotion: 'canary'
-};
+const DECISION_STATE = {};
 // Track which decisions the reader has actively visited.
 const DECISION_VISITED = new Set();
 
@@ -8720,9 +8707,8 @@ function decisionOptions(id) {
   return (def.options || []).map(o => ({...o, tier:'production'}));
 }
 function decisionIsCustom(id) {
-  const def = DECISION_DEFS[id];
-  if (!def) return false;
-  return decisionRead(id) !== def.defaultVal;
+  if (!DECISION_DEFS[id]) return false;
+  return DECISION_VISITED.has(id);
 }
 // Tiles to render depend on Service shape — Mobile reader skips container tiles, etc.
 function decisionAppliesToShape(id) {
@@ -8863,25 +8849,38 @@ function renderDecisionMap() {
   const {custom, total} = decisionCounters();
   const ready = (custom >= total) && (total > 0);
 
+  const shapeChosen = DECISION_VISITED.has('shape');
+
   // Render each step as a horizontal band, then each row inside as full-width.
   const stepBlocks = DECISION_STEPS.map(step => {
+    const isShapeStep = step.tiles.includes('shape');
+    // Gate: hide all non-shape steps until shape is chosen
+    if (!isShapeStep && !shapeChosen) return '';
     const tiles = step.tiles.filter(decisionAppliesToShape);
     if (tiles.length === 0) return '';
+    const customCount = tiles.filter(id => id !== 'shape' && decisionIsCustom(id)).length;
+    const totalCount  = tiles.filter(id => id !== 'shape').length;
     const rowsHtml = tiles.map(id => id === 'shape' ? renderShapePicker() : renderDecisionRow(id)).join('');
+    const stepDone = isShapeStep ? shapeChosen : (customCount === totalCount && totalCount > 0);
+    const stepBadgeBg = stepDone ? '#d1fae5' : 'var(--accent)';
+    const stepBadgeColor = stepDone ? '#065f46' : 'white';
+    const stepLabel = isShapeStep
+      ? (shapeChosen ? '✅ Service shape' : 'Step 0 — Start here')
+      : step.label;
+    const countBadge = isShapeStep ? '' : `<span style="font-size:11px;color:${customCount===totalCount?'#1a7f37':'var(--muted)'};margin-left:auto">${customCount} / ${totalCount} picked</span>`;
     return `
-      <section class="dec-step" data-step="${step.step}" style="margin-bottom:18px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#fafbfc">
+      <section class="dec-step" data-step="${step.step}" style="margin-bottom:18px;padding:10px 12px;border:1px solid ${stepDone?'#d1fae5':'var(--border)'};border-radius:10px;background:#fafbfc;transition:border-color .2s">
         <header style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:14px;background:var(--accent);color:white;letter-spacing:.04em">STEP ${step.step}</span>
-          <span style="font-size:13.5px;font-weight:700;color:var(--text)">${step.label}</span>
-          <span style="font-size:11px;color:var(--muted);margin-left:auto">${tiles.filter(decisionIsCustom).length} / ${tiles.length} rows customized</span>
+          <span style="font-size:13.5px;font-weight:700;color:var(--text)">${stepLabel}</span>
+          ${countBadge}
         </header>
         ${rowsHtml}
       </section>`;
   }).join('');
 
   const finalCta = ready
-    ? `<button onclick="downloadAllFiles()" style="background:#1a7f37;color:white;border:none;padding:11px 20px;border-radius:6px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(26,127,55,.3)">⬇ Download all config files →</button>`
-    : `<button disabled title="Customize every row above to unlock" style="background:#e6eaef;color:#9ca3af;border:none;padding:11px 20px;border-radius:6px;font-size:13.5px;font-weight:700;cursor:not-allowed;font-family:inherit">⬇ Files unlock at ${total}/${total}</button>`;
+    ? `<button onclick="downloadAllFiles()" style="background:#1a7f37;color:white;border:none;padding:11px 20px;border-radius:6px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(26,127,55,.3)">⬇ Export all config files →</button>`
+    : `<button disabled title="Pick every row above to unlock" style="background:#e6eaef;color:#9ca3af;border:none;padding:11px 20px;border-radius:6px;font-size:13.5px;font-weight:700;cursor:not-allowed;font-family:inherit">Complete all ${total} decisions to export</button>`;
 
   wrap.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
@@ -8890,8 +8889,8 @@ function renderDecisionMap() {
         <div style="font-size:11.5px;color:var(--muted)">Walk top to bottom. Every row shows every option. Click any pill to pick. Greyed pills are incompatible with prior picks.</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:11.5px;color:var(--text-sec)"><b>${custom}</b> of ${total} customized</span>
-        <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:14px;background:${ready?'#dafbe1':'#fff8c5'};color:${ready?'#1a7f37':'#9a6700'};letter-spacing:.05em">${ready?'READY':'IN PROGRESS'}</span>
+        ${shapeChosen ? `<span style="font-size:11.5px;color:var(--text-sec)"><b>${custom}</b> of ${total} picked</span>` : `<span style="font-size:11.5px;color:var(--muted)">Pick a service shape to begin</span>`}
+        ${shapeChosen ? `<span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:14px;background:${ready?'#dafbe1':'#fff8c5'};color:${ready?'#1a7f37':'#9a6700'};letter-spacing:.05em">${ready?'READY':'IN PROGRESS'}</span>` : ''}
       </div>
     </div>
     ${stepBlocks}
@@ -8902,7 +8901,7 @@ function renderShapePicker() {
   const currentShape = decisionRead('shape');
   const currentFe = decisionRead('fe');
   const currentBe = decisionRead('be');
-  const isSet = decisionIsCustom('shape') || SHAPE_PICKER_STATE.subtype;
+  const isSet = DECISION_VISITED.has('shape');
 
   const catKey = SHAPE_PICKER_STATE.category;
   const subtypeKey = SHAPE_PICKER_STATE.subtype;
@@ -8964,7 +8963,7 @@ function renderShapePicker() {
     : 'Pick a service type to begin';
 
   return `
-    <div class="dec-row" data-decision="shape" style="background:white;border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:8px">
+    <div class="dec-row" data-decision="shape" style="background:white;border:1px solid ${isSet?'#d1fae5':'var(--border)'};border-radius:8px;padding:14px;margin-bottom:8px;transition:border-color .2s">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <span style="font-size:14px">🎯</span>
         <span style="font-size:12.5px;font-weight:700;color:var(--text)">Service shape</span>
@@ -8979,11 +8978,6 @@ function renderShapePicker() {
 
 function pickShapeCategory(catKey) {
   SHAPE_PICKER_STATE = { category: catKey, subtype: null };
-  const cat = SHAPE_TAXONOMY[catKey];
-  if (cat) {
-    const firstSubtype = Object.values(cat.subtypes)[0];
-    if (firstSubtype) decisionWrite('shape', firstSubtype.shapeVal);
-  }
   renderDecisionMap();
 }
 
@@ -8992,7 +8986,6 @@ function pickShapeSubtype(subtypeKey) {
   for (const [catKey, cat] of Object.entries(SHAPE_TAXONOMY)) {
     if (cat.subtypes[subtypeKey]) {
       SHAPE_PICKER_STATE.category = catKey;
-      decisionWrite('shape', cat.subtypes[subtypeKey].shapeVal);
       break;
     }
   }
@@ -9018,11 +9011,12 @@ function renderDecisionRow(id) {
   if (!def) return '';
   const opts = decisionOptions(id);
   const current = decisionRead(id);
-  const isCustom = decisionIsCustom(id);
+  const hasExplicitPick = DECISION_VISITED.has(id);
+  const isCustom = hasExplicitPick;
   const rowIcon = isCustom ? '✅' : '⚪';
 
   const pillsHtml = opts.map(o => {
-    const isPicked = o.value === current;
+    const isPicked = hasExplicitPick && (o.value === current);
     const incompat = isOptionIncompatible(id, o.value);
     const tierBadge = (id === 'fe' || id === 'be') && o.tier === 'coming-soon' ? ' ⏳' : '';
     const baseStyle = isPicked
@@ -9036,7 +9030,7 @@ function renderDecisionRow(id) {
     return `
       <button class="dec-pill" data-decision="${id}" data-value="${o.value}" ${onClick}
               title="${title.replace(/"/g,'&quot;')}"
-              style="${baseStyle};border-radius:18px;padding:5px 12px;font-size:11.5px;font-family:inherit;line-height:1.3;white-space:nowrap;transition:transform .1s">
+              style="${baseStyle};border-radius:18px;padding:5px 12px;font-size:11.5px;font-family:inherit;line-height:1.3;white-space:nowrap;transition:all .12s">
         ${prefix}${o.label}${tierBadge}
       </button>`;
   }).join(' ');
@@ -9044,15 +9038,17 @@ function renderDecisionRow(id) {
   const knowledgePanel = buildKnowledgePanel(id);
 
   return `
-    <div class="dec-row" data-decision="${id}" style="background:white;border:1px solid var(--border);border-radius:8px;padding:11px 14px;margin-bottom:8px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
+    <div class="dec-row" data-decision="${id}" style="background:white;border:1px solid ${isCustom ? '#d1fae5' : 'var(--border)'};border-radius:8px;padding:11px 14px;margin-bottom:8px;transition:border-color .2s">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:2px">
         <span style="font-size:14px">${def.icon}</span>
         <span style="font-size:12.5px;font-weight:700;color:var(--text)">${def.label}</span>
-        <span style="font-size:11.5px;color:var(--muted);flex:1">${def.concept}</span>
-        <button onclick="toggleKnowledge('${id}')" style="background:transparent;border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit;flex-shrink:0" title="Why this matters">▸ Why</button>
-        <span style="font-size:13px">${rowIcon}</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <button onclick="toggleKnowledge('${id}')" style="background:transparent;border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit" title="Why this matters">▸ Why</button>
+          <span style="font-size:13px">${rowIcon}</span>
+        </div>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px">${pillsHtml}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:7px;padding-left:22px;line-height:1.4">${def.concept}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${pillsHtml}</div>
       <div id="knowledge-${id}" style="display:none;margin-top:10px;padding:10px 12px;background:#f8fafc;border:1px solid var(--border-subtle);border-radius:6px;font-size:12px;line-height:1.6">
         ${knowledgePanel}
       </div>
@@ -9162,7 +9158,8 @@ function buildKnowledgePanel(id) {
   }
 
   if (parts.length === 0) {
-    parts.push(`<div style="color:var(--muted)">Select a ${(DECISION_DEFS[id]||{}).label||id} above to see details.</div>`);
+    const label = (DECISION_DEFS[id]||{}).label || id;
+    parts.push(`<div style="color:var(--muted);font-size:11.5px">No additional context available for <b>${label}</b>. Pick an option above to configure it.</div>`);
   }
 
   return parts.join('');
