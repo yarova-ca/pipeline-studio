@@ -412,6 +412,22 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 .ds-cta-btn-active:hover{background:#15622b;transform:translateY(-1px)}
 .ds-cta-btn-locked{display:inline-flex;align-items:center;gap:8px;background:var(--border);color:var(--muted);border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;cursor:not-allowed;font-family:inherit}
 .ds-cta-sub{font-size:11.5px;color:var(--muted);margin-top:8px}
+
+/* Step nav (sticky inside decision studio) */
+#ds-step-nav{position:sticky;top:88px;z-index:35;background:white;border-bottom:1px solid var(--border);padding:8px 32px;margin:-24px -32px 20px;display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,.06);scrollbar-width:none}
+#ds-step-nav::-webkit-scrollbar{display:none}
+.ds-nav-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:500;color:var(--muted);background:var(--surface);border:1.5px solid var(--border);cursor:pointer;font-family:inherit;white-space:nowrap;transition:border-color .15s,color .15s,background .15s;flex-shrink:0}
+.ds-nav-chip:hover{border-color:var(--accent);color:var(--accent);background:rgba(9,105,218,.05)}
+.ds-nav-chip.is-active{border-color:var(--accent);color:var(--accent);background:rgba(9,105,218,.08);font-weight:700}
+.ds-nav-chip.is-done{border-color:#82e59d;color:var(--success);background:#f0fdf4}
+.ds-nav-chip.is-done.is-active{background:#dafbe1}
+.ds-nav-count{font-size:10px;padding:0 5px;border-radius:10px;line-height:1.7;background:rgba(0,0,0,.06);border:1px solid transparent}
+.ds-nav-chip.is-done .ds-nav-count{background:#dafbe1;border-color:#82e59d;color:var(--success)}
+
+/* Next-step nudge banner */
+.ds-next-nudge{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:8px}
+.ds-next-btn{background:transparent;border:1.5px solid var(--accent);color:var(--accent);border-radius:6px;padding:5px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .12s,color .12s}
+.ds-next-btn:hover{background:var(--accent);color:white}
 </style>
 </head>
 <body>
@@ -8162,15 +8178,15 @@ const DECISION_STATE = {};
 const DECISION_VISITED = new Set();
 
 const DECISION_STEPS = [
-  {step:0, label:'Service shape',     tiles:['shape']},
-  {step:1, label:'Local — Developer', tiles:['ide','precommit','localsecret']},
-  {step:2, label:'Service code',      tiles:['fe','be','build','pkg']},
-  {step:3, label:'Pipeline',          tiles:['ci','reg','cd']},
-  {step:4, label:'Security',          tiles:['baseimage','sbom','scanner','signing']},
-  {step:5, label:'Deploy',            tiles:['cloud','promotion']},
-  {step:6, label:'AI / ML specific',  tiles:['mlframework','inferenceruntime','modelregistry','gpubaseimage']},
-  {step:7, label:'Infra specific',    tiles:['infratooltype','infradistribution']},
-  {step:8, label:'Compliance',        tiles:['industry','compliance']}
+  {step:0, icon:'🎯', label:'Service shape',  tiles:['shape']},
+  {step:1, icon:'🛠️', label:'Local dev',       tiles:['ide','precommit','localsecret']},
+  {step:2, icon:'📦', label:'Build tools',     tiles:['fe','be','build','pkg']},
+  {step:3, icon:'🚀', label:'Pipeline',        tiles:['ci','reg','cd']},
+  {step:4, icon:'🔒', label:'Security',        tiles:['baseimage','sbom','scanner','signing']},
+  {step:5, icon:'☁️', label:'Deploy',          tiles:['cloud','promotion']},
+  {step:6, icon:'🤖', label:'AI / ML',         tiles:['mlframework','inferenceruntime','modelregistry','gpubaseimage']},
+  {step:7, icon:'🔧', label:'Infra',           tiles:['infratooltype','infradistribution']},
+  {step:8, icon:'📋', label:'Compliance',      tiles:['industry','compliance']}
 ];
 
 const DECISION_DEFS = {
@@ -8791,6 +8807,8 @@ function decisionIsCustom(id) {
 function decisionAppliesToShape(id) {
   const shape = decisionRead('shape');
   if (id === 'shape') return true;
+  // fe and be are set by the shape picker — never shown as separate decision rows
+  if (id === 'fe' || id === 'be') return false;
 
   // AI/ML shape — show ML-specific rows, hide container deploy rows
   if (shape === 'aiml') {
@@ -8916,6 +8934,28 @@ function isOptionIncompatible(decisionId, optionValue) {
   return false;
 }
 
+function scrollToStep(stepNum) {
+  const el = document.querySelector(`.ds-step[data-step="${stepNum}"]`);
+  if (!el) return;
+  // 88px = config-bar (~46px) + tab-bar (~40px) + step-nav (~42px)
+  const top = el.getBoundingClientRect().top + window.scrollY - 138;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
+let _stepObs = null;
+function initStepObserver() {
+  if (_stepObs) _stepObs.disconnect();
+  _stepObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const chip = document.querySelector(`#ds-step-nav .ds-nav-chip[data-step="${e.target.dataset.step}"]`);
+      if (!chip) return;
+      if (e.isIntersecting) chip.classList.add('is-active');
+      else chip.classList.remove('is-active');
+    });
+  }, { rootMargin: '-8% 0px -60% 0px', threshold: 0 });
+  document.querySelectorAll('.ds-step[data-step]').forEach(el => _stepObs.observe(el));
+}
+
 // ── Renderer — top-to-bottom row spine ─────────────────────────
 // Inline row renderer — every decision is its own row.
 // Every option shown as a clickable pill. Picked option is filled.
@@ -8929,35 +8969,54 @@ function renderDecisionMap() {
   const shapeChosen = DECISION_VISITED.has('shape');
 
   // Render each step section
-  const stepBlocks = DECISION_STEPS.map(step => {
+  // Build step data once — reused by both nav and step sections
+  const stepData = DECISION_STEPS.map(step => {
     const isShapeStep = step.tiles.includes('shape');
-    if (!isShapeStep && !shapeChosen) return '';
     const tiles = step.tiles.filter(decisionAppliesToShape);
-    if (tiles.length === 0) return '';
-    const nonShapeTiles = tiles.filter(id => id !== 'shape');
-    const customCount = nonShapeTiles.filter(decisionIsCustom).length;
-    const totalCount  = nonShapeTiles.length;
-    const stepDone    = isShapeStep ? shapeChosen : (totalCount > 0 && customCount === totalCount);
-    const rowsHtml    = tiles.map(id => id === 'shape' ? renderShapePicker() : renderDecisionRow(id)).join('');
-    const animClass   = isShapeStep ? '' : ' ds-step-animate';
-    const stepLabel   = isShapeStep
+    const nonShape = tiles.filter(id => id !== 'shape');
+    const customCount = nonShape.filter(decisionIsCustom).length;
+    const totalCount  = nonShape.length;
+    const done = isShapeStep ? shapeChosen : (totalCount > 0 && customCount === totalCount);
+    const visible = isShapeStep || (shapeChosen && tiles.length > 0);
+    return { ...step, isShapeStep, tiles, nonShape, customCount, totalCount, done, visible };
+  });
+
+  // ── Step nav ──────────────────────────────────────────────────
+  const navChips = stepData.filter(s => s.visible).map(s => {
+    const cls = `ds-nav-chip${s.done?' is-done':''}`;
+    const badge = s.isShapeStep ? (s.done ? '✅' : '') :
+      s.totalCount > 0 ? `<span class="ds-nav-count">${s.customCount}/${s.totalCount}</span>` : '';
+    return `<button class="${cls}" data-step="${s.step}" onclick="scrollToStep(${s.step})">${s.icon} ${s.label} ${badge}</button>`;
+  }).join('');
+  const stepNav = shapeChosen ? `<div id="ds-step-nav">${navChips}</div>` : '';
+
+  // ── Step sections ─────────────────────────────────────────────
+  const stepBlocks = stepData.filter(s => s.visible).map(s => {
+    const rowsHtml = s.tiles.map(id => id === 'shape' ? renderShapePicker() : renderDecisionRow(id)).join('');
+    const animCls  = s.isShapeStep ? '' : ' ds-step-animate';
+    const labelTxt = s.isShapeStep
       ? (shapeChosen ? '✅ Service shape' : '— Start here — pick your service shape')
-      : step.label;
-    const countSpan   = isShapeStep || totalCount === 0 ? '' :
-      `<span class="${stepDone?'ds-step-count-done':'ds-step-count-pending'}">${customCount} / ${totalCount}</span>`;
-    return `
-      <div class="ds-step${animClass}" data-step="${step.step}">
-        <div class="ds-step-label">${stepLabel}${countSpan}</div>
-        ${rowsHtml}
+      : `${s.icon} ${s.label}`;
+    const countSpan = s.isShapeStep || s.totalCount === 0 ? '' :
+      `<span class="${s.done?'ds-step-count-done':'ds-step-count-pending'}">${s.customCount} / ${s.totalCount}</span>`;
+    // "Next" nudge: appears when ALL rows in this step are done (and it's not the last step)
+    const nextStep = stepData.find(x => x.step > s.step && x.visible);
+    const nudge = (!s.isShapeStep && s.done && nextStep && !stepData.find(x=>x.step===nextStep.step)?.done)
+      ? `<div class="ds-next-nudge"><button class="ds-next-btn" onclick="scrollToStep(${nextStep.step})">Next: ${nextStep.icon} ${nextStep.label} →</button></div>`
+      : '';
+    return `<div class="ds-step${animCls}" data-step="${s.step}">
+        <div class="ds-step-label">${labelTxt}${countSpan}</div>
+        ${rowsHtml}${nudge}
       </div>`;
   }).join('');
 
+  // ── CTA ───────────────────────────────────────────────────────
   const ctaBtn = ready
     ? `<button class="ds-cta-btn-active" onclick="downloadAllFiles()">⬇ Export all config files</button>`
     : `<button class="ds-cta-btn-locked" disabled>⬇ Export config files</button>`;
   const ctaSub = ready
-    ? `<div class="ds-cta-sub">All ${total} decisions made. Your pipeline config is ready.</div>`
-    : `<div class="ds-cta-sub">${shapeChosen ? `${custom} of ${total} decisions made — complete all to export.` : 'Pick a service shape above to begin.'}</div>`;
+    ? `<div class="ds-cta-sub">All ${total} decisions made — your pipeline config is ready.</div>`
+    : `<div class="ds-cta-sub">${shapeChosen ? `${custom} of ${total} decisions made.` : 'Pick a service shape above to begin.'}</div>`;
 
   const badgeCls = !shapeChosen ? 'ds-badge ds-badge-start' : ready ? 'ds-badge ds-badge-ready' : 'ds-badge ds-badge-progress';
   const badgeTxt = !shapeChosen ? 'Start here' : ready ? 'Ready' : 'In progress';
@@ -8969,15 +9028,19 @@ function renderDecisionMap() {
     <div class="ds-header">
       <div>
         <div class="ds-header-title">Pipeline Configurator</div>
-        <div class="ds-header-sub">Walk top to bottom. Click any pill to pick. Green border = done. Greyed pills = incompatible with prior picks.</div>
+        <div class="ds-header-sub">Pick your service shape, then walk each section. Click any pill to pick. Green border = done. Greyed pills are incompatible.</div>
       </div>
       <div class="ds-header-right">
         ${counterHtml}
         <span class="${badgeCls}">${badgeTxt}</span>
       </div>
     </div>
+    ${stepNav}
     ${stepBlocks}
     <div class="ds-cta">${ctaBtn}${ctaSub}</div>`;
+
+  // Set up IntersectionObserver after DOM is painted
+  setTimeout(initStepObserver, 50);
 }
 
 function renderShapePicker() {
