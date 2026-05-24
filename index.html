@@ -335,6 +335,83 @@ body.print-mode .tab-content { display:block !important }
 body.print-mode .tab-bar { display:none }
 body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-overlay { display:none !important }
 .phase-lbl{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+
+/* ══════════════════════════════════════
+   DECISION STUDIO
+   ══════════════════════════════════════ */
+#decision-map{padding:24px 32px 48px}
+.ds-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap}
+.ds-header-title{font-size:19px;font-weight:700;color:var(--text);line-height:1.2}
+.ds-header-sub{font-size:12.5px;color:var(--muted);margin-top:4px;max-width:440px;line-height:1.5}
+.ds-header-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ds-counter{font-size:12px;color:var(--text-sec)}
+.ds-counter b{color:var(--text)}
+.ds-badge{font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.04em;text-transform:uppercase}
+.ds-badge-start{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+.ds-badge-progress{background:#fff8c5;color:#9a6700}
+.ds-badge-ready{background:#dafbe1;color:#1a7f37}
+
+/* Step sections */
+.ds-step{margin-bottom:28px}
+.ds-step-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;padding:0 2px}
+.ds-step-count-done{color:var(--success);font-weight:600;font-size:10px}
+.ds-step-count-pending{color:var(--muted);font-size:10px}
+
+/* Decision rows */
+@keyframes ds-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ds-step-animate{animation:ds-in .25s ease both}
+.ds-row{background:white;border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;margin-bottom:8px;transition:border-color .18s,box-shadow .18s}
+.ds-row.picked{border-color:#82e59d;box-shadow:0 1px 4px rgba(26,127,55,.08)}
+.ds-row-hdr{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.ds-row-icon{font-size:15px;flex-shrink:0}
+.ds-row-label{font-size:13px;font-weight:600;color:var(--text)}
+.ds-row-meta{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.ds-why-btn{background:transparent;border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit;transition:background .12s,color .12s,border-color .12s}
+.ds-why-btn:hover{background:var(--surface);color:var(--text-sec);border-color:var(--text-sec)}
+.ds-status{font-size:13px;line-height:1}
+.ds-concept{font-size:12px;color:var(--muted);margin-bottom:10px;padding-left:23px;line-height:1.5}
+
+/* Pills */
+.ds-pills{display:flex;gap:7px;flex-wrap:wrap}
+.ds-pill{border-radius:20px;padding:5px 14px;font-size:12px;font-family:inherit;line-height:1.3;white-space:nowrap;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--text-sec);font-weight:500;transition:background .12s,color .12s,border-color .12s,box-shadow .12s}
+.ds-pill:hover:not(.incompat):not(.active){border-color:var(--accent);color:var(--accent);background:rgba(9,105,218,.05);box-shadow:0 0 0 3px rgba(9,105,218,.08)}
+.ds-pill.active{background:var(--accent);color:white;border-color:var(--accent);font-weight:600;box-shadow:0 2px 8px rgba(9,105,218,.22)}
+.ds-pill.incompat{background:var(--surface);color:#c0c4cc;border-color:#e5e7eb;cursor:not-allowed;opacity:.55}
+
+/* Knowledge panel */
+.ds-knowledge{display:none;margin-top:12px;padding:12px 14px;background:#f8fafc;border:1px solid var(--border-subtle);border-radius:7px;font-size:12px;line-height:1.65}
+
+/* Shape picker */
+.ds-cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+@media(max-width:1100px){.ds-cat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.ds-cat-grid{grid-template-columns:repeat(2,1fr)}}
+.ds-cat-btn{display:flex;flex-direction:column;align-items:center;padding:14px 10px;border:2px solid var(--border);border-radius:10px;background:white;cursor:pointer;font-family:inherit;text-align:center;transition:border-color .15s,background .15s,box-shadow .15s,transform .12s;min-height:92px;justify-content:center}
+.ds-cat-btn:hover{border-color:var(--accent);background:#f0f9ff;transform:translateY(-2px);box-shadow:0 4px 12px rgba(9,105,218,.1)}
+.ds-cat-btn.selected{border-color:var(--accent);background:#f0f9ff;box-shadow:0 0 0 3px rgba(9,105,218,.1)}
+.ds-cat-icon{font-size:22px;margin-bottom:5px}
+.ds-cat-label{font-size:12px;font-weight:700;color:var(--text)}
+.ds-cat-desc{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+.ds-level-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:14px 0 8px}
+.ds-subtype-grid{display:flex;gap:8px;flex-wrap:wrap}
+.ds-subtype-btn{flex:1;min-width:148px;max-width:240px;padding:10px 14px;border:2px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-family:inherit;text-align:left;transition:border-color .15s,background .15s}
+.ds-subtype-btn:hover{border-color:var(--accent);background:#f0f9ff}
+.ds-subtype-btn.selected{border-color:var(--accent);background:#f0f9ff}
+.ds-subtype-label{font-size:13px;font-weight:700;color:var(--text)}
+.ds-subtype-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3}
+.ds-fw-grid{display:flex;gap:8px;flex-wrap:wrap}
+.ds-fw-btn{padding:8px 16px;border:2px solid var(--border);border-radius:8px;background:white;color:var(--text);cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:500;transition:border-color .15s,background .15s,color .15s,transform .1s;text-align:left;line-height:1.35}
+.ds-fw-btn:hover{border-color:var(--accent);background:#f0f9ff;color:var(--accent);transform:translateY(-1px)}
+.ds-fw-btn.selected{border-color:var(--accent);background:var(--accent);color:white;font-weight:700}
+.ds-fw-name{font-weight:600}
+.ds-fw-desc{font-size:10.5px;opacity:.8;margin-top:2px}
+.ds-shape-done{display:flex;align-items:center;gap:8px;margin-top:14px;padding:10px 14px;background:#dafbe1;border:1px solid #82e59d;border-radius:8px;font-size:12.5px;color:var(--success);font-weight:600}
+
+/* CTA */
+.ds-cta{margin-top:32px;padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-align:center}
+.ds-cta-btn-active{display:inline-flex;align-items:center;gap:8px;background:var(--success);color:white;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(26,127,55,.28);transition:background .15s,transform .1s}
+.ds-cta-btn-active:hover{background:#15622b;transform:translateY(-1px)}
+.ds-cta-btn-locked{display:inline-flex;align-items:center;gap:8px;background:var(--border);color:var(--muted);border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;cursor:not-allowed;font-family:inherit}
+.ds-cta-sub{font-size:11.5px;color:var(--muted);margin-top:8px}
 </style>
 </head>
 <body>
@@ -8851,128 +8928,121 @@ function renderDecisionMap() {
 
   const shapeChosen = DECISION_VISITED.has('shape');
 
-  // Render each step as a horizontal band, then each row inside as full-width.
+  // Render each step section
   const stepBlocks = DECISION_STEPS.map(step => {
     const isShapeStep = step.tiles.includes('shape');
-    // Gate: hide all non-shape steps until shape is chosen
     if (!isShapeStep && !shapeChosen) return '';
     const tiles = step.tiles.filter(decisionAppliesToShape);
     if (tiles.length === 0) return '';
-    const customCount = tiles.filter(id => id !== 'shape' && decisionIsCustom(id)).length;
-    const totalCount  = tiles.filter(id => id !== 'shape').length;
-    const rowsHtml = tiles.map(id => id === 'shape' ? renderShapePicker() : renderDecisionRow(id)).join('');
-    const stepDone = isShapeStep ? shapeChosen : (customCount === totalCount && totalCount > 0);
-    const stepBadgeBg = stepDone ? '#d1fae5' : 'var(--accent)';
-    const stepBadgeColor = stepDone ? '#065f46' : 'white';
-    const stepLabel = isShapeStep
-      ? (shapeChosen ? '✅ Service shape' : 'Step 0 — Start here')
+    const nonShapeTiles = tiles.filter(id => id !== 'shape');
+    const customCount = nonShapeTiles.filter(decisionIsCustom).length;
+    const totalCount  = nonShapeTiles.length;
+    const stepDone    = isShapeStep ? shapeChosen : (totalCount > 0 && customCount === totalCount);
+    const rowsHtml    = tiles.map(id => id === 'shape' ? renderShapePicker() : renderDecisionRow(id)).join('');
+    const animClass   = isShapeStep ? '' : ' ds-step-animate';
+    const stepLabel   = isShapeStep
+      ? (shapeChosen ? '✅ Service shape' : '— Start here — pick your service shape')
       : step.label;
-    const countBadge = isShapeStep ? '' : `<span style="font-size:11px;color:${customCount===totalCount?'#1a7f37':'var(--muted)'};margin-left:auto">${customCount} / ${totalCount} picked</span>`;
+    const countSpan   = isShapeStep || totalCount === 0 ? '' :
+      `<span class="${stepDone?'ds-step-count-done':'ds-step-count-pending'}">${customCount} / ${totalCount}</span>`;
     return `
-      <section class="dec-step" data-step="${step.step}" style="margin-bottom:18px;padding:10px 12px;border:1px solid ${stepDone?'#d1fae5':'var(--border)'};border-radius:10px;background:#fafbfc;transition:border-color .2s">
-        <header style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <span style="font-size:13.5px;font-weight:700;color:var(--text)">${stepLabel}</span>
-          ${countBadge}
-        </header>
+      <div class="ds-step${animClass}" data-step="${step.step}">
+        <div class="ds-step-label">${stepLabel}${countSpan}</div>
         ${rowsHtml}
-      </section>`;
+      </div>`;
   }).join('');
 
-  const finalCta = ready
-    ? `<button onclick="downloadAllFiles()" style="background:#1a7f37;color:white;border:none;padding:11px 20px;border-radius:6px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(26,127,55,.3)">⬇ Export all config files →</button>`
-    : `<button disabled title="Pick every row above to unlock" style="background:#e6eaef;color:#9ca3af;border:none;padding:11px 20px;border-radius:6px;font-size:13.5px;font-weight:700;cursor:not-allowed;font-family:inherit">Complete all ${total} decisions to export</button>`;
+  const ctaBtn = ready
+    ? `<button class="ds-cta-btn-active" onclick="downloadAllFiles()">⬇ Export all config files</button>`
+    : `<button class="ds-cta-btn-locked" disabled>⬇ Export config files</button>`;
+  const ctaSub = ready
+    ? `<div class="ds-cta-sub">All ${total} decisions made. Your pipeline config is ready.</div>`
+    : `<div class="ds-cta-sub">${shapeChosen ? `${custom} of ${total} decisions made — complete all to export.` : 'Pick a service shape above to begin.'}</div>`;
+
+  const badgeCls = !shapeChosen ? 'ds-badge ds-badge-start' : ready ? 'ds-badge ds-badge-ready' : 'ds-badge ds-badge-progress';
+  const badgeTxt = !shapeChosen ? 'Start here' : ready ? 'Ready' : 'In progress';
+  const counterHtml = shapeChosen
+    ? `<div class="ds-counter"><b>${custom}</b> of ${total} picked</div>`
+    : `<div class="ds-counter" style="color:var(--muted)">Pick a service shape to begin</div>`;
 
   wrap.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+    <div class="ds-header">
       <div>
-        <div style="font-size:16px;font-weight:700;color:var(--text)">Pipeline Setup — ${total} decisions</div>
-        <div style="font-size:11.5px;color:var(--muted)">Walk top to bottom. Every row shows every option. Click any pill to pick. Greyed pills are incompatible with prior picks.</div>
+        <div class="ds-header-title">Pipeline Configurator</div>
+        <div class="ds-header-sub">Walk top to bottom. Click any pill to pick. Green border = done. Greyed pills = incompatible with prior picks.</div>
       </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        ${shapeChosen ? `<span style="font-size:11.5px;color:var(--text-sec)"><b>${custom}</b> of ${total} picked</span>` : `<span style="font-size:11.5px;color:var(--muted)">Pick a service shape to begin</span>`}
-        ${shapeChosen ? `<span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:14px;background:${ready?'#dafbe1':'#fff8c5'};color:${ready?'#1a7f37':'#9a6700'};letter-spacing:.05em">${ready?'READY':'IN PROGRESS'}</span>` : ''}
+      <div class="ds-header-right">
+        ${counterHtml}
+        <span class="${badgeCls}">${badgeTxt}</span>
       </div>
     </div>
     ${stepBlocks}
-    <div style="text-align:right;margin-top:14px">${finalCta}</div>`;
+    <div class="ds-cta">${ctaBtn}${ctaSub}</div>`;
 }
 
 function renderShapePicker() {
-  const currentShape = decisionRead('shape');
-  const currentFe = decisionRead('fe');
-  const currentBe = decisionRead('be');
   const isSet = DECISION_VISITED.has('shape');
-
   const catKey = SHAPE_PICKER_STATE.category;
   const subtypeKey = SHAPE_PICKER_STATE.subtype;
+  const pickedFw = SHAPE_PICKER_STATE.framework || null;
 
   const catBoxes = Object.entries(SHAPE_TAXONOMY).map(([key, cat]) => {
-    const isSelected = catKey === key;
-    return `
-      <button onclick="pickShapeCategory('${key}')"
-        style="flex:1;min-width:120px;max-width:200px;padding:12px 10px;border:2px solid ${isSelected?'var(--accent)':'var(--border)'};border-radius:8px;background:${isSelected?'#f0f9ff':'white'};cursor:pointer;font-family:inherit;text-align:center;transition:border-color .15s">
-        <div style="font-size:22px;margin-bottom:4px">${cat.icon}</div>
-        <div style="font-size:12px;font-weight:700;color:${isSelected?'var(--accent)':'var(--text)'}">${cat.label}</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.3">${cat.desc}</div>
-      </button>`;
+    const sel = catKey === key;
+    return `<button class="ds-cat-btn${sel?' selected':''}" onclick="pickShapeCategory('${key}')">
+      <div class="ds-cat-icon">${cat.icon}</div>
+      <div class="ds-cat-label">${cat.label}</div>
+      <div class="ds-cat-desc">${cat.desc}</div>
+    </button>`;
   }).join('');
 
   let subtypeHtml = '';
   if (catKey && SHAPE_TAXONOMY[catKey]) {
     const cat = SHAPE_TAXONOMY[catKey];
     const stBoxes = Object.entries(cat.subtypes).map(([key, st]) => {
-      const isSelected = subtypeKey === key;
-      return `
-        <button onclick="pickShapeSubtype('${key}')"
-          style="flex:1;min-width:140px;padding:10px 12px;border:2px solid ${isSelected?'var(--accent)':'var(--border)'};border-radius:6px;background:${isSelected?'#f0f9ff':'white'};cursor:pointer;font-family:inherit;text-align:left;transition:border-color .15s">
-          <div style="font-size:12.5px;font-weight:700;color:${isSelected?'var(--accent)':'var(--text)'}">${st.label}</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3">${st.desc}</div>
-        </button>`;
+      const sel = subtypeKey === key;
+      return `<button class="ds-subtype-btn${sel?' selected':''}" onclick="pickShapeSubtype('${key}')">
+        <div class="ds-subtype-label">${st.label}</div>
+        <div class="ds-subtype-desc">${st.desc}</div>
+      </button>`;
     }).join('');
-    subtypeHtml = `
-      <div style="margin-top:10px;padding:10px 0 0">
-        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">${cat.label} — pick type</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">${stBoxes}</div>
-      </div>`;
+    subtypeHtml = `<div class="ds-level-label">${cat.label} — pick type</div>
+      <div class="ds-subtype-grid">${stBoxes}</div>`;
   }
 
   let frameworkHtml = '';
-  if (catKey && subtypeKey && SHAPE_TAXONOMY[catKey] && SHAPE_TAXONOMY[catKey].subtypes[subtypeKey]) {
+  if (catKey && subtypeKey && SHAPE_TAXONOMY[catKey]?.subtypes[subtypeKey]) {
     const st = SHAPE_TAXONOMY[catKey].subtypes[subtypeKey];
-    const fwButtons = st.frameworks.map(fw => {
-      const isCurrent = (fw.feOrBe === 'fe' && currentFe === fw.value) ||
-                        (fw.feOrBe === 'be' && currentBe === fw.value) ||
-                        (currentShape === st.shapeVal && fw.feOrBe === 'none');
-      return `
-        <button onclick="pickShapeFramework('${fw.value}','${fw.feOrBe}','${st.shapeVal}')"
-          style="padding:8px 14px;border:2px solid ${isCurrent?'var(--accent)':'var(--border)'};border-radius:6px;background:${isCurrent?'var(--accent)':'white'};color:${isCurrent?'white':'var(--text)'};cursor:pointer;font-family:inherit;font-size:12px;font-weight:${isCurrent?'700':'400'};transition:all .15s;text-align:left">
-          <div style="font-weight:${isCurrent?'700':'600'}">${fw.label}</div>
-          <div style="font-size:10.5px;color:${isCurrent?'rgba(255,255,255,.85)':'var(--muted)'};margin-top:2px">${fw.desc}</div>
-        </button>`;
+    const fwBtns = st.frameworks.map(fw => {
+      const sel = pickedFw === fw.value;
+      return `<button class="ds-fw-btn${sel?' selected':''}" onclick="pickShapeFramework('${fw.value}','${fw.feOrBe}','${st.shapeVal}')">
+        <div class="ds-fw-name">${fw.label}</div>
+        <div class="ds-fw-desc">${fw.desc}</div>
+      </button>`;
     }).join('');
-    frameworkHtml = `
-      <div style="margin-top:10px;padding:10px 0 0">
-        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Framework — pick one</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">${fwButtons}</div>
-      </div>`;
+    frameworkHtml = `<div class="ds-level-label">Framework — pick one</div>
+      <div class="ds-fw-grid">${fwBtns}</div>`;
   }
 
-  const rowIcon = isSet ? '✅' : '⚪';
-  const currentDesc = catKey && subtypeKey
-    ? `${(SHAPE_TAXONOMY[catKey]||{}).icon || ''} ${(SHAPE_TAXONOMY[catKey]||{}).label || ''} › ${((SHAPE_TAXONOMY[catKey]||{}).subtypes||{})[subtypeKey]?.label || ''}`
-    : 'Pick a service type to begin';
+  const doneBanner = isSet ? `
+    <div class="ds-shape-done">
+      ✅ &nbsp; ${(SHAPE_TAXONOMY[catKey]||{}).icon||''} ${(SHAPE_TAXONOMY[catKey]||{}).label||''} › ${(SHAPE_TAXONOMY[catKey]?.subtypes[subtypeKey]||{}).label||''} › <b>${SHAPE_PICKER_STATE.frameworkLabel||''}</b>
+      &nbsp;—&nbsp; <span style="font-weight:400;opacity:.8">change above to reconfigure</span>
+    </div>` : '';
 
   return `
-    <div class="dec-row" data-decision="shape" style="background:white;border:1px solid ${isSet?'#d1fae5':'var(--border)'};border-radius:8px;padding:14px;margin-bottom:8px;transition:border-color .2s">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <span style="font-size:14px">🎯</span>
-        <span style="font-size:12.5px;font-weight:700;color:var(--text)">Service shape</span>
-        <span style="font-size:11.5px;color:var(--muted);flex:1">${currentDesc}</span>
-        <span style="font-size:13px">${rowIcon}</span>
+    <div class="ds-row${isSet?' picked':''}" data-decision="shape">
+      <div class="ds-row-hdr">
+        <span class="ds-row-icon">🎯</span>
+        <span class="ds-row-label">Service shape</span>
+        <div class="ds-row-meta">
+          <span class="ds-status">${isSet?'✅':'⚪'}</span>
+        </div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">${catBoxes}</div>
+      <div class="ds-concept">What are you building? Drives which pipeline rows appear.</div>
+      <div class="ds-cat-grid">${catBoxes}</div>
       ${subtypeHtml}
       ${frameworkHtml}
+      ${doneBanner}
     </div>`;
 }
 
@@ -8993,14 +9063,28 @@ function pickShapeSubtype(subtypeKey) {
 }
 
 function pickShapeFramework(fwValue, feOrBe, shapeVal) {
-  decisionWrite('shape', shapeVal);
+  // Write shape to state and mark visited
+  DECISION_STATE['shape'] = shapeVal;
+  DECISION_VISITED.add('shape');
+  // Write fe/be to select elements only — do NOT add to DECISION_VISITED
+  // (shape picker is the fe/be choice; user can still override in the fe/be rows)
   if (feOrBe === 'fe') {
-    decisionWrite('fe', fwValue);
-    decisionWrite('be', 'none');
+    const feEl = document.getElementById('sel-frontend');
+    if (feEl) feEl.value = fwValue;
+    const beEl = document.getElementById('sel-backend');
+    if (beEl) beEl.value = 'none';
   } else if (feOrBe === 'be') {
-    decisionWrite('be', fwValue);
-    decisionWrite('fe', 'none');
+    const beEl = document.getElementById('sel-backend');
+    if (beEl) beEl.value = fwValue;
+    const feEl = document.getElementById('sel-frontend');
+    if (feEl) feEl.value = 'none';
   }
+  // Track the picked framework label for the done banner
+  SHAPE_PICKER_STATE.framework = fwValue;
+  const cat = SHAPE_TAXONOMY[SHAPE_PICKER_STATE.category];
+  const st = cat?.subtypes[SHAPE_PICKER_STATE.subtype];
+  const fw = st?.frameworks.find(f => f.value === fwValue);
+  SHAPE_PICKER_STATE.frameworkLabel = fw?.label || fwValue;
   renderDecisionMap();
   renderMasterSVG();
   onConfigChange();
@@ -9012,57 +9096,47 @@ function renderDecisionRow(id) {
   const opts = decisionOptions(id);
   const current = decisionRead(id);
   const hasExplicitPick = DECISION_VISITED.has(id);
-  const isCustom = hasExplicitPick;
-  const rowIcon = isCustom ? '✅' : '⚪';
+  const rowIcon = hasExplicitPick ? '✅' : '⚪';
 
   const pillsHtml = opts.map(o => {
     const isPicked = hasExplicitPick && (o.value === current);
     const incompat = isOptionIncompatible(id, o.value);
     const tierBadge = (id === 'fe' || id === 'be') && o.tier === 'coming-soon' ? ' ⏳' : '';
-    const baseStyle = isPicked
-      ? 'background:var(--accent);color:white;border:1.5px solid var(--accent);font-weight:600'
-      : incompat
-        ? 'background:#f3f4f6;color:#9ca3af;border:1.5px solid #e5e7eb;cursor:not-allowed;opacity:.55'
-        : 'background:white;color:var(--text);border:1.5px solid var(--border);cursor:pointer';
+    const cls = isPicked ? 'ds-pill active' : incompat ? 'ds-pill incompat' : 'ds-pill';
     const onClick = incompat ? '' : `onclick="pickDecision('${id}','${o.value}')"`;
     const title = (incompat ? '⊘ Not compatible with your current picks. ' : '') + (o.desc || '');
     const prefix = incompat ? '⊘ ' : '';
-    return `
-      <button class="dec-pill" data-decision="${id}" data-value="${o.value}" ${onClick}
-              title="${title.replace(/"/g,'&quot;')}"
-              style="${baseStyle};border-radius:18px;padding:5px 12px;font-size:11.5px;font-family:inherit;line-height:1.3;white-space:nowrap;transition:all .12s">
-        ${prefix}${o.label}${tierBadge}
-      </button>`;
-  }).join(' ');
+    return `<button class="${cls}" data-decision="${id}" data-value="${o.value}" ${onClick}
+              title="${title.replace(/"/g,'&quot;')}">${prefix}${o.label}${tierBadge}</button>`;
+  }).join('');
 
   const knowledgePanel = buildKnowledgePanel(id);
 
   return `
-    <div class="dec-row" data-decision="${id}" style="background:white;border:1px solid ${isCustom ? '#d1fae5' : 'var(--border)'};border-radius:8px;padding:11px 14px;margin-bottom:8px;transition:border-color .2s">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:2px">
-        <span style="font-size:14px">${def.icon}</span>
-        <span style="font-size:12.5px;font-weight:700;color:var(--text)">${def.label}</span>
-        <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0">
-          <button onclick="toggleKnowledge('${id}')" style="background:transparent;border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit" title="Why this matters">▸ Why</button>
-          <span style="font-size:13px">${rowIcon}</span>
+    <div class="ds-row${hasExplicitPick ? ' picked' : ''}" data-decision="${id}">
+      <div class="ds-row-hdr">
+        <span class="ds-row-icon">${def.icon}</span>
+        <span class="ds-row-label">${def.label}</span>
+        <div class="ds-row-meta">
+          <button class="ds-why-btn" onclick="toggleKnowledge('${id}')" title="Why this matters">▸ Why</button>
+          <span class="ds-status">${rowIcon}</span>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:7px;padding-left:22px;line-height:1.4">${def.concept}</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">${pillsHtml}</div>
-      <div id="knowledge-${id}" style="display:none;margin-top:10px;padding:10px 12px;background:#f8fafc;border:1px solid var(--border-subtle);border-radius:6px;font-size:12px;line-height:1.6">
-        ${knowledgePanel}
-      </div>
+      <div class="ds-concept">${def.concept}</div>
+      <div class="ds-pills">${pillsHtml}</div>
+      <div id="knowledge-${id}" class="ds-knowledge">${knowledgePanel}</div>
     </div>`;
 }
 
 function toggleKnowledge(id) {
   const el = document.getElementById('knowledge-' + id);
   if (!el) return;
-  el.style.display = el.style.display === 'none' ? 'block' : 'none';
-  const row = document.querySelector(`.dec-row[data-decision="${id}"]`);
+  const open = el.style.display !== 'block';
+  el.style.display = open ? 'block' : 'none';
+  const row = document.querySelector(`.ds-row[data-decision="${id}"]`);
   if (row) {
-    const why = row.querySelector('button[title="Why this matters"]');
-    if (why) why.textContent = el.style.display === 'none' ? '▸ Why' : '▾ Why';
+    const why = row.querySelector('.ds-why-btn');
+    if (why) why.textContent = open ? '▾ Why' : '▸ Why';
   }
 }
 
