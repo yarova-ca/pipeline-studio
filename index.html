@@ -352,14 +352,22 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 .ds-badge-ready{background:#dafbe1;color:#1a7f37}
 
 /* Step sections */
-.ds-step{margin-bottom:28px}
-.ds-step-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;padding:0 2px}
+.ds-step{margin-bottom:12px}
+.ds-step-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;padding:0 2px}
 .ds-step-count-done{color:var(--success);font-weight:600;font-size:10px}
 .ds-step-count-pending{color:var(--muted);font-size:10px}
+/* Accordion states */
+.ds-step-collapsed{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:6px;transition:background .15s,border-color .15s}
+.ds-step-collapsed:hover{background:#f0f9ff;border-color:var(--accent)}
+.ds-step-collapsed .ds-step-label{margin-bottom:0;font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--text)}
+.ds-step-summary{font-size:11px;font-weight:400;color:var(--muted);text-overflow:ellipsis;overflow:hidden;white-space:nowrap;max-width:380px;margin-left:6px}
+.ds-step-locked{background:#fafbfc;border:1.5px dashed #e2e5ea;border-radius:10px;padding:10px 14px;margin-bottom:6px;pointer-events:none}
+.ds-step-label-locked{font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;margin-bottom:0;display:flex;align-items:center;gap:6px}
+.ds-nav-chip.is-active-step{background:var(--accent);color:white;border-color:var(--accent)}
 
 /* Decision rows */
 @keyframes ds-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.ds-step-animate{animation:ds-in .25s ease both}
+.ds-step-animate{animation:ds-in .25s ease both;margin-bottom:20px;padding:16px;background:white;border:1.5px solid var(--accent);border-radius:12px;box-shadow:0 2px 12px rgba(9,105,218,.08)}
 .ds-row{background:white;border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;margin-bottom:8px;transition:border-color .18s,box-shadow .18s}
 .ds-row.picked{border-color:#82e59d;box-shadow:0 1px 4px rgba(26,127,55,.08)}
 .ds-row-hdr{display:flex;align-items:center;gap:8px;margin-bottom:4px}
@@ -848,6 +856,9 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
     <div id="decision-map"></div>
   </section>
 
+  <!-- ── Phase context banner — appears after shape pick ── -->
+  <div id="phase-context-bar" style="display:none;padding:8px 32px;background:#f0f9ff;border-bottom:1px solid #d0e8ff;font-size:12px;color:var(--text-sec)"></div>
+
   <!-- ── Decision picker modal — opens when reader clicks any decision node. ── -->
   <div id="decision-picker-modal" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:215;align-items:center;justify-content:center;padding:24px" onclick="if(event.target===this)closeDecisionPicker()">
     <div style="background:white;border-radius:12px;width:min(640px,96vw);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 32px 70px rgba(0,0,0,.4)">
@@ -878,6 +889,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       <span><span style="display:inline-block;width:10px;height:10px;background:var(--ph-g-bg);border:1px solid var(--ph-g-br);vertical-align:middle"></span> Gate (sign/test/verify)</span>
       <span><span style="display:inline-block;width:10px;height:10px;background:var(--ph-o-bg);border:1px solid var(--ph-o-br);vertical-align:middle"></span> Ship/Promote</span>
       <span><span style="display:inline-block;width:10px;height:10px;background:var(--ph-v-bg);border:1px solid var(--ph-v-br);vertical-align:middle"></span> Runtime/Verify</span>
+      <span><span style="display:inline-block;width:8px;height:8px;background:#2da44e;border-radius:50%;vertical-align:middle"></span> Decision made</span>
       <span style="margin-left:auto" title="Stages that must pass for a signed, deployable production image. Any failure here = no release.">Red border = critical path · <span style="color:var(--text-sec)">sign → SLSA → notify → promote → verify</span></span>
     </div>
   </section>
@@ -1088,6 +1100,13 @@ helm install trivy-operator aqua/trivy-operator \
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Self-Test — page consistency report</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Runs in your browser on load. Every check is binary. Green = pass, red = fail.</p>
     <div id="selftest-results"></div>
+  </div>
+
+  <!-- ── Maintain tab — product knowledge state for maintainers ── -->
+  <div id="tab-maintain" class="tab-content">
+    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Maintain — product knowledge state</h2>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">For contributors and maintainers. Shows coverage gaps, coming-soon status, and knowledge freshness.</p>
+    <div id="maintain-content"></div>
   </div>
 
 </main>
@@ -8120,22 +8139,66 @@ function buildMasterSVG() {
     'p4':     'cd'
   };
 
+  // Decision → node mapping: when a decision is visited, these nodes glow green.
+  const DECISION_NODE_MAP = {
+    ide:              ['l1'],
+    precommit:        ['l2'],
+    localsecret:      ['l4'],
+    build:            ['s6pr', 's6main'],
+    pkg:              ['s6pr', 's6main'],
+    ci:               ['s1', 's0'],
+    reg:              ['s6main', 's13'],
+    cd:               ['p1', 'p2', 'p3', 'p4'],
+    baseimage:        ['s6pr', 's6main'],
+    sbom:             ['s8apr', 's8a'],
+    scanner:          ['s7pr', 's7main', 'r2'],
+    signing:          ['s8b', 's14', 'r1'],
+    cloud:            ['p1'],
+    promotion:        ['p2', 'p3', 'p4'],
+    industry:         ['s8b', 's10', 'r1', 'r2'],
+    compliance:       ['s8b', 's10', 'r1'],
+    mlframework:      ['s6pr', 's6main'],
+    inferenceruntime: ['p1'],
+    modelregistry:    ['s6main', 's13'],
+    gpubaseimage:     ['s6pr', 's6main'],
+    infratooltype:    ['s6pr', 's6main'],
+    infradistribution:['s13']
+  };
+
+  // Build the set of node ids touched by visited decisions
+  const decidedNodeIds = new Set(
+    Object.entries(DECISION_NODE_MAP)
+      .filter(([decId]) => DECISION_VISITED.has(decId))
+      .flatMap(([, nodeIds]) => nodeIds)
+  );
+
   // Nodes — hover boost, sub-text right-aligned, critical = bold red border.
   const nodes = Object.values(nodePos).map(n => {
-    const critStroke = n.critical ? '#cf222e' : n.stroke;
-    const critWidth  = n.critical ? '2.5' : '1';
+    const decisionActive = decidedNodeIds.has(n.id);
+    // Critical path red overrides green ring. Green ring added for decided nodes.
+    const critStroke = n.critical ? '#cf222e' : (decisionActive ? '#2da44e' : n.stroke);
+    const critWidth  = n.critical ? '2.5' : (decisionActive ? '2.2' : '1');
+    // Lighten fill slightly when a decision covers this node
+    const nodeFill = decisionActive && !n.critical
+      ? (n.fill === '#f1f3f5' ? '#eafbef' : n.fill.replace('f0','e8').replace('f4','ea') || n.fill)
+      : n.fill;
     const subX = n.x + NODE_W - 8;
     // Tool sub-label: show current decision pick for key nodes
     const toolDecId = TOOL_SUBLABEL_MAP[n.id];
     const toolLabel = toolDecId ? decisionCurrentLabel(toolDecId) : null;
     const toolSubY = n.y + NODE_H - 5;
+    // Green dot indicator for decided nodes (small circle top-right)
+    const decDot = decisionActive
+      ? `<circle cx="${n.x + NODE_W - 6}" cy="${n.y + 6}" r="4" fill="#2da44e"/>`
+      : '';
     return `
       <g class="msvg-node" data-id="${n.id}" style="cursor:pointer" onclick="onSvgNodeClick('${n.id}')">
-        <rect x="${n.x}" y="${n.y}" width="${NODE_W}" height="${NODE_H}" rx="5" fill="${n.fill}" stroke="${critStroke}" stroke-width="${critWidth}"/>
+        <rect x="${n.x}" y="${n.y}" width="${NODE_W}" height="${NODE_H}" rx="5" fill="${nodeFill}" stroke="${critStroke}" stroke-width="${critWidth}"/>
+        ${decDot}
         <text x="${n.x + 10}" y="${n.y + 23}" font-family="'Inter',sans-serif" font-size="11" font-weight="600" fill="#1a1e23">${n.label}</text>
         ${n.sub ? `<text x="${subX}" y="${n.y + 23}" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="9" fill="#57606a">${n.sub}</text>` : ''}
         ${toolLabel ? `<text x="${n.x + NODE_W/2}" y="${toolSubY}" text-anchor="middle" font-family="'Inter',sans-serif" font-size="8.5" fill="#0969da" font-style="italic">${toolLabel}</text>` : ''}
-        <title>${n.label}${n.sub ? ' · ' + n.sub : ''}${toolLabel ? ' · ' + toolLabel : ''}${n.critical ? ' (critical path)' : ''}</title>
+        <title>${n.label}${n.sub ? ' · ' + n.sub : ''}${toolLabel ? ' · ' + toolLabel : ''}${decisionActive ? ' ✓ decision made' : ''}${n.critical ? ' (critical path)' : ''}</title>
       </g>`;
   }).join('');
 
@@ -8176,6 +8239,8 @@ function onSvgNodeClick(stageId) {
 const DECISION_STATE = {};
 // Track which decisions the reader has actively visited.
 const DECISION_VISITED = new Set();
+// Which step is currently active in the accordion (0 = shape picker).
+let ACTIVE_STEP = 0;
 
 const DECISION_STEPS = [
   {step:0, icon:'🎯', label:'Service shape',  tiles:['shape']},
@@ -8956,20 +9021,17 @@ function initStepObserver() {
   document.querySelectorAll('.ds-step[data-step]').forEach(el => _stepObs.observe(el));
 }
 
-// ── Renderer — top-to-bottom row spine ─────────────────────────
-// Inline row renderer — every decision is its own row.
-// Every option shown as a clickable pill. Picked option is filled.
-// Incompatible options greyed with ⊘ and disabled.
+// ── Renderer — accordion step-by-step spine ────────────────────
+// One step active at a time. Completed steps collapse to a summary.
+// Future steps show a locked header. Nav chips let user jump back.
 function renderDecisionMap() {
   const wrap = document.getElementById('decision-map');
   if (!wrap) return;
   const {custom, total} = decisionCounters();
   const ready = (custom >= total) && (total > 0);
-
   const shapeChosen = DECISION_VISITED.has('shape');
 
-  // Render each step section
-  // Build step data once — reused by both nav and step sections
+  // Build step metadata
   const stepData = DECISION_STEPS.map(step => {
     const isShapeStep = step.tiles.includes('shape');
     const tiles = step.tiles.filter(decisionAppliesToShape);
@@ -8981,30 +9043,80 @@ function renderDecisionMap() {
     return { ...step, isShapeStep, tiles, nonShape, customCount, totalCount, done, visible };
   });
 
+  const visibleSteps = stepData.filter(s => s.visible);
+
+  // Clamp ACTIVE_STEP to visible range
+  const maxVisible = visibleSteps.length > 0 ? visibleSteps[visibleSteps.length - 1].step : 0;
+  if (ACTIVE_STEP > maxVisible) ACTIVE_STEP = maxVisible;
+
   // ── Step nav ──────────────────────────────────────────────────
-  const navChips = stepData.filter(s => s.visible).map(s => {
-    const cls = `ds-nav-chip${s.done?' is-done':''}`;
+  const navChips = visibleSteps.map(s => {
+    const isActive = s.step === ACTIVE_STEP;
+    const cls = `ds-nav-chip${s.done ? ' is-done' : ''}${isActive ? ' is-active-step' : ''}`;
     const badge = s.isShapeStep ? (s.done ? '✅' : '') :
       s.totalCount > 0 ? `<span class="ds-nav-count">${s.customCount}/${s.totalCount}</span>` : '';
-    return `<button class="${cls}" data-step="${s.step}" onclick="scrollToStep(${s.step})">${s.icon} ${s.label} ${badge}</button>`;
+    return `<button class="${cls}" data-step="${s.step}"
+      onclick="ACTIVE_STEP=${s.step};renderDecisionMap();scrollToStep(${s.step})"
+    >${s.icon} ${s.label} ${badge}</button>`;
   }).join('');
   const stepNav = shapeChosen ? `<div id="ds-step-nav">${navChips}</div>` : '';
 
-  // ── Step sections ─────────────────────────────────────────────
-  const stepBlocks = stepData.filter(s => s.visible).map(s => {
+  // ── Step sections — accordion ─────────────────────────────────
+  const stepBlocks = visibleSteps.map(s => {
+    const isActive  = s.step === ACTIVE_STEP;
+    const isCollapsed = !s.isShapeStep && s.step < ACTIVE_STEP;
+    const isLocked  = !s.isShapeStep && s.step > ACTIVE_STEP;
+
+    if (isLocked) {
+      // Future step: dim header only, not interactive
+      return `<div class="ds-step ds-step-locked" data-step="${s.step}">
+        <div class="ds-step-label ds-step-label-locked">
+          <span style="opacity:.4">🔒</span>
+          <span style="opacity:.45;margin-left:6px">${s.icon} ${s.label}</span>
+          ${s.totalCount > 0 ? `<span class="ds-step-count-pending" style="opacity:.4;margin-left:auto">${s.customCount} / ${s.totalCount}</span>` : ''}
+        </div>
+      </div>`;
+    }
+
+    if (isCollapsed) {
+      // Past step: collapsed summary — click to re-open
+      const pickedLabels = s.nonShape
+        .filter(id => DECISION_VISITED.has(id))
+        .map(id => decisionCurrentLabel(id))
+        .filter(Boolean)
+        .join(' · ');
+      const summaryText = pickedLabels || 'No picks yet';
+      return `<div class="ds-step ds-step-collapsed" data-step="${s.step}"
+          onclick="ACTIVE_STEP=${s.step};renderDecisionMap();scrollToStep(${s.step})" style="cursor:pointer">
+          <div class="ds-step-label">
+            ${s.done ? '✅' : s.icon} ${s.label}
+            <span class="ds-step-summary">${summaryText}</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--muted)">▸ edit</span>
+          </div>
+        </div>`;
+    }
+
+    // Active step: fully expanded
     const rowsHtml = s.tiles.map(id => id === 'shape' ? renderShapePicker() : renderDecisionRow(id)).join('');
-    const animCls  = s.isShapeStep ? '' : ' ds-step-animate';
     const labelTxt = s.isShapeStep
       ? (shapeChosen ? '✅ Service shape' : '— Start here — pick your service shape')
       : `${s.icon} ${s.label}`;
     const countSpan = s.isShapeStep || s.totalCount === 0 ? '' :
-      `<span class="${s.done?'ds-step-count-done':'ds-step-count-pending'}">${s.customCount} / ${s.totalCount}</span>`;
-    // "Next" nudge: appears when ALL rows in this step are done (and it's not the last step)
-    const nextStep = stepData.find(x => x.step > s.step && x.visible);
-    const nudge = (!s.isShapeStep && s.done && nextStep && !stepData.find(x=>x.step===nextStep.step)?.done)
-      ? `<div class="ds-next-nudge"><button class="ds-next-btn" onclick="scrollToStep(${nextStep.step})">Next: ${nextStep.icon} ${nextStep.label} →</button></div>`
-      : '';
-    return `<div class="ds-step${animCls}" data-step="${s.step}">
+      `<span class="${s.done ? 'ds-step-count-done' : 'ds-step-count-pending'}">${s.customCount} / ${s.totalCount}</span>`;
+
+    // "Next" button: always available, advances accordion
+    const nextStep = visibleSteps.find(x => x.step > s.step);
+    let nudge = '';
+    if (!s.isShapeStep && nextStep) {
+      const allDone = s.totalCount > 0 && s.customCount === s.totalCount;
+      nudge = `<div class="ds-next-nudge">
+        <button class="ds-next-btn" onclick="ACTIVE_STEP=${nextStep.step};renderDecisionMap();scrollToStep(${nextStep.step})">
+          ${allDone ? '✅ All set —' : ''} Next: ${nextStep.icon} ${nextStep.label} →
+        </button>
+      </div>`;
+    }
+
+    return `<div class="ds-step ds-step-animate" data-step="${s.step}">
         <div class="ds-step-label">${labelTxt}${countSpan}</div>
         ${rowsHtml}${nudge}
       </div>`;
@@ -9016,7 +9128,7 @@ function renderDecisionMap() {
     : `<button class="ds-cta-btn-locked" disabled>⬇ Export config files</button>`;
   const ctaSub = ready
     ? `<div class="ds-cta-sub">All ${total} decisions made — your pipeline config is ready.</div>`
-    : `<div class="ds-cta-sub">${shapeChosen ? `${custom} of ${total} decisions made.` : 'Pick a service shape above to begin.'}</div>`;
+    : `<div class="ds-cta-sub">${shapeChosen ? `${custom} of ${total} decisions made — complete all sections above.` : 'Pick a service shape above to begin.'}</div>`;
 
   const badgeCls = !shapeChosen ? 'ds-badge ds-badge-start' : ready ? 'ds-badge ds-badge-ready' : 'ds-badge ds-badge-progress';
   const badgeTxt = !shapeChosen ? 'Start here' : ready ? 'Ready' : 'In progress';
@@ -9028,7 +9140,11 @@ function renderDecisionMap() {
     <div class="ds-header">
       <div>
         <div class="ds-header-title">Pipeline Configurator</div>
-        <div class="ds-header-sub">Pick your service shape, then walk each section. Click any pill to pick. Green border = done. Greyed pills are incompatible.</div>
+        <div class="ds-header-sub">
+          ${shapeChosen
+            ? `Configuring: <b>${SHAPE_PICKER_STATE.frameworkLabel || decisionCurrentLabel('shape') || 'your service'}</b> — complete each section, then export your pipeline files.`
+            : 'Pick your service shape to begin. Each section unlocks in order. You can always go back.'}
+        </div>
       </div>
       <div class="ds-header-right">
         ${counterHtml}
@@ -9148,6 +9264,8 @@ function pickShapeFramework(fwValue, feOrBe, shapeVal) {
   const st = cat?.subtypes[SHAPE_PICKER_STATE.subtype];
   const fw = st?.frameworks.find(f => f.value === fwValue);
   SHAPE_PICKER_STATE.frameworkLabel = fw?.label || fwValue;
+  // Advance to step 1 (Local dev) the first time shape is picked.
+  if (ACTIVE_STEP === 0) ACTIVE_STEP = 1;
   renderDecisionMap();
   renderMasterSVG();
   onConfigChange();
@@ -9306,6 +9424,24 @@ function pickDecision(id, value) {
   const def = DECISION_DEFS[id];
   if (!def) return;
   decisionWrite(id, value);
+
+  // Auto-advance accordion if all tiles in current step are now done
+  const currentStepDef = DECISION_STEPS.find(s => s.step === ACTIVE_STEP);
+  if (currentStepDef && !currentStepDef.tiles.includes('shape')) {
+    const tiles = currentStepDef.tiles.filter(decisionAppliesToShape);
+    const nonShape = tiles.filter(tid => tid !== 'shape');
+    const allDone = nonShape.length > 0 && nonShape.every(decisionIsCustom);
+    if (allDone) {
+      const visibleSteps = DECISION_STEPS
+        .filter(s => {
+          const t = s.tiles.filter(decisionAppliesToShape);
+          return s.tiles.includes('shape') || (DECISION_VISITED.has('shape') && t.length > 0);
+        });
+      const nextStep = visibleSteps.find(s => s.step > ACTIVE_STEP);
+      if (nextStep) ACTIVE_STEP = nextStep.step;
+    }
+  }
+
   if (def.selectId) {
     if (id === 'industry' && typeof onIndustryChange === 'function') onIndustryChange();
     else onConfigChange();
@@ -10412,8 +10548,110 @@ function renderSelfTest() {
   wrap.innerHTML = summary + res.fail.map(i => row(i,false)).join('') + res.pass.map(i => row(i,true)).join('');
 }
 
+// ── Maintain tab — knowledge state for contributors ────────────────
+function renderMaintainTab() {
+  const wrap = document.getElementById('maintain-content');
+  if (!wrap) return;
+
+  // Coming-soon frameworks
+  const comingSoon = [];
+  if (typeof SHAPE_TAXONOMY !== 'undefined') {
+    for (const [catKey, cat] of Object.entries(SHAPE_TAXONOMY)) {
+      for (const [stKey, st] of Object.entries(cat.subtypes)) {
+        for (const fw of st.frameworks) {
+          if (fw.comingSoon) {
+            comingSoon.push({ category: `${cat.icon} ${cat.label}`, subtype: st.label, framework: fw.label, value: fw.value });
+          }
+        }
+      }
+    }
+  }
+  // Also scan STACKS for coming-soon entries
+  if (typeof STACKS !== 'undefined') {
+    for (const [key, stack] of Object.entries(STACKS)) {
+      if (stack.comingSoon && !comingSoon.find(c => c.value === key)) {
+        comingSoon.push({ category: '?', subtype: '?', framework: stack.label || key, value: key });
+      }
+    }
+  }
+
+  const csRows = comingSoon.length > 0
+    ? `<table class="ref-table" style="margin-bottom:20px">
+        <thead><tr><th>Framework</th><th>Category</th><th>Type</th><th>Value key</th></tr></thead>
+        <tbody>${comingSoon.map(c =>
+          `<tr><td><b>${c.framework}</b></td><td>${c.category}</td><td>${c.subtype}</td><td><code>${c.value}</code></td></tr>`
+        ).join('')}</tbody>
+      </table>`
+    : '<p style="color:var(--muted);font-size:12px">No coming-soon frameworks found.</p>';
+
+  // Knowledge freshness
+  const tourCount = typeof THREAT_TOURS !== 'undefined' ? Object.keys(THREAT_TOURS).length : 0;
+  const catalogCount = typeof CATALOG !== 'undefined' ? CATALOG.length : 0;
+  const glossaryCount = typeof GLOSSARY !== 'undefined' ? GLOSSARY.length : 0;
+  const invariantCount = typeof INVARIANTS !== 'undefined' ? INVARIANTS.length : 0;
+  const decisionCount = typeof DECISION_DEFS !== 'undefined' ? Object.keys(DECISION_DEFS).length : 0;
+
+  // How to add a framework
+  const addInstructions = `<ol style="font-size:12px;line-height:1.8;margin-left:18px;color:var(--text-sec)">
+    <li>Add entry to <code>SHAPE_TAXONOMY[category].subtypes[subtype].frameworks[]</code> with <code>value</code>, <code>label</code>, <code>desc</code>, <code>feOrBe</code>.</li>
+    <li>Add a corresponding entry in <code>STACKS</code> with <code>label</code>, <code>pkgMgr</code>, <code>buildCmd</code>, <code>testCmd</code>, <code>dockerFrom</code>.</li>
+    <li>Run self-test tab — all 33 checks must remain green.</li>
+    <li>If the stack has a unique CI pattern, add a <code>YAML_GEN</code> key and wire it in <code>genCI()</code>.</li>
+    <li>Remove <code>comingSoon: true</code> from the <code>SHAPE_TAXONOMY</code> entry and from <code>STACKS</code>.</li>
+  </ol>`;
+
+  wrap.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:22px">
+      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
+        <div style="font-size:24px;font-weight:700;color:var(--accent)">${decisionCount}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Decisions</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
+        <div style="font-size:24px;font-weight:700;color:var(--accent)">${invariantCount}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Invariants</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
+        <div style="font-size:24px;font-weight:700;color:var(--accent)">${tourCount}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Threat tours</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
+        <div style="font-size:24px;font-weight:700;color:var(--accent)">${catalogCount}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Catalog entries</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
+        <div style="font-size:24px;font-weight:700;color:var(--accent)">${glossaryCount}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Glossary terms</div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:${comingSoon.length > 0 ? '#fff8c5' : 'white'}">
+        <div style="font-size:24px;font-weight:700;color:${comingSoon.length > 0 ? '#92400e' : 'var(--accent)'}">${comingSoon.length}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Coming soon</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:13px;font-weight:700;margin:0 0 8px">Coming-soon frameworks (${comingSoon.length})</h3>
+    ${csRows}
+
+    <h3 style="font-size:13px;font-weight:700;margin:18px 0 8px">How to add a new framework</h3>
+    ${addInstructions}
+
+    <h3 style="font-size:13px;font-weight:700;margin:18px 0 8px">Self-test results</h3>
+    <div id="maintain-selftest"></div>`;
+
+  // Inline selftest in maintain tab
+  const stWrap = document.getElementById('maintain-selftest');
+  if (stWrap && typeof selfTestRun === 'function') {
+    const res = selfTestRun();
+    const pct = Math.round(res.pass.length / (res.pass.length + res.fail.length) * 100);
+    stWrap.innerHTML = `<div style="padding:10px 14px;border:2px solid ${res.fail.length === 0 ? '#1a7f37' : '#92400e'};border-radius:6px;background:${res.fail.length === 0 ? '#dafbe1' : '#fff8c5'};margin-bottom:10px">
+      <b>${res.fail.length === 0 ? '✅ All checks pass' : '⚠️ ' + res.fail.length + ' failing'}</b>
+      <span style="margin-left:8px;font-size:12px;color:var(--text-sec)">${pct}% · ${res.pass.length}/${res.pass.length + res.fail.length}</span>
+    </div>` +
+    res.fail.map(i => `<div style="padding:6px 12px;border:1px solid #fecaca;border-radius:4px;margin-bottom:4px;background:#fef2f2;font-size:12px"><b>❌ ${i.name}:</b> ${i.detail}</div>`).join('');
+  }
+}
+
 // ──────────────────────────────────────────────────────────────────
-// THREAT TOUR — 5 incident playbooks. Click an incident → highlights
+// THREAT TOUR — 5 incident playbacks. Click an incident → highlights
 // every stage that blocks it. Tooltip names the stage's role in stopping it.
 // ──────────────────────────────────────────────────────────────────
 const THREAT_TOURS = {
@@ -10763,7 +11001,8 @@ function renderTOC() {
       {id:'tab-matrix',    label:'Tested Combos'},
       {id:'tab-catalog',   label:'Catalog'},
       {id:'tab-glossary',  label:'Glossary'},
-      {id:'tab-selftest',  label:'Self-test'}
+      {id:'tab-selftest',  label:'Self-test'},
+      {id:'tab-maintain',  label:'Maintain'}
     ]}
   ];
   list.innerHTML = groups.map(g => `
@@ -10835,7 +11074,7 @@ function collapseReferenceSections() {
 // Skipped silently if IntersectionObserver is missing (e.g., jsdom test env).
 function initScrollspy() {
   if (typeof IntersectionObserver === 'undefined') return;
-  const sections = ['local','pr','main','promotions','runtime','files','setup','tradeoffs','mistakes','matrix','glossary']
+  const sections = ['local','pr','main','promotions','runtime','files','setup','tradeoffs','mistakes','matrix','glossary','selftest','maintain']
     .map(t => ({id:t, el:document.getElementById('tab-'+t)})).filter(x => x.el);
   if (!sections.length) return;
   const observer = new IntersectionObserver(entries => {
@@ -11107,6 +11346,16 @@ function onConfigChange() {
   writeStateToURL();
   if (typeof renderComingSoonBanner === 'function') renderComingSoonBanner();
   if (typeof renderDecisionMap === 'function') renderDecisionMap();
+  if (typeof renderMasterSVG === 'function') renderMasterSVG();
+
+  // Phase context banner — shows current config above the phase sections
+  const phaseBanner = document.getElementById('phase-context-bar');
+  if (phaseBanner && DECISION_VISITED.has('shape')) {
+    const shapeLabel = SHAPE_PICKER_STATE?.frameworkLabel || '';
+    const shapeDesc = shapeLabel ? `<b>${shapeLabel}</b>` : 'your service';
+    phaseBanner.innerHTML = `Configuring pipeline for ${shapeDesc} — scroll down to see phases, or use the diagram to explore stages.`;
+    phaseBanner.style.display = 'block';
+  }
   const cfg = getConfig();
   currentCompliance = cfg.compliance;
   currentIndustry = (document.getElementById('sel-industry') && document.getElementById('sel-industry').value) || 'none';
@@ -11801,6 +12050,7 @@ function init() {
   renderMistakes();
   renderMatrix();
   renderSelfTest();
+  renderMaintainTab();
   collapseReferenceSections();
   renderTOC();
   initScrollspy();
