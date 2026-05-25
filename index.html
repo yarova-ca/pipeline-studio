@@ -8660,7 +8660,7 @@ function buildMasterSVG() {
       ? `<circle cx="${n.x + NODE_W - 6}" cy="${n.y + 6}" r="4" fill="#2da44e"/>`
       : '';
     return `
-      <g class="msvg-node" data-id="${n.id}" style="cursor:pointer" onclick="onSvgNodeClick('${n.id}')">
+      <g class="msvg-node" data-id="${escAttr(n.id)}" style="cursor:pointer" onclick="onSvgNodeClick(this.dataset.id)">
         <rect x="${n.x}" y="${n.y}" width="${NODE_W}" height="${NODE_H}" rx="5" fill="${nodeFill}" stroke="${critStroke}" stroke-width="${critWidth}"/>
         ${decDot}
         <text x="${n.x + 10}" y="${n.y + 23}" font-family="'Inter',sans-serif" font-size="11" font-weight="600" fill="#1a1e23">${n.label}</text>
@@ -11892,6 +11892,14 @@ function initScrollspy() {
 function esc(str) {
   return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+// HTML-attribute-safe escape. Use when interpolating user/data values into
+// attribute values (especially data-*). Apostrophe matters for single-quoted
+// attributes; double-quote matters for double-quoted attributes.
+function escAttr(str) {
+  return (str == null ? '' : String(str))
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 
 // Linkify glossary terms inside prose. Used in stage concept/threat/etc text.
 // Wraps each occurrence of a glossary term in a clickable span that jumps to the glossary entry.
@@ -12731,13 +12739,15 @@ function renderWizardStep() {
   if (step.key === 'framework') options = wizardFrameworkOptions();
   else if (step.key === 'pkg')   options = wizardPkgOptions();
 
-  // Render body.
+  // Render body. Use data-* attributes + a delegated helper rather than inline
+  // JS-string interpolation, so apostrophes/quotes in step.key or o.value
+  // cannot break the onchange handler.
   const optsHtml = options.map(o => `
     <label style="display:block;margin-bottom:8px;cursor:pointer">
-      <input type="radio" name="wiz-${step.key}" value="${o.value}" onchange="WIZARD_STATE['${step.key}']='${o.value}';renderWizardSummary()" ${WIZARD_STATE[step.key] === o.value ? 'checked' : ''} style="margin-right:8px;vertical-align:top;margin-top:4px">
+      <input type="radio" name="wiz-${escAttr(step.key)}" value="${escAttr(o.value)}" data-wiz-step="${escAttr(step.key)}" data-wiz-value="${escAttr(o.value)}" onchange="onWizardOptionChange(this)" ${WIZARD_STATE[step.key] === o.value ? 'checked' : ''} style="margin-right:8px;vertical-align:top;margin-top:4px">
       <span style="display:inline-block;vertical-align:top;width:calc(100% - 22px)">
-        <span style="font-weight:600;font-size:13px;color:var(--text)">${o.label}</span>
-        <span style="display:block;font-size:11.5px;color:var(--text-sec);margin-top:2px;line-height:1.5">${o.desc}</span>
+        <span style="font-weight:600;font-size:13px;color:var(--text)">${esc(o.label)}</span>
+        <span style="display:block;font-size:11.5px;color:var(--text-sec);margin-top:2px;line-height:1.5">${esc(o.desc)}</span>
       </span>
     </label>`).join('');
 
@@ -12745,6 +12755,11 @@ function renderWizardStep() {
     <h3 style="font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text)">${step.label}</h3>
     <p style="font-size:12.5px;color:var(--text-sec);line-height:1.55;margin-bottom:14px">${step.concept}</p>
     <div style="border:1px solid var(--border);border-radius:8px;padding:14px 16px;background:var(--surface)">${optsHtml}</div>`;
+  renderWizardSummary();
+}
+function onWizardOptionChange(el) {
+  if (!el || !el.dataset) return;
+  WIZARD_STATE[el.dataset.wizStep] = el.dataset.wizValue;
   renderWizardSummary();
 }
 function renderWizardSummary() {
