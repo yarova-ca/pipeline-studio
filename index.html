@@ -957,7 +957,7 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
     </div>
     <div class="cfg-grp">
       <label for="sel-compliance">Compliance</label>
-      <select id="sel-compliance" onchange="this.dataset.userSet='1';onConfigChange();if(this.value!=='none')openComplianceContext(this.value)">
+      <select id="sel-compliance" onchange="this.dataset.userSet='1';onConfigChange();if(this.value!=='none')openComplianceContext(this.value)" title="Primary compliance framework. Add a second one with the +Add dropdown if your org needs both (e.g. PCI + SOC 2).">
         <option value="none">None</option>
         <option value="pci">PCI-DSS v4.0</option>
         <option value="hipaa">HIPAA</option>
@@ -971,6 +971,19 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
         <option value="nistcsf">NIST CSF 2.0</option>
         <option value="ferpa">FERPA (Education)</option>
         <option value="nerccip">NERC CIP (Energy)</option>
+      </select>
+    </div>
+    <div class="cfg-grp">
+      <label for="sel-compliance-2" style="font-size:9px;color:var(--muted)">+ Add</label>
+      <select id="sel-compliance-2" onchange="onConfigChange()" title="Optional second compliance framework. Many orgs need PCI + SOC 2 or HIPAA + SOC 2 — both control sets render under the compliance Why panel.">
+        <option value="none">—</option>
+        <option value="pci">PCI-DSS v4.0</option>
+        <option value="hipaa">HIPAA</option>
+        <option value="fedramp">FedRAMP Moderate</option>
+        <option value="soc2">SOC 2</option>
+        <option value="gdpr">GDPR</option>
+        <option value="iso27001">ISO/IEC 27001</option>
+        <option value="cmmc">CMMC Level 2</option>
       </select>
     </div>
     <span class="cfg-ci-badge" id="ci-file-badge" style="display:none">pr-checks.yml</span>
@@ -3014,7 +3027,8 @@ function getConfig() {
   }
   const ciKey  = document.getElementById('sel-ci')?.value        || 'github-actions';
   const regKey = document.getElementById('sel-reg')?.value       || 'ghcr';
-  const compKey= document.getElementById('sel-compliance')?.value|| 'none';
+  const compKey  = document.getElementById('sel-compliance')?.value   || 'none';
+  const compKey2 = document.getElementById('sel-compliance-2')?.value || 'none';
   const pmKey  = document.getElementById('sel-pkgmgr')?.value    || 'npm';
   // Re-look up after the Coming Soon → sister fallback above.
 
@@ -3064,7 +3078,7 @@ function getConfig() {
     feKey, beKey, ciKey, regKey, compKey, pmKey,
     feGroup, beGroup,
     fe, be, reg, pm,
-    ci: ciKey, registry: regKey, compliance: compKey,
+    ci: ciKey, registry: regKey, compliance: compKey, compliance2: compKey2,
     prFile: ci.prFile, mainFile: ci.mainFile,
     builderImage, runtimeImage: effectiveRuntimeImage,
     testCmds, lintCmds,
@@ -10768,12 +10782,20 @@ function renderComplianceCoverageTable(complianceKey) {
 
 function buildKnowledgePanel(id) {
   const parts = [];
-  // Compliance-specific: render control-coverage table for the picked framework.
+  // Compliance-specific: render control-coverage table for primary + optional
+  // secondary frameworks. Multi-framework support is common (PCI + SOC 2,
+  // HIPAA + SOC 2, etc.) — both tables stack here so the auditor sees full
+  // coverage in one place.
   if (id === 'compliance') {
     const picked = decisionRead('compliance');
+    const cfg2 = (typeof getConfig === 'function') ? getConfig().compliance2 : null;
     if (picked && picked !== 'none') {
       const table = renderComplianceCoverageTable(picked);
       if (table) parts.push(table);
+    }
+    if (cfg2 && cfg2 !== 'none' && cfg2 !== picked) {
+      const table2 = renderComplianceCoverageTable(cfg2);
+      if (table2) parts.push(table2);
     }
   }
   const dk = (typeof DECISION_KNOWLEDGE !== 'undefined') ? DECISION_KNOWLEDGE[id] : null;
@@ -13503,7 +13525,7 @@ document.addEventListener('input', e => {
 // On load: read params → set dropdowns + role.
 // On change: write back to URL (replaceState — no history pollution).
 // ──────────────────────────────────────────────────────────────────
-const URL_KEYS = ['fe','be','ci','reg','compliance','industry','mode'];
+const URL_KEYS = ['fe','be','ci','reg','compliance','compliance2','industry','mode'];
 
 function loadStateFromURL() {
   const p = new URLSearchParams(location.search);
@@ -13512,7 +13534,8 @@ function loadStateFromURL() {
   setIf('sel-backend',    p.get('be'));
   setIf('sel-ci',         p.get('ci'));
   setIf('sel-reg',        p.get('reg'));
-  setIf('sel-compliance', p.get('compliance'));
+  setIf('sel-compliance',   p.get('compliance'));
+  setIf('sel-compliance-2', p.get('compliance2'));
   setIf('sel-industry',   p.get('industry'));
   const mode = p.get('mode');
   if (mode) setMode(mode);
@@ -13525,7 +13548,8 @@ function writeStateToURL() {
   if (get('sel-backend'))    params.set('be', get('sel-backend'));
   if (get('sel-ci'))         params.set('ci', get('sel-ci'));
   if (get('sel-reg'))        params.set('reg', get('sel-reg'));
-  if (get('sel-compliance') && get('sel-compliance') !== 'none') params.set('compliance', get('sel-compliance'));
+  if (get('sel-compliance')   && get('sel-compliance')   !== 'none') params.set('compliance',  get('sel-compliance'));
+  if (get('sel-compliance-2') && get('sel-compliance-2') !== 'none') params.set('compliance2', get('sel-compliance-2'));
   if (get('sel-industry')   && get('sel-industry')   !== 'none') params.set('industry',   get('sel-industry'));
   const activeMode = document.body.className.match(/mode-(\w+)/);
   if (activeMode && activeMode[1] !== 'default') params.set('mode', activeMode[1]);
