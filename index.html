@@ -7858,6 +7858,120 @@ ${sameRepo ? 'Commits to this repo.' : 'Opens a PR against the config repo.'}
 ArgoCD's PreSync hook runs \`cosign verify\` on the digest before any pod schedules — if the signature is missing or the identity doesn't match \`YOUR_ORG/YOUR_REPO/.github/workflows/*\`, sync fails closed (I-20).
 `;
     }
+  },
+
+  // ── Helm chart — alternative to Kustomize. Used when cd === 'helm' (push mode)
+  // or when the team prefers chart-based packaging. The studio emits both
+  // Kustomize (above) and Helm so the user picks whichever they actually use.
+
+  'deploy/charts/myapp/Chart.yaml': {
+    label: 'deploy/charts/myapp/Chart.yaml',
+    content: `apiVersion: v2
+name: myapp
+description: Application chart — emitted by pipeline-studio.
+type: application
+version: 0.1.0       # bump when chart structure changes
+appVersion: "1.0.0"  # bump per release; CI rewrites this to the image digest
+`
+  },
+  'deploy/charts/myapp/values.yaml': {
+    label: 'deploy/charts/myapp/values.yaml',
+    get content() {
+      const cfg = getConfig();
+      const port = cfg.port || '8080';
+      return `# Default values. Override per environment with -f values-<env>.yaml or --set.
+image:
+  repository: REGISTRY/myapp     # set by CI: --set image.repository=...
+  digest: sha256:DIGEST           # set by CI: --set image.digest=...
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: ${port}
+
+# Security context matches the admission policies your platform team enforces.
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+resources:
+  requests: { cpu: "100m", memory: "128Mi" }
+  limits:   { cpu: "500m", memory: "512Mi" }
+
+env: dev   # overridden per environment
+
+probes:
+  readiness:
+    path: /health
+    initialDelaySeconds: 3
+    periodSeconds: 5
+`;
+    }
+  },
+  'deploy/charts/myapp/templates/deployment.yaml': {
+    label: 'deploy/charts/myapp/templates/deployment.yaml',
+    content: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: { app: {{ .Release.Name }} }
+  template:
+    metadata:
+      labels: { app: {{ .Release.Name }} }
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.image.repository }}@{{ .Values.image.digest }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          env:
+            - name: ENV
+              value: {{ .Values.env | quote }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.probes.readiness.path }}
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+`
+  },
+  'deploy/charts/myapp/templates/service.yaml': {
+    label: 'deploy/charts/myapp/templates/service.yaml',
+    content: `apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.type }}
+  selector: { app: {{ .Release.Name }} }
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+`
   }
 };
 
