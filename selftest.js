@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { execSync } = require('child_process');
-const html = fs.readFileSync('/mnt/c/Users/RohithY/yarova/devsecops-pipeline.html', 'utf8');
+const path = require('path');
+const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 
 let pass = 0, fail = 0;
 function check(label, cond) {
