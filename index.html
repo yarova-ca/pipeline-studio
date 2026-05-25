@@ -11759,13 +11759,36 @@ function renderGlossary() {
 // Reference sections (Files/Setup/Tradeoffs/Mistakes/Combos/Glossary) wrapped in <details>:
 //   - if target is <details>, open it first, then scroll.
 // Phase sections are plain divs — just scroll.
+// Sync to location.hash via replaceState (no history pollution; refresh + share-link
+// land on the same tab the user was viewing).
 function showTab(tabId, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  const tab = document.getElementById(`tab-${tabId}`);
+  const tab = $id(`tab-${tabId}`);
   if (!tab) return;
   if (tab.tagName === 'DETAILS') tab.open = true;
   try { tab.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e) {}
+  // Persist the active tab in the URL hash so refresh / share-link / back+forward
+  // restore the right section. replaceState avoids polluting history with every click.
+  try {
+    if (location.hash !== '#' + tabId) {
+      history.replaceState(null, '', location.pathname + location.search + '#' + tabId);
+    }
+  } catch (e) { /* file:// or sandboxed contexts may reject — non-fatal */ }
+}
+
+// Read the URL hash at load and scroll to that tab if it matches one of the
+// rendered tab panes. Safe to call multiple times.
+function restoreTabFromHash() {
+  const id = (location.hash || '').replace(/^#/, '');
+  if (!id) return;
+  if (!$id(`tab-${id}`)) return;
+  // Match the button so its 'active' class lights up.
+  const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => {
+    const oc = b.getAttribute('onclick') || '';
+    return oc.includes("'" + id + "'");
+  });
+  showTab(id, btn);
 }
 
 function switchTab(tabId) {
@@ -12954,6 +12977,12 @@ function init() {
   try { const id = firstOf(MAIN_STAGES);      if (id) selectPipeStage(id, 'main-detail'); }      catch(e) {}
   try { const id = firstOf(PROMOTION_STAGES); if (id) selectPipeStage(id, 'promotion-detail'); } catch(e) {}
   try { const id = firstOf(RUNTIME_STAGES);   if (id) selectPipeStage(id, 'runtime-detail'); }   catch(e) {}
+
+  // If the URL has a #tab hash, jump to it after all sections have rendered.
+  // Run on a microtask so scroll target heights are settled.
+  if (location.hash) setTimeout(restoreTabFromHash, 0);
+  // Browser back/forward triggers hashchange — sync the tab UI to it.
+  window.addEventListener('hashchange', restoreTabFromHash);
 }
 
 // ──────────────────────────────────────────────────────────────────
