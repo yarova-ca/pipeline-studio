@@ -936,15 +936,17 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       <span>Alerts for this combo</span>
       <span id="alerts-strip-count" style="font-size:10px;font-weight:700;background:#f3f4f6;color:var(--text-sec);padding:1px 8px;border-radius:10px">0</span>
     </summary>
+    <!-- Banners below use semantic tokens (--bg-note-*) so colors map to roles,
+         not arbitrary hexes. Audit V-1 / V-3: 5 different oranges + blues → 5 roles. -->
     <!-- ── Coming-soon banner — surfaces when reader picks a placeholder framework ── -->
-    <div id="comingsoon-banner" style="display:none;padding:10px 20px;background:#f3f4f6;border-top:1px solid var(--border-subtle);font-size:12.5px;color:var(--text-sec);border-left:4px solid #9ca3af"></div>
+    <div id="comingsoon-banner" style="display:none;padding:10px 20px;background:var(--bg-note-coming);border-top:1px solid var(--border-subtle);font-size:12.5px;color:var(--text-sec);border-left:4px solid var(--br-note-coming)"></div>
 
     <!-- ── Industry context — surfaces only when industry != none ── -->
-    <div id="industry-context" style="display:none;padding:10px 20px;background:#fff7ed;border-top:1px solid var(--border-subtle);font-size:12px;color:var(--text-sec)"></div>
+    <div id="industry-context" style="display:none;padding:10px 20px;background:var(--bg-note-compliance);border-top:1px solid var(--border-subtle);border-left:4px solid var(--br-note-compliance);font-size:12px;color:var(--text-sec)"></div>
 
     <!-- ── Mobile Stack Warning ── -->
-    <div id="mobile-warning" style="display:none;background:#fff8dc;border-left:3px solid #ff9800;padding:8px 18px;margin:0;font-size:12px;color:#333;border-top:1px solid var(--border-subtle)">
-      <strong style="display:block;margin-bottom:6px;color:#ff6f00;">⚠️ Mobile Stack Selected</strong>
+    <div id="mobile-warning" style="display:none;background:var(--bg-note-warn);border-left:4px solid var(--br-note-warn);padding:8px 18px;margin:0;font-size:12px;color:#333;border-top:1px solid var(--border-subtle)">
+      <strong style="display:block;margin-bottom:6px;color:#7a5800;">⚠️ Mobile Stack Selected</strong>
       <div style="color:#666;line-height:1.5;">
         This DevSecOps pipeline is designed for containerized web applications.<br>
         <strong>Mobile stacks (Expo, React Native)</strong> do not use Docker containerization.<br>
@@ -953,7 +955,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
     </div>
 
     <!-- ── Next.js Standalone Requirement ── -->
-    <div id="nextjs-warning" style="display:none;background:#e8f4fd;border-left:3px solid #2196f3;padding:8px 18px 8px 18px;margin:0;font-size:12px;color:#333;border-top:1px solid var(--border-subtle);position:relative">
+    <div id="nextjs-warning" style="display:none;background:var(--bg-note-info);border-left:4px solid var(--br-note-info);padding:8px 18px 8px 18px;margin:0;font-size:12px;color:#333;border-top:1px solid var(--border-subtle);position:relative">
       <button onclick="dismissNextjsWarning()" aria-label="Dismiss Next.js note" style="position:absolute;top:4px;right:8px;background:none;border:none;color:#666;cursor:pointer;font-size:14px;line-height:1">×</button>
       <strong style="display:block;margin-bottom:6px;color:#1976d2;">ℹ️ Next.js Dockerfile note</strong>
       <div style="color:#666;line-height:1.5;">
