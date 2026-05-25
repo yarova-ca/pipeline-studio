@@ -2967,6 +2967,7 @@ function getConfig() {
   const sbomKey     = decisionRead('sbom')      || 'syft';
   const baseimageKey= decisionRead('baseimage') || 'distroless';
   const cdKey       = decisionRead('cd')        || 'argocd';
+  const gitopsKey   = decisionRead('gitops')    || 'same-repo';
   const cloudKey    = decisionRead('cloud')     || 'aws';
   const promotionKey= decisionRead('promotion') || 'canary';
 
@@ -3007,6 +3008,7 @@ function getConfig() {
     sbom: sbomKey,
     baseimage: baseimageKey,
     cd: cdKey,
+    gitops: gitopsKey,
     cloud: cloudKey,
     promotion: promotionKey
   };
@@ -5438,9 +5440,28 @@ spec:
       - name: ENV
         value: dev`;
 
-    // default: argocd
+    // default: argocd. Branches by cfg.gitops:
+    //   - same-repo:     repoURL = this app repo, path = deploy/overlays/dev
+    //   - separate-repo: repoURL = a config repo, path = overlays/dev
+    //   - push:          no ArgoCD — emits helm upgrade instead
+    const gitops = cfg.gitops || 'same-repo';
+    if (gitops === 'push') return `# ── P1 — Deploy to dev (push deploy, no GitOps) ─────────────
+# CI runs this directly. No drift detection, no auto-sync, no audit trail.
+# Use only for prototypes; switch to ArgoCD/Flux before production.
+helm upgrade --install myapp-dev ./deploy/charts/myapp \\
+  --namespace myapp-dev --create-namespace \\
+  --set image.repository=REGISTRY/myapp \\
+  --set image.digest=sha256:DIGEST \\
+  --set env=dev \\
+  --wait --timeout 5m`;
+    const sameRepo = gitops === 'same-repo';
+    const repoURL  = sameRepo
+      ? 'https://github.com/YOUR_ORG/YOUR_APP_REPO    # same repo as source code'
+      : 'https://github.com/YOUR_ORG/YOUR_CONFIG_REPO # separate GitOps config repo';
+    const path = sameRepo ? 'deploy/overlays/dev' : 'overlays/dev';
     return `# ── P1 — Deploy to dev (ArgoCD Application + PreSync verify) ──
 # Image referenced by sha256 digest only. Tags never used at runtime.
+# GitOps layout: ${sameRepo ? 'same-repo (manifests live under deploy/ in this app repo)' : 'separate config repo'}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -5449,9 +5470,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/YOUR_ORG/YOUR_CONFIG_REPO
+    repoURL: ${repoURL}
     targetRevision: main
-    path: overlays/dev
+    path: ${path}
   destination:
     server: https://kubernetes.default.svc
     namespace: myapp-dev
@@ -7588,6 +7609,255 @@ spec:
                     - keyless:
                         subject: "https://github.com/YOUR_ORG/*/.github/workflows/*"
                         issuer: "https://token.actions.githubusercontent.com"`
+  },
+
+  // ── GitOps deploy tree — emitted only when cd is argocd|flux AND gitops != push.
+  // Same-repo: tree lives under deploy/ in the app repo. Separate-repo: tree
+  // lives in a config repo (the studio shows the same file content; the user
+  // copies it into the other repo). Push mode: only the Helm command, no tree.
+
+  'deploy/argocd-app.yaml': {
+    get label() {
+      const cfg = getConfig();
+      return cfg.cd === 'argocd' ? 'deploy/argocd-app.yaml (ArgoCD Application)' : 'deploy/argocd-app.yaml (not used — pick ArgoCD as CD)';
+    },
+    get content() {
+      const cfg = getConfig();
+      if (cfg.cd !== 'argocd') return '# Not emitted — current CD tool is ' + cfg.cd + '.\n# Switch CD to ArgoCD to emit this file.';
+      const sameRepo = (cfg.gitops || 'same-repo') === 'same-repo';
+      const repoURL = sameRepo ? 'https://github.com/YOUR_ORG/YOUR_APP_REPO' : 'https://github.com/YOUR_ORG/YOUR_CONFIG_REPO';
+      const path = sameRepo ? 'deploy/overlays/dev' : 'overlays/dev';
+      return `# ArgoCD Application — bootstrap with:
+#   kubectl apply -n argocd -f deploy/argocd-app.yaml
+# Then ArgoCD pulls + reconciles automatically on every commit.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: ${repoURL}
+    targetRevision: main
+    path: ${path}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp-dev
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions: [ "CreateNamespace=true" ]
+`;
+    }
+  },
+  'deploy/base/kustomization.yaml': {
+    label: 'deploy/base/kustomization.yaml',
+    content: `# Base kustomization — referenced by every overlay.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment.yaml
+  - service.yaml
+images:
+  - name: myapp
+    newName: REGISTRY/myapp           # set by CI's "Bump image digest" step
+    digest: sha256:DIGEST              # digest-pinned, never a tag (I-3)
+`
+  },
+  'deploy/base/deployment.yaml': {
+    label: 'deploy/base/deployment.yaml',
+    get content() {
+      const cfg = getConfig();
+      const port = cfg.port || '8080';
+      return `# Base Deployment. Overlays patch replicas + env per environment.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  labels: { app: myapp }
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: myapp }
+  template:
+    metadata:
+      labels: { app: myapp }
+    spec:
+      # securityContext + readOnlyRootFilesystem match common admission policies
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: myapp
+          image: myapp                 # rewritten by kustomize image transformer
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: ${port}
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits:   { cpu: "500m", memory: "512Mi" }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+          readinessProbe:
+            httpGet: { path: /health, port: ${port} }
+            initialDelaySeconds: 3
+            periodSeconds: 5
+`;
+    }
+  },
+  'deploy/base/service.yaml': {
+    label: 'deploy/base/service.yaml',
+    get content() {
+      const cfg = getConfig();
+      const port = cfg.port || '8080';
+      return `apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+spec:
+  selector: { app: myapp }
+  ports:
+    - port: 80
+      targetPort: ${port}
+      protocol: TCP
+`;
+    }
+  },
+  'deploy/overlays/dev/kustomization.yaml': {
+    label: 'deploy/overlays/dev/kustomization.yaml',
+    content: `apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: myapp-dev
+resources:
+  - ../../base
+replicas:
+  - name: myapp
+    count: 1
+patches:
+  - target: { kind: Deployment, name: myapp }
+    patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env
+        value:
+          - name: ENV
+            value: dev
+`
+  },
+  'deploy/overlays/staging/kustomization.yaml': {
+    label: 'deploy/overlays/staging/kustomization.yaml',
+    content: `apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: myapp-staging
+resources:
+  - ../../base
+replicas:
+  - name: myapp
+    count: 3
+patches:
+  - target: { kind: Deployment, name: myapp }
+    patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env
+        value:
+          - name: ENV
+            value: staging
+`
+  },
+  'deploy/overlays/prod/kustomization.yaml': {
+    label: 'deploy/overlays/prod/kustomization.yaml',
+    content: `apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: myapp-prod
+resources:
+  - ../../base
+replicas:
+  - name: myapp
+    count: 10
+patches:
+  - target: { kind: Deployment, name: myapp }
+    patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env
+        value:
+          - name: ENV
+            value: prod
+`
+  },
+  'deploy/README.md': {
+    label: 'deploy/README.md (one-time setup)',
+    get content() {
+      const cfg = getConfig();
+      const cd = cfg.cd || 'argocd';
+      const gitops = cfg.gitops || 'same-repo';
+      const sameRepo = gitops === 'same-repo';
+      if (gitops === 'push') return `# Deploy — push mode (no GitOps)
+
+You picked **push deploy**. CI runs \`helm upgrade\` directly from the
+main workflow. No drift detection, no auto-sync, no audit trail.
+
+## What you need before the first deploy
+1. \`kubectl\` configured for your target cluster (cluster admin gave you a kubeconfig)
+2. Helm 3 installed in your CI runner
+3. A namespace for each environment: \`kubectl create ns myapp-dev myapp-staging myapp-prod\`
+4. Your platform team has installed the admission policies (signed-image, allowed-registries) — see the **Cluster prerequisites** strip on the home page.
+
+## Switch to GitOps before production
+Push-deploy is for prototypes. Before any real traffic, switch the
+\`GitOps repo layout\` decision to **same-repo** or **separate-repo**.
+`;
+      return `# Deploy — ${cd === 'argocd' ? 'ArgoCD' : 'Flux'} (${sameRepo ? 'same-repo' : 'separate-repo'})
+
+This directory holds the K8s manifests ${cd === 'argocd' ? 'ArgoCD' : 'Flux'} watches.
+
+\`\`\`
+deploy/
+├── base/                       # one source of truth — patched per env by overlays
+│   ├── kustomization.yaml
+│   ├── deployment.yaml
+│   └── service.yaml
+├── overlays/
+│   ├── dev/kustomization.yaml      # replicas=1, ENV=dev
+│   ├── staging/kustomization.yaml  # replicas=3, ENV=staging
+│   └── prod/kustomization.yaml     # replicas=10, ENV=prod
+└── argocd-app.yaml             # the Application that points at the right overlay
+\`\`\`
+
+## One-time bootstrap
+
+${sameRepo
+  ? `**Same-repo layout** — the manifests above live in this app repo, in this \`deploy/\` directory. CI builds + pushes the image; ArgoCD watches \`deploy/overlays/<env>/\` and reconciles on every commit.
+
+\`\`\`bash
+# 1. Ensure ArgoCD is installed (platform team usually owns this)
+kubectl get ns argocd || kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+# 2. Tell ArgoCD to watch this repo
+kubectl apply -n argocd -f deploy/argocd-app.yaml
+
+# 3. Watch the sync
+argocd app get myapp-dev
+\`\`\``
+  : `**Separate-repo layout** — these manifests belong in a config repo (e.g. \`YOUR_ORG/k8s-config\`). Your CI builds the image in the app repo, then opens a PR against the config repo to bump \`base/kustomization.yaml\`'s image digest. ArgoCD watches the config repo.
+
+\`\`\`bash
+# 1. Copy this deploy/ tree into your config repo at the path matching argocd-app.yaml's "path"
+
+# 2. From the config repo:
+kubectl apply -n argocd -f argocd-app.yaml
+
+# 3. App-repo CI needs write access to config repo to open digest-bump PRs
+\`\`\``}
+
+## Image-digest update flow
+CI's "Promote :latest" step writes the new \`sha256:DIGEST\` into
+\`base/kustomization.yaml\` (\`images[0].digest\`).
+${sameRepo ? 'Commits to this repo.' : 'Opens a PR against the config repo.'}
+ArgoCD's PreSync hook runs \`cosign verify\` on the digest before any pod schedules — if the signature is missing or the identity doesn't match \`YOUR_ORG/YOUR_REPO/.github/workflows/*\`, sync fails closed (I-20).
+`;
+    }
   }
 };
 
@@ -8729,7 +8999,7 @@ const DECISION_STEPS = [
   {step:0, icon:'🎯', label:'Service shape',  tiles:['shape']},
   {step:1, icon:'🛠️', label:'Local dev — IDE, git hooks, secret scan', tiles:['ide','precommit','localsecret']},
   {step:2, icon:'📦', label:'Build tools — framework, bundler, pkg mgr', tiles:['fe','be','build','pkg']},
-  {step:3, icon:'🚀', label:'Pipeline — CI system, registry, CD tool', tiles:['ci','reg','cd']},
+  {step:3, icon:'🚀', label:'Pipeline — CI system, registry, CD tool, GitOps layout', tiles:['ci','reg','cd','gitops']},
   {step:4, icon:'🔒', label:'Security — base image, SBOM, CVE scan, signing', tiles:['baseimage','sbom','scanner','signing']},
   {step:5, icon:'☁️', label:'Deploy — cloud target, promotion strategy', tiles:['cloud','promotion']},
   {step:6, icon:'🤖', label:'AI / ML — model registry, GPU image, inference', tiles:['mlframework','inferenceruntime','modelregistry','gpubaseimage']},
@@ -8739,7 +9009,8 @@ const DECISION_STEPS = [
 
 // Decisions that must be set for a working pipeline — shown with Required badge.
 // fe/be added: pipeline can't build without knowing frontend/backend.
-const DECISION_REQUIRED = new Set(['fe','be','ci','reg','cd','scanner','signing','baseimage']);
+// gitops added: same-repo vs separate-repo changes the emitted deploy files.
+const DECISION_REQUIRED = new Set(['fe','be','ci','reg','cd','gitops','scanner','signing','baseimage']);
 // Decisions that have a "none" / skip option or a sensible auto default —
 // shown with Optional badge. build/pkg auto-derive from the framework choice.
 const DECISION_OPTIONAL = new Set(['ide','precommit','localsecret','build','pkg','sbom','cloud','promotion','industry','compliance']);
@@ -9109,6 +9380,16 @@ const DECISION_DEFS = {
       {value:'helm',      label:'Helm (manual)',              desc:'Imperative. No GitOps. Simple deploy.'},
       {value:'octopus',   label:'Octopus Deploy',             desc:'Windows-leaning enterprise CD.'},
       {value:'jenkinsx',  label:'Jenkins X',                  desc:'Cloud-native Jenkins for K8s.'}
+    ]
+  },
+  gitops: {
+    label:'GitOps repo layout', icon:'📂',
+    concept:'Where do K8s manifests live? Same app repo (deploy/ subtree) or a separate config repo (most common at scale). Drives whether your CI commits to two repos or one.',
+    defaultVal:'same-repo',
+    options:[
+      {value:'same-repo',     label:'Same repo (deploy/ subtree)',  desc:'Manifests live alongside source. ArgoCD/Flux watches THIS repo at path deploy/overlays/<env>. Best for small teams + monorepos.'},
+      {value:'separate-repo', label:'Separate config repo',         desc:'App repo builds + pushes image. Manifests live in a config repo. CI opens a PR there to bump image tag. Best at scale — independent app/platform ownership.'},
+      {value:'push',          label:'Push deploy (no GitOps)',      desc:'CI runs helm upgrade or kubectl apply directly. No drift detection, no audit. Use only for prototypes or single-env services.'}
     ]
   },
   baseimage: {
