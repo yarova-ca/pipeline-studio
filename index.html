@@ -223,10 +223,8 @@ main{min-width:0;overflow-x:hidden}
 .phase0-step-body code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface);padding:1px 5px;border-radius:3px;border:1px solid var(--border)}
 .phase0-step-body pre.cmd{background:var(--code-bg);color:var(--code-text);padding:10px 12px;border-radius:var(--r);font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;overflow-x:auto;margin:6px 0}
 .phase0-step-body p{font-size:12px;color:var(--text-sec);margin-bottom:6px;line-height:1.5}
-.tab-bar{display:flex;gap:0;padding:0 32px;border-bottom:2px solid var(--border);background:var(--surface);position:sticky;top:45px;z-index:var(--z-sticky-tab);overflow-x:auto}
-.tab-btn{padding:9px 16px;font-size:12.5px;font-weight:500;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:color .15s,border-color .15s;font-family:inherit;white-space:nowrap;margin-bottom:-2px;flex-shrink:0}
-.tab-btn:hover{color:var(--text)}
-.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+/* (Removed: .tab-bar + .tab-btn CSS — orphan styles with no matching HTML
+   since the layout switched to .phase-tabs UI.) */
 /* Tabs unified into single-scroll sections.
    Phases stay expanded — they ARE the narrative.
    Reference sections wrapped in <details> via JS — collapsible. */
@@ -631,7 +629,7 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
 .ds-cta-sub{font-size:11.5px;color:var(--muted);margin-top:8px}
 
 /* Step nav (sticky inside decision studio) */
-#ds-step-nav{position:sticky;top:88px;z-index:var(--z-sticky-step);background:white;border-bottom:1px solid var(--border);padding:8px 32px;margin:-24px -32px 20px;display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,.06);scrollbar-width:none}
+#ds-step-nav{position:sticky;top:calc(var(--sticky-headers-h, 90px) + 8px);z-index:var(--z-sticky-step);background:white;border-bottom:1px solid var(--border);padding:8px 32px;margin:-24px -32px 20px;display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,.06);scrollbar-width:none}
 #ds-step-nav::-webkit-scrollbar{display:none}
 .ds-nav-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:500;color:var(--muted);background:var(--surface);border:1.5px solid var(--border);cursor:pointer;font-family:inherit;white-space:nowrap;transition:border-color .15s,color .15s,background .15s;flex-shrink:0}
 .ds-nav-chip:hover{border-color:var(--accent);color:var(--accent);background:rgba(9,105,218,.05)}
@@ -9040,31 +9038,12 @@ function buildMasterSVG() {
     }
   }
 
-  // Decision → node mapping: when a decision is visited, these nodes glow green.
-  const DECISION_NODE_MAP = {
-    ide:              ['l1'],
-    precommit:        ['l2'],
-    localsecret:      ['l4'],
-    build:            ['s6pr', 's6main'],
-    pkg:              ['s6pr', 's6main'],
-    ci:               ['s1', 's0'],
-    reg:              ['s6main', 's13'],
-    cd:               ['p1', 'p2', 'p3', 'p4'],
-    baseimage:        ['s6pr', 's6main'],
-    sbom:             ['s8apr', 's8a'],
-    scanner:          ['s7pr', 's7main'],
-    signing:          ['s8b', 's14'],
-    cloud:            ['p1'],
-    promotion:        ['p2', 'p3', 'p4'],
-    industry:         ['s8b', 's10', 's14'],
-    compliance:       ['s8b', 's10', 's14'],
-    mlframework:      ['s6pr', 's6main'],
-    inferenceruntime: ['p1'],
-    modelregistry:    ['s6main', 's13'],
-    gpubaseimage:     ['s6pr', 's6main'],
-    infratooltype:    ['s6pr', 's6main'],
-    infradistribution:['s13']
-  };
+  // Decision → node mapping: alias to the top-level DECISION_AFFECTS_NODES so
+  // the two maps can never drift. The top-level version is the source of
+  // truth (also used by highlightDecisionNodes + syncToStage outside this
+  // closure). Used here to compute the set of nodes the active picks have
+  // touched, so the SVG can render them green.
+  const DECISION_NODE_MAP = DECISION_AFFECTS_NODES;
 
   // Build the set of node ids touched by visited decisions
   const decidedNodeIds = new Set(
@@ -10689,29 +10668,76 @@ const COMPLIANCE_CONTROL_MAP = {
 // Render a small compliance-coverage table inside the compliance row's Why
 // panel. Each row: control ID → title → ✓ if pipeline satisfies → which
 // invariants (clickable) → which stages enforce them.
+// Each invariant depends on at least one decision being set to a non-'none'
+// value. If a dependency is 'none', the invariant is NOT actively enforced
+// and any control claiming it must drop coverage. The auditor view should
+// reflect the user's ACTUAL picks, not the maximal pipeline.
+const INVARIANT_DEPENDS_ON = {
+  'I-2':  ['precommit'],          // pre-commit hooks
+  'I-3':  ['scanner'],            // CVE scan
+  'I-4':  ['scanner'],            // SAST is part of scanner suite
+  'I-5':  ['scanner'],            // IaC scan via scanner
+  'I-6':  ['localsecret'],        // secret scan
+  'I-8':  ['signing','sbom'],     // signed + SBOM-attested
+  'I-10': ['signing'],            // SLSA provenance signed with cosign
+  'I-13': ['baseimage'],          // approved base image registry
+  'I-16': ['signing'],            // image verified at admission via cosign
+  'I-19': ['scanner'],            // .trivyignore / scanner allowlist
+  'I-20': ['signing']             // admission verifies signature
+};
+// Returns 'full' | 'partial' | 'none' for the user's current picks.
+function _invariantStatus(iid) {
+  const deps = INVARIANT_DEPENDS_ON[iid];
+  if (!deps) return 'full'; // not gated by any decision (phase-0 / always-on)
+  const cfg = (typeof getConfig === 'function') ? getConfig() : {};
+  const off = deps.filter(d => !cfg[d] || cfg[d] === 'none').length;
+  if (off === 0) return 'full';
+  if (off === deps.length) return 'none';
+  return 'partial';
+}
 function renderComplianceCoverageTable(complianceKey) {
   const map = COMPLIANCE_CONTROL_MAP[complianceKey];
   if (!map || !map.length) return '';
   const invariantById = {};
   (INVARIANTS || []).forEach(i => { invariantById[i.id] = i; });
   const rows = map.map(c => {
+    // Per-invariant status reflects ACTUAL picks. A control is 'full' iff
+    // every supporting invariant is fully enforced; 'partial' if at least
+    // one is fully enforced; 'none' if all are off. Honest auditor view.
+    const statuses = c.satisfiedBy.map(_invariantStatus);
+    let metState = 'full';
+    if (statuses.every(s => s === 'none')) metState = 'none';
+    else if (statuses.some(s => s !== 'full')) metState = 'partial';
+    const metCell = metState === 'full'
+      ? '<td style="text-align:center;padding:5px 8px;color:var(--success);font-weight:700" title="Every supporting invariant is enforced by your current picks.">✓</td>'
+      : metState === 'partial'
+      ? '<td style="text-align:center;padding:5px 8px;color:#9a6700;font-weight:700" title="Some supporting invariants are turned off — partial coverage. Hover the invariant chip for details.">◐</td>'
+      : '<td style="text-align:center;padding:5px 8px;color:var(--danger);font-weight:700" title="No supporting invariant is enforced. Re-enable the relevant scanner/signing/sbom decision to satisfy this control.">✗</td>';
     const invs = c.satisfiedBy.map(iid => {
       const inv = invariantById[iid];
+      const s = _invariantStatus(iid);
+      const tint = s === 'full' ? 'var(--accent)' : s === 'partial' ? '#9a6700' : 'var(--danger)';
+      const bg   = s === 'full' ? 'rgba(9,105,218,.08)' : s === 'partial' ? 'rgba(154,103,0,.08)' : 'rgba(207,34,46,.08)';
+      const br   = s === 'full' ? 'rgba(9,105,218,.25)' : s === 'partial' ? 'rgba(154,103,0,.25)' : 'rgba(207,34,46,.25)';
+      const stateMark = s === 'full' ? '' : s === 'partial' ? ' ◐' : ' ✗';
       if (!inv) return `<span style="color:var(--muted)">${iid}</span>`;
-      return `<span class="dk-inv-chip" onclick="openInvariantContext('${iid}')" title="${esc(inv.text)} (Enforced at: ${esc(inv.enforced)})" style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--accent);background:rgba(9,105,218,.08);border:1px solid rgba(9,105,218,.25);border-radius:3px;padding:1px 5px;margin:1px 3px 1px 0;cursor:pointer">${iid}</span>`;
+      const cfgNow = (typeof getConfig === 'function') ? getConfig() : {};
+      const offDeps = (INVARIANT_DEPENDS_ON[iid] || []).filter(d => !cfgNow[d] || cfgNow[d] === 'none');
+      const title = `${inv.text} (${inv.enforced})${offDeps.length ? '. Currently OFF: ' + offDeps.join(', ') + '=none' : ''}`;
+      return `<span class="dk-inv-chip" onclick="openInvariantContext('${iid}')" title="${esc(title)}" style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:${tint};background:${bg};border:1px solid ${br};border-radius:3px;padding:1px 5px;margin:1px 3px 1px 0;cursor:pointer">${iid}${stateMark}</span>`;
     }).join('');
     const stages = [...new Set(c.satisfiedBy.map(iid => (invariantById[iid] || {}).enforced || '').filter(Boolean))]
       .map(s => `<span style="font-size:10.5px;color:var(--muted)">${esc(s.split(':')[0] || s)}</span>`).join(' · ');
     return `<tr>
       <td style="font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:var(--text);white-space:nowrap;padding:5px 8px">${esc(c.control)}</td>
       <td style="font-size:11.5px;padding:5px 8px">${esc(c.title)}</td>
-      <td style="text-align:center;padding:5px 8px;color:var(--success);font-weight:700">✓</td>
+      ${metCell}
       <td style="padding:5px 8px">${invs}</td>
       <td style="padding:5px 8px">${stages}</td>
     </tr>`;
   }).join('');
   return `<div style="margin-top:12px;padding:10px;border:1px solid var(--border);border-radius:4px;background:#fafbfc">
-    <div style="font-size:11.5px;font-weight:700;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Controls satisfied by your current pipeline</div>
+    <div style="font-size:11.5px;font-weight:700;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Controls satisfied by your CURRENT picks</div>
     <table style="width:100%;border-collapse:collapse;font-size:11.5px">
       <thead>
         <tr style="border-bottom:1px solid var(--border-subtle)">
@@ -10724,7 +10750,7 @@ function renderComplianceCoverageTable(complianceKey) {
       </thead>
       <tbody>${rows}</tbody>
     </table>
-    <div style="margin-top:6px;font-size:11px;color:var(--muted);font-style:italic">Click any invariant to see what enforces it. Controls listed here are satisfied by the pipeline; <b>extras outside the pipeline</b> (penetration tests, BAAs, etc.) appear in the compliance banner above.</div>
+    <div style="margin-top:6px;font-size:11px;color:var(--muted);font-style:italic">✓ = all supporting invariants enforced · ◐ = partial (one or more decisions set to <i>none</i>) · ✗ = no support active. Click any invariant chip to see what enforces it. Items outside this pipeline (pen tests, BAAs, etc.) appear in the compliance banner above.</div>
   </div>`;
 }
 
@@ -10850,16 +10876,10 @@ function pickDecision(id, value) {
   // the cause/effect link visually. Scheduled after the re-render so the
   // node DOM exists when we query for it.
   setTimeout(() => highlightDecisionNodes(id), 50);
-  // 3-way sync: also activate the phase tab of the FIRST affected stage so
-  // the user lands on the panel where their pick takes effect.
-  setTimeout(() => {
-    const nodes = (typeof DECISION_AFFECTS_NODES !== 'undefined') ? DECISION_AFFECTS_NODES[id] : null;
-    if (nodes && nodes.length) {
-      const tab = STAGE_TO_PHASE_TAB[nodes[0]];
-      const btn = tab && document.querySelector(`.phase-tab[data-tab="${tab}"]`);
-      if (tab && btn && !btn.classList.contains('phase-tab-active')) activatePhaseTab(tab, btn);
-    }
-  }, 60);
+  // Note: deliberately NOT auto-switching the phase tab here — was disorienting
+  // when user is reading Phase 0 docs and a decision flips them to Phase 4.
+  // The phase change is offered as a 'View in Phase X →' link in the toast
+  // (see onConfigChange).
 
   if (def.selectId) {
     if (id === 'industry' && typeof onIndustryChange === 'function') onIndustryChange();
@@ -12554,21 +12574,32 @@ function updateStickyHeadersHeight() {
   if (h > 0) document.documentElement.style.setProperty('--sticky-headers-h', (h + 8) + 'px');
 }
 
-// Mini-toast — used by the 'what changed' indicator on config changes and by
-// the auto-scroll on dropdown change. Auto-dismissed after `ms` (default 2.5s).
+// Mini-toast — used by the 'what changed' indicator on config changes. Auto-
+// dismissed after 3s. If `onClick` is supplied, the toast becomes clickable
+// (cursor:pointer; pointer-events on) and `onClick` fires when the user
+// clicks. Used to offer 'View in Phase X →' nav without auto-yanking.
 let _toastTimer = null;
-function showMiniToast(text) {
+function showMiniToast(text, onClick) {
   let toast = $id('mini-toast');
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'mini-toast';
-    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0d1117;color:#e6edf3;padding:8px 14px;border-radius:6px;font-size:12px;font-family:inherit;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:var(--z-toast-top);opacity:0;transition:opacity .18s;max-width:480px;text-align:center;pointer-events:none';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0d1117;color:#e6edf3;padding:8px 14px;border-radius:6px;font-size:12px;font-family:inherit;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:var(--z-toast-top);opacity:0;transition:opacity .18s;max-width:520px;text-align:center';
     document.body.appendChild(toast);
   }
   toast.textContent = text;
   toast.style.opacity = '1';
+  if (typeof onClick === 'function') {
+    toast.style.pointerEvents = 'auto';
+    toast.style.cursor = 'pointer';
+    toast.onclick = () => { try { onClick(); } catch (e) {} toast.style.opacity = '0'; };
+  } else {
+    toast.style.pointerEvents = 'none';
+    toast.style.cursor = 'default';
+    toast.onclick = null;
+  }
   if (_toastTimer) clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2500);
+  _toastTimer = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
 }
 
 function restoreQuickStartState() {
@@ -13353,27 +13384,39 @@ function onConfigChange() {
   // Re-render phase 0 (registry-specific content changes)
   renderPhase0();
 
-  // "What changed" feedback (fix 12). Diff the picked dropdowns from the
-  // previous config snapshot; if any changed, show a short toast naming
-  // them. Skipped on first call (no previous to diff against).
+  // "What changed" feedback (fix 12). Diff picked dropdowns vs the previous
+  // snapshot. Skipped on first call, on chrome-only changes (mode toggle,
+  // advanced toggle don't mutate cfg keys we care about), and on multi-change
+  // bursts (industry auto-link). The toast can also offer a 'View in Phase X'
+  // link instead of yanking the page automatically.
   try {
     const nextCfg = getConfig();
-    const changed = _diffCfg(_prevCfgSnapshot, nextCfg);
+    const changed = _diffCfg(_prevCfgSnapshot, nextCfg)
+      // Filter out keys that aren't pipeline-relevant (mode is body class
+      // only; pkgMgr is derived from language; lintCmd/testCmd are computed).
+      .filter(k => _affectedPhaseByKey[k] || ['fe','be','ci','registry','reg','cd','gitops','compliance','compliance2','scanner','signing','sbom','baseimage','industry'].includes(k));
     if (_prevCfgSnapshot && changed.length) {
-      const human = changed.map(k => k === 'compliance' ? 'Compliance' : k === 'ci' ? 'CI' : k === 'registry' ? 'Registry' : k.charAt(0).toUpperCase()+k.slice(1)).slice(0,3).join(', ');
+      const human = changed.map(k => k === 'compliance' ? 'Compliance' : k === 'compliance2' ? 'Compliance (+2)' : k === 'ci' ? 'CI' : k === 'reg' || k === 'registry' ? 'Registry' : k.charAt(0).toUpperCase()+k.slice(1)).slice(0,3).join(', ');
       const more = changed.length > 3 ? ` +${changed.length-3} more` : '';
-      showMiniToast(`Updated: ${human}${more}`);
-      // Fix 14 — auto-scroll to the affected phase column on a single change.
-      // Skipped if multiple things changed (avoid yanking unexpectedly) and
-      // skipped in quick-start mode or when user is currently in the
-      // decision-map section.
-      if (changed.length === 1 && !document.body.classList.contains('quick-start-mode')) {
+      // If a SINGLE config key changed and it's tied to a phase, offer a
+      // 'View in Phase X' link in the toast — user-initiated nav, no auto-yank.
+      let viewLink = '';
+      if (changed.length === 1) {
         const tabId = _affectedPhaseByKey[changed[0]];
-        if (tabId) {
-          const el = $id(tabId);
-          if (el) try { el.scrollIntoView({behavior:'smooth', block:'start'}); } catch (e) {}
+        if (tabId && !document.body.classList.contains('quick-start-mode')) {
+          const labels = { 'tab-phase0':'Phase 0', 'tab-local':'Phase 1', 'tab-pr':'Phase 2', 'tab-main':'Phase 3', 'tab-promotions':'Phase 4' };
+          viewLink = ` · View in ${labels[tabId] || tabId} →`;
         }
       }
+      showMiniToast(`Updated: ${human}${more}${viewLink}`, () => {
+        if (changed.length === 1) {
+          const tabId = _affectedPhaseByKey[changed[0]];
+          if (tabId) {
+            const btn = document.querySelector(`.phase-tab[data-tab="${tabId}"]`);
+            if (btn) activatePhaseTab(tabId, btn);
+          }
+        }
+      });
     }
     _prevCfgSnapshot = nextCfg;
   } catch (e) { /* never let UI feedback break the render */ }
@@ -14061,6 +14104,9 @@ function handleKeydown(e) {
     const cur = (document.body.className.match(/mode-(\w+)/) || [])[1] || 'default';
     const next = MODE_CYCLE[(MODE_CYCLE.indexOf(cur) + 1) % MODE_CYCLE.length];
     setMode(next);
+    // Feedback: the Mode select is hidden behind 'More' by default, so the
+    // user can't see the dropdown change. Show a brief toast confirming.
+    if (typeof showMiniToast === 'function') showMiniToast(`Mode: ${next.charAt(0).toUpperCase() + next.slice(1)}`);
     return;
   }
   if (k === '?') { e.preventDefault(); showKeyboardLegend(); return; }
