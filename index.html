@@ -693,8 +693,7 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
   </div>
 </div>
 
-<!-- (Wizard modal removed — see commit. The on-page Decision Map is now the
-     single entry point; the W keyboard shortcut + openWizard() are gone.) -->
+<!-- (Wizard modal removed — the on-page Decision Map is the single entry point.) -->
 
 <!-- ── Threat tour modal ── -->
 <div id="threat-tour-modal" role="dialog" aria-modal="true" aria-labelledby="threat-tour-title" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal-tour);align-items:flex-start;justify-content:center;padding-top:60px" onclick="if(event.target===this)hideThreatTour()">
@@ -13676,12 +13675,6 @@ function augmentDropdownsFromCatalog() {
     og.appendChild(opt);
   });
 }
-
-// ──────────────────────────────────────────────────────────────────
-// DECISION WIZARD — 7 questions, concept + tradeoff per step.
-// Output: every dropdown filled, pipeline rendered, modal closed.
-// State is held in WIZARD_STATE during the flow. Committed on Finish.
-// ──────────────────────────────────────────────────────────────────
 
 function init() {
   // Prevent browser from restoring scroll position — always open at top.
