@@ -8179,9 +8179,7 @@ function buildMasterSVG() {
     const critStroke = n.critical ? '#cf222e' : (decisionActive ? '#2da44e' : n.stroke);
     const critWidth  = n.critical ? '2.5' : (decisionActive ? '2.2' : '1');
     // Lighten fill slightly when a decision covers this node
-    const nodeFill = decisionActive && !n.critical
-      ? (n.fill === '#f1f3f5' ? '#eafbef' : n.fill.replace('f0','e8').replace('f4','ea') || n.fill)
-      : n.fill;
+    const nodeFill = decisionActive && !n.critical ? '#eafbef' : n.fill;
     const subX = n.x + NODE_W - 8;
     // Tool sub-label: show current decision pick for key nodes
     const toolDecId = TOOL_SUBLABEL_MAP[n.id];
@@ -9226,7 +9224,11 @@ function renderShapePicker() {
 }
 
 function pickShapeCategory(catKey) {
-  SHAPE_PICKER_STATE = { category: catKey, subtype: null };
+  // Reset shape state so old shape decisions don't filter the new shape.
+  SHAPE_PICKER_STATE = { category: catKey, subtype: null, framework: null, frameworkLabel: null };
+  delete DECISION_STATE['shape'];
+  DECISION_VISITED.delete('shape');
+  ACTIVE_STEP = 0;
   renderDecisionMap();
 }
 
@@ -9266,8 +9268,7 @@ function pickShapeFramework(fwValue, feOrBe, shapeVal) {
   SHAPE_PICKER_STATE.frameworkLabel = fw?.label || fwValue;
   // Advance to step 1 (Local dev) the first time shape is picked.
   if (ACTIVE_STEP === 0) ACTIVE_STEP = 1;
-  renderDecisionMap();
-  renderMasterSVG();
+  // onConfigChange handles renderDecisionMap + renderMasterSVG — no double render.
   onConfigChange();
 }
 
@@ -9446,6 +9447,7 @@ function pickDecision(id, value) {
     if (id === 'industry' && typeof onIndustryChange === 'function') onIndustryChange();
     else onConfigChange();
   } else {
+    writeStateToURL();
     renderDecisionMap();
     renderMasterSVG();
   }
@@ -10566,14 +10568,7 @@ function renderMaintainTab() {
       }
     }
   }
-  // Also scan STACKS for coming-soon entries
-  if (typeof STACKS !== 'undefined') {
-    for (const [key, stack] of Object.entries(STACKS)) {
-      if (stack.comingSoon && !comingSoon.find(c => c.value === key)) {
-        comingSoon.push({ category: '?', subtype: '?', framework: stack.label || key, value: key });
-      }
-    }
-  }
+
 
   const csRows = comingSoon.length > 0
     ? `<table class="ref-table" style="margin-bottom:20px">
@@ -10597,7 +10592,7 @@ function renderMaintainTab() {
     <li>Add a corresponding entry in <code>STACKS</code> with <code>label</code>, <code>pkgMgr</code>, <code>buildCmd</code>, <code>testCmd</code>, <code>dockerFrom</code>.</li>
     <li>Run self-test tab — all 33 checks must remain green.</li>
     <li>If the stack has a unique CI pattern, add a <code>YAML_GEN</code> key and wire it in <code>genCI()</code>.</li>
-    <li>Remove <code>comingSoon: true</code> from the <code>SHAPE_TAXONOMY</code> entry and from <code>STACKS</code>.</li>
+    <li>Remove <code>comingSoon: true</code> from the <code>SHAPE_TAXONOMY</code> framework entry.</li>
   </ol>`;
 
   wrap.innerHTML = `
