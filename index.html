@@ -657,7 +657,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
   </div>
   <div class="sb-scope">
     <strong style="color:#8b949e">Scope:</strong> Source code → Signed image in prod registry.<br>
-    <span style="color:#6e7681">All stacks. All CI systems. 5 phases.</span>
+    <span style="color:#6e7681">All stacks. All CI systems. 4 phases — dev → registry → verified deploy.</span>
   </div>
   <div class="nav-grp">
     <div class="nav-lbl">Start here</div>
@@ -719,16 +719,15 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       </div>
     </div>
 
-    <h3 style="font-size:14px;font-weight:700;margin:18px 0 8px;color:var(--text)">Why exactly 5 phases?</h3>
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Each phase has a single job. Skip one — you ship broken or unverifiable code.</p>
+    <h3 style="font-size:14px;font-weight:700;margin:18px 0 8px;color:var(--text)">Why exactly 4 phases?</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Each phase has a single job. Skip one — you ship broken or unverifiable code. Runtime security (Kyverno admission, Falco, Trivy Operator) is <b>out of scope</b> here — that's platform/SRE territory, installed once per cluster.</p>
     <table class="ref-table" style="margin-bottom:18px">
       <thead><tr><th style="width:80px">Phase</th><th>Single job</th><th>Skip it — what breaks</th></tr></thead>
       <tbody>
         <tr><td class="badge-cell ph-f" style="background:var(--ph-f-bg);color:var(--ph-f-tx)">1 — Developer</td><td>Catch obvious issues on the laptop before CI spends a minute.</td><td>Developer time wasted; CI budget burned on lint errors.</td></tr>
         <tr><td class="badge-cell ph-s" style="background:var(--ph-s-bg);color:var(--ph-s-tx)">2 — PR Gate</td><td>Block insecure or broken code from merging to main.</td><td>Main branch becomes broken; team blocked until fix.</td></tr>
         <tr><td class="badge-cell ph-b" style="background:var(--ph-b-bg);color:var(--ph-b-tx)">3 — Main Build</td><td>Produce one signed, attested, immutable image.</td><td>No production-quality artifact exists.</td></tr>
-        <tr><td class="badge-cell ph-o" style="background:var(--ph-o-bg);color:var(--ph-o-tx)">4 — Promotions</td><td>Move the same image through dev → test → staging → prod.</td><td>Rebuild per environment → different image in prod than tested.</td></tr>
-        <tr><td class="badge-cell ph-v" style="background:var(--ph-v-bg);color:var(--ph-v-tx)">5 — Runtime</td><td>Catch new CVEs and runtime tampering after deploy.</td><td>Image clean at build is vulnerable next week — undetected.</td></tr>
+        <tr><td class="badge-cell ph-o" style="background:var(--ph-o-bg);color:var(--ph-o-tx)">4 — Promotions</td><td>Move the same image through dev → test → staging → prod with verification at each gate.</td><td>Rebuild per environment → different image in prod than tested.</td></tr>
       </tbody>
     </table>
 
@@ -1063,6 +1062,25 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
     </div>
   </section>
 
+  <!-- ── Cluster prerequisites — installed once by platform/SRE; out of DevSecOps scope ── -->
+  <details id="cluster-prereqs" style="margin:0 32px 12px;border:1px solid var(--border);border-left:4px solid var(--accent);background:#f5f9ff;border-radius:var(--r);font-size:12.5px">
+    <summary style="cursor:pointer;padding:10px 14px;font-weight:600;color:var(--text);list-style:none;display:flex;align-items:center;gap:8px">
+      <span style="color:var(--accent)">▸</span>
+      Cluster prerequisites — installed once by your platform/SRE team
+      <span style="font-size:10.5px;font-weight:500;color:var(--muted);margin-left:auto">Out of DevSecOps scope; assumed already in place</span>
+    </summary>
+    <div style="padding:0 18px 12px;color:var(--text-sec);line-height:1.6">
+      <p style="margin-bottom:8px">Phase 4 promotions deploy successfully <b>only if</b> the target cluster already has these set up. If your platform team hasn't, deploys will reach the cluster but admission may not be enforced (signed-image checks become opt-in instead of mandatory). Ask your SRE/platform team — these are one-time, per-cluster installs:</p>
+      <ul style="margin-left:22px;line-height:1.7">
+        <li><b>Admission controller</b> (Kyverno or OPA Gatekeeper) with a <code>verifyImages</code> policy that matches your signing identity</li>
+        <li><b>Allowed-registries</b> policy restricting workloads to your registry hostname(s)</li>
+        <li><b>ArgoCD or Flux controller</b> running, with permission to read your config / app repo</li>
+        <li><b>Runtime detection</b> (Falco, Trivy Operator) — optional but recommended; cluster-wide, owned by SRE/SOC</li>
+      </ul>
+      <p style="margin-top:10px;font-style:italic;color:var(--muted);font-size:11.5px">These are platform concerns, not pipeline concerns. The studio emits the per-app config that <i>uses</i> these — it doesn't try to install them. Why: cluster bootstrap is a one-time setup owned by a different team; pipeline runs every commit, owned by app teams.</p>
+    </div>
+  </details>
+
   <!-- ── Phase 0 ── -->
   <div class="phase0-section" id="phase0">
     <h2>Phase 0 — Repository Bootstrap <span class="phase0-badge">ONE-TIME SETUP</span></h2>
@@ -1157,60 +1175,6 @@ cosign verify \
     </div>
   </div>
 
-  <!-- ── Phase 5: Runtime ── -->
-  <div id="tab-runtime" class="tab-content" role="region" aria-label="Phase 5 — Runtime">
-    <div class="pipe-flow" id="runtime-flow"></div>
-    <div id="runtime-detail"></div>
-    <div class="pipeline-hdr">
-      <h2>Phase 5 — Runtime Security — admission control and continuous drift detection</h2>
-      <p>Continuous monitoring after deployment. Runs always-on in the cluster.</p>
-    </div>
-    <details class="ref-section">
-      <summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--text);padding:6px 0">Reference — runtime tooling matrix (alternatives + alerts)</summary>
-      <table class="ref-table">
-        <thead><tr><th>Tool</th><th>What it monitors</th><th>Alert on</th><th>Default action</th><th>Alternatives</th></tr></thead>
-        <tbody>
-          <tr><td class="badge-cell">Falco</td><td>syscall activity inside running containers (eBPF)</td><td>Shell spawn, file read outside expected paths, network connect to unexpected IP</td><td>Alert to Slack/PagerDuty</td><td>Tetragon, Aqua, Prisma Cloud</td></tr>
-          <tr><td class="badge-cell">Trivy Operator</td><td>CVE re-scan of running images (checks against updated CVE DB)</td><td>New CRITICAL/HIGH CVE found in deployed image</td><td>Create Kubernetes CRD report + alert</td><td>Grype controller, Starboard</td></tr>
-          <tr><td class="badge-cell">Kyverno</td><td>Every pod admission against ClusterPolicies</td><td>Pod without valid cosign signature + SBOM attestation</td><td>Deny admission (fail-closed per I-20)</td><td>OPA Gatekeeper, Kubewarden</td></tr>
-          <tr><td class="badge-cell">Anchore Enterprise</td><td>SBOM drift — compare running image SBOM against baseline</td><td>Package added/removed vs. signed SBOM</td><td>Alert + policy violation report</td><td>Grype diff, in-toto verification</td></tr>
-          <tr><td class="badge-cell">OpenSCAP / Wazuh</td><td>Continuous compliance posture (CIS benchmarks, STIG)</td><td>Config drift from compliance baseline</td><td>Compliance report + remediation ticket</td><td>Chef InSpec, Prisma Compute</td></tr>
-        </tbody>
-      </table>
-    </details>
-    <hr class="phase-sep">
-    <details class="ref-section">
-      <summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--text);padding:6px 0">Reference — CVE re-scan policy (severity × cadence × SLA)</summary>
-      <p>New CVEs are published daily. An image clean at build time may have new vulnerabilities within weeks.</p>
-      <table class="ref-table">
-        <thead><tr><th>Severity</th><th>Re-scan frequency</th><th>Action when found</th><th>SLA to fix</th></tr></thead>
-        <tbody>
-          <tr><td class="badge-cell" style="color:var(--danger)">CRITICAL</td><td>Every 6 hours</td><td>Page on-call immediately. Block new deploys of image.</td><td>24 hours</td></tr>
-          <tr><td class="badge-cell" style="color:var(--warn)">HIGH</td><td>Daily</td><td>Create P2 ticket. Alert #security channel.</td><td>7 days</td></tr>
-          <tr><td class="badge-cell" style="color:var(--success)">MEDIUM</td><td>Weekly</td><td>Create P3 ticket in next sprint.</td><td>30 days</td></tr>
-          <tr><td class="badge-cell">LOW</td><td>Weekly</td><td>Log. Review quarterly.</td><td>90 days</td></tr>
-        </tbody>
-      </table>
-    </details>
-    <hr class="phase-sep">
-    <details class="ref-section">
-      <summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--text);padding:6px 0">Reference — Falco + Trivy Operator quick-start install</summary>
-      <pre style="background:var(--code-bg);color:var(--code-text);padding:14px;border-radius:var(--r);font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.65;overflow-x:auto"># Install Falco via Helm
-helm repo add falcosecurity https://falcosecurity.github.io/charts
-helm install falco falcosecurity/falco \
-  --namespace falco --create-namespace \
-  --set falco.grpc.enabled=true \
-  --set falco.grpc_output.enabled=true \
-  --set falcosidekick.enabled=true \
-  --set falcosidekick.config.slack.webhookurl="$SLACK_WEBHOOK"
-
-# Install Trivy Operator
-helm repo add aqua https://aquasecurity.github.io/helm-charts/
-helm install trivy-operator aqua/trivy-operator \
-  --namespace trivy-system --create-namespace \
-  --set trivy.ignoreUnfixed=true</pre>
-    </details>
-  </div>
 
   <!-- ── Config Files tab ── -->
   <div id="tab-files" class="tab-content hide-from-auditor" role="region" aria-label="Config Files">
@@ -1590,7 +1554,7 @@ const INVARIANTS = [
   {id:'I-17', text:'No untrusted fork code runs with repository write access or elevated secrets', enforced:'Phase 0: branch protection', incident:'pwn-request pattern — pull_request_target gave fork PRs secret access'},
   {id:'I-18', text:'All credentials OIDC-derived; no long-lived tokens stored in CI variable store', enforced:'Phase 0: OIDC setup', incident:'Codecov 2021 — stored CI tokens leaked, attackers had 4 months of access'},
   {id:'I-19', text:'Vuln allowlist entries expire ≤90 days',      enforced:'S7: .trivyignore',             incident:'Equifax — Struts CVE was on a wishlist of "fix later" for 2 months pre-breach'},
-  {id:'I-20', text:'All admission policies fail-closed',          enforced:'S14 + Phase 5',                incident:'Cryptojacking wave 2018 — fail-open admission let unsigned miners run'}
+  {id:'I-20', text:'All admission policies fail-closed',          enforced:'S14 (Verify Sig) + platform-owned admission webhook (Kyverno/OPA, out of scope)', incident:'Cryptojacking wave 2018 — fail-open admission let unsigned miners run'}
 ];
 
 // STRIDE = Microsoft threat-classification (Spoof, Tamper, Repudiate, Info-disclosure, DoS, Elevate).
@@ -2420,94 +2384,6 @@ const PROMOTION_STAGES = [
   }
 ];
 
-// Phase 5 — runs always-on in cluster. Not part of CI pipeline.
-// Detects post-deploy drift: new CVEs, runtime tampering, admission bypass.
-const RUNTIME_STAGES = [
-  {
-    id:'r1', badge:'R1', phase:'ph-v',
-    title:'Admission verification',
-    tool:'Kyverno ClusterPolicy · cosign verify',
-    invariants:['I-16','I-20'],
-    actor:'Kyverno admission webhook in cluster',
-    trigger:'Every Pod admission request',
-    filesRead:'ClusterPolicy YAML · pod spec · cosign signature in registry',
-    filesProduces:'Admit or deny decision',
-    onFailure:'Pod admission denied. Deploy fails closed (I-20).',
-    orderAfter:'After P1-P4 hand the image to the cluster.',
-    orderBefore:'Before pod runs.',
-    yamlKey:'genR1',
-    concept:'Cluster refuses any pod whose image lacks valid cosign signature + SBOM attestation.',
-    threat:'Unsigned image reaches cluster via bypass. Without this gate, build-pipeline failures leak to runtime.',
-    howItWorks:'Every Pod create call hits the Kyverno admission webhook. Kyverno fetches image signature from registry, verifies against expected OIDC issuer/subject. ClusterPolicy is fail-closed: any verify error denies admission.',
-    outputMeaning:'Admit: pod schedules. Deny: kubectl returns "admission webhook denied: image not signed by expected identity".',
-    whyOrder:'Hard gate at runtime. Last enforcement after every promotion step.',
-    commonMistakes:'Policy in audit mode only (logs but admits) | webhook failurePolicy:Ignore (fails open!) | Too-broad identity regex (any workflow matches)',
-    failureClass:'STOPS_PIPELINE'
-  },
-  {
-    id:'r2', badge:'R2', phase:'ph-v',
-    title:'Continuous CVE rescan',
-    tool:'Trivy Operator (in-cluster CRD)',
-    invariants:['I-3','I-19'],
-    actor:'Trivy Operator pod in trivy-system namespace',
-    trigger:'Cron: CRITICAL every 6h · HIGH daily · MEDIUM weekly',
-    filesRead:'Running image digests · updated CVE DB',
-    filesProduces:'VulnerabilityReport CRD per workload · alerts to Slack/PagerDuty',
-    onFailure:'Critical CVE found in running image: page on-call. Block new deploys of image.',
-    orderAfter:'Always-on. After R1 admits the image.',
-    orderBefore:'Continuous. No "before".',
-    yamlKey:'genR2',
-    concept:'New CVEs are published daily. An image clean at build can be vulnerable by next week.',
-    threat:'Long-running pod (days/weeks) accumulates exposure as new CVEs hit its base image.',
-    howItWorks:'Trivy Operator watches all workloads. Periodically pulls each image digest, scans against updated NVD/OSV/GHSA DB. Creates a VulnerabilityReport CRD per workload. Alert routed via webhook.',
-    outputMeaning:'VulnerabilityReport per workload. CVE list with severity + fixed version. Slack/PagerDuty alerts on CRITICAL.',
-    whyOrder:'Continuous. Strict re-scan cadence per severity.',
-    commonMistakes:'Disabling MEDIUM rescans (Medium → High over time) | No PagerDuty wiring (alert sleeps in #channel) | Same scanner version as build (misses new rules)',
-    failureClass:'WARNS_ONLY'
-  },
-  {
-    id:'r3', badge:'R3', phase:'ph-v',
-    title:'Runtime syscall monitoring',
-    tool:'Falco (eBPF · ' + TV.actionCheckout.split('@')[0] + ')',
-    invariants:[],
-    actor:'Falco DaemonSet on every node',
-    trigger:'Every syscall inside every container',
-    filesRead:'Kernel eBPF events · Falco rules.yaml',
-    filesProduces:'Alert events → Falcosidekick → Slack/PagerDuty/SIEM',
-    onFailure:'Suspicious syscall: alert. No auto-action by default. (Tetragon can kill.)',
-    orderAfter:'Always-on after R1.',
-    orderBefore:'Continuous.',
-    yamlKey:'genR3',
-    concept:'Falco watches Linux syscalls via eBPF and matches against rules (shell spawn, /etc/shadow read, unexpected egress).',
-    threat:'Compromised container drops a shell, reads secrets, connects to attacker C2. Build-time scanning cannot catch this.',
-    howItWorks:'Falco loads an eBPF program into the kernel (eBPF = sandboxed kernel programs). Every syscall checked against rule set. Matches forwarded to Falcosidekick. Default action: alert. Optional: kill the pod via Tetragon or admission controller.',
-    outputMeaning:'Alert event with: pod, container, syscall, args, rule that matched. Routed by Falcosidekick.',
-    whyOrder:'Always-on. Independent of CI pipeline.',
-    commonMistakes:'Default rules only (no app-specific tuning = noise) | No sidekick wiring (alerts stay on stdout) | Disabling kernel modules in hardened cluster (Falco needs eBPF or kernel modules)',
-    failureClass:'WARNS_ONLY'
-  },
-  {
-    id:'r4', badge:'R4', phase:'ph-v',
-    title:'SBOM drift detection',
-    tool:'Anchore Enterprise / in-toto verification',
-    invariants:['I-8'],
-    actor:'SBOM scanner sidecar or cron job',
-    trigger:'Daily or on workload restart',
-    filesRead:'Running image actual SBOM · signed baseline SBOM in registry',
-    filesProduces:'Drift report — packages added/removed/upgraded',
-    onFailure:'Drift found: policy violation report. New CRITICAL CVE → block new admits.',
-    orderAfter:'Always-on after R1.',
-    orderBefore:'Continuous.',
-    yamlKey:'genR4',
-    concept:'Compares the SBOM of the actually-running container to the signed SBOM baseline. Any delta = tamper signal.',
-    threat:'Layer mutated between build and runtime. Attacker swapped a binary inside a long-running pod.',
-    howItWorks:'Daily scan re-generates the SBOM of the running image. Diff against the cosign-attested SBOM from build. Differences emit a drift event. New packages cross-checked against CVE DB.',
-    outputMeaning:'Drift report: list of added/removed/changed packages with PURLs. Policy violation if any.',
-    whyOrder:'Continuous. After all build-time gates passed.',
-    commonMistakes:'Skipping the OS layer in diff (most drift hides there) | Tolerance too high (any drift is suspicious) | No baseline fetched from registry (compares to local copy)',
-    failureClass:'WARNS_ONLY'
-  }
-];
 
 const ALTERNATIVES = {
   s0:[
@@ -8224,7 +8100,6 @@ function allStages() {
   PR_STAGES.forEach(i => i.parallel ? i.stages.forEach(add) : add(i));
   MAIN_STAGES.forEach(i => i.parallel ? i.stages.forEach(add) : add(i));
   PROMOTION_STAGES.forEach(add);
-  RUNTIME_STAGES.forEach(add);
   return out;
 }
 
@@ -8442,11 +8317,10 @@ function jumpToStage(stageId) {
   // Find which phase array owns this stage. Drives which tab to open + which detail container.
   const inPR   = PR_STAGES.some(i => i.parallel ? i.stages.some(s => s.id === stageId) : i.id === stageId);
   const inProm = PROMOTION_STAGES.some(s => s.id === stageId);
-  const inRun  = RUNTIME_STAGES.some(s => s.id === stageId);
-  // tab-id suffix → 'pr' / 'main' / 'promotions' / 'runtime'.
+  // tab-id suffix → 'pr' / 'main' / 'promotions'.
   // detail container id → '<phase>-detail' (matches the divs added in HTML).
-  const tabId = inPR ? 'pr' : inProm ? 'promotions' : inRun ? 'runtime' : 'main';
-  const tab   = inProm ? 'promotion' : inRun ? 'runtime' : tabId;
+  const tabId = inPR ? 'pr' : inProm ? 'promotions' : 'main';
+  const tab   = inProm ? 'promotion' : tabId;
   switchTab(tabId);
   setTimeout(() => {
     const el = document.getElementById('pb-' + stageId);
@@ -8476,7 +8350,6 @@ const INVARIANT_TO_STAGES = (() => {
   collect(PR_STAGES);
   collect(MAIN_STAGES);
   collect(PROMOTION_STAGES);
-  collect(RUNTIME_STAGES);
   return m;
 })();
 
@@ -8601,14 +8474,8 @@ const SVG_LAYOUT = (() => {
       {id:'p1',   kind:'ship', label:'Deploy → dev',   sub:'P1'},
       {id:'p2',   kind:'ship', label:'Promote → test', sub:'P2'},
       {id:'p3',   kind:'ship', label:'Promote → staging', sub:'P3'},
-      {id:'p4',   kind:'ship', label:'Canary → prod',  sub:'P4', critical:true}
-    ]},
-    {phase:5, label:'Phase 5 · Runtime',    fill:'#ebfbee', stroke:'#b2f2bb', stages:[
-      {id:'s14',  kind:'verify', label:'Verify Sig',  sub:'S14', critical:true},
-      {id:'r1',   kind:'verify', label:'Admission verify', sub:'R1', critical:true},
-      {id:'r2',   kind:'verify', label:'CVE rescan',  sub:'R2'},
-      {id:'r3',   kind:'verify', label:'Falco eBPF',  sub:'R3'},
-      {id:'r4',   kind:'verify', label:'SBOM drift',  sub:'R4'}
+      {id:'p4',   kind:'ship', label:'Canary → prod',  sub:'P4', critical:true},
+      {id:'s14',  kind:'verify', label:'Verify Sig',  sub:'S14', critical:true}
     ]}
   ];
   // Hardcoded canonical edges (from_id → to_id). Critical edges flagged.
@@ -8627,10 +8494,8 @@ const SVG_LAYOUT = (() => {
     ['s8b','s12','critical'],['s10','s12','critical'],['dast','s12'],['s11','s12'],
     ['s12','s13','critical'],
     ['s13','p1','critical'],['p1','p2'],['p2','p3'],['p3','p4','critical'],
-    // promote → verify (Phase 5)
-    ['s13','s14','critical'],
-    ['s14','r1','critical'],['r1','r2'],['r1','r3'],['r1','r4'],
-    ['p4','r1','critical'],
+    // promote → final verify (last DevSecOps gate before cluster admission)
+    ['p4','s14','critical'],
     // cross-phase 0→1
     ['p0g3','l1']
   ];
@@ -10381,7 +10246,7 @@ function renderMasterSVG() {
 // Stage IDs that exist only in the diagram (no per-stage data).
 // openStageContext gracefully closes if id unknown — we guard by adding stubs.
 const SVG_ONLY_STAGES = {
-  // Phase 0 + Phase 1 anchors. Real P1-P4 + R1-R4 live in PROMOTION_STAGES + RUNTIME_STAGES.
+  // Phase 0 + Phase 1 anchors. Real P1-P4 live in PROMOTION_STAGES.
   'p0g1': {id:'p0g1', badge:'Gate 1', title:'Identity (OIDC trust)', tool:'Phase 0', concept:'Prove who the pipeline is to the registry without storing a long-lived password.', onFailure:'No way to push to registry.', invariants:['I-1','I-18']},
   'p0g2': {id:'p0g2', badge:'Gate 2', title:'Protection (branch + secret scanning)', tool:'Phase 0', concept:'Block unsigned commits, force-push, and secret leaks at the source.', onFailure:'Insecure code lands on main.', invariants:['I-2','I-6','I-17']},
   'p0g3': {id:'p0g3', badge:'Gate 3', title:'Secrets (pinned tooling)', tool:'Phase 0', concept:'Store only secrets that cannot be OIDC-derived. Pin tool versions.', onFailure:'Tooling drift, secret rot.', invariants:['I-14','I-15']},
@@ -10494,7 +10359,7 @@ function badgeToCkey(badge) {
 }
 
 function findStage(id) {
-  const all = [...LOCAL_STAGES, ...PR_STAGES, ...MAIN_STAGES, ...PROMOTION_STAGES, ...RUNTIME_STAGES];
+  const all = [...LOCAL_STAGES, ...PR_STAGES, ...MAIN_STAGES, ...PROMOTION_STAGES];
   for (const item of all) {
     if (item.parallel) {
       const found = item.stages.find(s => s.id === id);
@@ -11712,8 +11577,7 @@ function playPipeline() {
   const order = [
     ...PR_STAGES.flatMap(i => i.parallel ? i.stages.map(s => s.id) : [i.id]),
     ...MAIN_STAGES.flatMap(i => i.parallel ? i.stages.map(s => s.id) : [i.id]),
-    ...PROMOTION_STAGES.map(s => s.id),
-    ...RUNTIME_STAGES.map(s => s.id)
+    ...PROMOTION_STAGES.map(s => s.id)
   ];
   let i = 0;
   const step = () => {
@@ -11894,7 +11758,7 @@ function switchTab(tabId) {
 }
 
 // Wrap reference sections (post-Phase-5) in <details> so they collapse.
-// Phases 1-5 + concept stay expanded — they are the narrative.
+// Phases 1-4 + concept stay expanded — they are the narrative.
 // Why: long page = paralysis; reference content compressed = scannable.
 // Render the sticky right TOC.
 // Each anchor smooth-scrolls to its section.
@@ -11912,8 +11776,7 @@ function renderTOC() {
       {id:'tab-local',      label:'1 · Dev Local'},
       {id:'tab-pr',         label:'2 · PR Gate — scan + lint + build check'},
       {id:'tab-main',       label:'3 · Main — build, push, sign, attest'},
-      {id:'tab-promotions', label:'4 · Promotions — dev → staging → prod'},
-      {id:'tab-runtime',    label:'5 · Runtime — admission + drift detection'}
+      {id:'tab-promotions', label:'4 · Promotions — dev → staging → prod'}
     ]},
     {label:'Reference', items:[
       {id:'tab-files',     label:'Config Files'},
@@ -11996,7 +11859,7 @@ function collapseReferenceSections() {
 // Skipped silently if IntersectionObserver is missing (e.g., jsdom test env).
 function initScrollspy() {
   if (typeof IntersectionObserver === 'undefined') return;
-  const sections = ['local','pr','main','promotions','runtime','files','setup','tradeoffs','mistakes','matrix','glossary','selftest','maintain']
+  const sections = ['local','pr','main','promotions','files','setup','tradeoffs','mistakes','matrix','glossary','selftest','maintain']
     .map(t => ({id:t, el:document.getElementById('tab-'+t)})).filter(x => x.el);
   if (!sections.length) return;
   const observer = new IntersectionObserver(entries => {
@@ -12542,7 +12405,6 @@ function onConfigChange() {
   renderPipeFlow(PR_STAGES, 'pr-flow', 'pr-detail');
   renderPipeFlow(MAIN_STAGES, 'main-flow', 'main-detail');
   renderPipeFlow(PROMOTION_STAGES, 'promotion-flow', 'promotion-detail');
-  renderPipeFlow(RUNTIME_STAGES, 'runtime-flow', 'runtime-detail');
 
   // Re-render local phase
   renderLocalPhase();
@@ -13170,7 +13032,6 @@ function init() {
   renderPipeFlow(PR_STAGES, 'pr-flow', 'pr-detail');
   renderPipeFlow(MAIN_STAGES, 'main-flow', 'main-detail');
   renderPipeFlow(PROMOTION_STAGES, 'promotion-flow', 'promotion-detail');
-  renderPipeFlow(RUNTIME_STAGES, 'runtime-flow', 'runtime-detail');
   renderWorkflowBox('pr', 'PR Gate Workflow', 'pr-workflow-box');
   renderWorkflowBox('main', 'Main Pipeline Workflow', 'main-workflow-box');
   renderConfigFiles();
@@ -13209,7 +13070,6 @@ function init() {
   try { const id = firstOf(PR_STAGES);        if (id) selectPipeStage(id, 'pr-detail',        {noScroll:true}); } catch(e) {}
   try { const id = firstOf(MAIN_STAGES);      if (id) selectPipeStage(id, 'main-detail',      {noScroll:true}); } catch(e) {}
   try { const id = firstOf(PROMOTION_STAGES); if (id) selectPipeStage(id, 'promotion-detail', {noScroll:true}); } catch(e) {}
-  try { const id = firstOf(RUNTIME_STAGES);   if (id) selectPipeStage(id, 'runtime-detail',   {noScroll:true}); } catch(e) {}
 
   // If the URL has a #tab hash, jump to it after all sections have rendered.
   // Run on a microtask so scroll target heights are settled.
@@ -13221,7 +13081,7 @@ function init() {
 // ──────────────────────────────────────────────────────────────────
 // KEYBOARD SHORTCUTS — keep hands on the keyboard.
 // / → Quick Find · t → Threat tour · p → Play · m → cycle Mode
-// 1-5 → jump to Phase tab · ? → show legend.
+// 1-4 → jump to Phase tab · ? → show legend.
 // Ignored when focus is in an input/select/textarea.
 // ──────────────────────────────────────────────────────────────────
 const MODE_CYCLE = ['default','learn','ship','audit'];
@@ -13247,9 +13107,9 @@ function handleKeydown(e) {
   }
   if (k === '?') { e.preventDefault(); showKeyboardLegend(); return; }
   if (k === 'escape') { hideKeyboardLegend(); return; }
-  if (/^[1-5]$/.test(k)) {
+  if (/^[1-4]$/.test(k)) {
     e.preventDefault();
-    const phaseTabs = ['tab-local','tab-pr','tab-main','tab-promotions','tab-runtime'];
+    const phaseTabs = ['tab-local','tab-pr','tab-main','tab-promotions'];
     const target = phaseTabs[parseInt(k,10) - 1];
     const el = document.getElementById(target);
     if (el) try { el.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e2){}
@@ -13269,7 +13129,7 @@ function showKeyboardLegend() {
         <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">t</kbd> Threat tour</div>
         <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">p</kbd> Play animation</div>
         <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">m</kbd> Cycle mode</div>
-        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">1-5</kbd> Jump to Phase</div>
+        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">1-4</kbd> Jump to Phase</div>
         <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">?</kbd> Toggle this legend</div>
         <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">Esc</kbd> Hide legend</div>
       </div>`;
