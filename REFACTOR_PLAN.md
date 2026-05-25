@@ -141,42 +141,42 @@ This is where the "feels broken" goes away.
 
 This is where it stops looking like a Frankenstein.
 
-- [ ] **P2-1 · Extend design tokens** *(HIGH)*
+- [x] **P2-1 · Extend design tokens** *(HIGH)* — commit `8a47ef4`
   - Files: `index.html:11–29` (`:root`)
   - Add tokens for: font-size scale (`--fs-xs / sm / base / md / lg / xl / 2xl`, 5–7 values max), font-weight (`--fw-regular / medium / semibold / bold`), spacing scale (`--sp-1 … --sp-8` mapping to 4 / 8 / 12 / 16 / 20 / 24 / 32 / 48 px), line-height (`--lh-tight / base / loose`), elevation `--sh-1 / 2 / 3`, semantic backgrounds `--bg-note-info / warn / success / danger / compliance`.
   - Accept: A "design tokens" comment block in `:root` documents the whole scale.
 
-- [ ] **P2-2 · Eliminate inline styles in `<body>`** *(HIGH)*
+- [ ] **P2-2 · Eliminate inline styles in `<body>`** *(HIGH)* — DEFERRED — 513-site mechanical migration; each touched style needs visual regression check that requires a browser. Tokens (P2-1) + button system (P2-4) ready; migration itself wants a session with screenshot diff coverage
   - Problem: 513 inline `style="..."` attrs make every change hurt and prevent theming.
   - Files: `index.html:500–1180`
   - Fix: Convert recurring patterns into ~30 utility/component classes (`.modal`, `.modal-hdr`, `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.note`, `.note-info/warn/success/danger`, `.pill`, `.kbd`, etc.). Migrate in batches by component area.
   - Accept: `grep -c 'style="' index.html` drops below 50 (target: 0 for new code).
 
-- [ ] **P2-3 · Collapse 41 colors → tokenized palette** *(HIGH)*
+- [~] **P2-3 · Collapse 41 colors → tokenized palette** *(HIGH)* — PARTIAL (commit `1100dab`) — 4 alert banners now use semantic `--bg-note-*` / `--br-note-*` tokens. Full migration of remaining ~30 inline colors deferred to P2-2 session
   - Problem: 3 different pale blues for "info" banners, 2 yellow-oranges for warnings, 12+ grays for text, 3 reds, 3 greens.
   - Files: throughout
   - Fix: Define one color per role (`info`, `warn`, `success`, `danger`, `compliance`, `neutral`). Map every banner / pill / badge to a role.
   - Accept: A reader can identify a banner's severity by color alone without prior context.
 
-- [ ] **P2-4 · Single button system** *(MED)*
+- [~] **P2-4 · Single button system** *(MED)* — PARTIAL (commit `8d30abb`) — `.btn` + `.btn-primary/secondary/ghost/danger/success/sm` defined in CSS. Migration of existing inline-styled buttons deferred to P2-2 session
   - Problem: 12+ ad-hoc button styles with random padding (3/7/12/16 px).
   - Files: throughout
   - Fix: `.btn` base + `.btn-primary | .btn-secondary | .btn-ghost | .btn-danger` modifiers. Sizes: `.btn-sm | .btn` only.
   - Accept: Every `<button>` and button-like `<a>` uses one of these classes. No inline color/padding overrides.
 
-- [ ] **P2-5 · Single pill system** *(MED)*
+- [ ] **P2-5 · Single pill system** *(MED)* — DEFERRED — 5 pill rule sets to unify + inline pills to migrate; same regression-coverage need as P2-2
   - Problem: `.ds-pill`, `.swim-pill`, `.ds-nav-chip`, `.pb-ph-*` + inline pills — 5+ reinventions.
   - Files: `index.html:124, 256–261, 419, 486`
   - Fix: One `.pill` + role modifiers (`.pill-info`, etc.). Delete or alias the others.
   - Accept: One pill rule in CSS. Pills with the same role look identical.
 
-- [ ] **P2-6 · Remove `!important` declarations** *(LOW)*
+- [ ] **P2-6 · Remove `!important` declarations** *(LOW)* — DEFERRED — audit itself called most "defensible" (role/mode hiding selectors + print media). Remaining handful are mobile-override workarounds whose removal needs specificity recalculation per selector
   - Problem: 15 `!important` declarations — most are specificity workarounds for compound `body.role-* .hide-from-*` selectors.
   - Files: `index.html:37–38, 43, 46–48, 77, 324–326, 337, 341, 352–353, 357, 359`
   - Fix: Restructure role/mode selectors to win on specificity naturally; reserve `!important` for `@media print` only.
   - Accept: `grep -c '!important' index.html` ≤ 5, all in print media block.
 
-- [ ] **P2-7 · Use semantic `<label for="">`** *(MED)*
+- [x] **P2-7 · Use semantic `<label for="">`** *(MED)* — commit `caf7004`
   - Problem: Form labels are sibling `<div>`s with `aria-label` on the input — mobile screen readers can't focus by tapping the label.
   - Files: `index.html:666–828`
   - Fix: Wrap each label/select pair in a flex container, use `<label for="sel-frontend">Frontend</label>`.
@@ -188,28 +188,28 @@ This is where it stops looking like a Frankenstein.
 
 Don't start until Phases 0–1 are merged.
 
-- [ ] **P3-1 · Push education below action**
+- [ ] **P3-1 · Push education below action** — DEFERRED — reorders the entire landing experience. Product decision (what's the default landing tab? what stays vs. collapses?) — not safe to do autonomously
   - Today: hero → concept (stats + 3 cards + 2 tables) → decision map → phase 0 → **then** tab content.
   - Target: config bar → tab content (default to the user's likely starting tab) → concept/decision map/phase 0 as collapsible sections or a dedicated "Overview" tab.
   - Accept: First-time user reaches actual pipeline YAML in ≤ 1 viewport on a 1080p screen.
 
-- [ ] **P3-2 · Merge or move overlapping tabs**
+- [ ] **P3-2 · Merge or move overlapping tabs** — DEFERRED — content reorganization (glossary+catalog, setup→phase0, tradeoffs+mistakes). Affects render functions, TOC, scrollspy, URL hash routing. Needs your content judgment
   - `glossary` + `catalog` → single "Reference" tab with subsections.
   - `setup` → fold into Phase 0 as a registry-specific subsection.
   - `tradeoffs` + `mistakes` → single "Design & Pitfalls" tab.
   - Accept: 14 tabs → 10–11. Each tab has a single, non-overlapping purpose.
 
-- [ ] **P3-3 · Decide the sidebar's job**
+- [ ] **P3-3 · Decide the sidebar's job** — DEFERRED — strip duplicate nav vs keep as quick-link. Product decision
   - Today: sidebar duplicates top-of-page nav (Concept, Phase 0, Search) AND hosts the invariants browser.
   - Target: sidebar = invariants browser only + scope statement. Move "Search" to the config bar (already has a Quick-Find button anyway).
   - Accept: Sidebar has one job. New users can describe it in one sentence.
 
-- [ ] **P3-4 · Terminology pass**
+- [ ] **P3-4 · Terminology pass** — DEFERRED — editorial pass across 13k lines; needs human writing judgment
   - Decide canonical use of: *phase* (5 major divisions) vs *stage* (CI substeps) vs *step* (wizard/setup steps); *decision* (config choice) vs *tile* (UI element) vs *option* (alternative); *stack* (frontend+backend) vs *framework* vs *language*.
   - Files: throughout + glossary tab
   - Accept: Glossary tab defines each term once. Grep audit shows no contradictory uses.
 
-- [ ] **P3-5 · Reconsider role modes**
+- [ ] **P3-5 · Reconsider role modes** — DEFERRED — keep vs delete the Default/Learn/Ship/Audit modes; entirely a product call
   - Today: Default/Learn/Ship/Audit hide 1–2 tabs and tweak widths. Doesn't reduce complexity.
   - Decide: either commit to role modes as a first-class feature (heavy lift) or remove them and use sensible defaults with collapsibles.
   - Accept: Whichever path is chosen, document the rationale in this file.
