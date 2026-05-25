@@ -41,8 +41,9 @@ body{font-family:'Inter',-apple-system,sans-serif;font-size:14px;line-height:1.6
   .cfg-grp label{display:block;font-size:9px;margin-bottom:2px}
   .cfg-grp select{width:100%}
   #config-bar > button{flex:1 1 100%;font-size:12px;padding:8px}
-  /* Hide inline why-* tooltips — too wide on mobile */
-  #why-fe,#why-be,#why-ci,#why-reg{display:none}
+  /* Hide the entire why-panel on mobile — the inner tooltips are too wide,
+     and hiding only the inner divs leaves a dead expander that opens to nothing. */
+  #why-panel{display:none}
   .sdp-grid{grid-template-columns:1fr !important}
   .sdp-info-col{border-top:1px solid var(--border);border-right:none !important}
   .files-grid{grid-template-columns:1fr !important}
