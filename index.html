@@ -1004,7 +1004,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
   <!-- ── Tab bar ── -->
 
   <!-- ── Phase 1: Developer local ── -->
-  <div id="tab-local" class="tab-content active">
+  <div id="tab-local" class="tab-content active" role="region" aria-label="Phase 1 — Developer Local">
     <div class="pipeline-hdr">
       <h2>Phase 1 — Developer Local — shift-left security before CI runs</h2>
       <p>Shift-left security. Catches issues before they hit CI. Zero pipeline minutes spent.</p>
@@ -1013,7 +1013,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
   </div>
 
   <!-- ── Phase 2: PR Gate ── -->
-  <div id="tab-pr" class="tab-content">
+  <div id="tab-pr" class="tab-content" role="region" aria-label="Phase 2 — PR Gate">
     <div class="pipeline-hdr">
       <h2>Phase 2 — PR Gate — blocks insecure or broken code from merging</h2>
       <p>Blocks broken, insecure, or malformed code from merging. Every PR must pass all stages.</p>
@@ -1026,7 +1026,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
   </div>
 
   <!-- ── Phase 3: Main Build ── -->
-  <div id="tab-main" class="tab-content">
+  <div id="tab-main" class="tab-content" role="region" aria-label="Phase 3 — Main Build">
     <div class="pipeline-hdr">
       <h2>Phase 3 — Main Build — builds, signs, and attests the production image</h2>
       <p>Runs on every merge to main. Builds the signed, attested production image.</p>
@@ -1039,7 +1039,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
   </div>
 
   <!-- ── Phase 4: Environment Promotions ── -->
-  <div id="tab-promotions" class="tab-content">
+  <div id="tab-promotions" class="tab-content" role="region" aria-label="Phase 4 — Promotions">
     <div class="pipeline-hdr">
       <h2>Phase 4 — Environment Promotions — moves the signed image dev → staging → prod</h2>
       <p>Moves the signed image through environments. CD tooling (ArgoCD/Flux) handles the actual deploy. This pipeline verifies the image before each promotion.</p>
@@ -1089,7 +1089,7 @@ cosign verify \
   </div>
 
   <!-- ── Phase 5: Runtime ── -->
-  <div id="tab-runtime" class="tab-content">
+  <div id="tab-runtime" class="tab-content" role="region" aria-label="Phase 5 — Runtime">
     <div class="pipe-flow" id="runtime-flow"></div>
     <div id="runtime-detail"></div>
     <div class="pipeline-hdr">
@@ -1144,7 +1144,7 @@ helm install trivy-operator aqua/trivy-operator \
   </div>
 
   <!-- ── Config Files tab ── -->
-  <div id="tab-files" class="tab-content hide-from-auditor">
+  <div id="tab-files" class="tab-content hide-from-auditor" role="region" aria-label="Config Files">
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Configuration Files</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px">Copy each file into your repository. Select CI system above to generate the correct workflow file.</p>
     <div class="files-grid">
@@ -1154,7 +1154,7 @@ helm install trivy-operator aqua/trivy-operator \
   </div>
 
   <!-- ── Setup Guide tab ── -->
-  <div id="tab-setup" class="tab-content hide-from-staff hide-from-auditor">
+  <div id="tab-setup" class="tab-content hide-from-staff hide-from-auditor" role="region" aria-label="Setup Guide">
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">First-Time Setup Guide</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px">Step-by-step setup for each registry. Complete Phase 0 before running any pipeline.</p>
     <div class="setup-tabs" id="setup-tabs"></div>
@@ -1162,35 +1162,35 @@ helm install trivy-operator aqua/trivy-operator \
   </div>
 
   <!-- ── Tradeoffs tab (D) — all alternatives in one table ── -->
-  <div id="tab-tradeoffs" class="tab-content hide-from-junior">
+  <div id="tab-tradeoffs" class="tab-content hide-from-junior" role="region" aria-label="Tradeoffs">
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Tool Tradeoffs — alternatives per stage</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Every default tool has alternatives. Pick the one matching your team and budget. Each row shows when to switch + the chosen-vs-alt tradeoff.</p>
     <div id="tradeoffs-content"></div>
   </div>
 
   <!-- ── Common Mistakes tab (F) — aggregate stage-level mistakes ── -->
-  <div id="tab-mistakes" class="tab-content hide-from-junior">
+  <div id="tab-mistakes" class="tab-content hide-from-junior" role="region" aria-label="Common Mistakes">
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Common Mistakes — one screen, every gotcha</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Aggregated from every stage. Read once a quarter. Each row links to the stage that owns the fix.</p>
     <div id="mistakes-content"></div>
   </div>
 
   <!-- ── Tested Combos tab (G) — full visible matrix ── -->
-  <div id="tab-matrix" class="tab-content hide-from-auditor">
+  <div id="tab-matrix" class="tab-content hide-from-auditor" role="region" aria-label="Tested Combinations">
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Tested Combinations — full matrix</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Validated combos run end-to-end in CI. Reference combos worked once. Untested combos use generated YAML — works as designed but no full pipeline run yet.</p>
     <div id="matrix-content"></div>
   </div>
 
   <!-- ── Glossary tab ── -->
-  <div id="tab-glossary" class="tab-content">
+  <div id="tab-glossary" class="tab-content" role="region" aria-label="Glossary">
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Security Terms Glossary</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Every term used in this pipeline, defined plainly. No prior knowledge assumed.</p>
     <div id="glossary-grid"></div>
   </div>
 
   <!-- ── Catalog tab — full 102-entry inventory + totals. ── -->
-  <div id="tab-catalog" class="tab-content">
+  <div id="tab-catalog" class="tab-content" role="region" aria-label="Framework Catalog">
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Catalog — all frameworks, runtimes, languages</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Comprehensive list of supported entries. Tier shows where full code + knowledge lives. Coming soon = listed for transparency; pipeline falls back to a sister recipe.</p>
     <div id="catalog-summary" style="margin-bottom:18px"></div>
@@ -1198,14 +1198,14 @@ helm install trivy-operator aqua/trivy-operator \
   </div>
 
   <!-- ── Self-test panel — runs on load. Proves the page is internally consistent. ── -->
-  <div id="tab-selftest" class="tab-content">
+  <div id="tab-selftest" class="tab-content" role="region" aria-label="Self-test">
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Self-Test — page consistency report</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Runs in your browser on load. Every check is binary. Green = pass, red = fail.</p>
     <div id="selftest-results"></div>
   </div>
 
   <!-- ── Maintain tab — product knowledge state for maintainers ── -->
-  <div id="tab-maintain" class="tab-content">
+  <div id="tab-maintain" class="tab-content" role="region" aria-label="Maintainer Info">
     <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Maintain — product knowledge state</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">For contributors and maintainers. Shows coverage gaps, coming-soon status, and knowledge freshness.</p>
     <div id="maintain-content"></div>
@@ -11957,9 +11957,14 @@ function initScrollspy() {
     entries.forEach(e => {
       if (e.isIntersecting) {
         const id = e.target.id.replace(/^tab-/, '');
+        // .tab-btn elements are not in current HTML, but keep this for any
+        // future bar above the content. Both class and aria-current track state.
         document.querySelectorAll('.tab-btn').forEach(b => {
           const oc = b.getAttribute('onclick') || '';
-          b.classList.toggle('active', oc.includes("'" + id + "'"));
+          const match = oc.includes("'" + id + "'");
+          b.classList.toggle('active', match);
+          if (match) b.setAttribute('aria-current', 'location');
+          else b.removeAttribute('aria-current');
         });
       }
     });
