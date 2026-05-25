@@ -1293,6 +1293,18 @@ cosign verify \
 
   </div><!-- /.phase-strip -->
 
+  <!-- ── Reference panels — 9 vertical anchor sections wrapped in a single
+       collapsible. Closed by default so the page below the phase strip is
+       calm. Each section keeps its own id so hash deep-links + the right
+       TOC still scroll to the right place — opening the wrapper happens
+       in JS when one is targeted. ── -->
+  <details id="reference-wrap" style="margin:8px 32px 24px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface)">
+    <summary style="cursor:pointer;padding:10px 14px;font-weight:var(--fw-semibold);color:var(--text);font-size:var(--fs-md);list-style:none;display:flex;align-items:center;gap:10px">
+      <span style="color:var(--accent)">▸</span>
+      <span>Reference panels</span>
+      <span class="u-muted-i" style="font-size:var(--fs-sm);font-style:normal">Config Files · Setup · Tradeoffs · Mistakes · Tested Combos · Glossary · Catalog · Self-test · Maintain</span>
+    </summary>
+    <div style="padding:0 14px 14px">
 
   <!-- ── Config Files tab ── -->
   <div id="tab-files" class="tab-content hide-from-auditor" role="region" aria-label="Config Files">
@@ -1361,6 +1373,9 @@ cosign verify \
     <p class="u-muted-s">For contributors and maintainers. Shows coverage gaps, coming-soon status, and knowledge freshness.</p>
     <div id="maintain-content"></div>
   </div>
+
+    </div>
+  </details><!-- /#reference-wrap -->
 
 </main>
 
@@ -1759,11 +1774,6 @@ const COMPLIANCE_MAP = {
   p2:   {pci:'6.5.2',hipaa:'§164.312(c)(1)',fedramp:'CM-3',       soc2:'CC8.1', gdpr:'Art.32', canadapb:'CM-3',  cmmc:'CM.3.067'},
   p3:   {pci:'6.5.2',                       fedramp:'CP-2,SI-4',  soc2:'A1.1',  gdpr:'Art.32', canadapb:'CP-2',  cmmc:'IR.2.094'},
   p4:   {pci:'6.5.2',hipaa:'§164.312(a)(1)',fedramp:'CM-3,CM-5',  soc2:'CC8.1', gdpr:'Art.32', canadapb:'CM-3',  cmmc:'CM.3.067'},
-  // Phase 5 runtime stages.
-  r1:   {pci:'7.2.1',hipaa:'§164.312(c)(1)',fedramp:'AC-3,CM-7',  soc2:'CC6.6', gdpr:'Art.32', canadapb:'AC-3',  cmmc:'AC.1.001'},
-  r2:   {pci:'6.3.3',hipaa:'§164.306(a)(1)',fedramp:'RA-5,SI-2',  soc2:'CC7.1', gdpr:'Art.32', canadapb:'RA-5',  cmmc:'RM.2.142'},
-  r3:   {pci:'10.6',hipaa:'§164.308(a)(1)(ii)(D)',fedramp:'AU-6,SI-4',soc2:'CC7.2',gdpr:'Art.32',canadapb:'AU-6',cmmc:'AU.2.044'},
-  r4:   {pci:'11.5',hipaa:'§164.312(c)(1)',fedramp:'SI-7',        soc2:'CC7.1', gdpr:'Art.32', canadapb:'SI-7',  cmmc:'SI.3.220'}
 };
 
 const REGS = {
@@ -2848,109 +2858,6 @@ spec:
       autoPromotionEnabled: false`}
   ],
 
-  // ── Phase 5 — Runtime stages ──
-  r1: [
-    {tool:'OPA Gatekeeper',when:'Existing OPA Rego policy library; want to keep one policy engine',diff:'Rego DSL; ConstraintTemplate + Constraint CRDs; broader policy scope than Kyverno verify',yaml:`apiVersion: templates.gatekeeper.sh/v1
-kind: ConstraintTemplate
-metadata: { name: requirecosignsignature }
-spec:
-  crd:
-    spec:
-      names: { kind: RequireCosignSignature }
-  targets:
-    - target: admission.k8s.gatekeeper.sh
-      rego: |
-        package k8srequirecosign
-        violation[{"msg": msg}] {
-          input.review.kind.kind == "Pod"
-          some i; not startswith(input.review.object.spec.containers[i].image, "REGISTRY/myapp@sha256:")
-          msg := "image must be referenced by digest"
-        }`},
-    {tool:'Kubewarden',when:'WebAssembly-based admission; want polyglot policies in Rust/Go',diff:'Policy distributed via OCI image; WASM sandbox runtime',yaml:`apiVersion: policies.kubewarden.io/v1
-kind: ClusterAdmissionPolicy
-metadata: { name: verify-image-signature }
-spec:
-  module: registry://ghcr.io/kubewarden/policies/verify-image-signatures:v0.2.6
-  rules:
-    - apiGroups: [""]
-      apiVersions: ["v1"]
-      resources: ["pods"]
-      operations: ["CREATE","UPDATE"]
-  mutating: false
-  settings:
-    signatures:
-      - image: "REGISTRY/myapp*"
-        pubKeys: ["-----BEGIN PUBLIC KEY-----\\n...\\n-----END PUBLIC KEY-----"]`},
-    {tool:'Connaisseur',when:'Notary v1/v2 signing instead of Sigstore cosign',diff:'Policy-driven Notary verifier; supports DCT (Docker Content Trust)',yaml:`apiVersion: connaisseur/v1
-kind: ImagePolicy
-spec:
-  policy:
-    - pattern: "REGISTRY/myapp:*"
-      validator: cosign-keyless
-      with:
-        trustRoot: default`}
-  ],
-  r2: [
-    {tool:'Grype Operator',when:'Already using Anchore Grype CLI; prefer same scanner in cluster',diff:'Identical CLI; lighter than Trivy Operator; smaller rule set',yaml:`helm repo add anchore https://charts.anchore.io
-helm install grype-operator anchore/grype-operator \\
-  --namespace grype-system --create-namespace`},
-    {tool:'Starboard (legacy)',when:'Existing Starboard installation predates Trivy Operator',diff:'Starboard is deprecated; migrate to Trivy Operator',yaml:`# Starboard is end-of-life. Reference only — not for new installs.
-kubectl apply -f https://raw.githubusercontent.com/aquasecurity/starboard/v0.15.27/deploy/static/starboard.yaml`},
-    {tool:'Snyk Container monitor',when:'Snyk license already in place; want unified vuln dashboard',diff:'Commercial; SaaS dashboard; integrates with Snyk Open Source results',yaml:`- name: Snyk monitor running images
-  run: |
-    snyk container monitor \\
-      REGISTRY/myapp@\${{ needs.build.outputs.image-digest }} \\
-      --org=YOUR_SNYK_ORG`}
-  ],
-  r3: [
-    {tool:'Tetragon',when:'Need kernel-level enforcement, not just alerting',diff:'eBPF + Cilium; can kill processes, drop network connections; richer than Falco',yaml:`apiVersion: cilium.io/v1alpha1
-kind: TracingPolicy
-metadata: { name: kill-shell-in-prod }
-spec:
-  kprobes:
-    - call: "security_bprm_creds_from_file"
-      syscall: false
-      args:
-        - { index: 0, type: "linux_binprm" }
-      selectors:
-        - matchBinaries: [{ operator: "In", values: ["/bin/sh","/bin/bash"] }]
-          matchActions: [{ action: Sigkill }]`},
-    {tool:'Aqua Enterprise',when:'Commercial runtime + image scanning bundle preferred',diff:'Single vendor across CI + cluster; advanced behavioral analytics',yaml:`# Helm install via Aqua vendor charts (requires license)
-helm install aqua-enforcer aqua-helm/enforcer \\
-  --set imageCredentials.username=$AQUA_USER \\
-  --set imageCredentials.password=$AQUA_TOKEN \\
-  --set csp.host=$AQUA_HOST`},
-    {tool:'Sysdig Secure',when:'Sysdig already collecting kernel events for observability',diff:'Combines runtime security + system observability + cloud posture',yaml:`helm repo add sysdig https://charts.sysdig.com
-helm install sysdig-agent sysdig/sysdig \\
-  --set sysdig.accessKey=$SYSDIG_ACCESS_KEY \\
-  --set nodeAnalyzer.enabled=true \\
-  --set sysdig.settings.collector=collector.sysdigcloud.com`}
-  ],
-  r4: [
-    {tool:'in-toto attestation verifier',when:'SLSA L3 + in-toto layout already in use',diff:'Verifies the full in-toto layout, not just SBOM diff',yaml:`# in-toto-verify checks the layout signed by the build system.
-in-toto-verify \\
-  --layout root.layout \\
-  --layout-keys functionary-pub.pem \\
-  --link-dir attestations/`},
-    {tool:'Grype on running image (cron)',when:'Lightweight setup; no Anchore Enterprise license',diff:'Pulls each image and re-generates SBOM; compares vs baseline.json',yaml:`apiVersion: batch/v1
-kind: CronJob
-metadata: { name: sbom-drift, namespace: security }
-spec:
-  schedule: "0 3 * * *"
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          restartPolicy: OnFailure
-          containers:
-            - name: drift
-              image: anchore/grype:v0.85.0
-              command: ["sh","-c"]
-              args: ["grype $IMAGE_REF_WITH_DIGEST -o json > /tmp/live.json && diff /tmp/baseline.json /tmp/live.json"]`},
-    {tool:'OpenSCAP CIS Benchmarks',when:'Regulated environment requiring CIS benchmark drift detection',diff:'Covers OS-level config drift + CIS controls; broader than SBOM',yaml:`oscap-docker image REGISTRY/myapp@$DIGEST \\
-  oval eval --results scan-results.xml \\
-  /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml`}
-  ]
 };
 
 const GLOSSARY = [
@@ -10373,7 +10280,7 @@ function renderDecisionMap() {
   // Per product direction: no download — files render inline in the Files tab.
   // CTA scrolls to the Files tab.
   const ctaBtn = ready
-    ? `<button class="ds-cta-btn-active" onclick="showTab('files')">📋 View &amp; copy all files →</button>`
+    ? `<button class="ds-cta-btn-active" onclick="(document.getElementById('reference-wrap')||{}).open=true;showTab('files')">📋 View &amp; copy all files →</button>`
     : `<button class="ds-cta-btn-locked" disabled>📋 View all files</button>`;
   const ctaSub = ready
     ? `<div class="ds-cta-sub">All ${total} decisions made — files panel below holds every artifact ready to copy.</div>`
@@ -11246,9 +11153,7 @@ const STAGE_DISCIPLINE = {
   s9:'devops', s9a:'devops', dast:'devsecops', s11:'devops',
   s10:'devsecops', s12:'devops', s13:'devops', s14:'devsecops',
   // Promotions.
-  p1:'devops', p2:'devops', p3:'both', p4:'both',
-  // Runtime.
-  r1:'devsecops', r2:'devsecops', r3:'devsecops', r4:'devsecops'
+  p1:'devops', p2:'devops', p3:'both', p4:'both'
 };
 function disciplineOf(stage) {
   const v = (stage && stage.discipline) || STAGE_DISCIPLINE[stage && stage.id] || 'both';
@@ -11358,22 +11263,6 @@ const STAGE_BENEFIT = {
   p4: {
     devops: 'Auto-rollback in <30s on error spike. Customer impact bounded.',
     devsecops: 'Conservative 5%→100% ramp limits blast radius of a malicious build.'
-  },
-  r1: {
-    devops: 'Kyverno admit decision in <50ms. No pod-startup overhead at scale.',
-    devsecops: 'Fail-closed: pod refused on bad signature. Mirrors S14 at runtime.'
-  },
-  r2: {
-    devops: 'Operator pattern — no scheduled scans to manage. CRDs query directly.',
-    devsecops: 'Catches new CVEs in already-deployed images. Build-time scan is point-in-time.'
-  },
-  r3: {
-    devops: 'eBPF probe = near-zero kernel overhead. No app code changes.',
-    devsecops: 'Detects post-compromise behavior — shell spawn, /etc/shadow read, exfil.'
-  },
-  r4: {
-    devops: 'Daily cron — cheap. Diff vs baseline is fast.',
-    devsecops: 'Detects layer mutation. Catches in-place tampering inside long-running pods.'
   }
 };
 function benefitsFor(stage) {
@@ -12517,15 +12406,18 @@ function showTab(tabId, btn) {
 function restoreTabFromHash() {
   const raw = (location.hash || '').replace(/^#/, '');
   if (!raw) return;
-  // Hashes like #tab-local / #tab-pr / etc. are phase tabs — route to
-  // activatePhaseTab with silent:true so it doesn't immediately overwrite
-  // the same hash (which would no-op but is cleaner). Pure ids like #files /
-  // #setup keep going to showTab (smooth-scroll anchor sections below the
-  // phase strip).
+  // Phase tabs (tab-phase0..tab-promotions) → activatePhaseTab with silent.
+  // Reference sections (tab-files..tab-maintain) → make sure the
+  // #reference-wrap is OPEN so the section is visible, then showTab to scroll.
   const tabId = raw.startsWith('tab-') ? raw : null;
   if (tabId && document.querySelector(`.phase-tab[data-tab="${tabId}"]`)) {
     activatePhaseTab(tabId, null, { silent: true });
-  } else if ($id(`tab-${raw}`)) {
+    return;
+  }
+  if ($id(`tab-${raw}`)) {
+    const refWrap = $id('reference-wrap');
+    // Only auto-open if the target lives inside the wrap.
+    if (refWrap && refWrap.contains($id(`tab-${raw}`))) refWrap.open = true;
     showTab(raw, null);
   }
 }
