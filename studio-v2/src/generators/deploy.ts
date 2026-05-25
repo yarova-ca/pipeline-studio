@@ -113,7 +113,7 @@ function resolveDeployContext(config: PipelineConfig): {
 // ── Individual file generators ────────────────────────────────────────────────
 
 function genArgoCDApp(config: PipelineConfig): string {
-  const { app, cd, gitops, sameRepo } = resolveDeployContext(config);
+  const { app, cd, sameRepo } = resolveDeployContext(config);
 
   if (cd !== 'argocd') {
     return `# Not emitted — current CD tool is ${cd}.\n# Switch CD to ArgoCD to emit this file.`;

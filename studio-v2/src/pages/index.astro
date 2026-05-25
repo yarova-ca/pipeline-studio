@@ -4,6 +4,10 @@ import ConfigBar from '../islands/ConfigBar.svelte';
 import PipelineView from '../islands/PipelineView.svelte';
 import FileViewer from '../islands/FileViewer.svelte';
 import DecisionMap from '../islands/DecisionMap.svelte';
+import { INVARIANTS } from '../lib/invariants';
+import { COMPLIANCE_CONTROL_MAP } from '../lib/compliance';
+
+const complianceEntries = Object.entries(COMPLIANCE_CONTROL_MAP);
 ---
 
 <Base title="DevSecOps Pipeline Studio">
@@ -79,6 +83,60 @@ import DecisionMap from '../islands/DecisionMap.svelte';
     <!-- Decision map -->
     <section class="section-block" id="decision-map">
       <DecisionMap client:load />
+    </section>
+
+    <!-- Invariants reference -->
+    <section class="section-block" id="invariants">
+      <div class="section-hdr">
+        <h2 class="section-title">20 Pipeline Invariants</h2>
+        <p class="section-sub">Rules that must hold for every release. Each maps to the stage that enforces it.</p>
+      </div>
+      <div class="inv-table-wrap">
+        <table class="inv-table">
+          <thead>
+            <tr><th>ID</th><th>Rule</th><th>Enforced by</th><th>Real incident</th></tr>
+          </thead>
+          <tbody>
+            {INVARIANTS.map((inv) => (
+              <tr>
+                <td class="inv-id">{inv.id}</td>
+                <td>{inv.text}</td>
+                <td class="inv-stage">{inv.enforced}</td>
+                <td class="inv-inc">{inv.incident}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Compliance map -->
+    <section class="section-block" id="compliance">
+      <div class="section-hdr">
+        <h2 class="section-title">Compliance Control Map</h2>
+        <p class="section-sub">Which pipeline invariants satisfy which auditor controls, per framework.</p>
+      </div>
+      <div class="comp-grid">
+        {complianceEntries.map(([fwKey, controls]) => (
+          <div class="comp-card">
+            <div class="comp-fw">{fwKey.toUpperCase()}</div>
+            <table class="comp-table">
+              <thead>
+                <tr><th>Control</th><th>Title</th><th>Invariants</th></tr>
+              </thead>
+              <tbody>
+                {(controls ?? []).map((c) => (
+                  <tr>
+                    <td class="ctl-id">{c.control}</td>
+                    <td>{c.title}</td>
+                    <td class="ctl-inv">{c.satisfiedBy.join(', ')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
     </section>
 
     <!-- Generated files viewer -->
@@ -182,5 +240,98 @@ import DecisionMap from '../islands/DecisionMap.svelte';
   .section-sub {
     font-size: 11.5px;
     color: var(--muted);
+  }
+
+  /* Invariants table */
+  .inv-table-wrap { padding: 16px 24px 24px; overflow-x: auto; }
+  .inv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .inv-table th {
+    text-align: left;
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .inv-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+  }
+  .inv-table tr:last-child td { border-bottom: none; }
+  .inv-id {
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .inv-stage { color: var(--text-sec); white-space: nowrap; }
+  .inv-inc   { color: var(--muted); font-style: italic; }
+
+  /* Compliance grid */
+  .comp-grid {
+    padding: 16px 24px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 14px;
+  }
+  .comp-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .comp-fw {
+    background: var(--surface);
+    padding: 8px 12px;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    letter-spacing: .04em;
+  }
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .comp-table th {
+    text-align: left;
+    background: var(--bg);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .comp-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .ctl-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--text-sec);
+    white-space: nowrap;
+  }
+  .ctl-inv {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 10px;
+    white-space: nowrap;
   }
 </style>

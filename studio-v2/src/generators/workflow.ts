@@ -515,8 +515,7 @@ function resolveStackCmds(config: PipelineConfig): StackCmd {
 // ── PR workflow ───────────────────────────────────────────────────────────────
 
 export function generatePRWorkflow(config: PipelineConfig): string {
-  const reg = buildRegMeta(config.regKey);
-
+  // PR pipeline never pushes — registry metadata not needed here.
   return `name: PR Checks
 on:
   pull_request:
@@ -642,9 +641,6 @@ ${getSBOMStepsGHA(config, 'pr')}
           name: image-tar-\${{ github.sha }}
           path: /tmp
 ${getScanStepsGHA(config, 'input: /tmp/image.tar')}`;
-
-  // suppress unused-variable warning; reg is used above via template literal below
-  void reg;
 }
 
 // ── Main workflow ─────────────────────────────────────────────────────────────

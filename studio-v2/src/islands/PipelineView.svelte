@@ -32,6 +32,10 @@
   }
   function closePanel() { selectedId = null; }
 
+  function handleKey(e: KeyboardEvent) {
+    if (e.key === 'Escape' && selectedId) closePanel();
+  }
+
   function mistakes(s: StageDef): string[] {
     return s.commonMistakes ? s.commonMistakes.split(' | ') : [];
   }
@@ -228,10 +232,12 @@
   </div><!-- /pipeline-body -->
 </div><!-- /pipeline-root -->
 
+<svelte:window on:keydown={handleKey} />
+
 <!-- ── Stage Detail Panel (outside flow, fixed position) ─────────────────── -->
 {#if selectedStage}
   {@const s = selectedStage}
-  <aside class="sdp" aria-label="Stage detail: {s.title}">
+  <aside class="sdp" role="dialog" aria-modal="false" aria-label="Stage detail: {s.title}">
     <div class="sdp-hdr">
       <div>
         <span class="sdp-badge {PHASE_CLASS[s.phase] ?? ''}">{s.badge}</span>
