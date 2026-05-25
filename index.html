@@ -40,17 +40,40 @@ body{font-family:'Inter',-apple-system,sans-serif;font-size:14px;line-height:1.6
   .cfg-grp{flex:1 1 calc(50% - 8px);min-width:0}
   .cfg-grp label{display:block;font-size:9px;margin-bottom:2px}
   .cfg-grp select{width:100%}
-  /* On phones, threat-tour + play + wizard buttons get full width on their own row. */
   #config-bar > button{flex:1 1 100%;font-size:12px;padding:8px}
+  /* Hide inline why-* tooltips — too wide on mobile */
+  #why-fe,#why-be,#why-ci,#why-reg{display:none}
   .sdp-grid{grid-template-columns:1fr !important}
   .sdp-info-col{border-top:1px solid var(--border);border-right:none !important}
   .files-grid{grid-template-columns:1fr !important}
   .pipe-flow{padding-bottom:10px}
+  /* Reduce 32px padding to 12px across all content areas */
+  .tab-content{padding:16px 12px 32px}
+  .tab-bar{padding:0 8px}
+  #decision-map{padding:16px 12px 32px}
+  #ds-step-nav{padding:8px 12px;margin:-16px -12px 16px;top:auto;position:relative}
+  .swim-wrap{padding:12px 12px 10px}
+  .phase0-section{padding:14px 12px}
+  #phase-context-bar{padding:8px 12px}
+  .ref-collapsible > summary{padding:14px 12px}
+  /* Pill group labels: shrink so pills get more room */
+  .ds-pill-group-label{min-width:80px;font-size:8.5px}
+  /* Shape category grid: 2 cols on tablet */
+  .ds-cat-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:560px){
   #config-bar{padding:8px}
   .cfg-grp{flex:1 1 100%}
   .pipe-box{min-width:130px}
+  /* Tighter padding on small phones */
+  .tab-content{padding:12px 8px 24px}
+  #decision-map{padding:12px 8px 24px}
+  .ds-pill{padding:4px 10px;font-size:11px}
+  .ds-pill-group-label{min-width:68px;font-size:8px}
+  .ds-row-label{font-size:12px}
+  .ds-step-animate{padding:12px}
+  /* Step nav: horizontal scroll, no sticky on small phone */
+  #ds-step-nav{position:relative;top:auto;overflow-x:auto;padding:6px 8px;margin:-12px -8px 12px}
   .hero h1, h1{font-size:18px !important}
   pre.yaml-pre, pre.file-pre{font-size:10px}
 }
