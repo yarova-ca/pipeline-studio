@@ -30,49 +30,49 @@ On top of that, **functional bugs** make it feel broken: `#why-*` panels never b
 
 These are small, high-impact, low-risk. They fix the most visible "yuck" and unblock real testing.
 
-- [ ] **P0-1 · Fix invisible `#why-*` panels** *(HIGH)*
+- [x] **P0-1 · Fix invisible `#why-*` panels** *(HIGH)* — commit `22cfb2a`
   - Problem: `#why-fe/#why-be/#why-ci/#why-reg` start `display:none`. JS sets `innerHTML` but never sets display.
   - Files: `index.html:45, 12210–12213`
   - Fix: In `onConfigChange`, after setting innerHTML, set `el.style.display = el.innerHTML.trim() ? '' : 'none'`.
   - Accept: Picking a frontend/backend/CI/registry causes the matching "why" panel to appear with the rationale.
 
-- [ ] **P0-2 · Stop industry change overwriting manual compliance** *(HIGH)*
+- [x] **P0-2 · Stop industry change overwriting manual compliance** *(HIGH)* — commit `c501ace`
   - Problem: `onIndustryChange()` resets compliance to the industry default even when the user already chose one.
   - Files: `index.html:12065–12078`
   - Fix: Track whether compliance was user-set (data attribute or state flag); only auto-link when it's still `'none'` AND user hasn't explicitly chosen.
   - Accept: Manually pick PCI-DSS → switch industry to Healthcare → compliance stays PCI-DSS. Flash message offers a one-click switch instead.
 
-- [ ] **P0-3 · Escape interpolated values in inline handlers** *(HIGH)*
+- [x] **P0-3 · Escape interpolated values in inline handlers** *(HIGH)* — commit `edffe71`
   - Problem: Wizard `onchange="WIZARD_STATE['${step.key}']='${o.value}'"` and SVG `onclick="onSvgNodeClick('${n.id}')"` break silently if any value contains `'`.
   - Files: `index.html:8662–8680, 12720–12751`
   - Fix: Replace with `addEventListener` + dataset, OR run values through a small `escapeJsString()` helper.
   - Accept: A wizard option value or SVG node id containing `'` no longer breaks the handler (add a self-test case).
 
-- [ ] **P0-4 · Add null-guards to the ~20 unsafe `getElementById` calls** *(HIGH)*
+- [x] **P0-4 · Add null-guards to the ~20 unsafe `getElementById` calls** *(HIGH)* — commit `96415e7`
   - Problem: `document.getElementById(x).style/.textContent/.classList` with no null check — any render-order glitch becomes a dead button.
   - Files: `index.html:8122–8130, 10243–10244, 10354, 12365–12372, 12410–12416, 12710–12751`
   - Fix: Introduce a `function $(id){ return document.getElementById(id); }` helper, OR wrap each access in `const el = document.getElementById(...); if (!el) return;`.
   - Accept: Open every modal + every collapsible section in dev tools with one target element removed — nothing throws.
 
-- [ ] **P0-5 · Sync tab to URL hash + restore on load** *(MED)*
+- [x] **P0-5 · Sync tab to URL hash + restore on load** *(MED)* — commit `4b42381`
   - Problem: Tab clicks don't update `location.hash`; back/forward and refresh lose the tab.
   - Files: `index.html:11754–11770`
   - Fix: In `showTab`, set `history.replaceState(null, '', '#' + tabId)`. On `DOMContentLoaded`, read `location.hash` and call `showTab` if present.
   - Accept: Pick the "Promotions" tab, refresh — Promotions still selected. Back button returns to previous tab.
 
-- [ ] **P0-6 · Collapse 4 warning banners into 1 dismissable callout** *(HIGH for UX)*
+- [x] **P0-6 · Collapse 4 warning banners into 1 dismissable callout** *(HIGH for UX)* — commit `60d2923`
   - Problem: `mobile-warning`, `nextjs-warning`, `comingsoon-banner`, `industry-context` can stack to ~100+ px of vertical "shouting" above the fold.
   - Files: `index.html:851, 854, 869, 879`
   - Fix: One `#alerts-strip` `<details>` with a single summary like "Alerts for this combo (3)". Render messages inside as a list. Add a dismiss-for-session button.
   - Accept: Worst-case viewport above the tab content drops by ≥ 80 px.
 
-- [ ] **P0-7 · Remove duplicate `.tab-bar` CSS rule** *(LOW)*
+- [x] **P0-7 · Remove duplicate `.tab-bar` CSS rule** *(LOW)* — commit `fc39522`
   - Problem: Identical sticky/top/z-index declared twice.
   - Files: `index.html:149, 159`
   - Fix: Delete the duplicate.
   - Accept: One `.tab-bar` rule remains; visual output unchanged.
 
-- [ ] **P0-8 · Move Advanced selects behind an expander** *(HIGH for UX)*
+- [x] **P0-8 · Move Advanced selects behind an expander** *(HIGH for UX)* — commit `d238333`
   - Problem: 9 selects look equally important. Mode / Industry / Package Manager are power-user toggles.
   - Files: `index.html:664–828`
   - Fix: Keep Frontend / Backend / CI / Registry / Compliance visible. Put Package Manager / Industry / Mode behind a "More options" `<details>` in the config bar.
