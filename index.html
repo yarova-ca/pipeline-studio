@@ -103,6 +103,11 @@ main{min-width:0;overflow-x:hidden}
 .cfg-grp select{padding:4px 22px 4px 7px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);font-family:inherit;font-size:11.5px;font-weight:500;color:var(--text);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2357606a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;cursor:pointer;box-shadow:var(--sh1)}
 .cfg-grp select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(9,105,218,.12)}
 .cfg-divider{width:1px;height:24px;background:var(--border);margin:0 4px;flex-shrink:0}
+/* Advanced config controls — hidden by default to keep the bar focused on the
+   critical picks (Frontend, Backend, CI, Registry, Compliance). The
+   "▸ More" button (#cfg-advanced-toggle) reveals Pkg Mgr, Industry, Mode. */
+.cfg-grp-advanced{display:none}
+#config-bar.show-advanced .cfg-grp-advanced{display:flex}
 .cfg-ci-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.25);color:#58a6ff;font-family:'JetBrains Mono',monospace;white-space:nowrap}
 .hero{background:linear-gradient(160deg,#0d1117,#161b22);padding:28px 40px 22px;position:relative;overflow:hidden;border-bottom:1px solid #21262d}
 .hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(88,166,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(88,166,255,.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
@@ -759,7 +764,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
         </optgroup>
       </select>
     </div>
-    <div class="cfg-grp" id="cfg-pkgmgr-grp">
+    <div class="cfg-grp cfg-grp-advanced" id="cfg-pkgmgr-grp">
       <label>Pkg Mgr</label>
       <select id="sel-pkgmgr" aria-label="Package manager" onchange="onConfigChange()">
         <option value="npm">npm</option>
@@ -792,7 +797,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
         <option value="ttlsh">ttl.sh (ephemeral)</option>
       </select>
     </div>
-    <div class="cfg-grp">
+    <div class="cfg-grp cfg-grp-advanced">
       <label>Industry</label>
       <select id="sel-industry" aria-label="Industry sector" onchange="onIndustryChange()">
         <option value="none">General SaaS</option>
@@ -831,8 +836,8 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       <span>Search</span>
       <kbd style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:0 5px;font-size:10px;color:var(--muted);font-family:inherit">/</kbd>
     </button>
-    <div class="cfg-divider"></div>
-    <div class="cfg-grp">
+    <div class="cfg-divider cfg-grp-advanced"></div>
+    <div class="cfg-grp cfg-grp-advanced">
       <label>Mode</label>
       <select id="sel-mode" aria-label="Reading mode" onchange="setMode(this.value)" title="Mode — Default: balanced. Learn: concept first. Ship: code only. Audit: compliance emphasized.">
         <option value="default" title="Code + concept side by side. Best for first-time setup.">Default</option>
@@ -841,6 +846,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
         <option value="audit"   title="Compliance + invariants emphasized. Best for auditors + reviewers.">Audit</option>
       </select>
     </div>
+    <button id="cfg-advanced-toggle" onclick="toggleAdvancedConfig()" aria-label="Toggle advanced configuration options" aria-expanded="false" title="Show Pkg Mgr, Industry, Mode" style="background:transparent;border:1px dashed var(--border);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit"><span id="cfg-advanced-toggle-label">▸ More</span></button>
     <button onclick="openWizard()" aria-label="Open setup wizard" title="Walk through 7 questions — the page sets every dropdown for you" style="background:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:3px 12px;font-size:11px;color:white;cursor:pointer;font-family:inherit;font-weight:700">🧭 Setup wizard</button>
     <button onclick="downloadAllFiles()" aria-label="Download all config files as a zip" title="Build a zip of every config file for the current selection (Dockerfile, workflow YAML, Kyverno policy, .trivyignore, .gitleaks.toml). Requires JSZip CDN." style="background:#1a7f37;border:1px solid #1a7f37;border-radius:4px;padding:3px 12px;font-size:11px;color:white;cursor:pointer;font-family:inherit;font-weight:700">⬇ Download all files</button>
     <button onclick="showThreatTour()" title="Open a guided tour of a real-world incident — see exactly which pipeline stages would have blocked it" style="background:transparent;border:1px solid #dc2626;border-radius:4px;padding:3px 10px;font-size:11px;color:#dc2626;cursor:pointer;font-family:inherit;font-weight:600">🎯 Tour an incident</button>
@@ -12142,6 +12148,27 @@ function flashIndustryAutolink(industry, compliance) {
   strip.style.opacity = '1';
   setTimeout(() => { strip.style.opacity = '0'; }, 5000);
 }
+// Show/hide the advanced config selects (Pkg Mgr, Industry, Mode). Persisted
+// in localStorage so the reader's preference sticks across sessions.
+function toggleAdvancedConfig(force) {
+  const bar = $id('config-bar');
+  const btn = $id('cfg-advanced-toggle');
+  const label = $id('cfg-advanced-toggle-label');
+  if (!bar) return;
+  const wantOpen = typeof force === 'boolean'
+    ? force
+    : !bar.classList.contains('show-advanced');
+  bar.classList.toggle('show-advanced', wantOpen);
+  if (btn)   btn.setAttribute('aria-expanded', wantOpen ? 'true' : 'false');
+  if (label) label.textContent = wantOpen ? '▾ Less' : '▸ More';
+  try { localStorage.setItem('cfg-advanced-open', wantOpen ? '1' : '0'); } catch(e) {}
+}
+function restoreAdvancedConfigState() {
+  let want = false;
+  try { want = localStorage.getItem('cfg-advanced-open') === '1'; } catch(e) {}
+  toggleAdvancedConfig(want);
+}
+
 function dismissNextjsWarning() {
   const el = $id('nextjs-warning');
   if (el) el.style.display = 'none';
@@ -12959,6 +12986,7 @@ function init() {
   // Inject Coming Soon options FIRST so loadStateFromURL can resolve them.
   augmentDropdownsFromCatalog();
   loadStateFromURL();
+  restoreAdvancedConfigState();
   // Default lens — Practitioner. Reader can switch any time.
   // Default reading mode — Default (balanced). Reader can switch via dropdown.
   if (!document.body.className.match(/mode-/)) document.body.classList.add('mode-default');
