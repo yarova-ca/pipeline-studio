@@ -811,7 +811,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
     </div>
     <div class="cfg-grp">
       <label>Compliance</label>
-      <select id="sel-compliance" aria-label="Compliance framework" onchange="onConfigChange();if(this.value!=='none')openComplianceContext(this.value)">
+      <select id="sel-compliance" aria-label="Compliance framework" onchange="this.dataset.userSet='1';onConfigChange();if(this.value!=='none')openComplianceContext(this.value)">
         <option value="none">None</option>
         <option value="pci">PCI-DSS v4.0</option>
         <option value="hipaa">HIPAA</option>
@@ -12061,14 +12061,17 @@ function updatePkgMgrDropdown() {
 }
 
 // Industry change auto-suggests compliance + refreshes context block.
-// If the suggested compliance is not 'none' AND compliance dropdown was 'none',
-// the suggestion is applied + a brief flash explains it. Otherwise user keeps their pick.
+// Auto-applies ONLY when (a) compliance is still 'none' AND (b) user has never
+// touched the compliance dropdown (sel-compliance sets data-user-set on change).
+// Once the user has interacted with compliance, their choice is sticky — even
+// if they intentionally reset to 'none', we won't surprise them again.
 function onIndustryChange() {
   const indKey = document.getElementById('sel-industry').value;
   currentIndustry = indKey;
   const ind = INDUSTRIES[indKey];
   const compSel = document.getElementById('sel-compliance');
-  if (ind && compSel && compSel.value === 'none' && ind.suggestedCompliance && ind.suggestedCompliance !== 'none') {
+  const userTouchedCompliance = compSel && compSel.dataset.userSet === '1';
+  if (ind && compSel && !userTouchedCompliance && compSel.value === 'none' && ind.suggestedCompliance && ind.suggestedCompliance !== 'none') {
     // Only if the suggested value exists as an option.
     const opt = Array.from(compSel.options).find(o => o.value === ind.suggestedCompliance);
     if (opt) {
