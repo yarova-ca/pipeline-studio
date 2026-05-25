@@ -861,7 +861,13 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       </select>
     </div>
     <button id="cfg-advanced-toggle" onclick="toggleAdvancedConfig()" aria-label="Toggle advanced configuration options" aria-expanded="false" title="Show Pkg Mgr, Industry, Mode" style="background:transparent;border:1px dashed var(--border);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit"><span id="cfg-advanced-toggle-label">▸ More</span></button>
-    <button onclick="openWizard()" aria-label="Open setup wizard" title="Walk through 7 questions — the page sets every dropdown for you" style="background:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:3px 12px;font-size:11px;color:white;cursor:pointer;font-family:inherit;font-weight:700">🧭 Setup wizard</button>
+    <!-- P1-3 (step 1/2): Setup-wizard CTA removed from the visible config bar
+         so the on-page Decision Map becomes the single visible entry point for
+         picking config. The wizard remains reachable via the keyboard shortcut
+         W (see handleKeydown) and via openWizard() — kept as a power-user
+         shortcut and to avoid breaking any deep-link or external doc. A full
+         delete of the wizard is a product decision (see REFACTOR_PLAN P1-3). -->
+    <button onclick="openWizard()" aria-label="Open setup wizard (keyboard: W)" title="Walk through 7 questions — keyboard: W" hidden style="display:none">🧭 Setup wizard</button>
     <button onclick="downloadAllFiles()" aria-label="Download all config files as a zip" title="Build a zip of every config file for the current selection (Dockerfile, workflow YAML, Kyverno policy, .trivyignore, .gitleaks.toml). Requires JSZip CDN." style="background:#1a7f37;border:1px solid #1a7f37;border-radius:4px;padding:3px 12px;font-size:11px;color:white;cursor:pointer;font-family:inherit;font-weight:700">⬇ Download all files</button>
     <button onclick="showThreatTour()" title="Open a guided tour of a real-world incident — see exactly which pipeline stages would have blocked it" style="background:transparent;border:1px solid #dc2626;border-radius:4px;padding:3px 10px;font-size:11px;color:#dc2626;cursor:pointer;font-family:inherit;font-weight:600">🎯 Tour an incident</button>
     <button onclick="playPipeline()" title="Animate the full pipeline diagram — each stage lights up sequentially so the flow becomes visible" style="background:transparent;border:1px solid var(--accent);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--accent);cursor:pointer;font-family:inherit;font-weight:600">▶ Animate pipeline</button>
