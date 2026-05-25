@@ -494,14 +494,14 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
    decision list); active is just a wayfinding hint. */
 .ds-step-active > .ds-step-label{border-left:3px solid var(--accent);padding-left:8px;margin-left:-11px}
 
-/* Quick-start mode — minimal layout for first-time users. Hides everything
-   conceptual + decision-related; shows only config bar + phase strip + Files.
-   Toggle the body class via the banner CTA. */
+/* Quick-start mode — minimal layout for the 'just give me the files' path.
+   Hides concept + SVG diagram + decision map + cluster prereqs + why panel.
+   What stays: config bar + alerts strip + phase tabs (active = Main Build,
+   set by JS) + reference tabs below (with Files tab in particular). */
 body.quick-start-mode #master-svg-wrap,
 body.quick-start-mode #decision-map-section,
 body.quick-start-mode #concept,
 body.quick-start-mode #cluster-prereqs,
-body.quick-start-mode #phase0,
 body.quick-start-mode #why-panel { display:none !important }
 body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0fdf4,white); border-color:#82e59d; border-left-color:var(--success) }
 
@@ -1066,13 +1066,14 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
 
   <!-- Phase rollup merged into swimlane actor column. -->
 
-  <!-- ── Quick-start banner — for first-time users who want the minimum path.
-       Click toggles a body class that hides the SVG + decision-map and shows
-       a compact 4-question form. ── -->
+  <!-- ── Quick-start banner — for users who want minimum chrome + the files.
+       Toggles a body class that hides the SVG, decision-map, concept,
+       cluster-prereqs and 'Why' panel. Auto-switches to the Main Build phase
+       tab so the workflow YAML + Dockerfile + deploy tree are visible. ── -->
   <div id="quick-start-banner" style="margin:0 32px;padding:10px 14px;background:linear-gradient(90deg,#e0f2fe,white);border:1px solid #7dd3fc;border-left:4px solid var(--accent);border-radius:6px;font-size:12.5px;color:var(--text);display:flex;align-items:center;gap:10px">
-    <span style="font-weight:600">New here?</span>
-    <span style="color:var(--text-sec)">Skip the studio — just answer 4 questions and copy the files.</span>
-    <button onclick="toggleQuickStartMode()" style="margin-left:auto;background:var(--accent);color:white;border:none;border-radius:4px;padding:4px 12px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit">▶ Quick start (60s)</button>
+    <span style="font-weight:600">Just want the files?</span>
+    <span style="color:var(--text-sec)">Pick your stack above, then jump straight to Main Build YAML + the Files tab.</span>
+    <button onclick="toggleQuickStartMode()" style="margin-left:auto;background:var(--accent);color:white;border:none;border-radius:4px;padding:4px 12px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit">▶ Hide concept &amp; diagram</button>
     <button onclick="dismissQuickStart()" aria-label="Dismiss quick-start banner" title="Don't show again this session" style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;padding:0 4px">×</button>
   </div>
 
@@ -12448,8 +12449,9 @@ function renderGlossary() {
 // Activate one of the phase tabs (Phase 0..4). Hides all others, scrolls
 // the phase strip into view so the reader sees the content they just clicked.
 // Also writes #tab-<id> into the URL hash so refresh + share-link land on the
-// same tab.
-function activatePhaseTab(tabId, btn) {
+// same tab. `opts.silent` skips URL write — used when restoring from hash to
+// avoid a self-triggered hashchange race vs showTab.
+function activatePhaseTab(tabId, btn, opts) {
   if (!tabId) return;
   // Toggle nav buttons
   document.querySelectorAll('.phase-tab').forEach(b => {
@@ -12461,15 +12463,19 @@ function activatePhaseTab(tabId, btn) {
   document.querySelectorAll('.phase-strip > .tab-content').forEach(p => {
     p.classList.toggle('phase-active', p.id === tabId);
   });
-  // URL hash sync
-  try {
-    if (location.hash !== '#' + tabId) {
-      history.replaceState(null, '', location.pathname + location.search + '#' + tabId);
-    }
-  } catch (e) {}
+  // URL hash sync (skip when silent — caller is responding to a hash event)
+  if (!(opts && opts.silent)) {
+    try {
+      if (location.hash !== '#' + tabId) {
+        history.replaceState(null, '', location.pathname + location.search + '#' + tabId);
+      }
+    } catch (e) {}
+  }
   // Scroll the tab bar into view (not the panel — keeps tabs visible)
-  const tabs = document.querySelector('.phase-tabs');
-  if (tabs) try { tabs.scrollIntoView({behavior:'smooth', block:'start'}); } catch (e) {}
+  if (!(opts && opts.noScroll)) {
+    const tabs = document.querySelector('.phase-tabs');
+    if (tabs) try { tabs.scrollIntoView({behavior:'smooth', block:'start'}); } catch (e) {}
+  }
 }
 
 // Now a smooth-scroll jumper. All sections always visible.
@@ -12499,36 +12505,30 @@ function showTab(tabId, btn) {
 function restoreTabFromHash() {
   const raw = (location.hash || '').replace(/^#/, '');
   if (!raw) return;
-  // Hashes like #tab-local / #tab-pr / etc. are the new phase tabs — route
-  // them to activatePhaseTab. Pure ids like #files / #setup keep going to
-  // showTab (smooth-scroll anchor).
+  // Hashes like #tab-local / #tab-pr / etc. are phase tabs — route to
+  // activatePhaseTab with silent:true so it doesn't immediately overwrite
+  // the same hash (which would no-op but is cleaner). Pure ids like #files /
+  // #setup keep going to showTab (smooth-scroll anchor sections below the
+  // phase strip).
   const tabId = raw.startsWith('tab-') ? raw : null;
   if (tabId && document.querySelector(`.phase-tab[data-tab="${tabId}"]`)) {
-    activatePhaseTab(tabId);
+    activatePhaseTab(tabId, null, { silent: true });
   } else if ($id(`tab-${raw}`)) {
-    const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => {
-      const oc = b.getAttribute('onclick') || '';
-      return oc.includes("'" + raw + "'");
-    });
-    showTab(raw, btn);
-  }
-  // Auto-collapse the decision map when deep-linking to a phase pane (so the
-  // reader sees the phase content their link targeted, not 1200px of decision
-  // UI above). Skipped after the reader has engaged with decisions.
-  const phaseTabIds = ['tab-phase0','tab-local','tab-pr','tab-main','tab-promotions'];
-  if (phaseTabIds.includes(tabId)) {
-    if (!sessionStorage.getItem('ds-engaged')) toggleDecisionMapCollapsed(true);
+    showTab(raw, null);
   }
 }
 
-// Quick-start mode: hides the SVG diagram + decision-map + cluster-prereqs;
-// reveals only the config bar + phase strip + Files tab. Banner toggles it.
+// Quick-start mode: hides chrome (SVG diagram + decision-map + concept +
+// cluster-prereqs + why-panel), auto-switches the phase tab to Main Build
+// (Phase 3 — where the workflow YAML lives), and scrolls to the config bar.
 function toggleQuickStartMode() {
   document.body.classList.toggle('quick-start-mode');
   const on = document.body.classList.contains('quick-start-mode');
   try { sessionStorage.setItem('quick-start', on ? '1' : '0'); } catch (e) {}
-  // If turning on, scroll to config bar so the user sees the 5 selects first.
   if (on) {
+    // Switch to Main Build phase — that's where the workflow YAML lives.
+    const mainBtn = document.querySelector('.phase-tab[data-tab="tab-main"]');
+    if (mainBtn) activatePhaseTab('tab-main', mainBtn, { noScroll: true });
     const cb = $id('config-bar');
     if (cb) try { cb.scrollIntoView({behavior:'smooth', block:'start'}); } catch (e) {}
   }
