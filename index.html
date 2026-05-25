@@ -5362,8 +5362,24 @@ spec:
 
   genP1: cfg => {
     const cd = cfg.cd || 'argocd';
-    if (cd === 'flux') return `# ── P1 — Deploy to dev (Flux Kustomization) ─────────────────
+    if (cd === 'flux') {
+      const fluxGitops = cfg.gitops || 'same-repo';
+      if (fluxGitops === 'push') return `# ── P1 — Deploy to dev (push deploy, no GitOps) ─────────────
+# You picked push deploy with Flux as CD — these are inconsistent.
+# Either switch CD to 'helm' or switch GitOps repo layout to same/separate-repo.
+helm upgrade --install myapp-dev ./deploy/charts/myapp \\
+  --namespace myapp-dev --create-namespace \\
+  --set image.repository=REGISTRY/myapp \\
+  --set image.digest=sha256:DIGEST \\
+  --set env=dev --wait --timeout 5m`;
+      const fluxSameRepo = fluxGitops === 'same-repo';
+      const fluxRepoURL  = fluxSameRepo
+        ? 'https://github.com/YOUR_ORG/YOUR_APP_REPO    # same repo as source code'
+        : 'https://github.com/YOUR_ORG/YOUR_CONFIG_REPO # separate GitOps config repo';
+      const fluxPath = fluxSameRepo ? './deploy/overlays/dev' : './overlays/dev';
+      return `# ── P1 — Deploy to dev (Flux Kustomization) ─────────────────
 # Image referenced by sha256 digest only. Tags never used at runtime.
+# GitOps layout: ${fluxSameRepo ? 'same-repo (manifests live under deploy/ in this app repo)' : 'separate config repo'}
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
@@ -5371,7 +5387,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  url: https://github.com/YOUR_ORG/YOUR_CONFIG_REPO
+  url: ${fluxRepoURL}
   ref:
     branch: main
 ---
@@ -5385,12 +5401,13 @@ spec:
   sourceRef:
     kind: GitRepository
     name: myapp-config
-  path: ./overlays/dev
+  path: ${fluxPath}
   prune: true
   targetNamespace: myapp-dev
   images:
     - name: myapp
       digest: sha256:DIGEST   # updated by CI promotion job`;
+    }
 
     if (cd === 'helm') return `# ── P1 — Deploy to dev (Helm imperative) ────────────────────
 # Run this from your CI or locally. Not GitOps — no auto-sync.
@@ -7971,6 +7988,40 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
+`
+  },
+  'deploy/charts/myapp/values-dev.yaml': {
+    label: 'deploy/charts/myapp/values-dev.yaml',
+    content: `# Dev overrides. helm upgrade ... -f values.yaml -f values-dev.yaml
+replicaCount: 1
+env: dev
+resources:
+  requests: { cpu: "50m",  memory: "64Mi" }
+  limits:   { cpu: "250m", memory: "256Mi" }
+`
+  },
+  'deploy/charts/myapp/values-staging.yaml': {
+    label: 'deploy/charts/myapp/values-staging.yaml',
+    content: `# Staging overrides. helm upgrade ... -f values.yaml -f values-staging.yaml
+replicaCount: 3
+env: staging
+resources:
+  requests: { cpu: "100m", memory: "128Mi" }
+  limits:   { cpu: "500m", memory: "512Mi" }
+`
+  },
+  'deploy/charts/myapp/values-prod.yaml': {
+    label: 'deploy/charts/myapp/values-prod.yaml',
+    content: `# Prod overrides. helm upgrade ... -f values.yaml -f values-prod.yaml
+replicaCount: 10
+env: prod
+resources:
+  requests: { cpu: "200m", memory: "256Mi" }
+  limits:   { cpu: "1000m", memory: "1Gi" }
+# Pod disruption budget — keep at least N pods during voluntary disruption
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 7
 `
   }
 };
@@ -11385,23 +11436,70 @@ function renderWorkflowBox(phase, title, containerId) {
     </details>`;
 }
 
+// Group the emitted files by purpose. Each group renders as a header followed
+// by its file items. Order: what an engineer reads top-to-bottom while setting
+// up a new service.
+const CONFIG_FILE_GROUPS = [
+  { label: 'CI workflows',     keys: ['workflow', 'workflow-main'] },
+  { label: 'Container',        keys: ['Dockerfile'] },
+  { label: 'Local dev hooks',  keys: ['.pre-commit-config.yaml', '.gitleaks.toml'] },
+  { label: 'Security policy',  keys: ['.trivyignore', '.checkov.yaml', 'sbom-policy.yaml'] },
+  { label: 'Kustomize deploy tree', keys: [
+    'deploy/argocd-app.yaml',
+    'deploy/base/kustomization.yaml',
+    'deploy/base/deployment.yaml',
+    'deploy/base/service.yaml',
+    'deploy/overlays/dev/kustomization.yaml',
+    'deploy/overlays/staging/kustomization.yaml',
+    'deploy/overlays/prod/kustomization.yaml',
+    'deploy/README.md'
+  ]},
+  { label: 'Helm chart (alternative)', keys: [
+    'deploy/charts/myapp/Chart.yaml',
+    'deploy/charts/myapp/values.yaml',
+    'deploy/charts/myapp/values-dev.yaml',
+    'deploy/charts/myapp/values-staging.yaml',
+    'deploy/charts/myapp/values-prod.yaml',
+    'deploy/charts/myapp/templates/deployment.yaml',
+    'deploy/charts/myapp/templates/service.yaml'
+  ]}
+];
+
 function renderConfigFiles() {
   const fileList = document.getElementById('file-list');
   const filePanels = document.getElementById('file-panels');
-  const keys = Object.keys(CONFIG_FILES);
-  fileList.innerHTML = keys.map((k,i) =>
-    `<a class="file-item${i===0?' active':''}" onclick="showFile('${k}',this)">${typeof CONFIG_FILES[k].label === 'function' ? CONFIG_FILES[k].label() : CONFIG_FILES[k].label}</a>`
-  ).join('');
-  filePanels.innerHTML = keys.map((k,i) => {
+  if (!fileList || !filePanels) return;
+  // Any keys defined in CONFIG_FILES but not assigned to a group fall back to
+  // an "Other" bucket so nothing disappears silently if someone adds a file.
+  const grouped = new Set(CONFIG_FILE_GROUPS.flatMap(g => g.keys));
+  const allKeys = Object.keys(CONFIG_FILES);
+  const orphans = allKeys.filter(k => !grouped.has(k));
+  const groups = orphans.length
+    ? [...CONFIG_FILE_GROUPS, { label: 'Other', keys: orphans }]
+    : CONFIG_FILE_GROUPS;
+  let firstKey = null;
+  fileList.innerHTML = groups.map(g => {
+    const items = g.keys.filter(k => CONFIG_FILES[k]).map(k => {
+      if (!firstKey) firstKey = k;
+      const isFirst = k === firstKey;
+      const f = CONFIG_FILES[k];
+      const lbl = typeof f.label === 'function' ? f.label() : f.label;
+      return `<a class="file-item${isFirst?' active':''}" data-key="${escAttr(k)}" onclick="showFile('${escAttr(k)}',this)">${esc(lbl)}</a>`;
+    }).join('');
+    if (!items) return '';
+    return `<div class="file-group-hdr" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:8px 12px 4px;margin-top:4px;border-top:1px solid var(--border-subtle)">${esc(g.label)}</div>${items}`;
+  }).join('');
+  filePanels.innerHTML = allKeys.map((k,i) => {
     const f = CONFIG_FILES[k];
     const lbl = typeof f.label === 'function' ? f.label() : f.label;
     const content = typeof f.content === 'function' ? f.content() : f.content;
-    return `<div class="file-panel${i===0?' active':''}" id="fpanel-${k}">
+    const isFirst = k === firstKey;
+    return `<div class="file-panel${isFirst?' active':''}" id="fpanel-${k}">
       <div class="file-code-hdr">
-        <span class="file-name">${lbl}</span>
-        <button class="copy-btn" onclick="copyCode(this,'fcode-${k}')">Copy</button>
+        <span class="file-name">${esc(lbl)}</span>
+        <button class="copy-btn" onclick="copyCode(this,'fcode-${escAttr(k)}')">Copy</button>
       </div>
-      <pre class="file-pre" id="fcode-${k}">${esc(content)}</pre>
+      <pre class="file-pre" id="fcode-${escAttr(k)}">${esc(content)}</pre>
     </div>`;
   }).join('');
 }
