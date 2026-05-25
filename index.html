@@ -11063,7 +11063,7 @@ function renderSDP(stage) {
     </div>`;
 }
 
-function selectPipeStage(stageId, detailId) {
+function selectPipeStage(stageId, detailId, opts) {
   const stage = findStage(stageId);
   if (!stage) return;
   document.querySelectorAll('.pipe-box.pb-active').forEach(b => b.classList.remove('pb-active'));
@@ -11074,6 +11074,10 @@ function selectPipeStage(stageId, detailId) {
   container.innerHTML = renderSDP(stage);
   window.currentSdpStageId = stageId;
   window.currentSdpDetailId = detailId;
+  // Skip scroll when called from init() or from onConfigChange re-render — those
+  // are bookkeeping refreshes, not user navigation, and scrolling them yanks the
+  // user away from whatever they were reading.
+  if (opts && opts.noScroll) return;
   // scrollIntoView absent in jsdom; safe to no-op there.
   try { container.scrollIntoView({behavior:'smooth', block:'nearest'}); } catch(e) {}
 }
@@ -12542,9 +12546,12 @@ function onConfigChange() {
   // Re-render config files
   renderConfigFiles();
 
-  // Re-render open SDP with updated YAML
+  // Re-render open SDP with updated YAML. NoScroll: this is a config-change
+  // refresh, not user navigation — must not yank the page to wherever the
+  // last stage selection was (root cause of the "click Angular → page jumps"
+  // bug).
   if (window.currentSdpStageId && window.currentSdpDetailId) {
-    selectPipeStage(window.currentSdpStageId, window.currentSdpDetailId);
+    selectPipeStage(window.currentSdpStageId, window.currentSdpDetailId, {noScroll: true});
   }
 
   // Re-render phase 0 (registry-specific content changes)
@@ -13182,17 +13189,19 @@ function init() {
   renderComingSoonBanner();
   renderDecisionMap();
 
-  // Auto-select first stage of every pipeline phase.
-  // selectPipeStage uses scrollIntoView — guarded for jsdom (no-op in test env).
+  // Auto-select first stage of every pipeline phase (populates the detail
+  // panel for each phase tab). MUST pass noScroll: true — without it, the
+  // last call (runtime) would scrollIntoView and the page would land mid-doc
+  // instead of at the top on first load.
   const firstOf = arr => {
     const head = arr[0];
     if (!head) return null;
     return head.parallel ? head.stages[0].id : head.id;
   };
-  try { const id = firstOf(PR_STAGES);        if (id) selectPipeStage(id, 'pr-detail'); }        catch(e) {}
-  try { const id = firstOf(MAIN_STAGES);      if (id) selectPipeStage(id, 'main-detail'); }      catch(e) {}
-  try { const id = firstOf(PROMOTION_STAGES); if (id) selectPipeStage(id, 'promotion-detail'); } catch(e) {}
-  try { const id = firstOf(RUNTIME_STAGES);   if (id) selectPipeStage(id, 'runtime-detail'); }   catch(e) {}
+  try { const id = firstOf(PR_STAGES);        if (id) selectPipeStage(id, 'pr-detail',        {noScroll:true}); } catch(e) {}
+  try { const id = firstOf(MAIN_STAGES);      if (id) selectPipeStage(id, 'main-detail',      {noScroll:true}); } catch(e) {}
+  try { const id = firstOf(PROMOTION_STAGES); if (id) selectPipeStage(id, 'promotion-detail', {noScroll:true}); } catch(e) {}
+  try { const id = firstOf(RUNTIME_STAGES);   if (id) selectPipeStage(id, 'runtime-detail',   {noScroll:true}); } catch(e) {}
 
   // If the URL has a #tab hash, jump to it after all sections have rendered.
   // Run on a microtask so scroll target heights are settled.
