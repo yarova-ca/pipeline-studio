@@ -40,12 +40,18 @@
   --z-modal-wizard: 210;   /* Setup wizard */
   --z-modal-picker: 215;   /* Decision picker (opens from decision map; sits above wizard) */
   --z-toast-top: 300;      /* Floating keyboard legend */
+  /* Sum of all sticky header heights — config-bar (~46) + tab-bar (~40) + a
+     small gap = 90 on desktop. Wraps onto more rows on mobile so we bump it. */
+  --sticky-headers-h: 90px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',-apple-system,sans-serif;font-size:14px;line-height:1.6;color:var(--text);background:var(--bg);display:grid;grid-template-columns:252px 1fr 200px;min-height:100vh}
 @media (max-width:1400px){body{grid-template-columns:252px 1fr}aside#toc{display:none}}
 @media (max-width:900px){
+  /* Config bar wraps onto more rows on mobile — bump scroll-margin-top so
+     section anchors don't land underneath the stacked sticky headers. */
+  :root{--sticky-headers-h:130px}
   body{grid-template-columns:1fr}
   nav#sb{display:none}
   #ctx-drawer{width:100% !important;right:-100% !important}
@@ -177,7 +183,7 @@ main{min-width:0;overflow-x:hidden}
    anchor pattern, not a tab-swap UI. The .tab-btn 'active' state highlights
    which section the user last jumped to; the panels themselves never hide.
    See showTab() in JS. scroll-margin-top compensates for sticky headers. */
-.tab-content{display:block;padding:24px 32px 40px;border-top:1px solid var(--border-subtle);scroll-margin-top:90px}
+.tab-content{display:block;padding:24px 32px 40px;border-top:1px solid var(--border-subtle);scroll-margin-top:var(--sticky-headers-h)}
 .tab-content > h2:first-child, .tab-content .pipeline-hdr h2{font-size:18px}
 /* Collapsible reference section styling */
 .ref-collapsible{padding:0;border-top:1px solid var(--border-subtle)}
