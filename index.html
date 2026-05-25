@@ -964,7 +964,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
          shortcut and to avoid breaking any deep-link or external doc. A full
          delete of the wizard is a product decision (see REFACTOR_PLAN P1-3). -->
     <button onclick="openWizard()" aria-label="Open setup wizard (keyboard: W)" title="Walk through 7 questions — keyboard: W" hidden style="display:none">🧭 Setup wizard</button>
-    <button onclick="downloadAllFiles()" aria-label="Download all config files as a zip" title="Build a zip of every config file for the current selection (Dockerfile, workflow YAML, Kyverno policy, .trivyignore, .gitleaks.toml). Requires JSZip CDN." style="background:#1a7f37;border:1px solid #1a7f37;border-radius:4px;padding:3px 12px;font-size:11px;color:white;cursor:pointer;font-family:inherit;font-weight:700">⬇ Download all files</button>
+    <button onclick="resetAllConfig()" aria-label="Reset all selections to defaults" title="Reset every dropdown + decision back to defaults. URL params + advanced toggle are cleared too." style="background:transparent;border:1px solid var(--border);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit">↺ Reset</button>
     <button onclick="showThreatTour()" title="Open a guided tour of a real-world incident — see exactly which pipeline stages would have blocked it" style="background:transparent;border:1px solid #dc2626;border-radius:4px;padding:3px 10px;font-size:11px;color:#dc2626;cursor:pointer;font-family:inherit;font-weight:600">🎯 Tour an incident</button>
     <button onclick="playPipeline()" title="Animate the full pipeline diagram — each stage lights up sequentially so the flow becomes visible" style="background:transparent;border:1px solid var(--accent);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--accent);cursor:pointer;font-family:inherit;font-weight:600">▶ Animate pipeline</button>
   </div>
@@ -1105,6 +1105,37 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
         <li><b>Runtime detection</b> (Falco, Trivy Operator) — optional but recommended; cluster-wide, owned by SRE/SOC</li>
       </ul>
       <p style="margin-top:10px;font-style:italic;color:var(--muted);font-size:11.5px">These are platform concerns, not pipeline concerns. The studio emits the per-app config that <i>uses</i> these — it doesn't try to install them. Why: cluster bootstrap is a one-time setup owned by a different team; pipeline runs every commit, owned by app teams.</p>
+      <details style="margin-top:10px;border:1px solid var(--border);border-radius:4px;background:white">
+        <summary style="cursor:pointer;padding:8px 12px;font-weight:600;font-size:12px;color:var(--text);list-style:none">📋 Sample admission policy — copy this and send to your platform team</summary>
+        <div style="padding:0 12px 10px">
+          <p style="font-size:11.5px;color:var(--text-sec);margin:6px 0">If your cluster doesn't already enforce signed images, paste this Kyverno ClusterPolicy. It refuses any pod whose image isn't signed by your GitHub Actions workflow. Replace <code>YOUR_ORG</code> with your GitHub org name.</p>
+          <pre style="background:var(--code-bg);color:var(--code-text);padding:10px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.55;overflow-x:auto;margin:0">apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-signed-images
+spec:
+  validationFailureAction: Enforce      # I-20: fail-closed
+  background: false
+  rules:
+    - name: verify-image-signature
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+              namespaceSelector:
+                matchLabels:
+                  env: production       # only enforced in prod namespaces
+      verifyImages:
+        - imageReferences:
+            - "REGISTRY/*"              # restrict to YOUR registry (gates allowed-registries too)
+          attestors:
+            - entries:
+                - keyless:
+                    subject: "https://github.com/YOUR_ORG/*/.github/workflows/*"
+                    issuer: "https://token.actions.githubusercontent.com"</pre>
+          <p style="font-size:11px;color:var(--muted);margin:6px 0 0;font-style:italic">Install Kyverno first: <code>helm install kyverno kyverno/kyverno -n kyverno --create-namespace</code>. Then apply the policy: <code>kubectl apply -f admission.yaml</code>. Label your prod namespaces: <code>kubectl label ns myapp-prod env=production</code>.</p>
+        </div>
+      </details>
     </div>
   </details>
 
@@ -10314,11 +10345,13 @@ function renderDecisionMap() {
   }).join('');
 
   // ── CTA ───────────────────────────────────────────────────────
+  // Per product direction: no download — files render inline in the Files tab.
+  // CTA scrolls to the Files tab.
   const ctaBtn = ready
-    ? `<button class="ds-cta-btn-active" onclick="downloadAllFiles()">⬇ Export all config files</button>`
-    : `<button class="ds-cta-btn-locked" disabled>⬇ Export config files</button>`;
+    ? `<button class="ds-cta-btn-active" onclick="showTab('files')">📋 View &amp; copy all files →</button>`
+    : `<button class="ds-cta-btn-locked" disabled>📋 View all files</button>`;
   const ctaSub = ready
-    ? `<div class="ds-cta-sub">All ${total} decisions made — your pipeline config is ready.</div>`
+    ? `<div class="ds-cta-sub">All ${total} decisions made — files panel below holds every artifact ready to copy.</div>`
     : `<div class="ds-cta-sub">${shapeChosen ? `${custom} of ${total} decisions made.` : 'Pick a service shape above to begin.'}</div>`;
 
   const badgeCls = !shapeChosen ? 'ds-badge ds-badge-start' : ready ? 'ds-badge ds-badge-ready' : 'ds-badge ds-badge-progress';
@@ -12713,6 +12746,20 @@ function toggleAdvancedConfig(force) {
   if (label) label.textContent = wantOpen ? '▾ Less' : '▸ More';
   try { localStorage.setItem('cfg-advanced-open', wantOpen ? '1' : '0'); } catch(e) {}
 }
+// Wipe URL state + localStorage + dataset.userSet markers, then reload so the
+// page comes back at defaults. Asks for confirmation — destructive in the
+// sense that all picks vanish, but nothing on disk is touched.
+function resetAllConfig() {
+  if (!confirm('Reset every dropdown + decision to defaults? This clears the URL params and local storage; nothing in the repo changes.')) return;
+  try {
+    localStorage.removeItem('cfg-advanced-open');
+    localStorage.removeItem('nextjs-note-dismissed');
+  } catch (e) {}
+  // Clear URL params and the hash; reload from a clean state.
+  try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  location.reload();
+}
+
 function restoreAdvancedConfigState() {
   let want = false;
   try { want = localStorage.getItem('cfg-advanced-open') === '1'; } catch(e) {}
@@ -12744,6 +12791,12 @@ function refreshAlertsStrip() {
   const countEl = $id('alerts-strip-count');
   if (countEl) countEl.textContent = String(shown.length);
   strip.style.display = shown.length ? '' : 'none';
+  // Force-open the strip when a *substitution* alert is active (Coming Soon
+  // means the pipeline is actually using a sister framework). Soft notes
+  // (Next.js dockerfile note) don't force-open.
+  const comingsoon = $id('comingsoon-banner');
+  const subActive = comingsoon && (comingsoon.style.display === 'block' || comingsoon.style.display === 'flex');
+  if (subActive && !strip.open) strip.open = true;
 }
 
 function renderComingSoonBanner() {
