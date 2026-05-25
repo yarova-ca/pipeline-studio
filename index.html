@@ -68,8 +68,7 @@
   --z-drawer: 150;         /* ctx drawer (side sheet) */
   --z-modal: 200;          /* Quick-Find search overlay */
   --z-modal-tour: 205;     /* Threat tour walkthrough (was 200 — disambiguated) */
-  --z-modal-wizard: 210;   /* Setup wizard */
-  --z-modal-picker: 215;   /* Decision picker (opens from decision map; sits above wizard) */
+  --z-modal-picker: 215;   /* Decision picker (opens from decision map) */
   --z-toast-top: 300;      /* Floating keyboard legend */
   /* Sum of all sticky header heights — config-bar (~46) + tab-bar (~40) + a
      small gap = 90 on desktop. Wraps onto more rows on mobile so we bump it. */
@@ -672,25 +671,8 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
   </div>
 </div>
 
-<!-- ── Decision wizard modal — 7 questions, concept + tradeoff per step. ── -->
-<div id="wizard-modal" role="dialog" aria-modal="true" aria-labelledby="wizard-title" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal-wizard);align-items:center;justify-content:center;padding:24px" onclick="if(event.target===this)closeWizard()">
-  <div style="background:white;border-radius:12px;width:min(820px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 32px 70px rgba(0,0,0,.4);display:flex;flex-direction:column">
-    <div style="position:sticky;top:0;background:linear-gradient(135deg,#0d1117,#161b22);color:#f0f6fc;padding:14px 22px;display:flex;justify-content:space-between;align-items:center;z-index:var(--z-base);border-radius:12px 12px 0 0">
-      <div>
-        <div id="wizard-title" style="font-size:15px;font-weight:700">Set up your pipeline in 7 questions</div>
-        <div id="wizard-step-indicator" style="font-size:11.5px;color:#79c0ff;margin-top:2px">Step 1 of 7</div>
-      </div>
-      <button onclick="closeWizard()" aria-label="Close wizard" style="background:none;border:none;font-size:20px;cursor:pointer;color:#8b949e">×</button>
-    </div>
-    <div id="wizard-progress" style="height:4px;background:#e6eaef;width:100%"><div id="wizard-progress-bar" style="height:100%;background:var(--accent);width:14%;transition:width .25s"></div></div>
-    <div id="wizard-body" style="padding:22px 26px;flex:1;overflow-y:auto"></div>
-    <div style="border-top:1px solid var(--border);padding:12px 22px;display:flex;justify-content:space-between;align-items:center;background:var(--surface)">
-      <button id="wizard-back" onclick="wizardBack()" aria-label="Previous step" style="background:white;border:1px solid var(--border);padding:7px 16px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;color:var(--text-sec)">← Back</button>
-      <span id="wizard-summary" style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;flex:1;text-align:center;padding:0 14px"></span>
-      <button id="wizard-next" onclick="wizardNext()" aria-label="Next step" style="background:var(--accent);border:none;color:white;padding:7px 18px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">Next →</button>
-    </div>
-  </div>
-</div>
+<!-- (Wizard modal removed — see commit. The on-page Decision Map is now the
+     single entry point; the W keyboard shortcut + openWizard() are gone.) -->
 
 <!-- ── Threat tour modal ── -->
 <div id="threat-tour-modal" role="dialog" aria-modal="true" aria-labelledby="threat-tour-title" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal-tour);align-items:flex-start;justify-content:center;padding-top:60px" onclick="if(event.target===this)hideThreatTour()">
@@ -1002,13 +984,6 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
       </select>
     </div>
     <button id="cfg-advanced-toggle" onclick="toggleAdvancedConfig()" aria-label="Toggle advanced configuration options" aria-expanded="false" title="Show Pkg Mgr, Industry, Mode" style="background:transparent;border:1px dashed var(--border);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit"><span id="cfg-advanced-toggle-label">▸ More</span></button>
-    <!-- P1-3 (step 1/2): Setup-wizard CTA removed from the visible config bar
-         so the on-page Decision Map becomes the single visible entry point for
-         picking config. The wizard remains reachable via the keyboard shortcut
-         W (see handleKeydown) and via openWizard() — kept as a power-user
-         shortcut and to avoid breaking any deep-link or external doc. A full
-         delete of the wizard is a product decision (see REFACTOR_PLAN P1-3). -->
-    <button onclick="openWizard()" aria-label="Open setup wizard (keyboard: W)" title="Walk through 7 questions — keyboard: W" hidden style="display:none">🧭 Setup wizard</button>
     <button onclick="resetAllConfig()" aria-label="Reset all selections to defaults" title="Reset every dropdown + decision back to defaults. URL params + advanced toggle are cleared too." style="background:transparent;border:1px solid var(--border);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit">↺ Reset</button>
     <button onclick="showThreatTour()" title="Open a guided tour of a real-world incident — see exactly which pipeline stages would have blocked it" style="background:transparent;border:1px solid #dc2626;border-radius:4px;padding:3px 10px;font-size:11px;color:#dc2626;cursor:pointer;font-family:inherit;font-weight:600">🎯 Tour an incident</button>
     <button onclick="playPipeline()" title="Animate the full pipeline diagram — each stage lights up sequentially so the flow becomes visible" style="background:transparent;border:1px solid var(--accent);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--accent);cursor:pointer;font-family:inherit;font-weight:600">▶ Animate pipeline</button>
@@ -13747,262 +13722,6 @@ function augmentDropdownsFromCatalog() {
 // Output: every dropdown filled, pipeline rendered, modal closed.
 // State is held in WIZARD_STATE during the flow. Committed on Finish.
 // ──────────────────────────────────────────────────────────────────
-const WIZARD_STEPS = [
-  {
-    key: 'shape',
-    label: 'What kind of service are you building?',
-    concept: 'A service shape decides everything that follows. Frontend means UI only. Backend means API only. Full-stack means both in one repo. Mobile and SSG have different deployment models.',
-    options: [
-      {value:'fullstack', label:'Full-stack web app',  desc:'Server-rendered HTML + client JS. Example: Next.js, Rails, Phoenix.', sets:{'sel-frontend':'nextjs','sel-backend':'none'}},
-      {value:'frontend',  label:'Frontend SPA',        desc:'Single-page app. Needs a separate backend API. Example: React + Vite.', sets:{'sel-frontend':'react-vite','sel-backend':'none'}},
-      {value:'backend',   label:'Backend API / service', desc:'No UI. Serves JSON to clients. Example: FastAPI, gin, Spring Boot.', sets:{'sel-frontend':'none','sel-backend':'go-gin'}},
-      {value:'ssg',       label:'Static site (SSG)',    desc:'Built at build time. No runtime server. Example: Astro, Gatsby.', sets:{'sel-frontend':'astro','sel-backend':'none'}},
-      {value:'mobile',    label:'Mobile app',           desc:'Native or hybrid. No container pipeline. Example: Expo.', sets:{'sel-frontend':'mobile-expo','sel-backend':'none'}},
-      {value:'library',  label:'Library / package',    desc:'No deploy. Publish to npm/PyPI/crates. Pipeline covers test + sign + publish.', sets:{'sel-frontend':'none','sel-backend':'none'}}
-    ]
-  },
-  {
-    key: 'language',
-    label: 'Which primary language?',
-    concept: 'The language drives builder image, package manager, and tooling. Pick the one your team knows. Match to existing stack if extending.',
-    options: [
-      {value:'js',     label:'JavaScript / TypeScript', desc:'Node, React, Vue, Angular. Most popular for web work.'},
-      {value:'python', label:'Python',                  desc:'FastAPI, Django, Flask. Strong in data, ML, scripting.'},
-      {value:'go',     label:'Go',                      desc:'gin, echo, fiber. Compiled, single-binary, fast.'},
-      {value:'java',   label:'Java / Kotlin',           desc:'Spring Boot, Quarkus, Ktor. JVM enterprise standard.'},
-      {value:'dotnet', label:'.NET',                    desc:'ASP.NET Core. Microsoft-stack server.'},
-      {value:'rust',   label:'Rust',                    desc:'Axum, Actix. Memory-safe, compiled, performant.'},
-      {value:'ruby',   label:'Ruby',                    desc:'Rails, Sinatra. Convention over configuration.'},
-      {value:'php',    label:'PHP',                     desc:'Laravel, Symfony. Mature web ecosystem.'},
-      {value:'elixir', label:'Elixir',                  desc:'Phoenix. BEAM concurrency, fault tolerance.'}
-    ]
-  },
-  {
-    key: 'framework',
-    label: 'Which framework?',
-    dynamic: true, // built per step from prior answers
-    concept: 'Framework picks the test command, the build command, and the runtime image. Choose the one your team uses today.',
-    options: [] // filled dynamically
-  },
-  {
-    key: 'pkg',
-    label: 'Which package manager?',
-    dynamic: true,
-    concept: 'Package manager controls lockfile, install command, and CI cache key. Match to your repo. JS teams pick from npm/pnpm/yarn/bun. Python teams pick pip/poetry/uv. Others have one default.',
-    options: []
-  },
-  {
-    key: 'ci',
-    label: 'Which CI system?',
-    concept: 'CI runs the pipeline. Each system has different YAML syntax and OIDC support. Pick the one your repo uses today.',
-    options: [
-      {value:'github-actions', label:'GitHub Actions', desc:'GitHub-hosted runners. Built-in OIDC. Best when repo is on GitHub.'},
-      {value:'gitlab-ci',      label:'GitLab CI',      desc:'GitLab runners. Built-in OIDC. Best when repo is on GitLab.'},
-      {value:'jenkins',        label:'Jenkins',        desc:'Self-hosted. Stable, mature. No OIDC by default — store credentials.'},
-      {value:'azdo',           label:'Azure DevOps',   desc:'Microsoft cloud. Built-in OIDC for AWS/GCP/Azure.'},
-      {value:'circleci',       label:'CircleCI',       desc:'Cloud or self-hosted. OIDC via CircleCI Workload Identity.'},
-      {value:'tekton',         label:'Tekton',         desc:'Kubernetes-native CRDs. Best for cluster-side pipelines.'}
-    ]
-  },
-  {
-    key: 'registry',
-    label: 'Where do images live?',
-    concept: 'Registry holds your signed container images. Each has different auth and immutability rules. Pick the one closest to where you deploy.',
-    options: [
-      {value:'ghcr',      label:'GHCR',          desc:'GitHub Container Registry. OIDC via GitHub Actions. Free for public.'},
-      {value:'ecr',       label:'AWS ECR',       desc:'Amazon Elastic Container Registry. OIDC via IAM role.'},
-      {value:'gar',       label:'Google GAR',    desc:'Google Artifact Registry. OIDC via Workload Identity Federation.'},
-      {value:'acr',       label:'Azure ACR',     desc:'Azure Container Registry. OIDC via federated credential.'},
-      {value:'dockerhub', label:'Docker Hub',    desc:'Public images. No OIDC. Long-lived token required.'},
-      {value:'jfrog',     label:'JFrog',         desc:'Enterprise artifact platform. OIDC supported via Platform OIDC.'},
-      {value:'harbor',    label:'Harbor',        desc:'Self-hosted OCI registry. Robot accounts.'},
-      {value:'nexus',     label:'Nexus',         desc:'Self-hosted Sonatype Nexus. No OIDC — service account.'},
-      {value:'quay',      label:'Quay.io',       desc:'Red Hat hosted. Robot account auth.'},
-      {value:'ttlsh',     label:'ttl.sh',        desc:'Ephemeral. No login. Demos + CI smoke only.'}
-    ]
-  },
-  {
-    key: 'industry',
-    label: 'What industry are you in?',
-    concept: 'Industry suggests the compliance framework, the SLA target, and the typical attack surface. You can override the suggestion in the next step.',
-    options: [
-      {value:'none',       label:'General SaaS',          desc:'SOC 2 baseline. 99.9% SLA. Customer data + business logic.'},
-      {value:'fintech',    label:'Fintech / Payments',    desc:'PCI-DSS. 99.95% SLA. Payment Account Numbers + KYC data.'},
-      {value:'healthcare', label:'Healthcare',            desc:'HIPAA. 99.95% SLA. Protected Health Information.'},
-      {value:'government', label:'Government',            desc:'FedRAMP Moderate. 99.99% SLA. Controlled Unclassified Information.'},
-      {value:'defense',    label:'Defense / Aerospace',   desc:'CMMC Level 2+. 99.99% SLA. ITAR controlled tech data.'},
-      {value:'retail',     label:'Retail / E-commerce',   desc:'PCI-DSS. 99.95% SLA. Peak-traffic resilience matters.'},
-      {value:'media',      label:'Media / Publishing',    desc:'GDPR. 99.9% SLA. Subscriber PII + viewing analytics.'},
-      {value:'iot',        label:'IoT / Edge',            desc:'SOC 2. 99.0% SLA. Device fleets + telemetry.'},
-      {value:'education',  label:'Education / EdTech',    desc:'FERPA. 99.9% SLA. Student education records.'},
-      {value:'energy',     label:'Energy / Utilities',    desc:'NERC CIP. 99.99% SLA. Bulk-electric critical infra.'},
-      {value:'ai',         label:'AI / ML',               desc:'ISO 27001. Model SBOM + GPU images. 99.95% SLA.'}
-    ]
-  }
-];
-
-let WIZARD_STATE = {};
-let WIZARD_STEP_IDX = 0;
-
-function openWizard() {
-  WIZARD_STATE = {};
-  WIZARD_STEP_IDX = 0;
-  const modal = $id('wizard-modal');
-  if (!modal) return;
-  modal.style.display = 'flex';
-  renderWizardStep();
-  activateModal(modal);
-}
-function closeWizard() {
-  const modal = $id('wizard-modal');
-  if (modal) modal.style.display = 'none';
-  deactivateModal(modal);
-}
-function renderWizardStep() {
-  const step = WIZARD_STEPS[WIZARD_STEP_IDX];
-  const total = WIZARD_STEPS.length;
-  const ind = $id('wizard-step-indicator'), bar = $id('wizard-progress-bar');
-  const back = $id('wizard-back'), next = $id('wizard-next');
-  const body = $id('wizard-body');
-  if (!ind || !bar || !back || !next || !body) return;
-  ind.textContent = `Step ${WIZARD_STEP_IDX+1} of ${total} — ${step.label.slice(0,46)}`;
-  bar.style.width = `${Math.round(((WIZARD_STEP_IDX+1)/total)*100)}%`;
-  back.style.visibility = WIZARD_STEP_IDX === 0 ? 'hidden' : 'visible';
-  next.textContent = WIZARD_STEP_IDX === total-1 ? 'Finish + apply →' : 'Next →';
-
-  // Build options for dynamic steps.
-  let options = step.options;
-  if (step.key === 'framework') options = wizardFrameworkOptions();
-  else if (step.key === 'pkg')   options = wizardPkgOptions();
-
-  // Render body. Use data-* attributes + a delegated helper rather than inline
-  // JS-string interpolation, so apostrophes/quotes in step.key or o.value
-  // cannot break the onchange handler.
-  const optsHtml = options.map(o => `
-    <label style="display:block;margin-bottom:8px;cursor:pointer">
-      <input type="radio" name="wiz-${escAttr(step.key)}" value="${escAttr(o.value)}" data-wiz-step="${escAttr(step.key)}" data-wiz-value="${escAttr(o.value)}" onchange="onWizardOptionChange(this)" ${WIZARD_STATE[step.key] === o.value ? 'checked' : ''} style="margin-right:8px;vertical-align:top;margin-top:4px">
-      <span style="display:inline-block;vertical-align:top;width:calc(100% - 22px)">
-        <span style="font-weight:600;font-size:13px;color:var(--text)">${esc(o.label)}</span>
-        <span style="display:block;font-size:11.5px;color:var(--text-sec);margin-top:2px;line-height:1.5">${esc(o.desc)}</span>
-      </span>
-    </label>`).join('');
-
-  body.innerHTML = `
-    <h3 style="font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text)">${step.label}</h3>
-    <p style="font-size:12.5px;color:var(--text-sec);line-height:1.55;margin-bottom:14px">${step.concept}</p>
-    <div style="border:1px solid var(--border);border-radius:8px;padding:14px 16px;background:var(--surface)">${optsHtml}</div>`;
-  renderWizardSummary();
-}
-function onWizardOptionChange(el) {
-  if (!el || !el.dataset) return;
-  WIZARD_STATE[el.dataset.wizStep] = el.dataset.wizValue;
-  renderWizardSummary();
-}
-function renderWizardSummary() {
-  const parts = WIZARD_STEPS.slice(0, WIZARD_STEP_IDX + 1).map(s => {
-    const v = WIZARD_STATE[s.key];
-    return v ? `${s.key}=${v}` : '—';
-  });
-  document.getElementById('wizard-summary').textContent = parts.join(' · ');
-}
-function wizardBack() {
-  if (WIZARD_STEP_IDX > 0) { WIZARD_STEP_IDX--; renderWizardStep(); }
-}
-function wizardNext() {
-  const step = WIZARD_STEPS[WIZARD_STEP_IDX];
-  if (!WIZARD_STATE[step.key]) {
-    alert('Pick an option to continue.');
-    return;
-  }
-  if (WIZARD_STEP_IDX < WIZARD_STEPS.length - 1) {
-    WIZARD_STEP_IDX++;
-    renderWizardStep();
-  } else {
-    applyWizard();
-  }
-}
-function wizardFrameworkOptions() {
-  const shape = WIZARD_STATE.shape;
-  const lang  = WIZARD_STATE.language;
-  // Pull catalog entries matching shape + lang. Build options with tier badge.
-  const langMatch = (c) => {
-    if (lang === 'js') return c.lang === 'JS' || c.lang === 'TS' || c.lang === 'Bun' || c.lang === 'Deno' || c.lang === 'Dart';
-    if (lang === 'python') return c.lang === 'Python';
-    if (lang === 'go')     return c.lang === 'Go';
-    if (lang === 'java')   return c.lang === 'Java' || c.lang === 'Kotlin';
-    if (lang === 'dotnet') return c.lang === '.NET';
-    if (lang === 'rust')   return c.lang === 'Rust';
-    if (lang === 'ruby')   return c.lang === 'Ruby';
-    if (lang === 'php')    return c.lang === 'PHP';
-    if (lang === 'elixir') return c.lang === 'Elixir' || c.lang === 'Erlang';
-    return true;
-  };
-  const shapeMatch = (c) => {
-    if (shape === 'fullstack') return c.shape === 'fullstack';
-    if (shape === 'frontend')  return c.shape === 'spa';
-    if (shape === 'backend')   return c.shape === 'backend';
-    if (shape === 'ssg')       return c.shape === 'ssg';
-    if (shape === 'mobile')    return c.shape === 'mobile';
-    return true;
-  };
-  return CATALOG.filter(c => langMatch(c) && shapeMatch(c)).map(c => ({
-    value: c.id,
-    label: `${c.tier === 'coming-soon' ? '⏳ ' : ''}${c.label}`,
-    desc:  `${c.tier === 'production' ? '✅ Production-ready' : (c.tier === 'beta' ? '🟡 Beta' : '⏳ Coming soon — falls back to ' + (catalogEntry(c.sister)?.label || 'sister recipe'))} · ${c.note}`
-  }));
-}
-function wizardPkgOptions() {
-  const lang = WIZARD_STATE.language;
-  const map = {
-    js:     [{v:'npm',  l:'npm',  d:'Default Node package manager. Lockfile package-lock.json.'},
-             {v:'pnpm', l:'pnpm', d:'Faster install via content-addressable store.'},
-             {v:'yarn', l:'yarn', d:'Yarn classic / berry. Workspaces support.'},
-             {v:'bun',  l:'bun',  d:'Bun runtime built-in package manager.'}],
-    python: [{v:'pip',    l:'pip',    d:'Default Python installer. requirements.txt.'},
-             {v:'poetry', l:'poetry', d:'Project + dep management. poetry.lock.'},
-             {v:'uv',     l:'uv',     d:'Rust-based fast pip/poetry replacement.'}],
-    go:     [{v:'go',     l:'go mod', d:'Go modules. go.sum locks.'}],
-    java:   [{v:'maven',  l:'Maven',  d:'pom.xml dependency tree.'},
-             {v:'gradle', l:'Gradle', d:'gradle.lockfile.'}],
-    dotnet: [{v:'dotnet', l:'dotnet', d:'.csproj + packages.lock.json.'}],
-    rust:   [{v:'cargo',  l:'cargo',  d:'Cargo.lock.'}],
-    ruby:   [{v:'bundler',l:'bundler',d:'Gemfile.lock.'}],
-    php:    [{v:'composer',l:'composer',d:'composer.lock.'}],
-    elixir: [{v:'mix',    l:'mix',    d:'mix.lock.'}]
-  };
-  return (map[lang] || map.js).map(o => ({value:o.v, label:o.l, desc:o.d}));
-}
-function applyWizard() {
-  const setIf = (id, val) => { const el = document.getElementById(id); if (el && val && [...el.options].some(o => o.value === val)) el.value = val; };
-  // Service shape preset OK — framework + backend selection overrides.
-  if (WIZARD_STATE.shape) {
-    const shape = WIZARD_STEPS[0].options.find(o => o.value === WIZARD_STATE.shape);
-    if (shape && shape.sets) Object.entries(shape.sets).forEach(([k,v]) => setIf(k, v));
-  }
-  // Framework decides whether we set frontend or backend dropdown.
-  if (WIZARD_STATE.framework) {
-    const fw = catalogEntry(WIZARD_STATE.framework);
-    if (fw) {
-      const isFrontendCatalog = ['spa','fullstack','ssg','mobile'].includes(fw.shape);
-      const isBackendCatalog = (fw.shape === 'backend');
-      // JS-class fullstack → frontend dropdown. Non-JS fullstack → backend dropdown.
-      const jsClass = ['JS','TS','Bun','Deno','Dart'].includes(fw.lang);
-      if ((isFrontendCatalog && jsClass) || fw.shape === 'spa' || fw.shape === 'ssg' || fw.shape === 'mobile') {
-        setIf('sel-frontend', WIZARD_STATE.framework);
-      } else {
-        setIf('sel-backend', WIZARD_STATE.framework);
-      }
-    }
-  }
-  setIf('sel-pkgmgr',  WIZARD_STATE.pkg);
-  setIf('sel-ci',      WIZARD_STATE.ci);
-  setIf('sel-reg',     WIZARD_STATE.registry);
-  setIf('sel-industry',WIZARD_STATE.industry);
-  // Compliance auto-suggested by onIndustryChange.
-  if (typeof onIndustryChange === 'function') onIndustryChange();
-  else onConfigChange();
-  closeWizard();
-}
 
 function init() {
   // Prevent browser from restoring scroll position — always open at top.
@@ -14098,7 +13817,6 @@ function handleKeydown(e) {
   if (k === '/') { e.preventDefault(); if (typeof openQuickFind === 'function') openQuickFind(); return; }
   if (k === 't') { e.preventDefault(); showThreatTour(); return; }
   if (k === 'p') { e.preventDefault(); playPipeline(); return; }
-  if (k === 'w') { e.preventDefault(); openWizard(); return; }
   if (k === 'm') {
     e.preventDefault();
     const cur = (document.body.className.match(/mode-(\w+)/) || [])[1] || 'default';
@@ -14129,7 +13847,6 @@ function showKeyboardLegend() {
       <div style="font-weight:700;margin-bottom:8px;color:#79c0ff;font-size:12px">Keyboard shortcuts</div>
       <div style="line-height:1.7">
         <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">/</kbd> Quick find</div>
-        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">w</kbd> Open wizard</div>
         <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">t</kbd> Threat tour</div>
         <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">p</kbd> Play animation</div>
         <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">m</kbd> Cycle mode</div>
@@ -14151,7 +13868,6 @@ document.addEventListener('keydown', handleKeydown);
 // its own Escape handler (line ~12440) so we don't compete with it.
 document.addEventListener('keydown', function(e) {
   if (e.key !== 'Escape') return;
-  const w = $id('wizard-modal');         if (w && w.style.display === 'flex') { closeWizard(); return; }
   const p = $id('decision-picker-modal'); if (p && p.style.display === 'flex') { closeDecisionPicker(); return; }
   const t = $id('threat-tour-modal');    if (t && t.style.display === 'flex') { hideThreatTour(); return; }
   const d = $id('ctx-drawer');           if (d && d.style.right === '0px') { closeContext(); return; }

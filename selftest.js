@@ -90,12 +90,8 @@ while ((m = subtypeRe.exec(stBlock)) !== null) {
 }
 if (!anyDup) { console.log('  ✅ No within-subtype duplicates'); pass++; }
 
-// --- WIZARD_STEPS ---
-console.log('\nWIZARD_STEPS:');
-const wzStart = html.indexOf('const WIZARD_STEPS');
-const wzEnd   = html.indexOf('\nconst ', wzStart + 100);
-const wzBlock = html.slice(wzStart, wzEnd > 0 ? wzEnd : wzStart + 10000);
-check('library in WIZARD_STEPS', wzBlock.includes('library'));
+// (WIZARD_STEPS check removed — wizard deleted entirely; decision map is the
+//  single entry point now.)
 
 // --- JS syntax ---
 console.log('\nJS syntax:');
