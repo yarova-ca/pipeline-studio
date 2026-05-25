@@ -1,23 +1,109 @@
 ---
 import '../styles/tokens.css';
+import '../styles/app.css';
 
-interface Props { title?: string }
-const { title = 'Pipeline Studio' } = Astro.props;
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'DevSecOps Pipeline Studio',
+  description = 'Interactive DevSecOps pipeline generator. Configure your stack and generate Dockerfiles, GitHub Actions workflows, and Kubernetes manifests.'
+} = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0969da" />
     <title>{title}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Inline critical CSS so LCP isn't blocked -->
+    <style>
+      #app-shell { display: grid; min-height: 100vh; }
+      #config-bar { position: sticky; top: 0; z-index: var(--z-sticky); }
+      .main-col { min-width: 0; }
+    </style>
   </head>
+
   <body>
-    <slot />
+    <!-- Config bar sticky top -->
+    <slot name="config-bar" />
+
+    <!-- 3-column layout: sidebar | main | toc -->
+    <div id="app-shell">
+      <aside id="sidebar">
+        <slot name="sidebar" />
+      </aside>
+
+      <main class="main-col">
+        <slot />
+      </main>
+
+      <aside id="toc-panel">
+        <slot name="toc" />
+      </aside>
+    </div>
   </body>
 </html>
-<!--
-  REPLACE-ME — drop the responsive layout shell from yarova.ca into this
-  file (or into a separate component imported here). Keep the <slot /> as
-  the content-injection point. The HTML above is intentionally minimal so
-  it's safe to overwrite.
--->
+
+<style>
+  #app-shell {
+    grid-template-columns: 252px 1fr 200px;
+    grid-template-rows: 1fr;
+    gap: 0;
+    align-items: start;
+  }
+
+  #sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: #1b1f24;
+    color: #cdd9e5;
+    padding: var(--sp-3) 0;
+    scrollbar-width: thin;
+    scrollbar-color: #444c56 transparent;
+  }
+
+  .main-col {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  #toc-panel {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    padding: var(--sp-4);
+    scrollbar-width: thin;
+  }
+
+  @media (max-width: 1100px) {
+    #app-shell {
+      grid-template-columns: 220px 1fr;
+    }
+    #toc-panel { display: none; }
+  }
+
+  @media (max-width: 700px) {
+    #app-shell {
+      grid-template-columns: 1fr;
+    }
+    #sidebar { display: none; }
+  }
+</style>

@@ -7,14 +7,22 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check && tsc --noEmit"
+    "check": "astro check && tsc --noEmit",
+    "test": "npm run build && npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "test:headed": "npx playwright test --headed",
+    "test:a11y": "npx playwright test tests/e2e/accessibility.spec.ts",
+    "test:perf": "npx playwright test tests/e2e/performance.spec.ts",
+    "test:report": "npx playwright show-report tests/report"
   },
   "dependencies": {
-    "astro": "^4.16.0",
+    "@astrojs/check": "^0.9.9",
     "@astrojs/svelte": "^5.7.0",
+    "astro": "^4.16.0",
     "svelte": "^4.2.19"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
   }
