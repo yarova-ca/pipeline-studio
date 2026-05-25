@@ -10,7 +10,7 @@ export type DecisionId = string;       // 'ci' | 'reg' | 'cd' | 'gitops' | …
 export type InvariantId = `I-${number}`;
 export type ComplianceKey =
   | 'pci' | 'hipaa' | 'fedramp' | 'soc2' | 'gdpr'
-  | 'iso27001' | 'cmmc' | 'gdpr' | 'canadapb' | 'nistcsf' | 'ferpa'
+  | 'iso27001' | 'cmmc' | 'canadapb' | 'nistcsf' | 'ferpa'
   | 'nerccip' | 'hitrust' | 'none';
 
 export type PhaseTabId =
