@@ -156,6 +156,18 @@ main{min-width:0;overflow-x:hidden}
 .cfg-grp select{padding:4px 22px 4px 7px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);font-family:inherit;font-size:11.5px;font-weight:500;color:var(--text);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2357606a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;cursor:pointer;box-shadow:var(--sh1)}
 .cfg-grp select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(9,105,218,.12)}
 .cfg-divider{width:1px;height:24px;background:var(--border);margin:0 4px;flex-shrink:0}
+/* ── Utility classes — extracted from the most-repeated inline-style patterns.
+   These cover ~40% of static-HTML inline styles. Adopting them in new render
+   functions further cuts DOM-emitted inline styles. */
+.u-h-section{font-size:var(--fs-lg);font-weight:var(--fw-bold);margin-bottom:6px}
+.u-h-page{font-size:18px;font-weight:var(--fw-bold);margin-bottom:8px;color:var(--text)}
+.u-muted-i{color:var(--muted);font-style:italic}
+.u-muted-s{font-size:var(--fs-base);color:var(--muted);margin-bottom:16px}
+.u-eyebrow{font-size:10px;font-weight:var(--fw-bold);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px}
+.u-stat-box{border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;background:white}
+.u-stat-num{font-size:22px;font-weight:var(--fw-bold);color:var(--accent)}
+.u-kbd-dark{background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace}
+
 /* ── Unified button system. Use these for new buttons instead of inline styles.
    Modifier classes layer onto .btn for variants — see audit V-2 (12 ad-hoc
    button styles in the body). Migration of existing inline buttons is P2-4-full. */
@@ -1284,7 +1296,7 @@ cosign verify \
 
   <!-- ── Config Files tab ── -->
   <div id="tab-files" class="tab-content hide-from-auditor" role="region" aria-label="Config Files">
-    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Configuration Files</h2>
+    <h2 class="u-h-section">Configuration Files</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px">Copy each file into your repository. Select CI system above to generate the correct workflow file.</p>
     <div class="files-grid">
       <div class="files-list" id="file-list"></div>
@@ -1294,7 +1306,7 @@ cosign verify \
 
   <!-- ── Setup Guide tab ── -->
   <div id="tab-setup" class="tab-content hide-from-staff hide-from-auditor" role="region" aria-label="Setup Guide">
-    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">First-Time Setup Guide</h2>
+    <h2 class="u-h-section">First-Time Setup Guide</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px">Step-by-step setup for each registry. Complete Phase 0 before running any pipeline.</p>
     <div class="setup-tabs" id="setup-tabs"></div>
     <div id="setup-panels"></div>
@@ -1302,35 +1314,35 @@ cosign verify \
 
   <!-- ── Tradeoffs tab (D) — all alternatives in one table ── -->
   <div id="tab-tradeoffs" class="tab-content hide-from-junior" role="region" aria-label="Tradeoffs">
-    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Tool Tradeoffs — alternatives per stage</h2>
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Every default tool has alternatives. Pick the one matching your team and budget. Each row shows when to switch + the chosen-vs-alt tradeoff.</p>
+    <h2 class="u-h-section">Tool Tradeoffs — alternatives per stage</h2>
+    <p class="u-muted-s">Every default tool has alternatives. Pick the one matching your team and budget. Each row shows when to switch + the chosen-vs-alt tradeoff.</p>
     <div id="tradeoffs-content"></div>
   </div>
 
   <!-- ── Common Mistakes tab (F) — aggregate stage-level mistakes ── -->
   <div id="tab-mistakes" class="tab-content hide-from-junior" role="region" aria-label="Common Mistakes">
-    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Common Mistakes — one screen, every gotcha</h2>
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Aggregated from every stage. Read once a quarter. Each row links to the stage that owns the fix.</p>
+    <h2 class="u-h-section">Common Mistakes — one screen, every gotcha</h2>
+    <p class="u-muted-s">Aggregated from every stage. Read once a quarter. Each row links to the stage that owns the fix.</p>
     <div id="mistakes-content"></div>
   </div>
 
   <!-- ── Tested Combos tab (G) — full visible matrix ── -->
   <div id="tab-matrix" class="tab-content hide-from-auditor" role="region" aria-label="Tested Combinations">
-    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Tested Combinations — full matrix</h2>
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Validated combos run end-to-end in CI. Reference combos worked once. Untested combos use generated YAML — works as designed but no full pipeline run yet.</p>
+    <h2 class="u-h-section">Tested Combinations — full matrix</h2>
+    <p class="u-muted-s">Validated combos run end-to-end in CI. Reference combos worked once. Untested combos use generated YAML — works as designed but no full pipeline run yet.</p>
     <div id="matrix-content"></div>
   </div>
 
   <!-- ── Glossary tab ── -->
   <div id="tab-glossary" class="tab-content" role="region" aria-label="Glossary">
-    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Security Terms Glossary</h2>
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Every term used in this pipeline, defined plainly. No prior knowledge assumed.</p>
+    <h2 class="u-h-section">Security Terms Glossary</h2>
+    <p class="u-muted-s">Every term used in this pipeline, defined plainly. No prior knowledge assumed.</p>
     <div id="glossary-grid"></div>
   </div>
 
   <!-- ── Catalog tab — full 102-entry inventory + totals. ── -->
   <div id="tab-catalog" class="tab-content" role="region" aria-label="Framework Catalog">
-    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Catalog — all frameworks, runtimes, languages</h2>
+    <h2 class="u-h-section">Catalog — all frameworks, runtimes, languages</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Comprehensive list of supported entries. Tier shows where full code + knowledge lives. Coming soon = listed for transparency; pipeline falls back to a sister recipe.</p>
     <div id="catalog-summary" style="margin-bottom:18px"></div>
     <div id="catalog-listing"></div>
@@ -1338,15 +1350,15 @@ cosign verify \
 
   <!-- ── Self-test panel — runs on load. Proves the page is internally consistent. ── -->
   <div id="tab-selftest" class="tab-content" role="region" aria-label="Self-test">
-    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Self-Test — page consistency report</h2>
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">Runs in your browser on load. Every check is binary. Green = pass, red = fail.</p>
+    <h2 class="u-h-section">Self-Test — page consistency report</h2>
+    <p class="u-muted-s">Runs in your browser on load. Every check is binary. Green = pass, red = fail.</p>
     <div id="selftest-results"></div>
   </div>
 
   <!-- ── Maintain tab — product knowledge state for maintainers ── -->
   <div id="tab-maintain" class="tab-content" role="region" aria-label="Maintainer Info">
-    <h2 style="font-size:15px;font-weight:700;margin-bottom:6px">Maintain — product knowledge state</h2>
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:16px">For contributors and maintainers. Shows coverage gaps, coming-soon status, and knowledge freshness.</p>
+    <h2 class="u-h-section">Maintain — product knowledge state</h2>
+    <p class="u-muted-s">For contributors and maintainers. Shows coverage gaps, coming-soon status, and knowledge freshness.</p>
     <div id="maintain-content"></div>
   </div>
 
@@ -8567,13 +8579,13 @@ function openInvariantContext(invId) {
   });
 
   const stagesHtml = stages.length === 0
-    ? '<p style="color:var(--muted);font-style:italic">Enforced at Phase 0 — repository bootstrap, before CI runs.</p>'
+    ? '<p class="u-muted-i">Enforced at Phase 0 — repository bootstrap, before CI runs.</p>'
     : '<ul style="margin:0;padding-left:18px;line-height:1.7">' + stages.map(s =>
         `<li><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);cursor:pointer" onclick="closeContext();jumpToStage('${s.id}')">${s.badge}</span> — ${s.title}<br><span style="font-size:11px;color:var(--muted)">${s.tool || ''}</span></li>`
       ).join('') + '</ul>';
 
   const compHtml = compRows.length === 0
-    ? '<p style="color:var(--muted);font-style:italic">No compliance framework references this invariant directly.</p>'
+    ? '<p class="u-muted-i">No compliance framework references this invariant directly.</p>'
     : '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Framework</th><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Control</th></tr></thead><tbody>' +
         compRows.map(r => `<tr><td style="padding:3px 6px;border-bottom:1px solid #f0f0f0"><span style="cursor:pointer;color:var(--accent)" onclick="openComplianceContext('${r.fw}')">${r.fw.toUpperCase()}</span></td><td style="padding:3px 6px;border-bottom:1px solid #f0f0f0;font-family:'JetBrains Mono',monospace">${r.ctrl}</td></tr>`).join('') +
         '</tbody></table>';
@@ -8600,11 +8612,11 @@ function openInvariantContext(invId) {
     ${incidentBlock}
     ${threatBlock}
     <div style="margin-bottom:18px">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px">Enforced by ${stages.length} stage${stages.length === 1 ? '' : 's'}</div>
+      <div class="u-eyebrow">Enforced by ${stages.length} stage${stages.length === 1 ? '' : 's'}</div>
       ${stagesHtml}
     </div>
     <div>
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px">Compliance controls satisfied</div>
+      <div class="u-eyebrow">Compliance controls satisfied</div>
       ${compHtml}
     </div>
   `);
@@ -8634,7 +8646,7 @@ function openComplianceContext(fw) {
 
   const extrasHtml = req
     ? '<ul style="margin:6px 0 0 18px;line-height:1.6">' + req.extras.map(x => '<li>' + x + '</li>').join('') + '</ul>'
-    : '<p style="color:var(--muted);font-style:italic">No extra requirements registered.</p>';
+    : '<p class="u-muted-i">No extra requirements registered.</p>';
 
   // Highlight every mapped stage box.
   setTimeout(() => {
@@ -8650,11 +8662,11 @@ function openComplianceContext(fw) {
       <div style="font-size:11px;color:var(--muted)">Select this framework in the top dropdown — every stage badge will show its control ID inline.</div>
     </div>
     <div style="margin-bottom:18px">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px">Stages mapped (click to open)</div>
+      <div class="u-eyebrow">Stages mapped (click to open)</div>
       ${tableHtml}
     </div>
     <div>
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px">Requirements beyond this pipeline</div>
+      <div class="u-eyebrow">Requirements beyond this pipeline</div>
       ${extrasHtml}
     </div>
   `);
@@ -8667,13 +8679,13 @@ function openStageContext(stageId) {
   const ckey = badgeToCkey(stage.badge);
   const compRows = COMPLIANCE_MAP[ckey] || {};
   const compHtml = Object.entries(compRows).length === 0
-    ? '<p style="color:var(--muted);font-style:italic">No compliance mapping recorded.</p>'
+    ? '<p class="u-muted-i">No compliance mapping recorded.</p>'
     : '<table style="width:100%;border-collapse:collapse;font-size:12px"><tbody>' +
         Object.entries(compRows).map(([fw, ctrl]) => `<tr><td style="padding:3px 6px;border-bottom:1px solid #f0f0f0"><span style="cursor:pointer;color:var(--accent)" onclick="openComplianceContext('${fw}')">${fw.toUpperCase()}</span></td><td style="padding:3px 6px;border-bottom:1px solid #f0f0f0;font-family:'JetBrains Mono',monospace">${ctrl}</td></tr>`).join('') +
         '</tbody></table>';
 
   const invHtml = (stage.invariants || []).length === 0
-    ? '<p style="color:var(--muted);font-style:italic">No invariant directly tied to this stage.</p>'
+    ? '<p class="u-muted-i">No invariant directly tied to this stage.</p>'
     : (stage.invariants || []).map(id => {
         const inv = INVARIANTS.find(x => x.id === id);
         return `<div style="padding:6px 8px;margin-bottom:4px;background:#f0f9ff;border-left:3px solid var(--accent);border-radius:0 3px 3px 0;cursor:pointer" onclick="openInvariantContext('${id}')"><strong style="color:var(--accent);font-family:'JetBrains Mono',monospace">${id}</strong> — ${inv ? inv.text : id}</div>`;
@@ -8681,7 +8693,7 @@ function openStageContext(stageId) {
 
   const altList = ALTERNATIVES[ckey] || [];
   const altHtml = altList.length === 0
-    ? '<p style="color:var(--muted);font-style:italic">No alternative tools registered for this stage.</p>'
+    ? '<p class="u-muted-i">No alternative tools registered for this stage.</p>'
     : altList.map(a => `<div style="padding:8px 10px;margin-bottom:6px;background:#fafbfc;border:1px solid var(--border);border-radius:4px"><div style="font-weight:600;color:var(--text)">${a.tool}</div><div style="font-size:11px;color:var(--muted);margin-top:2px"><strong>When:</strong> ${a.when}</div><div style="font-size:11px;color:var(--muted);margin-top:2px"><strong>Diff:</strong> ${a.diff}</div></div>`).join('');
 
   const prof = STAGE_PROFILE[stage.id] || {time:'—',cost:'—'};
@@ -8693,15 +8705,15 @@ function openStageContext(stageId) {
     </div>
     <div style="margin-bottom:14px;padding:10px;background:#ffebe9;border-left:3px solid var(--danger);border-radius:0 4px 4px 0;font-size:12px"><strong>On failure:</strong> ${stage.onFailure || '—'}</div>
     <div style="margin-bottom:18px">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px">Invariants enforced</div>
+      <div class="u-eyebrow">Invariants enforced</div>
       ${invHtml}
     </div>
     <div style="margin-bottom:18px">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px">Compliance controls satisfied</div>
+      <div class="u-eyebrow">Compliance controls satisfied</div>
       ${compHtml}
     </div>
     <div>
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px">Alternative tools (${altList.length})</div>
+      <div class="u-eyebrow">Alternative tools (${altList.length})</div>
       ${altHtml}
     </div>
     <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
@@ -8721,7 +8733,7 @@ function openGlossaryContext(term) {
     return re.test(blob);
   });
   const mentionsHtml = mentions.length === 0
-    ? '<p style="color:var(--muted);font-style:italic">Term defined here. No stage description mentions it directly.</p>'
+    ? '<p class="u-muted-i">Term defined here. No stage description mentions it directly.</p>'
     : '<ul style="margin:0;padding-left:18px;line-height:1.7">' + mentions.map(s =>
         `<li><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);cursor:pointer" onclick="closeContext();jumpToStage('${s.id}')">${s.badge}</span> — ${s.title}</li>`
       ).join('') + '</ul>';
@@ -8729,7 +8741,7 @@ function openGlossaryContext(term) {
   openContext('GLOSSARY', term + (g.full ? ' — ' + g.full : ''), `
     <div style="margin-bottom:14px;padding:12px;background:#f0f9ff;border-left:3px solid var(--accent);border-radius:0 4px 4px 0;font-size:12.5px;line-height:1.55">${g.def}</div>
     <div>
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px">Mentioned in ${mentions.length} stage${mentions.length === 1 ? '' : 's'}</div>
+      <div class="u-eyebrow">Mentioned in ${mentions.length} stage${mentions.length === 1 ? '' : 's'}</div>
       ${mentionsHtml}
     </div>
   `);
@@ -13296,7 +13308,7 @@ function onConfigChange() {
       comboBadge.style.background = '#9a6700';
       comboBadge.textContent = 'REFERENCE';
       comboBadge.title = tooltipFor.reference;
-      comboText.innerHTML = (combo.notes || 'This combo is built from individually-tested components, but the exact pair has not been end-to-end verified by us.') + ` <span style="color:var(--muted);font-style:italic">— hover the badge for details.</span>`;
+      comboText.innerHTML = (combo.notes || 'This combo is built from individually-tested components, but the exact pair has not been end-to-end verified by us.') + ` <span class="u-muted-i">— hover the badge for details.</span>`;
     } else if (combo.status === 'untested') {
       comboBanner.style.display = 'flex';
       comboBanner.style.background = '#f6f8fa';
@@ -13304,7 +13316,7 @@ function onConfigChange() {
       comboBadge.style.background = '#57606a';
       comboBadge.textContent = 'UNTESTED COMBO';
       comboBadge.title = tooltipFor.untested;
-      comboText.innerHTML = `Components individually tested; this exact combo not yet end-to-end verified. <span style="color:var(--muted);font-style:italic">Hover the badge for the failure-mode breakdown.</span>`;
+      comboText.innerHTML = `Components individually tested; this exact combo not yet end-to-end verified. <span class="u-muted-i">Hover the badge for the failure-mode breakdown.</span>`;
     } else {
       comboBanner.style.display = 'none';
     }
@@ -13857,13 +13869,13 @@ function showKeyboardLegend() {
     panel.innerHTML = `
       <div style="font-weight:700;margin-bottom:8px;color:#79c0ff;font-size:12px">Keyboard shortcuts</div>
       <div style="line-height:1.7">
-        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">/</kbd> Quick find</div>
-        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">t</kbd> Threat tour</div>
-        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">p</kbd> Play animation</div>
-        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">m</kbd> Cycle mode</div>
-        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">1-4</kbd> Jump to Phase</div>
-        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">?</kbd> Toggle this legend</div>
-        <div><kbd style="background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px">Esc</kbd> Hide legend</div>
+        <div><kbd class="u-kbd-dark">/</kbd> Quick find</div>
+        <div><kbd class="u-kbd-dark">t</kbd> Threat tour</div>
+        <div><kbd class="u-kbd-dark">p</kbd> Play animation</div>
+        <div><kbd class="u-kbd-dark">m</kbd> Cycle mode</div>
+        <div><kbd class="u-kbd-dark">1-4</kbd> Jump to Phase</div>
+        <div><kbd class="u-kbd-dark">?</kbd> Toggle this legend</div>
+        <div><kbd class="u-kbd-dark">Esc</kbd> Hide legend</div>
       </div>`;
     document.body.appendChild(panel);
   } else {
