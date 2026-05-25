@@ -5848,136 +5848,6 @@ spec:
       successCondition: result[0] < 0.005`;
   },
 
-  // ── Phase 5 — Runtime stages (always-on cluster manifests) ────────
-
-  genR1: cfg => `# ── R1 — Kyverno admission verification (fail-closed I-20) ────
-apiVersion: kyverno.io/v1
-kind: ClusterPolicy
-metadata: { name: verify-cosign-signature }
-spec:
-  validationFailureAction: Enforce      # I-20: fail-closed
-  webhookConfiguration:
-    failurePolicy: Fail                 # never admit on webhook error
-  background: false
-  rules:
-    - name: check-image-signature
-      match:
-        any:
-          - resources: { kinds: [Pod] }
-      verifyImages:
-        - imageReferences: ["REGISTRY/myapp*"]
-          attestors:
-            - count: 1
-              entries:
-                - keyless:
-                    subjectRegExp: "https://github.com/YOUR_ORG/YOUR_REPO/.github/workflows/.*"
-                    issuer: "https://token.actions.githubusercontent.com"
-                    rekor:
-                      url: https://rekor.sigstore.dev
-          attestations:
-            - type: https://spdx.dev/Document
-              attestors:
-                - entries:
-                    - keyless:
-                        subjectRegExp: "https://github.com/YOUR_ORG/YOUR_REPO/.github/workflows/.*"
-                        issuer: "https://token.actions.githubusercontent.com"`,
-
-  genR2: cfg => `# ── R2 — Trivy Operator continuous CVE rescan ─────────────────
-# Helm install pins rescan cadence by severity.
-helm repo add aqua https://aquasecurity.github.io/helm-charts/
-helm upgrade --install trivy-operator aqua/trivy-operator \\
-  --namespace trivy-system --create-namespace \\
-  --set trivy.ignoreUnfixed=true \\
-  --set serviceMonitor.enabled=true \\
-  --set operator.scannerReportTTL=24h \\
-  --set operator.vulnerabilityScannerEnabled=true \\
-  --set operator.scanJobsConcurrentLimit=4 \\
-  --set "operator.scanJobsRetryDelay=30s" \\
-  --set "trivy.severity=CRITICAL,HIGH,MEDIUM"
-
-# Cadence policy:
-#   CRITICAL: every 6h   (rescanIntervalCritical)
-#   HIGH:     daily      (rescanIntervalHigh)
-#   MEDIUM:   weekly     (rescanIntervalMedium)
-#
-# Alerts: VulnerabilityReport CRDs forwarded by Alertmanager rule:
-apiVersion: monitoring.coreos.com/v1
-kind: PrometheusRule
-metadata: { name: trivy-critical-cve, namespace: trivy-system }
-spec:
-  groups:
-    - name: trivy
-      rules:
-        - alert: NewCriticalCVE
-          expr: trivy_image_vulnerabilities{severity="Critical"} > 0
-          for: 5m
-          labels: { severity: page }
-          annotations:
-            summary: "CRITICAL CVE in running image"
-            runbook: "https://runbooks.example.com/cve-critical"`,
-
-  genR3: cfg => `# ── R3 — Falco runtime syscall monitoring (eBPF) ──────────────
-helm repo add falcosecurity https://falcosecurity.github.io/charts
-helm upgrade --install falco falcosecurity/falco \\
-  --namespace falco --create-namespace \\
-  --set driver.kind=ebpf \\
-  --set tty=true \\
-  --set falcosidekick.enabled=true \\
-  --set falcosidekick.webui.enabled=true \\
-  --set falcosidekick.config.slack.webhookurl="$SLACK_WEBHOOK_URL" \\
-  --set falcosidekick.config.pagerduty.routingkey="$PAGERDUTY_ROUTING_KEY"
-
-# Custom rule example — alert when a shell spawns in any prod pod.
-cat <<'EOF' > custom_rules.yaml
-- rule: Shell spawned in prod pod
-  desc: Detects interactive shells inside production containers.
-  condition: >
-    spawned_process and container and proc.name in (bash, sh, zsh, ash) and
-    k8s.ns.name startswith "prod-"
-  output: >
-    Shell in prod pod (user=%user.name container=%container.name
-    image=%container.image.repository cmdline=%proc.cmdline)
-  priority: WARNING
-  tags: [shell, container, prod]
-EOF
-kubectl create configmap falco-custom-rules \\
-  --from-file=custom_rules.yaml -n falco --dry-run=client -o yaml | kubectl apply -f -`,
-
-  genR4: cfg => `# ── R4 — SBOM drift detection (Anchore / in-toto) ─────────────
-# Daily CronJob compares running image SBOM to signed baseline.
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: sbom-drift
-  namespace: security
-spec:
-  schedule: "0 3 * * *"   # 03:00 UTC daily
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          restartPolicy: OnFailure
-          serviceAccountName: sbom-drift
-          containers:
-            - name: drift
-              image: ${TV.syftImage}
-              command: [ "/bin/sh", "-c" ]
-              args:
-                - |
-                  set -euo pipefail
-                  IMG="\${IMAGE_REF_WITH_DIGEST}"
-                  # 1. Fetch attested baseline from registry.
-                  cosign download attestation "$IMG" \\
-                    --predicate-type=https://spdx.dev/Document > baseline.json
-                  # 2. Generate live SBOM from running image.
-                  syft "$IMG" -o spdx-json > live.json
-                  # 3. Diff. Any package change = drift event.
-                  python3 /scripts/sbom_diff.py baseline.json live.json \\
-                    > drift-report.json
-                  # 4. Emit metric + alert if drift count > 0.
-                  COUNT=$(jq '.changes | length' drift-report.json)
-                  echo "sbom_drift_count{image=\\"$IMG\\"} $COUNT" \\
-                    | curl --data-binary @- http://pushgateway:9091/metrics/job/sbom_drift`
 };
 
 // ══════════════════════════════════════════════════════════════════
@@ -8966,8 +8836,7 @@ const PHASE_DEFS = {
   1: {label:'Developer',  badge:'1 — Local',     color:'#adb5bd', stageIds:['l1','l2','l3','l4']},
   2: {label:'PR Gate',    badge:'2 — PR',        color:'#ff8787', stageIds:['s1','s2','s3','s3b','s4','s5','s6pr','s8apr','s7pr']},
   3: {label:'Main Build', badge:'3 — Main',      color:'#74c0fc', stageIds:['s0','s1main','s2m','s3m','s3bm','s4m','s5m','s6main','s8a','s7main','s8b','s9','s9a','dast','s11','s10','s12','s13','s14']},
-  4: {label:'Promotions', badge:'4 — Ship',      color:'#ffa94d', stageIds:['p1','p2','p3','p4']},
-  5: {label:'Runtime',    badge:'5 — Verified',  color:'#69db7c', stageIds:['r1','r2','r3','r4']}
+  4: {label:'Promotions', badge:'4 — Ship',      color:'#ffa94d', stageIds:['p1','p2','p3','p4','s14']}
 };
 
 // ──────────────────────────────────────────────────────────────────
@@ -9119,9 +8988,9 @@ function buildMasterSVG() {
       return lbl.replace(/\s*\([^)]*\)$/, '').replace(/\s*\[[^\]]*\]$/, '').split(/\s+/).slice(0, 2).join(' ');
     };
     switch (nodeId) {
-      case 's7pr': case 's7main': case 'r2':
+      case 's7pr': case 's7main':
         return vis('scanner')   ? short('scanner')   : null;
-      case 's8b': case 's14': case 'r1':
+      case 's8b': case 's14':
         return vis('signing')   ? short('signing')   : null;
       case 's8a': case 's8apr':
         return vis('sbom')      ? short('sbom')      : null;
@@ -9158,12 +9027,12 @@ function buildMasterSVG() {
     cd:               ['p1', 'p2', 'p3', 'p4'],
     baseimage:        ['s6pr', 's6main'],
     sbom:             ['s8apr', 's8a'],
-    scanner:          ['s7pr', 's7main', 'r2'],
-    signing:          ['s8b', 's14', 'r1'],
+    scanner:          ['s7pr', 's7main'],
+    signing:          ['s8b', 's14'],
     cloud:            ['p1'],
     promotion:        ['p2', 'p3', 'p4'],
-    industry:         ['s8b', 's10', 'r1', 'r2'],
-    compliance:       ['s8b', 's10', 'r1'],
+    industry:         ['s8b', 's10', 's14'],
+    compliance:       ['s8b', 's10', 's14'],
     mlframework:      ['s6pr', 's6main'],
     inferenceruntime: ['p1'],
     modelregistry:    ['s6main', 's13'],
@@ -11079,8 +10948,7 @@ function badgeToCkey(badge) {
     'S0':'s0','S1':'s1','S2':'s2','S3':'s3','S3b':'s3b','S4':'s4','S5':'s5',
     'S6':'s6','S7':'s7','S8':'s8','S8a':'s8a','S8b':'s8b',
     'S9':'s9','S9a':'s9a','DAST':'dast','S10':'s10','S11':'s11','S12':'s12','S13':'s13','S14':'s14',
-    'P1':'p1','P2':'p2','P3':'p3','P4':'p4',
-    'R1':'r1','R2':'r2','R3':'r3','R4':'r4'
+    'P1':'p1','P2':'p2','P3':'p3','P4':'p4'
   };
   return map[badge] || '';
 }
@@ -11453,11 +11321,7 @@ const STAGE_PROFILE = {
   'p2':{time:'~6 min',cost:'~$0.05 (regression suite)'},
   'p3':{time:'~5 min',cost:'~$0.04 (k6 load test)'},
   'p4':{time:'~25 min',cost:'free (canary in cluster)'},
-  // Phase 5 — always-on. Reported per workload-day.
-  'r1':{time:'<50ms',cost:'free (admission webhook)'},
-  'r2':{time:'~30s per scan',cost:'~$0 (in-cluster operator)'},
-  'r3':{time:'continuous',cost:'free (eBPF probe)'},
-  'r4':{time:'~2 min/day',cost:'~$0 (cron job)'}
+  's14':{time:'~5s',cost:'free (cosign verify in CD hook)'}
 };
 
 function renderPipeBox(stage, detailId) {
@@ -12198,8 +12062,7 @@ const THREAT_TOURS = {
       {stageId:'s2',  role:'Flags log4j-core <2.15.0 in dep tree before merge'},
       {stageId:'s2m', role:'Re-checks on main branch'},
       {stageId:'s8a', role:'SBOM records every transitive log4j-core copy'},
-      {stageId:'s7main', role:'CVE scanner blocks image if vulnerable'},
-      {stageId:'r2',  role:'Runtime rescan catches if found post-deploy'}
+      {stageId:'s7main', role:'CVE scanner blocks image if vulnerable'}
     ]
   },
   solarwinds: {
@@ -12210,8 +12073,7 @@ const THREAT_TOURS = {
       {stageId:'s0',  role:'OIDC removes long-lived creds that gave attackers access'},
       {stageId:'s8b', role:'Cosign signing ties artifact to verified CI identity'},
       {stageId:'s10', role:'SLSA L3 isolated provenance proves build steps not tampered'},
-      {stageId:'s14', role:'Verification step would have flagged signature mismatch'},
-      {stageId:'r1',  role:'Kyverno admission refuses pod if attestation invalid'}
+      {stageId:'s14', role:'PreSync verification flags signature mismatch before deploy'}
     ]
   },
   capitalone: {
@@ -12222,8 +12084,7 @@ const THREAT_TOURS = {
       {stageId:'s3',  role:'SAST catches SSRF patterns in source code'},
       {stageId:'s4',  role:'IaC scan blocks privileged containers + hostPath mounts'},
       {stageId:'s6main', role:'Non-root distroless image limits compromise blast radius'},
-      {stageId:'dast', role:'DAST scanner triggers SSRF probe against running app'},
-      {stageId:'r3',  role:'Falco eBPF alerts on shell or unexpected egress'}
+      {stageId:'dast', role:'DAST scanner triggers SSRF probe against running app'}
     ]
   },
   codecov: {
