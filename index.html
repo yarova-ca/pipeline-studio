@@ -356,14 +356,26 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 .ds-step-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;padding:0 2px}
 .ds-step-count-done{color:var(--success);font-weight:600;font-size:10px}
 .ds-step-count-pending{color:var(--muted);font-size:10px}
-/* Accordion states */
-.ds-step-collapsed{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:6px;transition:background .15s,border-color .15s}
+/* Decision row priority badges */
+.ds-badge-required{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:#fff0f0;color:#c0392b;border:1px solid #f5c6c6;border-radius:4px;padding:1px 5px;margin-left:6px}
+.ds-badge-optional{font-size:9px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;background:#f5f5f5;color:#888;border:1px solid #ddd;border-radius:4px;padding:1px 5px;margin-left:6px}
+/* Accordion step states */
+.ds-step-collapsed{background:#f8fafc;border:1.5px solid var(--border);border-radius:10px;padding:10px 16px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s}
 .ds-step-collapsed:hover{background:#f0f9ff;border-color:var(--accent)}
-.ds-step-collapsed .ds-step-label{margin-bottom:0;font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--text)}
-.ds-step-summary{font-size:11px;font-weight:400;color:var(--muted);text-overflow:ellipsis;overflow:hidden;white-space:nowrap;max-width:380px;margin-left:6px}
-.ds-step-locked{background:#fafbfc;border:1.5px dashed #e2e5ea;border-radius:10px;padding:10px 14px;margin-bottom:6px;pointer-events:none}
-.ds-step-label-locked{font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;margin-bottom:0;display:flex;align-items:center;gap:6px}
-.ds-nav-chip.is-active-step{background:var(--accent);color:white;border-color:var(--accent)}
+.ds-step-future{background:#fafbfc;border:1.5px dashed #d1d9e0;border-radius:10px;padding:9px 16px;margin-bottom:8px;cursor:pointer;transition:border-color .15s}
+.ds-step-future:hover{border-color:var(--accent);background:#f5f9ff}
+.ds-step-hdr-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ds-step-summary{font-size:11.5px;color:var(--muted);font-weight:400;margin-left:4px}
+.ds-next-btn{background:var(--accent);color:white;border:none;border-radius:6px;padding:7px 18px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s;margin-top:12px}
+.ds-next-btn:hover{background:#0860CA}
+.ds-next-btn-wrap{text-align:right}
+.ds-bluf-strip{background:#f0f9ff;border:1.5px solid #bae0fd;border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:12.5px;line-height:1.7}
+.ds-bluf-strip>div{margin-bottom:4px}
+.ds-bluf-strip>div:last-child{margin-bottom:0}
+.ds-pill-group{margin-bottom:6px;display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.ds-pill-group-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);min-width:120px;padding-right:6px}
+.ds-incompat-msg{font-size:11.5px;color:#c0392b;background:#fff0f0;border:1px solid #f5c6c6;border-radius:6px;padding:5px 10px;margin-top:6px;width:100%;animation:ds-in .2s ease both}
+.ds-governance{font-size:10.5px;color:var(--muted);border-top:1px solid var(--border);margin-top:16px;padding-top:10px;line-height:1.6}
 
 /* Decision rows */
 @keyframes ds-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -388,6 +400,30 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 
 /* Knowledge panel */
 .ds-knowledge{display:none;margin-top:12px;padding:12px 14px;background:#f8fafc;border:1px solid var(--border-subtle);border-radius:7px;font-size:12px;line-height:1.65}
+.dk-why{margin-bottom:6px;font-size:12px}
+.dk-skip{margin-bottom:8px;font-size:11.5px;color:var(--muted)}
+.dk-current{margin:10px 0;padding:10px 12px;background:white;border:1px solid var(--border);border-radius:7px}
+.dk-current-hdr{font-size:12px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.dk-caps{margin-bottom:6px;font-size:11.5px}
+.dk-cap-list{margin:3px 0 0 16px;padding:0}
+.dk-cap-list li{margin-bottom:2px}
+.dk-pick-when,.dk-avoid-when,.dk-tradeoff,.dk-cost{font-size:11.5px;margin-bottom:5px;line-height:1.5}
+.dk-label-pick{color:#1a7f37;font-weight:600}
+.dk-label-avoid{color:#c0392b;font-weight:600}
+.dk-label-tradeoff{color:#7a4f9a;font-weight:600}
+.dk-label-cost{color:#7a5200;font-weight:600}
+.dk-compare{margin-top:10px}
+.dk-compare-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px}
+.dk-table{width:100%;border-collapse:collapse;font-size:11px}
+.dk-table th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:3px 6px;border-bottom:1px solid var(--border)}
+.dk-table td{padding:4px 6px;border-bottom:1px solid #f0f0f0;vertical-align:top;line-height:1.4}
+.dk-row-picked td{background:#f0fff4}
+
+/* Selections summary bar */
+.sel-summary-bar{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:12px;align-items:center}
+.sel-summary-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-right:4px;flex-shrink:0}
+.sel-chip{display:inline-flex;align-items:center;gap:3px;background:white;border:1px solid #d0e4ff;border-radius:4px;padding:2px 8px;font-size:11px;font-weight:600;color:#1d4ed8;white-space:nowrap}
+.sel-chip-label{font-size:9px;color:var(--muted);font-weight:400}
 
 /* Shape picker */
 .ds-cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
@@ -906,7 +942,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
   <!-- ── Phase 1: Developer local ── -->
   <div id="tab-local" class="tab-content active">
     <div class="pipeline-hdr">
-      <h2>Phase 1 — Developer Local</h2>
+      <h2>Phase 1 — Developer Local — shift-left security before CI runs</h2>
       <p>Shift-left security. Catches issues before they hit CI. Zero pipeline minutes spent.</p>
     </div>
     <div id="local-content"></div>
@@ -915,31 +951,33 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
   <!-- ── Phase 2: PR Gate ── -->
   <div id="tab-pr" class="tab-content">
     <div class="pipeline-hdr">
-      <h2>Phase 2 — PR Gate</h2>
+      <h2>Phase 2 — PR Gate — blocks insecure or broken code from merging</h2>
       <p>Blocks broken, insecure, or malformed code from merging. Every PR must pass all stages.</p>
       <div class="pipeline-file" id="pr-file-label">.github/workflows/pr-checks.yml</div>
     </div>
     <div class="pipe-flow" id="pr-flow"></div>
     <div id="pr-detail"></div>
+    <div id="pr-sel-summary" style="display:none" class="sel-summary-bar"></div>
     <div id="pr-workflow-box"></div>
   </div>
 
   <!-- ── Phase 3: Main Build ── -->
   <div id="tab-main" class="tab-content">
     <div class="pipeline-hdr">
-      <h2>Phase 3 — Main Build</h2>
+      <h2>Phase 3 — Main Build — builds, signs, and attests the production image</h2>
       <p>Runs on every merge to main. Builds the signed, attested production image.</p>
       <div class="pipeline-file" id="main-file-label">.github/workflows/main-pipeline.yml</div>
     </div>
     <div class="pipe-flow" id="main-flow"></div>
     <div id="main-detail"></div>
+    <div id="main-sel-summary" style="display:none" class="sel-summary-bar"></div>
     <div id="main-workflow-box"></div>
   </div>
 
   <!-- ── Phase 4: Environment Promotions ── -->
   <div id="tab-promotions" class="tab-content">
     <div class="pipeline-hdr">
-      <h2>Phase 4 — Environment Promotions</h2>
+      <h2>Phase 4 — Environment Promotions — moves the signed image dev → staging → prod</h2>
       <p>Moves the signed image through environments. CD tooling (ArgoCD/Flux) handles the actual deploy. This pipeline verifies the image before each promotion.</p>
     </div>
     <div class="pipe-flow" id="promotion-flow"></div>
@@ -991,7 +1029,7 @@ cosign verify \
     <div class="pipe-flow" id="runtime-flow"></div>
     <div id="runtime-detail"></div>
     <div class="pipeline-hdr">
-      <h2>Phase 5 — Runtime Security</h2>
+      <h2>Phase 5 — Runtime Security — admission control and continuous drift detection</h2>
       <p>Continuous monitoring after deployment. Runs always-on in the cluster.</p>
     </div>
     <details class="ref-section">
@@ -2881,13 +2919,38 @@ function getConfig() {
   const builderImage = be.builder || fe.builder || 'node:22-alpine';
   const runtimeImage = be.runtime || fe.runtime || 'gcr.io/distroless/nodejs22-debian12:nonroot';
 
+  // Read decision-state picks for decisions not backed by DOM selectors.
+  // decisionRead() falls back to defaultVal when not visited.
+  const scannerKey  = decisionRead('scanner')   || 'trivy';
+  const signingKey  = decisionRead('signing')   || 'cosign';
+  const sbomKey     = decisionRead('sbom')      || 'syft';
+  const baseimageKey= decisionRead('baseimage') || 'distroless';
+  const cdKey       = decisionRead('cd')        || 'argocd';
+  const cloudKey    = decisionRead('cloud')     || 'aws';
+  const promotionKey= decisionRead('promotion') || 'canary';
+
+  // Override runtimeImage when user explicitly picked a non-distroless base.
+  const baseimageOverrides = {
+    alpine:    { nodejs:'node:22-alpine', python:'python:3.12-alpine', go:'gcr.io/distroless/static-debian12', java:'eclipse-temurin:21-jre-alpine', rust:'rust:1.87-alpine', dotnet:'mcr.microsoft.com/dotnet/aspnet:8.0-alpine', ruby:'ruby:3.3-alpine', php:'php:8.3-alpine-fpm', default:'alpine:3.20' },
+    ubuntu:    { nodejs:'node:22-slim',   python:'python:3.12-slim',   go:'ubuntu:24.04',                       java:'eclipse-temurin:21-jre-jammy',   rust:'ubuntu:24.04',     dotnet:'mcr.microsoft.com/dotnet/aspnet:8.0',          ruby:'ruby:3.3-slim',  php:'php:8.3-fpm',         default:'ubuntu:24.04' },
+    chainguard:{ nodejs:'cgr.dev/chainguard/node:latest',              python:'cgr.dev/chainguard/python:latest',               go:'cgr.dev/chainguard/static:latest',              java:'cgr.dev/chainguard/jre:latest',                   rust:'cgr.dev/chainguard/rust:latest',   dotnet:'cgr.dev/chainguard/dotnet-runtime:latest',     ruby:'cgr.dev/chainguard/ruby:latest',php:'cgr.dev/chainguard/php:latest', default:'cgr.dev/chainguard/static:latest' },
+    scratch:   { go:'scratch', rust:'scratch', default:'scratch' },
+    'rhel-ubi':{ nodejs:'registry.access.redhat.com/ubi9/nodejs-22',   python:'registry.access.redhat.com/ubi9/python-312',    go:'registry.access.redhat.com/ubi9-minimal',          java:'registry.access.redhat.com/ubi9/openjdk-21',      rust:'registry.access.redhat.com/ubi9-minimal',  dotnet:'registry.access.redhat.com/ubi9/dotnet-80-runtime', ruby:'registry.access.redhat.com/ubi9/ruby-33', php:'registry.access.redhat.com/ubi9/php-83', default:'registry.access.redhat.com/ubi9-minimal' },
+    distroless:{}
+  };
+  let effectiveRuntimeImage = runtimeImage;
+  if (baseimageKey !== 'distroless') {
+    const overrides = baseimageOverrides[baseimageKey] || {};
+    effectiveRuntimeImage = overrides[beGroup] || overrides[feGroup] || overrides.default || runtimeImage;
+  }
+
   return {
     feKey, beKey, ciKey, regKey, compKey, pmKey,
     feGroup, beGroup,
     fe, be, reg, pm,
     ci: ciKey, registry: regKey, compliance: compKey,
     prFile: ci.prFile, mainFile: ci.mainFile,
-    builderImage, runtimeImage,
+    builderImage, runtimeImage: effectiveRuntimeImage,
     testCmds, lintCmds,
     testCmd:    testCmds.join(' && ') || 'npm test',
     lintCmd:    lintCmds.join(' && ') || 'npx biome check .',
@@ -2897,8 +2960,249 @@ function getConfig() {
     port:       be.port || fe.port || '3000',
     healthPath: be.healthPath || fe.healthPath || '/api/health',
     startCmd:   be.startCmd || '',
-    installCmds:[pm.installCmd].filter(Boolean)
+    installCmds:[pm.installCmd].filter(Boolean),
+    scanner: scannerKey,
+    signing: signingKey,
+    sbom: sbomKey,
+    baseimage: baseimageKey,
+    cd: cdKey,
+    cloud: cloudKey,
+    promotion: promotionKey
   };
+}
+
+// ── Scanner YAML helpers ─────────────────────────────────────────────────────
+// Returns the GHA steps YAML for the container vulnerability scan job.
+// Called from buildGHAPRWorkflow() and buildGHAMainWorkflow().
+function getScanStepsGHA(cfg, imageArg) {
+  // imageArg: for PR = 'input: /tmp/image.tar', for main = 'image-ref: ...'
+  const isPR = imageArg.startsWith('input');
+  const sarifFile = isPR ? 'trivy.sarif' : 'trivy.sarif';
+
+  switch (cfg.scanner) {
+    case 'grype':
+      return `      - name: Load image
+        ${isPR ? 'run: docker load -i /tmp/image.tar' : `run: |
+          docker pull \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}`}
+      - name: Container scan — Grype
+        run: |
+          docker run --rm \\
+            -v /var/run/docker.sock:/var/run/docker.sock \\
+            anchore/grype:v0.85.0 \\
+            ${isPR ? 'myapp:pr-${{ github.sha }}' : '${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}'} \\
+            --severity critical --fail-on critical \\
+            --output sarif > grype.sarif
+      - uses: ${TV.codeqlUploadSarif}
+        if: always()
+        with:
+          sarif_file: grype.sarif`;
+
+    case 'snyk':
+      return `      - name: Container scan — Snyk
+        uses: snyk/actions/docker@master
+        with:
+          ${isPR ? 'image: myapp:pr-${{ github.sha }}' : 'image: ${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}'}
+          args: --severity-threshold=high --file=Dockerfile
+        env:
+          SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
+      - uses: ${TV.codeqlUploadSarif}
+        if: always()
+        with:
+          sarif_file: snyk.sarif`;
+
+    case 'anchore':
+      return `      - name: Container scan — Anchore
+        uses: anchore/scan-action@v4
+        id: anchore-scan
+        with:
+          ${isPR ? 'image: myapp:pr-${{ github.sha }}' : 'image: ${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}'}
+          fail-build: 'true'
+          severity-cutoff: high
+      - uses: ${TV.codeqlUploadSarif}
+        if: always()
+        with:
+          sarif_file: \${{ steps.anchore-scan.outputs.sarif }}`;
+
+    case 'clair':
+      return `      - name: Container scan — Clair
+        uses: quay/clair-action@v0.0.10
+        with:
+          ${isPR ? 'image-ref: myapp:pr-${{ github.sha }}' : 'image-ref: ${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}'}
+          db-file: /tmp/clair.db
+          format: sarif
+          output: clair.sarif
+          return-code: '1'
+      - uses: ${TV.codeqlUploadSarif}
+        if: always()
+        with:
+          sarif_file: clair.sarif`;
+
+    case 'prisma':
+      return `      - name: Container scan — Prisma Cloud
+        uses: PaloAltoNetworks/prisma-cloud-scan@v1
+        with:
+          ${isPR ? 'image: myapp:pr-${{ github.sha }}' : 'image: ${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}'}
+          prisma_cloud_url: \${{ secrets.PRISMA_CLOUD_URL }}
+          access_key: \${{ secrets.PRISMA_ACCESS_KEY }}
+          secret_key: \${{ secrets.PRISMA_SECRET_KEY }}`;
+
+    default: // trivy
+      return isPR
+        ? `      - name: Container scan — Trivy
+        uses: ${TV.trivyAction}
+        with:
+          input: /tmp/image.tar
+          format: sarif
+          output: trivy.sarif
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+          trivyignores: .trivyignore
+      - uses: ${TV.codeqlUploadSarif}
+        if: always()
+        with:
+          sarif_file: trivy.sarif`
+        : `      - uses: ${TV.trivyAction}
+        with:
+          image-ref: \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
+          format: sarif
+          output: trivy.sarif
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+          trivyignores: .trivyignore
+      - uses: ${TV.codeqlUploadSarif}
+        if: always()
+        with:
+          sarif_file: trivy.sarif`;
+  }
+}
+
+// Returns the GHA steps YAML for the SBOM generation job.
+function getSBOMStepsGHA(cfg, phase) {
+  const isPR = phase === 'pr';
+  const imageRef = isPR
+    ? 'myapp:pr-${{ github.sha }}'
+    : '${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}';
+
+  switch (cfg.sbom) {
+    case 'trivy':
+      return `      ${isPR ? `- run: docker load -i /tmp/image.tar
+      ` : ''}- name: SBOM generation — Trivy
+        run: |
+          docker run --rm \\
+            -v /var/run/docker.sock:/var/run/docker.sock \\
+            ${TV.trivyImage} \\
+            image --format cyclonedx \\
+            --output sbom.cdx.json \\
+            ${imageRef}
+      - uses: ${TV.actionUploadArtifact}
+        with:
+          name: sbom-${isPR ? 'pr-' : 'spdx-'}\${{ github.sha }}
+          path: sbom.cdx.json`;
+
+    case 'cyclonedx':
+      return `      - name: SBOM generation — CycloneDX
+        run: |
+          npm install -g @cyclonedx/cyclonedx-npm
+          cyclonedx-npm --output-format JSON --output-file sbom.cdx.json
+      - uses: ${TV.actionUploadArtifact}
+        with:
+          name: sbom-${isPR ? 'pr-' : 'spdx-'}\${{ github.sha }}
+          path: sbom.cdx.json`;
+
+    case 'in-toto':
+      return `      - name: SBOM + in-toto attestation — SLSA
+        uses: ${TV.cosignInstaller}
+      - run: |
+          ${isPR ? '' : '# '}cosign attest --yes \\
+            --predicate sbom.spdx.json \\
+            --type spdxjson \\
+            ${imageRef}
+      - uses: ${TV.actionUploadArtifact}
+        with:
+          name: sbom-${isPR ? 'pr-' : 'spdx-'}\${{ github.sha }}
+          path: sbom.spdx.json`;
+
+    default: // syft
+      return isPR
+        ? `      - run: docker load -i /tmp/image.tar
+      - uses: ${TV.sbomAction}
+        with:
+          image: ${imageRef}
+          format: spdx-json
+          output-file: sbom.spdx.json
+      - uses: ${TV.actionUploadArtifact}
+        with:
+          name: sbom-\${{ github.sha }}
+          path: sbom.spdx.json`
+        : `      - uses: ${TV.cosignInstaller}
+      - uses: ${TV.sbomAction}
+        with:
+          image: ${imageRef}
+          format: spdx-json
+          output-file: sbom.spdx.json
+          dependency-snapshot: true
+      - uses: ${TV.actionUploadArtifact}
+        with:
+          name: sbom-spdx-\${{ github.sha }}
+          path: sbom.spdx.json`;
+  }
+}
+
+// Returns the GHA steps YAML for the image signing job.
+function getSignStepsGHA(cfg) {
+  switch (cfg.signing) {
+    case 'notary2':
+      return `      - name: Install Notation
+        run: |
+          curl -Lo notation.tar.gz https://github.com/notaryproject/notation/releases/latest/download/notation_linux_amd64.tar.gz
+          tar xf notation.tar.gz && mv notation /usr/local/bin/
+      - name: Sign image — Notation (Notary v2)
+        run: |
+          notation sign \\
+            --signature-format cose \\
+            --key "\${{ secrets.NOTATION_KEY_NAME }}" \\
+            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}`;
+
+    case 'dct':
+      return `      - name: Sign image — Docker Content Trust (legacy)
+        env:
+          DOCKER_CONTENT_TRUST: 1
+          DOCKER_CONTENT_TRUST_SERVER: https://notary.docker.io
+          DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: \${{ secrets.DCT_PASSPHRASE }}
+          DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE: \${{ secrets.DCT_ROOT_PASSPHRASE }}
+        run: |
+          docker pull \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
+          docker tag \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }} \\
+            \${{ needs.build.outputs.image-ref }}:signed
+          docker push \${{ needs.build.outputs.image-ref }}:signed`;
+
+    case 'in-toto':
+      return `      - uses: ${TV.cosignInstaller}
+      - name: Sign + attest image — in-toto / SLSA
+        run: |
+          cosign attest --yes \\
+            --rekor-url https://rekor.sigstore.dev \\
+            --predicate sbom.spdx.json \\
+            --type spdxjson \\
+            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
+          cosign sign --yes \\
+            --rekor-url https://rekor.sigstore.dev \\
+            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}`;
+
+    default: // cosign (keyless)
+      return `      - uses: ${TV.cosignInstaller}
+      - run: |
+          cosign sign --yes --rekor-url https://rekor.sigstore.dev \\
+            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
+      - run: |
+          cosign attest --yes --rekor-url https://rekor.sigstore.dev \\
+            --predicate sbom.spdx.json --type spdxjson \\
+            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}`;
+  }
 }
 
 // Returns the integration-test command for the selected stack.
@@ -3736,7 +4040,7 @@ spec:
   }[cfg.ci] || '# CI system not supported: ' + cfg.ci),
 
   genS7PR: cfg => ({
-    'github-actions': `# ── S7 — Container Vulnerability Scan (PR tarball) ──────────────
+    'github-actions': `# ── S7 — Container Vulnerability Scan (PR tarball) — ${cfg.scanner} ──
 # Invariants I-7 (no CRITICAL/HIGH CVE), I-19 (.trivyignore entries expire ≤90 days).
 
       - name: Download image tarball
@@ -3744,17 +4048,7 @@ spec:
         with:
           name: image-tar-\${{ github.sha }}
           path: /tmp
-      - name: Container scan — Trivy
-        uses: ${TV.trivyAction}
-        with:
-          input: /tmp/image.tar
-          format: sarif
-          output: trivy.sarif
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: os,library
-          severity: CRITICAL,HIGH
-          trivyignores: .trivyignore
+${getScanStepsGHA(cfg, 'input: /tmp/image.tar').replace(/^      /gm, '      ')}
       - name: Upload Trivy SARIF
         uses: ${TV.codeqlUploadSarif}
         if: always()
@@ -4042,26 +4336,11 @@ spec:
   }[cfg.ci] || '# CI system not supported: ' + cfg.ci),
 
   genS7Main: cfg => ({
-    'github-actions': `# ── S7 — Container Vulnerability Scan (Main registry) ───────────
+    'github-actions': `# ── S7 — Container Vulnerability Scan (Main registry) — ${cfg.scanner} ──
 # Scans the image in the registry by digest.
 # Signing only happens AFTER this scan passes.
 
-      - name: Container scan — Trivy
-        uses: ${TV.trivyAction}
-        with:
-          image-ref: \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
-          format: sarif
-          output: trivy.sarif
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: os,library
-          severity: CRITICAL,HIGH
-          trivyignores: .trivyignore
-      - name: Upload Trivy SARIF
-        uses: ${TV.codeqlUploadSarif}
-        if: always()
-        with:
-          sarif_file: trivy.sarif`,
+${getScanStepsGHA(cfg, 'image-ref: ${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}')}`,
     'gitlab-ci': `# ── S7 — Container Vulnerability Scan Main (GitLab CI) ───────────
 container-scan-main:
   stage: attest
@@ -4123,29 +4402,15 @@ spec:
   }[cfg.ci] || '# CI system not supported: ' + cfg.ci),
 
   genS8b: cfg => ({
-    'github-actions': `# ── S8b — Image Signing + SBOM Attestation ──────────────────────
+    'github-actions': `# ── S8b — Image Signing + SBOM Attestation — ${cfg.signing} ────────
 # Invariant I-8: every prod image signed + SBOM attested.
-# Keyless signing — no private key stored anywhere (I-18).
 # Runs AFTER container scan. Never sign before scanning.
 
       - name: Download SBOM artifact
         uses: ${TV.actionDownloadArtifact}
         with:
           name: sbom-spdx-\${{ github.sha }}
-      - name: Install Cosign
-        uses: ${TV.cosignInstaller}
-      - name: Sign image (keyless — OIDC + Rekor)
-        run: |
-          cosign sign --yes \\
-            --rekor-url https://rekor.sigstore.dev \\
-            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
-      - name: Attest SBOM to image
-        run: |
-          cosign attest --yes \\
-            --rekor-url https://rekor.sigstore.dev \\
-            --predicate sbom.spdx.json \\
-            --type spdxjson \\
-            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}`,
+${getSignStepsGHA(cfg)}`,
     'gitlab-ci': `# ── S8b — Image Signing (GitLab CI) ─────────────────────────────
 # Note: cosign keyless requires OIDC token — configure GitLab OIDC or use key-based signing
 sign-attest:
@@ -5052,7 +5317,88 @@ spec:
   // ── Phase 4 — Promotion stages (GitOps + verification) ────────────
   // CI-agnostic. Reference YAML targets Argo CD + Argo Rollouts.
 
-  genP1: cfg => `# ── P1 — Deploy to dev (ArgoCD Application + PreSync verify) ──
+  genP1: cfg => {
+    const cd = cfg.cd || 'argocd';
+    if (cd === 'flux') return `# ── P1 — Deploy to dev (Flux Kustomization) ─────────────────
+# Image referenced by sha256 digest only. Tags never used at runtime.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: myapp-config
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/YOUR_ORG/YOUR_CONFIG_REPO
+  ref:
+    branch: main
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: myapp-dev
+  namespace: flux-system
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: myapp-config
+  path: ./overlays/dev
+  prune: true
+  targetNamespace: myapp-dev
+  images:
+    - name: myapp
+      digest: sha256:DIGEST   # updated by CI promotion job`;
+
+    if (cd === 'helm') return `# ── P1 — Deploy to dev (Helm imperative) ────────────────────
+# Run this from your CI or locally. Not GitOps — no auto-sync.
+helm upgrade --install myapp-dev ./charts/myapp \\
+  --namespace myapp-dev --create-namespace \\
+  --set image.repository=REGISTRY/myapp \\
+  --set image.digest=sha256:DIGEST \\
+  --set image.tag="" \\
+  --set env=dev \\
+  --wait --timeout 5m`;
+
+    if (cd === 'spinnaker') return `# ── P1 — Deploy to dev (Spinnaker pipeline) ─────────────────
+# Import this JSON into Spinnaker via: spin pipeline save -f spinnaker-dev.json
+{
+  "name": "myapp-dev-deploy",
+  "application": "myapp",
+  "stages": [
+    {
+      "type": "deployManifest",
+      "name": "Deploy to dev",
+      "account": "k8s-dev",
+      "cloudProvider": "kubernetes",
+      "manifests": [{"apiVersion":"apps/v1","kind":"Deployment","metadata":{"name":"myapp","namespace":"myapp-dev"},"spec":{"template":{"spec":{"containers":[{"name":"myapp","image":"REGISTRY/myapp@sha256:DIGEST"}]}}}}],
+      "refId": "1"
+    }
+  ]
+}`;
+
+    if (cd === 'jenkinsx') return `# ── P1 — Deploy to dev (Jenkins X) ──────────────────────────
+# .lighthouse/jenkins-x/deploy.yaml — Jenkins X Tekton pipeline
+apiVersion: lighthouse.jenkins.io/v1alpha1
+kind: LighthouseJob
+metadata:
+  name: myapp-dev-deploy
+spec:
+  refs:
+    org: YOUR_ORG
+    repo: YOUR_REPO
+    base_ref: main
+  agent: tekton
+  pipeline_run_spec:
+    pipelineRef:
+      name: myapp-deploy
+    params:
+      - name: IMAGE_DIGEST
+        value: sha256:DIGEST
+      - name: ENV
+        value: dev`;
+
+    // default: argocd
+    return `# ── P1 — Deploy to dev (ArgoCD Application + PreSync verify) ──
 # Image referenced by sha256 digest only. Tags never used at runtime.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -5095,7 +5441,8 @@ spec:
           env:
             - name: IMAGE_REF_WITH_DIGEST
               valueFrom:
-                configMapKeyRef: { name: image-digest, key: ref }`,
+                configMapKeyRef: { name: image-digest, key: ref }`;
+  },
 
   genP2: cfg => `# ── P2 — Promote to test (digest-pinned kustomize patch) ──────
 # Run by a bot user in a GitHub Action after dev smoke passes.
@@ -5158,7 +5505,134 @@ jobs:
     steps:
       - run: echo "UAT reviewer must approve in the Environments tab."`,
 
-  genP4: cfg => `# ── P4 — Canary to prod (Argo Rollouts 5% → 100%) ─────────────
+  genP4: cfg => {
+    const promo = cfg.promotion || 'canary';
+
+    if (promo === 'bluegreen') return `# ── P4 — Blue/Green to prod (Argo Rollouts) ──────────────────
+# Two identical environments. Traffic switches all at once after tests pass.
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: myapp
+  namespace: myapp-prod
+spec:
+  replicas: 5
+  strategy:
+    blueGreen:
+      activeService: myapp-active
+      previewService: myapp-preview
+      autoPromotionEnabled: false   # manual approval required
+      scaleDownDelaySeconds: 30
+  selector: { matchLabels: { app: myapp } }
+  template:
+    metadata: { labels: { app: myapp } }
+    spec:
+      containers:
+        - name: myapp
+          image: REGISTRY/myapp@sha256:DIGEST`;
+
+    if (promo === 'rolling') return `# ── P4 — Rolling update to prod (K8s native) ─────────────────
+# Replace pods gradually. No Argo Rollouts needed.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: myapp-prod
+spec:
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+  selector:
+    matchLabels: { app: myapp }
+  template:
+    metadata:
+      labels: { app: myapp }
+    spec:
+      containers:
+        - name: myapp
+          image: REGISTRY/myapp@sha256:DIGEST
+          readinessProbe:
+            httpGet: { path: /health, port: 8080 }
+            initialDelaySeconds: 5
+            periodSeconds: 5`;
+
+    if (promo === 'recreate') return `# ── P4 — Recreate deployment to prod ─────────────────────────
+# Stop all old pods, start all new. Accepts downtime window.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: myapp-prod
+spec:
+  replicas: 5
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels: { app: myapp }
+  template:
+    metadata:
+      labels: { app: myapp }
+    spec:
+      containers:
+        - name: myapp
+          image: REGISTRY/myapp@sha256:DIGEST`;
+
+    if (promo === 'flagger') return `# ── P4 — Flagger canary to prod (Istio service mesh) ─────────
+# Requires Flagger + Istio installed. Traffic split via VirtualService.
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: myapp
+  namespace: myapp-prod
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: myapp
+  service:
+    port: 80
+    targetPort: 8080
+    gateways: [public-gateway.istio-system.svc.cluster.local]
+    hosts: [myapp.example.com]
+  analysis:
+    interval: 1m
+    threshold: 10
+    maxWeight: 50
+    stepWeight: 10
+    metrics:
+      - name: request-success-rate
+        thresholdRange: { min: 99 }
+        interval: 1m
+      - name: request-duration
+        thresholdRange: { max: 500 }
+        interval: 30s`;
+
+    if (promo === 'shadow') return `# ── P4 — Shadow / dark launch (traffic mirroring) ────────────
+# Real traffic mirrored to new version. No user impact.
+# Requires Istio. Mirror responses are discarded.
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: myapp-shadow
+  namespace: myapp-prod
+spec:
+  hosts: [myapp.example.com]
+  http:
+    - route:
+        - destination:
+            host: myapp-stable
+            port: { number: 80 }
+          weight: 100
+      mirror:
+        host: myapp-shadow
+        port: { number: 80 }
+      mirrorPercentage: { value: 100 }`;
+
+    // default: canary
+    return `# ── P4 — Canary to prod (Argo Rollouts 5% → 100%) ─────────────
 # Auto-rollback if Prometheus error_rate > 0.5% at any step.
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
@@ -5188,7 +5662,7 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: REGISTRY/myapp@sha256:DIGEST   # never a tag
+          image: REGISTRY/myapp@sha256:DIGEST
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
@@ -5204,7 +5678,8 @@ spec:
           query: |
             sum(rate(http_requests_total{app="myapp",code=~"5.."}[1m]))
               / sum(rate(http_requests_total{app="myapp"}[1m]))
-      successCondition: result[0] < 0.005`,
+      successCondition: result[0] < 0.005`;
+  },
 
   // ── Phase 5 — Runtime stages (always-on cluster manifests) ────────
 
@@ -5462,7 +5937,7 @@ jobs:
           retention-days: 1
 
   sbom-gen:
-    name: "S8a: SBOM Generation"
+    name: "S8a: SBOM Generation (${cfg.sbom})"
     runs-on: ubuntu-24.04
     needs: [build]
     steps:
@@ -5470,19 +5945,10 @@ jobs:
         with:
           name: image-tar-\${{ github.sha }}
           path: /tmp
-      - run: docker load -i /tmp/image.tar
-      - uses: ${TV.sbomAction}
-        with:
-          image: myapp:pr-\${{ github.sha }}
-          format: spdx-json
-          output-file: sbom.spdx.json
-      - uses: ${TV.actionUploadArtifact}
-        with:
-          name: sbom-\${{ github.sha }}
-          path: sbom.spdx.json
+${getSBOMStepsGHA(cfg, 'pr')}
 
   scan:
-    name: "S7: Container Vulnerability Scan"
+    name: "S7: Container Vulnerability Scan (${cfg.scanner})"
     runs-on: ubuntu-24.04
     needs: [sbom-gen]
     steps:
@@ -5490,21 +5956,7 @@ jobs:
         with:
           name: image-tar-\${{ github.sha }}
           path: /tmp
-      - name: Container scan — Trivy
-        uses: ${TV.trivyAction}
-        with:
-          input: /tmp/image.tar
-          format: sarif
-          output: trivy.sarif
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: os,library
-          severity: CRITICAL,HIGH
-          trivyignores: .trivyignore
-      - uses: ${TV.codeqlUploadSarif}
-        if: always()
-        with:
-          sarif_file: trivy.sarif`;
+${getScanStepsGHA(cfg, 'input: /tmp/image.tar')}`;
 }
 
 function buildGHAMainWorkflow(cfg) {
@@ -5625,47 +6077,23 @@ ${r.loginYAML}
           echo "base=${r.registryUrl}/\${{ env.IMAGE_NAME }}" >> \$GITHUB_OUTPUT
 
   sbom-gen:
-    name: "S8a: SBOM Generation"
+    name: "S8a: SBOM Generation (${cfg.sbom})"
     runs-on: ubuntu-24.04
     needs: [build]
     steps:
-      - uses: ${TV.cosignInstaller}
-      - uses: ${TV.sbomAction}
-        with:
-          image: \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
-          format: spdx-json
-          output-file: sbom.spdx.json
-          dependency-snapshot: true
-      - uses: ${TV.actionUploadArtifact}
-        with:
-          name: sbom-spdx-\${{ github.sha }}
-          path: sbom.spdx.json
+${getSBOMStepsGHA(cfg, 'main')}
 
   scan:
-    name: "S7: Container Vulnerability Scan"
+    name: "S7: Container Vulnerability Scan (${cfg.scanner})"
     runs-on: ubuntu-24.04
     needs: [sbom-gen, build]
     steps:
-      - uses: ${TV.trivyAction}
-        with:
-          image-ref: \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
-          format: sarif
-          output: trivy.sarif
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: os,library
-          severity: CRITICAL,HIGH
-          trivyignores: .trivyignore
-      - uses: ${TV.codeqlUploadSarif}
-        if: always()
-        with:
-          sarif_file: trivy.sarif
+${getScanStepsGHA(cfg, 'image-ref: ${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}')}
 
   sign:
-    name: "S8b: Sign + Attest"
+    name: "S8b: Sign + Attest (${cfg.signing})"
     runs-on: ubuntu-24.04
     # Hard-depends on sbom-gen — the SBOM artifact is downloaded in this job.
-    # Without sbom-gen in needs, GitHub Actions does not guarantee the artifact exists.
     needs: [scan, build, sbom-gen]
     permissions:
       id-token: write
@@ -5674,15 +6102,8 @@ ${r.loginYAML}
       - uses: ${TV.actionDownloadArtifact}
         with:
           name: sbom-spdx-\${{ github.sha }}
-      - uses: ${TV.cosignInstaller}
 ${r.loginYAML}
-      - run: |
-          cosign sign --yes --rekor-url https://rekor.sigstore.dev \\
-            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
-      - run: |
-          cosign attest --yes --rekor-url https://rekor.sigstore.dev \\
-            --predicate sbom.spdx.json --type spdxjson \\
-            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
+${getSignStepsGHA(cfg)}
 
   test:
     name: "S9: Test Suite"
@@ -8127,17 +8548,43 @@ function buildMasterSVG() {
     return `<path d="${path}" fill="none" stroke="${stroke}" stroke-width="${width}" stroke-dasharray="${dasharray}" marker-end="url(#arr${mod==='critical'?'C':''})"/>`;
   }).join('');
 
-  // Tool sub-label mapping: stage id → decision id to show current pick label
-  const TOOL_SUBLABEL_MAP = {
-    's7pr':   'scanner',
-    's7main': 'scanner',
-    's8b':    'signing',
-    's6main': 'reg',
-    'p1':     'cd',
-    'p2':     'cd',
-    'p3':     'cd',
-    'p4':     'cd'
-  };
+  // Returns the short tool name for any SVG node based on current decision picks.
+  // Priority order matters for nodes touched by multiple decisions.
+  function getNodeToolLabel(nodeId) {
+    const vis = id => DECISION_VISITED.has(id);
+    const short = id => {
+      const lbl = decisionCurrentLabel(id);
+      if (!lbl || lbl === '—') return null;
+      // Strip "(Vendor)" suffix, keep first 2 words max
+      return lbl.replace(/\s*\([^)]*\)$/, '').replace(/\s*\[[^\]]*\]$/, '').split(/\s+/).slice(0, 2).join(' ');
+    };
+    switch (nodeId) {
+      case 's7pr': case 's7main': case 'r2':
+        return vis('scanner')   ? short('scanner')   : null;
+      case 's8b': case 's14': case 'r1':
+        return vis('signing')   ? short('signing')   : null;
+      case 's8a': case 's8apr':
+        return vis('sbom')      ? short('sbom')      : null;
+      case 's6main': case 's13':
+        return vis('reg')       ? short('reg')       : (vis('baseimage') ? short('baseimage') : null);
+      case 's6pr':
+        return vis('baseimage') ? short('baseimage') : (vis('build') ? short('build') : null);
+      case 'p1':
+        return vis('cd')        ? short('cd')        : (vis('cloud') ? short('cloud') : null);
+      case 'p2': case 'p3': case 'p4':
+        return vis('promotion') ? short('promotion') : (vis('cd') ? short('cd') : null);
+      case 's0': case 's1':
+        return vis('ci')        ? short('ci')        : null;
+      case 'l1':
+        return vis('ide')       ? short('ide')       : null;
+      case 'l2':
+        return vis('precommit') ? short('precommit') : null;
+      case 'l4':
+        return vis('localsecret') ? short('localsecret') : null;
+      default:
+        return null;
+    }
+  }
 
   // Decision → node mapping: when a decision is visited, these nodes glow green.
   const DECISION_NODE_MAP = {
@@ -8181,9 +8628,8 @@ function buildMasterSVG() {
     // Lighten fill slightly when a decision covers this node
     const nodeFill = decisionActive && !n.critical ? '#eafbef' : n.fill;
     const subX = n.x + NODE_W - 8;
-    // Tool sub-label: show current decision pick for key nodes
-    const toolDecId = TOOL_SUBLABEL_MAP[n.id];
-    const toolLabel = toolDecId ? decisionCurrentLabel(toolDecId) : null;
+    // Tool sub-label: show short name of the picked tool for this node
+    const toolLabel = getNodeToolLabel(n.id);
     const toolSubY = n.y + NODE_H - 5;
     // Green dot indicator for decided nodes (small circle top-right)
     const decDot = decisionActive
@@ -8195,7 +8641,8 @@ function buildMasterSVG() {
         ${decDot}
         <text x="${n.x + 10}" y="${n.y + 23}" font-family="'Inter',sans-serif" font-size="11" font-weight="600" fill="#1a1e23">${n.label}</text>
         ${n.sub ? `<text x="${subX}" y="${n.y + 23}" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="9" fill="#57606a">${n.sub}</text>` : ''}
-        ${toolLabel ? `<text x="${n.x + NODE_W/2}" y="${toolSubY}" text-anchor="middle" font-family="'Inter',sans-serif" font-size="8.5" fill="#0969da" font-style="italic">${toolLabel}</text>` : ''}
+        ${toolLabel ? `<rect x="${n.x + 6}" y="${toolSubY - 9}" width="${NODE_W - 12}" height="12" rx="3" fill="#dbeafe" opacity="0.9"/>
+        <text x="${n.x + NODE_W/2}" y="${toolSubY}" text-anchor="middle" font-family="'Inter',sans-serif" font-size="8" font-weight="600" fill="#1d4ed8">${toolLabel}</text>` : ''}
         <title>${n.label}${n.sub ? ' · ' + n.sub : ''}${toolLabel ? ' · ' + toolLabel : ''}${decisionActive ? ' ✓ decision made' : ''}${n.critical ? ' (critical path)' : ''}</title>
       </g>`;
   }).join('');
@@ -8238,19 +8685,282 @@ const DECISION_STATE = {};
 // Track which decisions the reader has actively visited.
 const DECISION_VISITED = new Set();
 // Which step is currently active in the accordion (0 = shape picker).
+// ACTIVE_STEP: which step is currently expanded. Completed steps collapse to summary (editable). Future steps clickable.
 let ACTIVE_STEP = 0;
 
 const DECISION_STEPS = [
   {step:0, icon:'🎯', label:'Service shape',  tiles:['shape']},
-  {step:1, icon:'🛠️', label:'Local dev',       tiles:['ide','precommit','localsecret']},
-  {step:2, icon:'📦', label:'Build tools',     tiles:['fe','be','build','pkg']},
-  {step:3, icon:'🚀', label:'Pipeline',        tiles:['ci','reg','cd']},
-  {step:4, icon:'🔒', label:'Security',        tiles:['baseimage','sbom','scanner','signing']},
-  {step:5, icon:'☁️', label:'Deploy',          tiles:['cloud','promotion']},
-  {step:6, icon:'🤖', label:'AI / ML',         tiles:['mlframework','inferenceruntime','modelregistry','gpubaseimage']},
-  {step:7, icon:'🔧', label:'Infra',           tiles:['infratooltype','infradistribution']},
-  {step:8, icon:'📋', label:'Compliance',      tiles:['industry','compliance']}
+  {step:1, icon:'🛠️', label:'Local dev — IDE, git hooks, secret scan', tiles:['ide','precommit','localsecret']},
+  {step:2, icon:'📦', label:'Build tools — framework, bundler, pkg mgr', tiles:['fe','be','build','pkg']},
+  {step:3, icon:'🚀', label:'Pipeline — CI system, registry, CD tool', tiles:['ci','reg','cd']},
+  {step:4, icon:'🔒', label:'Security — base image, SBOM, CVE scan, signing', tiles:['baseimage','sbom','scanner','signing']},
+  {step:5, icon:'☁️', label:'Deploy — cloud target, promotion strategy', tiles:['cloud','promotion']},
+  {step:6, icon:'🤖', label:'AI / ML — model registry, GPU image, inference', tiles:['mlframework','inferenceruntime','modelregistry','gpubaseimage']},
+  {step:7, icon:'🔧', label:'Infra — IaC tool type, distribution method', tiles:['infratooltype','infradistribution']},
+  {step:8, icon:'📋', label:'Compliance — industry sector, framework', tiles:['industry','compliance']}
 ];
+
+// Decisions that must be set for a working pipeline — shown with Required badge.
+const DECISION_REQUIRED = new Set(['ci','reg','cd','scanner','signing','baseimage']);
+// Decisions that have a "none" / skip option — shown with Optional badge.
+const DECISION_OPTIONAL = new Set(['ide','precommit','localsecret','cloud','promotion']);
+
+// Groups for decisions with many options — rendered as labeled pill sections.
+const DECISION_PILL_GROUPS = {
+  build: [
+    { label: 'Auto', values: ['auto'] },
+    { label: 'JavaScript / TypeScript', values: ['vite','turbopack','webpack','esbuild','rspack','rollup','bun','parcel'] },
+    { label: 'Mobile', values: ['metro'] },
+    { label: 'Go', values: ['go'] },
+    { label: 'Rust', values: ['cargo'] },
+    { label: 'JVM', values: ['maven','gradle'] },
+    { label: '.NET', values: ['dotnet'] }
+  ]
+};
+
+const DECISION_KNOWLEDGE = {
+  ide: {
+    why: 'Catches security issues as you type — before commit, before CI. Issues found in IDE cost 0 CI minutes to fix.',
+    skipWhen: 'Team uses terminal-only editors (vim, emacs) with no plugin ecosystem.',
+    options: {
+      snyk:      { caps:['Real-time CVE scan in deps','Container image scan','IaC scan (Dockerfile, K8s YAML)','License compliance'], pickWhen:'You want one tool covering deps + container + IaC in the IDE.', avoid:'Avoid on free tier with >5 devs — 200 test/month limit hit fast.', tradeoff:'vs Semgrep: Snyk finds CVEs in packages; Semgrep finds security patterns in source code. Both cover different attack surfaces.', cost:'Free: 200 tests/month. Team: $98/dev/year.' },
+      semgrep:   { caps:['2000+ security rules','Custom rule writing','OWASP Top 10 patterns','Multi-language'], pickWhen:'You want source-code security patterns — SQL injection, XSS, command injection.', avoid:'Avoid if you only need CVE-in-dependency scanning — Semgrep does not check package CVEs.', tradeoff:'vs Snyk: Semgrep finds logic-level bugs; Snyk finds known CVEs. Use both for full coverage.', cost:'Free community rules. Pro: $40/dev/month.' },
+      sonarlint: { caps:['Quality gates','Security hotspots','Connected mode with SonarQube/SonarCloud','Java/C# deep analysis'], pickWhen:'Team already pays for SonarQube or SonarCloud — connected mode syncs rules.', avoid:'Avoid if no SonarQube server — standalone SonarLint has limited rule coverage vs Semgrep.', tradeoff:'vs Semgrep: SonarLint is better for quality (code smells, duplication); Semgrep is better for security rules.', cost:'Free standalone. SonarCloud: $10/dev/month.' },
+      codeql:    { caps:['Deep interprocedural data-flow analysis','CodeQL queries','GitHub Advanced Security integration'], pickWhen:'Team has GitHub Advanced Security license and needs deep multi-file vulnerability analysis.', avoid:'Avoid for real-time feedback — CodeQL is slow (3-8 min per scan), not suitable for keystroke-level hints.', tradeoff:'vs Semgrep: CodeQL finds complex multi-file bugs; Semgrep finds single-file patterns. CodeQL is more powerful but slower.', cost:'Requires GitHub Advanced Security: $49/dev/month.' },
+      none:      { caps:['No IDE security feedback'], pickWhen:'Never the right choice for a security-conscious pipeline.', avoid:'Avoid — CI still catches issues but the fix cycle is 5-15 minutes longer per issue.', tradeoff:'Choosing none means every security issue discovered in CI requires a full commit-push-wait-fix cycle.', cost:'$0 tooling, but higher developer time cost per finding.' }
+    },
+    compare: ['snyk','semgrep','sonarlint','codeql']
+  },
+  precommit: {
+    why: 'Blocks bad commits at the source — before they reach remote. Same hooks run in CI to catch --no-verify bypasses.',
+    skipWhen: 'Only skip if team has a policy against local tooling and relies entirely on CI gate.',
+    options: {
+      precommit: { caps:['200+ hooks on pre-commit.com','Runs in isolated virtualenv per hook','Multi-language','Most widely adopted'], pickWhen:'Any project — pre-commit is the default choice. Largest hook ecosystem by far.', avoid:'Avoid only if team resists Python dependency or uses Windows without WSL (setup friction).', tradeoff:'vs Husky: pre-commit runs hooks in isolated envs (no conflicts); Husky runs npm scripts (simpler but JS-only ecosystem).', cost:'Free. Python required.' },
+      husky:     { caps:['Zero config for JS/TS','Runs npm scripts as hooks','5MB install'], pickWhen:'JS/TS-only project and team wants no Python dependency.', avoid:'Avoid for polyglot repos — Husky only runs npm scripts, not arbitrary commands cleanly.', tradeoff:'vs pre-commit: Husky is simpler for pure JS; pre-commit handles Go, Python, Ruby, Java hooks equally.', cost:'Free. Node.js required.' },
+      lefthook:  { caps:['Parallel hook execution','Go binary — no runtime dependency','YAML config','Fastest runner'], pickWhen:'Large repo where hooks are slow — Lefthook runs them in parallel.', avoid:'Avoid if you rely on pre-commit.com hook registry — Lefthook has no equivalent marketplace.', tradeoff:'vs pre-commit: Lefthook is faster (parallel); pre-commit has a larger hook library.', cost:'Free. Single Go binary.' },
+      overcommit: { caps:['Ruby-native hooks','Mature','Built-in checks for Rails conventions'], pickWhen:'Ruby/Rails project already using the Ruby toolchain.', avoid:'Avoid for non-Ruby projects — overcommit adds Ruby dependency for no gain.', tradeoff:'vs pre-commit: overcommit is better for Rails-specific checks; pre-commit is better for everything else.', cost:'Free. Ruby required.' },
+      none:      { caps:['No local commit gate'], pickWhen:'Never the preferred choice.', avoid:'Avoid — the same CI hooks take 5-10 extra minutes per fix when not caught locally.', tradeoff:'CI catches the same issues but every finding requires a full push-wait-fix loop.', cost:'$0 tooling, higher fix cost per finding.' }
+    },
+    compare: ['precommit','husky','lefthook','overcommit']
+  },
+  localsecret: {
+    why: 'Prevents credentials committed to git — even if deleted later, the secret exists in git history forever and is exploitable.',
+    skipWhen: 'Never skip — CI runs this same check but a secret committed even once is already in history.',
+    options: {
+      gitleaks:   { caps:['150+ credential patterns','Regex + entropy detection','SARIF output','<5s scan time','Most widely adopted'], pickWhen:'Default choice for any project. Fastest and most adopted.', avoid:'Avoid if you need live verification that the found secret actually works — Gitleaks only pattern-matches, does not verify.', tradeoff:'vs TruffleHog: Gitleaks is faster; TruffleHog live-verifies secrets against the issuing API (confirms exploitability).', cost:'Free. Open source.' },
+      trufflehog: { caps:['Live secret verification against APIs','Detects active vs rotated secrets','GitHub/GitLab/S3 scanning'], pickWhen:'High security requirement — you want to know if a found secret is still active, not just pattern-matched.', avoid:'Avoid in fast CI — TruffleHog verification takes 30s+ vs Gitleaks 5s.', tradeoff:'vs Gitleaks: TruffleHog confirms exploitability; Gitleaks just pattern-matches. More accurate, slower.', cost:'Free. Open source.' },
+      gitsecrets: { caps:['AWS credential patterns','Pre-commit integration','Simple setup'], pickWhen:'AWS-only project and team wants simplest possible setup.', avoid:'Avoid for general use — only ~10 patterns vs Gitleaks 150+.', tradeoff:'vs Gitleaks: git-secrets is simpler but covers far fewer secret types. Gitleaks is strictly better for general use.', cost:'Free. Open source.' },
+      detect:     { caps:['Baseline approach — track known-allowed patterns','Audit workflow for false positive management','22 detector types'], pickWhen:'Large existing codebase with many existing false positives — baseline lets you ignore known findings.', avoid:'Avoid for greenfield projects — baseline setup adds friction without benefit when starting clean.', tradeoff:'vs Gitleaks: detect-secrets manages false positives better; Gitleaks blocks harder with fewer configuration options.', cost:'Free. Python required.' },
+      none:       { caps:['No local secret scan'], pickWhen:'Never the right choice.', avoid:'Avoid — even with CI scanning, a secret committed to a shared branch is already in remote history.', tradeoff:'CI catches secrets but only after they reach the remote. At that point rotation is mandatory.', cost:'$0 tooling, potentially very high incident cost.' }
+    },
+    compare: ['gitleaks','trufflehog','gitsecrets','detect']
+  },
+  ci: {
+    why: 'The CI system runs every stage in your pipeline. Choice affects: YAML syntax, OIDC signing support, runner cost, and marketplace availability.',
+    skipWhen: 'Not skippable — no CI means no pipeline.',
+    options: {
+      'github-actions': { caps:['Native OIDC for GHCR/ECR/GAR/ACR — no stored secrets','2000 min/month free on public repos','Largest action marketplace','Matrix builds','GitHub-hosted and self-hosted runners'], pickWhen:'Project is on GitHub. Default choice — best OIDC integration, largest ecosystem.', avoid:'Avoid if self-hosted on-prem is mandatory (air-gapped environments).', tradeoff:'vs CircleCI: GitHub Actions has better OIDC and marketplace; CircleCI has faster Docker Layer Caching and more granular resource classes.', cost:'2000 min/month free. Team: $4/extra 1000 min.' },
+      circleci:         { caps:['Docker Layer Caching built-in','Fastest caching in industry','Resource classes (small to GPU)','Orbs marketplace'], pickWhen:'Build speed is critical — Docker Layer Caching reduces container build time by 60-80%.', avoid:'Avoid if team is already on GitHub Actions and has no performance problem — switching adds migration cost.', tradeoff:'vs GitHub Actions: CircleCI is faster for large Docker builds; GitHub Actions has better OIDC and marketplace depth.', cost:'Free: 6000 min/month. Performance: $15/user/month.' },
+      gitlab:           { caps:['Built into GitLab','Shared runners free (400 min/month)','Built-in container registry','Auto DevOps templates'], pickWhen:'Project is already on GitLab — no reason to add a second CI system.', avoid:'Avoid if project is on GitHub — double toolchain with no benefit.', tradeoff:'vs GitHub Actions: GitLab CI has better built-in registry integration; GitHub Actions has a larger marketplace.', cost:'Free tier: 400 min/month. Premium: $29/user/month.' },
+      jenkins:          { caps:['Self-hosted — full control','No per-minute cost','Massive plugin ecosystem (1800+ plugins)','On-prem support'], pickWhen:'Air-gapped environment, on-prem mandate, or existing Jenkins investment.', avoid:'Avoid for new projects — Jenkins requires significant ops burden (updates, plugins, security patches).', tradeoff:'vs GitHub Actions: Jenkins has no per-minute cost and is on-prem; GitHub Actions is managed and requires no ops.', cost:'Free software. Infrastructure cost only.' },
+      buildkite:        { caps:['Bring-your-own-agents','Best for monorepos (dynamic pipelines)','Fastest at scale','Hybrid cloud + self-hosted'], pickWhen:'Large monorepo where GitHub Actions runner queues cause bottlenecks.', avoid:'Avoid for standard projects — adds agent management overhead without benefit at small scale.', tradeoff:'vs GitHub Actions: Buildkite scales better for large teams; GitHub Actions is simpler to set up.', cost:'$490/month flat for up to 10 users.' }
+    },
+    compare: ['github-actions','circleci','gitlab','jenkins','buildkite']
+  },
+  reg: {
+    why: 'The registry stores your signed image. Choice affects: auth method (OIDC vs token), cost, pull rate limits, and tag immutability.',
+    skipWhen: 'Not skippable — every containerised service needs a registry.',
+    options: {
+      ghcr:      { caps:['Free with GitHub','OIDC via GITHUB_TOKEN — zero setup','No pull rate limits within GitHub Actions','Tag immutability','Package visibility follows repo visibility'], pickWhen:'Project is on GitHub. Default choice — zero cost, zero auth setup.', avoid:'Avoid if company policy requires a specific cloud vendor registry (ECR/GAR/ACR).', tradeoff:'vs ECR: GHCR is free and simpler; ECR integrates with AWS IAM policies and ECS task roles natively.', cost:'Free for public. Private: included in GitHub plan.' },
+      ecr:       { caps:['AWS native','Free 500MB/month per account','OIDC via aws-actions/configure-aws-credentials','Lifecycle policies','ECR pull-through cache'], pickWhen:'Deploying to AWS ECS or EKS — IAM role for task automatically gets pull permission.', avoid:'Avoid if not on AWS — ECR adds IAM complexity without benefit outside AWS.', tradeoff:'vs GHCR: ECR integrates with AWS IAM and ECS natively; GHCR is simpler and free but requires extra auth when pulling from ECS.', cost:'Free 500MB/month. $0.10/GB/month after.' },
+      gar:       { caps:['GCP native','Multi-region replication','Built-in vulnerability scanning (on push)','OIDC via google-github-actions','Fine-grained IAM'], pickWhen:'Deploying to GCP Cloud Run or GKE — Workload Identity Federation gives pods automatic pull access.', avoid:'Avoid if not on GCP — cross-cloud pull adds latency and egress cost.', tradeoff:'vs GHCR: GAR has built-in vulnerability scanning on push; GHCR requires a separate scan step.', cost:'Free 0.5GB/month. $0.10/GB/month after. Scan: $0.26/image.' },
+      dockerhub:  { caps:['Largest public image ecosystem','Global CDN pull','Webhooks'], pickWhen:'Distributing a public open-source image — Docker Hub is where developers look first.', avoid:'Avoid for private production images — rate limits (100 pulls/6h anonymous, 200/6h free), and stored token required (no OIDC).', tradeoff:'vs GHCR: Docker Hub is better for public distribution; GHCR is better for private production images (OIDC, free private).', cost:'Free public. Pro (private): $7/user/month.' },
+      acr:        { caps:['Azure native','OIDC via azure/login + federated identity','Geo-replication','Quarantine policy','Content Trust (signing)'], pickWhen:'Deploying to AKS or Azure Container Apps — managed identity gives pods automatic pull access.', avoid:'Avoid if not on Azure — cross-cloud pull adds latency and egress cost.', tradeoff:'vs GHCR: ACR has better Azure IAM integration; GHCR is simpler and free.', cost:'Basic: $0.167/day. Standard: $0.667/day. Premium: $1.667/day.' }
+    },
+    compare: ['ghcr','ecr','gar','dockerhub','acr']
+  },
+  cd: {
+    why: 'CD tool reads the image digest from the registry and applies Kubernetes manifests. Choice drives GitOps vs push-based deployment, drift detection, and multi-cluster support.',
+    skipWhen: 'Skip only for library/mobile shapes — no deployment target.',
+    options: {
+      argocd:    { caps:['GitOps pull model','ApplicationSet for multi-cluster','Auto drift detection and sync','Web UI + CLI','RBAC per application','Most widely adopted GitOps tool'], pickWhen:'K8s deployment with GitOps. Default choice for new K8s services.', avoid:'Avoid for non-K8s targets (serverless, VMs) — ArgoCD is K8s-only.', tradeoff:'vs Flux: ArgoCD has a UI and ApplicationSet for multi-cluster; Flux is lighter and has better native Helm support.', cost:'Free. Open source. CNCF graduated.' },
+      flux:      { caps:['GitOps pull model','Lightweight — no UI','Better Helm controller','CNCF graduated','Multi-tenancy via Flux tenants'], pickWhen:'Helm-heavy deployment or team prefers CLI-only GitOps without a UI.', avoid:'Avoid if you need a visual dashboard to debug sync status — Flux has no built-in UI.', tradeoff:'vs ArgoCD: Flux is lighter and has a better Helm controller; ArgoCD has a UI and simpler multi-cluster setup via ApplicationSet.', cost:'Free. Open source.' },
+      spinnaker: { caps:['Multi-cloud push model','Stage-graph pipelines','Manual approval stages','Canary analysis (Kayenta)','Netflix-origin'], pickWhen:'Multi-cloud deployments (AWS + GCP + Azure in one pipeline) with complex approval workflows.', avoid:'Avoid for standard K8s — Spinnaker is heavy (needs its own K8s cluster to run) and complex to maintain.', tradeoff:'vs ArgoCD: Spinnaker supports multi-cloud and complex approval stages; ArgoCD is K8s-only but simpler.', cost:'Free. But requires ~6 pods of infrastructure.' },
+      helm:      { caps:['Imperative deploy','No GitOps','Helm chart templating','Simple for one-off deploys'], pickWhen:'Simple deploy without GitOps, or bootstrapping before setting up ArgoCD/Flux.', avoid:'Avoid for production — Helm alone has no drift detection, no auto-sync, no audit trail.', tradeoff:'vs ArgoCD: Helm is simpler to start; ArgoCD adds drift detection and GitOps audit trail.', cost:'Free. Open source.' },
+      octopus:   { caps:['Multi-tenant deployments','Windows support','Complex release approval workflows','Runbook automation'], pickWhen:'.NET/Windows workloads requiring complex approval chains and runbook automation.', avoid:'Avoid for standard Linux K8s — Octopus adds complexity without benefit over ArgoCD.', tradeoff:'vs ArgoCD: Octopus is better for .NET/Windows ecosystems; ArgoCD is better for Linux K8s GitOps.', cost:'From $10/deployment target/month.' }
+    },
+    compare: ['argocd','flux','spinnaker','helm','octopus']
+  },
+  baseimage: {
+    why: 'The container base image sets the attack surface for every CVE scanner run. A smaller base = fewer packages = fewer CVEs = faster scans = fewer false positives.',
+    skipWhen: 'Not skippable for container shapes.',
+    options: {
+      distroless: { caps:['No shell','No package manager','No apt/apk','~20MB smaller than Alpine','Google-maintained','Lowest CVE count'], pickWhen:'Production container for Go, Java, Node, Python — use distroless for the runtime stage.', avoid:'Avoid for build stage — distroless has no build tools. Always use multi-stage build (builder=full image, runtime=distroless).', tradeoff:'vs Alpine: Distroless has lower CVE count and no shell (harder to exploit); Alpine has apk for debugging but more CVEs.', cost:'Free. GCR hosted.' },
+      alpine:     { caps:['~5MB base','apk package manager','BusyBox shell','Widely understood'], pickWhen:'Build stage only, or when you need apk for debugging in staging. Not for prod runtime.', avoid:'Avoid for production runtime — Alpine has musl libc which causes glibc compatibility issues for some binaries.', tradeoff:'vs Distroless: Alpine is more debuggable (has shell); Distroless has lower attack surface and CVE count.', cost:'Free.' },
+      chainguard: { caps:['Zero-CVE focus','Wolfi-based (glibc compatible)','Signed by default','Daily rebuilds','Free images + paid enterprise with SLAs'], pickWhen:'Compliance environments where zero-CVE image is required by policy (SOC 2, FedRAMP).', avoid:'Avoid if your runtime is not in Chainguard catalog — not every language runtime has a Chainguard variant.', tradeoff:'vs Distroless: Chainguard has glibc compatibility and more language variants; Distroless has longer Google track record.', cost:'Free images. Enterprise SLA: contact sales.' },
+      ubuntu:     { caps:['apt package manager','75MB base','Familiar','Most CVEs of the set'], pickWhen:'Development/debugging only. Never for production runtime.', avoid:'Avoid for production — Ubuntu slim has the highest CVE count of all options and a shell that can be exploited.', tradeoff:'vs Distroless: Ubuntu has more CVEs, a shell, and apt — easier to debug but much larger attack surface.', cost:'Free.' },
+      scratch:    { caps:['Zero bytes base','Zero packages','Zero CVEs','Static binaries only'], pickWhen:'Static Go or Rust binary with CGO_ENABLED=0. Smallest possible image.', avoid:'Avoid for any binary that makes glibc calls — scratch has no C library. Avoid if you need any debugging capability.', tradeoff:'vs Distroless: scratch is smaller but has no CA certificates, no timezone data, no user/group — distroless includes these.', cost:'Free.' }
+    },
+    compare: ['distroless','chainguard','alpine','scratch','ubuntu']
+  },
+  sbom: {
+    why: 'SBOM (Software Bill of Materials — a machine-readable list of every library in your image) is required for CVE tracking, compliance attestation (SOC 2, FedRAMP), and supply chain audits.',
+    skipWhen: 'Skip only if compliance framework explicitly does not require it. SOC 2 and FedRAMP both require it.',
+    options: {
+      syft:     { caps:['Fastest SBOM generator','SPDX + CycloneDX + Syft native formats','Grype native input','Cosign attestation support','25+ language ecosystems'], pickWhen:'Default choice. Fastest, widest format support, integrates directly with Grype scanner and cosign attest.', avoid:'Avoid if you need CDX-only output and already use cdxgen — redundant tooling.', tradeoff:'vs cdxgen: Syft is faster and simpler; cdxgen supports more languages but is slower and heavier.', cost:'Free. Open source. Anchore.' },
+      trivysbom: { caps:['Single binary (same as container scanner)','CycloneDX output','Built into Trivy workflow','SARIF + SBOM in one tool'], pickWhen:'You are already using Trivy as container scanner — zero additional tooling.', avoid:'Avoid if you need SPDX format — Trivy SBOM output is CycloneDX only.', tradeoff:'vs Syft: Trivy SBOM keeps the toolchain to one binary; Syft supports more output formats.', cost:'Free. Open source. Aqua Security.' },
+      cdxgen:   { caps:['CycloneDX-native','22 language ecosystems','Deep transitive dep resolution','Polyglot monorepo support'], pickWhen:'Polyglot monorepo with 4+ language ecosystems — cdxgen handles Go + Java + Python + Node in one pass.', avoid:'Avoid for standard single-language projects — cdxgen is heavy and slow vs Syft.', tradeoff:'vs Syft: cdxgen supports more language combinations; Syft is faster for standard stacks.', cost:'Free. Open source. OWASP.' }
+    },
+    compare: ['syft','trivysbom','cdxgen']
+  },
+  scanner: {
+    why: 'Container scanner checks every OS package and library layer in your image for CVEs (Common Vulnerabilities and Exposures — published security holes). Blocks HIGH/CRITICAL findings before push.',
+    skipWhen: 'Never skip — unscanned images push known exploitable CVEs to production.',
+    options: {
+      trivy:   { caps:['OS CVEs + language library CVEs + IaC misconfigs','<30s scan time','SARIF output','SBOM generation','Most widely adopted','Free'], pickWhen:'Default choice for any project. Fastest and most comprehensive.', avoid:'Avoid nothing — Trivy is the correct default. No scenario where another scanner is strictly better for general use.', tradeoff:'vs Grype: Trivy covers OS + language + IaC in one tool; Grype has slightly better accuracy on some language ecosystems but no IaC.', cost:'Free. Open source. Aqua Security.' },
+      grype:   { caps:['OS CVEs + language library CVEs','Anchore-maintained','Better accuracy on some Java ecosystems','SARIF output'], pickWhen:'Java/Maven projects where Grype Java ecosystem accuracy is needed.', avoid:'Avoid as a replacement for Trivy if you also need IaC scanning — Grype does not scan Dockerfiles or K8s YAML.', tradeoff:'vs Trivy: Grype has slightly higher accuracy for Java dep CVEs; Trivy covers IaC and is faster.', cost:'Free. Open source. Anchore.' },
+      snykcon: { caps:['CVE + fix advice in scan output','Reachability analysis (is the vulnerable code path reached?)','Snyk dashboard','PR comments with fix PRs'], pickWhen:'Team already pays for Snyk and wants unified dashboard across dep scan, container scan, and code scan.', avoid:'Avoid without a Snyk subscription — free tier is 100 container tests/month.', tradeoff:'vs Trivy: Snyk provides fix advice and reachability analysis; Trivy is faster and free.', cost:'Free: 100 tests/month. Team: $98/dev/year.' },
+      dockerscout: { caps:['Built into Docker Desktop','Policy evaluation','Vulnerability analysis','Bill of materials view'], pickWhen:'Team is already on Docker Desktop Pro and wants a zero-setup scanner.', avoid:'Avoid for CI pipelines — Docker Scout CI integration is limited compared to Trivy.', tradeoff:'vs Trivy: Docker Scout is better integrated with Docker Desktop UI; Trivy is better for CI pipelines.', cost:'Free basic. Pro: included in Docker Desktop Pro ($7/month).' }
+    },
+    compare: ['trivy','grype','snykcon','dockerscout']
+  },
+  signing: {
+    why: 'Cryptographic image signing proves the image was built by your CI system and not tampered with. Blocks unsigned images via admission control (Kyverno/OPA policy).',
+    skipWhen: 'Skip only for library/mobile shapes — no container image to sign.',
+    options: {
+      cosign:    { caps:['Keyless signing via OIDC — no key management','Sigstore transparency log (Rekor)','Attach SBOM + SLSA attestations','OCI-native','Compatible with all major registries'], pickWhen:'Default choice. No key management overhead, works with GitHub Actions OIDC natively.', avoid:'Avoid DCT — it is legacy and not compatible with modern registries.', tradeoff:'vs Notation: Cosign is simpler and has broader CI ecosystem support; Notation is required for Azure Container Registry signature policy.', cost:'Free. Open source. Linux Foundation.' },
+      cosignkey: { caps:['Cosign with explicit key pair','Works in air-gapped environments','Custom PKI integration','Key rotation required'], pickWhen:'Air-gapped environment where Sigstore transparency log is not accessible, or custom enterprise PKI required.', avoid:'Avoid in cloud CI — keyless cosign is strictly simpler (no key rotation, no secret management).', tradeoff:'vs Keyless cosign: key-based cosign works offline; keyless requires internet access to Sigstore.', cost:'Free. Open source.' },
+      notation:  { caps:['CNCF Notary v2 spec','OCI distribution spec compliant','Required for Azure Container Registry signature policy','Plugin model'], pickWhen:'Deploying to Azure Kubernetes Service with ACR signature enforcement policy.', avoid:'Avoid outside Azure — Notation ecosystem is smaller than Cosign for non-Azure targets.', tradeoff:'vs Cosign: Notation is the required choice for ACR policy enforcement; Cosign has broader multi-registry support.', cost:'Free. Open source. CNCF.' },
+      dct:       { caps:['Docker Content Trust — legacy signing','Requires Notary v1','Incompatible with GHCR/ECR/GAR/ACR'], pickWhen:'Never — DCT is legacy. Only valid for self-hosted Docker Hub with Notary v1 server.', avoid:'Always avoid for modern registries — DCT is incompatible with GHCR, ECR, GAR, and ACR.', tradeoff:'vs Cosign: DCT is legacy, narrowly supported, and requires a separate Notary v1 server. No advantage over Cosign.', cost:'Free but operationally costly.' }
+    },
+    compare: ['cosign','cosignkey','notation','dct']
+  },
+  cloud: {
+    why: 'Cloud provider determines which managed K8s, serverless, and storage services you use, and how OIDC identity federation works between CI and the cloud.',
+    skipWhen: 'Skip if deploying to self-hosted K8s with no cloud dependency.',
+    options: {
+      aws:   { caps:['ECS (serverless containers)','EKS (managed K8s)','ECR (registry)','OIDC via aws-actions/configure-aws-credentials','IAM roles for service accounts (IRSA)','Most CI/CD tooling supports AWS natively'], pickWhen:'Team is already on AWS, or needs the widest CI/CD ecosystem support.', avoid:'Avoid if team is on GCP/Azure — cross-cloud adds IAM complexity without benefit.', tradeoff:'vs GCP: AWS has more CI/CD integrations and larger ecosystem; GCP Cloud Run is cheaper for small containerised services.', cost:'EKS: $0.10/cluster/hour. ECS Fargate: $0.04048/vCPU/hour.' },
+      gcp:   { caps:['Cloud Run (serverless containers)','GKE Autopilot (managed K8s — no node management)','GAR (registry)','Workload Identity Federation','Built-in vulnerability scanning on push'], pickWhen:'New K8s service — GKE Autopilot is cheapest managed K8s with no node ops overhead.', avoid:'Avoid if team is already on AWS with existing IAM investment.', tradeoff:'vs AWS: GCP Cloud Run is simpler for stateless containers; AWS ECS has more tooling and is more widely known.', cost:'GKE Autopilot: $0.10/cluster/hour + pod pricing. Cloud Run: $0.00002400/vCPU-second.' },
+      azure: { caps:['AKS (managed K8s)','Container Apps (serverless)','ACR (registry)','Managed identity OIDC','Best for .NET workloads','GitHub Actions has deepest Azure integration'], pickWhen:'.NET/Windows workloads, or company is Azure-first by policy.', avoid:'Avoid for pure Linux/Go/Python — Azure adds complexity without benefit vs GCP or AWS.', tradeoff:'vs AWS: Azure has better .NET and Windows support; AWS has more Linux CI/CD tooling and a larger ecosystem.', cost:'AKS: $0.10/cluster/hour. Container Apps: $0.000024/vCPU-second.' },
+      none:  { caps:['Self-hosted K8s','No cloud dependency'], pickWhen:'On-premises deployment or air-gapped environment with no cloud access.', avoid:'Avoid if cloud is available — self-hosted K8s requires full node operations (patching, upgrades, storage).', tradeoff:'vs Any cloud: self-hosted has no per-hour cost but requires full ops team for node management.', cost:'Infrastructure cost only.' }
+    },
+    compare: ['aws','gcp','azure','none']
+  },
+  promotion: {
+    why: 'Promotion strategy controls how the signed image moves from dev → staging → prod. Determines blast radius of a bad deploy and how quickly it can be rolled back.',
+    skipWhen: 'Skip only for library/mobile shapes — no deployment stages.',
+    options: {
+      gitops:     { caps:['Automated PR-based promotion','Full audit trail in git','ArgoCD image-updater or Flux image automation','No manual steps in the happy path'], pickWhen:'Default for K8s GitOps — every promotion is a git commit with full history.', avoid:'Avoid if team has no GitOps setup — requires ArgoCD or Flux plus image-updater configuration.', tradeoff:'vs Manual: GitOps is automated and auditable; manual approval adds a human gate that slows release.', cost:'Free. Requires ArgoCD Image Updater or Flux Image Automation.' },
+      manual:     { caps:['GitHub Environments protection rules','Required reviewer approval','Deployment history in GitHub','Simple to set up'], pickWhen:'Regulated environment where a human must approve every production deploy (SOC 2, PCI DSS).', avoid:'Avoid if team ships more than 5 times per day — manual approval becomes a bottleneck.', tradeoff:'vs GitOps: manual has a human gate (required for some compliance); GitOps is automated (faster, fewer interruptions).', cost:'Free. Built into GitHub Actions.' },
+      canary:     { caps:['Gradual traffic shift (5% → 50% → 100%)','Auto-rollback on error rate increase','Argo Rollouts or Flagger','Requires metrics (Prometheus)'], pickWhen:'High-traffic production service where a bad deploy affecting 100% of traffic is unacceptable.', avoid:'Avoid without Prometheus metrics — canary analysis without metrics defaults to time-based, not signal-based.', tradeoff:'vs Manual: canary is automated and data-driven; manual is simpler but shifts 100% at once.', cost:'Free tools. Requires Prometheus + Argo Rollouts or Flagger.' },
+      bluegreen:  { caps:['Full environment swap','Instant cutover','Instant rollback (flip traffic back)','2× infrastructure cost during transition'], pickWhen:'Services needing zero-downtime deploy with instant rollback capability.', avoid:'Avoid for cost-sensitive services — blue-green runs 2× infrastructure during every deploy window.', tradeoff:'vs Canary: blue-green is instant cutover; canary is gradual. Blue-green requires 2× infra; canary requires metrics.', cost:'2× normal infrastructure cost during deploy window.' }
+    },
+    compare: ['gitops','manual','canary','bluegreen']
+  },
+
+  build: {
+    why: 'The bundler compiles your source into deployable output. Wrong bundler = broken build, larger bundle, or incompatible output format.',
+    skipWhen: 'Choose Auto — the framework default is correct for almost every case. Override only when you have a specific speed or compatibility requirement.',
+    options: {
+      auto:      { caps:['Uses the framework-native bundler','Zero config','Always compatible with the framework'], pickWhen:'Default. Correct for all frameworks. Override only when Auto is not fast enough.', avoid:'Never avoid. This is the safe default.', tradeoff:'vs Explicit pick: Auto is always framework-compatible; explicit may be faster but can break on framework updates.', cost:'Free.' },
+      vite:      { caps:['ESM-first — no CommonJS bundle overhead','HMR under 50ms (hot module replacement — instant dev reloads)','Native TypeScript, JSX, CSS modules'], pickWhen:'Vue, Svelte, SolidJS, Astro, or any project that controls its own bundler config.', avoid:'Avoid for Next.js (uses Turbopack) and React Native (uses Metro).', tradeoff:'vs webpack: Vite is 10–100× faster dev start; webpack has larger plugin ecosystem for edge cases.', cost:'Free. OSS.' },
+      turbopack: { caps:['Rust-based — 10× faster than webpack on large codebases','Native to Next.js 15 (default since Next.js 14)','Incremental compilation'], pickWhen:'Next.js 14+ project. This is Next.js default and requires no config.', avoid:'Avoid outside Next.js — Turbopack is tightly coupled to the Next.js build graph.', tradeoff:'vs Vite: Turbopack is faster for large Next.js apps; Vite has wider framework support.', cost:'Free. Bundled in Next.js.' },
+      webpack:   { caps:['Largest plugin ecosystem','Module federation for micro-frontends','Supports any asset type via loaders','Industry-tested at scale'], pickWhen:'Legacy project already on webpack, or needs Module Federation, or requires a loader not available in Vite.', avoid:'Avoid for new projects — Vite or Turbopack is always faster and simpler.', tradeoff:'vs Vite: webpack cold start is 5–30× slower; webpack has more mature plugins and edge-case support.', cost:'Free. OSS.' },
+      esbuild:   { caps:['Written in Go — fastest single-file bundler','Sub-second builds for most projects','Used internally by Vite'], pickWhen:'Build tool scripts, CLI tools, or Node.js libraries where output is a single JS file.', avoid:'Avoid for complex SPA apps needing code splitting or HMR — esbuild has minimal plugin API.', tradeoff:'vs Vite: esbuild is faster but has no dev server or HMR; Vite uses esbuild internally for production.', cost:'Free. OSS.' },
+      rspack:    { caps:['Rust webpack-compatible API','~10× faster than webpack','Drop-in webpack replacement — same config format'], pickWhen:'Existing webpack config too slow to migrate off. Rspack reads webpack.config.js unchanged.', avoid:'Avoid for greenfield — Vite or Turbopack is simpler than Rspack for new projects.', tradeoff:'vs webpack: Rspack is ~10× faster with identical API; only 80% of webpack plugins are supported.', cost:'Free. OSS.' },
+      rollup:    { caps:['Best tree-shaking (removes unused code)','Library-first output (ESM + CJS + UMD)','Small output size'], pickWhen:'Publishing a JS/TS library to npm. Rollup produces the cleanest tree-shaken library output.', avoid:'Avoid for application bundling — Rollup lacks dev server and HMR.', tradeoff:'vs esbuild: Rollup has better tree-shaking and output format control; esbuild is faster.', cost:'Free. OSS.' },
+      bun:       { caps:['Native Bun runtime bundler','Fastest JS bundler on benchmarks','Outputs ESM, CJS, IIFE'], pickWhen:'Project already using Bun as the runtime and package manager — zero extra tooling.', avoid:'Avoid if team uses Node.js — Bun runtime has minor compatibility gaps with some npm packages.', tradeoff:'vs esbuild: Bun bundler is faster; esbuild has wider ecosystem support.', cost:'Free. OSS.' },
+      metro:     { caps:['React Native / Expo native bundler','Fast Refresh for native apps','Symbol maps for crash reporting'], pickWhen:'React Native or Expo project. Metro is the only supported bundler for native apps.', avoid:'Avoid for web projects — Metro is not a web bundler.', tradeoff:'vs Vite: Metro is RN-native; Vite can run Expo web but cannot produce native bundles.', cost:'Free. Bundled in React Native / Expo.' },
+      go:        { caps:['Single-binary output','Cross-compilation built-in (GOOS/GOARCH)','No runtime dependency'], pickWhen:'Go project. `go build` is the only correct build tool for Go.', avoid:'N/A — no alternative for Go.', tradeoff:'vs other compilers: Go produces a single static binary; JVM and Python require a runtime.', cost:'Free. Part of Go toolchain.' },
+      cargo:     { caps:['Zero-cost abstractions at compile time','Integrated test runner','Cross-compilation with cargo-cross'], pickWhen:'Rust project. `cargo build` is the only correct build tool for Rust.', avoid:'N/A — no alternative for Rust.', tradeoff:'vs Go: cargo build times are slower (30–300s cold); Go build times are under 5s.', cost:'Free. Part of Rust toolchain.' },
+      maven:     { caps:['Standard JVM build lifecycle','Plugin ecosystem (Surefire, Checkstyle, OWASP)','pom.xml declarative config'], pickWhen:'Java project using pom.xml, or existing Maven codebase.', avoid:'Avoid for new JVM projects where Gradle is supported — Gradle is faster and more flexible.', tradeoff:'vs Gradle: Maven is more rigid but more predictable; Gradle is faster but has a steeper DSL learning curve.', cost:'Free. OSS.' },
+      gradle:    { caps:['Kotlin DSL — type-checked build config','Incremental compilation','Parallel task execution'], pickWhen:'Kotlin project, Android project, or Java project wanting faster builds than Maven.', avoid:'Avoid if team is unfamiliar with Groovy/Kotlin DSL — Maven is simpler for basic Java projects.', tradeoff:'vs Maven: Gradle is faster and more flexible; Maven is simpler and more widely documented.', cost:'Free. OSS.' },
+      dotnet:    { caps:['MSBuild integration','Cross-platform (.NET 8+)','Single-file publish with AOT'], pickWhen:'.NET / C# project. `dotnet build` is the correct build tool.', avoid:'N/A — no alternative for .NET.', tradeoff:'vs JVM: .NET AOT produces smaller binaries; JVM JIT has better peak throughput after warmup.', cost:'Free. Part of .NET SDK.' }
+    },
+    compare: ['auto','vite','turbopack','webpack','esbuild','rspack']
+  },
+
+  mlframework: {
+    why: 'The ML framework drives the training loop, model serialization format, hardware support, and ecosystem of pre-trained models available.',
+    skipWhen: 'Not skippable for ML pipeline shapes — framework determines all downstream tooling.',
+    options: {
+      pytorch:         { caps:['Dynamic computation graph — debug with normal Python','torch.compile() for graph optimization','Largest LLM ecosystem (Hugging Face, vLLM, TGI all native)','CUDA + ROCm + MPS (Apple Silicon)'], pickWhen:'Default for LLMs, computer vision, and any research-to-production workflow. 80% of Hugging Face models are PyTorch-native.', avoid:'Avoid if team needs TFX production pipelines or TPU training — TensorFlow has better support there.', tradeoff:'vs TensorFlow: PyTorch is more Pythonic and research-friendly; TensorFlow has better TFX pipeline support and TPU integration.', cost:'Free. OSS. Apache 2.0.' },
+      jax:             { caps:['XLA (Accelerated Linear Algebra — compiles computation graphs to hardware)','Functional transformations: vmap, jit, grad, pmap','TPU-native — Google internal standard','Flax and Optax ecosystem'], pickWhen:'Research requiring massive parallelism on TPUs, or custom gradient computation not expressible in PyTorch.', avoid:'Avoid for production inference — JAX models are harder to export and serve than PyTorch.', tradeoff:'vs PyTorch: JAX has better TPU support and functional purity; PyTorch has larger ecosystem and easier debugging.', cost:'Free. OSS. Apache 2.0.' },
+      tensorflow:      { caps:['TFX pipeline (production ML workflow orchestration)','TensorFlow Serving (gRPC + REST inference server)','TensorFlow Lite for mobile/edge','Keras high-level API'], pickWhen:'Google Cloud / Vertex AI production pipelines, or TensorFlow Lite mobile deployment.', avoid:'Avoid for LLM fine-tuning — HuggingFace Transformers support for TF is secondary to PyTorch.', tradeoff:'vs PyTorch: TensorFlow has better production pipeline tooling (TFX); PyTorch has better LLM and research ecosystem.', cost:'Free. OSS. Apache 2.0.' },
+      'hf-transformers':{ caps:['400K+ pre-trained models on Hugging Face Hub','PEFT (Parameter-Efficient Fine-Tuning — LoRA, QLoRA)','4-bit quantization via BitsAndBytes','Direct vLLM / TGI serving compatibility'], pickWhen:'Fine-tuning BERT, LLaMA, Mistral, Gemma, or any Hugging Face model. Default for LLM fine-tuning.', avoid:'Avoid for classical ML (tabular data, regression) — use sklearn or XGBoost instead.', tradeoff:'vs raw PyTorch: HF Transformers saves weeks of implementation; raw PyTorch gives full architectural control.', cost:'Free. OSS. Apache 2.0. HF Hub free tier: 1GB model storage.' },
+      sklearn:         { caps:['Consistent API across 50+ algorithms','Pipeline API for preprocessing + model chaining','No GPU required','Fast for tabular data < 10M rows'], pickWhen:'Tabular data, classification, regression, clustering — classical ML without neural nets.', avoid:'Avoid for neural networks, LLMs, or image models — sklearn has no deep learning support.', tradeoff:'vs XGBoost: sklearn has broader algorithm coverage; XGBoost wins on tabular prediction accuracy for structured data.', cost:'Free. OSS. BSD.' },
+      xgboost:         { caps:['Gradient boosting — winner on Kaggle structured data competitions','GPU training via CUDA','LightGBM alternative with similar API','Built-in cross-validation'], pickWhen:'Tabular data prediction tasks (churn, fraud, pricing). Standard for structured data competitions.', avoid:'Avoid for image, text, or time-series with complex patterns — use neural networks instead.', tradeoff:'vs sklearn RandomForest: XGBoost wins on accuracy for most tabular tasks; RandomForest trains faster and is more interpretable.', cost:'Free. OSS. Apache 2.0.' }
+    },
+    compare: ['pytorch','hf-transformers','tensorflow','jax','sklearn','xgboost']
+  },
+
+  inferenceruntime: {
+    why: 'The inference runtime serves the model as an API. It determines tokens/sec throughput, GPU utilisation, and whether multiple models can share one GPU.',
+    skipWhen: 'Skip only if this is a training-only job that produces a model artifact with no serving endpoint.',
+    options: {
+      vllm:       { caps:['PagedAttention — 24× throughput vs naive serving','OpenAI-compatible API — drop-in replacement','Continuous batching (queues requests; no per-request GPU reset)','Supports LLaMA, Mistral, Mixtral, Gemma, Qwen natively'], pickWhen:'Serving LLMs at production load. PagedAttention makes it the highest-throughput option for autoregressive generation.', avoid:'Avoid for non-LLM models (vision, classification) — vLLM is LLM-only.', tradeoff:'vs TGI: vLLM has higher throughput; TGI has better Hugging Face Hub integration and streaming support.', cost:'Free. OSS. Apache 2.0. GPU cost is infrastructure.' },
+      tgi:        { caps:['Text Generation Inference — Hugging Face native','Automatic model download from HF Hub','gRPC + REST API','Flash Attention 2 support'], pickWhen:'Direct HF Hub model serving where pull-and-serve workflow is needed. Best HF ecosystem integration.', avoid:'Avoid for very high concurrency — vLLM has better batching at >100 concurrent requests.', tradeoff:'vs vLLM: TGI has better HF Hub integration and easier model download; vLLM has higher throughput under load.', cost:'Free. OSS. Apache 2.0.' },
+      triton:     { caps:['NVIDIA Triton — serves any framework (TensorFlow, PyTorch, ONNX, TensorRT)','Dynamic batching for multiple concurrent requests','Prometheus metrics built-in','Multi-model server — one instance, multiple models'], pickWhen:'Multi-framework serving, or NVIDIA TensorRT optimized models, or serving non-LLM models alongside LLMs.', avoid:'Avoid for pure LLM serving — vLLM or TGI is simpler and faster for text generation.', tradeoff:'vs vLLM: Triton supports any model type; vLLM is LLM-only but much simpler to configure.', cost:'Free. OSS. BSD.' },
+      onnx:       { caps:['Runs on CPU or GPU','Quantized INT8/INT4 models — 4× smaller inference','Cross-framework: export PyTorch/TF → ONNX → serve','Optimized for edge and CPU-constrained environments'], pickWhen:'CPU inference, edge deployment, or quantized model serving where GPU is unavailable or expensive.', avoid:'Avoid for large LLMs (>7B params) on CPU — latency will be unacceptable. Use GPU-based servers instead.', tradeoff:'vs vLLM: ONNX runs on CPU at lower cost; vLLM requires GPU and has 10–100× higher throughput.', cost:'Free. OSS. MIT.' },
+      torchserve: { caps:['PyTorch-native — no export step needed','Management API for model registration and versioning','A/B testing between model versions','Custom handlers via Python'], pickWhen:'PyTorch-only shop wanting native serving without ONNX export or HF Hub dependency.', avoid:'Avoid for LLMs — TorchServe is optimized for classification/detection models, not autoregressive generation.', tradeoff:'vs Triton: TorchServe is simpler for PyTorch models; Triton supports more frameworks and has better GPU batching.', cost:'Free. OSS. Apache 2.0.' },
+      bentoml:    { caps:['Model packaging → cloud deploy in one workflow','Built-in runners for PyTorch, TF, sklearn, ONNX','OpenAPI spec auto-generated','Yatai cluster management UI'], pickWhen:'MLOps platform replacing custom deploy scripts. BentoML handles packaging, containerization, and deploy in one tool.', avoid:'Avoid if team wants minimal abstraction — BentoML adds an opinionated layer on top of Docker + K8s.', tradeoff:'vs raw Docker + K8s: BentoML is much simpler to get started; raw K8s gives more control for large-scale serving.', cost:'Free OSS. BentoCloud managed service from $0.50/GPU-hour.' },
+      none:       { caps:['No serving endpoint — job produces artifact only','Simplest pipeline — no server to operate','Suitable for batch prediction jobs'], pickWhen:'Training pipeline that saves a model artifact to the registry. No real-time inference needed.', avoid:'Avoid if any downstream system needs real-time predictions from this model.', tradeoff:'vs any server: no-serving eliminates operational complexity; adds latency (batch jobs instead of API calls).', cost:'No serving cost. Storage cost only (model artifact).' }
+    },
+    compare: ['vllm','tgi','triton','onnx','torchserve','bentoml']
+  },
+
+  modelregistry: {
+    why: 'The model registry tracks which model version is deployed where. Without it, you cannot reproduce a past prediction or roll back a bad model.',
+    skipWhen: 'Skip only for training-only jobs with no deployment. Skip is not safe if you ever need to roll back a model in production.',
+    options: {
+      hfhub:    { caps:['400K+ public models','Private repos for paid tiers','Model cards with eval metrics','Dataset and space linking','Direct vLLM / TGI pull support'], pickWhen:'Open or private LLM hosting where HF ecosystem tools (PEFT, Transformers) are used.', avoid:'Avoid for regulated industries requiring on-prem storage — HF Hub is cloud-only.', tradeoff:'vs MLflow: HF Hub is model-centric with versioning; MLflow tracks experiments and associates metrics with model versions.', cost:'Free for public. Pro $9/month. Enterprise from $20/user/month.' },
+      mlflow:   { caps:['Experiment tracking (metrics, params, artifacts per run)','Model registry with staging/production transitions','Built-in serving via mlflow models serve','Self-hosted or Databricks-managed'], pickWhen:'Teams wanting experiment tracking linked to model versions. Standard for non-LLM ML teams.', avoid:'Avoid for LLMs — MLflow model logging does not handle multi-GB model artifacts efficiently.', tradeoff:'vs HF Hub: MLflow tracks experiments and metrics alongside models; HF Hub is model-centric with no experiment tracking.', cost:'Free OSS. Databricks managed: included in Databricks platform pricing.' },
+      sagemaker: { caps:['AWS-native — IAM role auth','Model approval workflow for governance','A/B testing between model versions','Integrated with SageMaker Training and Endpoint'], pickWhen:'Full AWS shop where training and serving both run on SageMaker.', avoid:'Avoid for non-AWS infrastructure — SageMaker registry is tightly coupled to AWS IAM and endpoints.', tradeoff:'vs MLflow: SageMaker has AWS-native governance and endpoints; MLflow is cloud-agnostic.', cost:'Free registry storage. SageMaker endpoint pricing from $0.10/hour.' },
+      wandb:    { caps:['Best experiment dashboards in the industry','Artifact versioning with lineage graph','Sweep hyperparameter optimization','Alerts on metric degradation'], pickWhen:'Teams that care about reproducibility and want the best visualization of training runs.', avoid:'Avoid if data cannot leave your network — W&B is SaaS-only (self-hosted enterprise tier exists but is expensive).', tradeoff:'vs MLflow: W&B has better dashboards and collaboration; MLflow is free self-hosted with less polish.', cost:'Free for solo. Team $50/month. Enterprise pricing by seat.' },
+      vertexai: { caps:['GCP-native — Workload Identity Federation auth','Auto-register from Vertex AI training jobs','A/B model routing via Vertex Endpoint','Integrated with BigQuery ML'], pickWhen:'GCP shop using Vertex AI training. Auto-registration from training jobs removes manual upload step.', avoid:'Avoid for non-GCP infrastructure — Vertex registry is GCP-only.', tradeoff:'vs MLflow: Vertex is GCP-native and integrates with training; MLflow is cloud-agnostic.', cost:'Free registry metadata. Vertex Endpoint serving from $0.20/hour.' },
+      gcs:      { caps:['Lowest cost per GB','No schema or lineage tracking','Any file format','Works with any cloud — not GCP-specific'], pickWhen:'Simple artifact storage when lineage tracking and approval workflows are not needed.', avoid:'Avoid for production models where you need to know what version is deployed and who approved it.', tradeoff:'vs MLflow: GCS is cheaper and simpler; MLflow adds experiment tracking, lineage, and approval workflow.', cost:'$0.020/GB/month GCS. $0.023/GB/month S3.' }
+    },
+    compare: ['hfhub','mlflow','wandb','sagemaker','vertexai','gcs']
+  },
+
+  gpubaseimage: {
+    why: 'The GPU base image determines which CUDA version is available. CUDA version must match the GPU driver version on the host node — a mismatch causes a silent GPU initialization failure.',
+    skipWhen: 'Choose cpu-only only for models with <100M parameters where CPU latency is acceptable (< 200ms).',
+    options: {
+      cuda12:     { caps:['NVIDIA CUDA 12.4.1','Ubuntu 22.04 base','Supports H100, A100, L40S, RTX 4090','Compatible with PyTorch 2.x, TensorFlow 2.16+, vLLM, TGI'], pickWhen:'Default for any NVIDIA GPU workload. CUDA 12.x is the current standard for LLM inference and fine-tuning.', avoid:'Avoid on hosts with CUDA 11.x drivers — CUDA 12 images do not run on CUDA 11 drivers.', tradeoff:'vs cuda-disto: cuda12 is the standard base; cuda-disto is smaller and signed but requires a Chainguard subscription.', cost:'Free. Public NVIDIA Docker Hub image.' },
+      'cuda-disto':{ caps:['Chainguard Wolfi-based — minimal attack surface','Pre-signed by Chainguard (CVE-zero policy)','CUDA 12.x runtime only (no development headers)','Automated patch cadence'], pickWhen:'Production inference where CVE count on the base image must be zero and image signing is required.', avoid:'Avoid for development or training — cuda-disto is runtime-only, no nvcc compiler or development headers.', tradeoff:'vs cuda12: cuda-disto is smaller and CVE-zero; cuda12 has developer tools included.', cost:'Free tier available. Chainguard paid plans for SLA and private images.' },
+      rocm:       { caps:['AMD GPU support — ROCm (Radeon Open Compute)','rocm/dev:6.x-ubuntu22.04 base','Compatible with PyTorch ROCm build','Cheaper GPU instances on some clouds'], pickWhen:'AMD GPU instances (MI300X, MI250) where NVIDIA GPU cost is the constraint.', avoid:'Avoid for NVIDIA GPUs — ROCm drivers do not run on NVIDIA hardware.', tradeoff:'vs cuda12: ROCm GPU hardware is cheaper on some clouds; CUDA has wider framework support and more pre-built wheels.', cost:'Free. Public AMD Docker Hub image.' },
+      'cpu-only': { caps:['Standard python:3.12-slim base','No CUDA dependency','Works on any CI runner','Low inference cost for small models'], pickWhen:'Models with <100M parameters where latency < 500ms is acceptable, or batch prediction jobs with no SLA.', avoid:'Avoid for LLMs (>1B params) — CPU inference will be 10–100× slower than GPU for autoregressive generation.', tradeoff:'vs cuda12: cpu-only has zero GPU cost; cuda12 can serve LLMs 10–100× faster.', cost:'No GPU cost. CPU instance ~$0.05–0.20/hour.' }
+    },
+    compare: ['cuda12','cuda-disto','rocm','cpu-only']
+  },
+
+  infratooltype: {
+    why: 'The infrastructure tool type determines the artifact format, test framework, release tooling, and distribution channel for what you are building.',
+    skipWhen: 'Not skippable — every infra shape needs to know what it produces.',
+    options: {
+      cli:       { caps:['Single binary via goreleaser (Go) or cargo-dist (Rust)','Cross-platform builds: linux/darwin/windows','Signed binary + sha256 checksum','brew / apt / scoop distribution'], pickWhen:'Developer tooling distributed to users who run it locally or in CI. Go and Rust are the two standard choices.', avoid:'Avoid if the tool needs to be installed cluster-wide — K8s Operator or Helm chart is better for cluster-scoped tooling.', tradeoff:'vs Helm chart: CLI is simpler to distribute; Helm is required for K8s resources that need lifecycle management.', cost:'Free tooling (goreleaser, cargo-dist). GitHub Releases hosting: free.' },
+      operator:  { caps:['CRD (Custom Resource Definition — extends K8s API with custom object types)','Controller loop watches CRD state and reconciles cluster state','OLM (Operator Lifecycle Manager — manages operator install/upgrade)','OperatorHub listing'], pickWhen:'Automating K8s cluster operations (database provisioning, cert rotation, backup) that need to react to cluster events.', avoid:'Avoid for simple app deployment — Helm chart is far simpler. Operators are only needed for stateful, event-driven automation.', tradeoff:'vs Helm: operator reacts to events and self-heals; Helm is declarative and simpler but does not self-reconcile.', cost:'Free tooling (Operator SDK, Kubebuilder). OperatorHub listing: free.' },
+      helm:      { caps:['K8s app packaging standard','Values.yaml templating — one chart, multiple environments','ArtifactHub listing for discovery','OCI chart storage in container registries'], pickWhen:'Packaging a K8s application for distribution to other teams or customers. Helm is the K8s packaging standard.', avoid:'Avoid for tooling that needs to react to cluster events — use an Operator instead.', tradeoff:'vs Operator: Helm deploys and templates K8s manifests; Operator adds reconciliation loops for stateful automation.', cost:'Free tooling. ArtifactHub listing: free.' },
+      terraform: { caps:['HCL declarative infrastructure definition','Terraform Registry for module discovery','OpenTofu (open-source fork) fully compatible','State file tracks actual vs desired state'], pickWhen:'Reusable infrastructure module that provisions cloud resources (VPCs, RDS, IAM roles) consumed via terraform module calls.', avoid:'Avoid for K8s-only resources — Helm is simpler for K8s manifests. Use Terraform for cloud resource provisioning.', tradeoff:'vs Ansible: Terraform is declarative and idempotent; Ansible is procedural and better for configuration management.', cost:'Free for OSS Terraform / OpenTofu. Terraform Cloud from $20/user/month.' }
+    },
+    compare: ['cli','helm','operator','terraform']
+  },
+
+  infradistribution: {
+    why: 'The distribution channel determines how users install and update the tool. It also determines what signing format is required (cosign for OCI, GPG for binary, etc.).',
+    skipWhen: 'Not skippable — distribution channel is required to generate the publish step in the pipeline.',
+    options: {
+      'github-releases': { caps:['goreleaser or cargo-dist automates multi-platform builds','Binary signed with cosign or GPG','sha256 checksum for each artifact','Homebrew tap auto-update via homebrew-releaser'], pickWhen:'CLI tool where users download a binary directly. GitHub Releases is the standard for Go and Rust CLIs.', avoid:'Avoid for K8s apps that need Helm chart versioning — GitHub Releases is binary-centric.', tradeoff:'vs brew: GitHub Releases is the primary source; Homebrew taps reference GitHub Releases as the download URL.', cost:'Free. GitHub Releases is free for public and private repos.' },
+      operatorhub:       { caps:['OLM bundle format (CSV — Cluster Service Version, CRDs, RBAC)','OperatorHub.io listing for discovery','Red Hat certified operator track','Automatic upgrade paths via OLM subscription'], pickWhen:'K8s Operator distributed to OpenShift or vanilla K8s users who use OLM for operator management.', avoid:'Avoid for non-operator tools — OLM and OperatorHub are operator-specific distribution channels.', tradeoff:'vs Helm: OperatorHub provides lifecycle management via OLM; Helm requires manual upgrade commands.', cost:'Free listing on OperatorHub. Red Hat certification requires partner program.' },
+      artifacthub:       { caps:['ArtifactHub.io listing for Helm chart discovery','OCI chart storage in any container registry','Helm chart version history','Verified publisher badge'], pickWhen:'Helm chart distributed to K8s operators and developers who search ArtifactHub for charts.', avoid:'Avoid for binary CLIs — ArtifactHub is chart-centric.', tradeoff:'vs GitHub Releases: ArtifactHub provides searchable listing; GitHub Releases requires knowing the repo URL.', cost:'Free. ArtifactHub listing is free.' },
+      'terraform-registry':{ caps:['Terraform Registry auto-discovery via GitHub tag','Semantic versioning enforced','Module documentation auto-generated','Available via `terraform module` commands'], pickWhen:'Terraform or OpenTofu module that other teams consume via `source = "registry.terraform.io/org/module/provider"`.', avoid:'Avoid for K8s resources — use Helm chart instead. Terraform Registry is for cloud resource modules.', tradeoff:'vs private git: Terraform Registry provides versioning and discovery; private git requires users to know the repo URL.', cost:'Free for public modules. Terraform Cloud private registry from $20/user/month.' },
+      brew:              { caps:['Homebrew formula for macOS and Linux install','`brew install org/tap/tool` user experience','Auto-update via `brew upgrade`','No binary download URL to remember'], pickWhen:'CLI tool targeting developers on macOS or Linux who use Homebrew as their primary package manager.', avoid:'Avoid as the only distribution method — Homebrew requires a GitHub Release as the source URL.', tradeoff:'vs direct binary: Homebrew provides `brew upgrade` for users; direct binary requires manual download for updates.', cost:'Free. Homebrew tap is a GitHub repo.' },
+      'npm-pkg':         { caps:['`npx tool-name` zero-install experience','npm/yarn/pnpm install as dev dependency','Semantic versioning via npm','Auto-update via Renovate/Dependabot'], pickWhen:'JS/TS CLI tool where users already have Node.js installed and `npx` is the standard invocation.', avoid:'Avoid for Go or Rust CLIs — npm distribution for non-JS tools creates a confusing dependency on Node.js.', tradeoff:'vs GitHub Releases: npm provides `npx` zero-install; GitHub Releases produces smaller binaries (no Node.js required).', cost:'Free for public npm packages. npm Pro $7/month for private packages.' }
+    },
+    compare: ['github-releases','artifacthub','operatorhub','brew','npm-pkg','terraform-registry']
+  }
+};
 
 const DECISION_DEFS = {
   shape: {
@@ -8377,7 +9087,7 @@ const DECISION_DEFS = {
   },
   sbom: {
     label:'SBOM tool', icon:'📜',
-    concept:'Generates Software Bill of Materials — inventory of every dependency in the image.',
+    concept:'SBOM (Software Bill of Materials — a complete list of every library and OS package inside your container image). Required for CVE (Common Vulnerabilities and Exposures — published security holes with patch info) tracking.',
     defaultVal:'syft',
     options:[
       {value:'syft',      label:'Syft (Anchore)',             desc:'SPDX + CycloneDX. Default in this pipeline. Best language coverage.'},
@@ -8388,7 +9098,7 @@ const DECISION_DEFS = {
   },
   scanner: {
     label:'CVE scanner', icon:'🛡️',
-    concept:'Scans image layers for known vulnerabilities. CRITICAL/HIGH blocks the build.',
+    concept:'Scans image layers for CVE (Common Vulnerabilities and Exposures — a public registry of known security holes with patch information). CRITICAL/HIGH severity findings block the build.',
     defaultVal:'trivy',
     options:[
       {value:'trivy',     label:'Trivy (Aqua)',               desc:'Free. NVD + OSV + GHSA. SARIF output. Most popular.'},
@@ -8401,7 +9111,7 @@ const DECISION_DEFS = {
   },
   signing: {
     label:'Image signing', icon:'🔐',
-    concept:'Cryptographic signature on the image. Verifies provenance + blocks tampering.',
+    concept:'Cryptographic signature on the image. Verifies provenance and blocks tampering. Keyless signing uses OIDC (OpenID Connect — short-lived identity token, no stored CI password needed).',
     defaultVal:'cosign',
     options:[
       {value:'cosign',    label:'Sigstore cosign (keyless)',  desc:'OIDC-keyless. Rekor transparency log. Default for new pipelines.'},
@@ -8447,7 +9157,7 @@ const DECISION_DEFS = {
   },
   compliance: {
     label:'Compliance framework', icon:'📋',
-    concept:'Audit framework. Each pipeline stage maps to a control ID.',
+    concept:'Audit framework. Each pipeline stage maps to a control ID. Frameworks include SOC 2 (Service Organization Control 2 — security/availability audit standard), PCI DSS (Payment Card Industry Data Security Standard), and SLSA (Supply chain Levels for Software Artifacts — build integrity levels).',
     selectId:'sel-compliance', defaultVal:'none'
   },
   // ── AI / ML specific rows ──────────────────────────────────
@@ -8997,6 +9707,35 @@ function isOptionIncompatible(decisionId, optionValue) {
   return false;
 }
 
+function getIncompatReason(decisionId, optionValue) {
+  const fe = decisionRead('fe');
+  const be = decisionRead('be');
+  if (decisionId === 'build') {
+    const fwLabel = decisionCurrentLabel('fe') || fe;
+    return `${optionValue} is not the bundler for ${fwLabel}. Pick a compatible bundler above, or change your frontend framework first.`;
+  }
+  if (decisionId === 'pkg') {
+    const lang = (catalogEntry(fe) || catalogEntry(be) || {}).lang || 'your framework';
+    return `${optionValue} is not compatible with ${lang} projects. Pick the package manager for ${lang}.`;
+  }
+  if (decisionId === 'signing' && optionValue === 'dct') {
+    const regLabel = decisionCurrentLabel('reg');
+    return `Docker Content Trust (DCT) is a legacy signing method. ${regLabel} uses keyless OIDC signing — pick Cosign instead.`;
+  }
+  return 'Not compatible with your current selections.';
+}
+
+function showIncompatReason(decisionId, optionValue, btnEl) {
+  const existingMsg = btnEl.parentElement.querySelector('.ds-incompat-msg');
+  if (existingMsg) existingMsg.remove();
+  const reason = getIncompatReason(decisionId, optionValue);
+  const msg = document.createElement('div');
+  msg.className = 'ds-incompat-msg';
+  msg.textContent = '⊘ ' + reason;
+  btnEl.parentElement.appendChild(msg);
+  setTimeout(() => msg.remove(), 4000);
+}
+
 function scrollToStep(stepNum) {
   const el = document.querySelector(`.ds-step[data-step="${stepNum}"]`);
   if (!el) return;
@@ -9019,9 +9758,9 @@ function initStepObserver() {
   document.querySelectorAll('.ds-step[data-step]').forEach(el => _stepObs.observe(el));
 }
 
-// ── Renderer — accordion step-by-step spine ────────────────────
-// One step active at a time. Completed steps collapse to a summary.
-// Future steps show a locked header. Nav chips let user jump back.
+// ── Renderer — flat always-visible decision list ────────────────
+// All applicable steps visible after shape pick. No locking, no accordion.
+// User picks in any order. Any decision can be changed at any time.
 function renderDecisionMap() {
   const wrap = document.getElementById('decision-map');
   if (!wrap) return;
@@ -9043,81 +9782,79 @@ function renderDecisionMap() {
 
   const visibleSteps = stepData.filter(s => s.visible);
 
-  // Clamp ACTIVE_STEP to visible range
-  const maxVisible = visibleSteps.length > 0 ? visibleSteps[visibleSteps.length - 1].step : 0;
-  if (ACTIVE_STEP > maxVisible) ACTIVE_STEP = maxVisible;
-
-  // ── Step nav ──────────────────────────────────────────────────
+  // ── Section jump nav (appears after shape pick) ───────────────
   const navChips = visibleSteps.map(s => {
-    const isActive = s.step === ACTIVE_STEP;
-    const cls = `ds-nav-chip${s.done ? ' is-done' : ''}${isActive ? ' is-active-step' : ''}`;
+    const cls = `ds-nav-chip${s.done ? ' is-done' : ''}`;
     const badge = s.isShapeStep ? (s.done ? '✅' : '') :
       s.totalCount > 0 ? `<span class="ds-nav-count">${s.customCount}/${s.totalCount}</span>` : '';
     return `<button class="${cls}" data-step="${s.step}"
-      onclick="ACTIVE_STEP=${s.step};renderDecisionMap();scrollToStep(${s.step})"
+      onclick="setActiveStep(${s.step})"
     >${s.icon} ${s.label} ${badge}</button>`;
   }).join('');
   const stepNav = shapeChosen ? `<div id="ds-step-nav">${navChips}</div>` : '';
 
-  // ── Step sections — accordion ─────────────────────────────────
+  // ── Step sections — accordion: completed collapse, active expands, future clickable ─────
   const stepBlocks = visibleSteps.map(s => {
-    const isActive  = s.step === ACTIVE_STEP;
-    const isCollapsed = !s.isShapeStep && s.step < ACTIVE_STEP;
-    const isLocked  = !s.isShapeStep && s.step > ACTIVE_STEP;
+    const isActive   = s.step === ACTIVE_STEP;
+    const isCompleted = !s.isShapeStep && s.step < ACTIVE_STEP;
+    const isFuture   = !s.isShapeStep && s.step > ACTIVE_STEP;
 
-    if (isLocked) {
-      // Future step: dim header only, not interactive
-      return `<div class="ds-step ds-step-locked" data-step="${s.step}">
-        <div class="ds-step-label ds-step-label-locked">
-          <span style="opacity:.4">🔒</span>
-          <span style="opacity:.45;margin-left:6px">${s.icon} ${s.label}</span>
-          ${s.totalCount > 0 ? `<span class="ds-step-count-pending" style="opacity:.4;margin-left:auto">${s.customCount} / ${s.totalCount}</span>` : ''}
+    // Shape step: always fully open (user can re-pick shape at any time)
+    if (s.isShapeStep) {
+      const labelTxt = shapeChosen ? '✅ Service shape' : '— Start here — pick your service shape';
+      return `<div class="ds-step ds-step-animate" data-step="${s.step}">
+        <div class="ds-step-label">${labelTxt}</div>
+        ${renderShapePicker()}
+      </div>`;
+    }
+
+    // Completed step: collapsed summary, click to reopen
+    if (isCompleted) {
+      const pickedLabels = s.nonShape
+        .filter(id => DECISION_VISITED.has(id))
+        .map(id => decisionCurrentLabel(id))
+        .filter(l => l && l !== '—')
+        .slice(0, 4);
+      const summary = pickedLabels.length
+        ? `<span class="ds-step-summary">— ${pickedLabels.join(' · ')}</span>`
+        : '';
+      return `<div class="ds-step-collapsed" data-step="${s.step}" onclick="setActiveStep(${s.step})">
+        <div class="ds-step-hdr-row">
+          <span>✅ ${s.icon} ${s.label}${summary}</span>
+          <span style="font-size:11px;color:var(--accent);flex-shrink:0">Edit ▸</span>
         </div>
       </div>`;
     }
 
-    if (isCollapsed) {
-      // Past step: collapsed summary — click to re-open
-      const pickedLabels = s.nonShape
-        .filter(id => DECISION_VISITED.has(id))
-        .map(id => decisionCurrentLabel(id))
-        .filter(Boolean)
-        .join(' · ');
-      const summaryText = pickedLabels || 'No picks yet';
-      return `<div class="ds-step ds-step-collapsed" data-step="${s.step}"
-          onclick="ACTIVE_STEP=${s.step};renderDecisionMap();scrollToStep(${s.step})" style="cursor:pointer">
-          <div class="ds-step-label">
-            ${s.done ? '✅' : s.icon} ${s.label}
-            <span class="ds-step-summary">${summaryText}</span>
-            <span style="margin-left:auto;font-size:11px;color:var(--muted)">▸ edit</span>
-          </div>
-        </div>`;
+    // Future step: visible but collapsed, user can jump ahead
+    if (isFuture) {
+      const countTxt = s.totalCount > 0 ? `<span style="font-size:11px;font-weight:400;margin-left:4px">${s.totalCount} decision${s.totalCount!==1?'s':''}</span>` : '';
+      return `<div class="ds-step-future" data-step="${s.step}" onclick="setActiveStep(${s.step})">
+        <div class="ds-step-hdr-row">
+          <span style="color:var(--muted);font-weight:600">${s.icon} ${s.label}${countTxt}</span>
+          <span style="font-size:11px;color:var(--muted);flex-shrink:0">Jump to ▸</span>
+        </div>
+      </div>`;
     }
 
     // Active step: fully expanded
-    const rowsHtml = s.tiles.map(id => id === 'shape' ? renderShapePicker() : renderDecisionRow(id)).join('');
-    const labelTxt = s.isShapeStep
-      ? (shapeChosen ? '✅ Service shape' : '— Start here — pick your service shape')
-      : `${s.icon} ${s.label}`;
-    const countSpan = s.isShapeStep || s.totalCount === 0 ? '' :
+    const rowsHtml = s.tiles.map(id => renderDecisionRow(id)).join('');
+    const countSpan = s.totalCount === 0 ? '' :
       `<span class="${s.done ? 'ds-step-count-done' : 'ds-step-count-pending'}">${s.customCount} / ${s.totalCount}</span>`;
-
-    // "Next" button: always available, advances accordion
-    const nextStep = visibleSteps.find(x => x.step > s.step);
-    let nudge = '';
-    if (!s.isShapeStep && nextStep) {
-      const allDone = s.totalCount > 0 && s.customCount === s.totalCount;
-      nudge = `<div class="ds-next-nudge">
-        <button class="ds-next-btn" onclick="ACTIVE_STEP=${nextStep.step};renderDecisionMap();scrollToStep(${nextStep.step})">
-          ${allDone ? '✅ All set —' : ''} Next: ${nextStep.icon} ${nextStep.label} →
-        </button>
-      </div>`;
-    }
+    const nextStep = visibleSteps.find(vs => vs.step > ACTIVE_STEP);
+    const nextBtn = nextStep
+      ? `<div class="ds-next-btn-wrap"><button class="ds-next-btn" onclick="setActiveStep(${nextStep.step})">
+          ${s.done ? '✅ ' : ''}Next: ${nextStep.icon} ${nextStep.label} →
+         </button></div>`
+      : s.done
+        ? `<div style="text-align:right;margin-top:10px;color:var(--success);font-weight:600;font-size:13px">✅ All decisions complete — export below</div>`
+        : '';
 
     return `<div class="ds-step ds-step-animate" data-step="${s.step}">
-        <div class="ds-step-label">${labelTxt}${countSpan}</div>
-        ${rowsHtml}${nudge}
-      </div>`;
+      <div class="ds-step-label">${s.icon} ${s.label}${countSpan}</div>
+      ${rowsHtml}
+      ${nextBtn}
+    </div>`;
   }).join('');
 
   // ── CTA ───────────────────────────────────────────────────────
@@ -9126,7 +9863,7 @@ function renderDecisionMap() {
     : `<button class="ds-cta-btn-locked" disabled>⬇ Export config files</button>`;
   const ctaSub = ready
     ? `<div class="ds-cta-sub">All ${total} decisions made — your pipeline config is ready.</div>`
-    : `<div class="ds-cta-sub">${shapeChosen ? `${custom} of ${total} decisions made — complete all sections above.` : 'Pick a service shape above to begin.'}</div>`;
+    : `<div class="ds-cta-sub">${shapeChosen ? `${custom} of ${total} decisions made.` : 'Pick a service shape above to begin.'}</div>`;
 
   const badgeCls = !shapeChosen ? 'ds-badge ds-badge-start' : ready ? 'ds-badge ds-badge-ready' : 'ds-badge ds-badge-progress';
   const badgeTxt = !shapeChosen ? 'Start here' : ready ? 'Ready' : 'In progress';
@@ -9135,13 +9872,19 @@ function renderDecisionMap() {
     : `<div class="ds-counter" style="color:var(--muted)">Pick a service shape to begin</div>`;
 
   wrap.innerHTML = `
+    ${!shapeChosen ? `<div class="ds-bluf-strip">
+      <div class="ds-bluf-who"><b>Who:</b> DevSecOps engineers, platform leads, and SRE teams setting up a new service.</div>
+      <div class="ds-bluf-what"><b>What you get:</b> A complete, production-ready pipeline configuration — every tool decision answered for your service shape.</div>
+      <div class="ds-bluf-when"><b>When:</b> Before writing your first GitHub Actions workflow. Or when auditing an existing pipeline.</div>
+      <div class="ds-bluf-why"><b>Why this matters:</b> Wrong tool choices = security gaps in CI, blocked PRs at code review, and broken deploys to prod.</div>
+    </div>` : ''}
     <div class="ds-header">
       <div>
         <div class="ds-header-title">Pipeline Configurator</div>
         <div class="ds-header-sub">
           ${shapeChosen
-            ? `Configuring: <b>${SHAPE_PICKER_STATE.frameworkLabel || decisionCurrentLabel('shape') || 'your service'}</b> — complete each section, then export your pipeline files.`
-            : 'Pick your service shape to begin. Each section unlocks in order. You can always go back.'}
+            ? `Configuring: <b>${SHAPE_PICKER_STATE.frameworkLabel || decisionCurrentLabel('shape') || 'your service'}</b> — pick any decision below. Change anything at any time.`
+            : 'Pick your service shape to begin. All relevant decisions appear below.'}
         </div>
       </div>
       <div class="ds-header-right">
@@ -9151,10 +9894,20 @@ function renderDecisionMap() {
     </div>
     ${stepNav}
     ${stepBlocks}
-    <div class="ds-cta">${ctaBtn}${ctaSub}</div>`;
+    <div class="ds-cta">${ctaBtn}${ctaSub}</div>
+    <div class="ds-governance">
+      <b>Owner:</b> Rohith — rohith@yarova.ca &nbsp;·&nbsp;
+      <b>Last verified:</b> 2026-05-24 &nbsp;·&nbsp;
+      <b>Deprecation trigger:</b> When GitHub Actions removes OIDC support or Sigstore/cosign changes its signing protocol.
+    </div>`;
 
-  // Set up IntersectionObserver after DOM is painted
   setTimeout(initStepObserver, 50);
+}
+
+function setActiveStep(n) {
+  ACTIVE_STEP = n;
+  renderDecisionMap();
+  setTimeout(() => scrollToStep(n), 30);
 }
 
 function renderShapePicker() {
@@ -9267,6 +10020,7 @@ function pickShapeFramework(fwValue, feOrBe, shapeVal) {
   const fw = st?.frameworks.find(f => f.value === fwValue);
   SHAPE_PICKER_STATE.frameworkLabel = fw?.label || fwValue;
   // Advance to step 1 (Local dev) the first time shape is picked.
+  // Advance to step 1 (Local dev) when shape is first picked.
   if (ACTIVE_STEP === 0) ACTIVE_STEP = 1;
   // onConfigChange handles renderDecisionMap + renderMasterSVG — no double render.
   onConfigChange();
@@ -9279,18 +10033,40 @@ function renderDecisionRow(id) {
   const current = decisionRead(id);
   const hasExplicitPick = DECISION_VISITED.has(id);
   const rowIcon = hasExplicitPick ? '✅' : '⚪';
+  const priorityBadge = DECISION_REQUIRED.has(id)
+    ? '<span class="ds-badge-required">Required</span>'
+    : DECISION_OPTIONAL.has(id)
+      ? '<span class="ds-badge-optional">Optional</span>'
+      : '';
 
-  const pillsHtml = opts.map(o => {
+  const makePill = (o) => {
     const isPicked = hasExplicitPick && (o.value === current);
     const incompat = isOptionIncompatible(id, o.value);
     const tierBadge = (id === 'fe' || id === 'be') && o.tier === 'coming-soon' ? ' ⏳' : '';
     const cls = isPicked ? 'ds-pill active' : incompat ? 'ds-pill incompat' : 'ds-pill';
-    const onClick = incompat ? '' : `onclick="pickDecision('${id}','${o.value}')"`;
+    const onClick = incompat
+      ? `onclick="showIncompatReason('${id}','${o.value}',this)"`
+      : `onclick="pickDecision('${id}','${o.value}')"`;
     const title = (incompat ? '⊘ Not compatible with your current picks. ' : '') + (o.desc || '');
     const prefix = incompat ? '⊘ ' : '';
     return `<button class="${cls}" data-decision="${id}" data-value="${o.value}" ${onClick}
               title="${title.replace(/"/g,'&quot;')}">${prefix}${o.label}${tierBadge}</button>`;
-  }).join('');
+  };
+
+  let pillsHtml;
+  const groups = DECISION_PILL_GROUPS[id];
+  if (groups) {
+    pillsHtml = groups.map(g => {
+      const groupOpts = opts.filter(o => g.values.includes(o.value));
+      if (groupOpts.length === 0) return '';
+      return `<div class="ds-pill-group">
+        <span class="ds-pill-group-label">${g.label}</span>
+        ${groupOpts.map(makePill).join('')}
+      </div>`;
+    }).join('');
+  } else {
+    pillsHtml = opts.map(makePill).join('');
+  }
 
   const knowledgePanel = buildKnowledgePanel(id);
 
@@ -9298,7 +10074,7 @@ function renderDecisionRow(id) {
     <div class="ds-row${hasExplicitPick ? ' picked' : ''}" data-decision="${id}">
       <div class="ds-row-hdr">
         <span class="ds-row-icon">${def.icon}</span>
-        <span class="ds-row-label">${def.label}</span>
+        <span class="ds-row-label">${def.label}</span>${priorityBadge}
         <div class="ds-row-meta">
           <button class="ds-why-btn" onclick="toggleKnowledge('${id}')" title="Why this matters">▸ Why</button>
           <span class="ds-status">${rowIcon}</span>
@@ -9324,92 +10100,88 @@ function toggleKnowledge(id) {
 
 function buildKnowledgePanel(id) {
   const parts = [];
+  const dk = (typeof DECISION_KNOWLEDGE !== 'undefined') ? DECISION_KNOWLEDGE[id] : null;
 
-  // Find relevant pipeline stages for this decision
+  if (dk) {
+    // Decision context
+    parts.push(`<div class="dk-why"><b>Why this matters:</b> ${dk.why}</div>`);
+    if (dk.skipWhen) parts.push(`<div class="dk-skip"><b>When to skip:</b> ${dk.skipWhen}</div>`);
+
+    // Current pick details
+    const picked = decisionRead(id);
+    const hasPick = DECISION_VISITED.has(id);
+    if (hasPick && picked && dk.options && dk.options[picked]) {
+      const opt = dk.options[picked];
+      const capList = opt.caps.map(c => `<li>${c}</li>`).join('');
+      parts.push(`<div class="dk-current">
+        <div class="dk-current-hdr">Selected: <b>${decisionCurrentLabel(id)}</b></div>
+        <div class="dk-caps"><b>Capabilities:</b><ul class="dk-cap-list">${capList}</ul></div>
+        <div class="dk-pick-when"><span class="dk-label-pick">✅ Pick when:</span> ${opt.pickWhen}</div>
+        <div class="dk-avoid-when"><span class="dk-label-avoid">⊘ Avoid when:</span> ${opt.avoid}</div>
+        <div class="dk-tradeoff"><span class="dk-label-tradeoff">⟷ Trade-off:</span> ${opt.tradeoff}</div>
+        <div class="dk-cost"><span class="dk-label-cost">💰 Cost:</span> ${opt.cost}</div>
+      </div>`);
+    }
+
+    // Compare table — all options
+    if (dk.compare && dk.options) {
+      const rows = dk.compare.map(v => {
+        const o = dk.options[v];
+        if (!o) return '';
+        const isPicked = hasPick && picked === v;
+        return `<tr class="${isPicked ? 'dk-row-picked' : ''}">
+          <td><b>${v}</b></td>
+          <td>${o.pickWhen}</td>
+          <td>${o.cost}</td>
+        </tr>`;
+      }).join('');
+      parts.push(`<div class="dk-compare">
+        <div class="dk-compare-label">Compare all options</div>
+        <table class="dk-table">
+          <thead><tr><th>Option</th><th>Pick when</th><th>Cost</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`);
+    }
+  }
+
+  // Fall back to stage-based knowledge (for decisions not in DECISION_KNOWLEDGE)
   const stageMap = {
-    ide:         ['l1'],
-    precommit:   ['l2'],
-    localsecret: ['l4'],
-    fe:          ['s6pr','s6main'],
-    be:          ['s6pr','s6main'],
-    build:       ['s6pr','s6main'],
-    pkg:         ['s2','s2m'],
-    ci:          ['s0'],
-    reg:         ['s6main','s13'],
-    cd:          ['p1','p2','p3','p4'],
-    baseimage:   ['s6pr','s6main'],
-    sbom:        ['s8a','s8apr'],
-    scanner:     ['s7pr','s7main'],
-    signing:     ['s8b'],
-    cloud:       ['p1','p4'],
-    promotion:   ['p4'],
-    industry:    [],
-    compliance:  [],
-    mlframework:    ['s6main'],
-    inferenceruntime:['s6main'],
-    modelregistry:  ['s13'],
-    gpubaseimage:   ['s6main'],
-    infratooltype:  ['s6main'],
-    infradistribution:['s13']
+    ide:['l1'], precommit:['l2'], localsecret:['l4'],
+    fe:['s6pr','s6main'], be:['s6pr','s6main'], build:['s6pr','s6main'],
+    pkg:['s2','s2m'], ci:['s0'], reg:['s6main','s13'], cd:['p1','p2','p3','p4'],
+    baseimage:['s6pr','s6main'], sbom:['s8a','s8apr'], scanner:['s7pr','s7main'],
+    signing:['s8b'], cloud:['p1','p4'], promotion:['p4'],
+    mlframework:['s6main'], inferenceruntime:['s6main'],
+    modelregistry:['s13'], gpubaseimage:['s6main'],
+    infratooltype:['s6main'], infradistribution:['s13']
   };
-
   const stageIds = stageMap[id] || [];
   const allSt = (typeof _allStagesOrig === 'function' ? _allStagesOrig() : [])
     .concat(Object.values(typeof SVG_ONLY_STAGES !== 'undefined' ? SVG_ONLY_STAGES : {}));
-
-  // Concept + threat from first matching stage
   const stg = allSt.find(s => stageIds.includes(s.id));
-  if (stg) {
+
+  if (stg && !dk) {
     if (stg.concept) parts.push(`<div><b>What this stage does:</b> ${stg.concept}</div>`);
     if (stg.threat)  parts.push(`<div style="margin-top:6px"><b>Threat blocked:</b> ${stg.threat}</div>`);
     if (stg.commonMistakes) {
       const mistakes = stg.commonMistakes.split('|').map(m => `<li style="margin-left:16px">${m.trim()}</li>`).join('');
       parts.push(`<div style="margin-top:6px"><b>Common mistakes:</b><ul style="margin:4px 0 0">${mistakes}</ul></div>`);
     }
-    // Time + cost
-    const sp = (typeof STAGE_PROFILE !== 'undefined' ? STAGE_PROFILE : {})[stg.id];
-    if (sp) parts.push(`<div style="margin-top:6px"><b>Time / cost:</b> ${sp.time} · ${sp.cost}</div>`);
   }
 
-  // Invariants that relate to this decision
+  // Invariants
   const invMap = {
-    ide:       ['I-4'],
-    precommit: ['I-2'],
-    localsecret:['I-6'],
-    sbom:      ['I-8','I-10'],
-    scanner:   ['I-3','I-19'],
-    signing:   ['I-8','I-10','I-16'],
-    baseimage: ['I-7','I-13'],
-    reg:       ['I-12','I-13'],
-    cd:        ['I-11'],
-    cloud:     ['I-1','I-5']
+    ide:['I-4'], precommit:['I-2'], localsecret:['I-6'],
+    sbom:['I-8','I-10'], scanner:['I-3','I-19'], signing:['I-8','I-10','I-16'],
+    baseimage:['I-7','I-13'], reg:['I-12','I-13'], cd:['I-11'], cloud:['I-1','I-5']
   };
   const invIds = invMap[id] || [];
   if (invIds.length > 0 && typeof INVARIANTS !== 'undefined') {
     const invs = INVARIANTS.filter(i => invIds.includes(i.id));
-    if (invs.length > 0) {
-      const invHtml = invs.map(i => {
-        const threat = (typeof INVARIANT_THREAT_MAP !== 'undefined' && INVARIANT_THREAT_MAP[i.id]) || {};
-        const mitre = (threat.mitre || []).join(', ');
-        return `<li style="margin-left:16px"><b>${i.id}</b>: ${i.text}${mitre ? ` · MITRE: ${mitre}` : ''}<br><span style="color:var(--muted);font-size:11px">Real incident: ${i.incident}</span></li>`;
-      }).join('');
+    if (invs.length > 0 && !dk) {
+      const invHtml = invs.map(i => `<li style="margin-left:16px"><b>${i.id}</b>: ${i.text}<br><span style="color:var(--muted);font-size:11px">Real incident: ${i.incident}</span></li>`).join('');
       parts.push(`<div style="margin-top:6px"><b>Invariants enforced:</b><ul style="margin:4px 0 0">${invHtml}</ul></div>`);
-    }
-  }
-
-  // Option help for fe/be decisions
-  if ((id === 'fe' || id === 'be') && typeof OPTION_HELP !== 'undefined') {
-    const currentVal = decisionRead(id);
-    const help = (OPTION_HELP[id === 'fe' ? 'frontend' : 'backend'] || {})[currentVal];
-    if (help) parts.push(`<div style="margin-top:6px"><b>Why ${decisionCurrentLabel(id)}:</b> ${help}</div>`);
-  }
-
-  // Alternatives for current pick
-  if (stg && typeof ALTERNATIVES !== 'undefined' && ALTERNATIVES[stg.id]) {
-    const alts = ALTERNATIVES[stg.id].slice(0, 2);
-    if (alts.length > 0) {
-      const altHtml = alts.map(a => `<li style="margin-left:16px"><b>${a.tool}</b> — ${a.when}</li>`).join('');
-      parts.push(`<div style="margin-top:6px"><b>Alternatives for specific cases:</b><ul style="margin:4px 0 0">${altHtml}</ul></div>`);
     }
   }
 
@@ -9426,23 +10198,6 @@ function pickDecision(id, value) {
   if (!def) return;
   decisionWrite(id, value);
 
-  // Auto-advance accordion if all tiles in current step are now done
-  const currentStepDef = DECISION_STEPS.find(s => s.step === ACTIVE_STEP);
-  if (currentStepDef && !currentStepDef.tiles.includes('shape')) {
-    const tiles = currentStepDef.tiles.filter(decisionAppliesToShape);
-    const nonShape = tiles.filter(tid => tid !== 'shape');
-    const allDone = nonShape.length > 0 && nonShape.every(decisionIsCustom);
-    if (allDone) {
-      const visibleSteps = DECISION_STEPS
-        .filter(s => {
-          const t = s.tiles.filter(decisionAppliesToShape);
-          return s.tiles.includes('shape') || (DECISION_VISITED.has('shape') && t.length > 0);
-        });
-      const nextStep = visibleSteps.find(s => s.step > ACTIVE_STEP);
-      if (nextStep) ACTIVE_STEP = nextStep.step;
-    }
-  }
-
   if (def.selectId) {
     if (id === 'industry' && typeof onIndustryChange === 'function') onIndustryChange();
     else onConfigChange();
@@ -9450,6 +10205,7 @@ function pickDecision(id, value) {
     writeStateToURL();
     renderDecisionMap();
     renderMasterSVG();
+    updateSelectionSummary();
   }
 }
 
@@ -10270,18 +11026,41 @@ function downloadAllFiles() {
     }
   }
   // Provenance — show what produced these files.
+  const regKey = cfg.regKey || 'ghcr';
+  const ciKey  = cfg.ciKey  || 'github-actions';
   const stamp = [
-    '# Generated by devsecops-pipeline.html',
+    '# Generated by pipeline-studio — devsecops-pipeline.html',
     '# Date:        ' + TODAY,
     '# Frontend:    ' + cfg.feKey,
     '# Backend:     ' + cfg.beKey,
     '# Pkg manager: ' + cfg.pmKey,
-    '# CI system:   ' + cfg.ciKey,
-    '# Registry:    ' + cfg.regKey,
+    '# CI system:   ' + ciKey,
+    '# Registry:    ' + regKey,
     '# Compliance:  ' + cfg.compKey,
     '# Industry:    ' + (document.getElementById('sel-industry')?.value || 'none'),
     '',
-    '# Use the README inside the zip + the Setup Guide tab for one-time setup.'
+    '# ── PREREQUISITES (one-time setup before pasting these files) ──────────',
+    '# 1. GitHub repository with Actions enabled.',
+    '# 2. Branch protection on main:',
+    '#    Settings → Branches → Add rule → Require status checks before merging.',
+    '# 3. Secrets required in GitHub → Settings → Secrets and variables → Actions:',
+    regKey === 'ghcr'
+      ? '#    GITHUB_TOKEN: auto-provided. No setup needed for GHCR.'
+      : '#    REGISTRY_USERNAME and REGISTRY_PASSWORD for your registry.',
+    '#    SLACK_WEBHOOK_URL (if using Slack notifications).',
+    '#    SEMGREP_APP_TOKEN (if using Semgrep cloud).',
+    '#    FOSSA_API_KEY (if using FOSSA license scan).',
+    '# 4. Cosign (image signing tool) public key pinned in your repo:',
+    '#    Run: cosign generate-key-pair then add COSIGN_PRIVATE_KEY secret.',
+    '# 5. Container registry access:',
+    '#    For GHCR: enabled automatically. For ECR/GAR/ACR: OIDC role required.',
+    '',
+    '# ── VERIFY SETUP ──────────────────────────────────────────────────────',
+    '# Run: gh workflow run pr-checks.yml --ref main',
+    '# Expected: all jobs green in the Actions tab within 10 minutes.',
+    '# When any job fails: check the job log for the first red step.',
+    '',
+    '# Use the Setup Guide tab for step-by-step one-time configuration.'
   ].join('\n');
   zip.file('README-generated.txt', stamp);
   zip.generateAsync({type:'blob'}).then(blob => {
@@ -10982,11 +11761,11 @@ function renderTOC() {
       {id:'phase0', label:'Phase 0 · Bootstrap'}
     ]},
     {label:'Pipeline', items:[
-      {id:'tab-local',      label:'1 · Developer'},
-      {id:'tab-pr',         label:'2 · PR Gate'},
-      {id:'tab-main',       label:'3 · Main Build'},
-      {id:'tab-promotions', label:'4 · Promotions'},
-      {id:'tab-runtime',    label:'5 · Runtime'}
+      {id:'tab-local',      label:'1 · Dev Local'},
+      {id:'tab-pr',         label:'2 · PR Gate — scan + lint + build check'},
+      {id:'tab-main',       label:'3 · Main — build, push, sign, attest'},
+      {id:'tab-promotions', label:'4 · Promotions — dev → staging → prod'},
+      {id:'tab-runtime',    label:'5 · Runtime — admission + drift detection'}
     ]},
     {label:'Reference', items:[
       {id:'tab-files',     label:'Config Files'},
@@ -11336,12 +12115,44 @@ function renderIndustryContext() {
     </div>`;
 }
 
+// Renders the "what's in your YAML" chip bar above each workflow output box.
+// Decisions are grouped: security tools vs infra vs deploy.
+function updateSelectionSummary() {
+  const groups = [
+    { label:'Stack',    ids:['ci','reg'] },
+    { label:'Security', ids:['scanner','signing','sbom','baseimage'] },
+    { label:'Deploy',   ids:['cd','promotion','cloud'] }
+  ];
+  const short = id => {
+    const lbl = decisionCurrentLabel(id);
+    if (!lbl || lbl === '—') return null;
+    return lbl.replace(/\s*\([^)]*\)$/, '').replace(/\s*\[[^\]]*\]$/, '').split(/\s+/).slice(0,2).join(' ');
+  };
+
+  ['pr-sel-summary','main-sel-summary'].forEach(barId => {
+    const bar = document.getElementById(barId);
+    if (!bar) return;
+    const chips = [];
+    groups.forEach(g => {
+      const picked = g.ids.filter(id => DECISION_VISITED.has(id));
+      picked.forEach(id => {
+        const lbl = short(id);
+        if (lbl) chips.push(`<span class="sel-chip"><span class="sel-chip-label">${DECISION_DEFS[id]?.label?.split(' ')[0] || id}</span> ${lbl}</span>`);
+      });
+    });
+    if (chips.length === 0) { bar.style.display = 'none'; return; }
+    bar.innerHTML = `<span class="sel-summary-label">Generating YAML for →</span>` + chips.join('');
+    bar.style.display = 'flex';
+  });
+}
+
 function onConfigChange() {
   updatePkgMgrDropdown();
   writeStateToURL();
   if (typeof renderComingSoonBanner === 'function') renderComingSoonBanner();
   if (typeof renderDecisionMap === 'function') renderDecisionMap();
   if (typeof renderMasterSVG === 'function') renderMasterSVG();
+  updateSelectionSummary();
 
   // Phase context banner — shows current config above the phase sections
   const phaseBanner = document.getElementById('phase-context-bar');
@@ -12016,6 +12827,10 @@ function applyWizard() {
 }
 
 function init() {
+  // Prevent browser from restoring scroll position — always open at top.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+
   // Inject Coming Soon options FIRST so loadStateFromURL can resolve them.
   augmentDropdownsFromCatalog();
   loadStateFromURL();
