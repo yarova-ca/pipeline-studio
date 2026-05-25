@@ -10622,8 +10622,110 @@ function toggleKnowledge(id) {
   }
 }
 
+// Compliance control → invariants that satisfy it. Each entry: {control,
+// title, satisfiedBy:[invariant IDs]}. The pipeline's invariants implicitly
+// satisfy multiple frameworks; this map makes the proof explicit for auditors.
+const COMPLIANCE_CONTROL_MAP = {
+  pci: [
+    { control:'6.4.4', title:'Secure software development (SAST)',     satisfiedBy:['I-4'] },
+    { control:'6.5',   title:'Common coding vulnerabilities addressed', satisfiedBy:['I-4'] },
+    { control:'6.3.2', title:'Inventory of all software components',    satisfiedBy:['I-8','I-10'] },
+    { control:'11.3',  title:'Vulnerability scans',                     satisfiedBy:['I-3','I-19'] },
+    { control:'11.5',  title:'Detect changes to critical files',        satisfiedBy:['I-8','I-10','I-16'] },
+    { control:'8.6.3', title:'Strong cryptography for keys',            satisfiedBy:['I-1','I-18'] }
+  ],
+  hipaa: [
+    { control:'164.312(a)',  title:'Access control',                  satisfiedBy:['I-1','I-18','I-17'] },
+    { control:'164.312(c)',  title:'Integrity controls',              satisfiedBy:['I-8','I-10','I-16'] },
+    { control:'164.312(e)',  title:'Transmission security',           satisfiedBy:['I-7','I-13'] },
+    { control:'164.308(a)(1)', title:'Risk analysis',                 satisfiedBy:['I-3','I-4','I-5'] },
+    { control:'164.308(a)(8)', title:'Evaluation',                    satisfiedBy:['I-9','I-19'] }
+  ],
+  soc2: [
+    { control:'CC6.1', title:'Logical access controls',         satisfiedBy:['I-1','I-18','I-17'] },
+    { control:'CC6.6', title:'Encryption of data in transit',   satisfiedBy:['I-13'] },
+    { control:'CC7.1', title:'Detection of vulnerabilities',    satisfiedBy:['I-3','I-4','I-5','I-19'] },
+    { control:'CC7.2', title:'Detection of anomalies',          satisfiedBy:['I-6','I-8','I-16'] },
+    { control:'CC8.1', title:'Change management',               satisfiedBy:['I-2','I-15','I-17','I-14'] }
+  ],
+  fedramp: [
+    { control:'AC-2', title:'Account management',          satisfiedBy:['I-1','I-18'] },
+    { control:'CM-3', title:'Configuration change control', satisfiedBy:['I-2','I-15'] },
+    { control:'RA-5', title:'Vulnerability scanning',       satisfiedBy:['I-3','I-19'] },
+    { control:'SI-2', title:'Flaw remediation',             satisfiedBy:['I-3','I-19'] },
+    { control:'SI-7', title:'Software / firmware integrity', satisfiedBy:['I-8','I-10','I-16'] },
+    { control:'SC-13',title:'Cryptographic protection',     satisfiedBy:['I-1','I-13','I-18'] }
+  ],
+  gdpr: [
+    { control:'Art. 25', title:'Data protection by design',   satisfiedBy:['I-4','I-5','I-6'] },
+    { control:'Art. 32', title:'Security of processing',      satisfiedBy:['I-3','I-7','I-8'] }
+  ],
+  iso27001: [
+    { control:'A.8.25', title:'Secure development lifecycle',  satisfiedBy:['I-2','I-4','I-9'] },
+    { control:'A.8.28', title:'Secure coding',                 satisfiedBy:['I-4','I-5'] },
+    { control:'A.8.30', title:'Outsourced development',        satisfiedBy:['I-14','I-15','I-17'] },
+    { control:'A.5.23', title:'Information security for cloud services', satisfiedBy:['I-1','I-13','I-18'] }
+  ],
+  cmmc: [
+    { control:'AC.L2-3.1.1', title:'Limit access to authorized users', satisfiedBy:['I-1','I-17','I-18'] },
+    { control:'CM.L2-3.4.3', title:'Track changes to system',          satisfiedBy:['I-2','I-15'] },
+    { control:'SI.L2-3.14.1', title:'Identify + correct flaws',         satisfiedBy:['I-3','I-19'] },
+    { control:'SI.L2-3.14.2', title:'Provide protection from malicious code', satisfiedBy:['I-4','I-6','I-8'] }
+  ]
+};
+
+// Render a small compliance-coverage table inside the compliance row's Why
+// panel. Each row: control ID → title → ✓ if pipeline satisfies → which
+// invariants (clickable) → which stages enforce them.
+function renderComplianceCoverageTable(complianceKey) {
+  const map = COMPLIANCE_CONTROL_MAP[complianceKey];
+  if (!map || !map.length) return '';
+  const invariantById = {};
+  (INVARIANTS || []).forEach(i => { invariantById[i.id] = i; });
+  const rows = map.map(c => {
+    const invs = c.satisfiedBy.map(iid => {
+      const inv = invariantById[iid];
+      if (!inv) return `<span style="color:var(--muted)">${iid}</span>`;
+      return `<span class="dk-inv-chip" onclick="openInvariantContext('${iid}')" title="${esc(inv.text)} (Enforced at: ${esc(inv.enforced)})" style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--accent);background:rgba(9,105,218,.08);border:1px solid rgba(9,105,218,.25);border-radius:3px;padding:1px 5px;margin:1px 3px 1px 0;cursor:pointer">${iid}</span>`;
+    }).join('');
+    const stages = [...new Set(c.satisfiedBy.map(iid => (invariantById[iid] || {}).enforced || '').filter(Boolean))]
+      .map(s => `<span style="font-size:10.5px;color:var(--muted)">${esc(s.split(':')[0] || s)}</span>`).join(' · ');
+    return `<tr>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:var(--text);white-space:nowrap;padding:5px 8px">${esc(c.control)}</td>
+      <td style="font-size:11.5px;padding:5px 8px">${esc(c.title)}</td>
+      <td style="text-align:center;padding:5px 8px;color:var(--success);font-weight:700">✓</td>
+      <td style="padding:5px 8px">${invs}</td>
+      <td style="padding:5px 8px">${stages}</td>
+    </tr>`;
+  }).join('');
+  return `<div style="margin-top:12px;padding:10px;border:1px solid var(--border);border-radius:4px;background:#fafbfc">
+    <div style="font-size:11.5px;font-weight:700;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Controls satisfied by your current pipeline</div>
+    <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border-subtle)">
+          <th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted);text-transform:uppercase">Control</th>
+          <th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted);text-transform:uppercase">Title</th>
+          <th style="text-align:center;padding:4px 8px;font-size:10px;color:var(--muted);text-transform:uppercase">Met</th>
+          <th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted);text-transform:uppercase">Invariants</th>
+          <th style="text-align:left;padding:4px 8px;font-size:10px;color:var(--muted);text-transform:uppercase">Stage(s)</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="margin-top:6px;font-size:11px;color:var(--muted);font-style:italic">Click any invariant to see what enforces it. Controls listed here are satisfied by the pipeline; <b>extras outside the pipeline</b> (penetration tests, BAAs, etc.) appear in the compliance banner above.</div>
+  </div>`;
+}
+
 function buildKnowledgePanel(id) {
   const parts = [];
+  // Compliance-specific: render control-coverage table for the picked framework.
+  if (id === 'compliance') {
+    const picked = decisionRead('compliance');
+    if (picked && picked !== 'none') {
+      const table = renderComplianceCoverageTable(picked);
+      if (table) parts.push(table);
+    }
+  }
   const dk = (typeof DECISION_KNOWLEDGE !== 'undefined') ? DECISION_KNOWLEDGE[id] : null;
 
   if (dk) {
