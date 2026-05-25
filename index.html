@@ -7629,8 +7629,14 @@ images:
     label: 'deploy/base/deployment.yaml',
     get content() {
       const cfg = getConfig();
-      const port = cfg.port || '8080';
+      // Pull a real port + healthcheck path from the picked framework rather
+      // than defaulting to 8080/'/health' for every stack. Falls back only
+      // when the framework hasn't declared one (e.g. mobile/library shapes).
+      const port = cfg.port || cfg.be?.port || cfg.fe?.port || '8080';
+      const healthPath = cfg.healthPath || cfg.be?.healthPath || cfg.fe?.healthPath || '/health';
+      const stackTag = [cfg.fe?.label, cfg.be?.label].filter(x => x && x !== 'None').join(' + ') || 'generic';
       return `# Base Deployment. Overlays patch replicas + env per environment.
+# Configured for: ${stackTag} · containerPort ${port} · readiness ${healthPath}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7662,7 +7668,7 @@ spec:
             readOnlyRootFilesystem: true
             capabilities: { drop: ["ALL"] }
           readinessProbe:
-            httpGet: { path: /health, port: ${port} }
+            httpGet: { path: ${healthPath}, port: ${port} }
             initialDelaySeconds: 3
             periodSeconds: 5
 `;
@@ -7672,8 +7678,10 @@ spec:
     label: 'deploy/base/service.yaml',
     get content() {
       const cfg = getConfig();
-      const port = cfg.port || '8080';
-      return `apiVersion: v1
+      const port = cfg.port || cfg.be?.port || cfg.fe?.port || '8080';
+      const stackTag = [cfg.fe?.label, cfg.be?.label].filter(x => x && x !== 'None').join(' + ') || 'generic';
+      return `# Configured for: ${stackTag} · targetPort ${port}
+apiVersion: v1
 kind: Service
 metadata:
   name: myapp
@@ -7839,8 +7847,11 @@ appVersion: "1.0.0"  # bump per release; CI rewrites this to the image digest
     label: 'deploy/charts/myapp/values.yaml',
     get content() {
       const cfg = getConfig();
-      const port = cfg.port || '8080';
+      const port = cfg.port || cfg.be?.port || cfg.fe?.port || '8080';
+      const healthPath = cfg.healthPath || cfg.be?.healthPath || cfg.fe?.healthPath || '/health';
+      const stackTag = [cfg.fe?.label, cfg.be?.label].filter(x => x && x !== 'None').join(' + ') || 'generic';
       return `# Default values. Override per environment with -f values-<env>.yaml or --set.
+# Configured for: ${stackTag} · targetPort ${port} · readiness ${healthPath}
 image:
   repository: REGISTRY/myapp     # set by CI: --set image.repository=...
   digest: sha256:DIGEST           # set by CI: --set image.digest=...
@@ -7873,7 +7884,7 @@ env: dev   # overridden per environment
 
 probes:
   readiness:
-    path: /health
+    path: ${healthPath}
     initialDelaySeconds: 3
     periodSeconds: 5
 `;
