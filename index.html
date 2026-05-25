@@ -167,6 +167,16 @@ main{min-width:0;overflow-x:hidden}
 .u-stat-box{border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center;background:white}
 .u-stat-num{font-size:22px;font-weight:var(--fw-bold);color:var(--accent)}
 .u-kbd-dark{background:#21262d;border:1px solid #30363d;padding:1px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace}
+.u-kbd-light{background:white;border:1px solid var(--border);padding:1px 5px;border-radius:3px;font-family:inherit}
+.u-mb-18{margin-bottom:18px}
+.u-mb-4{margin-bottom:4px}
+.u-tc{text-align:center}
+.u-eyebrow-thin{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.u-eyebrow-thick{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.u-stat-card{border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white}
+.u-stat-pad{text-align:center;padding:10px;background:white;border:1px solid var(--border);border-radius:6px}
+.u-stat-num-lg{font-size:24px;font-weight:var(--fw-bold);color:var(--accent)}
+.u-table-base{width:100%;border-collapse:collapse;font-size:12px}
 
 /* ── Unified button system. Use these for new buttons instead of inline styles.
    Modifier classes layer onto .btn for variants — see audit V-2 (12 ad-hoc
@@ -677,8 +687,8 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
     <input id="qf-input" type="text" placeholder="Search invariants (I-8), stages (S6), compliance (PCI), glossary (SBOM), terms…" style="width:100%;padding:14px 18px;font-size:14px;font-family:inherit;border:none;outline:none;border-bottom:1px solid var(--border);box-sizing:border-box">
     <div id="qf-results" style="max-height:50vh;overflow-y:auto"></div>
     <div style="padding:8px 14px;background:#f6f8fa;font-size:11px;color:var(--muted);display:flex;gap:14px;justify-content:space-between">
-      <span><kbd style="background:white;border:1px solid var(--border);padding:1px 5px;border-radius:3px;font-family:inherit">↑↓</kbd> navigate &nbsp; <kbd style="background:white;border:1px solid var(--border);padding:1px 5px;border-radius:3px;font-family:inherit">Enter</kbd> open &nbsp; <kbd style="background:white;border:1px solid var(--border);padding:1px 5px;border-radius:3px;font-family:inherit">Esc</kbd> close</span>
-      <span>Press <kbd style="background:white;border:1px solid var(--border);padding:1px 5px;border-radius:3px;font-family:inherit">/</kbd> or <kbd style="background:white;border:1px solid var(--border);padding:1px 5px;border-radius:3px;font-family:inherit">⌘K</kbd> any time</span>
+      <span><kbd class="u-kbd-light">↑↓</kbd> navigate &nbsp; <kbd class="u-kbd-light">Enter</kbd> open &nbsp; <kbd class="u-kbd-light">Esc</kbd> close</span>
+      <span>Press <kbd class="u-kbd-light">/</kbd> or <kbd class="u-kbd-light">⌘K</kbd> any time</span>
     </div>
   </div>
 </div>
@@ -743,11 +753,11 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
   <section id="concept" class="role-emphasis-junior" style="padding:24px 32px;border-bottom:1px solid var(--border-subtle);background:linear-gradient(180deg,#fafbfc,#fff)">
     <!-- Pipeline at-a-glance — 5 essentials. -->
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px">
-      <div style="text-align:center;padding:10px;background:white;border:1px solid var(--border);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--accent)">5</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em">Phases</div></div>
-      <div style="text-align:center;padding:10px;background:white;border:1px solid var(--border);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--accent)">14</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em">CI stages</div></div>
-      <div style="text-align:center;padding:10px;background:white;border:1px solid var(--border);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--accent)">20</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em">Invariants</div></div>
-      <div style="text-align:center;padding:10px;background:white;border:1px solid var(--border);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--accent)">6</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em">CI systems</div></div>
-      <div style="text-align:center;padding:10px;background:white;border:1px solid var(--border);border-radius:6px"><div style="font-size:22px;font-weight:700;color:var(--accent)">9</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em">Registries</div></div>
+      <div class="u-stat-pad"><div class="u-stat-num">5</div><div class="u-eyebrow-thin">Phases</div></div>
+      <div class="u-stat-pad"><div class="u-stat-num">14</div><div class="u-eyebrow-thin">CI stages</div></div>
+      <div class="u-stat-pad"><div class="u-stat-num">20</div><div class="u-eyebrow-thin">Invariants</div></div>
+      <div class="u-stat-pad"><div class="u-stat-num">6</div><div class="u-eyebrow-thin">CI systems</div></div>
+      <div class="u-stat-pad"><div class="u-stat-num">9</div><div class="u-eyebrow-thin">Registries</div></div>
     </div>
     <h2 style="font-size:18px;font-weight:700;margin-bottom:6px;color:var(--text)">Start here — concept in 90 seconds</h2>
     <p style="font-size:13px;color:var(--muted);margin-bottom:18px">If you have never shipped a signed container, read this first. If you have, skip to Phase 2.</p>
@@ -774,7 +784,7 @@ body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0
 
     <h3 style="font-size:14px;font-weight:700;margin:18px 0 8px;color:var(--text)">Why exactly 4 phases?</h3>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Each phase has a single job. Skip one — you ship broken or unverifiable code. Runtime security (Kyverno admission, Falco, Trivy Operator) is <b>out of scope</b> here — that's platform/SRE territory, installed once per cluster.</p>
-    <table class="ref-table" style="margin-bottom:18px">
+    <table class="ref-table" class="u-mb-18">
       <thead><tr><th style="width:80px">Phase</th><th>Single job</th><th>Skip it — what breaks</th></tr></thead>
       <tbody>
         <tr><td class="badge-cell ph-f" style="background:var(--ph-f-bg);color:var(--ph-f-tx)">1 — Developer</td><td>Catch obvious issues on the laptop before CI spends a minute.</td><td>Developer time wasted; CI budget burned on lint errors.</td></tr>
@@ -1356,7 +1366,7 @@ cosign verify \
   <div id="tab-catalog" class="tab-content" role="region" aria-label="Framework Catalog">
     <h2 class="u-h-section">Catalog — all frameworks, runtimes, languages</h2>
     <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Comprehensive list of supported entries. Tier shows where full code + knowledge lives. Coming soon = listed for transparency; pipeline falls back to a sister recipe.</p>
-    <div id="catalog-summary" style="margin-bottom:18px"></div>
+    <div id="catalog-summary" class="u-mb-18"></div>
     <div id="catalog-listing"></div>
   </div>
 
@@ -2962,6 +2972,14 @@ function getConfig() {
   const baseimageKey= decisionRead('baseimage') || 'distroless';
   const cdKey       = decisionRead('cd')        || 'argocd';
   const gitopsKey   = decisionRead('gitops')    || 'same-repo';
+  // App name — defaults to 'myapp' (template-friendly). Override via URL
+  // (?appName=foo) for per-service deploy artifacts in a monorepo. Single
+  // source of truth; threaded into every deploy file generator below.
+  let appName = 'myapp';
+  try {
+    const p = new URLSearchParams(location.search).get('appName');
+    if (p && /^[a-z][a-z0-9-]{0,38}$/.test(p)) appName = p;
+  } catch (e) {}
   const cloudKey    = decisionRead('cloud')     || 'aws';
   const promotionKey= decisionRead('promotion') || 'canary';
 
@@ -3003,6 +3021,7 @@ function getConfig() {
     baseimage: baseimageKey,
     cd: cdKey,
     gitops: gitopsKey,
+    appName,
     cloud: cloudKey,
     promotion: promotionKey
   };
@@ -7508,13 +7527,14 @@ spec:
       const sameRepo = (cfg.gitops || 'same-repo') === 'same-repo';
       const repoURL = sameRepo ? 'https://github.com/YOUR_ORG/YOUR_APP_REPO' : 'https://github.com/YOUR_ORG/YOUR_CONFIG_REPO';
       const path = sameRepo ? 'deploy/overlays/dev' : 'overlays/dev';
+      const app = cfg.appName || 'myapp';
       return `# ArgoCD Application — bootstrap with:
 #   kubectl apply -n argocd -f deploy/argocd-app.yaml
 # Then ArgoCD pulls + reconciles automatically on every commit.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: myapp-dev
+  name: ${app}-dev
   namespace: argocd
 spec:
   project: default
@@ -7524,7 +7544,7 @@ spec:
     path: ${path}
   destination:
     server: https://kubernetes.default.svc
-    namespace: myapp-dev
+    namespace: ${app}-dev
   syncPolicy:
     automated: { prune: true, selfHeal: true }
     syncOptions: [ "CreateNamespace=true" ]
@@ -7533,17 +7553,20 @@ spec:
   },
   'deploy/base/kustomization.yaml': {
     label: 'deploy/base/kustomization.yaml',
-    content: `# Base kustomization — referenced by every overlay.
+    get content() {
+      const app = (getConfig().appName) || 'myapp';
+      return `# Base kustomization — referenced by every overlay.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
 images:
-  - name: myapp
-    newName: REGISTRY/myapp           # set by CI's "Bump image digest" step
-    digest: sha256:DIGEST              # digest-pinned, never a tag (I-3)
-`
+  - name: ${app}
+    newName: REGISTRY/${app}           # set by CI's "Bump image digest" step
+    digest: sha256:DIGEST               # digest-pinned, never a tag (I-3)
+`;
+    }
   },
   'deploy/base/deployment.yaml': {
     label: 'deploy/base/deployment.yaml',
@@ -7555,28 +7578,29 @@ images:
       const port = cfg.port || cfg.be?.port || cfg.fe?.port || '8080';
       const healthPath = cfg.healthPath || cfg.be?.healthPath || cfg.fe?.healthPath || '/health';
       const stackTag = [cfg.fe?.label, cfg.be?.label].filter(x => x && x !== 'None').join(' + ') || 'generic';
+      const app = cfg.appName || 'myapp';
       return `# Base Deployment. Overlays patch replicas + env per environment.
 # Configured for: ${stackTag} · containerPort ${port} · readiness ${healthPath}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
-  labels: { app: myapp }
+  name: ${app}
+  labels: { app: ${app} }
 spec:
   replicas: 2
   selector:
-    matchLabels: { app: myapp }
+    matchLabels: { app: ${app} }
   template:
     metadata:
-      labels: { app: myapp }
+      labels: { app: ${app} }
     spec:
       # securityContext + readOnlyRootFilesystem match common admission policies
       securityContext:
         runAsNonRoot: true
         seccompProfile: { type: RuntimeDefault }
       containers:
-        - name: myapp
-          image: myapp                 # rewritten by kustomize image transformer
+        - name: ${app}
+          image: ${app}                # rewritten by kustomize image transformer
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: ${port}
@@ -7600,13 +7624,14 @@ spec:
       const cfg = getConfig();
       const port = cfg.port || cfg.be?.port || cfg.fe?.port || '8080';
       const stackTag = [cfg.fe?.label, cfg.be?.label].filter(x => x && x !== 'None').join(' + ') || 'generic';
+      const app = cfg.appName || 'myapp';
       return `# Configured for: ${stackTag} · targetPort ${port}
 apiVersion: v1
 kind: Service
 metadata:
-  name: myapp
+  name: ${app}
 spec:
-  selector: { app: myapp }
+  selector: { app: ${app} }
   ports:
     - port: 80
       targetPort: ${port}
@@ -7616,63 +7641,72 @@ spec:
   },
   'deploy/overlays/dev/kustomization.yaml': {
     label: 'deploy/overlays/dev/kustomization.yaml',
-    content: `apiVersion: kustomize.config.k8s.io/v1beta1
+    get content() {
+      const app = (getConfig().appName) || 'myapp';
+      return `apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: myapp-dev
+namespace: ${app}-dev
 resources:
   - ../../base
 replicas:
-  - name: myapp
+  - name: ${app}
     count: 1
 patches:
-  - target: { kind: Deployment, name: myapp }
+  - target: { kind: Deployment, name: ${app} }
     patch: |
       - op: add
         path: /spec/template/spec/containers/0/env
         value:
           - name: ENV
             value: dev
-`
+`;
+    }
   },
   'deploy/overlays/staging/kustomization.yaml': {
     label: 'deploy/overlays/staging/kustomization.yaml',
-    content: `apiVersion: kustomize.config.k8s.io/v1beta1
+    get content() {
+      const app = (getConfig().appName) || 'myapp';
+      return `apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: myapp-staging
+namespace: ${app}-staging
 resources:
   - ../../base
 replicas:
-  - name: myapp
+  - name: ${app}
     count: 3
 patches:
-  - target: { kind: Deployment, name: myapp }
+  - target: { kind: Deployment, name: ${app} }
     patch: |
       - op: add
         path: /spec/template/spec/containers/0/env
         value:
           - name: ENV
             value: staging
-`
+`;
+    }
   },
   'deploy/overlays/prod/kustomization.yaml': {
     label: 'deploy/overlays/prod/kustomization.yaml',
-    content: `apiVersion: kustomize.config.k8s.io/v1beta1
+    get content() {
+      const app = (getConfig().appName) || 'myapp';
+      return `apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: myapp-prod
+namespace: ${app}-prod
 resources:
   - ../../base
 replicas:
-  - name: myapp
+  - name: ${app}
     count: 10
 patches:
-  - target: { kind: Deployment, name: myapp }
+  - target: { kind: Deployment, name: ${app} }
     patch: |
       - op: add
         path: /spec/template/spec/containers/0/env
         value:
           - name: ENV
             value: prod
-`
+`;
+    }
   },
   'deploy/README.md': {
     label: 'deploy/README.md (one-time setup)',
@@ -7754,26 +7788,31 @@ ArgoCD's PreSync hook runs \`cosign verify\` on the digest before any pod schedu
   // Kustomize (above) and Helm so the user picks whichever they actually use.
 
   'deploy/charts/myapp/Chart.yaml': {
-    label: 'deploy/charts/myapp/Chart.yaml',
-    content: `apiVersion: v2
-name: myapp
+    get label() { const a = (getConfig().appName) || 'myapp'; return `deploy/charts/${a}/Chart.yaml`; },
+    get content() {
+      const app = (getConfig().appName) || 'myapp';
+      return `apiVersion: v2
+name: ${app}
 description: Application chart — emitted by pipeline-studio.
 type: application
 version: 0.1.0       # bump when chart structure changes
 appVersion: "1.0.0"  # bump per release; CI rewrites this to the image digest
-`
+`;
+    }
   },
   'deploy/charts/myapp/values.yaml': {
-    label: 'deploy/charts/myapp/values.yaml',
+    get label() { const a = (getConfig().appName) || 'myapp'; return `deploy/charts/${a}/values.yaml`; },
     get content() {
       const cfg = getConfig();
       const port = cfg.port || cfg.be?.port || cfg.fe?.port || '8080';
       const healthPath = cfg.healthPath || cfg.be?.healthPath || cfg.fe?.healthPath || '/health';
       const stackTag = [cfg.fe?.label, cfg.be?.label].filter(x => x && x !== 'None').join(' + ') || 'generic';
+      const app = cfg.appName || 'myapp';
       return `# Default values. Override per environment with -f values-<env>.yaml or --set.
 # Configured for: ${stackTag} · targetPort ${port} · readiness ${healthPath}
+# Chart directory should be named '${app}' to match Chart.yaml.
 image:
-  repository: REGISTRY/myapp     # set by CI: --set image.repository=...
+  repository: REGISTRY/${app}    # set by CI: --set image.repository=...
   digest: sha256:DIGEST           # set by CI: --set image.digest=...
   pullPolicy: IfNotPresent
 
@@ -8493,7 +8532,7 @@ function openInvariantContext(invId) {
 
   const compHtml = compRows.length === 0
     ? '<p class="u-muted-i">No compliance framework references this invariant directly.</p>'
-    : '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Framework</th><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Control</th></tr></thead><tbody>' +
+    : '<table class="u-table-base"><thead><tr><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Framework</th><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Control</th></tr></thead><tbody>' +
         compRows.map(r => `<tr><td style="padding:3px 6px;border-bottom:1px solid #f0f0f0"><span style="cursor:pointer;color:var(--accent)" onclick="openComplianceContext('${r.fw}')">${r.fw.toUpperCase()}</span></td><td style="padding:3px 6px;border-bottom:1px solid #f0f0f0;font-family:'JetBrains Mono',monospace">${r.ctrl}</td></tr>`).join('') +
         '</tbody></table>';
 
@@ -8518,7 +8557,7 @@ function openInvariantContext(invId) {
     </div>
     ${incidentBlock}
     ${threatBlock}
-    <div style="margin-bottom:18px">
+    <div class="u-mb-18">
       <div class="u-eyebrow">Enforced by ${stages.length} stage${stages.length === 1 ? '' : 's'}</div>
       ${stagesHtml}
     </div>
@@ -8547,7 +8586,7 @@ function openComplianceContext(fw) {
   const mappedCount = rows.length;
   const coverage = Math.round(100 * mappedCount / totalStages);
 
-  const tableHtml = '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Stage</th><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Control ID</th></tr></thead><tbody>' +
+  const tableHtml = '<table class="u-table-base"><thead><tr><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Stage</th><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">Control ID</th></tr></thead><tbody>' +
     rows.map(r => `<tr style="cursor:pointer" onclick="closeContext();jumpToStage('${r.stage.id}')"><td style="padding:4px 6px;border-bottom:1px solid #f0f0f0"><span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent)">${r.stage.badge}</span> ${r.stage.title}</td><td style="padding:4px 6px;border-bottom:1px solid #f0f0f0;font-family:'JetBrains Mono',monospace">${r.control}</td></tr>`).join('') +
     '</tbody></table>';
 
@@ -8568,7 +8607,7 @@ function openComplianceContext(fw) {
       <div style="font-size:11.5px;color:var(--text);margin-bottom:6px"><strong>Coverage:</strong> ${mappedCount} / ${totalStages} stages map to this framework (${coverage}%).</div>
       <div style="font-size:11px;color:var(--muted)">Select this framework in the top dropdown — every stage badge will show its control ID inline.</div>
     </div>
-    <div style="margin-bottom:18px">
+    <div class="u-mb-18">
       <div class="u-eyebrow">Stages mapped (click to open)</div>
       ${tableHtml}
     </div>
@@ -8587,7 +8626,7 @@ function openStageContext(stageId) {
   const compRows = COMPLIANCE_MAP[ckey] || {};
   const compHtml = Object.entries(compRows).length === 0
     ? '<p class="u-muted-i">No compliance mapping recorded.</p>'
-    : '<table style="width:100%;border-collapse:collapse;font-size:12px"><tbody>' +
+    : '<table class="u-table-base"><tbody>' +
         Object.entries(compRows).map(([fw, ctrl]) => `<tr><td style="padding:3px 6px;border-bottom:1px solid #f0f0f0"><span style="cursor:pointer;color:var(--accent)" onclick="openComplianceContext('${fw}')">${fw.toUpperCase()}</span></td><td style="padding:3px 6px;border-bottom:1px solid #f0f0f0;font-family:'JetBrains Mono',monospace">${ctrl}</td></tr>`).join('') +
         '</tbody></table>';
 
@@ -8611,11 +8650,11 @@ function openStageContext(stageId) {
       <div style="padding:8px;background:#f0f9ff;border-radius:4px;font-size:11px"><div style="color:var(--muted);text-transform:uppercase;font-size:9px;font-weight:700">Cost / run</div><div style="font-size:13px;font-weight:600">${prof.cost}</div></div>
     </div>
     <div style="margin-bottom:14px;padding:10px;background:#ffebe9;border-left:3px solid var(--danger);border-radius:0 4px 4px 0;font-size:12px"><strong>On failure:</strong> ${stage.onFailure || '—'}</div>
-    <div style="margin-bottom:18px">
+    <div class="u-mb-18">
       <div class="u-eyebrow">Invariants enforced</div>
       ${invHtml}
     </div>
-    <div style="margin-bottom:18px">
+    <div class="u-mb-18">
       <div class="u-eyebrow">Compliance controls satisfied</div>
       ${compHtml}
     </div>
@@ -9014,23 +9053,24 @@ function onSvgNodeClick(stageId) {
 }
 
 // ── 3-way sync helpers ──────────────────────────────────────────────────────
-// Maps a stage ID (from SVG / phase strip / decision) → its owning phase tab.
-const STAGE_TO_PHASE_TAB = {
-  // Phase 0
-  p0g1:'tab-phase0', p0g2:'tab-phase0', p0g3:'tab-phase0',
-  // Phase 1
-  l1:'tab-local', l2:'tab-local', l3:'tab-local', l4:'tab-local',
-  // Phase 2 (PR gate)
-  s1:'tab-pr', s2:'tab-pr', s3:'tab-pr', s3b:'tab-pr', s4:'tab-pr', s5:'tab-pr',
-  s6pr:'tab-pr', s7pr:'tab-pr', s8apr:'tab-pr',
-  // Phase 3 (Main)
-  s0:'tab-main', s1main:'tab-main', s2m:'tab-main', s3m:'tab-main', s3bm:'tab-main',
-  s4m:'tab-main', s5m:'tab-main', s6main:'tab-main', s7main:'tab-main', s8a:'tab-main',
-  s8b:'tab-main', s9:'tab-main', s9a:'tab-main', dast:'tab-main', s10:'tab-main', s11:'tab-main',
-  // Phase 4 (Promotions)
-  s12:'tab-promotions', s13:'tab-promotions', p1:'tab-promotions', p2:'tab-promotions',
-  p3:'tab-promotions', p4:'tab-promotions', s14:'tab-promotions'
-};
+// Stage → owning phase tab. DERIVED from PHASE_DEFS (the canonical SVG band
+// data) plus a fixed Phase 0 set. Single source of truth. If a new stage is
+// added to PHASE_DEFS, this map updates automatically — no parallel literal
+// to keep in sync.
+const STAGE_TO_PHASE_TAB = (() => {
+  const out = {
+    p0g1: 'tab-phase0', p0g2: 'tab-phase0', p0g3: 'tab-phase0'
+  };
+  const phaseToTab = { 1: 'tab-local', 2: 'tab-pr', 3: 'tab-main', 4: 'tab-promotions' };
+  if (typeof PHASE_DEFS !== 'undefined') {
+    Object.entries(PHASE_DEFS).forEach(([phaseNum, def]) => {
+      const tab = phaseToTab[phaseNum];
+      if (!tab || !def.stageIds) return;
+      def.stageIds.forEach(sid => { out[sid] = tab; });
+    });
+  }
+  return out;
+})();
 // Pulse a decision row in the decision map (used when an SVG / phase click
 // implicates a decision).
 function pulseDecisionRow(decisionId) {
@@ -10910,7 +10950,7 @@ function renderPhase0() {
         </div>`;
     }).join('');
     return `
-      <div style="margin-bottom:18px">
+      <div class="u-mb-18">
         <h3 style="font-size:13px;font-weight:700;margin-bottom:4px;color:var(--text);display:flex;align-items:baseline;gap:8px">
           <span style="font-family:'JetBrains Mono',monospace;color:var(--accent)">${gate.name}</span>
         </h3>
@@ -11473,27 +11513,27 @@ function renderSDP(stage) {
       <div class="alts-body">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:12px">
           <div>
-            <div class="sdp-ikey" style="margin-bottom:4px">What it is</div>
+            <div class="sdp-ikey" class="u-mb-4">What it is</div>
             <div style="color:var(--text);line-height:1.5">${linkifyGlossary(stage.concept)}</div>
           </div>
           <div>
-            <div class="sdp-ikey" style="margin-bottom:4px">Threat it prevents</div>
+            <div class="sdp-ikey" class="u-mb-4">Threat it prevents</div>
             <div style="color:var(--danger);line-height:1.5">${stage.threat || '—'}</div>
           </div>
           <div>
-            <div class="sdp-ikey" style="margin-bottom:4px">How the tool works</div>
+            <div class="sdp-ikey" class="u-mb-4">How the tool works</div>
             <div style="color:var(--text-sec);line-height:1.5">${linkifyGlossary(stage.howItWorks || '—')}</div>
           </div>
           <div>
-            <div class="sdp-ikey" style="margin-bottom:4px">Reading the output</div>
+            <div class="sdp-ikey" class="u-mb-4">Reading the output</div>
             <div style="color:var(--text-sec);line-height:1.5">${linkifyGlossary(stage.outputMeaning || '—')}</div>
           </div>
           <div>
-            <div class="sdp-ikey" style="margin-bottom:4px">Why this order</div>
+            <div class="sdp-ikey" class="u-mb-4">Why this order</div>
             <div style="color:var(--text-sec);line-height:1.5">${stage.whyOrder || '—'}</div>
           </div>
           <div>
-            <div class="sdp-ikey" style="margin-bottom:4px">Common mistakes</div>
+            <div class="sdp-ikey" class="u-mb-4">Common mistakes</div>
             <div style="color:var(--warn);line-height:1.5">${(stage.commonMistakes||'—').split(' | ').map(m=>'• '+m).join('<br>')}</div>
           </div>
         </div>
@@ -11766,7 +11806,7 @@ function renderTradeoffs() {
           <span style="font-size:13px;font-weight:600">${stage.title}</span>
           <span style="font-size:11px;color:var(--muted);margin-left:auto">Default: ${(stage.tool || '').split('·')[0].trim()}</span>
         </div>
-        <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <table class="u-table-base">
           <thead><tr>
             <th style="text-align:left;padding:8px 12px;background:#fafbfc;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase;width:170px">Alternative</th>
             <th style="text-align:left;padding:8px 12px;background:#fafbfc;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase">When to switch</th>
@@ -11799,7 +11839,7 @@ function renderMistakes() {
   rows.forEach(r => { (byPhase[r.stage.phase] || byPhase['ph-f']).push(r); });
   const phaseLbl = {'ph-f':'Foundation','ph-s':'Security','ph-b':'Build','ph-g':'Gate','ph-o':'Ship','ph-v':'Verify'};
   container.innerHTML = Object.entries(byPhase).filter(([,arr]) => arr.length).map(([ph, arr]) => `
-    <div style="margin-bottom:18px">
+    <div class="u-mb-18">
       <h3 style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text);display:flex;align-items:center;gap:8px">
         <span class="swim-pill ${ph}" style="font-size:9px">${phaseLbl[ph]}</span>
         <span>${arr.length} mistake${arr.length===1?'':'s'}</span>
@@ -12000,29 +12040,29 @@ function renderMaintainTab() {
 
   wrap.innerHTML = `
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:22px">
-      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
-        <div style="font-size:24px;font-weight:700;color:var(--accent)">${decisionCount}</div>
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Decisions</div>
+      <div class="u-stat-card">
+        <div class="u-stat-num-lg">${decisionCount}</div>
+        <div class="u-eyebrow-thick">Decisions</div>
       </div>
-      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
-        <div style="font-size:24px;font-weight:700;color:var(--accent)">${invariantCount}</div>
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Invariants</div>
+      <div class="u-stat-card">
+        <div class="u-stat-num-lg">${invariantCount}</div>
+        <div class="u-eyebrow-thick">Invariants</div>
       </div>
-      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
-        <div style="font-size:24px;font-weight:700;color:var(--accent)">${tourCount}</div>
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Threat tours</div>
+      <div class="u-stat-card">
+        <div class="u-stat-num-lg">${tourCount}</div>
+        <div class="u-eyebrow-thick">Threat tours</div>
       </div>
-      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
-        <div style="font-size:24px;font-weight:700;color:var(--accent)">${catalogCount}</div>
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Catalog entries</div>
+      <div class="u-stat-card">
+        <div class="u-stat-num-lg">${catalogCount}</div>
+        <div class="u-eyebrow-thick">Catalog entries</div>
       </div>
-      <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:white">
-        <div style="font-size:24px;font-weight:700;color:var(--accent)">${glossaryCount}</div>
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Glossary terms</div>
+      <div class="u-stat-card">
+        <div class="u-stat-num-lg">${glossaryCount}</div>
+        <div class="u-eyebrow-thick">Glossary terms</div>
       </div>
       <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;background:${comingSoon.length > 0 ? '#fff8c5' : 'white'}">
         <div style="font-size:24px;font-weight:700;color:${comingSoon.length > 0 ? '#92400e' : 'var(--accent)'}">${comingSoon.length}</div>
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Coming soon</div>
+        <div class="u-eyebrow-thick">Coming soon</div>
       </div>
     </div>
 
@@ -12271,9 +12311,9 @@ function renderCatalog() {
     .sort((a,b) => b[1].total - a[1].total)
     .map(([lang, c]) => `<tr>
       <td><b>${lang}</b></td>
-      <td style="text-align:center">${c.production}</td>
-      <td style="text-align:center">${c.beta}</td>
-      <td style="text-align:center">${c['coming-soon']}</td>
+      <td class="u-tc">${c.production}</td>
+      <td class="u-tc">${c.beta}</td>
+      <td class="u-tc">${c['coming-soon']}</td>
       <td style="text-align:center;font-weight:700">${c.total}</td>
     </tr>`).join('');
   // Tool freshness row — maintainer view, separate from main pipeline.
@@ -12298,7 +12338,7 @@ function renderCatalog() {
         <div><div style="font-size:26px;font-weight:700;color:#57606a">⏳ ${totalC}</div><div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Coming soon</div></div>
       </div>
       <table class="ref-table" style="margin-top:6px">
-        <thead><tr><th>Language / Runtime</th><th style="text-align:center">✅ Production</th><th style="text-align:center">🟡 Beta</th><th style="text-align:center">⏳ Coming soon</th><th style="text-align:center">Total</th></tr></thead>
+        <thead><tr><th>Language / Runtime</th><th class="u-tc">✅ Production</th><th class="u-tc">🟡 Beta</th><th class="u-tc">⏳ Coming soon</th><th class="u-tc">Total</th></tr></thead>
         <tbody>${sumRows}</tbody>
       </table>
     </div>`;
@@ -13034,7 +13074,7 @@ function renderComingSoonBanner() {
     const sisterTxt = sister
       ? `<button onclick="switchToSister('${c.id === feId ? 'sel-frontend' : 'sel-backend'}','${sister.id}')" style="background:transparent;border:1px solid var(--accent);color:var(--accent);padding:2px 9px;border-radius:3px;font-size:11px;cursor:pointer;font-family:inherit;margin-left:6px">Switch to ${sister.label} →</button>`
       : '';
-    return `<div style="margin-bottom:4px"><b>⏳ ${c.label}</b> — listed for transparency. Code not ready yet. ${c.note}${sisterTxt}</div>`;
+    return `<div class="u-mb-4"><b>⏳ ${c.label}</b> — listed for transparency. Code not ready yet. ${c.note}${sisterTxt}</div>`;
   }).join('');
   banner.innerHTML = `
     <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;margin-bottom:4px">Coming-soon placeholder selected</div>
@@ -13484,6 +13524,11 @@ function writeStateToURL() {
   if (get('sel-industry')   && get('sel-industry')   !== 'none') params.set('industry',   get('sel-industry'));
   const activeMode = document.body.className.match(/mode-(\w+)/);
   if (activeMode && activeMode[1] !== 'default') params.set('mode', activeMode[1]);
+  // Preserve appName param when present + valid — flowed into all deploy files.
+  try {
+    const cur = new URLSearchParams(location.search).get('appName');
+    if (cur && /^[a-z][a-z0-9-]{0,38}$/.test(cur)) params.set('appName', cur);
+  } catch (e) {}
   const qs = params.toString();
   // Wrapped: file:// origin may reject replaceState in some sandboxes.
   // Failure here must not break rendering.
