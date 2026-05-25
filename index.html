@@ -8120,15 +8120,19 @@ function allStages() {
 }
 
 function openContext(kind, title, bodyHtml) {
-  document.getElementById('ctx-kind').textContent = kind;
-  document.getElementById('ctx-title').textContent = title;
-  document.getElementById('ctx-body').innerHTML = bodyHtml;
-  document.getElementById('ctx-drawer').style.right = '0';
-  document.getElementById('ctx-overlay').style.display = 'block';
+  const k = $id('ctx-kind'), t = $id('ctx-title'), b = $id('ctx-body');
+  const d = $id('ctx-drawer'), o = $id('ctx-overlay');
+  if (!k || !t || !b || !d || !o) return;
+  k.textContent = kind;
+  t.textContent = title;
+  b.innerHTML = bodyHtml;
+  d.style.right = '0';
+  o.style.display = 'block';
 }
 function closeContext() {
-  document.getElementById('ctx-drawer').style.right = '-460px';
-  document.getElementById('ctx-overlay').style.display = 'none';
+  const d = $id('ctx-drawer'), o = $id('ctx-overlay');
+  if (d) d.style.right = '-460px';
+  if (o) o.style.display = 'none';
   // Clear any highlighted pipe boxes.
   document.querySelectorAll('.pipe-box.ctx-glow').forEach(el => el.classList.remove('ctx-glow'));
 }
@@ -10239,11 +10243,13 @@ function openDecisionPicker(decisionId) {
   DECISION_VISITED.add(decisionId);
   const opts = decisionOptions(decisionId);
   const current = decisionRead(decisionId);
-  const modal = document.getElementById('decision-picker-modal');
-  if (!modal) return;
-  document.getElementById('decision-picker-title').innerHTML = `${def.icon} ${def.label} — pick one`;
-  document.getElementById('decision-picker-concept').textContent = def.concept;
-  const list = document.getElementById('decision-picker-list');
+  const modal = $id('decision-picker-modal');
+  const title = $id('decision-picker-title');
+  const concept = $id('decision-picker-concept');
+  const list = $id('decision-picker-list');
+  if (!modal || !title || !concept || !list) return;
+  title.innerHTML = `${def.icon} ${def.label} — pick one`;
+  concept.textContent = def.concept;
   list.innerHTML = opts.map(o => {
     const tierBadge = (decisionId === 'fe' || decisionId === 'be') && o.tier === 'coming-soon'
       ? '<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:#eef0f3;color:#57606a;margin-left:6px">⏳ Coming soon</span>'
@@ -10352,7 +10358,8 @@ function renderPhase0() {
 }
 
 function toggleP0(i) {
-  document.getElementById(`p0-${i}`).classList.toggle('open');
+  const el = $id(`p0-${i}`);
+  if (el) el.classList.toggle('open');
 }
 
 function renderLocalPhase() {
@@ -11889,6 +11896,9 @@ function initScrollspy() {
   sections.forEach(s => observer.observe(s.el));
 }
 
+// Shorthand for getElementById. Returns null if missing. Use to write
+// defensive accessors:  const el = $id('foo'); if (el) el.style.display = '';
+function $id(id) { return document.getElementById(id); }
 function esc(str) {
   return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -12355,33 +12365,41 @@ function buildQuickFindIndex() {
   Object.entries(COMPLIANCE_REQUIREMENTS).forEach(([k, v]) => QF_INDEX.push({
     kind:'Compliance', title:k.toUpperCase() + ' — ' + v.name,
     hint:'Click — select framework, see extras banner',
-    action:() => { closeQuickFind(); document.getElementById('sel-compliance').value = k; onConfigChange(); }
+    action:() => { closeQuickFind(); const s = $id('sel-compliance'); if (s) { s.value = k; s.dataset.userSet = '1'; onConfigChange(); } }
   }));
   // CI systems
   Object.entries(CI_SYSTEMS).forEach(([k, v]) => QF_INDEX.push({
     kind:'CI', title:v.label,
     hint:(OPTION_HELP.ci[k] || '').slice(0, 100),
-    action:() => { closeQuickFind(); document.getElementById('sel-ci').value = k; onConfigChange(); }
+    action:() => { closeQuickFind(); const s = $id('sel-ci'); if (s) { s.value = k; onConfigChange(); } }
   }));
   // Registries
   Object.entries(REGS).forEach(([k, v]) => QF_INDEX.push({
     kind:'Registry', title:v.label,
     hint:(OPTION_HELP.reg[k] || '').slice(0, 100),
-    action:() => { closeQuickFind(); document.getElementById('sel-reg').value = k; onConfigChange(); }
+    action:() => { closeQuickFind(); const s = $id('sel-reg'); if (s) { s.value = k; onConfigChange(); } }
   }));
 }
 
 function openQuickFind() {
   if (QF_INDEX.length === 0) buildQuickFindIndex();
-  document.getElementById('qf-overlay').style.display = 'flex';
-  const input = document.getElementById('qf-input');
+  const overlay = $id('qf-overlay'), input = $id('qf-input');
+  if (!overlay || !input) return;
+  overlay.style.display = 'flex';
   input.value = '';
   QF_SELECTED = 0;
   renderQuickFindResults('');
   setTimeout(() => input.focus(), 50);
 }
 function closeQuickFind() {
-  document.getElementById('qf-overlay').style.display = 'none';
+  const overlay = $id('qf-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+// Returns true iff the Quick-Find modal is currently open. Used by the
+// keydown listener — avoids two unguarded getElementById calls per keystroke.
+function isQuickFindOpen() {
+  const o = $id('qf-overlay');
+  return !!o && o.style.display === 'flex';
 }
 function renderQuickFindResults(q) {
   const ql = q.toLowerCase().trim();
@@ -12420,12 +12438,12 @@ document.addEventListener('keydown', e => {
     return;
   }
   // Esc closes modal.
-  if (e.key === 'Escape' && document.getElementById('qf-overlay').style.display === 'flex') {
+  if (e.key === 'Escape' && isQuickFindOpen()) {
     closeQuickFind();
     return;
   }
   // Arrow/Enter when modal is open.
-  if (document.getElementById('qf-overlay').style.display !== 'flex') return;
+  if (!isQuickFindOpen()) return;
   if (e.key === 'ArrowDown') { e.preventDefault(); qfSelect(Math.min(QF_SELECTED + 1, QF_FILTERED.length - 1)); }
   if (e.key === 'ArrowUp')   { e.preventDefault(); qfSelect(Math.max(QF_SELECTED - 1, 0)); }
   if (e.key === 'Enter' && QF_FILTERED[QF_SELECTED]) { e.preventDefault(); QF_FILTERED[QF_SELECTED].action(); }
@@ -12720,19 +12738,26 @@ let WIZARD_STEP_IDX = 0;
 function openWizard() {
   WIZARD_STATE = {};
   WIZARD_STEP_IDX = 0;
-  document.getElementById('wizard-modal').style.display = 'flex';
+  const modal = $id('wizard-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
   renderWizardStep();
 }
 function closeWizard() {
-  document.getElementById('wizard-modal').style.display = 'none';
+  const modal = $id('wizard-modal');
+  if (modal) modal.style.display = 'none';
 }
 function renderWizardStep() {
   const step = WIZARD_STEPS[WIZARD_STEP_IDX];
   const total = WIZARD_STEPS.length;
-  document.getElementById('wizard-step-indicator').textContent = `Step ${WIZARD_STEP_IDX+1} of ${total} — ${step.label.slice(0,46)}`;
-  document.getElementById('wizard-progress-bar').style.width = `${Math.round(((WIZARD_STEP_IDX+1)/total)*100)}%`;
-  document.getElementById('wizard-back').style.visibility = WIZARD_STEP_IDX === 0 ? 'hidden' : 'visible';
-  document.getElementById('wizard-next').textContent = WIZARD_STEP_IDX === total-1 ? 'Finish + apply →' : 'Next →';
+  const ind = $id('wizard-step-indicator'), bar = $id('wizard-progress-bar');
+  const back = $id('wizard-back'), next = $id('wizard-next');
+  const body = $id('wizard-body');
+  if (!ind || !bar || !back || !next || !body) return;
+  ind.textContent = `Step ${WIZARD_STEP_IDX+1} of ${total} — ${step.label.slice(0,46)}`;
+  bar.style.width = `${Math.round(((WIZARD_STEP_IDX+1)/total)*100)}%`;
+  back.style.visibility = WIZARD_STEP_IDX === 0 ? 'hidden' : 'visible';
+  next.textContent = WIZARD_STEP_IDX === total-1 ? 'Finish + apply →' : 'Next →';
 
   // Build options for dynamic steps.
   let options = step.options;
@@ -12751,7 +12776,7 @@ function renderWizardStep() {
       </span>
     </label>`).join('');
 
-  document.getElementById('wizard-body').innerHTML = `
+  body.innerHTML = `
     <h3 style="font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text)">${step.label}</h3>
     <p style="font-size:12.5px;color:var(--text-sec);line-height:1.55;margin-bottom:14px">${step.concept}</p>
     <div style="border:1px solid var(--border);border-radius:8px;padding:14px 16px;background:var(--surface)">${optsHtml}</div>`;
