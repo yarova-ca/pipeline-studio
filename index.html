@@ -173,8 +173,11 @@ main{min-width:0;overflow-x:hidden}
 /* Tabs unified into single-scroll sections.
    Phases stay expanded — they ARE the narrative.
    Reference sections wrapped in <details> via JS — collapsible. */
+/* All tab-content sections are visible at once by design — this is a scroll-to
+   anchor pattern, not a tab-swap UI. The .tab-btn 'active' state highlights
+   which section the user last jumped to; the panels themselves never hide.
+   See showTab() in JS. scroll-margin-top compensates for sticky headers. */
 .tab-content{display:block;padding:24px 32px 40px;border-top:1px solid var(--border-subtle);scroll-margin-top:90px}
-.tab-content.active{display:block}
 .tab-content > h2:first-child, .tab-content .pipeline-hdr h2{font-size:18px}
 /* Collapsible reference section styling */
 .ref-collapsible{padding:0;border-top:1px solid var(--border-subtle)}
