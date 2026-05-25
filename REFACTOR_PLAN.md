@@ -84,19 +84,19 @@ These are small, high-impact, low-risk. They fix the most visible "yuck" and unb
 
 This is where the "feels broken" goes away.
 
-- [ ] **P1-1 · Single z-index ladder** *(MED)*
+- [x] **P1-1 · Single z-index ladder** *(MED)* — commit `306c66c`
   - Problem: 11 ad-hoc z-index values, two modals tied at 200, no system.
   - Files: `index.html:11` (`:root`), all overlay/modal styles
   - Fix: Add tokens `--z-sticky:50; --z-overlay:100; --z-drawer:150; --z-modal:200; --z-modal-on-modal:250; --z-toast:300;`. Replace every numeric z-index.
   - Accept: Grep for `z-index:` outside `:root` returns 0 numeric values. Opening any two overlays stacks correctly.
 
-- [ ] **P1-2 · Modal semantics + focus trap** *(HIGH for a11y)*
+- [x] **P1-2 · Modal semantics + focus trap** *(HIGH for a11y)* — commit `215a1dd`
   - Problem: 5 modals (wizard, quick-find, decision-picker, threat-tour, context-drawer) have no `role="dialog"`, no `aria-modal`, no focus trap, no `inert` on background.
   - Files: `index.html:503, 516, 528, 548, 922`
   - Fix: Add `role="dialog" aria-modal="true" aria-labelledby="..."`. On open, save `document.activeElement`, focus first focusable inside modal, trap Tab inside until close, restore focus on close. Set `inert` on `<main>` while modal open.
   - Accept: Keyboard-only user can't tab out of a modal; closing returns focus to the trigger; screen reader announces "dialog".
 
-- [ ] **P1-3 · One decision flow** *(HIGH for UX)*
+- [~] **P1-3 · One decision flow** *(HIGH for UX)* — PARTIAL (commit `fea8642`) — Setup-wizard CTA hidden from config bar so Decision Map is the single visible entry. Wizard code retained + reachable via `W` shortcut. Full wizard deletion vs. fold-into-map is a product decision still pending
   - Problem: Wizard modal + Decision Map + Decision-Picker modal are three UIs for the same task.
   - Files: `index.html:528–546` (wizard), `915` (decision-map), `922–940` (decision-picker)
   - Decide one of:
@@ -105,31 +105,31 @@ This is where the "feels broken" goes away.
   - Recommend **(A)** — on-page beats modal for content-heavy choices.
   - Accept: One primary entry point for picking config. The other UI is gone. All existing functionality still reachable.
 
-- [ ] **P1-4 · Hide inactive tab panels** *(HIGH)*
+- [x] **P1-4 · Hide inactive tab panels** *(HIGH)* — REINTERPRETED (commit `0d95ce7`) — audit misread the design; tabs are intentionally scroll-to-section, all visible. Removed dead `.tab-content.active` selector + added comment codifying intent. No behavior change
   - Problem: `.tab-content { display:block }` and `.tab-content.active { display:block }` are identical. Either JS is hacking visibility some other way or all tabs render at once.
   - Files: `index.html:156–157`
   - Fix: Change base rule to `display:none`. Verify `showTab` adds/removes `.active` correctly. Audit any code that assumes a hidden tab is in the layout.
   - Accept: Only one tab is in the layout at a time. Performance + DOM size improve.
 
-- [ ] **P1-5 · Add `aria-selected` + `role="tab"` + `role="tabpanel"`** *(MED)*
+- [x] **P1-5 · Add `aria-selected` + `role="tab"` + `role="tabpanel"`** *(MED)* — REINTERPRETED (commit `e91afe6`) — no `.tab-btn` elements exist; correct fix for this scroll-anchor pattern is `role="region"` + `aria-label` on each section (14 added). `aria-current="location"` wired into scrollspy for any future tab-bar
   - Problem: No ARIA on the tab bar — screen reader users can't tell which tab is active.
   - Files: `index.html:11754–11770` (showTab), tab-bar HTML
   - Fix: Tab buttons get `role="tab"`, panels get `role="tabpanel"` + `aria-labelledby`. On switch, set `aria-selected="true"` on active button, `false` on others.
   - Accept: NVDA / VoiceOver announces "Tab 3 of 14, Promotions, selected".
 
-- [ ] **P1-6 · Replace inline `onclick` with event delegation** *(MED)*
+- [ ] **P1-6 · Replace inline `onclick` with event delegation** *(MED)* — DEFERRED — high-risk migration of 59 onclick sites for limited ROI now that P0-3 fixed the two interpolation-prone sites. The `switchTab` string-search is dead code (no `.tab-btn` HTML exists). Revisit if/when re-introducing a real tab bar
   - Problem: 59 inline `onclick=` vs 4 `addEventListener` — no consistent model, fragile to refactor (see P0-3 escaping bug).
   - Files: `index.html` body + script block
   - Fix: One delegated listener on `document` reading `data-action`. Migrate in batches by feature area (tabs, modals, decision picker, wizard).
   - Accept: New buttons are added with `data-action`, not `onclick`. The string-search trick in `switchTab` (line 11764) is removed in favor of `data-tab`.
 
-- [ ] **P1-7 · Single source of truth for config state** *(MED)*
+- [ ] **P1-7 · Single source of truth for config state** *(MED)* — DEFERRED — substantial refactor touching `getConfig`, every onChange handler, every renderer. Needs human-in-loop review per step; not safe to do autonomously without browser regression coverage. Recommend doing in dedicated session
   - Problem: Config is read off `.value` of selects scattered through code; tab re-renders are inconsistent.
   - Files: `index.html:2911–2977` (getConfig), all onChange handlers
   - Fix: A `state.config` object updated only via `setConfig({key, value})`, which validates downstream invariants (e.g. selected CI valid for backend) and dispatches a single `'config:change'` event. All renderers subscribe.
   - Accept: Picking a backend that doesn't support the current CI shows a one-line toast and resets CI to a valid default (no silent corruption).
 
-- [ ] **P1-8 · Sticky-header collision audit** *(MED)*
+- [x] **P1-8 · Sticky-header collision audit** *(MED)* — commit `fc05dbe`
   - Problem: `nav#sb` top:0, `#config-bar` top:0 z:50, `.tab-bar` top:45px z:40, `#ds-step-nav` top:88px z:35. `scroll-margin-top:90px` likely exceeded.
   - Files: `index.html:80, 99, 149, 156, 484`
   - Fix: Decide the stacked-header total height per breakpoint. Set `scroll-margin-top` to that value as a CSS variable. Stop using both top:0 elements on mobile.
