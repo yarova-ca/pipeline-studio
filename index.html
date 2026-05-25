@@ -236,31 +236,33 @@ main{min-width:0;overflow-x:hidden}
    See showTab() in JS. scroll-margin-top compensates for sticky headers. */
 .tab-content{display:block;padding:24px 32px 40px;border-top:1px solid var(--border-subtle);scroll-margin-top:var(--sticky-headers-h)}
 
-/* ── Phase strip — 4 phase tabs laid out side-by-side in a grid below the SVG.
-   Each cell is one of: tab-local, tab-pr, tab-main, tab-promotions. Width
-   responsive: 4 cols on wide screens, 2 on medium, 1 on phones.
-   Cells get a card treatment (border + radius + light bg) instead of the
-   full-bleed top border the standalone .tab-content otherwise gets. */
-.phase-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 24px;align-items:start;background:var(--surface)}
-.phase-strip > .tab-content{padding:14px;border:1px solid var(--border);border-top:1px solid var(--border);border-radius:8px;background:var(--bg);box-shadow:var(--sh-1);min-width:0;max-height:78vh;overflow-y:auto;overflow-x:hidden;scroll-margin-top:var(--sticky-headers-h)}
-.phase-strip > .tab-content::-webkit-scrollbar{width:6px}
-.phase-strip > .tab-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-/* Compact headings inside phase cells — column is narrow. */
-.phase-strip > .tab-content h2{font-size:14px !important;line-height:1.3;margin-bottom:4px}
-.phase-strip > .tab-content > .pipeline-hdr p{font-size:11.5px;color:var(--text-sec);line-height:1.45}
-.phase-strip > .tab-content .pipeline-file{font-size:10.5px}
-/* YAML blocks and wide tables inside a narrow cell — let them scroll horizontally. */
+/* ── Phase tabs + strip — REAL tab UI per user direction. Horizontal nav of
+   Phase 0..4 above; only the active phase's full content shows below at
+   full width. Replaces the prior 4-column grid (too cramped per phase). */
+.phase-tabs{display:flex;gap:0;padding:0 24px;background:var(--surface);border-bottom:2px solid var(--border);position:sticky;top:var(--sticky-headers-h, 90px);z-index:var(--z-sticky-tab);overflow-x:auto;scrollbar-width:thin}
+.phase-tab{flex:1 1 0;min-width:120px;display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 14px;background:transparent;border:none;border-bottom:3px solid transparent;color:var(--text-sec);cursor:pointer;font-family:inherit;text-align:left;transition:background .12s,border-color .12s,color .12s}
+.phase-tab:hover{background:rgba(9,105,218,.04);color:var(--text)}
+.phase-tab .pt-num{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);font-weight:700}
+.phase-tab .pt-label{font-size:13px;font-weight:600;line-height:1.2}
+.phase-tab .pt-sub{font-size:10.5px;color:var(--muted);line-height:1.3}
+.phase-tab.phase-tab-active{background:var(--bg);border-bottom-color:var(--accent);color:var(--text)}
+.phase-tab.phase-tab-active .pt-num{color:var(--accent)}
+.phase-tab.phase-tab-active .pt-label{color:var(--accent)}
+.phase-strip{padding:16px 24px;background:var(--bg)}
+/* By default, all phase-strip children are hidden — only the active one shows.
+   Active is set by JS activatePhaseTab(). */
+.phase-strip > .tab-content{display:none;padding:14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);box-shadow:var(--sh-1);scroll-margin-top:var(--sticky-headers-h)}
+.phase-strip > .tab-content.phase-active{display:block}
+.phase-strip > .tab-content h2{font-size:16px;line-height:1.3;margin-bottom:6px}
+.phase-strip > .tab-content > .pipeline-hdr p{font-size:13px;color:var(--text-sec);line-height:1.5}
+.phase-strip > .tab-content .pipeline-file{font-size:11.5px}
 .phase-strip > .tab-content pre,
-.phase-strip > .tab-content .yaml-pre{font-size:10.5px;line-height:1.5;max-width:100%;overflow-x:auto}
-.phase-strip > .tab-content table{font-size:11px}
-/* Stage flow pipe-boxes — already overflow:auto; keep them readable inside cell. */
-.phase-strip > .tab-content .pipe-flow{padding-bottom:6px}
-@media (max-width:1400px){
-  .phase-strip{grid-template-columns:repeat(2,1fr)}
-}
+.phase-strip > .tab-content .yaml-pre{font-size:11.5px;line-height:1.5;max-width:100%;overflow-x:auto}
 @media (max-width:900px){
-  .phase-strip{grid-template-columns:1fr;padding:12px}
-  .phase-strip > .tab-content{max-height:none}
+  .phase-tabs{padding:0 8px}
+  .phase-tab{min-width:90px;padding:6px 10px}
+  .phase-tab .pt-sub{display:none}
+  .phase-strip{padding:12px 8px}
 }
 .tab-content > h2:first-child, .tab-content .pipeline-hdr h2{font-size:18px}
 /* Collapsible reference section styling */
@@ -1196,19 +1198,30 @@ spec:
   </details>
 
   <!-- ── Phase 0 ── -->
-  <div class="phase0-section" id="phase0">
-    <h2>Phase 0 — Repository Bootstrap <span class="phase0-badge">ONE-TIME SETUP</span></h2>
-    <p class="phase0-subtitle">Complete before running any pipeline stage. No pipeline stage can succeed until these are done.</p>
-    <div class="phase0-steps" id="phase0-steps"></div>
+  <!-- ── Phase tab strip — horizontal nav for Phase 0 .. 4, one visible at a time.
+       Phase 0 is the one-time bootstrap; 1–4 are the per-commit pipeline.
+       Click a tab → full content of that phase shows below at full width. ── -->
+  <div class="phase-tabs" role="tablist" aria-label="Pipeline phases">
+    <button class="phase-tab phase-tab-active" role="tab" data-tab="tab-phase0"     onclick="activatePhaseTab('tab-phase0', this)"     aria-selected="true"><span class="pt-num">0</span><span class="pt-label">Bootstrap</span><span class="pt-sub">one-time setup</span></button>
+    <button class="phase-tab"                  role="tab" data-tab="tab-local"      onclick="activatePhaseTab('tab-local', this)"      aria-selected="false"><span class="pt-num">1</span><span class="pt-label">Dev Local</span><span class="pt-sub">pre-commit</span></button>
+    <button class="phase-tab"                  role="tab" data-tab="tab-pr"         onclick="activatePhaseTab('tab-pr', this)"         aria-selected="false"><span class="pt-num">2</span><span class="pt-label">PR Gate</span><span class="pt-sub">scan + verify</span></button>
+    <button class="phase-tab"                  role="tab" data-tab="tab-main"       onclick="activatePhaseTab('tab-main', this)"       aria-selected="false"><span class="pt-num">3</span><span class="pt-label">Main Build</span><span class="pt-sub">sign + attest</span></button>
+    <button class="phase-tab"                  role="tab" data-tab="tab-promotions" onclick="activatePhaseTab('tab-promotions', this)" aria-selected="false"><span class="pt-num">4</span><span class="pt-label">Promotions</span><span class="pt-sub">verified deploy</span></button>
   </div>
 
-  <!-- ── Phase strip — 4 phases side-by-side below the SVG.
-       Each cell is a self-contained column; cells flex into a grid on wide
-       screens, stack on narrow ones (see .phase-strip CSS). ── -->
-  <div class="phase-strip" role="list" aria-label="DevSecOps pipeline phases">
+  <div class="phase-strip" role="tabpanel">
+
+  <!-- ── Phase 0 (now first tab) ── -->
+  <div id="tab-phase0" class="tab-content phase-active" role="region" aria-label="Phase 0 — Bootstrap">
+    <div class="phase0-section">
+      <h2>Phase 0 — Repository Bootstrap <span class="phase0-badge">ONE-TIME SETUP</span></h2>
+      <p class="phase0-subtitle">Complete before running any pipeline stage. No pipeline stage can succeed until these are done.</p>
+      <div class="phase0-steps" id="phase0-steps"></div>
+    </div>
+  </div>
 
   <!-- ── Phase 1: Developer local ── -->
-  <div id="tab-local" class="tab-content active" role="region" aria-label="Phase 1 — Developer Local">
+  <div id="tab-local" class="tab-content" role="region" aria-label="Phase 1 — Developer Local">
     <div class="pipeline-hdr">
       <h2>Phase 1 — Developer Local — shift-left security before CI runs</h2>
       <p>Shift-left security. Catches issues before they hit CI. Zero pipeline minutes spent.</p>
@@ -8375,17 +8388,17 @@ function catalogTierPill(id) {
 // Driven from industry analyst guidance + sector regulators (HHS, FFIEC, FedRAMP).
 // Used by: industry dropdown autolink + industry context block.
 const INDUSTRIES = {
-  none:         {label:'General SaaS',         suggestedCompliance:'soc2',     sla:'99.9%',     traffic:'Internet-facing', sensitivity:'Customer credentials + business data', note:'Default profile. Tune compliance as customer contracts demand.'},
-  fintech:      {label:'Fintech / Payments',   suggestedCompliance:'pci',      sla:'99.95%',    traffic:'Internet-facing + partner APIs', sensitivity:'PAN (Primary Account Number) + customer KYC', note:'PCI-DSS scope split: CDE workloads need quarterly ASV scans + segmentation evidence.'},
-  healthcare:   {label:'Healthcare / Health-tech', suggestedCompliance:'hipaa', sla:'99.95%',    traffic:'Provider portals + patient APIs', sensitivity:'PHI (Protected Health Information)', note:'BAA (Business Associate Agreement) required with every downstream processor. HIPAA breach notification rules apply.'},
-  government:   {label:'Government / Public Sector', suggestedCompliance:'fedramp', sla:'99.99%', traffic:'Authenticated agency users only', sensitivity:'CUI (Controlled Unclassified Information)', note:'FedRAMP Moderate baseline. Continuous monitoring + JAB authorization or 3PAO sponsor required.'},
-  defense:      {label:'Defense / Aerospace',  suggestedCompliance:'cmmc',     sla:'99.99%',    traffic:'Closed network / VPN only', sensitivity:'CUI + ITAR controlled tech data', note:'CMMC Level 2+ + DFARS 252.204-7012 + supply-chain provenance mandatory.'},
-  retail:       {label:'Retail / E-commerce',  suggestedCompliance:'pci',      sla:'99.95%',    traffic:'Peak-driven (Black Friday)', sensitivity:'PAN + browsing behavior + loyalty data', note:'PCI scope on checkout path. Bot-mitigation outside pipeline (Cloudflare/Akamai).'},
-  media:        {label:'Media / Publishing',   suggestedCompliance:'gdpr',     sla:'99.9%',     traffic:'High read, low write', sensitivity:'Subscriber PII + viewing analytics', note:'GDPR Article 30 records of processing. CDN cache invalidation needs auditable controls.'},
-  iot:          {label:'IoT / Edge',            suggestedCompliance:'soc2',    sla:'99.0% (edge tolerated)', traffic:'Device fleets + MQTT/CoAP', sensitivity:'Device identity + telemetry', note:'Image signing extends to firmware. Edge nodes cannot run full Falco — use lightweight Tetragon.'},
-  education:    {label:'Education / EdTech',   suggestedCompliance:'ferpa',    sla:'99.9%',     traffic:'Student portals + admin tools', sensitivity:'FERPA student records', note:'FERPA + COPPA (under 13) overlap. Data-residency per state regulator.'},
-  energy:       {label:'Energy / Utilities',   suggestedCompliance:'nerccip',  sla:'99.99%',    traffic:'Operator consoles + SCADA gateways', sensitivity:'Critical infrastructure', note:'NERC CIP for bulk-electric. Air-gap reviews for OT (Operational Technology) boundaries.'},
-  ai:           {label:'AI / ML Platforms',    suggestedCompliance:'iso27001', sla:'99.95%',    traffic:'API + GPU job runners', sensitivity:'Training data + model weights', note:'Add model SBOM + provenance. Track GPU image signatures separately.'}
+  none:         {label:'General SaaS',         suggestedCompliance:'soc2',                                  sla:'99.9%',     traffic:'Internet-facing', sensitivity:'Customer credentials + business data', note:'Default profile. Tune compliance as customer contracts demand.'},
+  fintech:      {label:'Fintech / Payments',   suggestedCompliance:'pci',     suggestedCompliance2:'soc2', sla:'99.95%',    traffic:'Internet-facing + partner APIs', sensitivity:'PAN (Primary Account Number) + customer KYC', note:'PCI-DSS scope split: CDE workloads need quarterly ASV scans + segmentation evidence.'},
+  healthcare:   {label:'Healthcare / Health-tech', suggestedCompliance:'hipaa', suggestedCompliance2:'soc2', sla:'99.95%',    traffic:'Provider portals + patient APIs', sensitivity:'PHI (Protected Health Information)', note:'BAA (Business Associate Agreement) required with every downstream processor. HIPAA breach notification rules apply.'},
+  government:   {label:'Government / Public Sector', suggestedCompliance:'fedramp',                          sla:'99.99%', traffic:'Authenticated agency users only', sensitivity:'CUI (Controlled Unclassified Information)', note:'FedRAMP Moderate baseline. Continuous monitoring + JAB authorization or 3PAO sponsor required.'},
+  defense:      {label:'Defense / Aerospace',  suggestedCompliance:'cmmc',    suggestedCompliance2:'fedramp', sla:'99.99%',    traffic:'Closed network / VPN only', sensitivity:'CUI + ITAR controlled tech data', note:'CMMC Level 2+ + DFARS 252.204-7012 + supply-chain provenance mandatory.'},
+  retail:       {label:'Retail / E-commerce',  suggestedCompliance:'pci',     suggestedCompliance2:'soc2', sla:'99.95%',    traffic:'Peak-driven (Black Friday)', sensitivity:'PAN + browsing behavior + loyalty data', note:'PCI scope on checkout path. Bot-mitigation outside pipeline (Cloudflare/Akamai).'},
+  media:        {label:'Media / Publishing',   suggestedCompliance:'gdpr',    suggestedCompliance2:'soc2', sla:'99.9%',     traffic:'High read, low write', sensitivity:'Subscriber PII + viewing analytics', note:'GDPR Article 30 records of processing. CDN cache invalidation needs auditable controls.'},
+  iot:          {label:'IoT / Edge',            suggestedCompliance:'soc2',   suggestedCompliance2:'iso27001', sla:'99.0% (edge tolerated)', traffic:'Device fleets + MQTT/CoAP', sensitivity:'Device identity + telemetry', note:'Image signing extends to firmware. Edge nodes cannot run full Falco — use lightweight Tetragon.'},
+  education:    {label:'Education / EdTech',   suggestedCompliance:'ferpa',                                 sla:'99.9%',     traffic:'Student portals + admin tools', sensitivity:'FERPA student records', note:'FERPA + COPPA (under 13) overlap. Data-residency per state regulator.'},
+  energy:       {label:'Energy / Utilities',   suggestedCompliance:'nerccip', suggestedCompliance2:'iso27001', sla:'99.99%',    traffic:'Operator consoles + SCADA gateways', sensitivity:'Critical infrastructure', note:'NERC CIP for bulk-electric. Air-gap reviews for OT (Operational Technology) boundaries.'},
+  ai:           {label:'AI / ML Platforms',    suggestedCompliance:'iso27001', suggestedCompliance2:'soc2', sla:'99.95%',    traffic:'API + GPU job runners', sensitivity:'Training data + model weights', note:'Add model SBOM + provenance. Track GPU image signatures separately.'}
 };
 
 // Extra requirements imposed by each compliance framework beyond the base pipeline.
@@ -8921,7 +8934,13 @@ const SVG_LAYOUT = (() => {
     // promote → final verify (last DevSecOps gate before cluster admission)
     ['p4','s14','critical'],
     // cross-phase 0→1
-    ['p0g3','l1']
+    ['p0g3','l1'],
+    // ── Mirror links: same check, two gates (PR fast preview ↔ Main full run).
+    // Drawn as light-grey dashed lines without arrows so the visual reads as
+    // 'this is the same check, just at the other gate' rather than data flow.
+    ['s2','s2m','mirror'],['s3','s3m','mirror'],['s3b','s3bm','mirror'],
+    ['s4','s4m','mirror'],['s5','s5m','mirror'],
+    ['s6pr','s6main','mirror'],['s7pr','s7main','mirror'],['s8apr','s8a','mirror']
   ];
   return {cols, edges};
 })();
@@ -8970,6 +8989,12 @@ function buildMasterSVG() {
       // Bezier curve between columns.
       const mid = (x1 + x2) / 2;
       path = `M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}`;
+    }
+    // Mirror = 'same check, two gates' link between PR and Main variants of a
+    // stage. No arrow (it's not data flow), longer dash, very light color so
+    // it visually recedes vs. real edges.
+    if (mod === 'mirror') {
+      return `<path d="${path}" fill="none" stroke="#c9d1d9" stroke-width="1" stroke-dasharray="5,4" opacity="0.65"><title>Same check — runs in PR gate AND in Main build</title></path>`;
     }
     const stroke = mod === 'critical' ? '#cf222e' : '#adb5bd';
     const width  = mod === 'critical' ? '2.2' : '1';
@@ -9099,6 +9124,60 @@ function onSvgNodeClick(stageId) {
     try { inline.scrollIntoView({behavior:'smooth', block:'center'}); } catch(e) {}
     inline.classList.add('ctx-glow');
     setTimeout(() => inline.classList.remove('ctx-glow'), 2200);
+  }
+  syncToStage(stageId);
+}
+
+// ── 3-way sync helpers ──────────────────────────────────────────────────────
+// Maps a stage ID (from SVG / phase strip / decision) → its owning phase tab.
+const STAGE_TO_PHASE_TAB = {
+  // Phase 0
+  p0g1:'tab-phase0', p0g2:'tab-phase0', p0g3:'tab-phase0',
+  // Phase 1
+  l1:'tab-local', l2:'tab-local', l3:'tab-local', l4:'tab-local',
+  // Phase 2 (PR gate)
+  s1:'tab-pr', s2:'tab-pr', s3:'tab-pr', s3b:'tab-pr', s4:'tab-pr', s5:'tab-pr',
+  s6pr:'tab-pr', s7pr:'tab-pr', s8apr:'tab-pr',
+  // Phase 3 (Main)
+  s0:'tab-main', s1main:'tab-main', s2m:'tab-main', s3m:'tab-main', s3bm:'tab-main',
+  s4m:'tab-main', s5m:'tab-main', s6main:'tab-main', s7main:'tab-main', s8a:'tab-main',
+  s8b:'tab-main', s9:'tab-main', s9a:'tab-main', dast:'tab-main', s10:'tab-main', s11:'tab-main',
+  // Phase 4 (Promotions)
+  s12:'tab-promotions', s13:'tab-promotions', p1:'tab-promotions', p2:'tab-promotions',
+  p3:'tab-promotions', p4:'tab-promotions', s14:'tab-promotions'
+};
+// Pulse a decision row in the decision map (used when an SVG / phase click
+// implicates a decision).
+function pulseDecisionRow(decisionId) {
+  const row = document.querySelector(`.ds-row[data-decision="${decisionId}"]`);
+  if (!row) return;
+  row.classList.add('just-autolinked');
+  setTimeout(() => row.classList.remove('just-autolinked'), 2000);
+}
+// One-call sync: stage X was selected → switch to its phase tab, glow the SVG
+// node, and pulse every decision row whose pick affects this stage.
+function syncToStage(stageId) {
+  if (!stageId) return;
+  // 1. Switch to the matching phase tab
+  const tabId = STAGE_TO_PHASE_TAB[stageId];
+  if (tabId) {
+    const btn = document.querySelector(`.phase-tab[data-tab="${tabId}"]`);
+    if (btn && !btn.classList.contains('phase-tab-active')) {
+      activatePhaseTab(tabId, btn);
+    }
+  }
+  // 2. Glow the SVG node
+  document.querySelectorAll('.msvg-node.decision-glow').forEach(n => n.classList.remove('decision-glow'));
+  const svgNode = document.querySelector(`.msvg-node[data-id="${stageId}"]`);
+  if (svgNode) {
+    svgNode.classList.add('decision-glow');
+    setTimeout(() => svgNode.classList.remove('decision-glow'), 1800);
+  }
+  // 3. Pulse decision rows that affect this stage (reverse lookup)
+  if (typeof DECISION_AFFECTS_NODES !== 'undefined') {
+    Object.entries(DECISION_AFFECTS_NODES).forEach(([decId, nodes]) => {
+      if (nodes.indexOf(stageId) !== -1) pulseDecisionRow(decId);
+    });
   }
 }
 
@@ -10771,6 +10850,16 @@ function pickDecision(id, value) {
   // the cause/effect link visually. Scheduled after the re-render so the
   // node DOM exists when we query for it.
   setTimeout(() => highlightDecisionNodes(id), 50);
+  // 3-way sync: also activate the phase tab of the FIRST affected stage so
+  // the user lands on the panel where their pick takes effect.
+  setTimeout(() => {
+    const nodes = (typeof DECISION_AFFECTS_NODES !== 'undefined') ? DECISION_AFFECTS_NODES[id] : null;
+    if (nodes && nodes.length) {
+      const tab = STAGE_TO_PHASE_TAB[nodes[0]];
+      const btn = tab && document.querySelector(`.phase-tab[data-tab="${tab}"]`);
+      if (tab && btn && !btn.classList.contains('phase-tab-active')) activatePhaseTab(tab, btn);
+    }
+  }, 60);
 
   if (def.selectId) {
     if (id === 'industry' && typeof onIndustryChange === 'function') onIndustryChange();
@@ -11522,6 +11611,8 @@ function selectPipeStage(stageId, detailId, opts) {
   if (opts && opts.noScroll) return;
   // scrollIntoView absent in jsdom; safe to no-op there.
   try { container.scrollIntoView({behavior:'smooth', block:'nearest'}); } catch(e) {}
+  // 3-way sync: phase strip click → also light up SVG + decision rows.
+  if (typeof syncToStage === 'function') syncToStage(stageId);
 }
 
 function renderWorkflowBox(phase, title, containerId) {
@@ -12348,6 +12439,33 @@ function renderGlossary() {
   }).join('');
 }
 
+// Activate one of the phase tabs (Phase 0..4). Hides all others, scrolls
+// the phase strip into view so the reader sees the content they just clicked.
+// Also writes #tab-<id> into the URL hash so refresh + share-link land on the
+// same tab.
+function activatePhaseTab(tabId, btn) {
+  if (!tabId) return;
+  // Toggle nav buttons
+  document.querySelectorAll('.phase-tab').forEach(b => {
+    const isActive = b.dataset.tab === tabId;
+    b.classList.toggle('phase-tab-active', isActive);
+    b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+  // Toggle panels
+  document.querySelectorAll('.phase-strip > .tab-content').forEach(p => {
+    p.classList.toggle('phase-active', p.id === tabId);
+  });
+  // URL hash sync
+  try {
+    if (location.hash !== '#' + tabId) {
+      history.replaceState(null, '', location.pathname + location.search + '#' + tabId);
+    }
+  } catch (e) {}
+  // Scroll the tab bar into view (not the panel — keeps tabs visible)
+  const tabs = document.querySelector('.phase-tabs');
+  if (tabs) try { tabs.scrollIntoView({behavior:'smooth', block:'start'}); } catch (e) {}
+}
+
 // Now a smooth-scroll jumper. All sections always visible.
 // Reference sections (Files/Setup/Tradeoffs/Mistakes/Combos/Glossary) wrapped in <details>:
 //   - if target is <details>, open it first, then scroll.
@@ -12373,22 +12491,26 @@ function showTab(tabId, btn) {
 // Read the URL hash at load and scroll to that tab if it matches one of the
 // rendered tab panes. Safe to call multiple times.
 function restoreTabFromHash() {
-  const id = (location.hash || '').replace(/^#/, '');
-  if (!id) return;
-  if (!$id(`tab-${id}`)) return;
-  // Match the button so its 'active' class lights up.
-  const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => {
-    const oc = b.getAttribute('onclick') || '';
-    return oc.includes("'" + id + "'");
-  });
-  showTab(id, btn);
-  // If the deep-link is to one of the phase strips, auto-collapse the
-  // decision-map section so the user sees the phase content (their actual
-  // target) without scrolling past 1200px of decision UI. Click 'Show
-  // decisions' to bring it back. Skipped if reader has already engaged with
-  // decisions in this session (they probably want both visible).
-  const phaseIds = ['tab-local','tab-pr','tab-main','tab-promotions'];
-  if (phaseIds.includes('tab-'+id)) {
+  const raw = (location.hash || '').replace(/^#/, '');
+  if (!raw) return;
+  // Hashes like #tab-local / #tab-pr / etc. are the new phase tabs — route
+  // them to activatePhaseTab. Pure ids like #files / #setup keep going to
+  // showTab (smooth-scroll anchor).
+  const tabId = raw.startsWith('tab-') ? raw : null;
+  if (tabId && document.querySelector(`.phase-tab[data-tab="${tabId}"]`)) {
+    activatePhaseTab(tabId);
+  } else if ($id(`tab-${raw}`)) {
+    const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => {
+      const oc = b.getAttribute('onclick') || '';
+      return oc.includes("'" + raw + "'");
+    });
+    showTab(raw, btn);
+  }
+  // Auto-collapse the decision map when deep-linking to a phase pane (so the
+  // reader sees the phase content their link targeted, not 1200px of decision
+  // UI above). Skipped after the reader has engaged with decisions.
+  const phaseTabIds = ['tab-phase0','tab-local','tab-pr','tab-main','tab-promotions'];
+  if (phaseTabIds.includes(tabId)) {
     if (!sessionStorage.getItem('ds-engaged')) toggleDecisionMapCollapsed(true);
   }
 }
@@ -12581,7 +12703,10 @@ function collapseReferenceSections() {
 // Skipped silently if IntersectionObserver is missing (e.g., jsdom test env).
 function initScrollspy() {
   if (typeof IntersectionObserver === 'undefined') return;
-  const sections = ['local','pr','main','promotions','files','setup','tradeoffs','mistakes','matrix','glossary','selftest','maintain']
+  // Phase tabs (local/pr/main/promotions) are now real tab UI (only one
+   // visible at a time) — they're not scroll-anchor sections any more. Only
+   // the reference panels below the strip still scrollspy.
+  const sections = ['files','setup','tradeoffs','mistakes','matrix','glossary','selftest','maintain']
     .map(t => ({id:t, el:document.getElementById('tab-'+t)})).filter(x => x.el);
   if (!sections.length) return;
   const observer = new IntersectionObserver(entries => {
@@ -12852,16 +12977,22 @@ function onIndustryChange() {
   const indKey = document.getElementById('sel-industry').value;
   currentIndustry = indKey;
   const ind = INDUSTRIES[indKey];
-  const compSel = document.getElementById('sel-compliance');
+  const compSel  = document.getElementById('sel-compliance');
+  const comp2Sel = document.getElementById('sel-compliance-2');
   const userTouchedCompliance = compSel && compSel.dataset.userSet === '1';
+  const applied = [];
   if (ind && compSel && !userTouchedCompliance && compSel.value === 'none' && ind.suggestedCompliance && ind.suggestedCompliance !== 'none') {
-    // Only if the suggested value exists as an option.
     const opt = Array.from(compSel.options).find(o => o.value === ind.suggestedCompliance);
-    if (opt) {
-      compSel.value = ind.suggestedCompliance;
-      flashIndustryAutolink(ind.label, opt.textContent);
-    }
+    if (opt) { compSel.value = ind.suggestedCompliance; applied.push(opt.textContent); }
   }
+  // Set the second framework too if industry suggests one (e.g. Fintech →
+  // PCI + SOC 2; Healthcare → HIPAA + SOC 2). Only set when secondary is
+  // currently 'none' AND not the same as primary.
+  if (ind && comp2Sel && ind.suggestedCompliance2 && ind.suggestedCompliance2 !== 'none' && comp2Sel.value === 'none' && ind.suggestedCompliance2 !== compSel?.value) {
+    const opt2 = Array.from(comp2Sel.options).find(o => o.value === ind.suggestedCompliance2);
+    if (opt2) { comp2Sel.value = ind.suggestedCompliance2; applied.push(opt2.textContent); }
+  }
+  if (applied.length) flashIndustryAutolink(ind.label, applied.join(' + '));
   onConfigChange();
   renderIndustryContext();
   renderComingSoonBanner();
@@ -12869,9 +13000,9 @@ function onIndustryChange() {
 function flashIndustryAutolink(industry, compliance) {
   const strip = $id('industry-autolink-flash');
   if (strip) {
-    strip.innerHTML = `🎯 Industry <b>${industry}</b> → suggested compliance <b>${compliance}</b>. Override anytime in dropdown.`;
+    strip.innerHTML = `🎯 Industry <b>${esc(industry)}</b> → applied compliance: <b>${esc(compliance)}</b>. Override anytime in dropdowns.`;
     strip.style.opacity = '1';
-    setTimeout(() => { strip.style.opacity = '0'; }, 5000);
+    setTimeout(() => { strip.style.opacity = '0'; }, 5500);
   }
   // ALSO highlight the compliance row in the decision map AND the compliance
   // dropdown in the config bar so the reader sees what just changed, not just
@@ -12892,6 +13023,12 @@ function pulseAutolinkTargets() {
     if (cfgGrp) {
       cfgGrp.classList.add('just-autolinked');
       setTimeout(() => cfgGrp.classList.remove('just-autolinked'), 2800);
+    }
+    // Pulse the secondary compliance dropdown too if industry set it.
+    const cfgGrp2 = document.querySelector('.cfg-grp > select#sel-compliance-2')?.parentElement;
+    if (cfgGrp2 && document.getElementById('sel-compliance-2')?.value !== 'none') {
+      cfgGrp2.classList.add('just-autolinked');
+      setTimeout(() => cfgGrp2.classList.remove('just-autolinked'), 2800);
     }
   }, 50);
 }
