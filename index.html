@@ -421,6 +421,14 @@ a:focus-visible,
 .msvg-node{transition:filter .15s,transform .15s;transform-box:fill-box;transform-origin:center}
 .msvg-node:hover{filter:drop-shadow(0 3px 6px rgba(0,0,0,0.18))}
 .msvg-node:hover rect{stroke-width:2.5}
+/* Decision → SVG highlight pulse. Fires when user picks a decision; the
+   affected stage nodes flash blue so the cause/effect link is visible. */
+@keyframes ds-decision-glow {
+  0%   { stroke: #0969da; stroke-width: 4;   filter: drop-shadow(0 0 8px rgba(9,105,218,.55)); }
+  60%  { stroke: #0969da; stroke-width: 3;   filter: drop-shadow(0 0 4px rgba(9,105,218,.30)); }
+  100% { stroke-width: 1; filter: none; }
+}
+.msvg-node.decision-glow rect { animation: ds-decision-glow 1.8s ease-out 1; }
 @keyframes ctx-pulse{0%,100%{box-shadow:0 0 0 0 rgba(251,192,45,0.4)}50%{box-shadow:0 0 0 6px rgba(251,192,45,0)}}
 /* Role switcher — hide-only semantics, simpler logic.
    .hide-from-junior  → hidden when body.role-junior.
@@ -9242,6 +9250,48 @@ const DECISION_STEPS = [
 // fe/be added: pipeline can't build without knowing frontend/backend.
 // gitops added: same-repo vs separate-repo changes the emitted deploy files.
 const DECISION_REQUIRED = new Set(['fe','be','ci','reg','cd','gitops','scanner','signing','baseimage']);
+
+// Top-level mirror of the in-function DECISION_NODE_MAP so highlightDecisionNodes
+// can reach it from pickDecision (which lives outside the SVG-builder closure).
+// Keep in sync with the version inside buildMasterSVG.
+const DECISION_AFFECTS_NODES = {
+  ide:              ['l1'],
+  precommit:        ['l2'],
+  localsecret:      ['l4'],
+  build:            ['s6pr', 's6main'],
+  pkg:              ['s6pr', 's6main'],
+  ci:               ['s1', 's0'],
+  reg:              ['s6main', 's13'],
+  cd:               ['p1', 'p2', 'p3', 'p4'],
+  gitops:           ['p1', 'p2', 'p3', 'p4', 's14'],
+  baseimage:        ['s6pr', 's6main'],
+  sbom:             ['s8apr', 's8a'],
+  scanner:          ['s7pr', 's7main'],
+  signing:          ['s8b', 's14'],
+  cloud:            ['p1'],
+  promotion:        ['p2', 'p3', 'p4'],
+  industry:         ['s8b', 's10'],
+  compliance:       ['s8b', 's10'],
+  mlframework:      ['s6pr', 's6main'],
+  inferenceruntime: ['p1'],
+  modelregistry:    ['s6main', 's13'],
+  gpubaseimage:     ['s6pr', 's6main'],
+  infratooltype:    ['s6pr', 's6main'],
+  infradistribution:['s13']
+};
+function highlightDecisionNodes(decisionId) {
+  const nodeIds = DECISION_AFFECTS_NODES[decisionId];
+  if (!nodeIds) return;
+  // Clear any prior highlights.
+  document.querySelectorAll('.msvg-node.decision-glow').forEach(n => n.classList.remove('decision-glow'));
+  nodeIds.forEach(nid => {
+    const node = document.querySelector(`.msvg-node[data-id="${nid}"]`);
+    if (node) {
+      node.classList.add('decision-glow');
+      setTimeout(() => node.classList.remove('decision-glow'), 1800);
+    }
+  });
+}
 // Decisions that have a "none" / skip option or a sensible auto default —
 // shown with Optional badge. build/pkg auto-derive from the framework choice.
 const DECISION_OPTIONAL = new Set(['ide','precommit','localsecret','build','pkg','sbom','cloud','promotion','industry','compliance']);
@@ -10826,6 +10876,10 @@ function pickDecision(id, value) {
   // subsequent navigations within this session.
   try { sessionStorage.setItem('ds-engaged', '1'); } catch (e) {}
   decisionWrite(id, value);
+  // Fix 8 — highlight the SVG nodes this decision affects so the user sees
+  // the cause/effect link visually. Scheduled after the re-render so the
+  // node DOM exists when we query for it.
+  setTimeout(() => highlightDecisionNodes(id), 50);
 
   if (def.selectId) {
     if (id === 'industry' && typeof onIndustryChange === 'function') onIndustryChange();
