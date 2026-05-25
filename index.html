@@ -452,6 +452,19 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 
 /* Step sections */
 .ds-step{margin-bottom:12px}
+/* Visual emphasis for the active step (set by step-nav chip click) — left
+   accent bar only. All step content is rendered for every step (P1 flat
+   decision list); active is just a wayfinding hint. */
+.ds-step-active > .ds-step-label{border-left:3px solid var(--accent);padding-left:8px;margin-left:-11px}
+/* Pulse animation used when industry auto-links compliance, so the reader
+   sees which row just changed. Lasts ~3s then class is removed by JS. */
+@keyframes ds-autolink-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(9,105,218,.45); background: #f0f9ff; }
+  60%  { box-shadow: 0 0 0 6px rgba(9,105,218,.00); background: #f0f9ff; }
+  100% { box-shadow: 0 0 0 0 rgba(9,105,218,.00); background: transparent; }
+}
+.ds-row.just-autolinked{animation: ds-autolink-pulse 2.6s ease-out 1;border-radius:6px}
+.cfg-grp.just-autolinked > select{box-shadow:0 0 0 3px rgba(9,105,218,.35);transition:box-shadow .25s}
 .ds-step-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;padding:0 2px}
 .ds-step-count-done{color:var(--success);font-weight:600;font-size:10px}
 .ds-step-count-pending{color:var(--muted);font-size:10px}
@@ -8828,9 +8841,11 @@ const DECISION_STEPS = [
 ];
 
 // Decisions that must be set for a working pipeline — shown with Required badge.
-const DECISION_REQUIRED = new Set(['ci','reg','cd','scanner','signing','baseimage']);
-// Decisions that have a "none" / skip option — shown with Optional badge.
-const DECISION_OPTIONAL = new Set(['ide','precommit','localsecret','cloud','promotion']);
+// fe/be added: pipeline can't build without knowing frontend/backend.
+const DECISION_REQUIRED = new Set(['fe','be','ci','reg','cd','scanner','signing','baseimage']);
+// Decisions that have a "none" / skip option or a sensible auto default —
+// shown with Optional badge. build/pkg auto-derive from the framework choice.
+const DECISION_OPTIONAL = new Set(['ide','precommit','localsecret','build','pkg','sbom','cloud','promotion','industry','compliance']);
 
 // Groups for decisions with many options — rendered as labeled pill sections.
 const DECISION_PILL_GROUPS = {
@@ -9920,13 +9935,13 @@ function renderDecisionMap() {
   }).join('');
   const stepNav = shapeChosen ? `<div id="ds-step-nav">${navChips}</div>` : '';
 
-  // ── Step sections — accordion: completed collapse, active expands, future clickable ─────
+  // ── Step sections — flat: every applicable step renders its full rows.
+  // The active step gets a visual emphasis class so the user knows where the
+  // step-nav chip-click last landed them, but EVERY decision is always visible
+  // and pickable. Previously this was an accordion which: (a) hid required
+  // labels until you'd clicked through, and (b) caused the page to "go down"
+  // when steps collapsed/expanded on pick.
   const stepBlocks = visibleSteps.map(s => {
-    const isActive   = s.step === ACTIVE_STEP;
-    const isCompleted = !s.isShapeStep && s.step < ACTIVE_STEP;
-    const isFuture   = !s.isShapeStep && s.step > ACTIVE_STEP;
-
-    // Shape step: always fully open (user can re-pick shape at any time)
     if (s.isShapeStep) {
       const labelTxt = shapeChosen ? '✅ Service shape' : '— Start here — pick your service shape';
       return `<div class="ds-step ds-step-animate" data-step="${s.step}">
@@ -9934,51 +9949,22 @@ function renderDecisionMap() {
         ${renderShapePicker()}
       </div>`;
     }
-
-    // Completed step: collapsed summary, click to reopen
-    if (isCompleted) {
-      const pickedLabels = s.nonShape
-        .filter(id => DECISION_VISITED.has(id))
-        .map(id => decisionCurrentLabel(id))
-        .filter(l => l && l !== '—')
-        .slice(0, 4);
-      const summary = pickedLabels.length
-        ? `<span class="ds-step-summary">— ${pickedLabels.join(' · ')}</span>`
-        : '';
-      return `<div class="ds-step-collapsed" data-step="${s.step}" onclick="setActiveStep(${s.step})">
-        <div class="ds-step-hdr-row">
-          <span>✅ ${s.icon} ${s.label}${summary}</span>
-          <span style="font-size:11px;color:var(--accent);flex-shrink:0">Edit ▸</span>
-        </div>
-      </div>`;
-    }
-
-    // Future step: visible but collapsed, user can jump ahead
-    if (isFuture) {
-      const countTxt = s.totalCount > 0 ? `<span style="font-size:11px;font-weight:400;margin-left:4px">${s.totalCount} decision${s.totalCount!==1?'s':''}</span>` : '';
-      return `<div class="ds-step-future" data-step="${s.step}" onclick="setActiveStep(${s.step})">
-        <div class="ds-step-hdr-row">
-          <span style="color:var(--muted);font-weight:600">${s.icon} ${s.label}${countTxt}</span>
-          <span style="font-size:11px;color:var(--muted);flex-shrink:0">Jump to ▸</span>
-        </div>
-      </div>`;
-    }
-
-    // Active step: fully expanded
+    const isActive = s.step === ACTIVE_STEP;
+    const statusIcon = s.done ? '✅ ' : '';
     const rowsHtml = s.tiles.map(id => renderDecisionRow(id)).join('');
     const countSpan = s.totalCount === 0 ? '' :
       `<span class="${s.done ? 'ds-step-count-done' : 'ds-step-count-pending'}">${s.customCount} / ${s.totalCount}</span>`;
-    const nextStep = visibleSteps.find(vs => vs.step > ACTIVE_STEP);
-    const nextBtn = nextStep
+    const nextStep = visibleSteps.find(vs => vs.step > s.step);
+    const nextBtn = (isActive && nextStep)
       ? `<div class="ds-next-btn-wrap"><button class="ds-next-btn" onclick="setActiveStep(${nextStep.step})">
           ${s.done ? '✅ ' : ''}Next: ${nextStep.icon} ${nextStep.label} →
          </button></div>`
-      : s.done
+      : (isActive && !nextStep && s.done)
         ? `<div style="text-align:right;margin-top:10px;color:var(--success);font-weight:600;font-size:13px">✅ All decisions complete — export below</div>`
         : '';
-
-    return `<div class="ds-step ds-step-animate" data-step="${s.step}">
-      <div class="ds-step-label">${s.icon} ${s.label}${countSpan}</div>
+    const stepCls = `ds-step ds-step-animate${isActive ? ' ds-step-active' : ''}`;
+    return `<div class="${stepCls}" data-step="${s.step}">
+      <div class="ds-step-label">${statusIcon}${s.icon} ${s.label}${countSpan}</div>
       ${rowsHtml}
       ${nextBtn}
     </div>`;
@@ -12296,11 +12282,33 @@ function onIndustryChange() {
   renderComingSoonBanner();
 }
 function flashIndustryAutolink(industry, compliance) {
-  const strip = document.getElementById('industry-autolink-flash');
-  if (!strip) return;
-  strip.innerHTML = `🎯 Industry <b>${industry}</b> → suggested compliance <b>${compliance}</b>. Override anytime in dropdown.`;
-  strip.style.opacity = '1';
-  setTimeout(() => { strip.style.opacity = '0'; }, 5000);
+  const strip = $id('industry-autolink-flash');
+  if (strip) {
+    strip.innerHTML = `🎯 Industry <b>${industry}</b> → suggested compliance <b>${compliance}</b>. Override anytime in dropdown.`;
+    strip.style.opacity = '1';
+    setTimeout(() => { strip.style.opacity = '0'; }, 5000);
+  }
+  // ALSO highlight the compliance row in the decision map AND the compliance
+  // dropdown in the config bar so the reader sees what just changed, not just
+  // a corner toast they may have missed. Class is auto-removed after the
+  // animation completes (~2.6s).
+  pulseAutolinkTargets();
+}
+function pulseAutolinkTargets() {
+  // The decision map re-renders on every config change, so we need to schedule
+  // the class-add after the next render tick.
+  setTimeout(() => {
+    const row = document.querySelector('.ds-row[data-decision="compliance"]');
+    if (row) {
+      row.classList.add('just-autolinked');
+      setTimeout(() => row.classList.remove('just-autolinked'), 2800);
+    }
+    const cfgGrp = document.querySelector('.cfg-grp > select#sel-compliance')?.parentElement;
+    if (cfgGrp) {
+      cfgGrp.classList.add('just-autolinked');
+      setTimeout(() => cfgGrp.classList.remove('just-autolinked'), 2800);
+    }
+  }, 50);
 }
 // Show/hide the advanced config selects (Pkg Mgr, Industry, Mode). Persisted
 // in localStorage so the reader's preference sticks across sessions.
