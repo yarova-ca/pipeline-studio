@@ -1,0 +1,21 @@
+{
+  "name": "pipeline-studio-v2",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check && tsc --noEmit"
+  },
+  "dependencies": {
+    "astro": "^4.16.0",
+    "@astrojs/svelte": "^5.7.0",
+    "svelte": "^4.2.19"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

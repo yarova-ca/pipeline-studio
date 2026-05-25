@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import { INVARIANTS } from '../lib/invariants';
+import { PHASE_DEFS, STAGE_TO_PHASE_TAB } from '../lib/phases';
+import { DECISION_DEFS, DECISION_REQUIRED } from '../lib/decisions';
+import { COMPLIANCE_CONTROL_MAP } from '../lib/compliance';
+
+// Sanity counts so the dev server shows the data layer wired up.
+const phaseCount = Object.values(PHASE_DEFS).filter(Boolean).length;
+const stageCount = Object.keys(STAGE_TO_PHASE_TAB).length;
+const decisionCount = Object.keys(DECISION_DEFS).length;
+const requiredCount = DECISION_REQUIRED.size;
+const invariantCount = INVARIANTS.length;
+const frameworkCount = Object.keys(COMPLIANCE_CONTROL_MAP).length;
+---
+<Base title="Pipeline Studio v2 — scaffold">
+  <main style="max-width:960px;margin:48px auto;padding:0 24px">
+    <h1 style="margin-bottom:8px">Pipeline Studio v2 — scaffold up</h1>
+    <p style="color:var(--muted);margin-bottom:32px">
+      Astro project scaffolded. Data layer ported with types. Next: layout (from yarova.ca), components, generators.
+    </p>
+    <section style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
+      <div style="border:1px solid var(--border);border-radius:8px;padding:16px"><div style="font-size:24px;font-weight:700;color:var(--accent)">{phaseCount}</div><div style="color:var(--muted)">phases (1–4)</div></div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:16px"><div style="font-size:24px;font-weight:700;color:var(--accent)">{stageCount}</div><div style="color:var(--muted)">stages (derived)</div></div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:16px"><div style="font-size:24px;font-weight:700;color:var(--accent)">{decisionCount}</div><div style="color:var(--muted)">decisions ({requiredCount} required)</div></div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:16px"><div style="font-size:24px;font-weight:700;color:var(--accent)">{invariantCount}</div><div style="color:var(--muted)">invariants</div></div>
+      <div style="border:1px solid var(--border);border-radius:8px;padding:16px"><div style="font-size:24px;font-weight:700;color:var(--accent)">{frameworkCount}</div><div style="color:var(--muted)">compliance frameworks</div></div>
+    </section>
+    <p style="color:var(--muted);font-style:italic">
+      Drop layout / responsive / theme files from yarova.ca into <code>vendor/</code> then replace this page.
+    </p>
+  </main>
+</Base>

@@ -1,0 +1,23 @@
+---
+import '../styles/tokens.css';
+
+interface Props { title?: string }
+const { title = 'Pipeline Studio' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+<!--
+  REPLACE-ME — drop the responsive layout shell from yarova.ca into this
+  file (or into a separate component imported here). Keep the <slot /> as
+  the content-injection point. The HTML above is intentionally minimal so
+  it's safe to overwrite.
+-->
