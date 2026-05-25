@@ -14,7 +14,7 @@ const complianceEntries = Object.entries(COMPLIANCE_CONTROL_MAP);
 
   <!-- Config bar — sticky top, full width -->
   <div slot="config-bar" id="config-bar-wrapper">
-    <ConfigBar client:load />
+    <ConfigBar client:only="svelte" />
   </div>
 
   <!-- Sidebar — phase nav + invariants reference -->

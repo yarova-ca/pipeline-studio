@@ -28,7 +28,27 @@ export const DEFAULT_CONFIG: PipelineConfig = {
   healthPath: '/api/health',
 };
 
-export const config = writable<PipelineConfig>({ ...DEFAULT_CONFIG });
+// Read URL params at module load time (browser only).
+// This runs before any island mounts, so the store is initialized correctly
+// and Svelte's initial render reflects the URL state without a second pass.
+function initialConfig(): PipelineConfig {
+  const cfg = { ...DEFAULT_CONFIG };
+  if (typeof window === 'undefined') return cfg;
+  const p = new URLSearchParams(window.location.search);
+  return {
+    ...cfg,
+    feKey:       p.get('fe')          ?? cfg.feKey,
+    beKey:       p.get('be')          ?? cfg.beKey,
+    ciKey:       p.get('ci')          ?? cfg.ciKey,
+    regKey:      p.get('reg')         ?? cfg.regKey,
+    compliance:  (p.get('compliance') ?? cfg.compliance)  as ComplianceKey,
+    compliance2: (p.get('compliance2') ?? cfg.compliance2) as ComplianceKey,
+    industry:    p.get('industry')    ?? cfg.industry,
+    appName:     (() => { const n = p.get('appName'); return n && /^[a-z][a-z0-9-]{0,38}$/.test(n) ? n : cfg.appName; })(),
+  };
+}
+
+export const config = writable<PipelineConfig>(initialConfig());
 
 // Derived store: resolved stack objects for the current config.
 // Consumers import this to avoid repeating the lookup logic.

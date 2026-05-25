@@ -1,12 +1,55 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { config, resolvedConfig, resetConfig } from '../stores/config';
   import type { ComplianceKey } from '../lib/types';
   import { INDUSTRIES } from '../lib/industries';
+
+  // Svelte 4 compiles <select value={expr}> as an HTML attribute, not a DOM property.
+  // Browsers ignore the value attribute on selects — they rely on <option selected>.
+  // We must imperatively set select.value after mount to reflect store state.
+  // This matters for URL-param-driven initial state (initialConfig() in store).
+  onMount(() => {
+    const cfg = $config;
+    const selectors: [string, string][] = [
+      ['sel-frontend', cfg.feKey],
+      ['sel-backend',  cfg.beKey],
+      ['sel-ci',       cfg.ciKey],
+      ['sel-reg',      cfg.regKey],
+      ['sel-compliance',   cfg.compliance],
+      ['sel-compliance-2', cfg.compliance2],
+      ['sel-industry', cfg.industry],
+      ['sel-pkgmgr',   cfg.pkgMgr],
+    ];
+    for (const [id, val] of selectors) {
+      const el = document.getElementById(id) as HTMLSelectElement | null;
+      if (el && val) el.value = val;
+    }
+  });
 
   let showAdvanced = false;
 
   // Track whether compliance was explicitly set by the user
   let complianceUserSet = false;
+
+  // ── Incompatibility detection ───────────────────────────────────────────────
+  // Reactive warnings for combinations that are valid but unusual or misleading.
+  interface CompatWarning { id: string; msg: string; }
+
+  $: isMobile = $config.feKey === 'mobile-expo' || $config.feKey === 'mobile';
+  $: isEmptyStack = $config.feKey === 'none' && $config.beKey === 'none';
+  $: isEphemeralReg = $config.regKey === 'ttlsh';
+  $: isGhcrWithGitlab = $config.ciKey === 'gitlab-ci' && $config.regKey === 'ghcr';
+  $: isAzdoWithGhcr = $config.ciKey === 'azdo' && $config.regKey === 'ghcr';
+
+  $: compatWarnings = ((): CompatWarning[] => {
+    const w: CompatWarning[] = [];
+    if (isMobile) w.push({ id: 'mobile-reg', msg: 'Mobile apps ship to app stores, not container registries. Registry config is ignored.' });
+    if (isEmptyStack) w.push({ id: 'empty-stack', msg: 'No frontend or backend selected — nothing to containerize.' });
+    if (isEphemeralReg) w.push({ id: 'ttlsh', msg: 'ttl.sh images expire after 24 h — testing use only.' });
+    if (isGhcrWithGitlab) w.push({ id: 'ghcr-gitlab', msg: 'GHCR with GitLab CI requires a GitHub PAT secret in GitLab CI/CD variables.' });
+    if (isAzdoWithGhcr) w.push({ id: 'azdo-ghcr', msg: 'GHCR with Azure DevOps requires a GitHub PAT in ADO secret variables.' });
+    return w;
+  })();
 
   function handleIndustryChange(e: Event) {
     const val = (e.target as HTMLSelectElement).value;
@@ -180,9 +223,9 @@
     </select>
   </div>
 
-  <div class="cfg-grp">
-    <label for="sel-reg">Registry</label>
-    <select id="sel-reg" value={$config.regKey} on:change={handleRegChange}>
+  <div class="cfg-grp" class:compat-muted={isMobile} title={isMobile ? 'Mobile apps use app stores, not container registries' : undefined}>
+    <label for="sel-reg">Registry{isMobile ? ' ⚠' : ''}</label>
+    <select id="sel-reg" value={$config.regKey} on:change={handleRegChange} disabled={isMobile} aria-disabled={isMobile}>
       <option value="ghcr">GHCR</option>
       <option value="ecr">ECR (AWS)</option>
       <option value="gar">GAR (GCP)</option>
@@ -267,7 +310,16 @@
 
   <button
     aria-label="Reset all selections to defaults"
-    title="Reset every dropdown + decision back to defaults."
+    title="Reset every dropdown + decision back to defaults. Use this to start fresh for a new service."
     on:click={resetConfig}
   >↺ Reset</button>
+
+  <!-- Compat warnings strip -->
+  {#if compatWarnings.length > 0}
+    <div class="compat-bar" role="alert" aria-live="polite">
+      {#each compatWarnings as w (w.id)}
+        <span class="compat-chip">⚠ {w.msg}</span>
+      {/each}
+    </div>
+  {/if}
 </div>

@@ -487,12 +487,12 @@
     color: var(--text-sec);
   }
 
-  /* Stage Detail Panel */
+  /* Stage Detail Panel — anchored to right edge so it covers TOC, not the pipeline */
   .sdp {
     position: fixed;
-    right: 200px;
+    right: 0;
     top: 0;
-    width: 420px;
+    width: 400px;
     height: 100vh;
     background: var(--bg);
     border-left: 1px solid var(--border);
