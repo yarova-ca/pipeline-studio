@@ -739,8 +739,8 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
   <!-- ── Config bar ── -->
   <div id="config-bar" style="display:none">
     <div class="cfg-grp">
-      <label>Frontend</label>
-      <select id="sel-frontend" aria-label="Frontend framework" onchange="onConfigChange()">
+      <label for="sel-frontend">Frontend</label>
+      <select id="sel-frontend" onchange="onConfigChange()">
         <optgroup label="React — SSR / Hybrid">
           <option value="nextjs">Next.js 15</option>
           <option value="remix">Remix 2</option>
@@ -780,8 +780,8 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       </select>
     </div>
     <div class="cfg-grp">
-      <label>Backend</label>
-      <select id="sel-backend" aria-label="Backend framework" onchange="onConfigChange()">
+      <label for="sel-backend">Backend</label>
+      <select id="sel-backend" onchange="onConfigChange()">
         <option value="none">None (frontend only)</option>
         <optgroup label="Node.js">
           <option value="nodejs-express">Express</option>
@@ -836,15 +836,15 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       </select>
     </div>
     <div class="cfg-grp cfg-grp-advanced" id="cfg-pkgmgr-grp">
-      <label>Pkg Mgr</label>
-      <select id="sel-pkgmgr" aria-label="Package manager" onchange="onConfigChange()">
+      <label for="sel-pkgmgr">Pkg Mgr</label>
+      <select id="sel-pkgmgr" onchange="onConfigChange()">
         <option value="npm">npm</option>
       </select>
     </div>
     <div class="cfg-divider"></div>
     <div class="cfg-grp">
-      <label>CI System</label>
-      <select id="sel-ci" aria-label="CI system" onchange="onConfigChange()">
+      <label for="sel-ci">CI System</label>
+      <select id="sel-ci" onchange="onConfigChange()">
         <option value="github-actions">GitHub Actions</option>
         <option value="gitlab-ci">GitLab CI</option>
         <option value="jenkins">Jenkins</option>
@@ -854,8 +854,8 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       </select>
     </div>
     <div class="cfg-grp">
-      <label>Registry</label>
-      <select id="sel-reg" aria-label="Container registry" onchange="onConfigChange()">
+      <label for="sel-reg">Registry</label>
+      <select id="sel-reg" onchange="onConfigChange()">
         <option value="ghcr">GHCR</option>
         <option value="ecr">ECR (AWS)</option>
         <option value="gar">GAR (GCP)</option>
@@ -869,8 +869,8 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       </select>
     </div>
     <div class="cfg-grp cfg-grp-advanced">
-      <label>Industry</label>
-      <select id="sel-industry" aria-label="Industry sector" onchange="onIndustryChange()">
+      <label for="sel-industry">Industry</label>
+      <select id="sel-industry" onchange="onIndustryChange()">
         <option value="none">General SaaS</option>
         <option value="fintech">Fintech / Payments</option>
         <option value="healthcare">Healthcare</option>
@@ -885,8 +885,8 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
       </select>
     </div>
     <div class="cfg-grp">
-      <label>Compliance</label>
-      <select id="sel-compliance" aria-label="Compliance framework" onchange="this.dataset.userSet='1';onConfigChange();if(this.value!=='none')openComplianceContext(this.value)">
+      <label for="sel-compliance">Compliance</label>
+      <select id="sel-compliance" onchange="this.dataset.userSet='1';onConfigChange();if(this.value!=='none')openComplianceContext(this.value)">
         <option value="none">None</option>
         <option value="pci">PCI-DSS v4.0</option>
         <option value="hipaa">HIPAA</option>
@@ -909,8 +909,8 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
     </button>
     <div class="cfg-divider cfg-grp-advanced"></div>
     <div class="cfg-grp cfg-grp-advanced">
-      <label>Mode</label>
-      <select id="sel-mode" aria-label="Reading mode" onchange="setMode(this.value)" title="Mode — Default: balanced. Learn: concept first. Ship: code only. Audit: compliance emphasized.">
+      <label for="sel-mode">Mode</label>
+      <select id="sel-mode" onchange="setMode(this.value)" title="Mode — Default: balanced. Learn: concept first. Ship: code only. Audit: compliance emphasized.">
         <option value="default" title="Code + concept side by side. Best for first-time setup.">Default</option>
         <option value="learn"   title="Concept first, code below. Best for new readers.">Learn</option>
         <option value="ship"    title="Code first, panels minimized. Best for engineers ready to copy-paste.">Ship</option>
