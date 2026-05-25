@@ -78,7 +78,10 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',-apple-system,sans-serif;font-size:14px;line-height:1.6;color:var(--text);background:var(--bg);display:grid;grid-template-columns:252px 1fr 200px;min-height:100vh}
-@media (max-width:1400px){body{grid-template-columns:252px 1fr}aside#toc{display:none}}
+/* TOC now visible down to 1100px so iPad landscape keeps the section nav.
+   Below 1100 the TOC hides and the left sidebar carries navigation. */
+@media (max-width:1400px) and (min-width:1100px){body{grid-template-columns:252px 1fr 160px}}
+@media (max-width:1100px){body{grid-template-columns:252px 1fr}aside#toc{display:none}}
 @media (max-width:900px){
   /* Config bar wraps onto more rows on mobile — bump scroll-margin-top so
      section anchors don't land underneath the stacked sticky headers. */
@@ -483,6 +486,27 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
    accent bar only. All step content is rendered for every step (P1 flat
    decision list); active is just a wayfinding hint. */
 .ds-step-active > .ds-step-label{border-left:3px solid var(--accent);padding-left:8px;margin-left:-11px}
+
+/* Quick-start mode — minimal layout for first-time users. Hides everything
+   conceptual + decision-related; shows only config bar + phase strip + Files.
+   Toggle the body class via the banner CTA. */
+body.quick-start-mode #master-svg-wrap,
+body.quick-start-mode #decision-map-section,
+body.quick-start-mode #concept,
+body.quick-start-mode #cluster-prereqs,
+body.quick-start-mode #phase0,
+body.quick-start-mode #why-panel { display:none !important }
+body.quick-start-mode #quick-start-banner { background:linear-gradient(90deg,#f0fdf4,white); border-color:#82e59d; border-left-color:var(--success) }
+
+/* Auto-collapsed decision-map (used when hash deep-links to a phase). */
+#decision-map-section.collapsed > div#decision-map { display:none }
+#decision-map-section.collapsed { padding:8px 32px }
+#decision-map-section .ds-collapsed-cta { display:none }
+#decision-map-section.collapsed .ds-collapsed-cta {
+  display:block; padding:8px 12px; font-size:12px; color:var(--accent);
+  text-align:center; cursor:pointer; font-weight:600; background:white;
+  border:1px dashed var(--accent); border-radius:6px;
+}
 /* Pulse animation used when industry auto-links compliance, so the reader
    sees which row just changed. Lasts ~3s then class is removed by JS. */
 @keyframes ds-autolink-pulse {
@@ -1046,8 +1070,19 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 
   <!-- Phase rollup merged into swimlane actor column. -->
 
+  <!-- ── Quick-start banner — for first-time users who want the minimum path.
+       Click toggles a body class that hides the SVG + decision-map and shows
+       a compact 4-question form. ── -->
+  <div id="quick-start-banner" style="margin:0 32px;padding:10px 14px;background:linear-gradient(90deg,#e0f2fe,white);border:1px solid #7dd3fc;border-left:4px solid var(--accent);border-radius:6px;font-size:12.5px;color:var(--text);display:flex;align-items:center;gap:10px">
+    <span style="font-weight:600">New here?</span>
+    <span style="color:var(--text-sec)">Skip the studio — just answer 4 questions and copy the files.</span>
+    <button onclick="toggleQuickStartMode()" style="margin-left:auto;background:var(--accent);color:white;border:none;border-radius:4px;padding:4px 12px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit">▶ Quick start (60s)</button>
+    <button onclick="dismissQuickStart()" aria-label="Dismiss quick-start banner" title="Don't show again this session" style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;padding:0 4px">×</button>
+  </div>
+
   <!-- ── Decision Map — the entry point. Whole app is the checklist. ── -->
-  <section style="padding:14px 32px;border-bottom:1px solid var(--border-subtle);background:linear-gradient(135deg,#f0f9ff,white)">
+  <section id="decision-map-section" style="padding:14px 32px;border-bottom:1px solid var(--border-subtle);background:linear-gradient(135deg,#f0f9ff,white)">
+    <button class="ds-collapsed-cta" onclick="toggleDecisionMapCollapsed(false)" aria-label="Expand decision map">▾ Decisions hidden — click to expand</button>
     <div id="decision-map"></div>
   </section>
 
@@ -10685,6 +10720,9 @@ function buildKnowledgePanel(id) {
 function pickDecision(id, value) {
   const def = DECISION_DEFS[id];
   if (!def) return;
+  // Mark engagement so deep-links don't auto-collapse the decision map on
+  // subsequent navigations within this session.
+  try { sessionStorage.setItem('ds-engaged', '1'); } catch (e) {}
   decisionWrite(id, value);
 
   if (def.selectId) {
@@ -12305,6 +12343,54 @@ function restoreTabFromHash() {
     return oc.includes("'" + id + "'");
   });
   showTab(id, btn);
+  // If the deep-link is to one of the phase strips, auto-collapse the
+  // decision-map section so the user sees the phase content (their actual
+  // target) without scrolling past 1200px of decision UI. Click 'Show
+  // decisions' to bring it back. Skipped if reader has already engaged with
+  // decisions in this session (they probably want both visible).
+  const phaseIds = ['tab-local','tab-pr','tab-main','tab-promotions'];
+  if (phaseIds.includes('tab-'+id)) {
+    if (!sessionStorage.getItem('ds-engaged')) toggleDecisionMapCollapsed(true);
+  }
+}
+
+// Quick-start mode: hides the SVG diagram + decision-map + cluster-prereqs;
+// reveals only the config bar + phase strip + Files tab. Banner toggles it.
+function toggleQuickStartMode() {
+  document.body.classList.toggle('quick-start-mode');
+  const on = document.body.classList.contains('quick-start-mode');
+  try { sessionStorage.setItem('quick-start', on ? '1' : '0'); } catch (e) {}
+  // If turning on, scroll to config bar so the user sees the 5 selects first.
+  if (on) {
+    const cb = $id('config-bar');
+    if (cb) try { cb.scrollIntoView({behavior:'smooth', block:'start'}); } catch (e) {}
+  }
+}
+function dismissQuickStart() {
+  const b = $id('quick-start-banner');
+  if (b) b.style.display = 'none';
+  try { sessionStorage.setItem('quick-start-dismissed', '1'); } catch (e) {}
+}
+function restoreQuickStartState() {
+  // If user dismissed in this session, hide the banner.
+  try {
+    if (sessionStorage.getItem('quick-start-dismissed') === '1') {
+      const b = $id('quick-start-banner');
+      if (b) b.style.display = 'none';
+    }
+    if (sessionStorage.getItem('quick-start') === '1') {
+      document.body.classList.add('quick-start-mode');
+    }
+  } catch (e) {}
+}
+
+// Decision-map collapse helper used by both manual toggle (future) and
+// auto-collapse on hash deep-link.
+function toggleDecisionMapCollapsed(forceState) {
+  const section = $id('decision-map-section');
+  if (!section) return;
+  const want = typeof forceState === 'boolean' ? forceState : !section.classList.contains('collapsed');
+  section.classList.toggle('collapsed', want);
 }
 
 function switchTab(tabId) {
@@ -13595,6 +13681,7 @@ function init() {
   augmentDropdownsFromCatalog();
   loadStateFromURL();
   restoreAdvancedConfigState();
+  restoreQuickStartState();
   // Default lens — Practitioner. Reader can switch any time.
   // Default reading mode — Default (balanced). Reader can switch via dropdown.
   if (!document.body.className.match(/mode-/)) document.body.classList.add('mode-default');
