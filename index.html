@@ -519,7 +519,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 <body>
 
 <!-- ── Context drawer — cross-reference panel ── -->
-<aside id="ctx-drawer" style="position:fixed;top:0;right:-460px;width:440px;height:100vh;background:white;border-left:1px solid var(--border);box-shadow:-8px 0 24px rgba(0,0,0,0.08);z-index:var(--z-drawer);overflow-y:auto;transition:right 0.25s ease-out">
+<aside id="ctx-drawer" role="dialog" aria-modal="false" aria-labelledby="ctx-title" aria-hidden="true" style="position:fixed;top:0;right:-460px;width:440px;height:100vh;background:white;border-left:1px solid var(--border);box-shadow:-8px 0 24px rgba(0,0,0,0.08);z-index:var(--z-drawer);overflow-y:auto;transition:right 0.25s ease-out">
   <div style="position:sticky;top:0;background:white;border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px">
     <div style="display:flex;align-items:center;gap:8px">
       <span id="ctx-kind" style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:3px;background:var(--accent);color:white">CONTEXT</span>
@@ -532,7 +532,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 <div id="ctx-overlay" style="display:none;position:fixed;inset:0;background:transparent;z-index:var(--z-drawer-overlay)" onclick="closeContext()"></div>
 
 <!-- ── Quick-find modal (Layer 6 — press / or Cmd-K / Ctrl-K) ── -->
-<div id="qf-overlay" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal);align-items:flex-start;justify-content:center;padding-top:80px" onclick="if(event.target===this)closeQuickFind()">
+<div id="qf-overlay" role="dialog" aria-modal="true" aria-label="Quick find" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal);align-items:flex-start;justify-content:center;padding-top:80px" onclick="if(event.target===this)closeQuickFind()">
   <div style="background:white;border-radius:10px;width:min(640px,92vw);box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden">
     <input id="qf-input" type="text" placeholder="Search invariants (I-8), stages (S6), compliance (PCI), glossary (SBOM), terms…" style="width:100%;padding:14px 18px;font-size:14px;font-family:inherit;border:none;outline:none;border-bottom:1px solid var(--border);box-sizing:border-box">
     <div id="qf-results" style="max-height:50vh;overflow-y:auto"></div>
@@ -544,11 +544,11 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 </div>
 
 <!-- ── Decision wizard modal — 7 questions, concept + tradeoff per step. ── -->
-<div id="wizard-modal" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal-wizard);align-items:center;justify-content:center;padding:24px" onclick="if(event.target===this)closeWizard()">
+<div id="wizard-modal" role="dialog" aria-modal="true" aria-labelledby="wizard-title" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal-wizard);align-items:center;justify-content:center;padding:24px" onclick="if(event.target===this)closeWizard()">
   <div style="background:white;border-radius:12px;width:min(820px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 32px 70px rgba(0,0,0,.4);display:flex;flex-direction:column">
     <div style="position:sticky;top:0;background:linear-gradient(135deg,#0d1117,#161b22);color:#f0f6fc;padding:14px 22px;display:flex;justify-content:space-between;align-items:center;z-index:var(--z-base);border-radius:12px 12px 0 0">
       <div>
-        <div style="font-size:15px;font-weight:700">Set up your pipeline in 7 questions</div>
+        <div id="wizard-title" style="font-size:15px;font-weight:700">Set up your pipeline in 7 questions</div>
         <div id="wizard-step-indicator" style="font-size:11.5px;color:#79c0ff;margin-top:2px">Step 1 of 7</div>
       </div>
       <button onclick="closeWizard()" aria-label="Close wizard" style="background:none;border:none;font-size:20px;cursor:pointer;color:#8b949e">×</button>
@@ -564,11 +564,11 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
 </div>
 
 <!-- ── Threat tour modal ── -->
-<div id="threat-tour-modal" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal-tour);align-items:flex-start;justify-content:center;padding-top:60px" onclick="if(event.target===this)hideThreatTour()">
+<div id="threat-tour-modal" role="dialog" aria-modal="true" aria-labelledby="threat-tour-title" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal-tour);align-items:flex-start;justify-content:center;padding-top:60px" onclick="if(event.target===this)hideThreatTour()">
   <div style="background:white;border-radius:10px;width:min(720px,94vw);max-height:80vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.35)">
     <div style="position:sticky;top:0;background:white;padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;z-index:var(--z-base)">
       <div>
-        <div style="font-size:15px;font-weight:700;color:var(--text)">Threat Tour — trace a real incident through the pipeline</div>
+        <div id="threat-tour-title" style="font-size:15px;font-weight:700;color:var(--text)">Threat Tour — trace a real incident through the pipeline</div>
         <div style="font-size:11.5px;color:var(--muted)">Pick an incident. Page highlights every stage that blocks it.</div>
       </div>
       <button onclick="hideThreatTour()" aria-label="Close threat tour" title="Close" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)">×</button>
@@ -951,7 +951,7 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
   <div id="phase-context-bar" style="display:none;padding:8px 32px;background:#f0f9ff;border-bottom:1px solid #d0e8ff;font-size:12px;color:var(--text-sec)"></div>
 
   <!-- ── Decision picker modal — opens when reader clicks any decision node. ── -->
-  <div id="decision-picker-modal" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal-picker);align-items:center;justify-content:center;padding:24px" onclick="if(event.target===this)closeDecisionPicker()">
+  <div id="decision-picker-modal" role="dialog" aria-modal="true" aria-labelledby="decision-picker-title" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(13,17,23,0.55);z-index:var(--z-modal-picker);align-items:center;justify-content:center;padding:24px" onclick="if(event.target===this)closeDecisionPicker()">
     <div style="background:white;border-radius:12px;width:min(640px,96vw);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 32px 70px rgba(0,0,0,.4)">
       <div style="padding:14px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#0d1117,#161b22);color:#f0f6fc;border-radius:12px 12px 0 0">
         <div>
@@ -8159,10 +8159,13 @@ function openContext(kind, title, bodyHtml) {
   b.innerHTML = bodyHtml;
   d.style.right = '0';
   o.style.display = 'block';
+  // Drawer is a soft side-sheet (aria-modal=false) — flip aria-hidden but
+  // don't trap focus, so background page stays operable.
+  d.setAttribute('aria-hidden', 'false');
 }
 function closeContext() {
   const d = $id('ctx-drawer'), o = $id('ctx-overlay');
-  if (d) d.style.right = '-460px';
+  if (d) { d.style.right = '-460px'; d.setAttribute('aria-hidden', 'true'); }
   if (o) o.style.display = 'none';
   // Clear any highlighted pipe boxes.
   document.querySelectorAll('.pipe-box.ctx-glow').forEach(el => el.classList.remove('ctx-glow'));
@@ -10310,10 +10313,12 @@ function openDecisionPicker(decisionId) {
     closeDecisionPicker();
   };
   modal.style.display = 'flex';
+  activateModal(modal);
 }
 function closeDecisionPicker() {
-  const modal = document.getElementById('decision-picker-modal');
+  const modal = $id('decision-picker-modal');
   if (modal) modal.style.display = 'none';
+  deactivateModal(modal);
 }
 
 function renderMasterSVG() {
@@ -11550,13 +11555,16 @@ const THREAT_TOURS = {
 };
 
 function showThreatTour() {
-  const tour = document.getElementById('threat-tour-modal');
-  if (tour) tour.style.display = 'flex';
+  const tour = $id('threat-tour-modal');
+  if (!tour) return;
+  tour.style.display = 'flex';
   renderThreatTourList();
+  activateModal(tour);
 }
 function hideThreatTour() {
-  const tour = document.getElementById('threat-tour-modal');
+  const tour = $id('threat-tour-modal');
   if (tour) tour.style.display = 'none';
+  deactivateModal(tour);
   clearThreatHighlights();
 }
 function renderThreatTourList() {
@@ -11953,6 +11961,64 @@ function initScrollspy() {
 // Shorthand for getElementById. Returns null if missing. Use to write
 // defensive accessors:  const el = $id('foo'); if (el) el.style.display = '';
 function $id(id) { return document.getElementById(id); }
+
+// ── Modal focus trap ──────────────────────────────────────────────────────
+// activateModal(modalEl, opts) wires up a single open modal:
+//   1. Records the element that had focus and restores it on close.
+//   2. Moves focus into the modal (opts.initialFocus or first focusable).
+//   3. Cycles Tab/Shift-Tab within the modal.
+//   4. Flips aria-hidden so screen readers stop ignoring the dialog.
+// deactivateModal(modalEl) reverses it. Idempotent.
+let _modalStack = []; // top of stack = currently trapped modal
+function _focusables(el) {
+  return Array.from(el.querySelectorAll(
+    'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+  )).filter(n => n.offsetParent !== null || n === document.activeElement);
+}
+function _modalKeyHandler(e) {
+  const top = _modalStack[_modalStack.length - 1];
+  if (!top) return;
+  if (e.key !== 'Tab') return;
+  const fs = _focusables(top.el);
+  if (fs.length === 0) { e.preventDefault(); return; }
+  const first = fs[0], last = fs[fs.length - 1];
+  const active = document.activeElement;
+  if (e.shiftKey && (active === first || !top.el.contains(active))) {
+    e.preventDefault(); last.focus();
+  } else if (!e.shiftKey && (active === last || !top.el.contains(active))) {
+    e.preventDefault(); first.focus();
+  }
+}
+function activateModal(modalEl, opts) {
+  if (!modalEl) return;
+  opts = opts || {};
+  // Prevent double-activation
+  if (_modalStack.find(m => m.el === modalEl)) return;
+  const ret = document.activeElement;
+  _modalStack.push({ el: modalEl, returnFocus: ret });
+  modalEl.setAttribute('aria-hidden', 'false');
+  if (_modalStack.length === 1) {
+    document.addEventListener('keydown', _modalKeyHandler);
+  }
+  // Initial focus — caller can pass a specific element, otherwise first focusable
+  setTimeout(() => {
+    const target = opts.initialFocus || _focusables(modalEl)[0] || modalEl;
+    try { target.focus(); } catch(e) {}
+  }, 0);
+}
+function deactivateModal(modalEl) {
+  if (!modalEl) return;
+  const idx = _modalStack.findIndex(m => m.el === modalEl);
+  if (idx === -1) return;
+  const [removed] = _modalStack.splice(idx, 1);
+  modalEl.setAttribute('aria-hidden', 'true');
+  if (_modalStack.length === 0) {
+    document.removeEventListener('keydown', _modalKeyHandler);
+  }
+  if (removed.returnFocus && typeof removed.returnFocus.focus === 'function') {
+    try { removed.returnFocus.focus(); } catch(e) {}
+  }
+}
 function esc(str) {
   return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -12488,11 +12554,12 @@ function openQuickFind() {
   input.value = '';
   QF_SELECTED = 0;
   renderQuickFindResults('');
-  setTimeout(() => input.focus(), 50);
+  activateModal(overlay, { initialFocus: input });
 }
 function closeQuickFind() {
   const overlay = $id('qf-overlay');
   if (overlay) overlay.style.display = 'none';
+  deactivateModal(overlay);
 }
 // Returns true iff the Quick-Find modal is currently open. Used by the
 // keydown listener — avoids two unguarded getElementById calls per keystroke.
@@ -12841,10 +12908,12 @@ function openWizard() {
   if (!modal) return;
   modal.style.display = 'flex';
   renderWizardStep();
+  activateModal(modal);
 }
 function closeWizard() {
   const modal = $id('wizard-modal');
   if (modal) modal.style.display = 'none';
+  deactivateModal(modal);
 }
 function renderWizardStep() {
   const step = WIZARD_STEPS[WIZARD_STEP_IDX];
@@ -13127,6 +13196,15 @@ function hideKeyboardLegend() {
   if (p) p.style.display = 'none';
 }
 document.addEventListener('keydown', handleKeydown);
+// Escape closes whichever non-QuickFind modal is currently open. QuickFind has
+// its own Escape handler (line ~12440) so we don't compete with it.
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Escape') return;
+  const w = $id('wizard-modal');         if (w && w.style.display === 'flex') { closeWizard(); return; }
+  const p = $id('decision-picker-modal'); if (p && p.style.display === 'flex') { closeDecisionPicker(); return; }
+  const t = $id('threat-tour-modal');    if (t && t.style.display === 'flex') { hideThreatTour(); return; }
+  const d = $id('ctx-drawer');           if (d && d.style.right === '0px') { closeContext(); return; }
+});
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
