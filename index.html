@@ -12371,6 +12371,45 @@ function dismissQuickStart() {
   if (b) b.style.display = 'none';
   try { sessionStorage.setItem('quick-start-dismissed', '1'); } catch (e) {}
 }
+// Measure the real height of the stacked sticky headers (config bar + tab bar
+// if present + step nav if present) and set --sticky-headers-h to that value.
+// Re-runs on window resize since config bar wraps onto more rows at narrow
+// widths and the static CSS guess (130px) was wrong in places. Replaces the
+// hard-coded value while keeping --sticky-headers-h as the single source of
+// truth for scroll-margin-top.
+function updateStickyHeadersHeight() {
+  let h = 0;
+  const cb = $id('config-bar');
+  if (cb) {
+    const r = cb.getBoundingClientRect();
+    if (r && r.height && cb.offsetParent !== null) h += r.height;
+  }
+  const tb = document.querySelector('.tab-bar');
+  if (tb) {
+    const r = tb.getBoundingClientRect();
+    if (r && r.height && tb.offsetParent !== null) h += r.height;
+  }
+  // +8 for breathing room.
+  if (h > 0) document.documentElement.style.setProperty('--sticky-headers-h', (h + 8) + 'px');
+}
+
+// Mini-toast — used by the 'what changed' indicator on config changes and by
+// the auto-scroll on dropdown change. Auto-dismissed after `ms` (default 2.5s).
+let _toastTimer = null;
+function showMiniToast(text) {
+  let toast = $id('mini-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'mini-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0d1117;color:#e6edf3;padding:8px 14px;border-radius:6px;font-size:12px;font-family:inherit;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:var(--z-toast-top);opacity:0;transition:opacity .18s;max-width:480px;text-align:center;pointer-events:none';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = text;
+  toast.style.opacity = '1';
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2500);
+}
+
 function restoreQuickStartState() {
   // If user dismissed in this session, hide the banner.
   try {
@@ -12963,6 +13002,29 @@ function updateSelectionSummary() {
   });
 }
 
+// Tracks what dropdown values were on the previous config-change so we can
+// show a tiny 'Updated: <what changed>' toast and (for some changes) auto-
+// scroll the affected phase column into view.
+let _prevCfgSnapshot = null;
+const _affectedPhaseByKey = {
+  // Decision id → which phase strip cell should scroll into view on change.
+  fe: 'tab-main', be: 'tab-main', pkgMgr: 'tab-main',  // build → main
+  scanner: 'tab-pr', signing: 'tab-main', baseimage: 'tab-main',
+  cd: 'tab-promotions', gitops: 'tab-promotions', cloud: 'tab-promotions',
+  promotion: 'tab-promotions', ci: 'tab-pr', registry: 'tab-main',
+  ide: 'tab-local', precommit: 'tab-local', localsecret: 'tab-local',
+  sbom: 'tab-main', compliance: 'tab-promotions'
+};
+function _diffCfg(prev, next) {
+  if (!prev) return [];
+  const keys = new Set([...Object.keys(prev), ...Object.keys(next)]);
+  const changed = [];
+  for (const k of keys) {
+    if (typeof next[k] === 'string' && prev[k] !== next[k]) changed.push(k);
+  }
+  return changed;
+}
+
 function onConfigChange() {
   updatePkgMgrDropdown();
   writeStateToURL();
@@ -13018,15 +13080,39 @@ function onConfigChange() {
     // Show banner only when there is a verified workflow run.
     // REFERENCE + UNTESTED are maintainer states — they live in Catalog tab.
     const validatedWithProof = combo.status === 'validated' && combo.validationUrl;
+    // Tooltip text for non-validated states so the reader knows what
+    // 'REFERENCE' / 'UNTESTED' actually mean (audit gap 13: no explanation of
+    // failure mode). Each describes the risk profile concretely.
+    const tooltipFor = {
+      validated: 'Last verified green by us on a real CI run. Click the link for the receipt.',
+      reference: 'Stack + tool individually tested. This exact combo has not been end-to-end verified by us. Likely-good — risk is integration edge case (auth handshake, image path), not a security gap.',
+      untested:  'No end-to-end run yet for this exact combo. Components ARE individually tested. Risk: integration edge case, not a security gap. Files emitted are the same as for validated combos.'
+    };
     if (validatedWithProof) {
       comboBanner.style.display = 'flex';
       comboBanner.style.background = '#e8f5e9';
       comboBanner.style.borderLeftColor = '#43a047';
       comboBadge.style.background = '#43a047';
       comboBadge.textContent = 'VALIDATED';
+      comboBadge.title = tooltipFor.validated;
       comboText.innerHTML = (combo.notes || '') + ` <a href="${combo.validationUrl}" target="_blank" rel="noopener" style="color:#1a7f37;font-weight:600">View last green run ↗</a>`;
+    } else if (combo.status === 'reference') {
+      comboBanner.style.display = 'flex';
+      comboBanner.style.background = '#fff8c5';
+      comboBanner.style.borderLeftColor = '#d4a72c';
+      comboBadge.style.background = '#9a6700';
+      comboBadge.textContent = 'REFERENCE';
+      comboBadge.title = tooltipFor.reference;
+      comboText.innerHTML = (combo.notes || 'This combo is built from individually-tested components, but the exact pair has not been end-to-end verified by us.') + ` <span style="color:var(--muted);font-style:italic">— hover the badge for details.</span>`;
+    } else if (combo.status === 'untested') {
+      comboBanner.style.display = 'flex';
+      comboBanner.style.background = '#f6f8fa';
+      comboBanner.style.borderLeftColor = '#8b949e';
+      comboBadge.style.background = '#57606a';
+      comboBadge.textContent = 'UNTESTED COMBO';
+      comboBadge.title = tooltipFor.untested;
+      comboText.innerHTML = `Components individually tested; this exact combo not yet end-to-end verified. <span style="color:var(--muted);font-style:italic">Hover the badge for the failure-mode breakdown.</span>`;
     } else {
-      // Hide from reader — surface only in Catalog tab for maintainers.
       comboBanner.style.display = 'none';
     }
   }
@@ -13090,6 +13176,31 @@ function onConfigChange() {
 
   // Re-render phase 0 (registry-specific content changes)
   renderPhase0();
+
+  // "What changed" feedback (fix 12). Diff the picked dropdowns from the
+  // previous config snapshot; if any changed, show a short toast naming
+  // them. Skipped on first call (no previous to diff against).
+  try {
+    const nextCfg = getConfig();
+    const changed = _diffCfg(_prevCfgSnapshot, nextCfg);
+    if (_prevCfgSnapshot && changed.length) {
+      const human = changed.map(k => k === 'compliance' ? 'Compliance' : k === 'ci' ? 'CI' : k === 'registry' ? 'Registry' : k.charAt(0).toUpperCase()+k.slice(1)).slice(0,3).join(', ');
+      const more = changed.length > 3 ? ` +${changed.length-3} more` : '';
+      showMiniToast(`Updated: ${human}${more}`);
+      // Fix 14 — auto-scroll to the affected phase column on a single change.
+      // Skipped if multiple things changed (avoid yanking unexpectedly) and
+      // skipped in quick-start mode or when user is currently in the
+      // decision-map section.
+      if (changed.length === 1 && !document.body.classList.contains('quick-start-mode')) {
+        const tabId = _affectedPhaseByKey[changed[0]];
+        if (tabId) {
+          const el = $id(tabId);
+          if (el) try { el.scrollIntoView({behavior:'smooth', block:'start'}); } catch (e) {}
+        }
+      }
+    }
+    _prevCfgSnapshot = nextCfg;
+  } catch (e) { /* never let UI feedback break the render */ }
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -13741,6 +13852,10 @@ function init() {
   if (location.hash) setTimeout(restoreTabFromHash, 0);
   // Browser back/forward triggers hashchange — sync the tab UI to it.
   window.addEventListener('hashchange', restoreTabFromHash);
+  // Measure real sticky-header height now and on resize. Better than the
+  // hard-coded CSS guess that didn't account for config-bar wrapping.
+  updateStickyHeadersHeight();
+  window.addEventListener('resize', updateStickyHeadersHeight);
 }
 
 // ──────────────────────────────────────────────────────────────────
