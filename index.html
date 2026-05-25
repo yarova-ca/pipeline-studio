@@ -848,11 +848,6 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
     <button onclick="playPipeline()" title="Animate the full pipeline diagram — each stage lights up sequentially so the flow becomes visible" style="background:transparent;border:1px solid var(--accent);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--accent);cursor:pointer;font-family:inherit;font-weight:600">▶ Animate pipeline</button>
   </div>
 
-  <!-- ── Coming-soon banner — surfaces when reader picks a placeholder framework ── -->
-  <div id="comingsoon-banner" style="display:none;padding:10px 20px;background:#f3f4f6;border-bottom:1px solid var(--border-subtle);font-size:12.5px;color:var(--text-sec);border-left:4px solid #9ca3af"></div>
-
-  <!-- ── Industry context — surfaces only when industry != none ── -->
-  <div id="industry-context" style="display:none;padding:10px 20px;background:#fff7ed;border-bottom:1px solid var(--border-subtle);font-size:12px;color:var(--text-sec)"></div>
   <div id="industry-autolink-flash" style="position:fixed;top:80px;right:20px;padding:10px 14px;font-size:12px;color:#0c4a6e;opacity:0;transition:opacity .3s;line-height:1.5;background:#e0f2fe;border:1px solid #7dd3fc;border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:120;max-width:380px;pointer-events:none"></div>
 
   <!-- ── Why-you-picked panel — collapsed by default, reader opens on demand ── -->
@@ -866,25 +861,42 @@ body.print-mode #qf-overlay, body.print-mode #ctx-drawer, body.print-mode #ctx-o
     </div>
   </details>
 
-  <!-- ── Mobile Stack Warning ── -->
-  <div id="mobile-warning" style="display:none;background:#fff8dc;border-left:3px solid #ff9800;padding:8px 18px;margin:0;font-size:12px;color:#333;border-bottom:1px solid var(--border-subtle)">
-    <strong style="display:block;margin-bottom:6px;color:#ff6f00;">⚠️ Mobile Stack Selected</strong>
-    <div style="color:#666;line-height:1.5;">
-      This DevSecOps pipeline is designed for containerized web applications.<br>
-      <strong>Mobile stacks (Expo, React Native)</strong> do not use Docker containerization.<br>
-      The pipeline stages, Dockerfiles, and image signing steps below do not apply.
-    </div>
-  </div>
+  <!-- ── Alerts strip — wraps the 4 ad-hoc banners (coming-soon, industry,
+       mobile, nextjs) into a single dismissable expander so the page no
+       longer stacks 4 colored stripes above the fold. JS refreshAlertsStrip()
+       hides the wrapper entirely when no child is visible. ── -->
+  <details id="alerts-strip" style="display:none;border-bottom:1px solid var(--border-subtle);background:#fafbfc" open>
+    <summary style="cursor:pointer;padding:6px 20px;list-style:none;font-size:11px;font-weight:600;color:var(--text-sec);text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:8px">
+      <span style="color:#d97706">▾</span>
+      <span>Alerts for this combo</span>
+      <span id="alerts-strip-count" style="font-size:10px;font-weight:700;background:#f3f4f6;color:var(--text-sec);padding:1px 8px;border-radius:10px">0</span>
+    </summary>
+    <!-- ── Coming-soon banner — surfaces when reader picks a placeholder framework ── -->
+    <div id="comingsoon-banner" style="display:none;padding:10px 20px;background:#f3f4f6;border-top:1px solid var(--border-subtle);font-size:12.5px;color:var(--text-sec);border-left:4px solid #9ca3af"></div>
 
-  <!-- ── Next.js Standalone Requirement ── -->
-  <div id="nextjs-warning" style="display:none;background:#e8f4fd;border-left:3px solid #2196f3;padding:8px 18px 8px 18px;margin:0;font-size:12px;color:#333;border-bottom:1px solid var(--border-subtle);position:relative">
-    <button onclick="dismissNextjsWarning()" aria-label="Dismiss Next.js note" style="position:absolute;top:4px;right:8px;background:none;border:none;color:#666;cursor:pointer;font-size:14px;line-height:1">×</button>
-    <strong style="display:block;margin-bottom:6px;color:#1976d2;">ℹ️ Next.js Dockerfile note</strong>
-    <div style="color:#666;line-height:1.5;">
-      For Next.js, the generated Dockerfile requires <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-family:monospace;">output: 'standalone'</code> in <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-family:monospace;">next.config.ts</code>.
-      Set this once per repo — then dismiss.
+    <!-- ── Industry context — surfaces only when industry != none ── -->
+    <div id="industry-context" style="display:none;padding:10px 20px;background:#fff7ed;border-top:1px solid var(--border-subtle);font-size:12px;color:var(--text-sec)"></div>
+
+    <!-- ── Mobile Stack Warning ── -->
+    <div id="mobile-warning" style="display:none;background:#fff8dc;border-left:3px solid #ff9800;padding:8px 18px;margin:0;font-size:12px;color:#333;border-top:1px solid var(--border-subtle)">
+      <strong style="display:block;margin-bottom:6px;color:#ff6f00;">⚠️ Mobile Stack Selected</strong>
+      <div style="color:#666;line-height:1.5;">
+        This DevSecOps pipeline is designed for containerized web applications.<br>
+        <strong>Mobile stacks (Expo, React Native)</strong> do not use Docker containerization.<br>
+        The pipeline stages, Dockerfiles, and image signing steps below do not apply.
+      </div>
     </div>
-  </div>
+
+    <!-- ── Next.js Standalone Requirement ── -->
+    <div id="nextjs-warning" style="display:none;background:#e8f4fd;border-left:3px solid #2196f3;padding:8px 18px 8px 18px;margin:0;font-size:12px;color:#333;border-top:1px solid var(--border-subtle);position:relative">
+      <button onclick="dismissNextjsWarning()" aria-label="Dismiss Next.js note" style="position:absolute;top:4px;right:8px;background:none;border:none;color:#666;cursor:pointer;font-size:14px;line-height:1">×</button>
+      <strong style="display:block;margin-bottom:6px;color:#1976d2;">ℹ️ Next.js Dockerfile note</strong>
+      <div style="color:#666;line-height:1.5;">
+        For Next.js, the generated Dockerfile requires <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-family:monospace;">output: 'standalone'</code> in <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-family:monospace;">next.config.ts</code>.
+        Set this once per repo — then dismiss.
+      </div>
+    </div>
+  </details>
 
   <!-- ── Tested Combination Banner ── -->
   <div id="combo-banner" style="display:flex;align-items:center;gap:10px;background:#e8f5e9;border-left:3px solid #43a047;padding:6px 18px;margin:0;font-size:11.5px;color:#333;border-bottom:1px solid var(--border-subtle)">
@@ -12132,18 +12144,39 @@ function flashIndustryAutolink(industry, compliance) {
   setTimeout(() => { strip.style.opacity = '0'; }, 5000);
 }
 function dismissNextjsWarning() {
-  const el = document.getElementById('nextjs-warning');
+  const el = $id('nextjs-warning');
   if (el) el.style.display = 'none';
   try { localStorage.setItem('nextjs-note-dismissed', '1'); } catch(e) {}
+  refreshAlertsStrip();
+}
+
+// Hide the #alerts-strip wrapper when no inner banner is visible; otherwise
+// show it and update the count badge. Called whenever any inner banner
+// toggles visibility (renderComingSoonBanner, renderIndustryContext,
+// onConfigChange mobile/nextjs blocks, dismissNextjsWarning).
+function refreshAlertsStrip() {
+  const strip = $id('alerts-strip');
+  if (!strip) return;
+  const ids = ['comingsoon-banner','industry-context','mobile-warning','nextjs-warning'];
+  // Count purely off explicit display style ('block' or 'flex'). Inner banners
+  // set display:'block' when shown and display:'none' when hidden — never ''.
+  const shown = ids.filter(id => {
+    const el = $id(id);
+    if (!el) return false;
+    return el.style.display === 'block' || el.style.display === 'flex';
+  });
+  const countEl = $id('alerts-strip-count');
+  if (countEl) countEl.textContent = String(shown.length);
+  strip.style.display = shown.length ? '' : 'none';
 }
 
 function renderComingSoonBanner() {
-  const banner = document.getElementById('comingsoon-banner');
+  const banner = $id('comingsoon-banner');
   if (!banner) return;
-  const feId = document.getElementById('sel-frontend') ? document.getElementById('sel-frontend').value : '';
-  const beId = document.getElementById('sel-backend')  ? document.getElementById('sel-backend').value  : '';
+  const feId = $id('sel-frontend') ? $id('sel-frontend').value : '';
+  const beId = $id('sel-backend')  ? $id('sel-backend').value  : '';
   const csList = [feId, beId].filter(id => isComingSoon(id)).map(id => catalogEntry(id));
-  if (csList.length === 0) { banner.style.display = 'none'; return; }
+  if (csList.length === 0) { banner.style.display = 'none'; refreshAlertsStrip(); return; }
   banner.style.display = 'block';
   const rows = csList.map(c => {
     const sister = c.sister ? catalogEntry(c.sister) : null;
@@ -12165,10 +12198,10 @@ function switchToSister(selectId, value) {
 }
 
 function renderIndustryContext() {
-  const box = document.getElementById('industry-context');
+  const box = $id('industry-context');
   if (!box) return;
   const ind = INDUSTRIES[currentIndustry];
-  if (!ind || currentIndustry === 'none') { box.style.display = 'none'; return; }
+  if (!ind || currentIndustry === 'none') { box.style.display = 'none'; refreshAlertsStrip(); return; }
   box.style.display = 'block';
   box.innerHTML = `
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:6px;font-size:11.5px">
@@ -12181,6 +12214,7 @@ function renderIndustryContext() {
       <b>Sector note:</b> ${ind.note}<br>
       <b>Sensitivity:</b> ${ind.sensitivity}
     </div>`;
+  refreshAlertsStrip();
 }
 
 // Renders the "what's in your YAML" chip bar above each workflow output box.
@@ -12235,20 +12269,22 @@ function onConfigChange() {
   currentIndustry = (document.getElementById('sel-industry') && document.getElementById('sel-industry').value) || 'none';
 
   // Show/hide mobile stack warning
-  const mobileWarning = document.getElementById('mobile-warning');
+  const mobileWarning = $id('mobile-warning');
   const isMobileStack = cfg.feKey === 'mobile-expo' || cfg.feKey === 'mobile';
   if (mobileWarning) {
     mobileWarning.style.display = isMobileStack ? 'block' : 'none';
   }
 
   // Next.js standalone note — show only if not dismissed before.
-  const nextjsWarning = document.getElementById('nextjs-warning');
+  const nextjsWarning = $id('nextjs-warning');
   const isNextJS = cfg.feKey === 'nextjs';
   let nextjsDismissed = false;
   try { nextjsDismissed = localStorage.getItem('nextjs-note-dismissed') === '1'; } catch(e) {}
   if (nextjsWarning) {
     nextjsWarning.style.display = (isNextJS && !nextjsDismissed) ? 'block' : 'none';
   }
+  // Update the single wrapper visibility/count after any banner toggled.
+  refreshAlertsStrip();
 
   // Render "why this combo" panel — one short rationale per selector.
   const setWhy = (id, text) => { const el = document.getElementById(id); if (el) el.innerHTML = text; };
