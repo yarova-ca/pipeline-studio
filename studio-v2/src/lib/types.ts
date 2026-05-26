@@ -27,6 +27,11 @@ export interface DecisionOption {
   value: string;
   label: string;
   desc: string;
+  caps?: string[];
+  pickWhen?: string;
+  avoid?: string;
+  tradeoff?: string;
+  cost?: string;
 }
 
 export interface DecisionDef {
@@ -36,6 +41,8 @@ export interface DecisionDef {
   defaultVal: string;
   options?: DecisionOption[];
   selectId?: string;   // when the decision is backed by a config-bar <select>
+  why?: string;        // why this decision matters (longer explanation)
+  skipWhen?: string;   // when it's safe to skip
 }
 
 export interface Invariant {

@@ -5,6 +5,8 @@
 import type { InvariantId, StageId } from './types';
 import { TV } from './tools';
 
+export type Discipline = 's' | 'q' | 'c' | 'p' | 'r';
+
 export interface StageDef {
   id: StageId;
   badge: string;
@@ -28,6 +30,12 @@ export interface StageDef {
   commonMistakes?: string;
   ciLimitation?: string;
   failureClass?: string;
+  /** Discipline codes: s=Security q=Quality c=Compliance p=Process r=Runtime */
+  discipline?: Discipline[];
+  /** Typical wall-clock runtime in a real pipeline, e.g. "~2m" */
+  runtime?: string;
+  /** One-line ROI statement */
+  benefit?: string;
 }
 
 export interface LocalStageDef {
@@ -159,7 +167,10 @@ export const PR_STAGES: PipelineItem[] = [
     howItWorks: 'The pre-commit framework runs a configured list of hooks (small scripts) against staged files before git commit completes. CI re-runs the same hooks to catch --no-verify bypasses.',
     outputMeaning: 'Pass: all hooks returned exit code 0. Fail: hook name + file + line of violation printed to console.',
     whyOrder: 'First stage. Cheapest check. Catches syntax and formatting before wasting scan compute minutes.',
-    commonMistakes: '--no-verify locally (CI S1 re-runs and blocks anyway) | Not pinning hook revs (autoupdate silently changes behavior) | Slow hooks >30s (breaks developer flow)'
+    commonMistakes: '--no-verify locally (CI S1 re-runs and blocks anyway) | Not pinning hook revs (autoupdate silently changes behavior) | Slow hooks >30s (breaks developer flow)',
+    discipline: ['p'],
+    runtime: '~30s',
+    benefit: 'Blocks formatting and syntax bugs before they reach reviewers'
   },
   {
     id: 'parallel-s2s5', parallel: true,
@@ -180,7 +191,10 @@ export const PR_STAGES: PipelineItem[] = [
         howItWorks: 'Reads the package manifest. Resolves the full dep tree including transitive (indirect) deps. Matches each version against OSV/NVD vulnerability database.',
         outputMeaning: 'SARIF to GitHub Security tab. Each finding: CVE ID, severity (CRITICAL/HIGH/MEDIUM/LOW), package, installed version, fixed version.',
         whyOrder: 'Parallel with S3/S3b/S4/S5. No image needed — scans manifests only. Blocks build on CRITICAL/HIGH.',
-        commonMistakes: 'Threshold CRITICAL-only (HIGH CVEs like Log4Shell are exploited daily) | No Dependabot/Renovate (CVE count grows silently) | Not scanning transitive deps'
+        commonMistakes: 'Threshold CRITICAL-only (HIGH CVEs like Log4Shell are exploited daily) | No Dependabot/Renovate (CVE count grows silently) | Not scanning transitive deps',
+        discipline: ['s', 'c'],
+        runtime: '~45s',
+        benefit: 'Catches known CVEs in dependencies before they ship'
       },
       {
         id: 's3', badge: 'S3', phase: 'ph-s',
@@ -198,7 +212,10 @@ export const PR_STAGES: PipelineItem[] = [
         howItWorks: 'Parses code into an AST (Abstract Syntax Tree). Applies pattern rules. Example rule: user input flowing directly into SQL query without parameterization.',
         outputMeaning: 'SARIF report. Each finding: rule ID, severity, file:line, match reason. High confidence = confirmed bug.',
         whyOrder: 'Parallel with S2/S3b/S4/S5. Source code only — no build needed. Fast (~2min).',
-        commonMistakes: 'Default rules only (add --config=p/security-audit for deeper scan) | Ignoring medium-confidence findings | Missing framework-specific rule packs'
+        commonMistakes: 'Default rules only (add --config=p/security-audit for deeper scan) | Ignoring medium-confidence findings | Missing framework-specific rule packs',
+        discipline: ['s', 'q'],
+        runtime: '~2–4m',
+        benefit: 'Finds injection and auth flaws at merge time, not production'
       },
       {
         id: 's3b', badge: 'S3b', phase: 'ph-s',
@@ -216,7 +233,10 @@ export const PR_STAGES: PipelineItem[] = [
         howItWorks: 'FOSSA resolves the full dep tree and checks each dep\'s SPDX license ID against a user-defined policy.',
         outputMeaning: 'FOSSA dashboard report. Each dep: SPDX license ID, allowed/flagged/blocked status.',
         whyOrder: 'Parallel with security scans. No build needed. Blocks build before any GPL code enters the artifact.',
-        commonMistakes: 'No policy configured in FOSSA | Only scanning direct deps | Ignoring "unknown" license entries'
+        commonMistakes: 'No policy configured in FOSSA | Only scanning direct deps | Ignoring "unknown" license entries',
+        discipline: ['c'],
+        runtime: '~1m',
+        benefit: 'Prevents GPL contamination in commercial products'
       },
       {
         id: 's4', badge: 'S4', phase: 'ph-s',
@@ -234,7 +254,10 @@ export const PR_STAGES: PipelineItem[] = [
         howItWorks: 'Checkov reads every IaC file and applies ~2000 built-in rules mapped to CIS benchmarks.',
         outputMeaning: 'SARIF report. Each finding: check ID (e.g., CKV_DOCKER_3), severity, file, line, what to fix.',
         whyOrder: 'Parallel. IaC files are small — fast check. Catches Dockerfile errors before build.',
-        commonMistakes: 'Not scanning workflow YAML | Skipping K8s manifests | --skip-check on high-severity findings'
+        commonMistakes: 'Not scanning workflow YAML | Skipping K8s manifests | --skip-check on high-severity findings',
+        discipline: ['s', 'c'],
+        runtime: '~1m',
+        benefit: 'Catches misconfigured Terraform and Kubernetes before deployment'
       },
       {
         id: 's5', badge: 'S5', phase: 'ph-s',
@@ -252,7 +275,10 @@ export const PR_STAGES: PipelineItem[] = [
         howItWorks: 'Gitleaks scans every commit using regex patterns for 150+ known secret formats. fetch-depth:0 is required.',
         outputMeaning: 'Pass: no secrets found. Fail: file path + commit SHA + line number + matched rule name.',
         whyOrder: 'Parallel. Must use fetch-depth:0 for full history. Blocking — a leaked secret in any commit is critical.',
-        commonMistakes: 'Default fetch-depth:1 (scans HEAD only) | No rotation runbook | .gitleaksignore without expiry review'
+        commonMistakes: 'Default fetch-depth:1 (scans HEAD only) | No rotation runbook | .gitleaksignore without expiry review',
+        discipline: ['s'],
+        runtime: '~30s',
+        benefit: 'Ensures no API keys or credentials are committed to source control'
       }
     ]
   },
@@ -274,7 +300,10 @@ export const PR_STAGES: PipelineItem[] = [
     howItWorks: 'docker/build-push-action with push=false outputs the image as a .tar file. The tarball is uploaded as a CI artifact.',
     outputMeaning: '/tmp/image.tar artifact + image digest output.',
     whyOrder: 'After all security scans pass. Building before scans wastes compute.',
-    commonMistakes: 'Pushing to registry in PR pipeline | Not exporting the image digest | Using --build-arg for secrets'
+    commonMistakes: 'Pushing to registry in PR pipeline | Not exporting the image digest | Using --build-arg for secrets',
+    discipline: ['p', 'q'],
+    runtime: '~3–6m',
+    benefit: 'Verifies the image builds cleanly before expensive scan stages run'
   },
   {
     id: 's8apr', badge: 'S8a', phase: 'ph-g',
@@ -294,7 +323,10 @@ export const PR_STAGES: PipelineItem[] = [
     howItWorks: 'Syft reads the image tarball, walks every layer, identifies packages. Output: SPDX-JSON (ISO standard SBOM format).',
     outputMeaning: 'sbom.spdx.json: list of all components. Each entry: name, version, PURL, license.',
     whyOrder: 'After Docker Build. Before container scan. SBOM and scan must reference the same image digest.',
-    commonMistakes: 'Not attesting SBOM to registry | SPDX text format (use SPDX-JSON) | Running parallel with build'
+    commonMistakes: 'Not attesting SBOM to registry | SPDX text format (use SPDX-JSON) | Running parallel with build',
+    discipline: ['s', 'c'],
+    runtime: '~1m',
+    benefit: 'Generates dependency manifest needed by auditors and downstream scanners'
   },
   {
     id: 's7pr', badge: 'S7', phase: 'ph-g',
@@ -314,7 +346,10 @@ export const PR_STAGES: PipelineItem[] = [
     howItWorks: 'Trivy extracts all packages from every image layer. Matches versions against NVD, OSV, GitHub Advisory.',
     outputMeaning: 'SARIF to GitHub Security tab. Each finding: CVE ID, severity, package, installed version, fixed version.',
     whyOrder: 'After SBOM generation. Last stage in PR pipeline.',
-    commonMistakes: '.trivyignore entries without expiry date | exit-code:0 (must be 1 to actually block) | Stale Trivy DB cache'
+    commonMistakes: '.trivyignore entries without expiry date | exit-code:0 (must be 1 to actually block) | Stale Trivy DB cache',
+    discipline: ['s'],
+    runtime: '~2m',
+    benefit: 'Finds OS and app CVEs in the exact image built from this PR'
   }
 ];
 
@@ -339,7 +374,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'CI runner requests an OIDC token. Token is signed, short-lived (~1hr TTL). Registry IAM policy trusts this token for the specific workflow/branch combination.',
     outputMeaning: 'Registry credentials set as environment variables. No artifact, no log output.',
     whyOrder: 'First stage. All build/push stages need registry credentials.',
-    commonMistakes: 'Not restricting IAM role to specific repo+branch | Docker Hub: no OIDC support | Not masking AWS account ID in ECR setup'
+    commonMistakes: 'Not restricting IAM role to specific repo+branch | Docker Hub: no OIDC support | Not masking AWS account ID in ECR setup',
+    discipline: ['p'],
+    runtime: '~10s',
+    benefit: 'Enables keyless registry auth — no stored credentials to rotate'
   },
   {
     id: 's1main', badge: 'S1', phase: 'ph-f',
@@ -359,7 +397,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'pre-commit framework runs every hook against every file. Exit non-zero blocks the build.',
     outputMeaning: 'Pass: every hook returned 0. Fail: hook name + file + line printed.',
     whyOrder: 'First stage on main, parallel with security scans.',
-    commonMistakes: 'Skipping the re-run on main | autoupdate without review'
+    commonMistakes: 'Skipping the re-run on main | autoupdate without review',
+    discipline: ['p'],
+    runtime: '~30s',
+    benefit: 'Catches --no-verify bypasses that slipped through on the PR branch'
   },
   {
     id: 'parallel-main', parallel: true,
@@ -379,7 +420,10 @@ export const MAIN_STAGES: PipelineItem[] = [
         howItWorks: 'Reads manifest. Resolves transitive deps. Matches versions against OSV + NVD.',
         outputMeaning: 'SARIF upload to GitHub Security. Severity + fixed-version per CVE.',
         whyOrder: 'Parallel — no image needed.',
-        commonMistakes: 'Threshold CRITICAL-only | No auto-update tooling | Skipping transitive scan'
+        commonMistakes: 'Threshold CRITICAL-only | No auto-update tooling | Skipping transitive scan',
+        discipline: ['s', 'c'],
+        runtime: '~45s',
+        benefit: 'Re-validates deps against latest CVE database after merge'
       },
       {
         id: 's3m', badge: 'S3', phase: 'ph-s',
@@ -396,7 +440,10 @@ export const MAIN_STAGES: PipelineItem[] = [
         howItWorks: 'Parses source into AST. Applies rule packs. Reports matches with file:line.',
         outputMeaning: 'SARIF. Each finding: rule + severity + confidence + match.',
         whyOrder: 'Parallel.',
-        commonMistakes: 'Default rule pack only | Ignoring medium-confidence | Missing framework-specific packs'
+        commonMistakes: 'Default rule pack only | Ignoring medium-confidence | Missing framework-specific packs',
+        discipline: ['s', 'q'],
+        runtime: '~2–4m',
+        benefit: 'Runs on the merged commit — catches regressions from merge conflicts'
       },
       {
         id: 's3bm', badge: 'S3b', phase: 'ph-s',
@@ -413,7 +460,10 @@ export const MAIN_STAGES: PipelineItem[] = [
         howItWorks: 'Resolves deps. Maps each to SPDX license ID. Checks against policy.',
         outputMeaning: 'Pass/fail per policy. Per-dep license summary.',
         whyOrder: 'Parallel.',
-        commonMistakes: 'No policy configured | Only direct deps scanned | Ignoring "unknown" entries'
+        commonMistakes: 'No policy configured | Only direct deps scanned | Ignoring "unknown" entries',
+        discipline: ['c'],
+        runtime: '~1m',
+        benefit: 'Enforces license policy on the final merged dependency tree'
       },
       {
         id: 's4m', badge: 'S4', phase: 'ph-s',
@@ -430,7 +480,10 @@ export const MAIN_STAGES: PipelineItem[] = [
         howItWorks: 'Checkov runs ~2000 rules across CIS benchmarks.',
         outputMeaning: 'SARIF. Each finding: check ID + severity + remediation.',
         whyOrder: 'Parallel. Fast.',
-        commonMistakes: 'Not scanning workflow YAML | --skip-check on high-severity | Missing K8s manifests'
+        commonMistakes: 'Not scanning workflow YAML | --skip-check on high-severity | Missing K8s manifests',
+        discipline: ['s', 'c'],
+        runtime: '~1m',
+        benefit: 'Validates IaC changes merged to main before any deployment'
       },
       {
         id: 's5m', badge: 'S5', phase: 'ph-s',
@@ -447,7 +500,10 @@ export const MAIN_STAGES: PipelineItem[] = [
         howItWorks: 'Gitleaks scans every commit. Requires fetch-depth:0 for full history.',
         outputMeaning: 'Path + commit SHA + line + rule on finding.',
         whyOrder: 'Parallel. Full history fetch.',
-        commonMistakes: 'fetch-depth:1 (only HEAD) | No rotation runbook | .gitleaksignore without expiry'
+        commonMistakes: 'fetch-depth:1 (only HEAD) | No rotation runbook | .gitleaksignore without expiry',
+        discipline: ['s'],
+        runtime: '~30s',
+        benefit: 'Final secret scan gate before the image is built and pushed'
       }
     ]
   },
@@ -469,7 +525,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'docker/build-push-action with push=true. Multi-arch build (linux/amd64, linux/arm64) via QEMU emulation and buildx.',
     outputMeaning: 'Image in registry at REGISTRY/IMAGE:SHA. Outputs: image-digest (sha256:...), image-ref (full reference).',
     whyOrder: 'After all security scans. SBOM, sign, test, DAST all need the pushed image.',
-    commonMistakes: 'Pushing :latest as primary tag | Not capturing image-digest output | Single-arch build'
+    commonMistakes: 'Pushing :latest as primary tag | Not capturing image-digest output | Single-arch build',
+    discipline: ['p'],
+    runtime: '~4–8m',
+    benefit: 'Produces the multi-arch image that ships to production'
   },
   {
     id: 's8a', badge: 'S8a', phase: 'ph-g',
@@ -489,7 +548,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'Syft pulls the image from registry by digest. Generates SPDX-JSON SBOM.',
     outputMeaning: 'sbom.spdx.json artifact. Attached to registry image by S8b as a cosign attestation.',
     whyOrder: 'Immediately after Docker Build. Must complete before S8b and S7.',
-    commonMistakes: 'Using image tag instead of digest | Running in parallel with S7 without needs: gate'
+    commonMistakes: 'Using image tag instead of digest | Running in parallel with S7 without needs: gate',
+    discipline: ['s', 'c'],
+    runtime: '~1m',
+    benefit: 'Creates the SBOM that attestation and compliance policies verify'
   },
   {
     id: 's7main', badge: 'S7', phase: 'ph-g',
@@ -509,7 +571,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'Trivy scans the registry image by digest. Same database, same rules as PR.',
     outputMeaning: 'Same SARIF format as PR scan. Pipeline exits on CRITICAL/HIGH unless suppressed with valid expiry.',
     whyOrder: 'After SBOM generation. Before image signing (S8b). The ordering S8a → S7 → S8b is a hard pipeline invariant.',
-    commonMistakes: 'Running S8b before S7 (signs before scanning — violates invariant) | Different scan result from PR'
+    commonMistakes: 'Running S8b before S7 (signs before scanning — violates invariant) | Different scan result from PR',
+    discipline: ['s'],
+    runtime: '~2m',
+    benefit: 'Confirms pushed image is clean before SBOM attestation'
   },
   {
     id: 's8b', badge: 'S8b', phase: 'ph-g',
@@ -529,7 +594,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'cosign uses keyless signing (Sigstore OIDC — no private key stored anywhere). Entry recorded in Rekor (a public transparency log — append-only, immutable).',
     outputMeaning: 'Cosign signature in registry (.sig suffix). SBOM attestation (.att suffix). Rekor entry.',
     whyOrder: 'After container scan passes. Never sign before scanning.',
-    commonMistakes: 'Missing id-token:write permission | Not downloading SBOM artifact from S8a | Not verifying signature after signing'
+    commonMistakes: 'Missing id-token:write permission | Not downloading SBOM artifact from S8a | Not verifying signature after signing',
+    discipline: ['s', 'c'],
+    runtime: '~30s',
+    benefit: 'Keyless cryptographic proof that the image came from this CI run'
   },
   {
     id: 's9', badge: 'S9', phase: 'ph-g',
@@ -549,7 +617,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'Stack-specific test runner runs all tests. Coverage report uploaded to Codecov. I-9: if coverage decreases vs. base branch, pipeline fails.',
     outputMeaning: 'Pass/fail with count. Coverage percentage and diff vs. base branch on Codecov.',
     whyOrder: 'After Docker Build. Before DAST — DAST on a broken app produces meaningless results.',
-    commonMistakes: 'No coverage threshold | Running DAST before tests pass | Not uploading coverage report'
+    commonMistakes: 'No coverage threshold | Running DAST before tests pass | Not uploading coverage report',
+    discipline: ['q'],
+    runtime: '~2–5m',
+    benefit: 'Blocks code-correctness regressions from reaching main'
   },
   {
     id: 's9a', badge: 'S9a', phase: 'ph-g',
@@ -569,7 +640,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'docker compose brings up all services. Tests run against the composed stack via HTTP.',
     outputMeaning: 'Test pass/fail per test case.',
     whyOrder: 'After unit tests (S9). Before DAST.',
-    commonMistakes: 'Using production database credentials | Not seeding test data | Not running docker compose down on exit'
+    commonMistakes: 'Using production database credentials | Not seeding test data | Not running docker compose down on exit',
+    discipline: ['q'],
+    runtime: '~3–5m',
+    benefit: 'Catches service-to-service contract failures before deployment'
   },
   {
     id: 'dast', badge: 'DAST', phase: 'ph-g',
@@ -589,7 +663,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'OWASP ZAP (Zed Attack Proxy) starts a proxy, spiders every endpoint, then sends attack payloads.',
     outputMeaning: 'ZAP HTML report + SARIF. Each finding: URL, attack type, risk level, evidence.',
     whyOrder: 'After integration tests (app must be working). Last security check before SLSA.',
-    commonMistakes: 'Running before tests pass | Not excluding /health endpoints | Baseline scan only'
+    commonMistakes: 'Running before tests pass | Not excluding /health endpoints | Baseline scan only',
+    discipline: ['s'],
+    runtime: '~5m',
+    benefit: 'Finds runtime injection, auth, and config vulnerabilities in live app'
   },
   {
     id: 's11', badge: 'S11', phase: 'ph-g',
@@ -609,7 +686,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'k6 simulates virtual users making requests. Measures p50/p95/p99 latency, error rate, throughput.',
     outputMeaning: 'k6 summary: p95/p99 latency in ms, requests/second, error rate %. Threshold breach = pipeline fails.',
     whyOrder: 'After integration tests. Can run parallel with DAST.',
-    commonMistakes: 'No threshold assertions | No warm-up period | Testing against production'
+    commonMistakes: 'No threshold assertions | No warm-up period | Testing against production',
+    discipline: ['r'],
+    runtime: '~3m',
+    benefit: 'Prevents latency regressions shipping to production'
   },
   {
     id: 's10', badge: 'S10', phase: 'ph-g',
@@ -630,7 +710,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'slsa-github-generator runs as a SEPARATE, ISOLATED job (required for Level 3). Generates a provenance attestation signed by Sigstore.',
     outputMeaning: 'slsa-provenance.intoto.jsonl artifact + provenance attestation in registry.',
     whyOrder: 'After build and scan. Must be an isolated job for Level 3.',
-    commonMistakes: 'Running as a step inside the build job (max SLSA Level 2) | Not capturing image-digest | Missing permissions'
+    commonMistakes: 'Running as a step inside the build job (max SLSA Level 2) | Not capturing image-digest | Missing permissions',
+    discipline: ['c', 's'],
+    runtime: '~2m',
+    benefit: 'Produces a tamper-evident SLSA L3 provenance certificate'
   },
   {
     id: 's12', badge: 'S12', phase: 'ph-o',
@@ -650,7 +733,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'slackapi/slack-github-action sends a message with pipeline status, commit SHA, actor, and links to failed jobs.',
     outputMeaning: 'Slack message in #deployments. Green badge = all passed. Red badge = failure with direct link.',
     whyOrder: 'After all pipeline jobs complete. Non-blocking.',
-    commonMistakes: 'Missing if: always() | SLACK_BOT_TOKEN not in secrets | No direct link to failing job'
+    commonMistakes: 'Missing if: always() | SLACK_BOT_TOKEN not in secrets | No direct link to failing job',
+    discipline: ['p'],
+    runtime: '~5s',
+    benefit: 'Delivers signed image digest to CD/Argo for deployment'
   },
   {
     id: 's13', badge: 'S13', phase: 'ph-o',
@@ -670,7 +756,10 @@ export const MAIN_STAGES: PipelineItem[] = [
     howItWorks: 'docker buildx imagetools create re-tags the existing digest as :latest. No new image layers created.',
     outputMeaning: ':latest tag in registry pointing to the same digest as :SHA.',
     whyOrder: 'After notification. Only if all prior jobs passed — no if: always() on this step.',
-    commonMistakes: 'Using if: always() here | Rebuilding instead of re-tagging | Not referencing by digest'
+    commonMistakes: 'Using if: always() here | Rebuilding instead of re-tagging | Not referencing by digest',
+    discipline: ['p'],
+    runtime: '~1m',
+    benefit: 'Deploys the image to dev/staging using GitOps + Helm'
   }
 ];
 
@@ -696,6 +785,9 @@ export const PROMOTION_STAGES: StageDef[] = [
     outputMeaning: 'Pods in Ready state in dev namespace. /health returns 200 within 60s.',
     whyOrder: 'First environment hop after build. Smoke test gates promotion to test env.',
     commonMistakes: 'Pinning by tag instead of digest | Skipping PreSync cosign verify | No smoke test gate',
+    discipline: ['s', 'c'],
+    runtime: '~1m',
+    benefit: 'Re-validates the image digest and signature before promotion',
     failureClass: 'STOPS_PIPELINE'
   },
   {
@@ -717,6 +809,9 @@ export const PROMOTION_STAGES: StageDef[] = [
     outputMeaning: 'Test report — pass/fail per test case. JUnit XML uploaded.',
     whyOrder: 'After dev smoke. Before staging. Same image throughout.',
     commonMistakes: 'Rebuilding for test config | Pointing tests at prod DB | Manual digest copy (typo risk)',
+    discipline: ['q'],
+    runtime: '~5m',
+    benefit: 'Runs full integration suite against staging before production',
     failureClass: 'STOPS_PIPELINE'
   },
   {
@@ -738,6 +833,9 @@ export const PROMOTION_STAGES: StageDef[] = [
     outputMeaning: 'k6 summary report. UAT approval comment on PR. Both required.',
     whyOrder: 'After test. Before prod. Performance + UAT gates here.',
     commonMistakes: 'Staging config drifts from prod | k6 with no threshold | UAT optional',
+    discipline: ['q', 'p'],
+    runtime: 'manual (hours–days)',
+    benefit: 'Human acceptance gate — business signs off before prod promotion',
     failureClass: 'STOPS_PIPELINE'
   },
   {
@@ -759,6 +857,9 @@ export const PROMOTION_STAGES: StageDef[] = [
     outputMeaning: 'Per-step traffic %. Error rate at each step. Final: 100% on new version or rolled back.',
     whyOrder: 'Last promotion step. Customer-facing.',
     commonMistakes: 'No SLI defined | Skipping the 5% hold | Manual rollback only',
+    discipline: ['p'],
+    runtime: '~2m',
+    benefit: 'Atomically promotes the tested image to production',
     failureClass: 'STOPS_PIPELINE'
   },
   {
@@ -779,7 +880,10 @@ export const PROMOTION_STAGES: StageDef[] = [
     howItWorks: 'cosign verify checks the signature against the expected OIDC issuer and subject. Same check runs at K8s admission via Kyverno.',
     outputMeaning: 'Pass: verified. Fail: signature missing or issuer/subject mismatch.',
     whyOrder: 'Final stage. After promote.',
-    commonMistakes: 'Too-broad --certificate-identity-regexp | No Kyverno policy in cluster | Different subject in verify vs sign step'
+    commonMistakes: 'Too-broad --certificate-identity-regexp | No Kyverno policy in cluster | Different subject in verify vs sign step',
+    discipline: ['s', 'p'],
+    runtime: '~2m',
+    benefit: 'Triggers the GitOps deploy engine with the new image tag'
   }
 ];
 

@@ -2,12 +2,28 @@
 import Base from '../layouts/Base.astro';
 import ConfigBar from '../islands/ConfigBar.svelte';
 import PipelineView from '../islands/PipelineView.svelte';
+import PipelineSVG from '../islands/PipelineSVG.svelte';
+import WhyPanel from '../islands/WhyPanel.svelte';
 import FileViewer from '../islands/FileViewer.svelte';
+import ReferenceTabs from '../islands/ReferenceTabs.svelte';
 import DecisionMap from '../islands/DecisionMap.svelte';
 import { INVARIANTS } from '../lib/invariants';
 import { COMPLIANCE_CONTROL_MAP } from '../lib/compliance';
+import { CATALOG, CATALOG_TIERS, CATALOG_SHAPES } from '../lib/catalog';
 
 const complianceEntries = Object.entries(COMPLIANCE_CONTROL_MAP);
+
+// Group catalog by language for display
+const catalogByLang = CATALOG.reduce((acc, entry) => {
+  if (!acc[entry.lang]) acc[entry.lang] = [];
+  acc[entry.lang].push(entry);
+  return acc;
+}, {} as Record<string, typeof CATALOG>);
+
+const langOrder = ['JS', 'TS', 'Node', 'Bun', 'Python', 'Go', 'Java', 'Kotlin', '.NET', 'Rust', 'Ruby', 'PHP', 'Elixir', 'Swift', 'Dart'];
+const sortedLangs = langOrder.filter(l => catalogByLang[l]);
+const prodCount = CATALOG.filter(c => c.tier === 'production').length;
+const totalCount = CATALOG.length;
 ---
 
 <Base title="DevSecOps Pipeline Studio">
@@ -45,10 +61,29 @@ const complianceEntries = Object.entries(COMPLIANCE_CONTROL_MAP);
     </div>
 
     <div class="nav-section">
+      <div class="nav-hdr">Knowledge Base</div>
+      <ul class="nav-list">
+        <li><a href="#reference" class="nav-item">Setup Guides</a></li>
+        <li><a href="#reference" class="nav-item">Tool Versions</a></li>
+        <li><a href="#reference" class="nav-item">Tested Matrix</a></li>
+        <li><a href="#reference" class="nav-item">Glossary</a></li>
+        <li><a href="#reference" class="nav-item">Tradeoffs</a></li>
+        <li><a href="#reference" class="nav-item">Maintain</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-section">
       <div class="nav-hdr">Security</div>
       <ul class="nav-list">
         <li><a href="#invariants" class="nav-item">20 Invariants</a></li>
         <li><a href="#compliance" class="nav-item">Compliance Map</a></li>
+      </ul>
+    </div>
+    <div class="nav-section">
+      <div class="nav-hdr">Reference</div>
+      <ul class="nav-list">
+        <li><a href="#svg-diagram" class="nav-item">Pipeline Diagram</a></li>
+        <li><a href="#catalog" class="nav-item">Framework Catalog</a></li>
       </ul>
     </div>
   </nav>
@@ -58,8 +93,12 @@ const complianceEntries = Object.entries(COMPLIANCE_CONTROL_MAP);
     <div class="toc-hdr">On this page</div>
     <ul class="toc-list">
       <li><a href="#pipeline">Pipeline flow</a></li>
+      <li><a href="#svg-diagram">Pipeline diagram</a></li>
       <li><a href="#decision-map">Decision map</a></li>
       <li><a href="#file-viewer">Generated files</a></li>
+      <li><a href="#invariants">Invariants</a></li>
+      <li><a href="#compliance">Compliance</a></li>
+      <li><a href="#catalog">Framework catalog</a></li>
     </ul>
   </div>
 
@@ -73,11 +112,34 @@ const complianceEntries = Object.entries(COMPLIANCE_CONTROL_MAP);
         Select your stack, CI system, and registry above.
         The pipeline, files, and compliance map update instantly.
       </p>
+      <div class="hero-stats">
+        <span class="hero-stat"><strong>{prodCount}</strong> production-ready stacks</span>
+        <span class="hero-stat-sep">·</span>
+        <span class="hero-stat"><strong>5</strong> pipeline phases</span>
+        <span class="hero-stat-sep">·</span>
+        <span class="hero-stat"><strong>20</strong> security invariants</span>
+        <span class="hero-stat-sep">·</span>
+        <span class="hero-stat"><strong>12</strong> compliance frameworks</span>
+      </div>
     </section>
+
+    <!-- Why panel — tradeoffs for current picks (collapsed by default) -->
+    <WhyPanel client:only="svelte" />
 
     <!-- Interactive pipeline view -->
     <section class="section-block">
       <PipelineView client:load />
+    </section>
+
+    <!-- Master SVG pipeline diagram -->
+    <section class="section-block" id="svg-diagram">
+      <div class="section-hdr">
+        <h2 class="section-title">Master Pipeline Diagram</h2>
+        <p class="section-sub">All stages, all phases. Critical path in red. Stages lit green when your decisions affect them. Click any stage to highlight it.</p>
+      </div>
+      <div style="padding: 16px 24px 24px;">
+        <PipelineSVG client:load />
+      </div>
     </section>
 
     <!-- Decision map -->
@@ -143,9 +205,66 @@ const complianceEntries = Object.entries(COMPLIANCE_CONTROL_MAP);
     <section class="section-block" id="file-viewer">
       <div class="section-hdr">
         <h2 class="section-title">Generated Files</h2>
-        <p class="section-sub">All files update as you change the config above.</p>
+        <p class="section-sub">
+          All files update as you change the config above.
+          Select a file from the list, read it, copy it, drop it in your repo.
+          All files are production-ready — not illustrative templates.
+        </p>
       </div>
-      <FileViewer client:load />
+      <div style="padding: 16px 24px 24px;">
+        <FileViewer client:load />
+      </div>
+    </section>
+
+    <!-- Reference tabs: Setup Guides, Versions, Tested Matrix, Mistakes, Glossary, Tradeoffs, Maintain -->
+    <section class="section-block" id="reference">
+      <div class="section-hdr">
+        <h2 class="section-title">Reference</h2>
+        <p class="section-sub">Setup guides · Tool versions · Tested combinations · Common mistakes · Glossary · Tradeoffs · Maintain</p>
+      </div>
+      <ReferenceTabs client:load />
+    </section>
+
+    <!-- Framework catalog -->
+    <section class="section-block" id="catalog">
+      <div class="section-hdr">
+        <h2 class="section-title">Framework Catalog</h2>
+        <p class="section-sub">
+          <strong>{prodCount} production-ready</strong> stacks out of {totalCount} total.
+          Production = full Dockerfile + CI workflow generated. Coming soon = listed, use closest sister framework.
+        </p>
+      </div>
+      <div class="cat-tier-legend">
+        {Object.entries(CATALOG_TIERS).map(([tier, t]) => (
+          <span class="cat-tier-chip" style={`background:${t.bg};color:${t.color};border:1px solid ${t.color}40`}>
+            {t.label}
+          </span>
+        ))}
+      </div>
+      <div class="cat-grid">
+        {sortedLangs.map(lang => (
+          <div class="cat-lang-group">
+            <div class="cat-lang-hdr">{lang}</div>
+            <div class="cat-entries">
+              {catalogByLang[lang].map(entry => {
+                const tier = CATALOG_TIERS[entry.tier];
+                const shape = CATALOG_SHAPES[entry.shape];
+                return (
+                  <div class="cat-entry" title={entry.note}>
+                    <span class="cat-entry-label">{entry.label}</span>
+                    <span class="cat-shape-badge" title={shape?.label}>{shape?.icon}</span>
+                    <span
+                      class="cat-tier-dot"
+                      style={`background:${tier.color};`}
+                      title={tier.label}
+                    ></span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
 
   </div>
@@ -333,5 +452,85 @@ const complianceEntries = Object.entries(COMPLIANCE_CONTROL_MAP);
     color: var(--accent);
     font-size: 10px;
     white-space: nowrap;
+  }
+
+  /* Hero stats */
+  .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .hero-stat strong { color: var(--text); }
+  .hero-stat-sep { color: var(--border); }
+
+  /* Catalog tier legend */
+  .cat-tier-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 24px 0;
+  }
+  .cat-tier-chip {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: .04em;
+  }
+
+  /* Catalog grid */
+  .cat-grid {
+    padding: 14px 24px 28px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .cat-lang-group {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .cat-lang-hdr {
+    background: var(--surface);
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .cat-entries {
+    padding: 6px 8px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .cat-entry {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 4px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--text);
+    transition: background .1s;
+  }
+  .cat-entry:hover { background: var(--surface); }
+  .cat-entry-label { flex: 1; }
+  .cat-shape-badge {
+    font-size: 10px;
+    opacity: .6;
+  }
+  .cat-tier-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
 </style>

@@ -4,8 +4,10 @@
     LOCAL_STAGES, PR_STAGES, MAIN_STAGES, PROMOTION_STAGES, PHASE_0_STAGES,
     ALL_STAGES_FLAT, isParallel
   } from '../lib/stages';
-  import type { StageDef } from '../lib/stages';
+  import type { StageDef, Discipline } from '../lib/stages';
   import { INVARIANT_BY_ID } from '../lib/invariants';
+  import { TOOL_META } from '../lib/tools';
+  import type { ToolVersionKey } from '../lib/tools';
 
   const TABS = [
     { id: 0, label: '0', sublabel: 'Bootstrap',  color: '#6e7681' },
@@ -39,6 +41,40 @@
   function mistakes(s: StageDef): string[] {
     return s.commonMistakes ? s.commonMistakes.split(' | ') : [];
   }
+
+  const DISC_LABEL: Record<Discipline, string> = {
+    s: 'Security', q: 'Quality', c: 'Compliance', p: 'Process', r: 'Runtime',
+  };
+  const DISC_CLASS: Record<Discipline, string> = {
+    s: 'disc-s', q: 'disc-q', c: 'disc-c', p: 'disc-p', r: 'disc-r',
+  };
+
+  // Maps stage ID → primary TOOL_META key so we can show lastVerified date in the detail panel
+  const STAGE_TOOL_META_KEY: Record<string, ToolVersionKey> = {
+    's7pr':   'trivyAction',
+    's7main': 'trivyAction',
+    's8apr':  'sbomAction',
+    's8a':    'sbomAction',
+    's8b':    'cosignInstaller',
+    's14':    'cosignInstaller',
+    's3':     'semgrepVersion',
+    's3m':    'semgrepVersion',
+    's3b':    'fossaAction',
+    's3bm':   'fossaAction',
+    's4':     'checkovAction',
+    's4m':    'checkovAction',
+    's5':     'gitleaksAction',
+    's5m':    'gitleaksAction',
+    'dast':   'zapBaseline',
+    's11':    'k6Image',
+    's10':    'slsaGenerator',
+    's2':     'dependencyReview',
+    's2m':    'dependencyReview',
+    's1':     'preCommitAction',
+    's1main': 'preCommitAction',
+    's6pr':   'dockerBuildPush',
+    's6main': 'dockerBuildPush',
+  };
 </script>
 
 <div class="pipeline-root">
@@ -246,8 +282,33 @@
       <button class="sdp-close" on:click={closePanel} type="button" aria-label="Close">✕</button>
     </div>
 
+    {#if s.discipline?.length}
+      <div class="sdp-disc-row">
+        {#each s.discipline as d}
+          <span class="sdp-disc {DISC_CLASS[d]}">{DISC_LABEL[d]}</span>
+        {/each}
+        {#if s.runtime}
+          <span class="sdp-runtime">⏱ {s.runtime}</span>
+        {/if}
+      </div>
+    {/if}
+
+    {#if s.benefit}
+      <div class="sdp-benefit">{s.benefit}</div>
+    {/if}
+
     {#if s.tool}
+      {@const metaKey = STAGE_TOOL_META_KEY[s.id]}
+      {@const toolMeta = metaKey ? TOOL_META[metaKey] : null}
       <div class="sdp-row"><span class="sdp-lbl">Tool</span><code class="sdp-val">{s.tool}</code></div>
+      {#if toolMeta}
+        <div class="sdp-row">
+          <span class="sdp-lbl">Verified</span>
+          <span class="sdp-val sdp-verified">{toolMeta.lastVerified}
+            <span class="sdp-note">{toolMeta.note}</span>
+          </span>
+        </div>
+      {/if}
     {/if}
     {#if s.actor}
       <div class="sdp-row"><span class="sdp-lbl">Actor</span><span class="sdp-val">{s.actor}</span></div>
@@ -574,6 +635,49 @@
   }
   .sdp-list li + li { margin-top: 4px; }
   .sdp-incident { font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
+  .sdp-verified { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text-sec); }
+  .sdp-note { font-size: 9.5px; color: var(--muted); margin-left: 6px; font-family: inherit; }
+
+  /* Discipline chips */
+  .sdp-disc-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  .sdp-disc {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 1px solid;
+    letter-spacing: .03em;
+  }
+  .disc-s { background: #fff5f5; border-color: #ffa8a8; color: #c92a2a; }
+  .disc-q { background: #e8f4fd; border-color: #74c0fc; color: #1971c2; }
+  .disc-c { background: #f8f0fc; border-color: #cc5de8; color: #862e9c; }
+  .disc-p { background: var(--surface); border-color: var(--border); color: var(--muted); }
+  .disc-r { background: #ebfbee; border-color: #8ce99a; color: #2b8a3e; }
+
+  .sdp-runtime {
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* Benefit statement */
+  .sdp-benefit {
+    font-size: 11.5px;
+    color: var(--text-sec);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 7px 10px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
 
   @media (max-width: 1100px) {
     .sdp { right: 0; width: 360px; }
