@@ -144,6 +144,15 @@ nav#sb a.active { color: var(--sb-active); background: rgba(88,166,255,.08) }
   color: #58a6ff; font-family: 'JetBrains Mono', monospace; white-space: nowrap;
 }
 
+/* ── VALIDATED COMBO BANNER ── */
+.validated-bar {
+  width: 100%; padding: 3px 6px 2px;
+  font-size: 10px; font-weight: 600;
+  color: #1a7f37; background: rgba(26,127,55,.08);
+  border-top: 1px solid rgba(26,127,55,.25);
+  animation: compat-in .15s ease both;
+}
+
 /* ── COMPAT WARNINGS ── */
 .compat-muted { opacity: .5; pointer-events: none; }
 .compat-muted select { cursor: not-allowed; }

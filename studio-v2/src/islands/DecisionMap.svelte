@@ -9,11 +9,13 @@
     label: string;
     concept: string;
     defaultVal: string;
+    why?: string;
+    skipWhen?: string;
     isRequired: boolean;
     hasOptions: boolean;
     hasCfgBar: boolean;
     selectId?: string;
-    options?: Array<{ value: string; label: string; desc: string }>;
+    options?: Array<{ value: string; label: string; desc: string; caps?: string[]; pickWhen?: string; avoid?: string; tradeoff?: string; cost?: string }>;
   }
 
   const ENTRIES: DecisionEntry[] = (Object.entries(DECISION_DEFS) as [DecisionId, typeof DECISION_DEFS[DecisionId]][]).map(([id, def]) => ({
@@ -22,6 +24,8 @@
     label: def.label,
     concept: def.concept,
     defaultVal: def.defaultVal,
+    why: def.why,
+    skipWhen: def.skipWhen,
     isRequired: DECISION_REQUIRED.has(id),
     hasOptions: !!(def.options?.length),
     hasCfgBar: !!def.selectId,
@@ -91,24 +95,71 @@
           <div class="dm-body">
             <p class="dm-concept">{entry.concept}</p>
 
+            {#if entry.why}
+              <p class="dm-why">{entry.why}</p>
+            {/if}
+
             {#if entry.hasOptions}
               <div class="dm-opts">
                 {#each entry.options ?? [] as opt (opt.value)}
+                  {@const isPicked = currentPick === opt.value}
                   <button
                     class="dm-opt"
-                    class:picked={currentPick === opt.value}
+                    class:picked={isPicked}
                     on:click={() => pick(entry.id, opt.value)}
                     type="button"
                   >
-                    <span class="dm-opt-lbl">{opt.label}</span>
+                    <div class="dm-opt-top">
+                      <span class="dm-opt-lbl">{opt.label}</span>
+                      {#if isPicked}<span class="dm-opt-active-badge">Current pick</span>{/if}
+                    </div>
                     <span class="dm-opt-desc">{opt.desc}</span>
+                    {#if opt.caps && opt.caps.length > 0}
+                      <div class="dm-opt-caps">
+                        {#each opt.caps.slice(0, 3) as cap}
+                          <span class="dm-opt-cap">✓ {cap}</span>
+                        {/each}
+                      </div>
+                    {/if}
+                    {#if isPicked && (opt.pickWhen || opt.avoid || opt.tradeoff)}
+                      <div class="dm-opt-knowledge">
+                        {#if opt.pickWhen}
+                          <div class="dk-row">
+                            <span class="dk-lbl pick">Pick when</span>
+                            <span class="dk-val">{opt.pickWhen}</span>
+                          </div>
+                        {/if}
+                        {#if opt.avoid}
+                          <div class="dk-row">
+                            <span class="dk-lbl avoid">Avoid</span>
+                            <span class="dk-val">{opt.avoid}</span>
+                          </div>
+                        {/if}
+                        {#if opt.tradeoff}
+                          <div class="dk-row">
+                            <span class="dk-lbl tradeoff">Tradeoff</span>
+                            <span class="dk-val">{opt.tradeoff}</span>
+                          </div>
+                        {/if}
+                        {#if opt.cost}
+                          <div class="dk-row">
+                            <span class="dk-lbl cost">Cost</span>
+                            <span class="dk-val">{opt.cost}</span>
+                          </div>
+                        {/if}
+                      </div>
+                    {/if}
                   </button>
                 {/each}
               </div>
             {:else if entry.hasCfgBar}
               <p class="dm-note">
-                Change this via the <strong>{entry.label}</strong> dropdown in the config bar.
+                Change this via the <strong>{entry.label}</strong> dropdown in the config bar above.
               </p>
+            {/if}
+
+            {#if entry.skipWhen}
+              <p class="dm-skipwhen">Skip when: {entry.skipWhen}</p>
             {/if}
           </div>
         {/if}
@@ -180,11 +231,13 @@
     border-top: 1px solid var(--border-subtle);
     padding: 12px 12px 14px;
   }
-  .dm-concept { font-size: 11.5px; color: var(--text-sec); line-height: 1.5; margin-bottom: 12px; }
+  .dm-concept { font-size: 11.5px; color: var(--text-sec); line-height: 1.5; margin-bottom: 8px; }
+  .dm-why { font-size: 11px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; font-style: italic; border-left: 2px solid var(--border); padding-left: 8px; }
+  .dm-skipwhen { font-size: 10.5px; color: var(--muted); margin-top: 10px; padding: 6px 8px; background: var(--surface); border-radius: 4px; border: 1px solid var(--border); }
 
   .dm-opts { display: flex; flex-direction: column; gap: 6px; }
   .dm-opt {
-    display: flex; flex-direction: column; gap: 2px;
+    display: flex; flex-direction: column; gap: 3px;
     padding: 8px 10px;
     border: 1.5px solid var(--border);
     border-radius: 6px;
@@ -195,8 +248,40 @@
   }
   .dm-opt:hover  { border-color: var(--accent); background: #f6fbff; }
   .dm-opt.picked { border-color: var(--accent); background: #f0f7ff; }
-  .dm-opt-lbl   { font-size: 12px; font-weight: 600; color: var(--text); }
-  .dm-opt-desc  { font-size: 10.5px; color: var(--muted); line-height: 1.4; }
+
+  .dm-opt-top { display: flex; align-items: center; gap: 6px; }
+  .dm-opt-lbl { font-size: 12px; font-weight: 600; color: var(--text); flex: 1; }
+  .dm-opt-active-badge { font-size: 8.5px; font-weight: 700; color: #1a7f37; background: #dafbe1; border: 1px solid #82e59d; border-radius: 3px; padding: 1px 5px; white-space: nowrap; }
+  .dm-opt-desc { font-size: 10.5px; color: var(--muted); line-height: 1.4; }
+
+  .dm-opt-caps { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+  .dm-opt-cap { font-size: 9.5px; color: #1a7f37; background: #ebfbee; border: 1px solid #b2f2bb; border-radius: 3px; padding: 1px 5px; }
+
+  .dm-opt-knowledge {
+    margin-top: 6px;
+    border-top: 1px dashed var(--border);
+    padding-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .dk-row { display: flex; gap: 6px; align-items: flex-start; }
+  .dk-lbl {
+    flex-shrink: 0;
+    font-size: 8.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-top: 1px;
+    border: 1px solid;
+  }
+  .dk-lbl.pick     { background: #dafbe1; color: #1a7f37; border-color: #82e59d; }
+  .dk-lbl.avoid    { background: #ffebe9; color: #cf222e; border-color: #ffc9c9; }
+  .dk-lbl.tradeoff { background: #f3f0ff; color: #6741d9; border-color: #d0bfff; }
+  .dk-lbl.cost     { background: #fff8c5; color: #9a6700; border-color: #d4a72c; }
+  .dk-val { font-size: 10.5px; color: var(--text-sec); line-height: 1.45; }
 
   .dm-note {
     font-size: 11px; color: var(--muted);

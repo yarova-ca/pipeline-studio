@@ -3,6 +3,7 @@
   import { config, resolvedConfig, resetConfig } from '../stores/config';
   import type { ComplianceKey } from '../lib/types';
   import { INDUSTRIES } from '../lib/industries';
+  import { lookupCombo } from '../lib/testedcombos';
 
   // Svelte 4 compiles <select value={expr}> as an HTML attribute, not a DOM property.
   // Browsers ignore the value attribute on selects — they rely on <option selected>.
@@ -89,6 +90,23 @@
   }
   function handlePkgMgrChange(e: Event) {
     config.update(c => ({ ...c, pkgMgr: (e.target as HTMLSelectElement).value }));
+  }
+
+  // Validated combo detection — reactive
+  $: comboResult = lookupCombo($config.feKey, $config.beKey, $config.ciKey, $config.regKey);
+
+  // URL deep linking — push params on config change
+  $: if (typeof window !== 'undefined') {
+    const params = new URLSearchParams({
+      fe: $config.feKey,
+      be: $config.beKey,
+      ci: $config.ciKey,
+      reg: $config.regKey,
+    });
+    if ($config.compliance && $config.compliance !== 'none') params.set('compliance', $config.compliance);
+    if ($config.industry && $config.industry !== 'none') params.set('industry', $config.industry);
+    const url = `${window.location.pathname}?${params.toString()}`;
+    history.replaceState(null, '', url);
   }
 </script>
 
@@ -313,6 +331,13 @@
     title="Reset every dropdown + decision back to defaults. Use this to start fresh for a new service."
     on:click={resetConfig}
   >↺ Reset</button>
+
+  <!-- Validated combo banner -->
+  {#if comboResult.status === 'reference'}
+    <div class="validated-bar" role="status">
+      ✓ VALIDATED — {comboResult.notes}
+    </div>
+  {/if}
 
   <!-- Compat warnings strip -->
   {#if compatWarnings.length > 0}
