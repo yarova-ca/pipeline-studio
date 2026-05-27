@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="27-category framework catalog — Frontend, Mobile, Backend. 22 columns per framework including perf data, versions, tradeoffs, and when to use.">
 <title>Framework Catalog — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -64,10 +66,41 @@ td a:hover{text-decoration:underline}
 hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;
+  }
+  .section-legend{background:#1c2a3a;border-color:#2d4a6a}
+  .section-legend details{border-top-color:#2d4a6a}
+  tr:hover td{background:#161b22}
+  .fe{background:#1c3a5e;color:#79c0ff;border-color:#2d5986}
+  .mob{background:#3a2a00;color:#e3b341;border-color:#6a4800}
+  .be{background:#0f3320;color:#56d364;border-color:#1e5c35}
+  .prod{background:#0f3320;color:#56d364;border-color:#1e5c35}
+  .beta{background:#3a2a00;color:#e3b341;border-color:#6a4800}
+  .legacy{background:#3a0a0a;color:#f85149;border-color:#6a1515}
+  th[title]{border-bottom-color:#58a6ff}
+}
+@media print{
+  .skip-link,nav{display:none}
+  main{padding:20px}
+  .section-legend{border:1px solid #ccc;background:none;-webkit-print-color-adjust:exact}
+  .tbl{overflow:visible;border:1px solid #ccc}
+  th[title]{border-bottom:1px solid #999}
+  .b{border:1px solid #999;background:none;color:#000}
+  h2{margin-top:24px}
+}
 </style>
 </head>
 <body>
 
+<a href="#main-content" class="skip-link">Skip to content</a>
 <nav>
   <div class="nav-logo"><h1>Framework Catalog</h1><p>Pipeline Studio Design Doc</p></div>
   <div class="nav-section">Frontend Web</div>
@@ -100,9 +133,10 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <a href="#c25">25 — Scala</a>
   <a href="#c26">26 — Clojure</a>
   <a href="#c27">27 — C++</a>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
-<main>
+<main id="main-content">
 <div class="page-title">Framework Catalog</div>
 <div class="page-meta">27 categories &nbsp;·&nbsp; 22 columns per category (18 shared + 4 category-specific) &nbsp;·&nbsp; all rows filled</div>
 
@@ -206,7 +240,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <tr><td class="fw"><a href="https://vuejs.org">Vue</a></td><td><a href="https://github.com/vuejs/core/releases">3.5</a></td><td>TS / JS</td><td>MIT</td><td>Evan You / Community</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 event loop) — reactive proxy system</td><td>GC — V8. Reactive proxy tree in browser heap</td><td>TTI p99: ~1.5s on 4G mid-range</td><td>~30–50 kb</td><td>XSS if v-html misused, no built-in auth</td><td>Horizontal (CDN)</td><td>4M+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Gentler learning curve, progressive adoption</td><td>Large enterprise React team → React</td><td>vs React: gentler DX, smaller job market</td><td>CSR only (add Nuxt for SSR)</td><td>N/A — client-only</td><td>Browser</td></tr>
 <tr><td class="fw"><a href="https://angular.dev">Angular</a></td><td><a href="https://github.com/angular/angular/releases">19</a></td><td>TS</td><td>MIT</td><td>Google</td><td><span class="b prod">Production</span></td><td>Zone.js change detection — Signals (v17+) for fine-grained updates</td><td>GC — V8. Zone.js patch tree + component tree in heap</td><td>TTI p99: ~3s on 4G (heavier initial bundle)</td><td>~80–120 kb (esbuild reduces this)</td><td>Strong DI, built-in sanitization, no built-in auth</td><td>Horizontal (CDN)</td><td>3M+ weekly npm downloads</td><td>npm</td><td>Angular CLI / esbuild</td><td>npmjs.com</td><td>Enterprise, Java-background teams, opinionated structure</td><td>Small team, fast prototyping → Vue / React</td><td>vs React: more structured, heavier toolchain</td><td>CSR only (add Angular SSR)</td><td>N/A — client-only</td><td>Browser</td></tr>
 <tr><td class="fw"><a href="https://svelte.dev">Svelte</a></td><td><a href="https://github.com/sveltejs/svelte/releases">5</a></td><td>TS / JS</td><td>MIT</td><td>Vercel</td><td><span class="b prod">Production</span></td><td>Compiler-based reactivity — no virtual DOM, no diffing</td><td>GC — V8. No virtual DOM — compiled signals, lower heap use</td><td>TTI p99: ~0.8s on 4G (smallest runtime)</td><td>~5–15 kb (no runtime overhead)</td><td>XSS if {@html} misused, no virtual DOM attack surface</td><td>Horizontal (CDN)</td><td>700k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Smallest bundle, compile-time reactivity, no runtime overhead</td><td>Large team expecting React patterns → React</td><td>vs React: near-zero runtime, much smaller community</td><td>CSR only (add SvelteKit for SSR)</td><td>N/A — client-only</td><td>Browser</td></tr>
-<tr><td class="fw"><a href="https://solidjs.com">Solid.js</a></td><td><a href="https://github.com/solidjs/solid/releases">1.9</a></td><td>TS / JS</td><td>MIT</td><td>Community / Ryan Carniato</td><td><span class="b prod">Production</span></td><td>Fine-grained reactive graph — no virtual DOM, no diffing</td><td>GC — V8. Fine-grained reactive graph — no virtual DOM</td><td>TTI p99: ~0.6s on 4G</td><td>~6–12 kb</td><td>XSS if innerHTML misused, fine-grained reactivity model</td><td>Horizontal (CDN)</td><td>80k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / esbuild</td><td>npmjs.com</td><td>Maximum runtime performance, React-like syntax</td><td>Large team, ecosystem maturity needed → React</td><td>vs React: faster runtime, tiny ecosystem</td><td>CSR only (add SolidStart for SSR)</td><td>N/A — client-only</td><td>Browser</td></tr>
+<tr><td class="fw"><a href="https://solidjs.com">Solid.js</a></td><td><a href="https://github.com/solidjs/solid/releases">2.0</a></td><td>TS / JS</td><td>MIT</td><td>Community / Ryan Carniato</td><td><span class="b prod">Production</span></td><td>Fine-grained reactive graph — no virtual DOM, no diffing</td><td>GC — V8. Fine-grained reactive graph — no virtual DOM</td><td>TTI p99: ~0.6s on 4G</td><td>~6–12 kb</td><td>XSS if innerHTML misused, fine-grained reactivity model</td><td>Horizontal (CDN)</td><td>80k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / esbuild</td><td>npmjs.com</td><td>Maximum runtime performance, React-like syntax</td><td>Large team, ecosystem maturity needed → React</td><td>vs React: faster runtime, tiny ecosystem</td><td>CSR only (add SolidStart for SSR)</td><td>N/A — client-only</td><td>Browser</td></tr>
 </tbody></table></div>
 
 <!-- ══════════════════════════════════════
@@ -678,6 +712,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <tr><td class="fw"><a href="https://nestjs.com">NestJS</a></td><td><a href="https://github.com/nestjs/nest/releases">11.0</a></td><td>TS</td><td>MIT</td><td>Kamil Mysliwiec</td><td><span class="b prod">Production</span></td><td>DI-scoped async handlers — request pipeline via guards + interceptors</td><td>GC — V8. DI container + module graph held at boot (~30MB)</td><td>p99: ~8ms (Fastify adapter)</td><td>~40k req/s (Fastify adapter)</td><td>Guards, interceptors, pipes — structured auth model</td><td>Horizontal</td><td>1.5M+ weekly npm downloads</td><td>npm, yarn, pnpm</td><td>Node.js / Webpack (swc)</td><td>npmjs.com</td><td>Enterprise, Angular-background team, opinionated structure</td><td>Simple API → Express or Fastify</td><td>vs Express: structured DI + modules, heavier boilerplate</td><td>~500ms (reflection overhead)</td><td>~180 MB</td><td>Single-thread event loop</td></tr>
 <tr><td class="fw"><a href="https://hono.dev">Hono</a></td><td><a href="https://github.com/honojs/hono/releases">4.7</a></td><td>TS / JS</td><td>MIT</td><td>Community / Yusuke Wada</td><td><span class="b prod">Production</span></td><td>Multi-runtime async — same handler runs on Node / Deno / Bun / CF Workers</td><td>GC — V8. Near-zero heap — no class instantiation</td><td>p99: ~3ms (Bun runtime)</td><td>~100k req/s (Bun) / ~80k (Node)</td><td>Minimal surface — web-standard APIs only</td><td>Horizontal</td><td>600k+ weekly npm downloads</td><td>npm, pnpm</td><td>esbuild / Vite</td><td>npmjs.com</td><td>Edge + multi-runtime API (Node, Deno, Bun, Cloudflare)</td><td>Node.js-only middleware ecosystem needed → Fastify</td><td>vs Fastify: multi-runtime, no Node.js-specific middleware</td><td>~100ms (Bun) / ~200ms (Node)</td><td>~100 MB (Bun) / ~150 MB (Node)</td><td>Single-thread async (multi-runtime)</td></tr>
 <tr><td class="fw"><a href="https://deno.com">Deno</a></td><td><a href="https://github.com/denoland/deno/releases">2.3</a></td><td>TS / JS</td><td>MIT</td><td>Deno Land</td><td><span class="b prod">Production</span></td><td>Single-thread async + Workers API for true parallelism</td><td>GC — V8. Permissions state + module cache</td><td>p99: ~6ms (native HTTP)</td><td>~60k req/s (native HTTP)</td><td>Permissions model — deny-by-default filesystem, network, env access</td><td>Horizontal</td><td>90k+ GitHub stars</td><td>Deno (built-in)</td><td>esbuild (built-in)</td><td>jsr.io / deno.land/x</td><td>Security-first server, TypeScript without build step</td><td>npm-heavy codebase → Node.js</td><td>vs Node.js: deny-by-default security, smaller npm compat</td><td>~150ms</td><td>~200 MB (deno:alpine)</td><td>Single-thread async + Workers for parallel</td></tr>
+<tr><td class="fw"><a href="https://elysiajs.com">Elysia</a></td><td><a href="https://github.com/elysiajs/elysia/releases">1.2</a></td><td>TS</td><td>MIT</td><td>SaltyAom / Community</td><td><span class="b prod">Production</span></td><td>Single-thread async — Bun runtime only, JavaScriptCore event loop</td><td>GC — JavaScriptCore (Bun). Near-zero heap — value-based routing, no class overhead</td><td>p99: ~1ms (Bun runtime, consistently fastest TS framework)</td><td>~120k req/s (<a href="https://www.techempower.com/benchmarks/#section=data-r22&hw=ph&test=json">TechEmpower R22 JSON — Bun</a>)</td><td>End-to-end type safety via Eden treaty — type errors at compile time</td><td>Horizontal</td><td>30k+ GitHub stars</td><td>bun</td><td>Bun (no bundler)</td><td>npmjs.com / jsr.io</td><td>Maximum Bun throughput, end-to-end TypeScript type safety, Eden RPC</td><td>Non-Bun runtime required → Hono</td><td>vs Hono: Bun-only, higher throughput, end-to-end type safety</td><td>~50ms (Bun cold start)</td><td>~100 MB (oven-sh/bun:alpine)</td><td>Single-thread async (Bun only — not Node/Deno compatible)</td></tr>
 </tbody></table></div>
 
 <!-- ══════════════════════════════════════
