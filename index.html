@@ -172,15 +172,15 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="09-linux-distros.html" class="doc-card">
     <div class="doc-card-num">Doc 09</div>
     <div class="doc-card-title">Linux Distro Catalog</div>
-    <div class="doc-card-desc">22 Linux distributions across 4 families — Container-optimized, General purpose, RHEL family, and Immutable/K8s-native. Every distro compared on 14 columns: libc, package manager, image size, FIPS, DISA STIG, CIS benchmark, EOL, when to use, when NOT, primary tradeoff.</div>
-    <div class="doc-card-meta"><strong>Records:</strong> 22 distros · 4 families · 14 columns &nbsp;·&nbsp; <strong>Use when:</strong> selecting a base image or CI runner OS</div>
+    <div class="doc-card-desc">22 Linux distributions across 4 families — Container-optimized, General purpose, RHEL family, and Immutable/K8s-native. Every distro compared on 18 columns including: libc, package manager, image size, <strong>FROM tag</strong> (exact Docker Hub / registry path), <strong>CA certs</strong> (scratch and distroless/static have none — HTTPS calls fail), <strong>Default user</strong> (Distroless = nonroot; all others = root), FIPS, DISA STIG, CIS benchmark, EOL, when to use, when NOT, primary tradeoff.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 22 distros · 4 families · 18 columns &nbsp;·&nbsp; <strong>Use when:</strong> selecting a base image or CI runner OS, writing a FROM line</div>
   </a>
 
   <a href="10-linux-compliance.html" class="doc-card">
     <div class="doc-card-num">Doc 10</div>
     <div class="doc-card-title">Linux Compliance Matrices</div>
-    <div class="doc-card-desc">Four cross-reference matrices for all 22 distros: compliance readiness (FIPS, FedRAMP, HIPAA, PCI-DSS, SOC 2, ISO 27001, SBOM, SLSA), industry vertical fit (16 verticals), build-runner compatibility for all 27 framework categories (Frontend Web, Mobile, Backend), and runtime output compatibility for 12 production output types.</div>
-    <div class="doc-card-meta"><strong>Records:</strong> 22 distros · 11 compliance frameworks · 16 verticals · 27 build-runner categories · 12 runtime output types &nbsp;·&nbsp; <strong>Use when:</strong> verifying distro compliance, build, or runtime compat</div>
+    <div class="doc-card-desc">Five cross-reference matrices for all 22 distros: compliance readiness (FIPS, FedRAMP, HIPAA, PCI-DSS, SOC 2, ISO 27001, SBOM, SLSA), industry vertical fit (16 verticals), build-runner compatibility for all 27 framework categories (Frontend Web, Mobile, Backend), runtime output compatibility for 12 production output types, and <strong>Matrix 5 — multi-stage Dockerfile pairings</strong>: for each of the 27 framework categories, which build image + which runtime image + which pattern (Multi-stage / Single-stage / CI-only).</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 22 distros · 5 matrices · 27 build-runner categories · 12 runtime output types · 27 Dockerfile pairings &nbsp;·&nbsp; <strong>Use when:</strong> selecting compliance, runtime compat, or writing Dockerfiles</div>
   </a>
 
 </div>

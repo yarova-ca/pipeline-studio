@@ -91,6 +91,9 @@ th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
 .c11{min-width:215px;font-size:11px}
 .c12{min-width:195px;font-size:11px;color:var(--text-dim)}
 .c13{min-width:230px;font-size:11px;color:var(--text-dim)}
+.cfrom{min-width:200px;font-family:monospace;font-size:10px;color:var(--text-dim)}
+.ccerts{min-width:60px;text-align:center}
+.cuser{min-width:70px;text-align:center}
 /* Certification cells */
 .cert-yes{color:var(--green);font-weight:600;font-size:11px}
 .cert-partial{color:var(--amber);font-weight:600;font-size:11px}
@@ -163,7 +166,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <div class="chip-label">Families<br>(use-case groups)</div>
   </div>
   <div class="count-chip col-chip">
-    <div class="chip-num">15</div>
+    <div class="chip-num">18</div>
     <div class="chip-label">Columns<br>per distro</div>
   </div>
   <div class="count-chip ctx-chip">
@@ -296,6 +299,21 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
       <p>Free tier: wolfi-base available publicly. FIPS tier: paid Chainguard Images subscription required.</p>
     </div>
   </details>
+  <details>
+    <summary><span class="sum-label">CA certificates — what breaks without them</span></summary>
+    <div class="expand-content">
+      <h4>Images with no CA certificate bundle</h4>
+      <p><strong>scratch</strong> and <strong>gcr.io/distroless/static-debian12</strong> ship with no CA cert bundle. The CA certs column shows "No" for these two.</p>
+      <h4>What fails without CA certs</h4>
+      <p>Any app making outbound HTTPS calls: API clients, npm install, pip install, cargo registry calls, apt-get over HTTPS. The error appears as connection refused, SSL_ERROR_HANDSHAKE_FAILURE, or a generic certificate error — not a clear "no certs" message.</p>
+      <h4>Fix for scratch</h4>
+      <p>Copy certs from a build stage in a multi-stage Dockerfile: <code>COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/</code>. Add this immediately after <code>FROM scratch</code>.</p>
+      <h4>Fix for distroless/static-debian12</h4>
+      <p>Switch to <code>gcr.io/distroless/base-debian12</code>. The base variant adds ~18MB but includes CA certs, glibc, and libssl. Use base if your app makes HTTPS calls or uses glibc networking.</p>
+      <h4>Alpine is fine</h4>
+      <p>Alpine ships <code>ca-certificates</code> by default. Alpine CI images and Alpine runtime images can make HTTPS calls without any extra steps.</p>
+    </div>
+  </details>
 </div>
 
 <div class="tbl-wrap container-fam">
@@ -309,6 +327,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <th class="c3" title="Package manager available in the image — or none if the image has no pkg mgr">Pkg mgr</th>
           <th class="c4" title="Compressed OCI image size from the official registry, smallest available variant">Min image</th>
           <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
+          <th class="cfrom" title="Exact Docker Hub or registry pull path for the official image. Use this in your Dockerfile FROM line.">FROM tag</th>
+          <th class="ccerts" title="CA certificate bundle: required for HTTPS calls, package manager installs, and registry access. scratch and distroless/static have none — apps making outbound HTTPS calls will fail.">CA certs</th>
+          <th class="cuser" title="Default process UID in the container. Distroless is nonroot by default. All others are root — add USER directive before CMD/ENTRYPOINT for security hardening.">Default user</th>
           <th class="c5" title="FIPS 140-2 / 140-3: whether a validated cryptographic module is available">FIPS</th>
           <th class="c6" title="DISA STIG: whether an official Defense Information Systems Agency hardening guide exists for this distro">DISA STIG</th>
           <th class="c7" title="CIS Benchmark: whether the Center for Internet Security publishes a hardening benchmark for this image">CIS</th>
@@ -328,6 +349,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">none</td>
           <td class="c4">0 bytes (empty)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>scratch</code></td>
+          <td class="ccerts"><span class="cert-partial" title="No CA cert bundle. Fix: COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/">No</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -345,6 +369,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">apk</td>
           <td class="c4">~7 MB</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>alpine:3.21</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add: adduser -S appuser &amp;&amp; USER appuser">root</span></td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -362,6 +389,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">none</td>
           <td class="c4">~27 MB</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">registry.access.redhat.com/ubi9/ubi-micro</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -379,6 +409,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">microdnf</td>
           <td class="c4">~37 MB</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">registry.access.redhat.com/ubi9/ubi-minimal</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -396,6 +429,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">none</td>
           <td class="c4">~2 MB (static)<br>~20 MB (base)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">gcr.io/distroless/static-debian12</code> <small>(static)</small><br><code style="font-size:9px">gcr.io/distroless/base-debian12</code> <small>(base)</small></td>
+          <td class="ccerts"><span class="cert-partial" title="static-debian12 has no CA certs. Switch to base-debian12 for HTTPS support.">No (static)</span><br><span class="cert-yes">Yes (base)</span></td>
+          <td class="cuser"><span class="cert-yes" title="Distroless runs as nonroot (UID 65532) by default — no USER directive needed.">nonroot</span></td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -413,6 +449,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">apk</td>
           <td class="c4">~5 MB (wolfi-base)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">cgr.dev/chainguard/wolfi-base:latest</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="wolfi-base runs as root. Chainguard application images (e.g. cgr.dev/chainguard/node) have non-root variants.">root</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -430,6 +469,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">tdnf</td>
           <td class="c4">~30 MB</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">mcr.microsoft.com/azurelinux/base/core:3.0</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-partial">Partial</span></td>
@@ -447,6 +489,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">none (read-only OS)</td>
           <td class="c4">~2.5 GB (VM image — not a container base)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
+          <td class="ccerts"><span class="cert-no">N/A</span></td>
+          <td class="cuser"><span class="cert-no">N/A</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-partial">Partial</span></td>
@@ -506,6 +551,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <th class="c3" title="Package manager: apt / dnf / apk / tdnf / none">Pkg mgr</th>
           <th class="c4" title="Compressed OCI image size, smallest official variant">Min image</th>
           <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
+          <th class="cfrom" title="Exact Docker Hub or registry pull path for the official image. Use this in your Dockerfile FROM line.">FROM tag</th>
+          <th class="ccerts" title="CA certificate bundle: required for HTTPS calls, package manager installs, and registry access. scratch and distroless/static have none — apps making outbound HTTPS calls will fail.">CA certs</th>
+          <th class="cuser" title="Default process UID in the container. Distroless is nonroot by default. All others are root — add USER directive before CMD/ENTRYPOINT for security hardening.">Default user</th>
           <th class="c5" title="FIPS 140-2 / 140-3: whether a validated cryptographic module is available — 140-2 still valid; new certifications issued under 140-3">FIPS</th>
           <th class="c6" title="DISA STIG: official DoD hardening guide published for this distro">DISA STIG</th>
           <th class="c7" title="CIS Benchmark: Center for Internet Security hardening guide published">CIS</th>
@@ -525,6 +573,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">apt</td>
           <td class="c4">~75 MB (slim)<br>~130 MB (full)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>debian:12-slim</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -542,6 +593,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">apt</td>
           <td class="c4">~78 MB (minimal)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>ubuntu:22.04</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-yes">Yes</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -559,6 +613,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">apt</td>
           <td class="c4">~80 MB (minimal)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>ubuntu:24.04</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-yes">Yes</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -576,6 +633,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">dnf</td>
           <td class="c4">~185 MB (minimal)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>fedora:42</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -593,6 +653,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">dnf</td>
           <td class="c4">~65 MB (minimal)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>amazonlinux:2023</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -610,6 +673,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">tdnf</td>
           <td class="c4">~40 MB</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>photon:5.0</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -669,6 +735,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <th class="c3" title="Package manager">Pkg mgr</th>
           <th class="c4" title="Compressed OCI image size, smallest official variant">Min image</th>
           <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
+          <th class="cfrom" title="Exact Docker Hub or registry pull path for the official image. Use this in your Dockerfile FROM line.">FROM tag</th>
+          <th class="ccerts" title="CA certificate bundle: required for HTTPS calls, package manager installs, and registry access. scratch and distroless/static have none — apps making outbound HTTPS calls will fail.">CA certs</th>
+          <th class="cuser" title="Default process UID in the container. Distroless is nonroot by default. All others are root — add USER directive before CMD/ENTRYPOINT for security hardening.">Default user</th>
           <th class="c5" title="FIPS 140-2 / 140-3: independently certified module available from vendor">FIPS</th>
           <th class="c6" title="DISA STIG: official DoD hardening guide published for this exact distro">DISA STIG</th>
           <th class="c7" title="CIS Benchmark: hardening guide published by Center for Internet Security">CIS</th>
@@ -688,6 +757,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">dnf</td>
           <td class="c4">~27 MB (UBI-micro)<br>~225 MB (full)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">registry.access.redhat.com/ubi9/ubi</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-yes">Yes</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -705,6 +777,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">dnf</td>
           <td class="c4">~210 MB</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">quay.io/centos/centos:stream9</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -722,6 +797,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">dnf</td>
           <td class="c4">~210 MB</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>rockylinux:9</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -739,6 +817,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">dnf</td>
           <td class="c4">~205 MB</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>almalinux:9</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -756,6 +837,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">dnf</td>
           <td class="c4">~215 MB</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>oraclelinux:9</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-yes">Yes</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -816,6 +900,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <th class="c3" title="Package manager — or none if immutable with no pkg mgr">Pkg mgr</th>
           <th class="c4" title="VM image size — these are not container base images">Image size</th>
           <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
+          <th class="cfrom" title="Exact Docker Hub or registry pull path for the official image. Use this in your Dockerfile FROM line.">FROM tag</th>
+          <th class="ccerts" title="CA certificate bundle: required for HTTPS calls, package manager installs, and registry access. scratch and distroless/static have none — apps making outbound HTTPS calls will fail.">CA certs</th>
+          <th class="cuser" title="Default process UID in the container. Distroless is nonroot by default. All others are root — add USER directive before CMD/ENTRYPOINT for security hardening.">Default user</th>
           <th class="c5" title="FIPS 140-2 / 140-3: whether a validated cryptographic module is available — 140-2 still valid; new certifications issued under 140-3">FIPS</th>
           <th class="c6" title="DISA STIG: official DoD hardening guide published">DISA STIG</th>
           <th class="c7" title="CIS Benchmark: hardening guide published by Center for Internet Security">CIS</th>
@@ -835,6 +922,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">none (immutable)</td>
           <td class="c4">~300 MB (VM image)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
+          <td class="ccerts"><span class="cert-no">N/A</span></td>
+          <td class="cuser"><span class="cert-no">N/A</span></td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-partial">Partial</span></td>
@@ -852,6 +942,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">none (API-driven)</td>
           <td class="c4">~80 MB (system image)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
+          <td class="ccerts"><span class="cert-no">N/A</span></td>
+          <td class="cuser"><span class="cert-no">N/A</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -869,6 +962,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c3">none (immutable, SSM API)</td>
           <td class="c4">~500 MB (VM, two-partition)</td>
           <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
+          <td class="ccerts"><span class="cert-no">N/A</span></td>
+          <td class="cuser"><span class="cert-no">N/A</span></td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
