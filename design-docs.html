@@ -33,9 +33,12 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:44px 0 4px;paddi
 .section-legend strong{color:var(--text-head)}
 .leg-row{margin-top:4px;color:var(--text)}
 .leg-insight{margin-top:6px;color:var(--text-dim);font-style:italic}
-.section-legend details{margin-top:10px}
-.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none}
+.section-legend details{margin-top:12px;border-top:1px solid #c8dff5;padding-top:10px}
+.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none;display:flex;align-items:center;gap:6px}
 .section-legend summary::-webkit-details-marker{display:none}
+.section-legend summary::before{content:'▶';font-size:9px;display:inline-block;color:var(--blue)}
+.section-legend details[open] summary::before{content:'▼'}
+.section-legend summary .sum-label{flex:1}
 .expand-content{margin-top:10px;font-size:11px;line-height:1.7;color:var(--text)}
 .expand-content h4{font-size:11px;font-weight:700;color:var(--text-head);margin:12px 0 3px;text-transform:uppercase;letter-spacing:.04em}
 .expand-content h4:first-child{margin-top:0}
@@ -112,7 +115,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <div class="leg-row"><strong>Bundle size (col 10):</strong> gzipped JS delivered on first load — controls how long the browser takes to become interactive after the first byte arrives.</div>
   <div class="leg-insight">Fast TTFB + large bundle = page appears, then freezes 3–5s while JS loads. Fast TTFB + small bundle = fast all the way through. Every 100 kb extra ≈ +1s TTI on 4G mid-range.</div>
   <details>
-    <summary>▶ Expand column definitions (concurrency, GC, rendering, hydration)</summary>
+    <summary><span class="sum-label">Column definitions — Rendering modes, Hydration, Concurrency, GC</span></summary>
     <div class="expand-content">
       <h4>Rendering modes (col 20)</h4>
       <p>SSR = server renders full HTML per request. TTFB: 50–200ms. TTI: fast after TTFB. Good for SEO.</p>
@@ -418,7 +421,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <div class="leg-row"><strong>Bundle size (col 10):</strong> compressed app binary — controls download time from app store and on-device storage used.</div>
   <div class="leg-insight">High fps + large bundle = smooth UX, slow install. Low fps + small bundle = fast install, poor UX. PWA (cat 13) uses TTFB from Service Worker cache, not fps.</div>
   <details>
-    <summary>▶ Expand column definitions (concurrency, GC, rendering, state init)</summary>
+    <summary><span class="sum-label">Column definitions — Concurrency, GC, Rendering, State init</span></summary>
     <div class="expand-content">
       <h4>Concurrency (col 7)</h4>
       <p>JS thread + native UI thread (React Native): JS runs on Hermes engine, UI renders on native thread. JSI (new arch) enables near-synchronous calls between them.</p>
@@ -621,7 +624,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <div class="leg-row"><strong>Throughput (col 10):</strong> peak req/s under sustained load. Source: <a href="https://www.techempower.com/benchmarks/#section=data-r22&hw=ph&test=json">TechEmpower R22 JSON serialization test</a>.</div>
   <div class="leg-insight">High throughput + high latency = handles volume but users wait. Low throughput + low latency = fast but cannot scale to traffic. Neither number alone tells the full story.</div>
   <details>
-    <summary>▶ Expand column definitions (concurrency models, GC models)</summary>
+    <summary><span class="sum-label">Column definitions — Concurrency models, GC models</span></summary>
     <div class="expand-content">
       <h4>Concurrency models (col 7)</h4>
       <p><strong>Event loop (Node.js, Deno, Bun):</strong> one thread handles all requests. Non-blocking I/O. CPU-bound work blocks all requests. Use when: I/O-heavy workloads. Do NOT use for: CPU-heavy processing on the same process.</p>
