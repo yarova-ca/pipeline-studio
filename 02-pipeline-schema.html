@@ -57,6 +57,13 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;paddi
 .flow-diagram{overflow-x:auto;padding:8px 0 20px}
 .flow-row{display:flex;align-items:flex-start;gap:0;min-width:max-content}
 .flow-connector{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:28px;width:32px;flex-shrink:0}
+/* Summary counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.count-chip.phase-chip{border-left:3px solid var(--blue)}.count-chip.phase-chip .chip-num{color:var(--blue)}
+.count-chip.stage-chip{border-left:3px solid var(--green)}.count-chip.stage-chip .chip-num{color:var(--green)}
 .flow-connector .arrow-line{width:1px;height:20px;background:var(--border)}
 .flow-connector .arrow-head{font-size:14px;color:var(--text-dim);line-height:1;margin-top:-2px}
 .flow-connector-h{display:flex;align-items:center;justify-content:center;width:28px;flex-shrink:0;padding-top:22px;font-size:18px;color:var(--text-dim)}
@@ -158,6 +165,16 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <a href="#p3" class="p3">Phase 3 — Main Build</a>
   <a href="#reg" class="reg">Registry</a>
   <a href="#promo" class="promo">Promotions</a>
+  <div class="nav-section">All docs</div>
+  <a href="index.html">⌂ Hub</a>
+  <a href="01-framework-catalog.html">01 Frameworks</a>
+  <a href="02-pipeline-schema.html" aria-current="page">02 Pipeline schema</a>
+  <a href="03-stage-types.html">03 Stage types</a>
+  <a href="04-tool-catalog.html">04 Tool catalog</a>
+  <a href="05-invariants.html">05 Invariants</a>
+  <a href="06-industry-schema.html">06 US industries</a>
+  <a href="07-canada-schema.html">07 CA industries</a>
+  <a href="08-canada-market.html">08 CA market</a>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
@@ -165,11 +182,29 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <div class="page-title">Pipeline Schema</div>
 <div class="page-meta">6 phases &nbsp;·&nbsp; 44 stages &nbsp;·&nbsp; Phase 0 through Promotions &nbsp;·&nbsp; verified 2026-05-26</div>
 
+<div class="counts-bar">
+  <div class="count-chip phase-chip"><div class="chip-num">6</div><div class="chip-label">Phases<br>total</div></div>
+  <div class="count-chip stage-chip"><div class="chip-num">44</div><div class="chip-label">Unique<br>stages</div></div>
+  <div class="count-chip"><div class="chip-num">4</div><div class="chip-label">Promotion<br>environments</div></div>
+</div>
+
 <div class="section-legend">
   <strong>What this doc covers</strong>
   <div class="leg-row">The full pipeline — every phase, every stage, every connection, every environment.</div>
-  <div class="leg-row">Stage type shown here via dot color (blue = DevSecOps, green = DevOps). Full classification table is in doc 03. Invariants are in doc 05.</div>
-  <div class="leg-insight">Read this to understand the shape of the pipeline. Read 03-stage-types to understand what each stage enforces. Read 05-invariants to understand what cannot be violated.</div>
+  <div class="leg-row">Stage type shown here via dot color (blue = DevSecOps, green = DevOps). Full classification table is in <a href="03-stage-types.html">doc 03</a>. Invariants are in <a href="05-invariants.html">doc 05</a>.</div>
+  <div class="leg-insight">Read this to understand the shape of the pipeline. Read <a href="03-stage-types.html">03-stage-types</a> to understand what each stage enforces. Read <a href="05-invariants.html">05-invariants</a> to understand what cannot be violated.</div>
+  <details>
+    <summary><span class="sum-label">Acronym definitions — terms used in this doc</span></summary>
+    <div class="expand-content">
+      <p><strong>SCA</strong> — Software Composition Analysis. Scans third-party dependencies for known CVEs.</p>
+      <p><strong>SAST</strong> — Static Application Security Testing. Scans source code for insecure patterns without running the code.</p>
+      <p><strong>DAST</strong> — Dynamic Application Security Testing. Runs the application and probes it for vulnerabilities over HTTP.</p>
+      <p><strong>IaC</strong> — Infrastructure as Code. Terraform, Helm, Kubernetes manifests, CloudFormation, etc.</p>
+      <p><strong>SBOM</strong> — Software Bill of Materials. A machine-readable list of every component in the build artifact.</p>
+      <p><strong>SLSA</strong> — Supply-chain Levels for Software Artifacts. A provenance attestation proving the artifact was built by a trusted pipeline from a known source.</p>
+      <p><strong>OIDC</strong> — OpenID Connect. Used here for keyless CI authentication — each job gets a short-lived token, no stored credentials.</p>
+    </div>
+  </details>
   <details>
     <summary><span class="sum-label">Phase summary — trigger conditions and outputs</span></summary>
     <div class="expand-content">

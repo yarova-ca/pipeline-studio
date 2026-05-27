@@ -71,6 +71,8 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;paddi
 .ind-table th{text-align:left;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);white-space:nowrap}
 .ind-table td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;font-size:11px;line-height:1.45}
 .ind-table tbody tr:hover{background:var(--bg2)}
+/* Tooltip hint on column headers */
+th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
 /* Column width classes */
 .c0{width:34px;min-width:34px;color:var(--text-dim);font-weight:600;text-align:right;white-space:nowrap}
 .c1{min-width:165px;font-weight:500}
@@ -143,12 +145,22 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <a href="#connections">Catalog connections</a>
   <a href="#columns">Column schema</a>
   <a href="#industries">All 74 industries</a>
+  <div class="nav-section">All docs</div>
+  <a href="index.html">⌂ Hub</a>
+  <a href="01-framework-catalog.html">01 Frameworks</a>
+  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
+  <a href="03-stage-types.html">03 Stage types</a>
+  <a href="04-tool-catalog.html">04 Tool catalog</a>
+  <a href="05-invariants.html">05 Invariants</a>
+  <a href="06-industry-schema.html" aria-current="page">06 US industries</a>
+  <a href="07-canada-schema.html">07 CA industries</a>
+  <a href="08-canada-market.html">08 CA market</a>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-title">Industry Schema</div>
-<div class="page-meta">74 industries · 16 verticals · 10 columns per row | Source: <code>06-industry-schema.md</code></div>
+<div class="page-meta">74 industries · 16 verticals · 10 columns per row &nbsp;·&nbsp; verified 2026-05-26</div>
 
 <div class="counts-bar">
   <div class="count-chip ind-chip"><div class="chip-num">74</div><div class="chip-label">Industries<br>total</div></div>
@@ -161,6 +173,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <div class="leg-row">Framework catalog — industry does NOT restrict frameworks. Any framework runs in any industry.</div>
   <div class="leg-row">Exception: FIPS-140-2 compliance affects some runtimes. Rows with this restriction carry a <span class="tag-fips">FIPS required</span> note in Framework notes.</div>
   <div class="leg-row">Pipeline tool catalog — industry DOES change the pipeline. Industry → auto-selects compliance standard → adds extra controls at specific stages.</div>
+  <div class="leg-row">Canadian version (73 industries, provincial regulators): <a href="07-canada-schema.html">07-canada-schema.html</a></div>
   <details>
     <summary><span class="sum-label">Column definitions — all 10</span></summary>
     <div class="expand-content">
@@ -224,17 +237,17 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <table class="ind-table">
       <thead>
         <tr>
-          <th class="c0">#</th>
-          <th class="c1">Industry</th>
-          <th class="c2">Vertical</th>
-          <th class="c3">Mandatory compliance</th>
-          <th class="c4">Optional compliance</th>
-          <th class="c5">Regulatory body</th>
-          <th class="c6">Data sensitivity</th>
-          <th class="c7">Pipeline stages affected</th>
-          <th class="c8">Framework notes</th>
-          <th class="c9">Key security requirements</th>
-          <th class="c10">Audit requirements</th>
+          <th class="c0" title="Row number — 74 industries total.">#</th>
+          <th class="c1" title="Industry name. 74 total across 16 verticals.">Industry</th>
+          <th class="c2" title="Parent group (one of 16 verticals). Same taxonomy in 07-canada-schema and 08-canada-market.">Vertical</th>
+          <th class="c3" title="Legally required standards. Skipping creates regulatory exposure, not just security risk.">Mandatory compliance</th>
+          <th class="c4" title="Best-practice standards, not legally required. Often required by enterprise customers in procurement.">Optional compliance</th>
+          <th class="c5" title="The authority that enforces mandatory compliance. Their audit programs drive the audit requirements column.">Regulatory body</th>
+          <th class="c6" title="PII = personally identifiable info. PHI = protected health info. PCI = payment card data. Classified = government classified.">Data sensitivity</th>
+          <th class="c7" title="Stages from docs 02–04 that get extra controls when this industry is selected.">Pipeline stages affected</th>
+          <th class="c8" title="Compliance-driven framework restrictions. None = all frameworks in doc 01 permitted. FIPS required = restrict to FIPS-certified runtime builds.">Framework notes</th>
+          <th class="c9" title="Top security requirements for this industry. Not exhaustive — see mandatory compliance docs for the full control list.">Key security requirements</th>
+          <th class="c10" title="Log retention period and audit trail requirements. Drives storage policy and immutable log requirements.">Audit requirements</th>
         </tr>
       </thead>
       <tbody>

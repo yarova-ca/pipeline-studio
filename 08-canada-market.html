@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Canada Market Navigation — 73 industries · 5 market dimensions · hubs, tier, demand, wage, entry difficulty · data verified May 2026">
+<title>Canada Market Navigation — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:220px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+main{flex:1;min-width:0;padding:40px 52px 100px}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px;font-style:italic}
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.count-chip.ind-chip{border-left:3px solid var(--red)}
+.count-chip.ind-chip .chip-num{color:var(--red)}
+.count-chip.hub-chip{border-left:3px solid var(--green)}
+.count-chip.hub-chip .chip-num{color:var(--green)}
+.count-chip.cert-chip{border-left:3px solid var(--amber)}
+.count-chip.cert-chip .chip-num{color:var(--amber)}
+.count-chip.noc-chip{border-left:3px solid var(--purple)}
+.count-chip.noc-chip .chip-num{color:var(--purple)}
+.section-legend{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:12px 0 20px;font-size:12px;line-height:1.6}
+.section-legend strong{color:var(--text-head)}
+.leg-row{margin-top:4px;color:var(--text)}
+.section-legend details{margin-top:12px;border-top:1px solid #c8dff5;padding-top:10px}
+.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none;display:flex;align-items:center;gap:6px}
+.section-legend summary::-webkit-details-marker{display:none}
+.section-legend summary::before{content:'▶';font-size:9px;display:inline-block;color:var(--blue)}
+.section-legend details[open] summary::before{content:'▼'}
+.section-legend summary .sum-label{flex:1}
+.expand-content{margin-top:10px;font-size:11px;line-height:1.7;color:var(--text)}
+.expand-content p{margin-bottom:4px}
+/* General tables */
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px;margin-bottom:20px}
+.tbl-scroll{overflow-x:auto;margin-top:12px;margin-bottom:20px}
+.gen-table{width:100%;border-collapse:collapse;font-size:12px}
+.gen-table thead tr{background:var(--bg2)}
+.gen-table th{text-align:left;padding:7px 14px;font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border)}
+.gen-table td{padding:7px 14px;border-bottom:1px solid var(--border);vertical-align:top;font-size:11.5px;line-height:1.45}
+.gen-table tbody tr:last-child td{border-bottom:none}
+.gen-table tbody tr:hover{background:var(--bg2)}
+/* Market table */
+.tbl-scroll-mkt{overflow-x:auto}
+.ind-table{border-collapse:collapse;font-size:11.5px;min-width:1400px;width:100%}
+.ind-table thead tr{background:var(--bg2);position:sticky;top:0;z-index:1}
+.ind-table th{text-align:left;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);white-space:nowrap}
+.ind-table td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;font-size:11px;line-height:1.45}
+.ind-table tbody tr:hover{background:var(--bg2)}
+/* Tooltip hint on column headers */
+th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
+.c0{width:34px;min-width:34px;color:var(--text-dim);font-weight:600;text-align:right;white-space:nowrap}
+.c1{min-width:165px;font-weight:500}
+.c2{min-width:130px;color:var(--text-dim);font-size:11px}
+.c3{min-width:230px}
+.c4{min-width:55px;text-align:center}
+.c5{min-width:75px}
+.c6{min-width:155px}
+.c7{min-width:50px;text-align:center}
+/* Vertical divider rows */
+.vert-row td{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:5px 10px;border-bottom:1px solid var(--border)}
+.vert-row.fin td{background:#fff8e8;color:#7a4800;border-top:1px solid #f5d98a}
+.vert-row.health td{background:#f0fff4;color:#116329;border-top:1px solid #aadebc}
+.vert-row.gov td{background:#f0f6ff;color:#0550ae;border-top:1px solid #b6d7f5}
+.vert-row.def td{background:#faf0ff;color:#6e2f9a;border-top:1px solid #d8b4fe}
+.vert-row.energy td{background:#fff0e8;color:#8b3a00;border-top:1px solid #fdb98a}
+.vert-row.tech td{background:#f0faff;color:#0969da;border-top:1px solid #93c5fd}
+.vert-row.telecom td{background:#f5f0ff;color:#8250df;border-top:1px solid #c5a7f5}
+.vert-row.retail td{background:#fff8f0;color:#9a4800;border-top:1px solid #fed7aa}
+.vert-row.mfg td{background:#f8f8f8;color:#3a3a3a;border-top:1px solid #d0d0d0}
+.vert-row.media td{background:#fff0f5;color:#a40050;border-top:1px solid #fbcfe8}
+.vert-row.edu td{background:#f0fffe;color:#0e7a6a;border-top:1px solid #99f6e4}
+.vert-row.trans td{background:#f5f5ff;color:#3a3a9a;border-top:1px solid #c7d2fe}
+.vert-row.re td{background:#fefce8;color:#7a5a00;border-top:1px solid #fde68a}
+.vert-row.agri td{background:#f0fff0;color:#14532d;border-top:1px solid #86efac}
+.vert-row.legal td{background:#f8f5ff;color:#5b21b6;border-top:1px solid #ddd6fe}
+.vert-row.npo td{background:#fff5f5;color:#7f1d1d;border-top:1px solid #fecaca}
+.vert-count{float:right;font-size:9px;font-weight:400;opacity:.7}
+.tbl-foot{padding:7px 14px;font-size:11px;color:var(--text-dim);background:var(--bg2);border-top:2px solid var(--border);display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+/* Tier badges */
+.tier-badge{font-size:11px;font-weight:700;color:var(--text-head)}
+.t1{font-weight:700;color:var(--text-head);font-size:11px}
+.t2{font-weight:600;color:var(--blue);font-size:11px}
+.t3{font-weight:600;color:var(--amber);font-size:11px}
+.t4{font-weight:600;color:var(--text-dim);font-size:11px}
+/* Demand badges */
+.dm-hot{color:var(--green);font-weight:600;font-size:11px}
+.dm-warm{color:var(--amber);font-weight:600;font-size:11px}
+.dm-flat{color:var(--text-dim);font-size:11px}
+.dm-dec{color:var(--red);font-weight:600;font-size:11px}
+/* Difficulty */
+.dif-easy{color:var(--green);font-weight:700}
+.dif-mod{color:var(--amber);font-weight:700}
+.dif-hard{color:var(--red);font-weight:700}
+/* Heatmap */
+.heat-table{border-collapse:collapse;font-size:11px;width:100%}
+.heat-table th{text-align:center;padding:5px 7px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid var(--border);background:var(--bg2);white-space:nowrap}
+.heat-table th:first-child{text-align:left;min-width:110px}
+.heat-table td{text-align:center;padding:5px 7px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600}
+.heat-table td:first-child{text-align:left;font-weight:500;color:var(--text);background:var(--bg2);border-right:1px solid var(--border)}
+.heat-table tbody tr:hover td{background:var(--bg3)}
+.hH{color:var(--green)}
+.hM{color:var(--amber)}
+.hL{color:var(--text-dim);font-weight:400}
+/* Province code */
+.prov-code{font-size:11px;font-weight:700;color:var(--text-dim);background:var(--bg3);border-radius:4px;padding:1px 6px;letter-spacing:.04em}
+/* Verified / estimated chips */
+.verified{font-size:10px;background:#f0fff4;border:1px solid #aadebc;border-radius:3px;padding:1px 6px;color:var(--green);font-weight:600;white-space:nowrap}
+.estimated{font-size:10px;background:#fff8e8;border:1px solid #f5d98a;border-radius:3px;padding:1px 6px;color:var(--amber);font-weight:600;white-space:nowrap}
+code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;--blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#c5a7f5}
+  .section-legend{background:#1c2a3a;border-color:#2d4a6a}
+  .section-legend details{border-top-color:#2d4a6a}
+  code{background:#1c2028;border-color:#30363d}
+  .heat-table td:first-child{background:#161b22}
+  .verified{background:#0f2d1a;border-color:#1e5c35}
+  .estimated{background:#2a1e00;border-color:#6a4000}
+  .vert-row.fin td{background:#2a1e00;border-color:#6a4000}
+  .vert-row.health td{background:#0f2d1a;border-color:#1e5c35}
+  .vert-row.gov td{background:#1c2a3a;border-color:#2d4a6a}
+  .vert-row.def td{background:#1e0f3a;border-color:#4a2d7a}
+  .vert-row.energy td{background:#2a1500;border-color:#6a3a00}
+  .vert-row.tech td{background:#0a1e3a;border-color:#1d4a8a}
+  .vert-row.telecom td{background:#1e0f3a;border-color:#5a2d8a}
+  .vert-row.retail td{background:#2a1800;border-color:#6a4500}
+  .vert-row.mfg td{background:#1a1a1a;border-color:#3a3a3a}
+  .vert-row.media td{background:#2a0020;border-color:#6a0050}
+  .vert-row.edu td{background:#001e1c;border-color:#004a45}
+  .vert-row.trans td{background:#0a0a2a;border-color:#2a2a6a}
+  .vert-row.re td{background:#1e1a00;border-color:#4a3a00}
+  .vert-row.agri td{background:#001a00;border-color:#004a00}
+  .vert-row.legal td{background:#150a2a;border-color:#3a1a6a}
+  .vert-row.npo td{background:#2a0000;border-color:#6a0000}
+}
+@media print{
+  .skip-link,nav{display:none}
+  main{padding:20px}
+  .section-legend{border:1px solid #ccc;background:none;-webkit-print-color-adjust:exact}
+  .tbl-scroll{overflow:visible}
+  h2{margin-top:24px}
+  .vert-row td,.count-chip{background:none!important;border-color:#ccc!important;color:#000!important}
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-logo"><h1>Market Navigation</h1><p>Pipeline Studio · 08</p></div>
+  <div class="nav-section">Market data</div>
+  <a href="#industries">All 73 industries</a>
+  <div class="nav-section">Intelligence</div>
+  <a href="#heatmap">City × Vertical heatmap</a>
+  <a href="#cert-roi">Certification ROI</a>
+  <a href="#immigration">Immigration pathway</a>
+  <div class="nav-section">Reference</div>
+  <a href="#sources">Data sources</a>
+  <div class="nav-section">All docs</div>
+  <a href="index.html">⌂ Hub</a>
+  <a href="01-framework-catalog.html">01 Frameworks</a>
+  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
+  <a href="03-stage-types.html">03 Stage types</a>
+  <a href="04-tool-catalog.html">04 Tool catalog</a>
+  <a href="05-invariants.html">05 Invariants</a>
+  <a href="06-industry-schema.html">06 US industries</a>
+  <a href="07-canada-schema.html">07 CA industries</a>
+  <a href="08-canada-market.html" aria-current="page">08 CA market</a>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<main id="main-content">
+<div class="page-title">Canada Market Navigation</div>
+<div class="page-meta">73 industries · 16 verticals · 14 hubs · 5 market dimensions · data verified May 2026</div>
+
+<div class="counts-bar">
+  <div class="count-chip ind-chip"><div class="chip-num">73</div><div class="chip-label">Industries<br>covered</div></div>
+  <div class="count-chip hub-chip"><div class="chip-num">14</div><div class="chip-label">Canadian<br>hubs mapped</div></div>
+  <div class="count-chip"><div class="chip-num">16</div><div class="chip-label">Verticals<br>in table</div></div>
+  <div class="count-chip cert-chip"><div class="chip-num">8</div><div class="chip-label">Certs with<br>ROI estimate</div></div>
+  <div class="count-chip noc-chip"><div class="chip-num">2</div><div class="chip-label">NOC codes<br>for DevSecOps</div></div>
+</div>
+
+<div class="section-legend">
+  <div class="leg-row"><strong>What this file is:</strong> Focused market view of all 73 Canadian industries — hubs, employer concentration, demand, wages, and entry difficulty only.</div>
+  <div class="leg-row"><strong>When to read:</strong> Before choosing a target industry, city, or immigration route for tech/DevSecOps work in Canada.</div>
+  <div class="leg-row"><strong>Compliance data:</strong> Mandatory compliance, regulators, and audit requirements live in <a href="07-canada-schema.html">07-canada-schema.html</a>.</div>
+  <details>
+    <summary><span class="sum-label">Column definitions — 5 market dimensions</span></summary>
+    <div class="expand-content">
+      <p><strong>Primary hubs:</strong> Which of the 14 named Canadian hubs concentrate this industry. Format: Hub (T1), Hub (T2). When no hub applies: –</p>
+      <p><strong>Tier:</strong> Employer concentration. T1 = 3+ major employers active. T2 = 1–2 major + SME cluster. T3 = SME-dominated, no employer &gt;20%. T4 = Government-only (&gt;80% of roles).</p>
+      <p><strong>Demand:</strong> Directional signal for DevSecOps-adjacent roles. Hot = posting growth &gt;15% YoY. Warm = 5–15% YoY. Flat = &lt;5% change. Declining = postings falling.</p>
+      <p><strong>Wage band (CA$):</strong> Annual salary for mid-level DevSecOps-adjacent roles (3–7 years experience). Toronto and Vancouver: +8–15% above national range.</p>
+      <p><strong>Entry:</strong> Difficulty score 1–5 for first role. 1 = Very easy (high junior volume). 2 = Easy. 3 = Moderate. 4 = Hard (mostly senior or clearance). 5 = Very hard (&lt;5% junior postings, clearance mandatory).</p>
+      <p><strong>Sources:</strong> Robert Half Canada 2026 · Job Bank Canada (NOC 21220, 21231) · CBRE Tech Talent Canada 2025 · Canadian Cybersecurity Network. Last verified: May 2026.</p>
+    </div>
+  </details>
+</div>
+
+<!-- ─── ALL 73 INDUSTRIES — MARKET VIEW ──────────────────────────────────── -->
+<h2 id="industries">All 73 industries — market dimensions</h2>
+<div class="section-sub">16 verticals · 8 columns · Primary hubs · Tier · Demand · Wage · Entry difficulty</div>
+
+<div class="tbl-scroll-mkt">
+<table class="ind-table">
+<thead>
+<tr>
+  <th class="c0" title="Row number — 73 industries (same set as 07-canada-schema).">#</th>
+  <th class="c1" title="Canadian industry name. Matches 07 exactly for cross-reference.">Industry</th>
+  <th class="c2" title="Parent group — same 16 verticals as 06 and 07.">Vertical</th>
+  <th class="c3" title="Which of the 14 Canadian hubs concentrate this industry. T1/T2 in parens = tier within that hub. — = no hub applies.">Primary hubs</th>
+  <th class="c4" title="Employer concentration. T1 = 3+ major employers. T2 = 1–2 major + SME cluster. T3 = SME-dominated. T4 = Government-only (>80% of roles).">Tier</th>
+  <th class="c5" title="Directional signal for DevSecOps-adjacent roles. Hot = >15% YoY posting growth. Warm = 5–15%. Flat = <5%. Declining = postings falling.">Demand</th>
+  <th class="c6" title="Annual salary for mid-level DevSecOps roles (3–7 years). Toronto and Vancouver: +8–15% above national range. Sources: Robert Half Canada 2026 + Job Bank.">Wage band (CA$)</th>
+  <th class="c7" title="Difficulty score 1–5 for first role. 1 = Very easy. 5 = Very hard (clearance mandatory, <5% junior postings).">Entry</th>
+</tr>
+</thead>
+<tbody>
+<tr class="vert-row fin"><td colspan="8">Financial Services<span class="vert-count">8 industries</span></td></tr>
+<tr>
+  <td class="c0">1</td>
+  <td class="c1">Retail Banking</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Toronto (T1), Montréal (T1), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$90k–CA$125k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr>
+  <td class="c0">2</td>
+  <td class="c1">Investment Banking</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Toronto (T1), Montréal (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$110k–CA$160k</td>
+  <td class="c7"><span class="dif-hard">5</span></td>
+</tr>
+<tr>
+  <td class="c0">3</td>
+  <td class="c1">Life Insurance</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Toronto (T1), Montréal (T1), Waterloo (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$85k–CA$120k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">4</td>
+  <td class="c1">P&amp;C Insurance</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Toronto (T1), Montréal (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">5</td>
+  <td class="c1">Asset Management</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Toronto (T1), Montréal (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$95k–CA$135k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr>
+  <td class="c0">6</td>
+  <td class="c1">Fintech &amp; Neobanks</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Toronto (T1), Vancouver (T2), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$95k–CA$140k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr>
+  <td class="c0">7</td>
+  <td class="c1">Credit Unions</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Vancouver (T1), Waterloo (T2), Ottawa (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$105k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">8</td>
+  <td class="c1">Payments Processing</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Toronto (T1), Montréal (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$90k–CA$130k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr class="vert-row health"><td colspan="8">Healthcare &amp; Life Sciences<span class="vert-count">8 industries</span></td></tr>
+<tr>
+  <td class="c0">9</td>
+  <td class="c1">Hospitals &amp; Health Systems</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Toronto (T1), Vancouver (T1), Edmonton (T1)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">10</td>
+  <td class="c1">Provincial Health Insurance</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Ottawa (T1), Victoria (T2), Edmonton (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$105k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">11</td>
+  <td class="c1">Pharmaceutical</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Montréal (T1), Toronto (T1), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$85k–CA$120k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">12</td>
+  <td class="c1">Biotech &amp; Life Sciences Research</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Vancouver (T1), Montréal (T1), Toronto (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$85k–CA$125k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">13</td>
+  <td class="c1">Medical Devices</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Toronto (T1), Vancouver (T2), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">14</td>
+  <td class="c1">Clinical Diagnostics &amp; Labs</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Toronto (T1), Vancouver (T2), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$105k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">15</td>
+  <td class="c1">Telehealth &amp; Digital Health</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Toronto (T1), Vancouver (T2), Edmonton (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$90k–CA$130k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">16</td>
+  <td class="c1">Long-term Care &amp; Home Care</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Toronto (T2), Vancouver (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T3</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$65k–CA$90k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr class="vert-row gov"><td colspan="8">Government &amp; Public Sector<span class="vert-count">6 industries</span></td></tr>
+<tr>
+  <td class="c0">17</td>
+  <td class="c1">Federal Government</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Ottawa (T1), Halifax (T2), Victoria (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$82k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">18</td>
+  <td class="c1">Provincial Government</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Victoria (T1), Edmonton (T1), Quebec City (T1)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$108k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">19</td>
+  <td class="c1">Municipal Government</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Toronto (T2), Vancouver (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$70k–CA$100k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">20</td>
+  <td class="c1">Crown Corporations</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Ottawa (T1), Toronto (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">21</td>
+  <td class="c1">Public Safety &amp; Law Enforcement</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Ottawa (T1), Victoria (T2), Halifax (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr>
+  <td class="c0">22</td>
+  <td class="c1">Justice &amp; Courts</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Ottawa (T1), Victoria (T2), Halifax (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$105k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr class="vert-row def"><td colspan="8">Defense &amp; Intelligence<span class="vert-count">5 industries</span></td></tr>
+<tr>
+  <td class="c0">23</td>
+  <td class="c1">Canadian Armed Forces</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">Ottawa (T1), Kingston (T1), Halifax (T2), Victoria (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$82k–CA$115k</td>
+  <td class="c7"><span class="dif-hard">5</span></td>
+</tr>
+<tr>
+  <td class="c0">24</td>
+  <td class="c1">CSE (Signals Intelligence)</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">Ottawa (T1)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$95k–CA$140k</td>
+  <td class="c7"><span class="dif-hard">5</span></td>
+</tr>
+<tr>
+  <td class="c0">25</td>
+  <td class="c1">CSIS (Domestic Intelligence)</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">Ottawa (T1), Toronto (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$85k–CA$120k</td>
+  <td class="c7"><span class="dif-hard">5</span></td>
+</tr>
+<tr>
+  <td class="c0">26</td>
+  <td class="c1">Defense Contractors</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">Ottawa (T1), Kingston (T2), Halifax (T2), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$90k–CA$130k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr>
+  <td class="c0">27</td>
+  <td class="c1">DRDC (Defence Research)</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">Ottawa (T1), Halifax (T2), Kingston (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$85k–CA$120k</td>
+  <td class="c7"><span class="dif-hard">5</span></td>
+</tr>
+<tr class="vert-row energy"><td colspan="8">Energy &amp; Environment<span class="vert-count">6 industries</span></td></tr>
+<tr>
+  <td class="c0">28</td>
+  <td class="c1">Oil &amp; Gas (Upstream)</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">Calgary (T1), Edmonton (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$90k–CA$135k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">29</td>
+  <td class="c1">Pipelines &amp; Midstream</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">Calgary (T1), Edmonton (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$88k–CA$125k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">30</td>
+  <td class="c1">Electricity &amp; Utilities</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">Toronto (T1), Calgary (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">31</td>
+  <td class="c1">Nuclear Energy</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">Ottawa (T2), Toronto (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$90k–CA$135k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr>
+  <td class="c0">32</td>
+  <td class="c1">Renewables &amp; Cleantech</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">Calgary (T1), Toronto (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$85k–CA$125k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">33</td>
+  <td class="c1">Mining &amp; Resources</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">Calgary (T2), Edmonton (T2), Saskatoon (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr class="vert-row tech"><td colspan="8">Technology<span class="vert-count">5 industries</span></td></tr>
+<tr>
+  <td class="c0">34</td>
+  <td class="c1">Software &amp; SaaS</td>
+  <td class="c2">Technology</td>
+  <td class="c3">Toronto (T1), Vancouver (T1), Waterloo (T1), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$95k–CA$145k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">35</td>
+  <td class="c1">AI &amp; ML Platforms</td>
+  <td class="c2">Technology</td>
+  <td class="c3">Toronto (T1), Montréal (T1), Vancouver (T2), Waterloo (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$100k–CA$155k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr>
+  <td class="c0">36</td>
+  <td class="c1">Cloud Services</td>
+  <td class="c2">Technology</td>
+  <td class="c3">Toronto (T1), Vancouver (T1), Montréal (T2), Ottawa (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$95k–CA$145k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">37</td>
+  <td class="c1">Cybersecurity</td>
+  <td class="c2">Technology</td>
+  <td class="c3">Ottawa (T1), Toronto (T1), Waterloo (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$90k–CA$140k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr>
+  <td class="c0">38</td>
+  <td class="c1">Hardware &amp; Semiconductor</td>
+  <td class="c2">Technology</td>
+  <td class="c3">Waterloo (T1), Ottawa (T2), Toronto (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$85k–CA$125k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr class="vert-row telecom"><td colspan="8">Telecommunications<span class="vert-count">4 industries</span></td></tr>
+<tr>
+  <td class="c0">39</td>
+  <td class="c1">Wireless Carriers (MNO)</td>
+  <td class="c2">Telecommunications</td>
+  <td class="c3">Toronto (T1), Ottawa (T1), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$85k–CA$120k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">40</td>
+  <td class="c1">Internet Service Providers</td>
+  <td class="c2">Telecommunications</td>
+  <td class="c3">Toronto (T1), Ottawa (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">41</td>
+  <td class="c1">Broadcasting &amp; Cable</td>
+  <td class="c2">Telecommunications</td>
+  <td class="c3">Toronto (T1), Montréal (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-dec">Declining</span></td>
+  <td class="c6">CA$75k–CA$105k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">42</td>
+  <td class="c1">Satellite Communications</td>
+  <td class="c2">Telecommunications</td>
+  <td class="c3">Ottawa (T1), Toronto (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$90k–CA$130k</td>
+  <td class="c7"><span class="dif-hard">4</span></td>
+</tr>
+<tr class="vert-row retail"><td colspan="8">Retail &amp; Commerce<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">43</td>
+  <td class="c1">Grocery &amp; Food Retail</td>
+  <td class="c2">Retail &amp; Commerce</td>
+  <td class="c3">Toronto (T1), Calgary (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$105k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">44</td>
+  <td class="c1">E-Commerce &amp; Marketplace</td>
+  <td class="c2">Retail &amp; Commerce</td>
+  <td class="c3">Toronto (T1), Vancouver (T2), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$85k–CA$125k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">45</td>
+  <td class="c1">General Retail</td>
+  <td class="c2">Retail &amp; Commerce</td>
+  <td class="c3">Toronto (T1), Calgary (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$70k–CA$100k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr class="vert-row mfg"><td colspan="8">Manufacturing &amp; Industrial<span class="vert-count">4 industries</span></td></tr>
+<tr>
+  <td class="c0">46</td>
+  <td class="c1">Automotive Manufacturing</td>
+  <td class="c2">Manufacturing &amp; Industrial</td>
+  <td class="c3">Toronto (T1), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$110k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">47</td>
+  <td class="c1">Aerospace &amp; Aviation</td>
+  <td class="c2">Manufacturing &amp; Industrial</td>
+  <td class="c3">Montréal (T1), Toronto (T2), Winnipeg (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$85k–CA$125k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">48</td>
+  <td class="c1">Food Processing &amp; Manufacturing</td>
+  <td class="c2">Manufacturing &amp; Industrial</td>
+  <td class="c3">Toronto (T1), Calgary (T2), Edmonton (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$70k–CA$100k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">49</td>
+  <td class="c1">Industrial Equipment &amp; Heavy Mfg</td>
+  <td class="c2">Manufacturing &amp; Industrial</td>
+  <td class="c3">Toronto (T1), Calgary (T2), Edmonton (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$110k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr class="vert-row media"><td colspan="8">Media &amp; Entertainment<span class="vert-count">4 industries</span></td></tr>
+<tr>
+  <td class="c0">50</td>
+  <td class="c1">Broadcasting (TV &amp; Radio)</td>
+  <td class="c2">Media &amp; Entertainment</td>
+  <td class="c3">Toronto (T1), Montréal (T1), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-dec">Declining</span></td>
+  <td class="c6">CA$70k–CA$100k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">51</td>
+  <td class="c1">Video Gaming</td>
+  <td class="c2">Media &amp; Entertainment</td>
+  <td class="c3">Vancouver (T1), Montréal (T1), Toronto (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$85k–CA$130k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">52</td>
+  <td class="c1">Film &amp; TV Production</td>
+  <td class="c2">Media &amp; Entertainment</td>
+  <td class="c3">Vancouver (T1), Toronto (T1), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$80k–CA$120k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">53</td>
+  <td class="c1">Digital Media &amp; Publishing</td>
+  <td class="c2">Media &amp; Entertainment</td>
+  <td class="c3">Toronto (T1), Vancouver (T2), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-dec">Declining</span></td>
+  <td class="c6">CA$70k–CA$100k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr class="vert-row edu"><td colspan="8">Education<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">54</td>
+  <td class="c1">Universities &amp; Research</td>
+  <td class="c2">Education</td>
+  <td class="c3">Toronto (T1), Vancouver (T1), Montréal (T1), Ottawa (T2), Waterloo (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$108k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">55</td>
+  <td class="c1">K-12 Schools</td>
+  <td class="c2">Education</td>
+  <td class="c3">Toronto (T2), Vancouver (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$65k–CA$90k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">56</td>
+  <td class="c1">Online Learning &amp; EdTech</td>
+  <td class="c2">Education</td>
+  <td class="c3">Toronto (T1), Vancouver (T2), Waterloo (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$80k–CA$120k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr class="vert-row trans"><td colspan="8">Transportation &amp; Logistics<span class="vert-count">5 industries</span></td></tr>
+<tr>
+  <td class="c0">57</td>
+  <td class="c1">Air Transport</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Toronto (T1), Vancouver (T1), Calgary (T2), Montréal (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">58</td>
+  <td class="c1">Rail Transport</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Ottawa (T1), Calgary (T2), Winnipeg (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$78k–CA$110k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">59</td>
+  <td class="c1">Trucking &amp; Logistics</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Toronto (T1), Calgary (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$75k–CA$105k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">60</td>
+  <td class="c1">Marine, Ports &amp; Shipping</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Vancouver (T1), Halifax (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$108k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">61</td>
+  <td class="c1">Urban &amp; Public Transit</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Toronto (T1), Vancouver (T1), Ottawa (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$105k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr class="vert-row re"><td colspan="8">Real Estate &amp; Construction<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">62</td>
+  <td class="c1">Residential Real Estate</td>
+  <td class="c2">Real Estate &amp; Construction</td>
+  <td class="c3">Toronto (T1), Vancouver (T1), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$70k–CA$100k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">63</td>
+  <td class="c1">Commercial Real Estate</td>
+  <td class="c2">Real Estate &amp; Construction</td>
+  <td class="c3">Toronto (T1), Vancouver (T1), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$75k–CA$105k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">64</td>
+  <td class="c1">Property Management</td>
+  <td class="c2">Real Estate &amp; Construction</td>
+  <td class="c3">Toronto (T2), Vancouver (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T3</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$65k–CA$90k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr class="vert-row agri"><td colspan="8">Agriculture<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">65</td>
+  <td class="c1">Crop Farming &amp; Grain</td>
+  <td class="c2">Agriculture</td>
+  <td class="c3">Saskatoon (T1), Winnipeg (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T3</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$65k–CA$90k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">66</td>
+  <td class="c1">Livestock &amp; Aquaculture</td>
+  <td class="c2">Agriculture</td>
+  <td class="c3">Saskatoon (T2), Halifax (T2), Victoria (T2)</td>
+  <td class="c4"><span class="tier-badge">T3</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$60k–CA$85k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">67</td>
+  <td class="c1">AgriTech &amp; Precision Ag</td>
+  <td class="c2">Agriculture</td>
+  <td class="c3">Saskatoon (T1), Calgary (T2), Waterloo (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-hot">Hot</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr class="vert-row legal"><td colspan="8">Legal &amp; Professional Services<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">68</td>
+  <td class="c1">Law Firms</td>
+  <td class="c2">Legal &amp; Professional Services</td>
+  <td class="c3">Toronto (T1), Vancouver (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">69</td>
+  <td class="c1">Accounting, Audit &amp; Tax</td>
+  <td class="c2">Legal &amp; Professional Services</td>
+  <td class="c3">Toronto (T1), Vancouver (T2), Calgary (T2)</td>
+  <td class="c4"><span class="tier-badge">T2</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$80k–CA$115k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr>
+  <td class="c0">70</td>
+  <td class="c1">Management Consulting</td>
+  <td class="c2">Legal &amp; Professional Services</td>
+  <td class="c3">Toronto (T1), Ottawa (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T1</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$90k–CA$135k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+<tr class="vert-row npo"><td colspan="8">Non-profit &amp; Social<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">71</td>
+  <td class="c1">Registered Charities</td>
+  <td class="c2">Non-profit &amp; Social</td>
+  <td class="c3">Toronto (T2), Ottawa (T2), Vancouver (T2)</td>
+  <td class="c4"><span class="tier-badge">T3</span></td>
+  <td class="c5"><span class="dm-dec">Declining</span></td>
+  <td class="c6">CA$60k–CA$85k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">72</td>
+  <td class="c1">Healthcare Charities</td>
+  <td class="c2">Non-profit &amp; Social</td>
+  <td class="c3">Toronto (T2), Vancouver (T2), Ottawa (T2)</td>
+  <td class="c4"><span class="tier-badge">T3</span></td>
+  <td class="c5"><span class="dm-flat">Flat</span></td>
+  <td class="c6">CA$65k–CA$90k</td>
+  <td class="c7"><span class="dif-easy">2</span></td>
+</tr>
+<tr>
+  <td class="c0">73</td>
+  <td class="c1">Indigenous Community Services</td>
+  <td class="c2">Non-profit &amp; Social</td>
+  <td class="c3">Ottawa (T2), Winnipeg (T2), Saskatoon (T2)</td>
+  <td class="c4"><span class="tier-badge">T4</span></td>
+  <td class="c5"><span class="dm-warm">Warm</span></td>
+  <td class="c6">CA$65k–CA$90k</td>
+  <td class="c7"><span class="dif-mod">3</span></td>
+</tr>
+</tbody>
+</table>
+<div class="tbl-foot">
+  <span>73 industries · 16 verticals · data verified May 2026</span>
+  <span>Tier: T1 = 3+ major employers · T2 = 1–2 major + SME · T3 = SME-dominated · T4 = Government-only</span>
+  <span>Entry: 1 = Very easy → 5 = Very hard</span>
+</div>
+</div>
+
+<!-- ─── HUB × VERTICAL HEATMAP ──────────────────────────────────────────── -->
+<h2 id="heatmap">City × Vertical heatmap</h2>
+<div class="section-sub">14 hubs · 16 verticals · H = high concentration · M = medium · L = low</div>
+
+<div class="section-legend">
+  <div class="leg-row"><span class="hH"><strong>H</strong></span> — 3+ major employers, strong job density in this city for this vertical.</div>
+  <div class="leg-row"><span class="hM"><strong>M</strong></span> — 1–2 major employers or active SME cluster.</div>
+  <div class="leg-row"><span class="hL"><strong>L</strong></span> — Minimal presence, few postings.</div>
+  <div class="leg-row"><strong>Source:</strong> CBRE Scoring Tech Talent Canada 2025 · investcanada.ca · kovasys.com 2026. <strong>Last verified:</strong> May 2026.</div>
+</div>
+
+<div class="tbl-scroll"><div class="tbl-wrap" style="margin:0">
+<table class="heat-table">
+<thead><tr>
+  <th>Hub</th>
+  <th title="Financial Services">FinSvc</th>
+  <th title="Healthcare">Health</th>
+  <th title="Government">Gov</th>
+  <th title="Defense &amp; Intelligence">Def</th>
+  <th title="Energy &amp; Environment">Energy</th>
+  <th title="Technology">Tech</th>
+  <th title="Telecommunications">Telecom</th>
+  <th title="Retail &amp; Commerce">Retail</th>
+  <th title="Manufacturing">Mfg</th>
+  <th title="Media &amp; Entertainment">Media</th>
+  <th title="Education">Edu</th>
+  <th title="Transportation">Trans</th>
+  <th title="Real Estate">RE</th>
+  <th title="Agriculture">Agri</th>
+  <th title="Legal &amp; Professional">Legal</th>
+  <th title="Non-Profit">NPO</th>
+</tr></thead>
+<tbody>
+<tr><td><strong>Toronto</strong></td><td class="hH">H</td><td class="hH">H</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hH">H</td><td class="hH">H</td><td class="hH">H</td><td class="hM">M</td><td class="hH">H</td><td class="hH">H</td><td class="hH">H</td><td class="hH">H</td><td class="hL">L</td><td class="hH">H</td><td class="hM">M</td></tr>
+<tr><td><strong>Waterloo</strong></td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hH">H</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hH">H</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td></tr>
+<tr><td><strong>Ottawa</strong></td><td class="hM">M</td><td class="hM">M</td><td class="hH">H</td><td class="hH">H</td><td class="hL">L</td><td class="hH">H</td><td class="hH">H</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hH">H</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hH">H</td><td class="hH">H</td></tr>
+<tr><td><strong>Kingston</strong></td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hH">H</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td></tr>
+<tr><td><strong>Montréal</strong></td><td class="hH">H</td><td class="hM">M</td><td class="hM">M</td><td class="hH">H</td><td class="hL">L</td><td class="hH">H</td><td class="hM">M</td><td class="hM">M</td><td class="hH">H</td><td class="hH">H</td><td class="hH">H</td><td class="hM">M</td><td class="hM">M</td><td class="hL">L</td><td class="hM">M</td><td class="hM">M</td></tr>
+<tr><td><strong>Quebec City</strong></td><td class="hH">H</td><td class="hM">M</td><td class="hH">H</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hM">M</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hL">L</td><td class="hM">M</td><td class="hL">L</td><td class="hM">M</td><td class="hM">M</td></tr>
+<tr><td><strong>Halifax</strong></td><td class="hL">L</td><td class="hM">M</td><td class="hH">H</td><td class="hH">H</td><td class="hM">M</td><td class="hM">M</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hH">H</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hM">M</td></tr>
+<tr><td><strong>Fredericton</strong></td><td class="hL">L</td><td class="hL">L</td><td class="hH">H</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td></tr>
+<tr><td><strong>Vancouver</strong></td><td class="hM">M</td><td class="hH">H</td><td class="hM">M</td><td class="hM">M</td><td class="hM">M</td><td class="hH">H</td><td class="hM">M</td><td class="hH">H</td><td class="hL">L</td><td class="hH">H</td><td class="hH">H</td><td class="hH">H</td><td class="hH">H</td><td class="hL">L</td><td class="hM">M</td><td class="hM">M</td></tr>
+<tr><td><strong>Victoria</strong></td><td class="hL">L</td><td class="hL">L</td><td class="hH">H</td><td class="hH">H</td><td class="hL">L</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hM">M</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td></tr>
+<tr><td><strong>Calgary</strong></td><td class="hM">M</td><td class="hM">M</td><td class="hM">M</td><td class="hL">L</td><td class="hH">H</td><td class="hM">M</td><td class="hM">M</td><td class="hM">M</td><td class="hM">M</td><td class="hL">L</td><td class="hM">M</td><td class="hH">H</td><td class="hH">H</td><td class="hH">H</td><td class="hM">M</td><td class="hL">L</td></tr>
+<tr><td><strong>Edmonton</strong></td><td class="hL">L</td><td class="hH">H</td><td class="hH">H</td><td class="hL">L</td><td class="hH">H</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hH">H</td><td class="hL">L</td><td class="hH">H</td><td class="hM">M</td><td class="hM">M</td><td class="hM">M</td><td class="hL">L</td><td class="hM">M</td></tr>
+<tr><td><strong>Saskatoon</strong></td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hL">L</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hL">L</td><td class="hH">H</td><td class="hL">L</td><td class="hL">L</td><td class="hH">H</td><td class="hL">L</td><td class="hL">L</td></tr>
+<tr><td><strong>Winnipeg</strong></td><td class="hL">L</td><td class="hM">M</td><td class="hM">M</td><td class="hM">M</td><td class="hL">L</td><td class="hL">L</td><td class="hM">M</td><td class="hM">M</td><td class="hH">H</td><td class="hL">L</td><td class="hM">M</td><td class="hH">H</td><td class="hL">L</td><td class="hH">H</td><td class="hL">L</td><td class="hM">M</td></tr>
+</tbody>
+</table>
+</div></div>
+
+<div class="section-legend" style="margin-top:12px">
+  <strong>Column key:</strong>
+  <div class="leg-row">FinSvc = Financial Services · Health = Healthcare &amp; Life Sciences · Gov = Government &amp; Public Sector · Def = Defense &amp; Intelligence · Energy = Energy &amp; Environment · Tech = Technology</div>
+  <div class="leg-row">Telecom = Telecommunications · Retail = Retail &amp; Commerce · Mfg = Manufacturing &amp; Industrial · Media = Media &amp; Entertainment · Edu = Education · Trans = Transportation &amp; Logistics</div>
+  <div class="leg-row">RE = Real Estate &amp; Construction · Agri = Agriculture · Legal = Legal &amp; Professional Services · NPO = Non-profit &amp; Social</div>
+</div>
+
+<!-- ─── CERTIFICATION ROI ───────────────────────────────────────────────── -->
+<h2 id="cert-roi">Certification ROI by vertical</h2>
+<div class="section-sub">Estimated salary premium for DevSecOps-adjacent roles in Canada — no verified Canadian study as of May 2026</div>
+
+<div class="section-legend">
+  <div class="leg-row"><strong>Confidence note:</strong> No Canadian government or recruiter study publishes cert-specific premiums by province as of May 2026.</div>
+  <div class="leg-row">All premium figures are derived from recruiter reports and job posting salary differentials. Every row is marked <span class="estimated">Estimated</span>.</div>
+  <div class="leg-row"><strong>GC PBMM clarification:</strong> GC PBMM is a cloud architecture compliance framework — not a personal certification. No salary premium applies to individuals.</div>
+</div>
+
+<div class="tbl-wrap">
+<table class="gen-table">
+<thead><tr>
+  <th title="Industry-recognized credential acronym. Use in resumes for ATS matching.">Cert</th>
+  <th title="Full credential name.">Full name</th>
+  <th title="Industries where this cert most often raises offer salary.">Top verticals</th>
+  <th title="Estimated annual salary premium in Canadian dollars. Derived from recruiter reports — no verified Canadian study exists.">Est. premium (CA$)</th>
+  <th title="Estimated = no verified Canadian study source. Treat as directional, not precise.">Confidence</th>
+</tr></thead>
+<tbody>
+<tr><td><code>CISSP</code></td><td>Certified Information Systems Security Professional</td><td>Finance, Gov, Defence, Health</td><td>+CA$15k–CA$25k</td><td><span class="estimated">Estimated</span></td></tr>
+<tr><td><code>CCSP</code></td><td>Certified Cloud Security Professional</td><td>Tech, Finance, Health</td><td>+CA$10k–CA$18k</td><td><span class="estimated">Estimated</span></td></tr>
+<tr><td><code>AWS Security</code></td><td>AWS Certified Security – Specialty</td><td>Tech, Finance, Retail</td><td>+CA$8k–CA$15k</td><td><span class="estimated">Estimated</span></td></tr>
+<tr><td><code>AZ-500</code></td><td>Azure Security Engineer Associate</td><td>Gov (GC Azure), Tech</td><td>+CA$8k–CA$12k</td><td><span class="estimated">Estimated</span></td></tr>
+<tr><td><code>CKS</code></td><td>Certified Kubernetes Security Specialist</td><td>Tech, Finance</td><td>+CA$12k–CA$20k</td><td><span class="estimated">Estimated</span></td></tr>
+<tr><td><code>CISA</code></td><td>Certified Information Systems Auditor</td><td>Finance, Health, Gov</td><td>+CA$10k–CA$18k</td><td><span class="estimated">Estimated</span></td></tr>
+<tr><td><code>OSCP</code></td><td>Offensive Security Certified Professional</td><td>Defence, Gov, Finance</td><td>+CA$15k–CA$25k</td><td><span class="estimated">Estimated</span></td></tr>
+<tr><td><code>PCI DSS QSA</code></td><td>Payment Card Industry Qualified Security Assessor</td><td>Finance, Retail</td><td>+CA$20k–CA$35k</td><td><span class="estimated">Estimated</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ─── IMMIGRATION & CREDENTIAL PATHWAY ───────────────────────────────── -->
+<h2 id="immigration">Immigration &amp; credential pathway</h2>
+<div class="section-sub">NOC codes · Express Entry · Provincial Nominee Programs — last verified May 2026</div>
+
+<h3>NOC codes for DevSecOps roles</h3>
+<div class="tbl-wrap">
+<table class="gen-table">
+<thead><tr><th title="National Occupational Classification 2021 code. Used in Express Entry, PNP, and TFWP applications.">NOC Code</th><th title="Official NOC occupation title.">Title</th><th title="Choose this code based on the primary focus of the role — security-primary vs. engineering-primary.">Use when</th><th title="Training, Education, Experience and Responsibilities tier. TEER 1 = university degree required for classification.">TEER</th></tr></thead>
+<tbody>
+<tr>
+  <td><code>21220</code></td>
+  <td>Cybersecurity Specialists</td>
+  <td>Role is 70%+ security focus — SOC analyst, CISO, security engineer</td>
+  <td>1</td>
+</tr>
+<tr>
+  <td><code>21231</code></td>
+  <td>Software Engineers and Designers</td>
+  <td>DevSecOps Engineer, DevOps Engineer, Cloud Engineer</td>
+  <td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section-legend">
+  <div class="leg-row"><strong>Primary code for DevSecOps:</strong> <code>21231</code>. Use <code>21220</code> when the role is security-primary over engineering.</div>
+  <div class="leg-row">TEER 1 (Training, Education, Experience and Responsibilities level 1) — university degree required for classification purposes.</div>
+  <div class="leg-row"><strong>Source:</strong> Statistics Canada NOC 2021 Version 1.0 · ESDC NOC Explorer (noc.esdc.gc.ca). Last verified: May 2026.</div>
+</div>
+
+<h3>Express Entry</h3>
+<div class="tbl-wrap">
+<table class="gen-table">
+<thead><tr><th title="General = all programs combined. STEM = category-based draw favouring tech occupations — CRS cut-off ~300 points lower.">Draw type</th><th title="Comprehensive Ranking System minimum score for the draw. STEM cut-offs are ~300 points lower than general.">CRS cut-off</th><th title="Date this cut-off was published. Express Entry draws happen approximately weekly.">Date</th><th title="Context for the draw — eligibility specifics or comparison to other draws.">Notes</th></tr></thead>
+<tbody>
+<tr>
+  <td>General (all programs)</td>
+  <td><strong>805</strong></td>
+  <td>May 25, 2026</td>
+  <td>Last published draw as of May 2026</td>
+</tr>
+<tr>
+  <td>STEM category-based</td>
+  <td><strong>462–510</strong></td>
+  <td>2025 range</td>
+  <td>Primary pathway for tech workers — ~300 CRS lower than general pool</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section-legend">
+  <div class="leg-row"><strong>Job offer CRS points status:</strong> Removed March 2025. Reintroduction announced March 13, 2026. Not yet in effect as of May 2026.</div>
+  <div class="leg-row">When applying via STEM category draw: CRS cut-off is 462–510.</div>
+  <div class="leg-row">When applying via general draw: CRS cut-off was 805 on May 25, 2026 — recent draws ranged 786–805 (March–May 2026). STEM category is the primary tech immigration pathway as of May 2026.</div>
+  <div class="leg-row"><strong>Source:</strong> IRCC Express Entry draw results · moving2canada.com. Last verified: May 25, 2026.</div>
+</div>
+
+<h3>Provincial Nominee Programs (PNP) — 2026</h3>
+<div class="section-legend">
+  <div class="leg-row">Total PNP nominations in 2026: <strong>91,500</strong> — up from 55,000 in 2025.</div>
+  <div class="leg-row">Why: Largest single-year PNP expansion in program history. Federal immigration targets increased.</div>
+  <div class="leg-row"><strong>Coverage:</strong> 4 provinces with active tech-sector streams shown — BC, AB, ON, SK · remaining 9 provinces have no dedicated tech stream as of May 2026.</div>
+  <div class="leg-row"><strong>Source:</strong> canxglobal.com · gofarglobal.com. Last verified: May 2026.</div>
+</div>
+<div class="tbl-wrap">
+<table class="gen-table">
+<thead><tr>
+  <th title="Two-letter code — only 4 provinces have active tech-sector streams as of May 2026.">Province</th>
+  <th title="Name of the tech-targeted nomination stream.">Stream</th>
+  <th title="Median processing time from application to nomination.">Processing</th>
+  <th title="Eligibility limitation. Most streams require a Canadian employer job offer first.">Constraint</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><span class="prov-code">BC</span></td>
+  <td>BC Tech Pilot</td>
+  <td>2–3 months</td>
+  <td>29 eligible tech occupations only. Draws held most Tuesdays. Expedited vs. regular BC PNP (4–6 months).</td>
+</tr>
+<tr>
+  <td><span class="prov-code">AB</span></td>
+  <td>Accelerated Tech Pathway</td>
+  <td>~1 month</td>
+  <td>Fastest processing in Canada as of May 2026. Bypasses standard provincial queue.</td>
+</tr>
+<tr>
+  <td><span class="prov-code">ON</span></td>
+  <td>Employer Job Offer streams</td>
+  <td>4–6 months</td>
+  <td>Express Entry-linked OINP streams suspended through 2025 and into 2026. Ontario employer job offer required first.</td>
+</tr>
+<tr>
+  <td><span class="prov-code">SK</span></td>
+  <td>Priority sector nominations</td>
+  <td>Varies</td>
+  <td>Tech added as priority sector in 2026. 50% of SK nominations reserved for 7 priority sectors.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section-legend">
+  <div class="leg-row"><strong>Source:</strong> immigcanada.com · libertyimmigration.ca · canxglobal.com. Last verified: May 2026.</div>
+</div>
+
+<!-- ─── DATA SOURCES ─────────────────────────────────────────────────────── -->
+<h2 id="sources">Data sources</h2>
+<div class="section-sub">All sources accessed May 2026 — columns marked Estimated have no verified Canadian study</div>
+
+<div class="tbl-wrap">
+<table class="gen-table">
+<thead><tr>
+  <th title="Origin of the underlying data. Verify before relying on numbers for decisions.">Source</th>
+  <th title="Which columns or sections of this doc use this source.">What it covers</th>
+  <th title="Date the source was last checked. All sources here are current to May 2026.">Last verified</th>
+</tr></thead>
+<tbody>
+<tr><td>Robert Half Canada 2026 IT &amp; Tech Salary Guide</td><td>Entry, mid, senior salary bands by role and city</td><td><span class="verified">May 2026</span></td></tr>
+<tr><td>Glassdoor CA — Cloud Security Engineer, Toronto</td><td>Toronto city-specific average: CA$113,449 (Jan 2026)</td><td><span class="verified">May 2026</span></td></tr>
+<tr><td>cybersecurityinfinity.com — 2026 Market Insights</td><td>City wage bands and YoY demand trends</td><td><span class="verified">May 2026</span></td></tr>
+<tr><td>Job Bank Canada — NOC 21220, 21231</td><td>Job prospects 2024–2033, posting volumes by occupation</td><td><span class="verified">May 2026</span></td></tr>
+<tr><td>Canadian Cybersecurity Network</td><td>2,448 postings tracked March 2025 – February 2026. Entry role share: 5.4%.</td><td><span class="verified">May 2026</span></td></tr>
+<tr><td>CBRE Scoring Tech Talent: Canada 2025</td><td>Hub concentration and workforce size by city</td><td><span class="verified">May 2026</span></td></tr>
+<tr><td>kovasys.com — 2026 North America Talent Map</td><td>Largest tech hubs and employer concentration</td><td><span class="verified">May 2026</span></td></tr>
+<tr><td>IRCC Express Entry draw results</td><td>CRS cut-offs: general 805 (May 25, 2026) · STEM 462–510 (2025 range)</td><td><span class="verified">May 25, 2026</span></td></tr>
+<tr><td>Statistics Canada NOC 2021 Version 1.0</td><td>NOC code definitions and TEER levels for 21220 and 21231</td><td><span class="verified">May 2026</span></td></tr>
+<tr><td>canxglobal.com · gofarglobal.com</td><td>PNP 2026 allocation totals: 91,500 nominations</td><td><span class="verified">May 2026</span></td></tr>
+<tr><td>immigcanada.com · libertyimmigration.ca</td><td>BC, AB, ON, SK PNP stream details and processing times</td><td><span class="verified">May 2026</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="section-legend">
+  <strong>What is not in this document:</strong>
+  <div class="leg-row">Full 73-industry compliance data — see <a href="07-canada-schema.html">07-canada-schema.html</a> for mandatory compliance, regulators, and audit requirements per industry.</div>
+  <div class="leg-row">LinkedIn job count snapshots — stale within weeks.</div>
+  <div class="leg-row">Individual company salary data (e.g., Google CA internal bands) — company data is not market data.</div>
+  <div class="leg-row">IRCC immigration points estimates for specific profiles — IRCC policy changes quarterly.</div>
+</div>
+
+</main>
+</body>
+</html>
