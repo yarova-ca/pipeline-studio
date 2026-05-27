@@ -81,6 +81,7 @@ th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
 .c2{min-width:65px;font-family:monospace;font-size:11px;color:var(--text-dim)}
 .c3{min-width:75px;font-family:monospace;font-size:11px;color:var(--text-dim)}
 .c4{min-width:95px;font-size:11px;color:var(--text-dim)}
+.carch{min-width:110px;font-size:11px;color:var(--text-dim)}
 .c5{min-width:75px;text-align:center}
 .c6{min-width:75px;text-align:center}
 .c7{min-width:85px;text-align:center}
@@ -162,7 +163,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <div class="chip-label">Families<br>(use-case groups)</div>
   </div>
   <div class="count-chip col-chip">
-    <div class="chip-num">14</div>
+    <div class="chip-num">15</div>
     <div class="chip-label">Columns<br>per distro</div>
   </div>
   <div class="count-chip ctx-chip">
@@ -243,6 +244,22 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
       <p>Run <code>ldd /usr/local/bin/your-binary</code> inside the Alpine container. If it outputs <code>not a dynamic executable</code> or <code>no dynamic linker</code>, the binary will fail. If it lists <code>libc.so.6</code>, it requires glibc and will not run on Alpine.</p>
     </div>
   </details>
+  <details>
+    <summary><span class="sum-label">Multi-arch and docker buildx — ARM64 vs x86_64</span></summary>
+    <div class="expand-content">
+      <p>All 22 distros in this catalog publish official images for both <strong>x86_64</strong> (Intel/AMD) and <strong>ARM64</strong> (Apple Silicon, AWS Graviton). As of 2026, this is standard practice.</p>
+      <h4>x86_64 (amd64)</h4>
+      <p>Intel and AMD processors. Universal default for GitHub Actions runners, GitLab CI, and most CI providers. Always available.</p>
+      <h4>ARM64 (aarch64)</h4>
+      <p>Apple Silicon (M1/M2/M3), AWS Graviton 2/3/4, Ampere Altra. Graviton 3 is ~40% cheaper than equivalent x86_64 EC2 and 60% more energy efficient. GitHub Actions offers ARM64 runners (larger plan required).</p>
+      <h4>Multi-arch OCI manifest</h4>
+      <p>A multi-arch image is a single tag (<code>alpine:3.21</code>) that resolves to the correct architecture automatically. <code>docker pull alpine:3.21</code> on ARM64 gets the ARM64 layer; on x86_64 gets the x86_64 layer.</p>
+      <h4>Building multi-arch images</h4>
+      <p>Use <code>docker buildx build --platform linux/amd64,linux/arm64 -t your-image:tag .</code> — requires Docker Desktop or a Docker daemon with buildx enabled. CI providers: GitHub Actions supports this natively; add <code>platforms: linux/amd64,linux/arm64</code> to your workflow.</p>
+      <h4>When ARM64 matters for base image selection</h4>
+      <p>If your CI runs on ARM64 (Graviton) and your Dockerfile uses a musl-based base (Alpine), test on both architectures — musl behavior is identical across architectures, but native modules compiled at build time must match the target arch.</p>
+    </div>
+  </details>
 </div>
 
 <!-- ═══ SECTION 1: CONTAINER-OPTIMIZED ═══ -->
@@ -291,6 +308,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <th class="c2" title="C library: glibc (broad compat), musl (small, strict), none (scratch/static-only)">libc</th>
           <th class="c3" title="Package manager available in the image — or none if the image has no pkg mgr">Pkg mgr</th>
           <th class="c4" title="Compressed OCI image size from the official registry, smallest available variant">Min image</th>
+          <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
           <th class="c5" title="FIPS 140-2 / 140-3: whether a validated cryptographic module is available">FIPS</th>
           <th class="c6" title="DISA STIG: whether an official Defense Information Systems Agency hardening guide exists for this distro">DISA STIG</th>
           <th class="c7" title="CIS Benchmark: whether the Center for Internet Security publishes a hardening benchmark for this image">CIS</th>
@@ -309,6 +327,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">none</td>
           <td class="c3">none</td>
           <td class="c4">0 bytes (empty)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -325,6 +344,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">musl</td>
           <td class="c3">apk</td>
           <td class="c4">~7 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -341,6 +361,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">none</td>
           <td class="c4">~27 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -357,6 +378,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">microdnf</td>
           <td class="c4">~37 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -373,6 +395,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">none</td>
           <td class="c4">~2 MB (static)<br>~20 MB (base)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -389,6 +412,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">apk</td>
           <td class="c4">~5 MB (wolfi-base)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -405,6 +429,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">tdnf</td>
           <td class="c4">~30 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-partial">Partial</span></td>
@@ -421,6 +446,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">none (read-only OS)</td>
           <td class="c4">~2.5 GB (VM image — not a container base)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-partial">Partial</span></td>
@@ -479,6 +505,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <th class="c2" title="C library: glibc (broad compat), musl (small, strict), none">libc</th>
           <th class="c3" title="Package manager: apt / dnf / apk / tdnf / none">Pkg mgr</th>
           <th class="c4" title="Compressed OCI image size, smallest official variant">Min image</th>
+          <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
           <th class="c5" title="FIPS 140-2 / 140-3: whether a validated cryptographic module is available — 140-2 still valid; new certifications issued under 140-3">FIPS</th>
           <th class="c6" title="DISA STIG: official DoD hardening guide published for this distro">DISA STIG</th>
           <th class="c7" title="CIS Benchmark: Center for Internet Security hardening guide published">CIS</th>
@@ -497,6 +524,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">apt</td>
           <td class="c4">~75 MB (slim)<br>~130 MB (full)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -513,6 +541,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">apt</td>
           <td class="c4">~78 MB (minimal)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-yes">Yes</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -529,6 +558,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">apt</td>
           <td class="c4">~80 MB (minimal)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-yes">Yes</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -545,6 +575,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">dnf</td>
           <td class="c4">~185 MB (minimal)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -561,6 +592,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">dnf</td>
           <td class="c4">~65 MB (minimal)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -577,6 +609,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">tdnf</td>
           <td class="c4">~40 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -635,6 +668,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <th class="c2" title="C library">libc</th>
           <th class="c3" title="Package manager">Pkg mgr</th>
           <th class="c4" title="Compressed OCI image size, smallest official variant">Min image</th>
+          <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
           <th class="c5" title="FIPS 140-2 / 140-3: independently certified module available from vendor">FIPS</th>
           <th class="c6" title="DISA STIG: official DoD hardening guide published for this exact distro">DISA STIG</th>
           <th class="c7" title="CIS Benchmark: hardening guide published by Center for Internet Security">CIS</th>
@@ -653,6 +687,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">dnf</td>
           <td class="c4">~27 MB (UBI-micro)<br>~225 MB (full)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-yes">Yes</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -669,6 +704,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">dnf</td>
           <td class="c4">~210 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -685,6 +721,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">dnf</td>
           <td class="c4">~210 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -701,6 +738,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">dnf</td>
           <td class="c4">~205 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-partial">Partial</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -717,6 +755,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">dnf</td>
           <td class="c4">~215 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-yes">Yes</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
@@ -776,6 +815,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <th class="c2" title="C library used by the host OS">libc</th>
           <th class="c3" title="Package manager — or none if immutable with no pkg mgr">Pkg mgr</th>
           <th class="c4" title="VM image size — these are not container base images">Image size</th>
+          <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
           <th class="c5" title="FIPS 140-2 / 140-3: whether a validated cryptographic module is available — 140-2 still valid; new certifications issued under 140-3">FIPS</th>
           <th class="c6" title="DISA STIG: official DoD hardening guide published">DISA STIG</th>
           <th class="c7" title="CIS Benchmark: hardening guide published by Center for Internet Security">CIS</th>
@@ -794,6 +834,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">none (immutable)</td>
           <td class="c4">~300 MB (VM image)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-no">No</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-partial">Partial</span></td>
@@ -810,6 +851,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc (minimal userspace)</td>
           <td class="c3">none (API-driven)</td>
           <td class="c4">~80 MB (system image)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-no">No</span></td>
@@ -826,6 +868,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c2">glibc</td>
           <td class="c3">none (immutable, SSM API)</td>
           <td class="c4">~500 MB (VM, two-partition)</td>
+          <td class="carch">x86_64 + ARM64</td>
           <td class="c5"><span class="cert-yes">Yes</span></td>
           <td class="c6"><span class="cert-no">No</span></td>
           <td class="c7"><span class="cert-yes">Yes</span></td>
