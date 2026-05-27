@@ -63,6 +63,8 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;paddi
 .count-chip.comp-chip .chip-num{color:var(--blue)}
 .count-chip.proc-chip{border-left:3px solid var(--text-dim)}
 .count-chip.proc-chip .chip-num{color:var(--text-dim)}
+/* Tooltip hint on column headers */
+th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
 /* Table wrapper */
 .tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
 .tbl-wrap.p0{border-top:3px solid var(--p0-color)}
@@ -153,12 +155,22 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <a href="#reg" class="reg">Registry</a>
   <a href="#promo" class="promo">Promotions</a>
   <a href="#summary-tbl">Summary table</a>
+  <div class="nav-section">All docs</div>
+  <a href="index.html">⌂ Hub</a>
+  <a href="01-framework-catalog.html">01 Frameworks</a>
+  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
+  <a href="03-stage-types.html">03 Stage types</a>
+  <a href="04-tool-catalog.html">04 Tool catalog</a>
+  <a href="05-invariants.html" aria-current="page">05 Invariants</a>
+  <a href="06-industry-schema.html">06 US industries</a>
+  <a href="07-canada-schema.html">07 CA industries</a>
+  <a href="08-canada-market.html">08 CA market</a>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-title">Pipeline Invariants</div>
-<div class="page-meta">25 conditions that must always hold. Violation = pipeline broken — build must stop or never reach the next stage. | Source: <code>05-invariants.md</code></div>
+<div class="page-meta">25 conditions that must always hold. Violation = pipeline broken — build must stop or never reach the next stage. &nbsp;·&nbsp; verified 2026-05-26</div>
 
 <!-- Summary counts bar -->
 <div id="summary" class="counts-bar">
@@ -191,6 +203,18 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <span class="leg-row">&nbsp;&nbsp;<span class="badge badge-proc"><span class="bdot"></span>Process</span> — enforces workflow order or human review gate.</span>
   <div class="leg-insight">When adding a new stage or changing stage order: check every invariant in the affected phase. A single ordering change can break multiple downstream invariants.</div>
   <details>
+    <summary><span class="sum-label">Acronym definitions — terms used in this doc</span></summary>
+    <div class="expand-content">
+      <p><strong>SCA</strong> — Software Composition Analysis. Scans third-party dependencies for known CVEs.</p>
+      <p><strong>SAST</strong> — Static Application Security Testing. Scans source code for insecure patterns without running the code.</p>
+      <p><strong>DAST</strong> — Dynamic Application Security Testing. Runs the application and probes it for vulnerabilities over HTTP.</p>
+      <p><strong>IaC</strong> — Infrastructure as Code. Terraform, Helm, Kubernetes manifests, CloudFormation, etc.</p>
+      <p><strong>SBOM</strong> — Software Bill of Materials. Machine-readable list of every component in the build artifact.</p>
+      <p><strong>SLSA</strong> — Supply-chain Levels for Software Artifacts. Provenance attestation proving the artifact was built by a trusted pipeline from a known source.</p>
+      <p><strong>OIDC</strong> — OpenID Connect. Used for keyless CI authentication — each CI job gets a short-lived token, no stored credentials.</p>
+    </div>
+  </details>
+  <details>
     <summary><span class="sum-label">Column definitions — all 6 columns</span></summary>
     <div class="expand-content">
       <p><strong>ID</strong> — unique identifier. Format: <code>I-&lt;phase&gt;-&lt;n&gt;</code>. Example: <code>I-P3-1</code> = Phase 3, first invariant.</p>
@@ -211,16 +235,16 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
     <table class="inv-table">
       <thead>
         <tr>
-          <th class="col-id">ID</th>
-          <th class="col-stage">Stage</th>
-          <th class="col-inv">Invariant</th>
-          <th class="col-viol">If violated</th>
-          <th class="col-enf">Enforced by</th>
-          <th class="col-class">Control class</th>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="I-P0-1">
           <td class="col-id">I-P0-1</td>
           <td class="col-stage">Branch protection</td>
           <td class="col-inv">No direct push to main ever</td>
@@ -228,7 +252,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">GitHub branch protection rules</td>
           <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
         </tr>
-        <tr>
+        <tr id="I-P0-2">
           <td class="col-id">I-P0-2</td>
           <td class="col-stage">OIDC trust</td>
           <td class="col-inv">CI uses OIDC tokens — no long-lived secrets stored in CI</td>
@@ -236,7 +260,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">GitHub OIDC + cloud IAM</td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-P0-3">
           <td class="col-id">I-P0-3</td>
           <td class="col-stage">Registry access</td>
           <td class="col-inv">Push scoped to exact repo + branch only</td>
@@ -244,7 +268,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">Registry policy + OIDC role binding</td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-P0-4">
           <td class="col-id">I-P0-4</td>
           <td class="col-stage">Kyverno admission policy</td>
           <td class="col-inv">Cluster rejects any image not signed by the pipeline</td>
@@ -252,7 +276,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">Kyverno ClusterPolicy</td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-P0-5">
           <td class="col-id">I-P0-5</td>
           <td class="col-stage">Dependency update automation</td>
           <td class="col-inv">All dependency updates arrive as PRs — never manual edits</td>
@@ -274,16 +298,16 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
     <table class="inv-table">
       <thead>
         <tr>
-          <th class="col-id">ID</th>
-          <th class="col-stage">Stage</th>
-          <th class="col-inv">Invariant</th>
-          <th class="col-viol">If violated</th>
-          <th class="col-enf">Enforced by</th>
-          <th class="col-class">Control class</th>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="I-P1-1">
           <td class="col-id">I-P1-1</td>
           <td class="col-stage">Local secret scan</td>
           <td class="col-inv">A commit containing a detected secret is blocked before it leaves the developer machine</td>
@@ -291,7 +315,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">gitleaks pre-commit hook</td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-P1-2">
           <td class="col-id">I-P1-2</td>
           <td class="col-stage">Pre-commit hooks</td>
           <td class="col-inv">Dockerfile linting (hadolint) and IaC checks (checkov) block commit on failure</td>
@@ -313,16 +337,16 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
     <table class="inv-table">
       <thead>
         <tr>
-          <th class="col-id">ID</th>
-          <th class="col-stage">Stage</th>
-          <th class="col-inv">Invariant</th>
-          <th class="col-viol">If violated</th>
-          <th class="col-enf">Enforced by</th>
-          <th class="col-class">Control class</th>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="I-P2-1">
           <td class="col-id">I-P2-1</td>
           <td class="col-stage">Build (no push)</td>
           <td class="col-inv">Image is built to tarball only — no push to registry ever</td>
@@ -330,7 +354,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">Docker build with <code>--output type=tar</code> or no <code>--push</code></td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-P2-2">
           <td class="col-id">I-P2-2</td>
           <td class="col-stage">SCA / SAST / License / IaC / Secrets</td>
           <td class="col-inv">All five scans complete before build step begins</td>
@@ -338,7 +362,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">CI job ordering — scans in parallel, build depends on all five</td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-P2-3">
           <td class="col-id">I-P2-3</td>
           <td class="col-stage">Container scan</td>
           <td class="col-inv">Trivy scans the tarball — not a registry image</td>
@@ -346,7 +370,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">Trivy <code>--input tarball.tar</code></td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-P2-4">
           <td class="col-id">I-P2-4</td>
           <td class="col-stage">PR review</td>
           <td class="col-inv">At least one human approval required before merge</td>
@@ -354,7 +378,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">GitHub branch protection — required reviewers</td>
           <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
         </tr>
-        <tr>
+        <tr id="I-P2-5">
           <td class="col-id">I-P2-5</td>
           <td class="col-stage">SBOM generate</td>
           <td class="col-inv">SBOM is generated from the same tarball scanned by Trivy</td>
@@ -376,16 +400,16 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
     <table class="inv-table">
       <thead>
         <tr>
-          <th class="col-id">ID</th>
-          <th class="col-stage">Stage</th>
-          <th class="col-inv">Invariant</th>
-          <th class="col-viol">If violated</th>
-          <th class="col-enf">Enforced by</th>
-          <th class="col-class">Control class</th>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="I-P3-1">
           <td class="col-id">I-P3-1</td>
           <td class="col-stage">Sign</td>
           <td class="col-inv">Image is signed only after it is pushed and scanned — never before</td>
@@ -393,7 +417,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">CI job ordering — sign depends on container scan</td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-P3-2">
           <td class="col-id">I-P3-2</td>
           <td class="col-stage">SBOM generate + attest</td>
           <td class="col-inv">SBOM attestation is attached only after signing — never before</td>
@@ -401,7 +425,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">CI job ordering — attest depends on sign</td>
           <td class="col-class"><span class="badge badge-comp"><span class="bdot"></span>Compliance</span></td>
         </tr>
-        <tr>
+        <tr id="I-P3-3">
           <td class="col-id">I-P3-3</td>
           <td class="col-stage">Container scan</td>
           <td class="col-inv">Trivy scans the registry image digest — not a tarball or tag</td>
@@ -409,7 +433,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">Trivy <code>--image registry/repo@sha256:...</code></td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-P3-4">
           <td class="col-id">I-P3-4</td>
           <td class="col-stage">SLSA provenance</td>
           <td class="col-inv">SLSA provenance is generated only after image is signed</td>
@@ -417,7 +441,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">CI job ordering — SLSA depends on sign</td>
           <td class="col-class"><span class="badge badge-comp"><span class="bdot"></span>Compliance</span></td>
         </tr>
-        <tr>
+        <tr id="I-P3-5">
           <td class="col-id">I-P3-5</td>
           <td class="col-stage">Release tag</td>
           <td class="col-inv">Semantic version tag applied before SBOM and SLSA generation</td>
@@ -425,7 +449,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">CI job ordering — tag before attest and provenance</td>
           <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
         </tr>
-        <tr>
+        <tr id="I-P3-6">
           <td class="col-id">I-P3-6</td>
           <td class="col-stage">Tests + Codecov</td>
           <td class="col-inv">All tests pass before DAST runs</td>
@@ -447,16 +471,16 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
     <table class="inv-table">
       <thead>
         <tr>
-          <th class="col-id">ID</th>
-          <th class="col-stage">Stage</th>
-          <th class="col-inv">Invariant</th>
-          <th class="col-viol">If violated</th>
-          <th class="col-enf">Enforced by</th>
-          <th class="col-class">Control class</th>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="I-R-1">
           <td class="col-id">I-R-1</td>
           <td class="col-stage">Sign verify</td>
           <td class="col-inv">No image is promoted from registry to any environment without cosign signature verification</td>
@@ -464,7 +488,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">cosign verify at registry promotion step</td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-R-2">
           <td class="col-id">I-R-2</td>
           <td class="col-stage">SBOM attach</td>
           <td class="col-inv">SBOM is attached to the registry image before any promotion</td>
@@ -472,7 +496,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">OCI SBOM attach step before promotion gate</td>
           <td class="col-class"><span class="badge badge-comp"><span class="bdot"></span>Compliance</span></td>
         </tr>
-        <tr>
+        <tr id="I-R-3">
           <td class="col-id">I-R-3</td>
           <td class="col-stage">SLSA attach</td>
           <td class="col-inv">SLSA provenance is attached to the registry image before any promotion</td>
@@ -494,16 +518,16 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
     <table class="inv-table">
       <thead>
         <tr>
-          <th class="col-id">ID</th>
-          <th class="col-stage">Stage</th>
-          <th class="col-inv">Invariant</th>
-          <th class="col-viol">If violated</th>
-          <th class="col-enf">Enforced by</th>
-          <th class="col-class">Control class</th>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="I-PR-1">
           <td class="col-id">I-PR-1</td>
           <td class="col-stage">cosign verify</td>
           <td class="col-inv">Signature verified in the target environment before ArgoCD / Flux deploys</td>
@@ -511,7 +535,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">cosign verify step in promotion workflow</td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-PR-2">
           <td class="col-id">I-PR-2</td>
           <td class="col-stage">GitOps PR</td>
           <td class="col-inv">Deployment references image by digest — never by mutable tag</td>
@@ -519,7 +543,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">GitOps PR sets <code>image: repo@sha256:...</code></td>
           <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
         </tr>
-        <tr>
+        <tr id="I-PR-3">
           <td class="col-id">I-PR-3</td>
           <td class="col-stage">Gate</td>
           <td class="col-inv">Promotion to the next environment requires explicit gate approval</td>
@@ -527,7 +551,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
           <td class="col-enf">Manual approval gate or policy gate in ArgoCD</td>
           <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
         </tr>
-        <tr>
+        <tr id="I-PR-4">
           <td class="col-id">I-PR-4</td>
           <td class="col-stage">Env tests</td>
           <td class="col-inv">Tests must pass before gate opens — gate cannot open on partial test results</td>

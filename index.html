@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Pipeline Studio — 8 design docs covering frameworks, pipeline stages, tools, invariants, and industry schemas">
+<title>Pipeline Studio — Hub</title>
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;--border:#d0d7de;
+  --text:#1f2328;--text-dim:#636c76;--text-head:#1f2328;
+  --blue:#0969da;--green:#1a7f37;--red:#cf222e;--purple:#8250df;
+  --sidebar-w:220px
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:13px;line-height:1.5}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+/* Skip link */
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+/* Sidebar */
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3);font-weight:600}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+/* Main */
+main{flex:1;padding:40px 48px;max-width:1100px}
+.page-title{font-size:24px;font-weight:700;color:var(--text-head);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+/* Section headings */
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:40px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
+/* Doc cards grid */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:8px}
+.doc-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px 18px;text-decoration:none;color:var(--text);display:block;transition:border-color .15s,box-shadow .15s}
+.doc-card:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(9,105,218,.12);text-decoration:none}
+.doc-card-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);margin-bottom:4px}
+.doc-card-title{font-size:14px;font-weight:600;color:var(--text-head);margin-bottom:6px}
+.doc-card-desc{font-size:12px;color:var(--text-dim);line-height:1.5;margin-bottom:10px}
+.doc-card-meta{font-size:11px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
+.doc-card-meta strong{color:var(--text)}
+/* Reading order */
+.order-list{counter-reset:step;display:flex;flex-direction:column;gap:8px}
+.order-item{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.order-item::before{counter-increment:step;content:counter(step);display:flex;align-items:center;justify-content:center;width:22px;height:22px;min-width:22px;background:var(--blue);color:#fff;border-radius:50%;font-size:11px;font-weight:700;margin-top:1px}
+.order-item-title{font-weight:600;font-size:12.5px;color:var(--text-head)}
+.order-item-desc{font-size:11.5px;color:var(--text-dim);margin-top:2px}
+/* Dependency map */
+.dep-row{display:flex;align-items:center;gap:8px;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border)}
+.dep-row:last-child{border-bottom:none}
+.dep-from{min-width:200px;font-weight:500}
+.dep-arrow{color:var(--text-dim);font-size:14px}
+.dep-to{color:var(--text-dim)}
+/* Glossary table */
+.glossary-table{width:100%;border-collapse:collapse;font-size:12px}
+.glossary-table th{text-align:left;padding:6px 12px;font-size:10.5px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);background:var(--bg2)}
+.glossary-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+.glossary-table tbody tr:last-child td{border-bottom:none}
+.glossary-table tbody tr:hover{background:var(--bg2)}
+.glossary-table td:first-child{font-weight:600;font-size:12px;white-space:nowrap;color:var(--text-head)}
+/* Hint card */
+.hint-card{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;font-size:12px;line-height:1.6;color:var(--text-dim);margin-bottom:8px}
+.hint-card strong{color:var(--text-head)}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--text-dim:#848d97;--text-head:#e6edf3}
+  .doc-card:hover{box-shadow:0 2px 8px rgba(56,139,253,.15)}
+  .hint-card{background:#1c2a3a;border-color:#2d4a6a;color:var(--text-dim)}
+}
+@media print{
+  .skip-link,nav{display:none}
+  main{padding:20px;max-width:none}
+  .doc-card{border:1px solid #ccc;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Design Doc Hub</p></div>
+  <div class="nav-section">All docs</div>
+  <a href="index.html" aria-current="page">⌂ Hub</a>
+  <a href="01-framework-catalog.html">01 Frameworks</a>
+  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
+  <a href="03-stage-types.html">03 Stage types</a>
+  <a href="04-tool-catalog.html">04 Tool catalog</a>
+  <a href="05-invariants.html">05 Invariants</a>
+  <a href="06-industry-schema.html">06 US industries</a>
+  <a href="07-canada-schema.html">07 CA industries</a>
+  <a href="08-canada-market.html">08 CA market</a>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<main id="main-content">
+<div class="page-title">Pipeline Studio</div>
+<div class="page-meta">8 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; verified 2026-05-26</div>
+
+<div class="hint-card">
+  <strong>Purpose:</strong> Reference for building secure CI/CD pipelines across any framework, any regulated industry, any Canadian market.
+  <br>Start with <a href="02-pipeline-schema.html">doc 02</a> to understand the pipeline shape. Then pick the doc you need.
+</div>
+
+<!-- ═══ DOC CARDS ═══ -->
+<h2>All 8 docs</h2>
+<div class="cards-grid">
+
+  <a href="01-framework-catalog.html" class="doc-card">
+    <div class="doc-card-num">Doc 01</div>
+    <div class="doc-card-title">Framework Catalog</div>
+    <div class="doc-card-desc">27 framework categories across Frontend Web, Mobile, and Backend. Every framework compared on 22 columns — license, maturity, performance, security posture, ecosystem, tradeoff vs closest alternative.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 27 categories · 22 columns · all rows filled &nbsp;·&nbsp; <strong>Use when:</strong> picking a framework for a new project</div>
+  </a>
+
+  <a href="02-pipeline-schema.html" class="doc-card">
+    <div class="doc-card-num">Doc 02</div>
+    <div class="doc-card-title">Pipeline Schema</div>
+    <div class="doc-card-desc">The full pipeline shape — every phase, every stage, every connection. Visual flow + text diagrams. Phase trigger conditions and outputs. Parallel stage groups marked.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 6 phases · 44 stages · 4 environments &nbsp;·&nbsp; <strong>Use when:</strong> understanding what runs when and in what order</div>
+  </a>
+
+  <a href="03-stage-types.html" class="doc-card">
+    <div class="doc-card-num">Doc 03</div>
+    <div class="doc-card-title">Stage Types</div>
+    <div class="doc-card-desc">Every pipeline stage classified as DevOps or DevSecOps. DevOps failure = workflow problem, engineering team owns it. DevSecOps failure = security event, artifact does not ship.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 44 stages · 16 DevOps · 28 DevSecOps &nbsp;·&nbsp; <strong>Use when:</strong> deciding who owns a failed stage</div>
+  </a>
+
+  <a href="04-tool-catalog.html" class="doc-card">
+    <div class="doc-card-num">Doc 04</div>
+    <div class="doc-card-title">Tool Catalog</div>
+    <div class="doc-card-desc">The tool selected for every pipeline stage. 10 columns per stage: tool + version, license, applies to, changes when, output format, CI integration, mandatory status, when to use, when NOT, primary tradeoff vs closest alternative.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 44 stages · 10 columns per stage &nbsp;·&nbsp; <strong>Use when:</strong> choosing the right scanner, signer, or runner</div>
+  </a>
+
+  <a href="05-invariants.html" class="doc-card">
+    <div class="doc-card-num">Doc 05</div>
+    <div class="doc-card-title">Invariants</div>
+    <div class="doc-card-desc">25 conditions that must always hold across the pipeline. Violation = build stops or artifact does not ship. Classifed as Security, Compliance, or Process. Deep-linked from doc 04 tool-catalog.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 25 invariants · 12 Security · 5 Compliance · 8 Process &nbsp;·&nbsp; <strong>Use when:</strong> adding a stage or changing stage order</div>
+  </a>
+
+  <a href="06-industry-schema.html" class="doc-card">
+    <div class="doc-card-num">Doc 06</div>
+    <div class="doc-card-title">US Industry Schema</div>
+    <div class="doc-card-desc">74 US industries across 16 verticals. Each row: mandatory and optional compliance standards, regulatory body, data sensitivity, pipeline stages affected, framework notes, key security requirements, audit requirements.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 74 industries · 16 verticals · 10 columns &nbsp;·&nbsp; <strong>Use when:</strong> adapting pipeline for a US regulated industry</div>
+  </a>
+
+  <a href="07-canada-schema.html" class="doc-card">
+    <div class="doc-card-num">Doc 07</div>
+    <div class="doc-card-title">Canada Industry Schema</div>
+    <div class="doc-card-desc">73 Canadian industries with provincial regulators, PIPEDA/OSFI/FINTRAC compliance, OCAP® data sovereignty, Protected B classification, and GC PBMM notes. 13 provinces/territories. 14 major hubs.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 73 industries · 13 provinces/territories · 14 hubs &nbsp;·&nbsp; <strong>Use when:</strong> adapting pipeline for a Canadian regulated industry</div>
+  </a>
+
+  <a href="08-canada-market.html" class="doc-card">
+    <div class="doc-card-num">Doc 08</div>
+    <div class="doc-card-title">Canada Market Navigation</div>
+    <div class="doc-card-desc">73 Canadian industries with market data: employer tier, demand direction, wage band, and entry difficulty. City × vertical heatmap. Certification ROI. NOC codes, Express Entry CRS cut-offs, PNP streams.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 73 industries · 5 market dimensions · 14 hubs · 8 certs &nbsp;·&nbsp; <strong>Use when:</strong> choosing a target industry, city, or immigration route in Canada</div>
+  </a>
+
+</div>
+
+<!-- ═══ READING ORDER ═══ -->
+<h2>Recommended reading order</h2>
+<div class="order-list">
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="02-pipeline-schema.html">02 — Pipeline Schema</a></div><div class="order-item-desc">Start here. Understand the shape — 6 phases, 44 stages, 4 environments, what runs in what order.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="03-stage-types.html">03 — Stage Types</a></div><div class="order-item-desc">Classify each stage. Know who owns a failure — engineering or security.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="04-tool-catalog.html">04 — Tool Catalog</a></div><div class="order-item-desc">Pick tools for each stage. Understand mandatory vs conditional vs optional.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="05-invariants.html">05 — Invariants</a></div><div class="order-item-desc">Confirm no ordering rule is violated. Check before changing stage order or adding stages.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="01-framework-catalog.html">01 — Framework Catalog</a> (orthogonal)</div><div class="order-item-desc">Select a framework. Orthogonal to docs 02–05 — any framework runs the same pipeline.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="06-industry-schema.html">06 — US Industry Schema</a> or <a href="07-canada-schema.html">07 — Canada Industry Schema</a></div><div class="order-item-desc">Add industry-specific controls. Select your industry → see which stages get extra controls.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="08-canada-market.html">08 — Canada Market Navigation</a> (Canada only)</div><div class="order-item-desc">Navigate Canadian market entry — hubs, demand, wages, immigration pathway.</div></div>
+  </div>
+</div>
+
+<!-- ═══ DEPENDENCY MAP ═══ -->
+<h2>Cross-doc dependencies</h2>
+<div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px">
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="02-pipeline-schema.html">02 Pipeline Schema</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">defines the stages used in 03, 04, 05</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="03-stage-types.html">03 Stage Types</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">classification referenced by 04 (tool selection per stage type)</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="05-invariants.html">05 Invariants</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">deep-linked from 04 tool-catalog "When to use" cells (I-P3-1, I-P3-2, I-P3-4, I-P3-6)</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="06-industry-schema.html">06 US Industries</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">adds extra controls to stages in 04 when an industry is selected</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="07-canada-schema.html">07 CA Industries</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">Canadian version of 06 — same 16 verticals, Canadian-specific industry roster and regulators</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="08-canada-market.html">08 CA Market</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">market lens on the same 73 industries as 07 — compliance data stays in 07</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="01-framework-catalog.html">01 Frameworks</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">orthogonal — framework choice does not change the pipeline (except FIPS-required rows)</div>
+  </div>
+</div>
+
+<!-- ═══ GLOSSARY ═══ -->
+<h2>Glossary — terms used across all docs</h2>
+<div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+<table class="glossary-table">
+<thead><tr><th>Term</th><th>Plain-English definition</th><th>Used in</th></tr></thead>
+<tbody>
+<tr><td>SCA</td><td>Software Composition Analysis — scans third-party dependencies for known CVEs (Common Vulnerabilities and Exposures).</td><td>02, 03, 04, 05</td></tr>
+<tr><td>SAST</td><td>Static Application Security Testing — scans source code for insecure patterns without running the code.</td><td>02, 03, 04, 05</td></tr>
+<tr><td>DAST</td><td>Dynamic Application Security Testing — runs the application and probes it for vulnerabilities over HTTP.</td><td>02, 03, 04, 05</td></tr>
+<tr><td>IaC</td><td>Infrastructure as Code — Terraform, Helm, Kubernetes manifests, CloudFormation, etc. Checked by checkov and hadolint.</td><td>02, 03, 04, 05</td></tr>
+<tr><td>SBOM</td><td>Software Bill of Materials — machine-readable list of every component in the build artifact. Required for supply chain compliance.</td><td>02, 03, 04, 05</td></tr>
+<tr><td>SLSA</td><td>Supply-chain Levels for Software Artifacts — provenance attestation proving the artifact was built by a trusted pipeline from a known source.</td><td>02, 03, 04, 05</td></tr>
+<tr><td>OIDC</td><td>OpenID Connect — used for keyless CI authentication. Each job gets a short-lived token; no stored credentials in CI.</td><td>02, 03, 04, 05</td></tr>
+<tr><td>PIPEDA</td><td>Personal Information Protection and Electronic Documents Act — Canada's federal private-sector privacy law.</td><td>07, 08</td></tr>
+<tr><td>OSFI</td><td>Office of the Superintendent of Financial Institutions — Canadian federal financial regulator.</td><td>07, 08</td></tr>
+<tr><td>FINTRAC</td><td>Financial Transactions and Reports Analysis Centre of Canada — federal AML (anti-money laundering) regulator.</td><td>07</td></tr>
+<tr><td>GC PBMM</td><td>Government of Canada Protected B, Medium Integrity, Medium Availability — cloud architecture compliance framework for federal workloads.</td><td>07</td></tr>
+<tr><td>OCAP®</td><td>Ownership, Control, Access and Possession — First Nations data sovereignty principles. Registered trademark of the First Nations Information Governance Centre.</td><td>07</td></tr>
+<tr><td>NOC</td><td>National Occupational Classification — Canada's system for classifying occupations. Used in immigration applications (Express Entry, PNP).</td><td>08</td></tr>
+<tr><td>TEER</td><td>Training, Education, Experience and Responsibilities — NOC 2021 tier system. TEER 1 = university degree required for immigration classification.</td><td>08</td></tr>
+<tr><td>CRS</td><td>Comprehensive Ranking System — points-based score used in Express Entry to rank candidates. Higher score = invited to apply sooner.</td><td>08</td></tr>
+<tr><td>PNP</td><td>Provincial Nominee Program — each province nominates candidates for permanent residency. Adds ~600 CRS points when issued.</td><td>08</td></tr>
+<tr><td>DevOps</td><td>Development Operations — workflow and infrastructure stages (build, deploy, tag, test, notify). Failure = engineering team owns the fix.</td><td>02, 03, 04</td></tr>
+<tr><td>DevSecOps</td><td>Development Security Operations — security enforcement stages (scan, sign, attest, verify, policy). Failure = artifact does not ship.</td><td>02, 03, 04, 05</td></tr>
+</tbody>
+</table>
+</div>
+
+</main>
+</body>
+</html>

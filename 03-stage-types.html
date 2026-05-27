@@ -60,6 +60,8 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;paddi
 .count-chip.devsec .chip-num{color:var(--blue)}
 .count-chip.devops{border-left:3px solid var(--green)}
 .count-chip.devops .chip-num{color:var(--green)}
+/* Tooltip hint on column headers */
+th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
 /* Table wrapper */
 .tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
 .tbl-wrap.p0{border-top:3px solid var(--p0-color)}
@@ -142,6 +144,16 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <a href="#reg" class="reg">Registry</a>
   <a href="#promo" class="promo">Promotions</a>
   <a href="#totals">Totals</a>
+  <div class="nav-section">All docs</div>
+  <a href="index.html">⌂ Hub</a>
+  <a href="01-framework-catalog.html">01 Frameworks</a>
+  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
+  <a href="03-stage-types.html" aria-current="page">03 Stage types</a>
+  <a href="04-tool-catalog.html">04 Tool catalog</a>
+  <a href="05-invariants.html">05 Invariants</a>
+  <a href="06-industry-schema.html">06 US industries</a>
+  <a href="07-canada-schema.html">07 CA industries</a>
+  <a href="08-canada-market.html">08 CA market</a>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
@@ -154,7 +166,19 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <div class="leg-row">Every pipeline stage classified as DevOps or DevSecOps.</div>
   <div class="leg-row"><strong>DevOps</strong> — infrastructure and workflow. Build, deploy, tag, test, notify.</div>
   <div class="leg-row"><strong>DevSecOps</strong> — security enforcement. Scan, sign, attest, verify, policy.</div>
-  <div class="leg-insight">Pipeline flow and ordering: doc 02. Tool selection per stage: doc 04. Ordering constraints: doc 05.</div>
+  <div class="leg-insight">Pipeline flow and ordering: <a href="02-pipeline-schema.html">doc 02</a>. Tool selection per stage: <a href="04-tool-catalog.html">doc 04</a>. Ordering constraints: <a href="05-invariants.html">doc 05</a>.</div>
+  <details>
+    <summary><span class="sum-label">Acronym definitions — terms used in this doc</span></summary>
+    <div class="expand-content">
+      <p><strong>SCA</strong> — Software Composition Analysis. Scans third-party dependencies for known CVEs.</p>
+      <p><strong>SAST</strong> — Static Application Security Testing. Scans source code for insecure patterns without running the code.</p>
+      <p><strong>DAST</strong> — Dynamic Application Security Testing. Runs the application and probes it for vulnerabilities over HTTP.</p>
+      <p><strong>IaC</strong> — Infrastructure as Code. Terraform, Helm, Kubernetes manifests, CloudFormation, etc.</p>
+      <p><strong>SBOM</strong> — Software Bill of Materials. Machine-readable list of every component in the build artifact.</p>
+      <p><strong>SLSA</strong> — Supply-chain Levels for Software Artifacts. Provenance attestation proving the artifact was built by a trusted pipeline.</p>
+      <p><strong>OIDC</strong> — OpenID Connect. Used for keyless CI authentication — each job gets a short-lived token, no stored credentials.</p>
+    </div>
+  </details>
   <details>
     <summary><span class="sum-label">Why the split matters — gate ownership and failure response</span></summary>
     <div class="expand-content">
@@ -197,7 +221,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <div class="tbl-wrap p0">
   <table class="stage-table">
     <thead>
-      <tr><th>Stage</th><th>Type</th></tr>
+      <tr><th title="Pipeline stage name. Tool selection: doc 04. Ordering rules: doc 05.">Stage</th><th title="DevOps = workflow/infra (build, deploy, tag). DevSecOps = security enforcement (scan, sign, attest). DevSecOps failure blocks ship and pages security.">Type</th></tr>
     </thead>
     <tbody>
       <tr><td>Branch protection</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
@@ -224,7 +248,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <div class="tbl-wrap p1">
   <table class="stage-table">
     <thead>
-      <tr><th>Stage</th><th>Type</th></tr>
+      <tr><th title="Pipeline stage name. Tool selection: doc 04. Ordering rules: doc 05.">Stage</th><th title="DevOps = workflow/infra (build, deploy, tag). DevSecOps = security enforcement (scan, sign, attest). DevSecOps failure blocks ship and pages security.">Type</th></tr>
     </thead>
     <tbody>
       <tr><td>IDE plugins</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
@@ -248,7 +272,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <div class="tbl-wrap p2">
   <table class="stage-table">
     <thead>
-      <tr><th>Stage</th><th>Type</th></tr>
+      <tr><th title="Pipeline stage name. Tool selection: doc 04. Ordering rules: doc 05.">Stage</th><th title="DevOps = workflow/infra (build, deploy, tag). DevSecOps = security enforcement (scan, sign, attest). DevSecOps failure blocks ship and pages security.">Type</th></tr>
     </thead>
     <tbody>
       <tr><td>Pre-commit (CI)</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
@@ -280,7 +304,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <div class="tbl-wrap p3">
   <table class="stage-table">
     <thead>
-      <tr><th>Stage</th><th>Type</th></tr>
+      <tr><th title="Pipeline stage name. Tool selection: doc 04. Ordering rules: doc 05.">Stage</th><th title="DevOps = workflow/infra (build, deploy, tag). DevSecOps = security enforcement (scan, sign, attest). DevSecOps failure blocks ship and pages security.">Type</th></tr>
     </thead>
     <tbody>
       <tr><td>Pre-commit (CI)</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
@@ -320,7 +344,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <div class="tbl-wrap reg">
   <table class="stage-table">
     <thead>
-      <tr><th>Stage</th><th>Type</th></tr>
+      <tr><th title="Pipeline stage name. Tool selection: doc 04. Ordering rules: doc 05.">Stage</th><th title="DevOps = workflow/infra (build, deploy, tag). DevSecOps = security enforcement (scan, sign, attest). DevSecOps failure blocks ship and pages security.">Type</th></tr>
     </thead>
     <tbody>
       <tr><td>Image store</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
@@ -345,7 +369,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <div class="tbl-wrap promo">
   <table class="stage-table">
     <thead>
-      <tr><th>Stage</th><th>Type</th><th>Environments</th></tr>
+      <tr><th title="Pipeline stage name. Tool selection: doc 04. Ordering rules: doc 05.">Stage</th><th title="DevOps = workflow/infra (build, deploy, tag). DevSecOps = security enforcement (scan, sign, attest). DevSecOps failure blocks ship and pages security.">Type</th><th title="Which environments run this stage. PROD replaces stages 4–5 with Argo Rollouts + Monitor.">Environments</th></tr>
     </thead>
     <tbody>
       <tr><td>GitOps PR</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td><td class="note-cell">DEV · TEST · STAGING · PROD</td></tr>
@@ -362,6 +386,9 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
     <span><span class="badge badge-devops"><span class="bdot"></span>DevOps</span>&nbsp;4</span>
     <span><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span>&nbsp;1</span>
     <span>5 unique stages per environment</span>
+  </div>
+  <div class="tbl-foot" style="font-style:italic">
+    "Env tests" in this doc = Integration tests (DEV) · Integration + contract tests (TEST) · Regression tests (STAGING). Unified as one stage row; test suite differs per environment.
   </div>
 </div>
 
