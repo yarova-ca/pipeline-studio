@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Stage Types — DevOps vs DevSecOps classification for all 44 pipeline stages across 6 phases.">
+<title>Stage Types — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:220px;
+  --p0-color:#8250df;--p1-color:#1a7f37;--p2-color:#9a6700;--p3-color:#0969da;--reg-color:#cf222e;--promo-color:#1a7f37;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.p0{border-left-color:var(--p0-color)}
+nav a.p1{border-left-color:var(--p1-color)}
+nav a.p2{border-left-color:var(--p2-color)}
+nav a.p3{border-left-color:var(--p3-color)}
+nav a.reg{border-left-color:var(--reg-color)}
+nav a.promo{border-left-color:var(--promo-color)}
+main{flex:1;min-width:0;padding:40px 52px 100px}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+/* Section legends */
+.section-legend{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:20px 0 28px;font-size:12px;line-height:1.6}
+.section-legend strong{color:var(--text-head)}
+.leg-row{margin-top:4px;color:var(--text)}
+.leg-insight{margin-top:6px;color:var(--text-dim);font-style:italic}
+.section-legend details{margin-top:12px;border-top:1px solid #c8dff5;padding-top:10px}
+.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none;display:flex;align-items:center;gap:6px}
+.section-legend summary::-webkit-details-marker{display:none}
+.section-legend summary::before{content:'▶';font-size:9px;display:inline-block;color:var(--blue)}
+.section-legend details[open] summary::before{content:'▼'}
+.section-legend summary .sum-label{flex:1}
+.expand-content{margin-top:10px;font-size:11px;line-height:1.7;color:var(--text)}
+.expand-content p{margin-bottom:6px}
+/* Headings */
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.phase-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px;font-style:italic}
+/* Summary counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.count-chip.devsec{border-left:3px solid var(--blue)}
+.count-chip.devsec .chip-num{color:var(--blue)}
+.count-chip.devops{border-left:3px solid var(--green)}
+.count-chip.devops .chip-num{color:var(--green)}
+/* Table wrapper */
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
+.tbl-wrap.p0{border-top:3px solid var(--p0-color)}
+.tbl-wrap.p1{border-top:3px solid var(--p1-color)}
+.tbl-wrap.p2{border-top:3px solid var(--p2-color)}
+.tbl-wrap.p3{border-top:3px solid var(--p3-color)}
+.tbl-wrap.reg{border-top:3px solid var(--reg-color)}
+.tbl-wrap.promo{border-top:3px solid var(--promo-color)}
+/* Stage classification table */
+.stage-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.stage-table thead tr{background:var(--bg2)}
+.stage-table th{text-align:left;padding:7px 16px;font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border)}
+.stage-table td{padding:7px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+.stage-table tbody tr:hover{background:var(--bg2)}
+/* Section divider row inside table */
+.grp-row td{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:5px 16px;border-bottom:1px solid var(--border)}
+.grp-row.parallel td{background:#faf8ff;color:var(--purple);border-top:1px solid #ede0ff}
+.grp-row.sec-track td{background:#f0f6ff;color:var(--blue);border-top:1px solid #b6d7f5}
+.grp-row.test-track td{background:#dafbe1;color:var(--green);border-top:1px solid #aadebc}
+.grp-row.prod-only td{background:#fff8e1;color:var(--amber);border-top:1px solid #f5c842}
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-devsec{background:#dbeeff;color:#0550ae}
+.badge-devops{background:#dafbe1;color:#116329}
+.badge .bdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.badge-devsec .bdot{background:#0969da}
+.badge-devops .bdot{background:#1a7f37}
+/* Note cell */
+.note-cell{font-size:11px;color:var(--text-dim)}
+/* PROD replacement tag */
+.replaces-tag{font-size:10px;font-weight:600;color:var(--amber);margin-left:6px;padding:1px 6px;background:#fff0cc;border-radius:3px;border:1px solid #f5c842}
+/* Table footer counts */
+.tbl-foot{padding:7px 16px;font-size:11px;color:var(--text-dim);background:var(--bg2);border-top:2px solid var(--border);display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+/* Totals row */
+.totals-row{margin-top:44px;padding:16px 20px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;display:flex;flex-wrap:wrap;align-items:center;gap:24px;font-size:13px}
+.totals-row strong{color:var(--text-head)}
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#c5a7f5;
+  }
+  .section-legend{background:#1c2a3a;border-color:#2d4a6a}
+  .section-legend details{border-top-color:#2d4a6a}
+  .badge-devsec{background:#0d2744;color:#79c0ff}
+  .badge-devops{background:#0f2d1a;color:#56d364}
+  .grp-row.parallel td{background:#1a1530;border-color:#4a3580}
+  .grp-row.sec-track td{background:#1c2a3a;border-color:#2d4a6a}
+  .grp-row.test-track td{background:#0f2d1a;border-color:#1e5c35}
+  .grp-row.prod-only td{background:#2a1f00;border-color:#8a6a00}
+  .replaces-tag{background:#3a2800;border-color:#8a6a00;color:var(--amber)}
+}
+@media print{
+  .skip-link,nav{display:none}
+  main{padding:20px}
+  .section-legend{border:1px solid #ccc;background:none}
+  h2{margin-top:24px}
+  .tbl-wrap{break-inside:avoid}
+  .badge{color-adjust:exact;-webkit-print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-logo"><h1>Stage Types</h1><p>Pipeline Studio Design Doc</p></div>
+  <div class="nav-section">Jump to</div>
+  <a href="#summary">Summary counts</a>
+  <div class="nav-section">Phases</div>
+  <a href="#p0" class="p0">Phase 0 — Bootstrap</a>
+  <a href="#p1" class="p1">Phase 1 — Local Dev</a>
+  <a href="#p2" class="p2">Phase 2 — PR Gate</a>
+  <a href="#p3" class="p3">Phase 3 — Main Build</a>
+  <a href="#reg" class="reg">Registry</a>
+  <a href="#promo" class="promo">Promotions</a>
+  <a href="#totals">Totals</a>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<main id="main-content">
+<div class="page-title">Stage Types</div>
+<div class="page-meta">44 stages &nbsp;·&nbsp; 16 DevOps &nbsp;·&nbsp; 28 DevSecOps &nbsp;·&nbsp; verified 2026-05-26</div>
+
+<div class="section-legend">
+  <strong>What this doc covers</strong>
+  <div class="leg-row">Every pipeline stage classified as DevOps or DevSecOps.</div>
+  <div class="leg-row"><strong>DevOps</strong> — infrastructure and workflow. Build, deploy, tag, test, notify.</div>
+  <div class="leg-row"><strong>DevSecOps</strong> — security enforcement. Scan, sign, attest, verify, policy.</div>
+  <div class="leg-insight">Pipeline flow and ordering: doc 02. Tool selection per stage: doc 04. Ordering constraints: doc 05.</div>
+  <details>
+    <summary><span class="sum-label">Why the split matters — gate ownership and failure response</span></summary>
+    <div class="expand-content">
+      <p><strong>DevOps failure</strong> = workflow problem. Engineering team owns the fix. No security escalation required.</p>
+      <p><strong>DevSecOps failure</strong> = security event. Engineering and security both respond. The artifact does not ship until the stage passes.</p>
+      <p><strong>Phase 0</strong> has equal DevOps (3) and DevSecOps (3). The security baseline must exist before any code is written — not added later.</p>
+      <p><strong>Phase 3</strong> has 11 DevSecOps vs 5 DevOps. Every artifact that enters the registry must be scanned, signed, and attested. The ratio reflects that requirement.</p>
+      <p><strong>Promotions</strong> have 1 DevSecOps stage (cosign verify). Signing happened in Phase 3. Promotions re-verify — they do not re-sign.</p>
+    </div>
+  </details>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SUMMARY COUNTS
+════════════════════════════════════════════════════════════ -->
+<h2 id="summary">Summary counts</h2>
+<div class="phase-sub">Per-phase breakdown below. Promotions count 5 unique stages (same stages reused per environment).</div>
+
+<div class="counts-bar">
+  <div class="count-chip">
+    <div class="chip-num">44</div>
+    <div class="chip-label">Total stages<br>across all phases</div>
+  </div>
+  <div class="count-chip devops">
+    <div class="chip-num">16</div>
+    <div class="chip-label">DevOps stages<br>infra + workflow</div>
+  </div>
+  <div class="count-chip devsec">
+    <div class="chip-num">28</div>
+    <div class="chip-label">DevSecOps stages<br>security enforcement</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PHASE 0 — BOOTSTRAP
+════════════════════════════════════════════════════════════ -->
+<h2 id="p0">Phase 0 — Bootstrap</h2>
+<div class="phase-sub">Runs once at repo creation. Not triggered by PRs or pushes.</div>
+
+<div class="tbl-wrap p0">
+  <table class="stage-table">
+    <thead>
+      <tr><th>Stage</th><th>Type</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Branch protection</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr><td>CODEOWNERS</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr><td>OIDC trust</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Registry access</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr><td>Kyverno admission policy</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Dependency update automation</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+    </tbody>
+  </table>
+  <div class="tbl-foot">
+    <span><span class="badge badge-devops"><span class="bdot"></span>DevOps</span>&nbsp;3</span>
+    <span><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span>&nbsp;3</span>
+    <span>Total: 6</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PHASE 1 — LOCAL DEV
+════════════════════════════════════════════════════════════ -->
+<h2 id="p1">Phase 1 — Local Dev</h2>
+<div class="phase-sub">Runs on developer machine. Triggered on git commit.</div>
+
+<div class="tbl-wrap p1">
+  <table class="stage-table">
+    <thead>
+      <tr><th>Stage</th><th>Type</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>IDE plugins</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr><td>Pre-commit hooks</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Local secret scan</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+    </tbody>
+  </table>
+  <div class="tbl-foot">
+    <span><span class="badge badge-devops"><span class="bdot"></span>DevOps</span>&nbsp;1</span>
+    <span><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span>&nbsp;2</span>
+    <span>Total: 3</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PHASE 2 — PR GATE
+════════════════════════════════════════════════════════════ -->
+<h2 id="p2">Phase 2 — PR Gate</h2>
+<div class="phase-sub">Triggers on every PR push. All 10 stages must pass before merge is allowed.</div>
+
+<div class="tbl-wrap p2">
+  <table class="stage-table">
+    <thead>
+      <tr><th>Stage</th><th>Type</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pre-commit (CI)</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr class="grp-row parallel"><td colspan="2">Parallel group — SCA, SAST, License, IaC, Secrets all run at the same time. Build waits for all 5.</td></tr>
+      <tr><td>SCA</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>SAST</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>License scan</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>IaC scan</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Secrets scan</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Build (no push)</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr><td>SBOM generate</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Container scan</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>PR review</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+    </tbody>
+  </table>
+  <div class="tbl-foot">
+    <span><span class="badge badge-devops"><span class="bdot"></span>DevOps</span>&nbsp;2</span>
+    <span><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span>&nbsp;8</span>
+    <span>Total: 10</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PHASE 3 — MAIN BUILD
+════════════════════════════════════════════════════════════ -->
+<h2 id="p3">Phase 3 — Main Build</h2>
+<div class="phase-sub">Triggers on merge to main. 16 stages. Produces the signed, attested, promotion-ready artifact.</div>
+
+<div class="tbl-wrap p3">
+  <table class="stage-table">
+    <thead>
+      <tr><th>Stage</th><th>Type</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pre-commit (CI)</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr class="grp-row parallel"><td colspan="2">Parallel group — SCA, SAST, License, IaC, Secrets all run at the same time. Build waits for all 5.</td></tr>
+      <tr><td>SCA</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>SAST</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>License scan</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>IaC scan</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Secrets scan</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Build + Push</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr><td>Release tag</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr class="grp-row sec-track"><td colspan="2">Security track — starts after Build + Push. Ordering enforced by invariants I-P3-1, I-P3-2, I-P3-4.</td></tr>
+      <tr><td>Container scan</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Sign</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>SBOM generate + attest</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>SLSA provenance</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr class="grp-row test-track"><td colspan="2">Test track — runs parallel to security track. Both start after Build + Push.</td></tr>
+      <tr><td>Tests + Codecov</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr><td>DAST</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>Perf test</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr><td>Notify</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+    </tbody>
+  </table>
+  <div class="tbl-foot">
+    <span><span class="badge badge-devops"><span class="bdot"></span>DevOps</span>&nbsp;5</span>
+    <span><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span>&nbsp;11</span>
+    <span>Total: 16</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     REGISTRY
+════════════════════════════════════════════════════════════ -->
+<h2 id="reg">Registry</h2>
+<div class="phase-sub">After Phase 3. Before any promotion. All three artifacts must be attached before promotion is allowed.</div>
+
+<div class="tbl-wrap reg">
+  <table class="stage-table">
+    <thead>
+      <tr><th>Stage</th><th>Type</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Image store</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td></tr>
+      <tr><td>Sign verify</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>SBOM attach</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+      <tr><td>SLSA attach</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td></tr>
+    </tbody>
+  </table>
+  <div class="tbl-foot">
+    <span><span class="badge badge-devops"><span class="bdot"></span>DevOps</span>&nbsp;1</span>
+    <span><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span>&nbsp;3</span>
+    <span>Total: 4</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PROMOTIONS
+════════════════════════════════════════════════════════════ -->
+<h2 id="promo">Promotions</h2>
+<div class="phase-sub">5 stages per environment. PROD replaces stages 4–5 with Argo Rollouts + Monitor.</div>
+
+<div class="tbl-wrap promo">
+  <table class="stage-table">
+    <thead>
+      <tr><th>Stage</th><th>Type</th><th>Environments</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>GitOps PR</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td><td class="note-cell">DEV · TEST · STAGING · PROD</td></tr>
+      <tr><td>ArgoCD / Flux deploy</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td><td class="note-cell">DEV · TEST · STAGING · PROD</td></tr>
+      <tr><td>cosign verify</td><td><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span></td><td class="note-cell">DEV · TEST · STAGING · PROD</td></tr>
+      <tr><td>Env tests</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td><td class="note-cell">DEV · TEST · STAGING only</td></tr>
+      <tr><td>Gate</td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td><td class="note-cell">DEV · TEST · STAGING only</td></tr>
+      <tr class="grp-row prod-only"><td colspan="3">PROD only — stages 4 and 5 are replaced. Argo Rollouts replaces Env tests. Monitor replaces Gate.</td></tr>
+      <tr><td>Argo Rollouts <span class="replaces-tag">replaces Env tests</span></td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td><td class="note-cell">PROD only</td></tr>
+      <tr><td>Monitor <span class="replaces-tag">replaces Gate</span></td><td><span class="badge badge-devops"><span class="bdot"></span>DevOps</span></td><td class="note-cell">PROD only</td></tr>
+    </tbody>
+  </table>
+  <div class="tbl-foot">
+    <span><span class="badge badge-devops"><span class="bdot"></span>DevOps</span>&nbsp;4</span>
+    <span><span class="badge badge-devsec"><span class="bdot"></span>DevSecOps</span>&nbsp;1</span>
+    <span>5 unique stages per environment</span>
+  </div>
+</div>
+
+<hr>
+
+<div class="totals-row" id="totals">
+  <strong>All phases total</strong>
+  <span>44 stages</span>
+  <span style="color:var(--green);font-weight:600">16 DevOps</span>
+  <span style="color:var(--blue);font-weight:600">28 DevSecOps</span>
+</div>
+
+</main>
+</body>
+</html>
