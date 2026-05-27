@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Canada Industry Schema — 73 industries, 13 provinces/territories, 14 major hubs, all 10 columns populated with Canadian-specific compliance data.">
+<title>Canada Industry Schema — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:220px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+main{flex:1;min-width:0;padding:40px 52px 100px}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px;font-style:italic}
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.count-chip.ind-chip{border-left:3px solid var(--red)}
+.count-chip.ind-chip .chip-num{color:var(--red)}
+.count-chip.prov-chip{border-left:3px solid var(--blue)}
+.count-chip.prov-chip .chip-num{color:var(--blue)}
+.count-chip.hub-chip{border-left:3px solid var(--green)}
+.count-chip.hub-chip .chip-num{color:var(--green)}
+.section-legend{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:20px 0 28px;font-size:12px;line-height:1.6}
+.section-legend strong{color:var(--text-head)}
+.leg-row{margin-top:4px;color:var(--text)}
+.section-legend details{margin-top:12px;border-top:1px solid #c8dff5;padding-top:10px}
+.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none;display:flex;align-items:center;gap:6px}
+.section-legend summary::-webkit-details-marker{display:none}
+.section-legend summary::before{content:'▶';font-size:9px;display:inline-block;color:var(--blue)}
+.section-legend details[open] summary::before{content:'▼'}
+.section-legend summary .sum-label{flex:1}
+.expand-content{margin-top:10px;font-size:11px;line-height:1.7;color:var(--text)}
+.expand-content p{margin-bottom:6px}
+/* General tables */
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px;margin-bottom:28px}
+.gen-table{width:100%;border-collapse:collapse;font-size:12px}
+.gen-table thead tr{background:var(--bg2)}
+.gen-table th{text-align:left;padding:7px 14px;font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border)}
+.gen-table td{padding:7px 14px;border-bottom:1px solid var(--border);vertical-align:top;font-size:11.5px;line-height:1.45}
+.gen-table tbody tr:last-child td{border-bottom:none}
+.gen-table tbody tr:hover{background:var(--bg2)}
+/* Province/territory flag */
+.prov-code{font-size:11px;font-weight:700;color:var(--text-dim);background:var(--bg3);border-radius:4px;padding:1px 6px;letter-spacing:.04em}
+/* Industry table */
+.tbl-scroll{overflow-x:auto}
+.ind-table{border-collapse:collapse;font-size:11.5px;min-width:1800px;width:100%}
+.ind-table thead tr{background:var(--bg2);position:sticky;top:0;z-index:1}
+.ind-table th{text-align:left;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);white-space:nowrap}
+.ind-table td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;font-size:11px;line-height:1.45}
+.ind-table tbody tr:hover{background:var(--bg2)}
+/* Column widths */
+.c0{width:34px;min-width:34px;color:var(--text-dim);font-weight:600;text-align:right;white-space:nowrap}
+.c1{min-width:165px;font-weight:500}
+.c2{min-width:140px;color:var(--text-dim);font-size:11px}
+.c3{min-width:155px}
+.c4{min-width:145px;color:var(--text-dim)}
+.c5{min-width:130px;color:var(--text-dim)}
+.c6{min-width:110px;color:var(--text-dim)}
+.c7{min-width:195px}
+.c8{min-width:145px;color:var(--text-dim)}
+.c9{min-width:200px}
+.c10{min-width:155px;color:var(--text-dim)}
+/* Vertical divider rows */
+.vert-row td{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:5px 10px;border-bottom:1px solid var(--border)}
+.vert-row.fin td{background:#fff8e8;color:#7a4800;border-top:1px solid #f5d98a}
+.vert-row.health td{background:#f0fff4;color:#116329;border-top:1px solid #aadebc}
+.vert-row.gov td{background:#f0f6ff;color:#0550ae;border-top:1px solid #b6d7f5}
+.vert-row.def td{background:#faf0ff;color:#6e2f9a;border-top:1px solid #d8b4fe}
+.vert-row.energy td{background:#fff0e8;color:#8b3a00;border-top:1px solid #fdb98a}
+.vert-row.tech td{background:#f0faff;color:#0969da;border-top:1px solid #93c5fd}
+.vert-row.telecom td{background:#f5f0ff;color:#8250df;border-top:1px solid #c5a7f5}
+.vert-row.retail td{background:#fff8f0;color:#9a4800;border-top:1px solid #fed7aa}
+.vert-row.mfg td{background:#f8f8f8;color:#3a3a3a;border-top:1px solid #d0d0d0}
+.vert-row.media td{background:#fff0f5;color:#a40050;border-top:1px solid #fbcfe8}
+.vert-row.edu td{background:#f0fffe;color:#0e7a6a;border-top:1px solid #99f6e4}
+.vert-row.trans td{background:#f5f5ff;color:#3a3a9a;border-top:1px solid #c7d2fe}
+.vert-row.re td{background:#fefce8;color:#7a5a00;border-top:1px solid #fde68a}
+.vert-row.agri td{background:#f0fff0;color:#14532d;border-top:1px solid #86efac}
+.vert-row.legal td{background:#f8f5ff;color:#5b21b6;border-top:1px solid #ddd6fe}
+.vert-row.npo td{background:#fff5f5;color:#7f1d1d;border-top:1px solid #fecaca}
+.vert-count{float:right;font-size:9px;font-weight:400;opacity:.7}
+.tbl-foot{padding:7px 14px;font-size:11px;color:var(--text-dim);background:var(--bg2);border-top:2px solid var(--border);display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace}
+/* Canadian tags */
+.tag-pbmm{font-size:10px;font-weight:600;color:#0550ae;background:#dbeeff;border:1px solid #93c5fd;border-radius:3px;padding:1px 5px;white-space:nowrap}
+.tag-protected-b{font-size:10px;font-weight:600;color:#5b21b6;background:#f5f0ff;border:1px solid #c5a7f5;border-radius:3px;padding:1px 5px;white-space:nowrap}
+.tag-secret{font-size:10px;font-weight:600;color:#7f1d1d;background:#fff5f5;border:1px solid #fecaca;border-radius:3px;padding:1px 5px;white-space:nowrap}
+.tag-ocap{font-size:10px;font-weight:600;color:#14532d;background:#f0fff0;border:1px solid #86efac;border-radius:3px;padding:1px 5px;white-space:nowrap}
+/* Province type indicator */
+.type-prov{color:var(--blue);font-size:10px;font-weight:600}
+.type-terr{color:var(--amber);font-size:10px;font-weight:600}
+/* Hub region badge */
+.hub-region{font-size:10px;color:var(--text-dim);background:var(--bg3);border-radius:4px;padding:1px 6px}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;--blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#c5a7f5}
+  .section-legend{background:#1c2a3a;border-color:#2d4a6a}
+  code{background:#1c2028;border-color:#30363d}
+  .tag-pbmm{background:#0d2040;border-color:#1a4080}
+  .tag-protected-b{background:#1a0d30;border-color:#3d1a70}
+  .tag-secret{background:#2a0a0a;border-color:#6a1a1a}
+  .tag-ocap{background:#0a2010;border-color:#1a5030}
+  .vert-row.fin td{background:#2a1e00;border-color:#6a4000}
+  .vert-row.health td{background:#0f2d1a;border-color:#1e5c35}
+  .vert-row.gov td{background:#1c2a3a;border-color:#2d4a6a}
+  .vert-row.def td{background:#1a0d2e;border-color:#4a2070}
+  .vert-row.energy td{background:#2a1400;border-color:#6a2800}
+  .vert-row.tech td{background:#0d2040;border-color:#1a4080}
+  .vert-row.telecom td{background:#1a0d30;border-color:#3d1a70}
+  .vert-row.retail td{background:#2a1800;border-color:#6a3400}
+  .vert-row.mfg td{background:#1c1c1c;border-color:#3a3a3a}
+  .vert-row.media td{background:#2a0018;border-color:#6a0040}
+  .vert-row.edu td{background:#002a28;border-color:#006a60}
+  .vert-row.trans td{background:#0a0a2a;border-color:#2a2a6a}
+  .vert-row.re td{background:#2a2000;border-color:#6a5000}
+  .vert-row.agri td{background:#0a2010;border-color:#1a5030}
+  .vert-row.legal td{background:#160a2a;border-color:#3a1a6a}
+  .vert-row.npo td{background:#2a0a0a;border-color:#6a1a1a}
+}
+@media print{.skip-link,nav{display:none}main{padding:20px}.section-legend{border:1px solid #ccc;background:none}}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-logo"><h1>Canada Schema</h1><p>Pipeline Studio Design Doc</p></div>
+  <div class="nav-section">Jump to</div>
+  <a href="#provinces">Provinces &amp; territories</a>
+  <a href="#hubs">Major hubs</a>
+  <a href="#industries">All 73 industries</a>
+  <a href="#regref">Regulatory reference</a>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<main id="main-content">
+<div class="page-title">Canada Industry Schema</div>
+<div class="page-meta">73 industries · 13 provinces/territories · 14 major hubs · 10 columns per row | Source: <code>07-canada-schema.md</code></div>
+
+<div class="counts-bar">
+  <div class="count-chip ind-chip"><div class="chip-num">73</div><div class="chip-label">Industries<br>mapped to Canada</div></div>
+  <div class="count-chip prov-chip"><div class="chip-num">13</div><div class="chip-label">Provinces &amp;<br>territories</div></div>
+  <div class="count-chip hub-chip"><div class="chip-num">14</div><div class="chip-label">Major industry<br>hubs</div></div>
+  <div class="count-chip"><div class="chip-num">10</div><div class="chip-label">Columns<br>per row</div></div>
+</div>
+
+<div class="section-legend">
+  <strong>What this file covers:</strong>
+  <div class="leg-row">All 06-industry-schema columns, re-mapped to Canadian regulators, laws, and compliance standards.</div>
+  <div class="leg-row">Column 3 (Mandatory compliance) uses Canadian law only — PIPEDA, OSFI, FINTRAC, Health Canada, CRTC, CNSC, etc.</div>
+  <div class="leg-row">Column 5 (Regulatory body) names the Canadian authority — not the US equivalent.</div>
+  <div class="leg-row">Tags: <span class="tag-pbmm">GC PBMM</span> = federal cloud workload requires GC PBMM.
+  <span class="tag-protected-b">Protected B</span> = data classification Protected B or above.
+  <span class="tag-secret">Secret</span> = Secret or Top Secret classification.
+  <span class="tag-ocap">OCAP®</span> = First Nations data sovereignty principles apply.</div>
+  <details>
+    <summary><span class="sum-label">Column definitions — all 10 (Canadian variant)</span></summary>
+    <div class="expand-content">
+      <p><strong>1 Industry</strong> — name of the industry.</p>
+      <p><strong>2 Vertical</strong> — parent group (same 16 verticals as 06).</p>
+      <p><strong>3 Mandatory compliance</strong> — Canadian laws and standards legally required.</p>
+      <p><strong>4 Optional compliance</strong> — best-practice standards, not legally required.</p>
+      <p><strong>5 Regulator</strong> — the Canadian authority that enforces mandatory compliance.</p>
+      <p><strong>6 Data sensitivity</strong> — Canadian classification: PII · PHI · PCI · Protected A/B/C · Secret · Public.</p>
+      <p><strong>7 Pipeline stages affected</strong> — stages that get extra controls for this industry.</p>
+      <p><strong>8 Framework notes</strong> — Canadian-specific framework restrictions or requirements.</p>
+      <p><strong>9 Key security requirements</strong> — top security requirements for this industry in Canada.</p>
+      <p><strong>10 Audit requirements</strong> — Canadian retention periods and audit trail obligations.</p>
+    </div>
+  </details>
+</div>
+
+<!-- PROVINCES & TERRITORIES -->
+<h2 id="provinces">Provinces &amp; territories</h2>
+<div class="section-sub">13 jurisdictions · each with its own privacy regulator and industry profile</div>
+
+<div class="tbl-wrap">
+<table class="gen-table">
+<thead>
+<tr>
+  <th>Code</th>
+  <th>Province / Territory</th>
+  <th>Type</th>
+  <th>Key sectors</th>
+  <th>Notable hubs</th>
+  <th>Privacy regulator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><span class="prov-code">BC</span></td>
+  <td>British Columbia</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>Tech, film/VFX, green energy, forestry, mining, biotech, ocean tech</td>
+  <td>Vancouver, Victoria, Kelowna</td>
+  <td>OIPC BC · BC PIPA + FOIPPA</td>
+</tr>
+<tr>
+  <td><span class="prov-code">AB</span></td>
+  <td>Alberta</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>Oil &amp; gas, agriculture, fintech, energy tech, beef/livestock</td>
+  <td>Calgary, Edmonton</td>
+  <td>OIPC AB · AB PIPA + FOIP</td>
+</tr>
+<tr>
+  <td><span class="prov-code">SK</span></td>
+  <td>Saskatchewan</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>Crop farming, mining, uranium/nuclear, potash, agritech</td>
+  <td>Saskatoon, Regina</td>
+  <td>OIPC SK · HIPA + LAFOIP</td>
+</tr>
+<tr>
+  <td><span class="prov-code">MB</span></td>
+  <td>Manitoba</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>Agriculture, aerospace, manufacturing, food processing</td>
+  <td>Winnipeg</td>
+  <td>OIPC MB · PHIA + FIPPA</td>
+</tr>
+<tr>
+  <td><span class="prov-code">ON</span></td>
+  <td>Ontario</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>Finance, tech, auto manufacturing, healthcare, government, education</td>
+  <td>Toronto, Waterloo, Ottawa, Kingston</td>
+  <td>IPC Ontario · PHIPA + MFIPPA</td>
+</tr>
+<tr>
+  <td><span class="prov-code">QC</span></td>
+  <td>Quebec</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>AI/ML, aerospace, gaming, finance, pharma, insurance, hydro</td>
+  <td>Montreal, Quebec City, Sherbrooke</td>
+  <td>CAI (Commission d'accès) · Law 25 + LPRPSP</td>
+</tr>
+<tr>
+  <td><span class="prov-code">NB</span></td>
+  <td>New Brunswick</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>Cybersecurity, government tech, forestry, energy</td>
+  <td>Fredericton, Moncton</td>
+  <td>OIPC NB · PPIPNB + RTIPNB</td>
+</tr>
+<tr>
+  <td><span class="prov-code">NS</span></td>
+  <td>Nova Scotia</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>Ocean technology, defense, government, fisheries</td>
+  <td>Halifax, Dartmouth</td>
+  <td>OIPC NS · PIIDPA + FOIPOP</td>
+</tr>
+<tr>
+  <td><span class="prov-code">PE</span></td>
+  <td>Prince Edward Island</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>Agriculture, tourism, lobster fishery, government</td>
+  <td>Charlottetown</td>
+  <td>OIPC PEI · FOIPP</td>
+</tr>
+<tr>
+  <td><span class="prov-code">NL</span></td>
+  <td>Newfoundland &amp; Labrador</td>
+  <td><span class="type-prov">Province</span></td>
+  <td>Oil &amp; gas (offshore), ocean tech, mining, fisheries</td>
+  <td>St. John's</td>
+  <td>OIPC NL · ATIPPA + Access to Info Act</td>
+</tr>
+<tr>
+  <td><span class="prov-code">YT</span></td>
+  <td>Yukon</td>
+  <td><span class="type-terr">Territory</span></td>
+  <td>Mining (gold, silver, zinc), tourism, government</td>
+  <td>Whitehorse</td>
+  <td>OIPC YT · ATIPP Act</td>
+</tr>
+<tr>
+  <td><span class="prov-code">NT</span></td>
+  <td>Northwest Territories</td>
+  <td><span class="type-terr">Territory</span></td>
+  <td>Mining (diamonds, gold), government, Indigenous services</td>
+  <td>Yellowknife</td>
+  <td>ATIPP NWT · ATIPP Act</td>
+</tr>
+<tr>
+  <td><span class="prov-code">NU</span></td>
+  <td>Nunavut</td>
+  <td><span class="type-terr">Territory</span></td>
+  <td>Government, mining, Indigenous services, tourism</td>
+  <td>Iqaluit</td>
+  <td>ATIPP Nunavut · ATIPP Act</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- MAJOR HUBS -->
+<h2 id="hubs">Major industry hubs</h2>
+<div class="section-sub">14 hubs with defined industry specializations and data residency zones</div>
+
+<div class="tbl-wrap">
+<table class="gen-table">
+<thead>
+<tr>
+  <th>Hub</th>
+  <th>Province</th>
+  <th>Region</th>
+  <th>Specialization</th>
+  <th>Notable institutions / anchors</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Toronto</strong></td>
+  <td><span class="prov-code">ON</span></td>
+  <td><span class="hub-region">Canada East</span></td>
+  <td>Fintech, AI, enterprise tech, healthcare</td>
+  <td>MaRS Discovery District · Vector Institute · Big 5 banks · OMERS · Sun Life</td>
+</tr>
+<tr>
+  <td><strong>Waterloo Region</strong></td>
+  <td><span class="prov-code">ON</span></td>
+  <td><span class="hub-region">Canada East</span></td>
+  <td>AI, quantum computing, cybersecurity, SaaS</td>
+  <td>University of Waterloo · Perimeter Institute · IQC · D2L · OpenText · Blackberry</td>
+</tr>
+<tr>
+  <td><strong>Ottawa</strong></td>
+  <td><span class="prov-code">ON</span></td>
+  <td><span class="hub-region">Canada East</span></td>
+  <td>Federal gov tech, defense, cybersecurity</td>
+  <td>DND · CSE · CCCS · NRC · Shopify HQ · Kinaxis · L3Harris Canada</td>
+</tr>
+<tr>
+  <td><strong>Kingston</strong></td>
+  <td><span class="prov-code">ON</span></td>
+  <td><span class="hub-region">Canada East</span></td>
+  <td>Defense research, academia</td>
+  <td>RMC (Royal Military College) · Queen's University · DND Kingston base</td>
+</tr>
+<tr>
+  <td><strong>Montreal</strong></td>
+  <td><span class="prov-code">QC</span></td>
+  <td><span class="hub-region">Canada East</span></td>
+  <td>AI/ML, aerospace, video gaming, VFX, fintech</td>
+  <td>Mila · IVADO · Ubisoft · Bombardier · Pratt &amp; Whitney Canada · CAE · Desjardins</td>
+</tr>
+<tr>
+  <td><strong>Quebec City</strong></td>
+  <td><span class="prov-code">QC</span></td>
+  <td><span class="hub-region">Canada East</span></td>
+  <td>Insurance, government tech, fintech</td>
+  <td>Intact Financial · Desjardins (HQ) · Quebec Provincial Government</td>
+</tr>
+<tr>
+  <td><strong>Halifax</strong></td>
+  <td><span class="prov-code">NS</span></td>
+  <td><span class="hub-region">Canada East</span></td>
+  <td>Ocean tech, defense, cybersecurity, government</td>
+  <td>Dalhousie University · CFB Halifax (NATO) · Ocean Frontier Institute · DND</td>
+</tr>
+<tr>
+  <td><strong>Fredericton</strong></td>
+  <td><span class="prov-code">NB</span></td>
+  <td><span class="hub-region">Canada East</span></td>
+  <td>Cybersecurity, government tech, SaaS</td>
+  <td>University of New Brunswick · Spielo · Cvent · Planet Hatch</td>
+</tr>
+<tr>
+  <td><strong>Vancouver</strong></td>
+  <td><span class="prov-code">BC</span></td>
+  <td><span class="hub-region">Canada West</span></td>
+  <td>Tech, film/VFX, green energy, biotech</td>
+  <td>Amazon AWS CA · Microsoft Vancouver · EA · Hootsuite · Slack · NFI · TRIUMF</td>
+</tr>
+<tr>
+  <td><strong>Victoria</strong></td>
+  <td><span class="prov-code">BC</span></td>
+  <td><span class="hub-region">Canada West</span></td>
+  <td>Government tech, defense, ocean science</td>
+  <td>DFO Pacific HQ · CFB Esquimalt · UVic · BC Provincial Government</td>
+</tr>
+<tr>
+  <td><strong>Calgary</strong></td>
+  <td><span class="prov-code">AB</span></td>
+  <td><span class="hub-region">Canada West</span></td>
+  <td>Energy tech, fintech, cleantech, agriculture</td>
+  <td>SAIT · University of Calgary · Alberta Energy Regulator · Platform Calgary</td>
+</tr>
+<tr>
+  <td><strong>Edmonton</strong></td>
+  <td><span class="prov-code">AB</span></td>
+  <td><span class="hub-region">Canada West</span></td>
+  <td>AI, health tech, energy, government</td>
+  <td>University of Alberta · Alberta Machine Intelligence Institute (Amii) · AHS · Government of Alberta</td>
+</tr>
+<tr>
+  <td><strong>Saskatoon</strong></td>
+  <td><span class="prov-code">SK</span></td>
+  <td><span class="hub-region">Canada West</span></td>
+  <td>AgriTech, biotech, mining tech, nuclear</td>
+  <td>Global Institute for Food Security · USask · Canadian Light Source · Cameco</td>
+</tr>
+<tr>
+  <td><strong>Winnipeg</strong></td>
+  <td><span class="prov-code">MB</span></td>
+  <td><span class="hub-region">Canada Central</span></td>
+  <td>Aerospace, agriculture, manufacturing, transportation</td>
+  <td>StandardAero · New Flyer Industries · University of Manitoba · Manitoba Hydro</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- INDUSTRY TABLE -->
+<h2 id="industries">All 73 industries — all 10 columns</h2>
+<div class="section-sub">Same 16 verticals as 06 · Canadian regulators and compliance in every row</div>
+
+<div class="tbl-scroll">
+<table class="ind-table">
+<thead>
+<tr>
+  <th class="c0">#</th>
+  <th class="c1">Industry</th>
+  <th class="c2">Vertical</th>
+  <th class="c3">Mandatory compliance (CA)</th>
+  <th class="c4">Optional compliance</th>
+  <th class="c5">Regulator (CA)</th>
+  <th class="c6">Data sensitivity</th>
+  <th class="c7">Pipeline stages affected</th>
+  <th class="c8">Framework notes</th>
+  <th class="c9">Key security requirements</th>
+  <th class="c10">Audit requirements</th>
+</tr>
+</thead>
+<tbody>
+
+<!-- FINANCIAL SERVICES -->
+<tr class="vert-row fin"><td colspan="11">Financial Services<span class="vert-count">8 industries</span></td></tr>
+<tr>
+  <td class="c0">1</td>
+  <td class="c1">Retail Banking</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">OSFI B-10/B-13 · Bank Act · PIPEDA · FINTRAC PCMLTFA · AML/ATF</td>
+  <td class="c4">SOC 2 Type II · ISO 27001 · PCI DSS</td>
+  <td class="c5">OSFI · FINTRAC · Bank of Canada</td>
+  <td class="c6">PII · PCI · Financial</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy</td>
+  <td class="c8">OSFI B-13 requires vendor notification for cloud. Core system data must reside in Canada unless OSFI-approved.</td>
+  <td class="c9">MFA on all customer-facing systems · AES-256 encryption · FINTRAC transaction monitoring · fraud detection · secure core banking access</td>
+  <td class="c10">Financial records 7 yr · FINTRAC records 5 yr · Suspicious transaction reports 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">2</td>
+  <td class="c1">Investment Banking</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">OSFI · CIRO (formerly IIROC) · Provincial securities acts · PIPEDA</td>
+  <td class="c4">SOC 2 Type II · ISO 27001</td>
+  <td class="c5">OSFI · CIRO · OSC/AMF (provincial)</td>
+  <td class="c6">PII · MNPI · Financial</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">CIRO Rule 3200 data segregation. MNPI firewall enforcement between trading desks. Trading systems require sub-50ms latency.</td>
+  <td class="c9">MNPI access controls · Chinese Wall enforcement · audit trail for all trades and communications · voice recording archiving</td>
+  <td class="c10">Trade records 7 yr · Electronic communications 5 yr · Voice communications 3 yr</td>
+</tr>
+<tr>
+  <td class="c0">3</td>
+  <td class="c1">Life Insurance</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">OSFI · Provincial Insurance Acts · PIPEDA · PHIPA (where health data)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">OSFI · FSRA (ON) · AMF (QC) · BCFSA (BC)</td>
+  <td class="c6">PII · PHI · Financial</td>
+  <td class="c7">Build · SAST · DAST · Sign · Deploy</td>
+  <td class="c8">Health data triggers PHIPA (ON) or provincial equivalent. OSFI Guideline E-21 for operational risk. Federal insurers under OSFI; provincial under provincial acts.</td>
+  <td class="c9">PHI encryption per PHIPA · underwriting model integrity · claims fraud detection · actuarial data access controls</td>
+  <td class="c10">Policy records 10 yr · Claims 7 yr · PHIPA breach notification required</td>
+</tr>
+<tr>
+  <td class="c0">4</td>
+  <td class="c1">P&amp;C Insurance</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Provincial Insurance Acts · PIPEDA · Motor Vehicle Act (auto lines)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">FSRA (ON) · BCFSA (BC) · AMF (QC) · provincial regulators</td>
+  <td class="c6">PII · Financial</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Auto insurance publicly administered in BC (ICBC), MB (MPI), SK (SGI), QC (SAAQ) — separate regulatory regime. IFRS 17 financial reporting compliance.</td>
+  <td class="c9">Claims processing integrity · telematics data protection · broker portal security · fraud detection</td>
+  <td class="c10">Policy and claims records 7 yr</td>
+</tr>
+<tr>
+  <td class="c0">5</td>
+  <td class="c1">Asset Management</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">CIRO · CSA · NI 81-102 · NI 31-103 · PIPEDA</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">CIRO · CSA · OSC (ON primary)</td>
+  <td class="c6">PII · Financial</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">NI 81-102 governs mutual funds. ETFs under NI 41-101. NI 31-103 registration required. Fund accounting systems require 99.9% uptime SLA.</td>
+  <td class="c9">NAV calculation integrity · client account segregation · trade order management security · benchmark manipulation prevention</td>
+  <td class="c10">Trade records 7 yr · Compliance records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">6</td>
+  <td class="c1">Fintech &amp; Neobanks</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">FINTRAC (if MSB) · PIPEDA · OSFI (if licensed) · Provincial consumer protection</td>
+  <td class="c4">PCI DSS · SOC 2 · ISO 27001 · Open Banking Canada framework</td>
+  <td class="c5">FINTRAC · OSFI (if licensed) · Provincial regulators</td>
+  <td class="c6">PII · PCI · Financial</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Canada Open Banking framework still developing (2024 federal budget). OSFI B-13 applies to tech-heavy operations. FINTRAC MSB registration mandatory for money services businesses.</td>
+  <td class="c9">KYC/AML onboarding · FINTRAC transaction monitoring · API security for open banking · fraud detection · biometric authentication</td>
+  <td class="c10">FINTRAC records 5 yr · AML records 5 yr · Transaction logs 1 yr rolling</td>
+</tr>
+<tr>
+  <td class="c0">7</td>
+  <td class="c1">Credit Unions</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Provincial credit union legislation · DICO (ON)/CUDIC (BC) · PIPEDA · FINTRAC</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">FSRA (ON) · BCFSA (BC) · AMF (QC)</td>
+  <td class="c6">PII · PCI · Financial</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Provincially regulated only (no federal charter). Desjardins Group (QC) is Canada's largest credit union network. Deposit insurance varies by province.</td>
+  <td class="c9">Member data protection · core banking security · FINTRAC reporting · ATM/debit network security (Interac)</td>
+  <td class="c10">Financial records 7 yr · FINTRAC records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">8</td>
+  <td class="c1">Payments Processing</td>
+  <td class="c2">Financial Services</td>
+  <td class="c3">Payments Canada rules · PIPEDA · FINTRAC · PCI DSS · Bank Act (if bank-affiliated)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">Payments Canada · Bank of Canada · FINTRAC</td>
+  <td class="c6">PCI · PII · Transaction records</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Payments Canada Modernization: Lynx RTGS system live, RTR real-time rail in development. Interac dominant domestic network. ISO 20022 migration underway.</td>
+  <td class="c9">PCI DSS Level 1 · transaction integrity · real-time fraud prevention · tokenization · HSM secure key management</td>
+  <td class="c10">PCI DSS quarterly ASV scans · Transaction logs 1 yr rolling · Compliance records 5 yr</td>
+</tr>
+
+<!-- HEALTHCARE & LIFE SCIENCES -->
+<tr class="vert-row health"><td colspan="11">Healthcare &amp; Life Sciences<span class="vert-count">8 industries</span></td></tr>
+<tr>
+  <td class="c0">9</td>
+  <td class="c1">Hospitals &amp; Health Systems</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">PHIPA (ON) · HIA (AB) · PIPA (BC) · Provincial equivalents · Health Canada</td>
+  <td class="c4">SOC 2 · ISO 27001 · CAN/CIOSC 103-1</td>
+  <td class="c5">Provincial health ministries · provincial OIPCs</td>
+  <td class="c6">PHI · PII</td>
+  <td class="c7">Build · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Data must stay within the province for patient records. PHIPA (ON) most stringent provincial law. Federal hospitals (Veterans Affairs, DND) follow PIPEDA additionally.</td>
+  <td class="c9">PHI encryption at rest and in transit · access controls per circle of care · breach notification within 24 hr (PHIPA) · medical device integration security · PACS/DICOM security</td>
+  <td class="c10">Patient records 10 yr · Breach log indefinitely · Access logs 2 yr</td>
+</tr>
+<tr>
+  <td class="c0">10</td>
+  <td class="c1">Provincial Health Insurance</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Provincial health insurance acts (OHIP-ON, MSP-BC, AHCIP-AB) · PHIPA equivalent · PIPEDA</td>
+  <td class="c4">ISO 27001 · SOC 2</td>
+  <td class="c5">Provincial ministries of health · provincial OIPCs</td>
+  <td class="c6">PHI · PII · Government</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Each province operates own health insurance program. Data residency within province mandatory. Federal transfers via Canada Health Act. Billing systems require HL7/FHIR integration security.</td>
+  <td class="c9">Interprovincial data sharing controls · billing fraud prevention · health card identity verification · clinician credential validation</td>
+  <td class="c10">Billing records 10 yr · Eligibility verification logs 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">11</td>
+  <td class="c1">Pharmaceutical</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Health Canada (Food and Drug Regulations) · ICH GCP/GMP · PIPEDA · CDSA (Controlled Drugs)</td>
+  <td class="c4">FDA 21 CFR Part 11 (US exports) · ISO 27001 · GxP</td>
+  <td class="c5">Health Canada (Drug Directorate) · PHAC</td>
+  <td class="c6">PHI · PII · Trade secrets</td>
+  <td class="c7">Build · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Health Canada requires 21 CFR Part 11-equivalent electronic records validation. CDSA for controlled substance tracking. GCP/GMP validation requirements affect CI/CD pipeline (change control procedures).</td>
+  <td class="c9">GxP validation of CI/CD systems · chain of custody for controlled substances · clinical trial data integrity · IP/trade secret protection</td>
+  <td class="c10">Clinical trial records 25 yr · Drug approval files permanent</td>
+</tr>
+<tr>
+  <td class="c0">12</td>
+  <td class="c1">Biotech &amp; Life Sciences Research</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">PIPEDA · TCPS 2 (Tri-Council research ethics) · Health Canada (if clinical) · Provincial privacy acts</td>
+  <td class="c4">ISO 27001 · NIH-equivalent security guidelines</td>
+  <td class="c5">Health Canada · Institutional REBs · PHAC</td>
+  <td class="c6">PHI · PII · Genomic · Research IP</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Genomic data requires explicit consent under TCPS 2 Article 13. ELSI (Ethical, Legal, Social Implications) framework applies. National Security Guidelines for Research Partnerships (2023) affect foreign-funded research.</td>
+  <td class="c9">Genomic data de-identification · research data sovereignty (data stays in Canada) · IP protection · chain of custody for specimens</td>
+  <td class="c10">Research records 10 yr minimum · Ethics approvals permanent</td>
+</tr>
+<tr>
+  <td class="c0">13</td>
+  <td class="c1">Medical Devices</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Health Canada SOR/98-282 · PIPEDA · IEC 62443 · IEC 62304</td>
+  <td class="c4">ISO 13485 · ISO 14971 · FDA 21 CFR 820 (US market)</td>
+  <td class="c5">Health Canada (Therapeutic Products Directorate)</td>
+  <td class="c6">PHI · PII · Device telemetry</td>
+  <td class="c7">Build · SAST · DAST · Sign · Deploy</td>
+  <td class="c8">Health Canada Class I–IV determines regulatory pathway. Class III/IV require QMS. SaMD (Software as Medical Device) follows IMDRF guidance. SBOM required for Class III/IV devices.</td>
+  <td class="c9">IEC 62304 software lifecycle documentation · vulnerability disclosure program · patch management for deployed devices · firmware signing</td>
+  <td class="c10">Design history file: product lifetime + 10 yr · Post-market surveillance 15 yr</td>
+</tr>
+<tr>
+  <td class="c0">14</td>
+  <td class="c1">Clinical Diagnostics &amp; Labs</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">PIPEDA · Provincial lab accreditation (CMLTO-ON, CSMLS) · PHIPA/equivalent · Health Canada</td>
+  <td class="c4">ISO 15189 · CAP accreditation · ISO 27001</td>
+  <td class="c5">Provincial colleges of laboratory technologists · provincial health ministries</td>
+  <td class="c6">PHI · PII · Lab results</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">LIS (Laboratory Information System) integration requires HL7 v2/FHIR security. Result sign-off workflow integrity mandatory. POCT (Point-of-Care Testing) devices follow specific Health Canada regulations.</td>
+  <td class="c9">Result integrity and non-repudiation · access controls by ordering physician circle of care · LIS/HIS interface security · specimen tracking chain of custody</td>
+  <td class="c10">Lab results 10 yr · QC records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">15</td>
+  <td class="c1">Telehealth &amp; Digital Health</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">PHIPA (ON)/provincial equivalent · PIPEDA · Health Canada (if SaMD) · CASL</td>
+  <td class="c4">SOC 2 · ISO 27001 · CAN/CIOSC 103-1</td>
+  <td class="c5">Provincial colleges of regulated health professionals · provincial OIPCs</td>
+  <td class="c6">PHI · PII · Video/audio</td>
+  <td class="c7">Build · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Canadian data centres required for patient video/audio. Provincial practitioner licensing restricts cross-provincial care delivery. CASL applies to appointment reminders.</td>
+  <td class="c9">End-to-end encryption of video sessions · PHIPA-compliant BAA with cloud providers · MFA for practitioners · session recording consent management</td>
+  <td class="c10">Session records per PHIPA (10 yr) · Consent logs 10 yr</td>
+</tr>
+<tr>
+  <td class="c0">16</td>
+  <td class="c1">Long-term Care &amp; Home Care</td>
+  <td class="c2">Healthcare &amp; Life Sciences</td>
+  <td class="c3">Provincial long-term care acts (LTCHA-ON) · PHIPA/equivalent · PIPEDA</td>
+  <td class="c4">ISO 27001 · Accreditation Canada standards</td>
+  <td class="c5">Provincial ministries of health and long-term care · provincial OIPCs</td>
+  <td class="c6">PHI · PII (vulnerable populations)</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">IoT/smart home integration for resident monitoring requires additional security controls. Mobile care worker apps require MDM. Data sharing with acute care follows provincial health information custodian rules.</td>
+  <td class="c9">Resident PHI protection · medication administration security · family portal access controls · IoT/sensor device security</td>
+  <td class="c10">Resident records 10 yr · Medication administration records 7 yr</td>
+</tr>
+
+<!-- GOVERNMENT & PUBLIC SECTOR -->
+<tr class="vert-row gov"><td colspan="11">Government &amp; Public Sector<span class="vert-count">6 industries</span></td></tr>
+<tr>
+  <td class="c0">17</td>
+  <td class="c1">Federal Government</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Privacy Act · ATIA · Security of Information Act · ITSG-33 · TBS policies · <span class="tag-pbmm">GC PBMM</span></td>
+  <td class="c4">ISO 27001 · NIST CSF</td>
+  <td class="c5">TBS · OPC · CSE/CCCS</td>
+  <td class="c6"><span class="tag-protected-b">Protected B</span> · Secret · PII</td>
+  <td class="c7">Build · SAST · DAST · SCA · Sign · Deploy · Monitor</td>
+  <td class="c8">GC PBMM mandatory for cloud workloads. CCCS ITSG-33 IT security controls. Data residency in Canada mandatory. PSPC cloud procurement rules apply. ATO (Authority to Operate) process required.</td>
+  <td class="c9">PBMM cloud controls · CCCS-approved encryption · separation of classified/unclassified networks · identity via GCKey or Sign-In Canada · SA&amp;A (Security Assessment and Authorization)</td>
+  <td class="c10">Access logs 2 yr · Security incident logs 10 yr · Classified audit trails indefinitely</td>
+</tr>
+<tr>
+  <td class="c0">18</td>
+  <td class="c1">Provincial Government</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Provincial FIPPA/FOIPPA/ATI Acts · Provincial privacy acts · ITSG-33 equivalent policies</td>
+  <td class="c4">ISO 27001 · CAN/CIOSC 103-1</td>
+  <td class="c5">Provincial OIPCs · provincial CISOs</td>
+  <td class="c6">Protected · PII · Public</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Data residency within province mandatory for most provincial systems. BC Cloud Hosting Services, Ontario Government cloud policy vary. Identity via provincial SSO.</td>
+  <td class="c9">Access controls per provincial RBAC policies · data residency enforcement · BC/ON/QC-specific cloud security standards · citizen data protection</td>
+  <td class="c10">Administrative records 7 yr · FOIPPA request logs 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">19</td>
+  <td class="c1">Municipal Government</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Provincial MFIPPA/FOIPPA (Municipal) · Provincial privacy acts · PIPEDA (limited)</td>
+  <td class="c4">ISO 27001 · NIST CSF</td>
+  <td class="c5">Provincial OIPCs · municipal auditors</td>
+  <td class="c6">PII · Public · Local government records</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Smart city deployments require Privacy Impact Assessments (PIAs). IoT/sensor data in public spaces regulated by provincial FIPPA. Procurement through municipal procurement offices.</td>
+  <td class="c9">Citizen data protection · 311 system security · smart city IoT security · open data privacy review before publication</td>
+  <td class="c10">Municipal records 7 yr · Council minutes permanent</td>
+</tr>
+<tr>
+  <td class="c0">20</td>
+  <td class="c1">Crown Corporations</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Privacy Act (if federal) · ATIA · Financial Administration Act · mixed provincial/federal</td>
+  <td class="c4">ISO 27001 · SOC 2</td>
+  <td class="c5">TBS (federal) · provincial equivalents · OPC</td>
+  <td class="c6">PII · Commercial · Government</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Each Crown operates under its own mandate act (CBC Act, Canada Post Act, VIA Rail). Commercial activities follow PIPEDA; government activities follow Privacy Act. Canada Post is critical infrastructure designated.</td>
+  <td class="c9">Crown-specific security policies · commercial customer data protection · government information handling · critical infrastructure protection</td>
+  <td class="c10">Varies by Crown mandate · Financial records 7 yr</td>
+</tr>
+<tr>
+  <td class="c0">21</td>
+  <td class="c1">Public Safety &amp; Law Enforcement</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Privacy Act · RCMP Act · Criminal Code (lawful interception) · PIPEDA · Provincial police acts</td>
+  <td class="c4">ISO 27001 · NIST CSF</td>
+  <td class="c5">RCMP · provincial police oversight bodies · CISC</td>
+  <td class="c6"><span class="tag-protected-b">Protected B</span> · Criminal records · PII</td>
+  <td class="c7">Build · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">RCMP CPIC system requires CCCS approval. Provincial police systems (OPP, SQ) follow provincial data governance. Biometric data (fingerprints, DNA) under Privacy Act with additional restrictions.</td>
+  <td class="c9">CPIC connection security · biometric data protection · officer safety data controls · intercept capability per Criminal Code Part VI · chain of evidence integrity</td>
+  <td class="c10">Criminal records permanent · Occurrence reports 7 yr minimum · Intercept authorizations sealed by court</td>
+</tr>
+<tr>
+  <td class="c0">22</td>
+  <td class="c1">Justice &amp; Courts</td>
+  <td class="c2">Government &amp; Public Sector</td>
+  <td class="c3">Privacy Act · Provincial court administration acts · PIPEDA · Court Records Management standards</td>
+  <td class="c4">ISO 27001</td>
+  <td class="c5">Courts Administration Service (federal) · provincial court services branches</td>
+  <td class="c6"><span class="tag-protected-b">Protected B</span> · PII · Court records · Publication ban records</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Electronic court filing systems (eCourt, Caselines) require strict access controls. Publication bans enforced at data access layer. Federal courts follow CAS IT standards; provincial courts follow provincial systems.</td>
+  <td class="c9">Publication ban enforcement in court record systems · accused/witness identity protection · judicial independence of court systems · evidence integrity chain</td>
+  <td class="c10">Court records permanent · Publication ban orders indefinitely</td>
+</tr>
+
+<!-- DEFENSE & INTELLIGENCE -->
+<tr class="vert-row def"><td colspan="11">Defense &amp; Intelligence<span class="vert-count">5 industries</span></td></tr>
+<tr>
+  <td class="c0">23</td>
+  <td class="c1">Canadian Armed Forces</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">Security of Information Act · DND Security Orders · NATO security requirements · COMSEC standards</td>
+  <td class="c4">CMMC (working group) · ISO 27001</td>
+  <td class="c5">DND/ADM(IM) · CSE · NATO</td>
+  <td class="c6"><span class="tag-secret">Secret</span> · NATO RESTRICTED/SECRET · Protected B/C</td>
+  <td class="c7">Build · SAST · DAST · SCA · Sign · Deploy · Monitor</td>
+  <td class="c8">Classified networks (SNET/DWAN) separated from unclassified. COMSEC device approval by CSE. NATO interoperability requirements. ITSG-33 mandatory. Five Eyes data sharing protocols apply.</td>
+  <td class="c9">COMSEC equipment approval · personnel security (Top Secret clearance) · physical security zones · NATO interoperability standards · supply chain integrity for weapons systems</td>
+  <td class="c10">Classified logs indefinitely · COMSEC accounting permanent · Personnel security records permanent</td>
+</tr>
+<tr>
+  <td class="c0">24</td>
+  <td class="c1">CSE (Signals Intelligence)</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">CSE Act · Security of Information Act · Five Eyes agreements</td>
+  <td class="c4">N/A — classified</td>
+  <td class="c5">Minister of National Defence · NSICOP · NSIRA</td>
+  <td class="c6"><span class="tag-secret">Secret</span> · Top Secret · EYES ONLY</td>
+  <td class="c7">All stages with classified controls</td>
+  <td class="c8">Most requirements classified. Public-facing CCCS cloud security guidance published. CCCS vulnerability disclosure coordination. CCCS Annual Threat Report governs GC cyber posture.</td>
+  <td class="c9">Classified COMSEC · cryptographic key management · SIGINT protection · signals protection</td>
+  <td class="c10">Classified · oversight by NSICOP and NSIRA</td>
+</tr>
+<tr>
+  <td class="c0">25</td>
+  <td class="c1">CSIS (Domestic Intelligence)</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">CSIS Act · Security of Information Act · Privacy Act · Five Eyes protocols</td>
+  <td class="c4">N/A — classified</td>
+  <td class="c5">Minister of Public Safety · NSIRA · NSICOP</td>
+  <td class="c6"><span class="tag-secret">Secret</span> · Top Secret · HUMINT source protection</td>
+  <td class="c7">All stages with classified controls</td>
+  <td class="c8">HUMINT source data has absolute legal protection. Warrant-based collection under CSIS Act. NSIRA oversight. Intelligence community data sharing via classified channels.</td>
+  <td class="c9">Source protection systems · counter-surveillance in dev environments · HUMINT data compartmentalization · secure development facilities</td>
+  <td class="c10">Classified · warrant records sealed by court order</td>
+</tr>
+<tr>
+  <td class="c0">26</td>
+  <td class="c1">Defense Contractors</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">PSPC Industrial Security Program (ISP) · ITAR (US-origin tech) · Security of Information Act · CAN/CIOSC 103-2 · Controlled Goods Program</td>
+  <td class="c4">CMMC (if prime to US DoD) · ISO 27001 · AS9100</td>
+  <td class="c5">PSPC Industrial Security Directorate · Global Affairs Canada (export) · US State Dept (ITAR)</td>
+  <td class="c6"><span class="tag-protected-b">Protected B</span> · Controlled Goods · ITAR-controlled · NATO RESTRICTED</td>
+  <td class="c7">Build · SAST · DAST · SCA · Sign · Deploy</td>
+  <td class="c8">PSPC ISP mandatory for all defense contracts. Controlled Goods Program registration required. ITAR compliance for US-origin defense tech. PSPC requires facility security clearance. CITP (Canadian IT security profile) for system classification.</td>
+  <td class="c9">Facility security clearance · personnel security screening · Controlled Goods handling · ITAR export control compliance · supply chain security · foreign ownership disclosure</td>
+  <td class="c10">Controlled Goods records 10 yr · PSPC contract records 7 yr · ITAR records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">27</td>
+  <td class="c1">DRDC (Defence Research)</td>
+  <td class="c2">Defense &amp; Intelligence</td>
+  <td class="c3">Security of Information Act · DND Security Orders · PSPC ISP · Scientific data management policy</td>
+  <td class="c4">ISO 27001 · ISO 9001</td>
+  <td class="c5">DND/ADM(S&amp;T) · CSE</td>
+  <td class="c6"><span class="tag-protected-b">Protected B</span> · Confidential · Secret · Research IP</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Research facilities hold facility security clearances. Quantum computing research has additional controls. Export controls on dual-use research. University collaborations require Tech Transfer Agreements.</td>
+  <td class="c9">Research IP protection · dual-use technology controls · classified research environment security · foreign entity relationships management · lab access controls</td>
+  <td class="c10">Research records 25 yr · Classified project files permanent</td>
+</tr>
+
+<!-- ENERGY & ENVIRONMENT -->
+<tr class="vert-row energy"><td colspan="11">Energy &amp; Environment<span class="vert-count">6 industries</span></td></tr>
+<tr>
+  <td class="c0">28</td>
+  <td class="c1">Oil &amp; Gas (Upstream)</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">AER (AB) · BCER (BC) · CER (cross-border) · CEPA · PIPEDA</td>
+  <td class="c4">ISO 27001 · IEC 62443 (OT) · NERC CIP (if power generation)</td>
+  <td class="c5">CER · AER (AB) · BCER (BC) · NSPB (SK)</td>
+  <td class="c6">OT/SCADA · Commercial · Environmental</td>
+  <td class="c7">Build · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">OT (Operational Technology) networks strictly separated from IT. SCADA security per IEC 62443. Wellbore data subject to provincial Crown royalty reporting. Alberta is Canada's primary upstream hub.</td>
+  <td class="c9">IT/OT network segregation · SCADA system hardening · emergency shutdown system integrity · seismic/geological data IP protection · wellbore reporting integrity</td>
+  <td class="c10">Regulatory filings 10 yr · SCADA event logs 5 yr · Environmental incident records permanent</td>
+</tr>
+<tr>
+  <td class="c0">29</td>
+  <td class="c1">Pipelines &amp; Midstream</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">CER Pipeline Regulations · Transportation of Dangerous Goods Act · CEPA · PIPEDA</td>
+  <td class="c4">ISO 27001 · IEC 62443 · NIST CSF</td>
+  <td class="c5">CER (Canada Energy Regulator)</td>
+  <td class="c6">OT/SCADA · Commercial · Critical infrastructure</td>
+  <td class="c7">Build · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">CER Critical Energy Infrastructure protection program. Trans Mountain, Enbridge, TC Energy pipelines under federal oversight. SCADA/DCS systems on isolated OT networks. Geospatial pipeline route data is sensitive.</td>
+  <td class="c9">SCADA/DCS isolation · emergency management system security · leak detection system integrity · geospatial data protection · cross-border data sharing with US NERC</td>
+  <td class="c10">Pipeline integrity logs permanent · SCADA records 10 yr · Incident records permanent</td>
+</tr>
+<tr>
+  <td class="c0">30</td>
+  <td class="c1">Electricity &amp; Utilities</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">NERC CIP (cross-border grids) · OEB (ON) · BCUC (BC) · AUC (AB) · REGIE (QC) · PIPEDA</td>
+  <td class="c4">ISO 27001 · IEC 62443 · NIST CSF</td>
+  <td class="c5">OEB (ON) · BCUC (BC) · AUC (AB) · CER (interprovincial)</td>
+  <td class="c6">OT/SCADA · Customer PII · Critical infrastructure</td>
+  <td class="c7">Build · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">NERC CIP mandatory for bulk electric systems connected to North American grid. Smart meter data is PII under PIPEDA. Ontario IESO and BC Hydro operate under distinct provincial frameworks.</td>
+  <td class="c9">NERC CIP CIP-002 through CIP-013 controls · AMI (Advanced Metering Infrastructure) security · grid SCADA protection · customer energy usage data privacy</td>
+  <td class="c10">NERC CIP records 6 yr · Smart meter data varies by province · Grid event logs permanent</td>
+</tr>
+<tr>
+  <td class="c0">31</td>
+  <td class="c1">Nuclear Energy</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">Nuclear Safety and Control Act · CNSC regulations · IAEA safeguards · PIPEDA · Security of Information Act (national security aspects)</td>
+  <td class="c4">ISO 27001 · IEC 62443 · IAEA nuclear security recommendations</td>
+  <td class="c5">CNSC · IAEA (international safeguards)</td>
+  <td class="c6"><span class="tag-protected-b">Protected B</span> · Nuclear · OT/SCADA</td>
+  <td class="c7">Build · SAST · DAST · SCA · Sign · Deploy · Monitor</td>
+  <td class="c8">CNSC regulates all Canadian nuclear facilities. Bruce Power, OPG (ON), NB Power Point Lepreau, AECL/CNL. Safety systems on air-gapped networks. Nuclear material accounting reported to IAEA. CANDU reactor-specific cybersecurity requirements.</td>
+  <td class="c9">Air-gapped safety systems · nuclear material accountancy system integrity · CANDU-specific cybersecurity · physical protection systems integration · IAEA safeguards reporting integrity · insider threat controls</td>
+  <td class="c10">Nuclear records permanent (CNSC) · IAEA safeguards records permanent · Security incident reports 25 yr</td>
+</tr>
+<tr>
+  <td class="c0">32</td>
+  <td class="c1">Renewables &amp; Cleantech</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">CER (interprovincial) · Provincial energy regulators (OEB, AUC, BCUC) · PIPEDA · CEPA (environmental)</td>
+  <td class="c4">ISO 27001 · IEC 62443 · ISO 50001</td>
+  <td class="c5">CER · Provincial energy regulators · ECCC</td>
+  <td class="c6">OT/SCADA · Commercial · Environmental</td>
+  <td class="c7">Build · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Grid interconnection requires NERC CIP compliance for bulk systems. Smart inverter protocols (IEEE 2030.5) security requirements. Carbon credit systems subject to PIPEDA and provincial regulations. IESO/AESO market data feeds require secure access.</td>
+  <td class="c9">SCADA for wind/solar farms · carbon registry system integrity · energy management system access controls · smart grid device security · grid stability event logging</td>
+  <td class="c10">Grid event logs 10 yr · Carbon credit records 10 yr · Environmental reports permanent</td>
+</tr>
+<tr>
+  <td class="c0">33</td>
+  <td class="c1">Mining &amp; Resources</td>
+  <td class="c2">Energy &amp; Environment</td>
+  <td class="c3">Provincial Mines Acts · CEPA · PIPEDA · TSX financial disclosure rules</td>
+  <td class="c4">ISO 27001 · ISO 14001 · TSM (Towards Sustainable Mining)</td>
+  <td class="c5">EMLI (BC) · AER (AB) · MNDM (ON) · CEPA · TSX</td>
+  <td class="c6">OT/SCADA · Commercial · Geological IP · Environmental</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Geological survey data (seismic, assay) is commercially sensitive IP. TSX/TSX-V material information disclosure rules. Indigenous consultation records may require privacy protections. Automated mine systems follow IEC 62443.</td>
+  <td class="c9">Geological IP protection · OT/SCADA for automated mining · tailings management system integrity · Indigenous consultation record management · financial disclosure control systems</td>
+  <td class="c10">Environmental records permanent · Financial disclosure 7 yr · Geological data retained as trade secret</td>
+</tr>
+
+<!-- TECHNOLOGY -->
+<tr class="vert-row tech"><td colspan="11">Technology<span class="vert-count">5 industries</span></td></tr>
+<tr>
+  <td class="c0">34</td>
+  <td class="c1">Software &amp; SaaS</td>
+  <td class="c2">Technology</td>
+  <td class="c3">PIPEDA (if handling Canadian personal data) · CASL · Provincial privacy acts (Law 25-QC, PIPA-BC)</td>
+  <td class="c4">SOC 2 Type II · ISO 27001 · CSA STAR · CAN/CIOSC 103-1</td>
+  <td class="c5">OPC · CRTC (CASL) · provincial OIPCs</td>
+  <td class="c6">PII · Customer data</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">CASL applies to all commercial electronic messages to Canadian addresses. Quebec Law 25 is stricter than PIPEDA. GC customers require <span class="tag-pbmm">GC PBMM</span> compliance.</td>
+  <td class="c9">PIPEDA privacy-by-design · CASL consent management · SBOM for software supply chain · vulnerability disclosure policy · data minimization enforcement</td>
+  <td class="c10">PIPEDA breach log 3 yr · CASL consent records 3 yr · Security logs 1 yr rolling</td>
+</tr>
+<tr>
+  <td class="c0">35</td>
+  <td class="c1">AI &amp; ML Platforms</td>
+  <td class="c2">Technology</td>
+  <td class="c3">PIPEDA · AIDA (Bill C-27 — proposed) · Provincial privacy acts · CASL</td>
+  <td class="c4">ISO 42001 (AI management) · NIST AI RMF · IEEE AI standards</td>
+  <td class="c5">OPC · proposed ISED AI regulator (AIDA) · provincial OIPCs</td>
+  <td class="c6">PII · Training data · Model IP</td>
+  <td class="c7">Build · SCA · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">AIDA (Bill C-27) will regulate high-impact AI systems if passed (status: 2024 parliamentary session). TBS Directive on Automated Decision-Making applies to federal government AI. Biometric data in training sets has heightened requirements.</td>
+  <td class="c9">Training data privacy protection · model extraction attack prevention · adversarial robustness · bias/fairness monitoring · explainability for regulated decisions · consent for personal data in training</td>
+  <td class="c10">Training data provenance 5 yr · Model versioning 5 yr · Automated decision logs 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">36</td>
+  <td class="c1">Cloud Services</td>
+  <td class="c2">Technology</td>
+  <td class="c3">PIPEDA · CASL · Provincial privacy acts · <span class="tag-pbmm">GC PBMM</span> (for federal workloads)</td>
+  <td class="c4">SOC 2 Type II · ISO 27001 · CSA STAR · CAN/CIOSC 103-1</td>
+  <td class="c5">OPC · TBS (GC PBMM) · provincial OIPCs</td>
+  <td class="c6">PII · Customer data · Varies by tenant</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">AWS Canada (Central and West), Azure Canada Central/East, GCP Canada provide Canadian data residency. GC Marketplace for PSPC-approved cloud services. CCCS ITSP.50.105 cloud security guidance. GC PBMM required for all federal workloads.</td>
+  <td class="c9">Data residency enforcement · GC PBMM controls · multi-tenant isolation · Canadian data sovereignty · CCCS cloud security assessment · zero-trust architecture</td>
+  <td class="c10">Access logs 1 yr min (GC: 2 yr) · Incident response records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">37</td>
+  <td class="c1">Cybersecurity</td>
+  <td class="c2">Technology</td>
+  <td class="c3">PIPEDA · CASL · Sector-specific laws (OSFI, PHIPA, etc.) · CCCS guidance (ITSG-33)</td>
+  <td class="c4">SOC 2 · ISO 27001 · NIST CSF · CIS Controls · ITSG-33</td>
+  <td class="c5">CCCS · OPC · Sector regulators</td>
+  <td class="c6">Security telemetry · Client data · Vulnerability intelligence</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">CCCS (Canadian Centre for Cyber Security) is primary guidance body. GC clients require ITSG-33. CCCS Coordinated Vulnerability Disclosure guidelines for security research. CCCS Annual Threat Assessment governs national posture.</td>
+  <td class="c9">Secure development (supply chain integrity) · vulnerability research ethics · client data segmentation · CCCS notifications for critical vulnerabilities · threat intelligence data sovereignty</td>
+  <td class="c10">Security logs 1 yr rolling · Incident reports 5 yr · Penetration test reports 3 yr</td>
+</tr>
+<tr>
+  <td class="c0">38</td>
+  <td class="c1">Hardware &amp; Semiconductor</td>
+  <td class="c2">Technology</td>
+  <td class="c3">PIPEDA (if collecting data) · ITAR (for defense-use chips) · Export Controls Order (Canada)</td>
+  <td class="c4">ISO 27001 · IEC 62443 · Common Criteria</td>
+  <td class="c5">ISED · Global Affairs Canada (export controls)</td>
+  <td class="c6">Commercial · IP · Export-controlled</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Canada's National Quantum Strategy (2022) includes security implications. ITAR/EAR applies to exported goods containing US technology. Quantum hardware research at IQC (Waterloo) and TRIUMF.</td>
+  <td class="c9">Chip design IP protection · supply chain integrity for components · export control classification review · tamper evidence for security chips · firmware signing</td>
+  <td class="c10">Export control records 5 yr · Design IP records retained as trade secret</td>
+</tr>
+
+<!-- TELECOMMUNICATIONS -->
+<tr class="vert-row telecom"><td colspan="11">Telecommunications<span class="vert-count">4 industries</span></td></tr>
+<tr>
+  <td class="c0">39</td>
+  <td class="c1">Wireless Carriers (MNO)</td>
+  <td class="c2">Telecommunications</td>
+  <td class="c3">Telecommunications Act · CRTC regulations · PIPEDA · CASL · ISED spectrum licensing</td>
+  <td class="c4">SOC 2 · ISO 27001 · GSMA security guidelines</td>
+  <td class="c5">CRTC · ISED (spectrum) · OPC</td>
+  <td class="c6">PII · Location data · Call records</td>
+  <td class="c7">Build · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Big 3: Bell, Rogers, Telus. CRTC-mandated MVNO wholesale access (2021 decision). Lawful interception under Criminal Code Part VI. 5G security guidance from CCCS (ITSAP.80.004). ISED manages spectrum allocation.</td>
+  <td class="c9">Lawful interception compliance · subscriber data protection · SS7/Diameter signaling security · 5G network slicing security · roaming agreement security</td>
+  <td class="c10">Call records 1 yr · CRTC complaints 2 yr · Network security events 2 yr</td>
+</tr>
+<tr>
+  <td class="c0">40</td>
+  <td class="c1">Internet Service Providers</td>
+  <td class="c2">Telecommunications</td>
+  <td class="c3">Telecommunications Act · CRTC · PIPEDA · CASL · Mandatory breach notification</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">CRTC · OPC</td>
+  <td class="c6">PII · Browsing patterns · Network logs</td>
+  <td class="c7">Build · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">CRTC net neutrality rules (Internet Traffic Management Practices). Mandatory DMARC/DNSSEC deployment guidance. Domain blocking orders (piracy via court order). CASL requires cooperation with CRTC enforcement.</td>
+  <td class="c9">Subscriber data minimization · network logging per court orders · DDoS mitigation · DNSSEC deployment · BGP route origin validation (RPKI) · CASL compliance systems</td>
+  <td class="c10">Traffic logs 1 yr (court order may extend) · CRTC requests 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">41</td>
+  <td class="c1">Broadcasting &amp; Cable</td>
+  <td class="c2">Telecommunications</td>
+  <td class="c3">Broadcasting Act · CRTC broadcasting regulations · CanCon rules · PIPEDA · CASL · Online Streaming Act (C-11, 2023)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">CRTC</td>
+  <td class="c6">PII · Subscriber data · Content rights</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Online Streaming Act (C-11, 2023) extends CRTC jurisdiction to streaming platforms (Netflix, Disney+). CanCon requirements mandate % of Canadian programming. National Public Alerting System (NPAS) emergency broadcast mandatory.</td>
+  <td class="c9">Emergency alert system hardening · broadcast automation security · DRM for premium content · CanCon tracking system integrity · subscriber authentication</td>
+  <td class="c10">CRTC broadcast logs 7 yr · CanCon certification records 7 yr · Subscriber data 3 yr</td>
+</tr>
+<tr>
+  <td class="c0">42</td>
+  <td class="c1">Satellite Communications</td>
+  <td class="c2">Telecommunications</td>
+  <td class="c3">Radiocommunications Act · Telecommunications Act · CRTC · ISED spectrum licensing · PIPEDA</td>
+  <td class="c4">ISO 27001 · ITU-T standards</td>
+  <td class="c5">ISED (spectrum licensing) · CRTC · Global Affairs Canada (foreign satellite)</td>
+  <td class="c6">PII · Transmission data · Defense-adjacent</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Telesat, MDA Group key Canadian players. Radarsat/WCAAF earth observation data may be defense-adjacent. Telesat Lightspeed LEO constellation under development. Canadian Space Agency data sharing protocols.</td>
+  <td class="c9">Ground station security · satellite command integrity · anti-jamming measures · earth observation data classification · COMSEC for defense-adjacent systems</td>
+  <td class="c10">Transmission logs 2 yr · Spectrum use reports annually</td>
+</tr>
+
+<!-- RETAIL & COMMERCE -->
+<tr class="vert-row retail"><td colspan="11">Retail &amp; Commerce<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">43</td>
+  <td class="c1">Grocery &amp; Food Retail</td>
+  <td class="c2">Retail &amp; Commerce</td>
+  <td class="c3">PIPEDA · CASL · CFIA (food safety) · Competition Act · Provincial consumer protection</td>
+  <td class="c4">PCI DSS · SOC 2 · ISO 27001</td>
+  <td class="c5">Competition Bureau · CFIA · OPC</td>
+  <td class="c6">PII · PCI · Purchase history</td>
+  <td class="c7">Build · SAST · DAST · Sign · Deploy</td>
+  <td class="c8">Loblaws, Metro, Sobeys, Costco. Loyalty programs (PC Optimum, Scene+) subject to PIPEDA consent. CFIA food safety traceability systems (STELA). PIPEDA breach notification if loyalty data compromised.</td>
+  <td class="c9">POS system security · loyalty program data minimization · CFIA traceability system integrity · supply chain fraud prevention · loyalty point fraud detection</td>
+  <td class="c10">Transaction records 7 yr · PCI DSS quarterly scans · CFIA traceability 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">44</td>
+  <td class="c1">E-Commerce &amp; Marketplace</td>
+  <td class="c2">Retail &amp; Commerce</td>
+  <td class="c3">PIPEDA · CASL · Competition Act · Provincial consumer protection acts · Quebec Law 25</td>
+  <td class="c4">PCI DSS · SOC 2 · ISO 27001</td>
+  <td class="c5">OPC (privacy) · CRTC (CASL) · Competition Bureau</td>
+  <td class="c6">PII · PCI · Purchase history · Behavioral</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Shopify (Waterloo/Ottawa origin), Amazon.ca, Kijiji. CASL consent mandatory for transactional email. Quebec Law 25 stricter consent requirements than federal PIPEDA. PIPEDA consent for behavioral tracking.</td>
+  <td class="c9">Fraud detection · CASL consent management · PCI DSS for payment card · behavioral tracking consent · bot detection · account takeover prevention</td>
+  <td class="c10">CASL consent records 3 yr · Transaction records 7 yr · Fraud reports 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">45</td>
+  <td class="c1">General Retail</td>
+  <td class="c2">Retail &amp; Commerce</td>
+  <td class="c3">PIPEDA · CASL · Provincial consumer protection acts</td>
+  <td class="c4">PCI DSS · SOC 2</td>
+  <td class="c5">OPC · Provincial consumer protection offices</td>
+  <td class="c6">PII · PCI · Purchase history</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Hudson's Bay Company, Canadian Tire, Dollarama. In-store facial recognition analytics banned under OPC/provincial orders. Quebec Law 25 applies to Quebec retail operations. Loyalty programs under PIPEDA.</td>
+  <td class="c9">POS/payment security · loyalty data consent · video surveillance compliance · data breach notification · staff PII protection</td>
+  <td class="c10">Financial records 7 yr · PCI DSS quarterly scans · PIPEDA breach logs 3 yr</td>
+</tr>
+
+<!-- MANUFACTURING & INDUSTRIAL -->
+<tr class="vert-row mfg"><td colspan="11">Manufacturing &amp; Industrial<span class="vert-count">4 industries</span></td></tr>
+<tr>
+  <td class="c0">46</td>
+  <td class="c1">Automotive Manufacturing</td>
+  <td class="c2">Manufacturing &amp; Industrial</td>
+  <td class="c3">Transport Canada (Motor Vehicle Safety Act) · PIPEDA · Environmental Protection Act · Provincial OHS</td>
+  <td class="c4">ISO/SAE 21434 (automotive cybersecurity) · ISO 27001 · IATF 16949</td>
+  <td class="c5">Transport Canada · Provincial labour ministries · ECCC</td>
+  <td class="c6">PII (connected vehicles) · OT/SCADA · IP/trade secrets</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Ontario auto corridor: Windsor, Oshawa, Cambridge, Ingersoll. Stellantis, GM, Toyota, Honda plants. Connected vehicle data follows PIPEDA. Autonomous vehicle testing regulated by Transport Canada and Ontario.</td>
+  <td class="c9">Connected vehicle OTA update signing · manufacturing OT/SCADA security · EDR data privacy · supply chain SBOM · EV charging infrastructure security · assembly line automation security</td>
+  <td class="c10">Safety incident records permanent · Vehicle recall records permanent · Environmental reports 10 yr</td>
+</tr>
+<tr>
+  <td class="c0">47</td>
+  <td class="c1">Aerospace &amp; Aviation</td>
+  <td class="c2">Manufacturing &amp; Industrial</td>
+  <td class="c3">Aeronautics Act · Canadian Aviation Regulations (CARs) · ITAR (defense components) · PSPC ISP · Export Controls Order · DO-178C (avionics)</td>
+  <td class="c4">AS9100 · DO-326A · ISO 27001</td>
+  <td class="c5">Transport Canada (TCCA) · PSPC · Global Affairs Canada (export)</td>
+  <td class="c6">OT · IP/trade secrets · Controlled Goods · ITAR-controlled</td>
+  <td class="c7">Build · SAST · DAST · SCA · Sign · Deploy</td>
+  <td class="c8">Bombardier, Pratt &amp; Whitney Canada, Magellan Aerospace, CAE. DO-178C/DO-326A for avionics software certification. ITAR applies to US-origin aerospace components. Defense contracts require PSPC ISP. Montreal is Canada's aerospace hub.</td>
+  <td class="c9">DO-178C software qualification traceability · ITAR export controls on tech transfer · supply chain counterfeit part prevention · avionics firmware signing · flight data security · CAE simulation IP protection</td>
+  <td class="c10">Aircraft maintenance records: lifetime + 25 yr · DO-178C qualification records retained with aircraft · ITAR records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">48</td>
+  <td class="c1">Food Processing &amp; Manufacturing</td>
+  <td class="c2">Manufacturing &amp; Industrial</td>
+  <td class="c3">Safe Food for Canadians Act (SFCA) · CFIA · HACCP · PIPEDA · Provincial OHS</td>
+  <td class="c4">ISO 22000 · SQF · BRC · ISO 27001</td>
+  <td class="c5">CFIA · Provincial health and labour ministries</td>
+  <td class="c6">PII · Commercial · Food safety records</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">SFCR requires traceability one step back, one step forward. CFIA Preventive Control Plans (PCPs) must be in digital systems. McCain Foods, Maple Leaf Foods, Saputo are key anchors. Allergen management system integrity is critical.</td>
+  <td class="c9">CFIA traceability system integrity · PCP documentation access controls · allergen management system security · recall management system · supplier verification systems · cold chain monitoring integrity</td>
+  <td class="c10">CFIA traceability records 5 yr · PCP records 5 yr · Recall records permanent</td>
+</tr>
+<tr>
+  <td class="c0">49</td>
+  <td class="c1">Industrial Equipment &amp; Heavy Mfg</td>
+  <td class="c2">Manufacturing &amp; Industrial</td>
+  <td class="c3">Provincial OHS Acts · Environmental permits · PIPEDA (employee data) · Export Controls Order (dual-use)</td>
+  <td class="c4">ISO 27001 · IEC 62443 · ISO 9001</td>
+  <td class="c5">Provincial labour ministries · ECCC · Global Affairs Canada (dual-use export)</td>
+  <td class="c6">OT/SCADA · IP/trade secrets · Commercial</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Finning International, Toromont, CNH Industrial Canada. OT/SCADA for automated production lines. Predictive maintenance IoT creates data obligations. Export of dual-use equipment under Export Controls Order.</td>
+  <td class="c9">OT/SCADA network segmentation · predictive maintenance IoT security · equipment telematics data protection · dual-use export control screening · ERP system access controls</td>
+  <td class="c10">Safety incident records permanent · OHS inspections 5 yr · Environmental records 10 yr</td>
+</tr>
+
+<!-- MEDIA & ENTERTAINMENT -->
+<tr class="vert-row media"><td colspan="11">Media &amp; Entertainment<span class="vert-count">4 industries</span></td></tr>
+<tr>
+  <td class="c0">50</td>
+  <td class="c1">Broadcasting (TV &amp; Radio)</td>
+  <td class="c2">Media &amp; Entertainment</td>
+  <td class="c3">Broadcasting Act · CRTC conditions of licence · CanCon regulations · PIPEDA · CASL · Online Streaming Act (C-11, 2023)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">CRTC</td>
+  <td class="c6">PII · Content rights · Subscriber data</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">CBC/Radio-Canada, CTV, Global, Corus, Bell Media. CanCon requirements per CRTC. National Public Alerting System (NPAS) emergency broadcast mandatory. French-language programming requirements for QC-distributed content.</td>
+  <td class="c9">Emergency alert system hardening · broadcast automation security · DRM for premium content · CanCon tracking system integrity · subscriber authentication</td>
+  <td class="c10">CRTC broadcast logs 7 yr · CanCon certification records 7 yr · Subscriber data 3 yr</td>
+</tr>
+<tr>
+  <td class="c0">51</td>
+  <td class="c1">Video Gaming</td>
+  <td class="c2">Media &amp; Entertainment</td>
+  <td class="c3">PIPEDA · CASL · Quebec Law 25 · Competition Act · COPPA (for US child users)</td>
+  <td class="c4">SOC 2 · ISO 27001 · ESRB · PEGI (European)</td>
+  <td class="c5">OPC · CRTC (CASL) · Quebec CAI · provincial consumer protection</td>
+  <td class="c6">PII · Payment · Behavioral · Minor data</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Montreal gaming hub: Ubisoft, Eidos-Montréal, WB Games, Square Enix. Quebec government game tax credits. Loot box regulation under review in Canada. Quebec Law 25 stricter for QC studios.</td>
+  <td class="c9">Minor age verification · in-game purchase controls · DDoS protection · cheat detection · PII/behavioral data minimization · Quebec Law 25 privacy consent · anti-piracy</td>
+  <td class="c10">CASL consent records 3 yr · Financial/in-app purchase 7 yr · Security incidents 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">52</td>
+  <td class="c1">Film &amp; TV Production</td>
+  <td class="c2">Media &amp; Entertainment</td>
+  <td class="c3">PIPEDA · CRTC (broadcasters) · CRA (film tax credits) · CASL</td>
+  <td class="c4">ISO 27001 · MPA content security standards</td>
+  <td class="c5">Telefilm Canada · CMF · CRA (tax credits) · CRTC (broadcast)</td>
+  <td class="c6">PII (cast/crew) · IP/creative · Financial (tax credits)</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Vancouver (BC Film) and Toronto (Ontario Creates) primary hubs. Federal/provincial tax credits (CAVCO, OMDC) require Canadian content certification. MPA content security standards for major studio co-productions. ACTRA/IATSE union data management.</td>
+  <td class="c9">Production IP/dailies protection · tax credit documentation integrity · ACTRA/union member PII · digital cinema mastering (DCP) security · NDA enforcement systems · anti-piracy for screeners</td>
+  <td class="c10">Tax credit records 7 yr · Union records 7 yr · Insurance claims permanent</td>
+</tr>
+<tr>
+  <td class="c0">53</td>
+  <td class="c1">Digital Media &amp; Publishing</td>
+  <td class="c2">Media &amp; Entertainment</td>
+  <td class="c3">PIPEDA · CASL · Competition Act · Copyright Act · Online News Act (C-18, 2023) · CRTC (if broadcaster)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">OPC · CRTC (CASL) · Competition Bureau</td>
+  <td class="c6">PII · Behavioral · Subscriber</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Online News Act (C-18, 2023) governs Google/Meta payments to news publishers. CASL consent for newsletters and notifications. Copyright Act AI training data exemptions under review. Quebec Law 25 cookie consent requirements.</td>
+  <td class="c9">CASL consent management · copyright protection for digital assets · subscriber authentication · ad fraud prevention · Quebec Law 25 consent implementation · paywall security</td>
+  <td class="c10">CASL records 3 yr · Subscriber data 3 yr after subscription ends · Copyright licensing records 7 yr</td>
+</tr>
+
+<!-- EDUCATION -->
+<tr class="vert-row edu"><td colspan="11">Education<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">54</td>
+  <td class="c1">Universities &amp; Research</td>
+  <td class="c2">Education</td>
+  <td class="c3">PIPEDA · FIPPA/ATIA (public institutions) · TCPS 2 (research ethics) · Provincial university acts</td>
+  <td class="c4">ISO 27001 · NIST CSF · CAN/CIOSC 103-1</td>
+  <td class="c5">OPC · Provincial ministries of advanced education · Tri-Council (CIHR/NSERC/SSHRC)</td>
+  <td class="c6">PII · PHI (health research) · Research IP · Student records</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Tri-Agency Research Data Management Policy requires data management plans. National Security Guidelines for Research Partnerships (2023) restrict some foreign-funded research. NSERC restrictions apply to sensitive research areas.</td>
+  <td class="c9">Research data sovereignty · national security vetting for research partnerships (NSICOP guidance) · student FIPPA rights · clinical research PHI under TCPS 2/PHIPA · lab control systems security · foreign researcher oversight</td>
+  <td class="c10">Student records 10 yr post-graduation · Research data per RDM plan (typically 10 yr) · Ethics approvals permanent</td>
+</tr>
+<tr>
+  <td class="c0">55</td>
+  <td class="c1">K-12 Schools</td>
+  <td class="c2">Education</td>
+  <td class="c3">Provincial education acts · Provincial FIPPA/MFIPPA · PIPEDA (limited — provincial primary) · COPPA (for US platforms used)</td>
+  <td class="c4">SOC 2 · Provincial ed-tech procurement requirements</td>
+  <td class="c5">Provincial ministries of education · provincial OIPCs</td>
+  <td class="c6">PII · Minor data · Student records</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Ontario school boards under MFIPPA. BC under FOIPPA. US-hosted platforms (Google Workspace for Education, Microsoft 365) under OPC scrutiny. Ed-tech vendor reviews required. Indigenous student data sovereignty per OCAP® principles.</td>
+  <td class="c9">Minor data protection · parental consent management · cloud vendor data residency for student data · cybersecurity training integration · video conferencing security</td>
+  <td class="c10">Student records 10 yr · Access logs 2 yr · Incident records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">56</td>
+  <td class="c1">Online Learning &amp; EdTech</td>
+  <td class="c2">Education</td>
+  <td class="c3">PIPEDA · CASL · COPPA (if children) · Quebec Law 25 · Provincial consumer protection</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">OPC · CRTC (CASL) · provincial OIPCs</td>
+  <td class="c6">PII · Behavioral (learning) · Minor data (if applicable)</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">D2L (Desire2Learn — Waterloo), Top Hat, Prodigy are Canadian EdTech anchors. CASL consent for course reminders. AODA accessibility compliance mandatory in Ontario. Quebec Law 25 cookie consent for QC learners.</td>
+  <td class="c9">CASL consent for notifications · learning analytics privacy · minor consent management · plagiarism detection system access controls · payment card security for course fees · Quebec Law 25 privacy dashboard</td>
+  <td class="c10">CASL records 3 yr · Student learning data 5 yr · Financial records 7 yr</td>
+</tr>
+
+<!-- TRANSPORTATION & LOGISTICS -->
+<tr class="vert-row trans"><td colspan="11">Transportation &amp; Logistics<span class="vert-count">5 industries</span></td></tr>
+<tr>
+  <td class="c0">57</td>
+  <td class="c1">Air Transport</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Aeronautics Act · Canadian Aviation Regulations (CARs) · Transport Canada · IATA standards · PIPEDA · CATSA (screening)</td>
+  <td class="c4">SOC 2 · ISO 27001 · IOSA</td>
+  <td class="c5">Transport Canada (TCCA) · Nav Canada · CATSA</td>
+  <td class="c6">PII · Passenger data · Security (CATSA)</td>
+  <td class="c7">Build · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Air Canada, WestJet, Transat. CATSA for passenger screening. API/PNR data shared with CBSA under CANPASS. Nav Canada air traffic control systems are critical infrastructure. ICAO cybersecurity standards (Doc 10164).</td>
+  <td class="c9">Passenger screening data security · PNR/API encryption · CBSA data sharing protocols · baggage system security · aircraft OTA update signing · ACARS communication security</td>
+  <td class="c10">Passenger records 5 yr · Security event logs 10 yr · Maintenance records: aircraft lifetime</td>
+</tr>
+<tr>
+  <td class="c0">58</td>
+  <td class="c1">Rail Transport</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Railway Safety Act · Transport Canada · PIPEDA · Transportation of Dangerous Goods Act</td>
+  <td class="c4">ISO 27001 · NIST CSF</td>
+  <td class="c5">Transport Canada · TSB (Transportation Safety Board)</td>
+  <td class="c6">PII · OT/SCADA · Dangerous goods</td>
+  <td class="c7">Build · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">CN, CP (CPKC), VIA Rail, commuter rail (GO Transit, RTM). SCADA for wayside signaling and PTC (Positive Train Control). TDG Act for dangerous goods manifests. Critical infrastructure designation for transcontinental rail.</td>
+  <td class="c9">Signaling system isolation (SCADA/PTC) · dangerous goods tracking integrity · passenger manifest security · bridge/infrastructure monitoring system security · employee OHS data protection</td>
+  <td class="c10">Safety records permanent · SCADA logs 5 yr · Dangerous goods records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">59</td>
+  <td class="c1">Trucking &amp; Logistics</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Motor Vehicle Transport Act · Provincial Highway Traffic Acts · PIPEDA · Transportation of Dangerous Goods Act · ELD mandate (2021)</td>
+  <td class="c4">C-TPAT (if cross-border) · SOC 2 · ISO 27001</td>
+  <td class="c5">Transport Canada · Provincial transport ministries · CBSA (cross-border)</td>
+  <td class="c6">PII (driver/ELD) · Commercial · Location/telematics</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">ELD (Electronic Logging Device) mandate (2021) creates regulated driver data. CBSA eManifest for cross-border shipments. C-TPAT for Canada-US border trade. PIP (Partners in Protection) program for trusted shippers.</td>
+  <td class="c9">ELD data protection (driver hours and location) · supply chain integrity · dangerous goods compliance system · border clearance data security · cargo theft prevention systems</td>
+  <td class="c10">ELD records 6 months minimum · TDG records 2 yr · CBSA records 7 yr</td>
+</tr>
+<tr>
+  <td class="c0">60</td>
+  <td class="c1">Marine, Ports &amp; Shipping</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Canada Shipping Act 2001 · Transport Canada (marine) · PIPEDA · Marine Transportation Security Act · ISPS Code</td>
+  <td class="c4">ISO 27001 · IMO guidelines</td>
+  <td class="c5">Transport Canada (marine safety) · Port Authorities · Coast Guard</td>
+  <td class="c6">PII · Commercial · Critical infrastructure · ISPS-classified</td>
+  <td class="c7">Build · SAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Port authorities (Vancouver, Montreal, Halifax, Prince Rupert) designated critical infrastructure. ISPS Code security plans are classified. VTS (Vessel Traffic Services) under Nav Canada/Coast Guard. Arctic sovereignty implications for Northern shipping routes.</td>
+  <td class="c9">Port access control systems · vessel tracking (AIS) security · ISPS security plan protection · cargo manifest encryption · port OT security · Arctic communications security</td>
+  <td class="c10">Security plans classified/permanent · Vessel records 10 yr · Cargo manifests 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">61</td>
+  <td class="c1">Urban &amp; Public Transit</td>
+  <td class="c2">Transportation &amp; Logistics</td>
+  <td class="c3">Provincial transit acts · AODA (ON accessibility) · Provincial privacy acts · PIPEDA · PCI DSS (fare payments)</td>
+  <td class="c4">SOC 2 · ISO 27001 · IEC 62443</td>
+  <td class="c5">Provincial transit authorities · municipal governments · provincial OIPCs</td>
+  <td class="c6">PII · Payment · Location · Tap-in/tap-out data</td>
+  <td class="c7">Build · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Presto (Metrolinx-ON), Compass (TransLink-BC), Opus (STM-QC). Tap-in/tap-out creates detailed location history under PIPEDA. AODA accessibility compliance mandatory for Ontario transit apps. TTC, OC Transpo, STM, Calgary Transit, Edmonton Transit.</td>
+  <td class="c9">Fare payment security (PCI DSS) · commuter location data minimization · transit card data protection · OT/SCADA security · real-time data API security · AODA app compliance</td>
+  <td class="c10">Transaction records 1 yr · Security incidents 5 yr · PCI DSS quarterly scans</td>
+</tr>
+
+<!-- REAL ESTATE & CONSTRUCTION -->
+<tr class="vert-row re"><td colspan="11">Real Estate &amp; Construction<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">62</td>
+  <td class="c1">Residential Real Estate</td>
+  <td class="c2">Real Estate &amp; Construction</td>
+  <td class="c3">FINTRAC (AML for realtors) · PIPEDA · Provincial real estate acts (TRESA-ON, RESA-BC) · Prohibition on Purchase by Non-Canadians Act (2022)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">FINTRAC · RECO (ON) · BCFSA (BC) · OACIQ (QC)</td>
+  <td class="c6">PII · Financial · PCI (deposits)</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">FINTRAC requires realtors to collect client ID and beneficial ownership (since 2023 amendments). Foreign buyer ban under Prohibition on Purchase by Non-Canadians Act (2022). BC Beneficial Ownership Land Title Registry (LOTR) integration required.</td>
+  <td class="c9">FINTRAC beneficial ownership verification · client identity management · land title system integration · deposit trust account security · foreign buyer verification · BC beneficial ownership registry access</td>
+  <td class="c10">FINTRAC client records 5 yr · Transaction records 7 yr · Trust account records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">63</td>
+  <td class="c1">Commercial Real Estate</td>
+  <td class="c2">Real Estate &amp; Construction</td>
+  <td class="c3">FINTRAC (AML) · PIPEDA · Provincial real estate and planning acts · Competition Act (REIT disclosure)</td>
+  <td class="c4">SOC 2 · ISO 27001 · BOMA standards</td>
+  <td class="c5">FINTRAC · OSFI (REIT financing) · provincial regulators</td>
+  <td class="c6">PII · Financial · Commercial IP</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Cadillac Fairview, Oxford Properties, RioCan. Building automation systems (BAS) require OT security. REIT disclosure rules under CSA National Instruments. Smart building IoT creates new PIPEDA obligations.</td>
+  <td class="c9">Tenant PII protection · building access control system security · BAS/smart building IoT security · FINTRAC client verification · REIT financial disclosure systems · property management platform security</td>
+  <td class="c10">FINTRAC records 5 yr · Financial records 7 yr · Building safety inspections permanent</td>
+</tr>
+<tr>
+  <td class="c0">64</td>
+  <td class="c1">Property Management</td>
+  <td class="c2">Real Estate &amp; Construction</td>
+  <td class="c3">Provincial Residential Tenancy Acts (RTA-ON, RTA-BC) · PIPEDA · FINTRAC (AML, cash rental)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">Provincial landlord-tenant boards · FINTRAC · provincial OIPCs</td>
+  <td class="c6">PII · Financial · Location · Tenant data</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Boardwalk, Killam, Minto. Tenant credit checks under provincial tenancy acts. Smart lock and access fob data creates location PII under PIPEDA. Maintenance request data is PII. FINTRAC applies for cash rental transactions.</td>
+  <td class="c9">Tenant PII minimization · credit bureau access controls · rental payment processing (PCI) · smart building access data security · tenant portal authentication · maintenance worker data collection limits</td>
+  <td class="c10">Tenancy records 3 yr after tenancy ends · Financial records 7 yr · FINTRAC records 5 yr</td>
+</tr>
+
+<!-- AGRICULTURE -->
+<tr class="vert-row agri"><td colspan="11">Agriculture<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">65</td>
+  <td class="c1">Crop Farming &amp; Grain</td>
+  <td class="c2">Agriculture</td>
+  <td class="c3">CFIA (Feeds Act, Seeds Act, Plant Protection Act) · SFCA · PIPEDA (agtech platforms) · Canada Grain Act</td>
+  <td class="c4">ISO 22000 · GlobalG.A.P. · SOC 2 (agtech platforms)</td>
+  <td class="c5">CFIA · Canadian Grain Commission · Provincial agriculture ministries</td>
+  <td class="c6">Commercial · IP (crop data) · Agricultural records</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Canadian Grain Commission regulates grain grading and weighing. Prairie grain belt (SK, MB, AB) is primary region. Precision agriculture platforms (Farmers Edge, Trimble) handle sensitive crop yield/soil data. Provincial farm data legislation emerging (Alberta leading).</td>
+  <td class="c9">Crop yield data sovereignty · precision agriculture platform data portability · grain trading system integrity · supply chain traceability for CFIA · farm equipment telematics privacy · provincial grain elevator system security</td>
+  <td class="c10">CFIA records 5 yr · Agri-program records 7 yr · Grain commission records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">66</td>
+  <td class="c1">Livestock &amp; Aquaculture</td>
+  <td class="c2">Agriculture</td>
+  <td class="c3">Health of Animals Act (CFIA) · SFCA · PIPEDA · DFO (aquaculture) · Animal Health Act (provincial)</td>
+  <td class="c4">ISO 22000 · HACCP · GlobalG.A.P.</td>
+  <td class="c5">CFIA · DFO (Fisheries and Oceans Canada) · Provincial agriculture ministries</td>
+  <td class="c6">Commercial · Animal health records · PII (producers)</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">RFID animal traceability via CCIA (Canadian Cattle Identification Agency) for bovine. DFO aquaculture licensing for BC salmon and shellfish. Avian influenza/disease outbreak reporting is mandatory. HACCP plans must be in digital systems.</td>
+  <td class="c9">Animal ID traceability system integrity · DFO fish harvest data security · disease outbreak reporting system security · supply chain traceability farm-to-table · HACCP plan access controls · producer PII protection</td>
+  <td class="c10">Animal traceability records 3 yr · CFIA inspection records 5 yr · DFO catch records 10 yr</td>
+</tr>
+<tr>
+  <td class="c0">67</td>
+  <td class="c1">AgriTech &amp; Precision Ag</td>
+  <td class="c2">Agriculture</td>
+  <td class="c3">PIPEDA (farmer data) · CASL · CFIA (crop/pest data) · Provincial privacy acts</td>
+  <td class="c4">SOC 2 · ISO 27001 · ISO 22000</td>
+  <td class="c5">OPC · CFIA · ISED (IoT devices)</td>
+  <td class="c6">PII (farmer) · Commercial (crop data) · IP (algorithms)</td>
+  <td class="c7">Build · SCA · SAST · DAST · Sign · Deploy · Monitor</td>
+  <td class="c8">Farmers Edge, Decisive Farming, Veritas Farm Management are key Canadian AgriTech firms. Farm data ownership legislation has no federal law yet (Alberta leading with emerging rules). Satellite/drone imagery creates data sovereignty questions. Saskatoon is Canada's AgriTech hub.</td>
+  <td class="c9">Farm data ownership controls · IoT field sensor security · drone data handling · precision agriculture API security · crop yield prediction model IP protection · CASL consent for farming recommendations</td>
+  <td class="c10">CASL records 3 yr · Financial records 7 yr · Crop data per contract terms · Security incidents 5 yr</td>
+</tr>
+
+<!-- LEGAL & PROFESSIONAL SERVICES -->
+<tr class="vert-row legal"><td colspan="11">Legal &amp; Professional Services<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">68</td>
+  <td class="c1">Law Firms</td>
+  <td class="c2">Legal &amp; Professional Services</td>
+  <td class="c3">PIPEDA · Provincial law society rules (LSO-ON, LSBC, BSQ-QC) · Solicitor-client privilege · FINTRAC (real estate/corporate transactions)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">Provincial law societies · FINTRAC (designated activities) · OPC</td>
+  <td class="c6">PII · Privileged communications · Financial</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Solicitor-client privilege creates absolute confidentiality obligation. Law Society of Ontario Technology Practice Area guidelines. FINTRAC reporting for real estate lawyers and trust accounts. Cloud storage requires law society compliance assessment before adoption.</td>
+  <td class="c9">Solicitor-client privilege technical controls · encrypted client file storage · trust account segregation · FINTRAC client verification · law society-compliant cloud storage · MDM for remote lawyers</td>
+  <td class="c10">File retention per law society rules (typically 10 yr) · FINTRAC records 5 yr · Trust account records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">69</td>
+  <td class="c1">Accounting, Audit &amp; Tax</td>
+  <td class="c2">Legal &amp; Professional Services</td>
+  <td class="c3">CPA Canada standards · Income Tax Act (CRA) · PIPEDA · FINTRAC (designated activities)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">CPA Canada (via provincial bodies) · CRA (tax) · FINTRAC</td>
+  <td class="c6">PII · Financial · Tax records · PCI</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Big 4 Canadian practices (Deloitte, PwC, KPMG, EY). CSQM (Canadian Standard on Quality Management) for firms. CRA e-filing security (EFILE). PCAOB oversight for US-listed Canadian companies. Data analytics in audit creates bulk financial data obligations.</td>
+  <td class="c9">Client financial data segmentation · CRA EFILE credential security · tax return data encryption · audit file access controls · CRA MyAccount API security · independence documentation integrity</td>
+  <td class="c10">Tax files 7 yr minimum (CRA) · Audit working papers 7 yr · CPA quality management records 5 yr</td>
+</tr>
+<tr>
+  <td class="c0">70</td>
+  <td class="c1">Management Consulting</td>
+  <td class="c2">Legal &amp; Professional Services</td>
+  <td class="c3">PIPEDA · CASL · Provincial employment standards (where employee data) · PSPC supplier qualification (gov contracts)</td>
+  <td class="c4">SOC 2 · ISO 27001 · ISO 20000</td>
+  <td class="c5">OPC · CRTC (CASL) · PSPC (government contracts)</td>
+  <td class="c6">PII · Confidential client data · IP</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">McKinsey, Deloitte, PwC, Accenture, KPMG Canadian practices. Government consulting contracts require PSPC security screening (reliability or secret). No sector-specific regulation — inherits client regulatory context.</td>
+  <td class="c9">Client data compartmentalization · NDA technical enforcement · government security screening compliance · knowledge management platform security · AI-assisted tool data privacy · CASL consent for client communications</td>
+  <td class="c10">Client records per contract (typically 7 yr) · CASL consent records 3 yr · Government contracts per PSPC requirements</td>
+</tr>
+
+<!-- NON-PROFIT & SOCIAL -->
+<tr class="vert-row npo"><td colspan="11">Non-profit &amp; Social<span class="vert-count">3 industries</span></td></tr>
+<tr>
+  <td class="c0">71</td>
+  <td class="c1">Registered Charities</td>
+  <td class="c2">Non-profit &amp; Social</td>
+  <td class="c3">Income Tax Act (CRA charity registration) · PIPEDA · Provincial Charities Acts · CASL</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">CRA (Charities Directorate) · Provincial charity regulators (PGT-BC, PGT-ON) · OPC</td>
+  <td class="c6">PII · Donor data · Beneficiary data</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">CRA charity registration requires annual T3010 reporting. CASL rules for non-profits relaxed but commercial electronic message rules still apply for fundraising. International fund transfer reporting if political activities exceed 10% threshold.</td>
+  <td class="c9">Donor database security · CASL consent for fundraising emails · CRA T3010 reporting system integrity · donation processing PCI DSS · beneficiary data sensitivity · international transfer AML controls</td>
+  <td class="c10">CRA charity records 7 yr · CASL consent records 3 yr · Donor PII 7 yr post last donation</td>
+</tr>
+<tr>
+  <td class="c0">72</td>
+  <td class="c1">Healthcare Charities</td>
+  <td class="c2">Non-profit &amp; Social</td>
+  <td class="c3">PIPEDA · PHIPA (if patient data) · Provincial charity acts · CASL · Health Canada (if clinical research funded)</td>
+  <td class="c4">SOC 2 · ISO 27001</td>
+  <td class="c5">CRA · Provincial OIPCs · Provincial charity regulators</td>
+  <td class="c6">PHI · PII · Donor data</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">Canadian Cancer Society, Heart &amp; Stroke, MS Society. Patient data subject to PHIPA where circle-of-care adjacent. Research funding requires TCPS 2 alignment. Patient registries under PHIPA. CRA charity rules limit advocacy activities.</td>
+  <td class="c9">Patient PII/PHI segmentation from donor data · PHIPA-compliant patient engagement · research participant consent management · CASL fundraising consent · donor PII protection</td>
+  <td class="c10">Patient records per PHIPA (10 yr) · CRA records 7 yr · Research data per RDM plan</td>
+</tr>
+<tr>
+  <td class="c0">73</td>
+  <td class="c1">Indigenous Community Services</td>
+  <td class="c2">Non-profit &amp; Social</td>
+  <td class="c3">PIPEDA · OCAP® principles (Ownership, Control, Access, Possession) · Indian Act (where applicable) · Provincial/federal social service acts</td>
+  <td class="c4">ISO 27001 · FNFMB standards</td>
+  <td class="c5">ISC (Indigenous Services Canada) · provincial child welfare · band councils</td>
+  <td class="c6"><span class="tag-ocap">OCAP®</span> · PII · Cultural heritage data · Genealogical</td>
+  <td class="c7">Build · SAST · Sign · Deploy</td>
+  <td class="c8">OCAP® principles: data must be Owned and Controlled by the community. FNIGC (First Nations Information Governance Centre) governs standards. Sixties Scoop and residential school records require special handling. ISC funding agreements require data sharing with consent.</td>
+  <td class="c9">OCAP® compliance for data sovereignty · cultural data access restrictions · genealogical data special handling · community-controlled identity systems · residential school survivor data security · federal/band dual jurisdiction access controls</td>
+  <td class="c10">Band council records per community governance · ISC reporting 7 yr · Cultural records permanent (community-governed)</td>
+</tr>
+
+</tbody>
+</table>
+<div class="tbl-foot">73 industries &nbsp;·&nbsp; 16 verticals &nbsp;·&nbsp; 10 columns per row &nbsp;·&nbsp; Canadian compliance data throughout</div>
+</div>
+
+<!-- REGULATORY REFERENCE -->
+<h2 id="regref">Canadian regulatory reference</h2>
+<div class="section-sub">Quick lookup — regulator, full name, sector, website path</div>
+
+<div class="tbl-wrap">
+<table class="gen-table">
+<thead>
+<tr>
+  <th>Acronym</th>
+  <th>Full name</th>
+  <th>Sector</th>
+  <th>Key law / instrument</th>
+</tr>
+</thead>
+<tbody>
+<tr><td><strong>OPC</strong></td><td>Office of the Privacy Commissioner of Canada</td><td>Privacy — federal</td><td>PIPEDA / Privacy Act</td></tr>
+<tr><td><strong>OSFI</strong></td><td>Office of the Superintendent of Financial Institutions</td><td>Financial — federal</td><td>Bank Act · Insurance Companies Act</td></tr>
+<tr><td><strong>FINTRAC</strong></td><td>Financial Transactions and Reports Analysis Centre</td><td>AML — federal</td><td>PCMLTFA</td></tr>
+<tr><td><strong>CIRO</strong></td><td>Canadian Investment Regulatory Organization (formerly IIROC + MFDA)</td><td>Securities</td><td>Provincial securities acts</td></tr>
+<tr><td><strong>CSA</strong></td><td>Canadian Securities Administrators</td><td>Securities — pan-Canadian</td><td>National Instruments (NI 31-103, NI 81-102)</td></tr>
+<tr><td><strong>CRTC</strong></td><td>Canadian Radio-television and Telecommunications Commission</td><td>Telecom/broadcast</td><td>Telecommunications Act · Broadcasting Act · CASL</td></tr>
+<tr><td><strong>ISED</strong></td><td>Innovation, Science and Economic Development Canada</td><td>Spectrum · export · innovation</td><td>Radiocommunications Act · Export Controls Order</td></tr>
+<tr><td><strong>Health Canada</strong></td><td>Health Canada</td><td>Health products, drugs, devices</td><td>Food and Drugs Act · Medical Devices Regulations</td></tr>
+<tr><td><strong>PHAC</strong></td><td>Public Health Agency of Canada</td><td>Public health</td><td>Public Health Agency of Canada Act</td></tr>
+<tr><td><strong>CFIA</strong></td><td>Canadian Food Inspection Agency</td><td>Food safety, agriculture</td><td>Safe Food for Canadians Act · Health of Animals Act</td></tr>
+<tr><td><strong>TBS</strong></td><td>Treasury Board Secretariat</td><td>Federal government IT policy</td><td>ITSG-33 · GC PBMM · Directive on Security Management</td></tr>
+<tr><td><strong>CCCS</strong></td><td>Canadian Centre for Cyber Security (part of CSE)</td><td>Cybersecurity — federal</td><td>ITSG-33 · ITSAP guidance</td></tr>
+<tr><td><strong>CSE</strong></td><td>Communications Security Establishment</td><td>Signals intelligence / COMSEC</td><td>CSE Act</td></tr>
+<tr><td><strong>PSPC</strong></td><td>Public Services and Procurement Canada</td><td>Federal procurement / defense contracts</td><td>Industrial Security Program (ISP) · Controlled Goods Program</td></tr>
+<tr><td><strong>CER</strong></td><td>Canada Energy Regulator (formerly NEB)</td><td>Energy infrastructure</td><td>Canadian Energy Regulator Act</td></tr>
+<tr><td><strong>CNSC</strong></td><td>Canadian Nuclear Safety Commission</td><td>Nuclear</td><td>Nuclear Safety and Control Act</td></tr>
+<tr><td><strong>Transport Canada</strong></td><td>Transport Canada</td><td>Aviation, rail, marine, motor vehicle</td><td>Aeronautics Act · Railway Safety Act · Canada Shipping Act</td></tr>
+<tr><td><strong>DFO</strong></td><td>Fisheries and Oceans Canada</td><td>Fisheries, aquaculture, marine</td><td>Fisheries Act · Oceans Act</td></tr>
+<tr><td><strong>ISC</strong></td><td>Indigenous Services Canada</td><td>Indigenous communities</td><td>Indian Act · Nisga'a Final Agreement · modern treaties</td></tr>
+<tr><td><strong>NSIRA</strong></td><td>National Security and Intelligence Review Agency</td><td>Intelligence oversight</td><td>NSIRA Act</td></tr>
+<tr><td><strong>NSICOP</strong></td><td>National Security and Intelligence Committee of Parliamentarians</td><td>Parliamentary oversight (intelligence)</td><td>NSICOP Act</td></tr>
+<tr><td><strong>CAI (QC)</strong></td><td>Commission d'accès à l'information du Québec</td><td>Privacy — Quebec</td><td>Law 25 (LPRPSP)</td></tr>
+<tr><td><strong>IPC (ON)</strong></td><td>Information and Privacy Commissioner of Ontario</td><td>Privacy — Ontario</td><td>PHIPA · MFIPPA · FIPPA</td></tr>
+<tr><td><strong>OIPC (BC)</strong></td><td>Office of the Information and Privacy Commissioner BC</td><td>Privacy — BC</td><td>BC PIPA · FOIPPA</td></tr>
+<tr><td><strong>FNIGC</strong></td><td>First Nations Information Governance Centre</td><td>Indigenous data governance</td><td>OCAP® principles (ownership, control, access, possession)</td></tr>
+</tbody>
+</table>
+</div>
+
+</main>
+</body>
+</html>
