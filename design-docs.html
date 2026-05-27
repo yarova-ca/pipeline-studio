@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Framework Catalog — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:240px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+
+/* SIDEBAR */
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+
+/* MAIN */
+main{flex:1;min-width:0;padding:40px 52px 100px}
+
+/* HEADINGS */
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:36px}
+
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:44px 0 4px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.cat-meta{font-size:11px;color:var(--text-dim);margin-bottom:14px}
+h3{font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 8px}
+
+/* TABLES */
+.tbl{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+thead tr{background:var(--bg2)}
+th{padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.45}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f6f8fa}
+td.fw{font-weight:600;color:var(--text-head);white-space:nowrap;min-width:100px}
+td.dim{color:var(--text-dim);font-size:11px}
+
+/* BADGES */
+.b{display:inline-block;padding:1px 7px;border-radius:99px;font-size:10px;font-weight:600;white-space:nowrap}
+.fe{background:#ddf4ff;color:#0969da;border:1px solid #b6d7f5}
+.mob{background:#fff8c5;color:#9a6700;border:1px solid #e3b341}
+.be{background:#dafbe1;color:#1a7f37;border:1px solid #aadebc}
+.prod{background:#dafbe1;color:#1a7f37;border:1px solid #aadebc}
+.beta{background:#fff8c5;color:#9a6700;border:1px solid #e3b341}
+.legacy{background:#ffebe9;color:#cf222e;border:1px solid #ffb8b0}
+
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><h1>Framework Catalog</h1><p>Pipeline Studio Design Doc</p></div>
+
+  <div class="nav-section">Frontend Web</div>
+  <a href="#c1">1 — SSR / Hybrid</a>
+  <a href="#c2">2 — CSR / SPA</a>
+  <a href="#c3">3 — SSG</a>
+  <a href="#c4">4 — Islands Architecture</a>
+  <a href="#c5">5 — Resumability</a>
+  <a href="#c6">6 — Edge Rendering</a>
+  <a href="#c7">7 — Streaming SSR</a>
+  <a href="#c8">8 — Micro-frontends</a>
+
+  <div class="nav-section">Mobile</div>
+  <a href="#c9">9 — Cross-platform JS</a>
+  <a href="#c10">10 — Cross-platform non-JS</a>
+  <a href="#c11">11 — Native iOS</a>
+  <a href="#c12">12 — Native Android</a>
+  <a href="#c13">13 — PWA</a>
+
+  <div class="nav-section">Backend</div>
+  <a href="#c14">14 — Node / Deno / Bun</a>
+  <a href="#c15">15 — Python</a>
+  <a href="#c16">16 — Go</a>
+  <a href="#c17">17 — Java</a>
+  <a href="#c18">18 — Kotlin</a>
+  <a href="#c19">19 — .NET / C#</a>
+  <a href="#c20">20 — Rust</a>
+  <a href="#c21">21 — Elixir</a>
+  <a href="#c22">22 — Ruby</a>
+  <a href="#c23">23 — PHP</a>
+  <a href="#c24">24 — Swift</a>
+  <a href="#c25">25 — Scala</a>
+  <a href="#c26">26 — Clojure</a>
+  <a href="#c27">27 — C++</a>
+</nav>
+
+<main>
+<div class="page-title">Framework Catalog</div>
+<div class="page-meta">27 categories &nbsp;·&nbsp; 18 shared columns &nbsp;·&nbsp; 4 frontend-only columns &nbsp;·&nbsp; 4 backend-only columns &nbsp;·&nbsp; all rows filled</div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 1 — SSR / Hybrid
+══════════════════════════════════════ -->
+<h2 id="c1">1 — Frontend — SSR / Hybrid <span class="b fe">Frontend Web</span></h2>
+<div class="cat-meta">Server renders HTML per request. Frameworks handle both server and client logic.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 TTFB)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Next.js</td><td>15</td><td>TS / JS</td><td>MIT</td><td>Vercel</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 event loop)</td><td>GC — V8</td><td>80ms edge / 120ms Node</td><td>Server exposed, no built-in auth, CSP manual</td><td>Horizontal</td><td>6M+ weekly npm downloads</td><td>npm, pnpm, yarn, bun</td><td>Webpack / Turbopack</td><td>npmjs.com</td><td>React team, SEO, mixed static + dynamic</td><td>Pure static → Astro. Mobile → Expo</td><td>vs Remix: bigger ecosystem, weaker form handling</td></tr>
+<tr><td class="fw">Remix</td><td>2.12</td><td>TS / JS</td><td>MIT</td><td>Shopify</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 event loop)</td><td>GC — V8</td><td>60ms edge / 100ms Node</td><td>Server exposed, web-standard fetch, no built-in auth</td><td>Horizontal</td><td>600k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / esbuild</td><td>npmjs.com</td><td>Form-heavy apps, progressive enhancement</td><td>Complex data-fetching graphs → Next.js</td><td>vs Next.js: simpler data model, smaller ecosystem</td></tr>
+<tr><td class="fw">Nuxt</td><td>3.13</td><td>TS / JS</td><td>MIT</td><td>NuxtLabs</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 event loop)</td><td>GC — V8</td><td>80ms edge / 120ms Node</td><td>Server exposed, Nitro server, no built-in auth</td><td>Horizontal</td><td>1.5M+ weekly npm downloads</td><td>npm, pnpm, yarn, bun</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Vue team, full-stack Vue apps</td><td>React team → Next.js</td><td>vs Next.js: Vue ecosystem, smaller community</td></tr>
+<tr><td class="fw">SvelteKit</td><td>2.7</td><td>TS / JS</td><td>MIT</td><td>Vercel</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 event loop)</td><td>GC — V8</td><td>50ms edge / 90ms Node</td><td>Server exposed, adapter-based, no built-in auth</td><td>Horizontal</td><td>700k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Smallest bundle, compile-time reactivity</td><td>Large React team → Next.js</td><td>vs Next.js: smaller bundle, smaller community</td></tr>
+<tr><td class="fw">Angular SSR</td><td>18</td><td>TS</td><td>MIT</td><td>Google</td><td><span class="b prod">Production</span></td><td>Single-thread async (Zone.js / Signals)</td><td>GC — V8</td><td>90ms Node</td><td>Strong DI system, CSP requires config, no built-in auth</td><td>Horizontal</td><td>3M+ weekly npm downloads</td><td>npm</td><td>Angular CLI / esbuild</td><td>npmjs.com</td><td>Enterprise Java-background teams, strict structure</td><td>Small team, fast iteration → Next.js</td><td>vs Next.js: more opinionated, heavier DX overhead</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size (gzip)</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Next.js</td><td>SSR, CSR, SSG, ISR — per-page</td><td>Full — RSC reduces client JS</td><td>~80–120 kb</td><td>Node.js / Edge (Vercel, Cloudflare)</td></tr>
+<tr><td class="fw">Remix</td><td>SSR, CSR — route-level</td><td>Full</td><td>~40–80 kb</td><td>Node.js / Edge (Cloudflare, Deno, Bun)</td></tr>
+<tr><td class="fw">Nuxt</td><td>SSR, CSR, SSG, ISR — per-page</td><td>Full — partial hydration via islands plugin</td><td>~70–100 kb</td><td>Node.js / Edge (Cloudflare, Vercel)</td></tr>
+<tr><td class="fw">SvelteKit</td><td>SSR, CSR, SSG — per-route</td><td>Full — minimal overhead due to no virtual DOM</td><td>~20–50 kb</td><td>Node.js / Edge (Cloudflare, Vercel, Deno)</td></tr>
+<tr><td class="fw">Angular SSR</td><td>SSR, CSR — app-wide</td><td>Full — hydration improved in v17+</td><td>~80–120 kb</td><td>Node.js only</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 2 — CSR / SPA
+══════════════════════════════════════ -->
+<h2 id="c2">2 — Frontend — CSR / SPA <span class="b fe">Frontend Web</span></h2>
+<div class="cat-meta">Browser renders all HTML. Server sends JS bundle only. No server-rendered HTML.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (TTI)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">React</td><td>19</td><td>TS / JS</td><td>MIT</td><td>Meta</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 event loop)</td><td>GC — V8</td><td>~2s on 4G (bundle-dependent)</td><td>XSS via dangerouslySetInnerHTML, no built-in auth</td><td>Horizontal (CDN)</td><td>20M+ weekly npm downloads</td><td>npm, pnpm, yarn, bun</td><td>Vite / CRA (deprecated)</td><td>npmjs.com</td><td>Rich UI, large team, React ecosystem</td><td>SEO-critical public site → SSR</td><td>vs Vue: larger community, higher learning curve</td></tr>
+<tr><td class="fw">Vue</td><td>3.5</td><td>TS / JS</td><td>MIT</td><td>Evan You / Community</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 event loop)</td><td>GC — V8</td><td>~1.5s on 4G</td><td>XSS if v-html misused, no built-in auth</td><td>Horizontal (CDN)</td><td>4M+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Gentler learning curve, progressive adoption</td><td>Large enterprise React team → React</td><td>vs React: gentler DX, smaller job market</td></tr>
+<tr><td class="fw">Angular</td><td>18</td><td>TS</td><td>MIT</td><td>Google</td><td><span class="b prod">Production</span></td><td>Single-thread async (Zone.js / Signals)</td><td>GC — V8</td><td>~3s on 4G (heavier initial bundle)</td><td>Strong DI, built-in sanitization, no built-in auth</td><td>Horizontal (CDN)</td><td>3M+ weekly npm downloads</td><td>npm</td><td>Angular CLI / esbuild</td><td>npmjs.com</td><td>Enterprise, Java-background teams, opinionated structure</td><td>Small team, fast prototyping → Vue / React</td><td>vs React: more structured, heavier toolchain</td></tr>
+<tr><td class="fw">Svelte</td><td>5</td><td>TS / JS</td><td>MIT</td><td>Vercel</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 event loop)</td><td>GC — V8</td><td>~0.8s on 4G (smallest runtime)</td><td>XSS if {@html} misused, no virtual DOM attack surface</td><td>Horizontal (CDN)</td><td>700k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Smallest bundle, compile-time reactivity, no runtime overhead</td><td>Large team expecting React patterns → React</td><td>vs React: near-zero runtime, much smaller community</td></tr>
+<tr><td class="fw">Solid.js</td><td>1.9</td><td>TS / JS</td><td>MIT</td><td>Community / Ryan Carniato</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 event loop)</td><td>GC — V8</td><td>~0.6s on 4G</td><td>XSS if innerHTML misused, fine-grained reactivity model</td><td>Horizontal (CDN)</td><td>80k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / esbuild</td><td>npmjs.com</td><td>Maximum runtime performance, React-like syntax</td><td>Large team, ecosystem maturity needed → React</td><td>vs React: faster runtime, tiny ecosystem</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size (gzip)</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">React</td><td>CSR only (add Next.js for SSR)</td><td>N/A — client-only</td><td>~40–60 kb (React alone)</td><td>Browser</td></tr>
+<tr><td class="fw">Vue</td><td>CSR only (add Nuxt for SSR)</td><td>N/A — client-only</td><td>~30–50 kb</td><td>Browser</td></tr>
+<tr><td class="fw">Angular</td><td>CSR only (add Angular SSR for SSR)</td><td>N/A — client-only</td><td>~80–120 kb (esbuild reduces this)</td><td>Browser</td></tr>
+<tr><td class="fw">Svelte</td><td>CSR only (add SvelteKit for SSR)</td><td>N/A — client-only</td><td>~5–15 kb (no runtime overhead)</td><td>Browser</td></tr>
+<tr><td class="fw">Solid.js</td><td>CSR only (add SolidStart for SSR)</td><td>N/A — client-only</td><td>~6–12 kb</td><td>Browser</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 3 — SSG
+══════════════════════════════════════ -->
+<h2 id="c3">3 — Frontend — SSG <span class="b fe">Frontend Web</span></h2>
+<div class="cat-meta">All pages pre-built at compile time. Served as static files. No runtime server needed.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (TTFB)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Astro</td><td>4.16</td><td>TS / JS</td><td>MIT</td><td>The Astro Technology Company</td><td><span class="b prod">Production</span></td><td>Build-time only (Vite)</td><td>GC — V8 (build only)</td><td>&lt;10ms (CDN static)</td><td>Zero JS by default, no attack surface at runtime</td><td>Horizontal (CDN)</td><td>1M+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Content sites, docs, blogs — max performance</td><td>Highly dynamic data per user → SSR</td><td>vs Next.js SSG: zero JS default, fewer integrations</td></tr>
+<tr><td class="fw">Eleventy</td><td>3.0</td><td>JS</td><td>MIT</td><td>Community / Zach Leatherman</td><td><span class="b prod">Production</span></td><td>Build-time only (Node.js)</td><td>GC — V8 (build only)</td><td>&lt;10ms (CDN static)</td><td>Zero JS by default</td><td>Horizontal (CDN)</td><td>200k+ weekly npm downloads</td><td>npm, yarn</td><td>Node.js (no bundler required)</td><td>npmjs.com</td><td>Maximum control, any template language</td><td>React/Vue team → Astro</td><td>vs Astro: simpler, no components model</td></tr>
+<tr><td class="fw">Hugo</td><td>0.131</td><td>Go templates</td><td>Apache 2.0</td><td>Community</td><td><span class="b prod">Production</span></td><td>Build-time only (Go binary)</td><td>Manual (Go — no GC at build)</td><td>&lt;10ms (CDN static)</td><td>Zero JS by default, Go binary — no npm supply chain</td><td>Horizontal (CDN)</td><td>70k+ GitHub stars</td><td>None (single binary)</td><td>Hugo CLI (built-in)</td><td>github.com/gohugoio/hugo</td><td>Largest site (10k+ pages), fastest build time</td><td>JS team, component model needed → Astro</td><td>vs Astro: 100× faster builds, no JS component ecosystem</td></tr>
+<tr><td class="fw">Gatsby</td><td>5.13</td><td>TS / JS</td><td>MIT</td><td>Netlify</td><td><span class="b prod">Production</span></td><td>Build-time only (V8 + GraphQL)</td><td>GC — V8 (build only)</td><td>&lt;10ms (CDN static)</td><td>GraphQL layer, plugin ecosystem risks</td><td>Horizontal (CDN)</td><td>400k+ weekly npm downloads</td><td>npm, yarn</td><td>Webpack / Gatsby CLI</td><td>npmjs.com</td><td>React + GraphQL data layer, image optimization</td><td>No GraphQL need → Astro or Next.js SSG</td><td>vs Astro: GraphQL data layer, slower builds</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size (gzip)</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Astro</td><td>SSG primary — SSR available via adapter</td><td>Partial (islands) — JS only where needed</td><td>~0 kb default (no JS shipped)</td><td>Browser + Node/Edge for SSR mode</td></tr>
+<tr><td class="fw">Eleventy</td><td>SSG only</td><td>None (no client JS by default)</td><td>~0 kb default</td><td>Browser (static files)</td></tr>
+<tr><td class="fw">Hugo</td><td>SSG only</td><td>None</td><td>~0 kb default</td><td>Browser (static files)</td></tr>
+<tr><td class="fw">Gatsby</td><td>SSG + partial hydration</td><td>Full (React hydration)</td><td>~100–150 kb (React overhead)</td><td>Browser + Node.js at build</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 4 — Islands Architecture
+══════════════════════════════════════ -->
+<h2 id="c4">4 — Frontend — Islands Architecture <span class="b fe">Frontend Web</span></h2>
+<div class="cat-meta">Mostly static HTML with isolated interactive JS "islands". Only island components hydrate.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (TTFB)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Astro</td><td>4.16</td><td>TS / JS</td><td>MIT</td><td>The Astro Technology Company</td><td><span class="b prod">Production</span></td><td>Build-time (Vite) + island runtime</td><td>GC — V8</td><td>&lt;10ms (CDN static)</td><td>Per-island isolation, zero JS surfaces by default</td><td>Horizontal (CDN)</td><td>1M+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Content-heavy sites needing selective interactivity</td><td>Fully dynamic app → SvelteKit or Next.js</td><td>vs Next.js: zero-JS baseline, islands only hydrate on demand</td></tr>
+<tr><td class="fw">Fresh</td><td>2.0</td><td>TS</td><td>MIT</td><td>Deno</td><td><span class="b prod">Production</span></td><td>Single-thread async (Deno / V8)</td><td>GC — V8</td><td>50ms (Deno Deploy edge)</td><td>No npm by default — smaller supply chain surface</td><td>Horizontal (Deno Deploy)</td><td>15k+ GitHub stars</td><td>Deno (no npm by default)</td><td>esbuild (built-in)</td><td>jsr.io / deno.land/x</td><td>Deno-native stack, edge-first, islands model</td><td>npm ecosystem needed → Astro</td><td>vs Astro: Deno-native, smaller ecosystem</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size (gzip)</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Astro</td><td>SSG + SSR — islands per component</td><td>Partial — only island components hydrate</td><td>~0 kb baseline, +island size per island</td><td>Browser + Node / Edge</td></tr>
+<tr><td class="fw">Fresh</td><td>SSR — islands per component</td><td>Partial — only island components hydrate</td><td>~5–20 kb per island (Preact)</td><td>Deno / Deno Deploy (edge)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 5 — Resumability
+══════════════════════════════════════ -->
+<h2 id="c5">5 — Frontend — Resumability <span class="b fe">Frontend Web</span></h2>
+<div class="cat-meta">Serializes server state into HTML. Browser resumes — not re-executes — on load. Zero hydration cost.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (TTI)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Qwik</td><td>1.9</td><td>TS / JS</td><td>MIT</td><td>Builder.io</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8) + lazy loading</td><td>GC — V8</td><td>&lt;100ms TTI regardless of app size</td><td>Serialized closures — unusual attack model, no built-in auth</td><td>Horizontal</td><td>90k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite</td><td>npmjs.com</td><td>Large apps where hydration cost is a performance bottleneck</td><td>Small app where hydration cost is negligible → React/Svelte</td><td>vs Next.js: near-zero TTI, steep mental model shift</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size (gzip)</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Qwik</td><td>SSR (Qwik City) + CSR</td><td>Resumable — not hydration. &lt;1 kb JS on load regardless of app size</td><td>&lt;1 kb initial (lazy loads on interaction)</td><td>Node.js / Edge (Cloudflare, Vercel)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 6 — Edge Rendering
+══════════════════════════════════════ -->
+<h2 id="c6">6 — Frontend — Edge Rendering <span class="b fe">Frontend Web</span></h2>
+<div class="cat-meta">Renders HTML at CDN edge nodes worldwide. Sub-50ms TTFB. No origin server round-trip.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 TTFB)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Next.js Edge Runtime</td><td>15</td><td>TS / JS</td><td>MIT</td><td>Vercel</td><td><span class="b prod">Production</span></td><td>V8 Isolate (no Node.js APIs)</td><td>GC — V8 (128 MB limit)</td><td>~30–60ms global</td><td>Reduced attack surface (no Node.js), no fs/crypto</td><td>Horizontal (CDN global)</td><td>6M+ weekly npm downloads</td><td>npm, pnpm, yarn, bun</td><td>Turbopack / Webpack</td><td>npmjs.com</td><td>Personalized pages needing global low latency</td><td>Node.js APIs needed → Node.js runtime</td><td>vs Node.js runtime: 10× faster TTFB, 128 MB limit</td></tr>
+<tr><td class="fw">Hono</td><td>4.6</td><td>TS / JS</td><td>MIT</td><td>Community / Yusuke Wada</td><td><span class="b prod">Production</span></td><td>V8 Isolate / Deno / Bun</td><td>GC — V8</td><td>~20–40ms global</td><td>Minimal surface — no framework magic, web-standard APIs</td><td>Horizontal (CDN global)</td><td>600k+ weekly npm downloads</td><td>npm, pnpm</td><td>esbuild / Vite</td><td>npmjs.com</td><td>Ultra-light API or SSR at the edge</td><td>Full-stack app with complex routing → Next.js</td><td>vs Next.js: lighter, multi-runtime, no React</td></tr>
+<tr><td class="fw">Remix (Cloudflare)</td><td>2.12</td><td>TS / JS</td><td>MIT</td><td>Shopify</td><td><span class="b prod">Production</span></td><td>V8 Isolate</td><td>GC — V8 (128 MB limit)</td><td>~30–60ms global</td><td>Web-standard fetch, no Node.js leakage at edge</td><td>Horizontal (CDN global)</td><td>600k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / esbuild</td><td>npmjs.com</td><td>Form-heavy apps needing global low latency</td><td>Node.js-specific packages needed → Node.js adapter</td><td>vs Next.js edge: web-standard model, Cloudflare-native</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size (gzip)</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Next.js Edge Runtime</td><td>SSR (edge) — pages opt-in via export runtime='edge'</td><td>Full</td><td>~80–120 kb</td><td>V8 Isolate (Vercel Edge, Cloudflare)</td></tr>
+<tr><td class="fw">Hono</td><td>SSR — any template engine</td><td>None (HTML only) or full if JSX used</td><td>~14 kb (framework only)</td><td>Cloudflare Workers, Deno Deploy, Bun, Node.js</td></tr>
+<tr><td class="fw">Remix (Cloudflare)</td><td>SSR — route-level</td><td>Full</td><td>~40–80 kb</td><td>Cloudflare Workers</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 7 — Streaming SSR
+══════════════════════════════════════ -->
+<h2 id="c7">7 — Frontend — Streaming SSR <span class="b fe">Frontend Web</span></h2>
+<div class="cat-meta">Sends HTML in chunks as it is generated. Browser renders above-the-fold before full page is ready.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (TTFB)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Next.js App Router</td><td>15</td><td>TS / JS</td><td>MIT</td><td>Vercel</td><td><span class="b prod">Production</span></td><td>Single-thread async + React Suspense</td><td>GC — V8</td><td>~50ms first chunk</td><td>Server components isolated, no client exposure of server code</td><td>Horizontal</td><td>6M+ weekly npm downloads</td><td>npm, pnpm, yarn, bun</td><td>Turbopack / Webpack</td><td>npmjs.com</td><td>Large pages where some sections load slower than others</td><td>Simple page → SSG</td><td>vs Pages Router: streaming + RSC, steeper migration</td></tr>
+<tr><td class="fw">Remix</td><td>2.12</td><td>TS / JS</td><td>MIT</td><td>Shopify</td><td><span class="b prod">Production</span></td><td>Single-thread async + defer()</td><td>GC — V8</td><td>~40ms first chunk</td><td>Web-standard response streaming</td><td>Horizontal</td><td>600k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / esbuild</td><td>npmjs.com</td><td>Deferred non-critical data, fast initial render</td><td>Simple page → SSG</td><td>vs Next.js: simpler defer model, smaller ecosystem</td></tr>
+<tr><td class="fw">SvelteKit</td><td>2.7</td><td>TS / JS</td><td>MIT</td><td>Vercel</td><td><span class="b prod">Production</span></td><td>Single-thread async + ReadableStream</td><td>GC — V8</td><td>~40ms first chunk</td><td>No virtual DOM — smaller runtime attack surface</td><td>Horizontal</td><td>700k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Smallest streamed bundle, Svelte ecosystem</td><td>React team → Next.js</td><td>vs Next.js: smaller bundle, React incompatible</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size (gzip)</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Next.js App Router</td><td>SSR streaming — Suspense boundaries define chunks</td><td>Full — RSC reduces hydration payload</td><td>~80–120 kb</td><td>Node.js / Edge</td></tr>
+<tr><td class="fw">Remix</td><td>SSR streaming — defer() wraps slow loaders</td><td>Full</td><td>~40–80 kb</td><td>Node.js / Edge / Deno / Bun</td></tr>
+<tr><td class="fw">SvelteKit</td><td>SSR streaming — ReadableStream native</td><td>Full (no virtual DOM overhead)</td><td>~20–50 kb</td><td>Node.js / Edge / Deno / Bun</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 8 — Micro-frontends
+══════════════════════════════════════ -->
+<h2 id="c8">8 — Frontend — Micro-frontends <span class="b fe">Frontend Web</span></h2>
+<div class="cat-meta">Multiple independently deployed frontend apps composed into one page. Different teams own different sections.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Module Federation</td><td>Webpack 5 / Rspack</td><td>JS / TS</td><td>MIT</td><td>Webpack team / ByteDance</td><td><span class="b prod">Production</span></td><td>Browser event loop per remote</td><td>GC — V8</td><td>Depends on remote load — ~50–200ms overhead</td><td>Remote code injection risk — must validate remote origins</td><td>Horizontal (each remote independently)</td><td>Webpack: 20M+ weekly downloads</td><td>npm, pnpm, yarn</td><td>Webpack 5 / Rspack</td><td>npmjs.com</td><td>Multiple teams, independent deployments, shared dependencies</td><td>Single team, small app → monorepo SPA</td><td>vs iframes: shared state possible, harder to isolate</td></tr>
+<tr><td class="fw">Single-spa</td><td>6.0</td><td>JS / TS</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Browser event loop, orchestrator pattern</td><td>GC — V8</td><td>~100–300ms orchestrator overhead</td><td>Shared global scope — XSS in one app affects all</td><td>Horizontal (each app independently)</td><td>100k+ weekly npm downloads</td><td>npm, yarn</td><td>Any bundler (framework-agnostic)</td><td>npmjs.com</td><td>Framework-agnostic composition (React + Vue + Angular together)</td><td>All apps same framework → Module Federation</td><td>vs Module Federation: framework agnostic, more configuration</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size (gzip)</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Module Federation</td><td>CSR (primary) — SSR support in Webpack 5.84+</td><td>Full — each remote hydrates independently</td><td>Shell ~10 kb + each remote independently</td><td>Browser</td></tr>
+<tr><td class="fw">Single-spa</td><td>CSR — each app renders itself</td><td>Full — each app independently</td><td>Orchestrator ~15 kb + each app independently</td><td>Browser</td></tr>
+</tbody></table></div>
+
+<hr>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 9 — Cross-platform JS Mobile
+══════════════════════════════════════ -->
+<h2 id="c9">9 — Mobile — Cross-platform JS <span class="b mob">Mobile</span></h2>
+<div class="cat-meta">JS/TS codebase targets iOS and Android. Bridges to native APIs via JS runtime.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">React Native</td><td>0.75</td><td>TS / JS</td><td>MIT</td><td>Meta</td><td><span class="b prod">Production</span></td><td>JS thread + native UI thread (new arch: JSI)</td><td>GC — Hermes (Meta's JS engine)</td><td>~60fps — near-native with new arch</td><td>JS bridge — XSS not applicable, native module risks</td><td>Vertical (device constraints)</td><td>700k+ weekly npm downloads</td><td>npm, yarn</td><td>Metro bundler</td><td>npmjs.com</td><td>React team targeting iOS + Android, large native module ecosystem</td><td>High-performance games or 3D → Flutter / Native</td><td>vs Flutter: larger ecosystem, slower UI than Flutter</td></tr>
+<tr><td class="fw">Expo</td><td>51</td><td>TS / JS</td><td>MIT</td><td>Expo</td><td><span class="b prod">Production</span></td><td>JS thread + native thread (React Native)</td><td>GC — Hermes</td><td>~60fps</td><td>Managed workflow limits native attack surface</td><td>Vertical (device constraints)</td><td>400k+ weekly npm downloads</td><td>npm, yarn</td><td>Metro + EAS Build</td><td>npmjs.com</td><td>React Native apps without Xcode/Android Studio setup</td><td>Deep native customization → bare React Native</td><td>vs bare React Native: faster DX, less native control</td></tr>
+<tr><td class="fw">Ionic</td><td>8</td><td>TS / JS</td><td>MIT</td><td>Ionic</td><td><span class="b prod">Production</span></td><td>Browser event loop (WebView)</td><td>GC — V8 (WebView)</td><td>~30–50fps (WebView overhead)</td><td>WebView — full web attack surface in a native shell</td><td>Vertical (device constraints)</td><td>200k+ weekly npm downloads</td><td>npm, yarn</td><td>Vite / Angular CLI</td><td>npmjs.com</td><td>Web team, web-only UI components, Capacitor plugins</td><td>Native performance critical → React Native / Flutter</td><td>vs React Native: web-native, lower performance ceiling</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">React Native</td><td>Native render (no HTML) — native UI components</td><td>N/A — native only</td><td>~20–50 MB APK / IPA (app bundle)</td><td>iOS / Android</td></tr>
+<tr><td class="fw">Expo</td><td>Native render — React Native under the hood</td><td>N/A — native only</td><td>~25–60 MB (includes Expo modules)</td><td>iOS / Android / Web (Expo Web)</td></tr>
+<tr><td class="fw">Ionic</td><td>WebView render (HTML/CSS in native shell)</td><td>N/A — web-native</td><td>~10–30 MB APK / IPA</td><td>iOS / Android / PWA / Web</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 10 — Cross-platform non-JS
+══════════════════════════════════════ -->
+<h2 id="c10">10 — Mobile — Cross-platform non-JS <span class="b mob">Mobile</span></h2>
+<div class="cat-meta">Non-JS language compiles to native iOS and Android. No JS runtime on device.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Flutter</td><td>3.24</td><td>Dart</td><td>BSD-3</td><td>Google</td><td><span class="b prod">Production</span></td><td>Single-thread (Dart) + isolates for background</td><td>GC — Dart VM</td><td>~120fps capable (Impeller renderer)</td><td>No WebView — smaller attack surface, custom renderer</td><td>Vertical (device constraints)</td><td>160k+ GitHub stars</td><td>pub (Dart)</td><td>Flutter CLI / Gradle / Xcode</td><td>pub.dev</td><td>Pixel-perfect cross-platform UI, animations, games</td><td>JS team, web output primary → React Native + Expo</td><td>vs React Native: faster/smoother UI, Dart is a new language</td></tr>
+<tr><td class="fw">.NET MAUI</td><td>9</td><td>C#</td><td>MIT</td><td>Microsoft</td><td><span class="b prod">Production</span></td><td>Thread pool + async/await</td><td>GC — CLR</td><td>~60fps native controls</td><td>.NET runtime, no WebView, native controls</td><td>Vertical (device constraints)</td><td>20k+ GitHub stars</td><td>NuGet</td><td>dotnet CLI / MSBuild</td><td>nuget.org</td><td>.NET / C# team targeting iOS, Android, Windows, macOS</td><td>No .NET team → Flutter</td><td>vs Flutter: C# ecosystem, lower UI flexibility</td></tr>
+<tr><td class="fw">Kotlin Multiplatform</td><td>2.0</td><td>Kotlin</td><td>Apache 2.0</td><td>JetBrains</td><td><span class="b prod">Production</span></td><td>Coroutines — multiplatform</td><td>GC — JVM (Android) / experimental K/N GC (iOS)</td><td>Native speed on each platform</td><td>Kotlin Native on iOS — smaller attack surface than JVM</td><td>Vertical (device constraints)</td><td>50k+ GitHub stars</td><td>Gradle</td><td>Kotlin CLI / Gradle / Xcode</td><td>maven.google.com / mavenCentral</td><td>Kotlin Android team adding iOS support, shared business logic</td><td>UI sharing needed → Flutter</td><td>vs Flutter: shares logic not UI, Kotlin native on iOS</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Flutter</td><td>Native render (Impeller — custom GPU renderer)</td><td>N/A</td><td>~15–30 MB (Dart + Flutter engine)</td><td>iOS / Android / Web / Desktop</td></tr>
+<tr><td class="fw">.NET MAUI</td><td>Native controls per platform</td><td>N/A</td><td>~20–40 MB (.NET runtime)</td><td>iOS / Android / Windows / macOS</td></tr>
+<tr><td class="fw">Kotlin Multiplatform</td><td>Native UI per platform (Compose Multiplatform for shared UI)</td><td>N/A</td><td>~8–20 MB per platform</td><td>iOS / Android / Desktop / Web (experimental)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 11 — Native iOS
+══════════════════════════════════════ -->
+<h2 id="c11">11 — Mobile — Native iOS <span class="b mob">Mobile</span></h2>
+<div class="cat-meta">Apple-native SDKs only. Maximum platform API access, best performance on iOS hardware.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Swift / SwiftUI</td><td>Swift 6 / SwiftUI 6</td><td>Swift</td><td>Apache 2.0</td><td>Apple</td><td><span class="b prod">Production</span></td><td>GCD (Grand Central Dispatch) + Swift concurrency (async/await)</td><td>ARC (Automatic Reference Counting)</td><td>120fps ProMotion, Metal GPU direct</td><td>App Sandbox, keychain, biometrics, no WebView unless needed</td><td>Vertical (device)</td><td>Swift: 65k+ GitHub stars</td><td>Swift Package Manager (SPM)</td><td>Xcode</td><td>Swift Package Index (swiftpackageindex.com)</td><td>iOS-first product, full platform API access, latest iOS features</td><td>iOS + Android both needed → Flutter or React Native</td><td>vs React Native: best iOS perf, iOS-only</td></tr>
+<tr><td class="fw">Objective-C (UIKit)</td><td>Objective-C 2.0</td><td>Objective-C</td><td>Proprietary</td><td>Apple</td><td><span class="b legacy">Legacy</span></td><td>GCD + NSOperationQueue</td><td>Manual (MRC) or ARC</td><td>Native — same as Swift</td><td>Same as Swift sandbox model</td><td>Vertical (device)</td><td>Legacy codebase (existing iOS apps)</td><td>CocoaPods / SPM</td><td>Xcode</td><td>cocoapods.org</td><td>Maintaining existing Obj-C codebase</td><td>New iOS project → Swift</td><td>vs Swift: no type safety, verbose syntax, no modern concurrency</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Swift / SwiftUI</td><td>Native iOS rendering (Core Animation / Metal)</td><td>N/A</td><td>~5–30 MB IPA (app-dependent)</td><td>iOS / iPadOS / macOS / watchOS / tvOS / visionOS</td></tr>
+<tr><td class="fw">Objective-C</td><td>Native iOS rendering (Core Animation / UIKit)</td><td>N/A</td><td>~5–30 MB IPA (app-dependent)</td><td>iOS / iPadOS / macOS</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 12 — Native Android
+══════════════════════════════════════ -->
+<h2 id="c12">12 — Mobile — Native Android <span class="b mob">Mobile</span></h2>
+<div class="cat-meta">Android-native SDKs only. Maximum platform API access, best performance on Android hardware.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Kotlin + Jetpack Compose</td><td>Kotlin 2.0 / Compose 1.7</td><td>Kotlin</td><td>Apache 2.0</td><td>Google / JetBrains</td><td><span class="b prod">Production</span></td><td>Coroutines + Flow</td><td>GC — JVM (ART)</td><td>~60–90fps, Material3 native</td><td>App Sandbox, keystore, biometrics</td><td>Vertical (device)</td><td>Compose: 20k+ GitHub stars</td><td>Gradle</td><td>Android Studio / Gradle</td><td>maven.google.com / mavenCentral</td><td>Android-first product, Google ecosystem, modern UI</td><td>iOS + Android both needed → Flutter or React Native</td><td>vs Flutter: native Android perf, Android-only</td></tr>
+<tr><td class="fw">Java Android SDK</td><td>Java 17 (Android SDK 35)</td><td>Java</td><td>Apache 2.0</td><td>Google</td><td><span class="b legacy">Legacy</span></td><td>Thread pool + AsyncTask (deprecated) / Java executors</td><td>GC — JVM (ART)</td><td>~60fps native</td><td>Same Android sandbox model</td><td>Vertical (device)</td><td>Legacy (existing Java Android apps)</td><td>Gradle</td><td>Android Studio / Gradle</td><td>maven.google.com</td><td>Maintaining existing Java Android codebase</td><td>New Android project → Kotlin + Compose</td><td>vs Kotlin: no null safety, verbose, no coroutines</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Kotlin + Compose</td><td>Native Android rendering (Skia canvas / HWUI)</td><td>N/A</td><td>~10–30 MB APK (split APK reduces this)</td><td>Android</td></tr>
+<tr><td class="fw">Java Android SDK</td><td>Native Android rendering (HWUI / XML layouts)</td><td>N/A</td><td>~8–25 MB APK</td><td>Android</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 13 — PWA
+══════════════════════════════════════ -->
+<h2 id="c13">13 — Mobile — PWA <span class="b mob">Mobile</span></h2>
+<div class="cat-meta">Web app installable on device via browser. Offline via Service Worker. No app store required.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Workbox</td><td>7.3</td><td>JS / TS</td><td>MIT</td><td>Google</td><td><span class="b prod">Production</span></td><td>Service Worker (browser background thread)</td><td>GC — V8</td><td>Offline capable — varies by cache strategy</td><td>HTTPS required, Service Worker scope isolation</td><td>Horizontal (CDN + cache)</td><td>2M+ weekly npm downloads</td><td>npm, yarn</td><td>Webpack / Vite plugin</td><td>npmjs.com</td><td>Adding offline + caching to any existing web app</td><td>Deep native APIs (Bluetooth, NFC) → Native or Capacitor</td><td>vs Capacitor: zero native code, limited native API access</td></tr>
+<tr><td class="fw">Vite PWA Plugin</td><td>0.20</td><td>JS / TS</td><td>MIT</td><td>Community / antfu</td><td><span class="b prod">Production</span></td><td>Service Worker (browser background thread)</td><td>GC — V8</td><td>Same as Workbox (uses Workbox under the hood)</td><td>HTTPS required</td><td>Horizontal (CDN + cache)</td><td>1.5M+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite</td><td>npmjs.com</td><td>Vite-based app needing PWA without manual Workbox config</td><td>Non-Vite build system → Workbox directly</td><td>vs Workbox: zero-config PWA for Vite, less control</td></tr>
+</tbody></table></div>
+
+<h3>Frontend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Rendering modes</th><th>Hydration</th><th>Bundle size</th><th>Runtime target</th></tr></thead>
+<tbody>
+<tr><td class="fw">Workbox</td><td>Any (SSR/SSG/CSR) — Workbox adds Service Worker layer</td><td>Depends on base framework</td><td>~10 kb (Workbox runtime)</td><td>Browser (installable on iOS Safari / Android Chrome)</td></tr>
+<tr><td class="fw">Vite PWA Plugin</td><td>Same as underlying Vite app</td><td>Same as underlying Vite app</td><td>~5 kb (plugin wrapper)</td><td>Browser (installable on iOS Safari / Android Chrome)</td></tr>
+</tbody></table></div>
+
+<hr>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 14 — Node / Deno / Bun
+══════════════════════════════════════ -->
+<h2 id="c14">14 — Backend — Node.js / Deno / Bun <span class="b be">Backend</span></h2>
+<div class="cat-meta">JS/TS server-side runtimes. Node.js: npm ecosystem. Deno: secure by default. Bun: fast all-in-one.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Express</td><td>5.0</td><td>JS / TS</td><td>MIT</td><td>OpenJS Foundation</td><td><span class="b prod">Production</span></td><td>Single-thread async (Node.js event loop)</td><td>GC — V8</td><td>~30k req/s (TechEmpower R22)</td><td>No built-in security — needs helmet.js, cors, rate-limit</td><td>Horizontal</td><td>30M+ weekly npm downloads</td><td>npm, yarn, pnpm</td><td>Node.js (no bundler)</td><td>npmjs.com</td><td>Largest middleware ecosystem, maximum flexibility</td><td>High throughput → Fastify</td><td>vs Fastify: 2× slower, larger middleware ecosystem</td></tr>
+<tr><td class="fw">Fastify</td><td>5.1</td><td>JS / TS</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Single-thread async (Node.js event loop)</td><td>GC — V8</td><td>~80k req/s (TechEmpower R22)</td><td>Schema validation built-in (Ajv), no helmet needed but recommended</td><td>Horizontal</td><td>2M+ weekly npm downloads</td><td>npm, yarn, pnpm</td><td>Node.js (no bundler)</td><td>npmjs.com</td><td>High throughput JSON APIs, schema-first design</td><td>Non-JSON protocols or Express plugins needed → Express</td><td>vs Express: 2× faster, smaller middleware ecosystem</td></tr>
+<tr><td class="fw">NestJS</td><td>10.4</td><td>TS</td><td>MIT</td><td>Kamil Mysliwiec</td><td><span class="b prod">Production</span></td><td>Single-thread async (Node.js event loop)</td><td>GC — V8</td><td>~40k req/s (Fastify adapter)</td><td>Guards, interceptors, pipes — structured auth model</td><td>Horizontal</td><td>1.5M+ weekly npm downloads</td><td>npm, yarn, pnpm</td><td>Node.js / Webpack (swc)</td><td>npmjs.com</td><td>Enterprise, Angular-background team, opinionated structure</td><td>Simple API → Express or Fastify</td><td>vs Express: structured DI + modules, heavier boilerplate</td></tr>
+<tr><td class="fw">Hono</td><td>4.6</td><td>TS / JS</td><td>MIT</td><td>Community / Yusuke Wada</td><td><span class="b prod">Production</span></td><td>Multi-runtime async</td><td>GC — V8</td><td>~100k req/s (Bun runtime)</td><td>Minimal surface — web-standard APIs only</td><td>Horizontal</td><td>600k+ weekly npm downloads</td><td>npm, pnpm</td><td>esbuild / Vite</td><td>npmjs.com</td><td>Edge + multi-runtime API (Node, Deno, Bun, Cloudflare)</td><td>Node.js-only middleware ecosystem needed → Fastify</td><td>vs Fastify: multi-runtime, no Node.js-specific middleware</td></tr>
+<tr><td class="fw">Deno</td><td>2.1</td><td>TS / JS</td><td>MIT</td><td>Deno Land</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8 + Tokio)</td><td>GC — V8</td><td>~60k req/s (native HTTP)</td><td>Permissions model — deny-by-default filesystem, network, env access</td><td>Horizontal</td><td>90k+ GitHub stars</td><td>Deno (built-in)</td><td>esbuild (built-in)</td><td>jsr.io / deno.land/x</td><td>Security-first server, TypeScript without build step</td><td>npm-heavy codebase → Node.js</td><td>vs Node.js: deny-by-default security, smaller npm compat</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Express</td><td>~30k req/s (TechEmpower R22 JSON)</td><td>~300ms</td><td>~150 MB (node:alpine)</td><td>Single-thread event loop</td></tr>
+<tr><td class="fw">Fastify</td><td>~80k req/s (TechEmpower R22 JSON)</td><td>~200ms</td><td>~150 MB (node:alpine)</td><td>Single-thread event loop</td></tr>
+<tr><td class="fw">NestJS</td><td>~40k req/s (Fastify adapter)</td><td>~500ms (reflection overhead)</td><td>~180 MB</td><td>Single-thread event loop</td></tr>
+<tr><td class="fw">Hono</td><td>~100k req/s (Bun) / ~80k (Node)</td><td>~100ms (Bun) / ~200ms (Node)</td><td>~100 MB (Bun) / ~150 MB (Node)</td><td>Single-thread async (multi-runtime)</td></tr>
+<tr><td class="fw">Deno</td><td>~60k req/s (native HTTP)</td><td>~150ms</td><td>~200 MB (deno:alpine)</td><td>Single-thread async + Workers for parallel</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 15 — Python
+══════════════════════════════════════ -->
+<h2 id="c15">15 — Backend — Python <span class="b be">Backend</span></h2>
+<div class="cat-meta">Python server frameworks. Best for ML/AI integrations and data science teams.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">FastAPI</td><td>0.115</td><td>Python</td><td>MIT</td><td>Sebastián Ramírez</td><td><span class="b prod">Production</span></td><td>Async (asyncio / Starlette)</td><td>GC — CPython (refcount + cycle)</td><td>~20k req/s (uvicorn)</td><td>Automatic OpenAPI, Pydantic validation, no built-in auth</td><td>Horizontal</td><td>15M+ weekly PyPI downloads</td><td>pip, uv, poetry</td><td>uvicorn / gunicorn</td><td>pypi.org</td><td>ML/AI APIs, async Python, auto OpenAPI docs</td><td>CPU-bound processing → Go or Rust</td><td>vs Django: async-first, lighter, no ORM built-in</td></tr>
+<tr><td class="fw">Django</td><td>5.1</td><td>Python</td><td>BSD-3</td><td>Django Software Foundation</td><td><span class="b prod">Production</span></td><td>Sync (WSGI) + async (ASGI) — both supported</td><td>GC — CPython (refcount + cycle)</td><td>~5k req/s (sync) / ~12k (async)</td><td>CSRF protection, SQL injection via ORM, security middleware built-in</td><td>Horizontal</td><td>25M+ weekly PyPI downloads</td><td>pip, uv, poetry</td><td>gunicorn / daphne</td><td>pypi.org</td><td>Full-stack web app, admin panel, ORM-heavy projects</td><td>Lightweight API → FastAPI</td><td>vs FastAPI: batteries-included ORM + admin, slower async</td></tr>
+<tr><td class="fw">Flask</td><td>3.1</td><td>Python</td><td>BSD-3</td><td>Pallets</td><td><span class="b prod">Production</span></td><td>Sync (WSGI) + async via Quart fork</td><td>GC — CPython</td><td>~8k req/s (gunicorn)</td><td>Minimal — no CSRF by default, needs Flask-Login, Flask-WTF</td><td>Horizontal</td><td>25M+ weekly PyPI downloads</td><td>pip, uv, poetry</td><td>gunicorn</td><td>pypi.org</td><td>Micro-services, simple APIs, teaching Python web dev</td><td>Async-first → FastAPI</td><td>vs FastAPI: no async, no auto-docs, more control</td></tr>
+<tr><td class="fw">Starlette</td><td>0.41</td><td>Python</td><td>BSD-3</td><td>Encode</td><td><span class="b prod">Production</span></td><td>Async (asyncio)</td><td>GC — CPython</td><td>~25k req/s (uvicorn)</td><td>Minimal — FastAPI is built on top of this</td><td>Horizontal</td><td>5M+ weekly PyPI downloads</td><td>pip, uv, poetry</td><td>uvicorn</td><td>pypi.org</td><td>Raw ASGI performance, building frameworks on top of</td><td>Need auto-docs or validation → FastAPI</td><td>vs FastAPI: lower-level, faster, no Pydantic</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">FastAPI</td><td>~20k req/s (uvicorn, async)</td><td>~500ms</td><td>~120 MB (python:alpine)</td><td>Async (asyncio) + multi-process via gunicorn</td></tr>
+<tr><td class="fw">Django</td><td>~5k (sync) / ~12k (async)</td><td>~800ms (ORM boot)</td><td>~150 MB</td><td>Thread-per-request (sync) or async (ASGI)</td></tr>
+<tr><td class="fw">Flask</td><td>~8k req/s (gunicorn workers)</td><td>~400ms</td><td>~100 MB</td><td>Thread-per-request (sync WSGI)</td></tr>
+<tr><td class="fw">Starlette</td><td>~25k req/s (uvicorn)</td><td>~300ms</td><td>~100 MB</td><td>Async (asyncio)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 16 — Go
+══════════════════════════════════════ -->
+<h2 id="c16">16 — Backend — Go <span class="b be">Backend</span></h2>
+<div class="cat-meta">Go HTTP frameworks. Go's goroutines and static binary make it ideal for high-throughput APIs.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Gin</td><td>1.10</td><td>Go</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Goroutines (M:N scheduling)</td><td>GC — Go tri-color mark-and-sweep</td><td>~120k req/s (TechEmpower R22)</td><td>No built-in auth — explicit middleware for CORS, auth</td><td>Horizontal</td><td>75k+ GitHub stars</td><td>go mod</td><td>go build</td><td>pkg.go.dev</td><td>High-throughput REST APIs, Go ecosystem, large community</td><td>Ultra-low latency → Fiber</td><td>vs Echo: larger community, similar performance</td></tr>
+<tr><td class="fw">Echo</td><td>4.12</td><td>Go</td><td>MIT</td><td>LabStack</td><td><span class="b prod">Production</span></td><td>Goroutines (M:N scheduling)</td><td>GC — Go</td><td>~115k req/s</td><td>Same as Gin — explicit middleware</td><td>Horizontal</td><td>28k+ GitHub stars</td><td>go mod</td><td>go build</td><td>pkg.go.dev</td><td>Cleaner API than Gin, middleware-first design</td><td>Need Gin's larger plugin ecosystem → Gin</td><td>vs Gin: cleaner API, smaller community</td></tr>
+<tr><td class="fw">Fiber</td><td>2.52</td><td>Go</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Goroutines + fasthttp (not net/http)</td><td>GC — Go</td><td>~300k req/s (TechEmpower R22 — uses fasthttp)</td><td>Deviates from net/http — middleware compatibility issues</td><td>Horizontal</td><td>32k+ GitHub stars</td><td>go mod</td><td>go build</td><td>pkg.go.dev</td><td>Maximum Go HTTP throughput</td><td>net/http middleware compatibility needed → Gin or Echo</td><td>vs Gin: 2× faster, incompatible with net/http middleware</td></tr>
+<tr><td class="fw">Chi</td><td>5.1</td><td>Go</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Goroutines (net/http compatible)</td><td>GC — Go</td><td>~100k req/s</td><td>net/http compatible — all standard lib middleware works</td><td>Horizontal</td><td>17k+ GitHub stars</td><td>go mod</td><td>go build</td><td>pkg.go.dev</td><td>Standard library compatibility, minimal abstraction over net/http</td><td>Need rich middleware ecosystem → Gin</td><td>vs Gin: closer to stdlib, less opinionated router</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Gin</td><td>~120k req/s</td><td>~50ms</td><td>~10–15 MB (static Go binary)</td><td>Goroutines — M:N scheduling (OS threads backing goroutine pool)</td></tr>
+<tr><td class="fw">Echo</td><td>~115k req/s</td><td>~50ms</td><td>~10–15 MB</td><td>Goroutines — M:N scheduling</td></tr>
+<tr><td class="fw">Fiber</td><td>~300k req/s</td><td>~50ms</td><td>~10–15 MB</td><td>Goroutines + fasthttp (bypasses net/http)</td></tr>
+<tr><td class="fw">Chi</td><td>~100k req/s</td><td>~50ms</td><td>~8–12 MB</td><td>Goroutines — M:N scheduling</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 17 — Java
+══════════════════════════════════════ -->
+<h2 id="c17">17 — Backend — Java <span class="b be">Backend</span></h2>
+<div class="cat-meta">JVM-based Java frameworks. Enterprise-grade, strong typing, large corporate adoption.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Spring Boot</td><td>3.3</td><td>Java</td><td>Apache 2.0</td><td>VMware / Broadcom</td><td><span class="b prod">Production</span></td><td>Thread pool (blocking) or WebFlux (reactive)</td><td>GC — JVM (G1GC / ZGC)</td><td>~80k req/s (WebFlux) / ~40k (MVC)</td><td>Spring Security built-in, CSRF, OAuth2, mature ecosystem</td><td>Horizontal</td><td>Most downloaded Java framework (Maven Central)</td><td>Maven / Gradle</td><td>Maven / Gradle</td><td>mavenCentral / maven.google.com</td><td>Enterprise Java, existing Spring ecosystem, security-critical apps</td><td>Low startup time → Quarkus native</td><td>vs Quarkus: bigger ecosystem, slower startup</td></tr>
+<tr><td class="fw">Quarkus</td><td>3.16</td><td>Java / Kotlin</td><td>Apache 2.0</td><td>Red Hat</td><td><span class="b prod">Production</span></td><td>Reactive (Vert.x) + blocking (Quarkus Workers)</td><td>GC — JVM or GraalVM native (no GC in native mode)</td><td>~120k req/s (native)</td><td>GraalVM native eliminates reflection attack vectors</td><td>Horizontal</td><td>Growing — 13k+ GitHub stars</td><td>Maven / Gradle</td><td>Quarkus CLI / Maven / Gradle</td><td>mavenCentral</td><td>Kubernetes-native, container-first, fast startup</td><td>Existing Spring team → Spring Boot</td><td>vs Spring Boot: 10× faster startup native, smaller ecosystem</td></tr>
+<tr><td class="fw">Micronaut</td><td>4.6</td><td>Java / Kotlin / Groovy</td><td>Apache 2.0</td><td>Object Computing</td><td><span class="b prod">Production</span></td><td>Reactive (Netty) + async</td><td>GC — JVM or GraalVM native</td><td>~100k req/s</td><td>Compile-time DI — no reflection at runtime</td><td>Horizontal</td><td>6k+ GitHub stars</td><td>Maven / Gradle</td><td>Micronaut CLI / Maven / Gradle</td><td>mavenCentral</td><td>Compile-time DI, GraalVM native, low memory</td><td>Spring familiarity needed → Spring Boot</td><td>vs Spring Boot: no reflection, compile-time AOP</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Spring Boot</td><td>~40k (MVC) / ~80k (WebFlux)</td><td>2–5s (JVM) / ~100ms (native image)</td><td>~180–250 MB (JRE) / ~80 MB (native)</td><td>Thread pool (MVC) or event loop (WebFlux / Netty)</td></tr>
+<tr><td class="fw">Quarkus</td><td>~120k req/s (native)</td><td>~10ms (native) / ~1s (JVM)</td><td>~50 MB (native) / ~200 MB (JVM)</td><td>Reactive (Vert.x event loop) + worker threads</td></tr>
+<tr><td class="fw">Micronaut</td><td>~100k req/s</td><td>~30ms (native) / ~500ms (JVM)</td><td>~60 MB (native) / ~200 MB (JVM)</td><td>Reactive (Netty event loop)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 18 — Kotlin
+══════════════════════════════════════ -->
+<h2 id="c18">18 — Backend — Kotlin <span class="b be">Backend</span></h2>
+<div class="cat-meta">Kotlin server frameworks. Coroutines for async. JVM interop. JetBrains tooling.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Ktor</td><td>3.0</td><td>Kotlin</td><td>Apache 2.0</td><td>JetBrains</td><td><span class="b prod">Production</span></td><td>Coroutines (Kotlin coroutine engine)</td><td>GC — JVM (G1GC)</td><td>~80k req/s (Netty engine)</td><td>Explicit plugin model — no magic, auth plugin required</td><td>Horizontal</td><td>12k+ GitHub stars</td><td>Gradle</td><td>Gradle / IntelliJ IDEA</td><td>mavenCentral</td><td>Kotlin-first server, coroutines, JetBrains ecosystem</td><td>Spring familiarity needed → Spring Boot Kotlin</td><td>vs Spring Boot: lightweight, Kotlin-idiomatic, smaller ecosystem</td></tr>
+<tr><td class="fw">Spring Boot (Kotlin)</td><td>3.3</td><td>Kotlin</td><td>Apache 2.0</td><td>VMware / Broadcom</td><td><span class="b prod">Production</span></td><td>Coroutines (WebFlux) + thread pool (MVC)</td><td>GC — JVM (G1GC / ZGC)</td><td>~80k req/s (WebFlux + coroutines)</td><td>Spring Security, full mature security model</td><td>Horizontal</td><td>Kotlin Spring: growing rapidly</td><td>Gradle</td><td>Gradle / Maven</td><td>mavenCentral</td><td>Existing Spring Java team migrating to Kotlin</td><td>New Kotlin project, no Spring baggage → Ktor</td><td>vs Ktor: Spring ecosystem, more boilerplate</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Ktor</td><td>~80k req/s (Netty)</td><td>~500ms (JVM)</td><td>~180–220 MB (JRE + app)</td><td>Coroutines + Netty event loop</td></tr>
+<tr><td class="fw">Spring Boot (Kotlin)</td><td>~80k req/s (WebFlux)</td><td>2–4s (JVM) / ~100ms (native)</td><td>~200–250 MB (JRE)</td><td>Coroutines (WebFlux) or thread pool (MVC)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 19 — .NET / C#
+══════════════════════════════════════ -->
+<h2 id="c19">19 — Backend — .NET / C# <span class="b be">Backend</span></h2>
+<div class="cat-meta">Microsoft .NET runtime. Cross-platform since .NET Core. Native AOT available in .NET 8+.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">ASP.NET Core</td><td>9</td><td>C#</td><td>MIT</td><td>Microsoft</td><td><span class="b prod">Production</span></td><td>Async/await + thread pool (Kestrel)</td><td>GC — CLR (Server GC)</td><td>~500k req/s (TechEmpower R22 — Kestrel platform)</td><td>Built-in auth, CSRF, HTTPS enforcement, security middleware</td><td>Horizontal</td><td>NuGet: largest .NET package registry</td><td>NuGet / dotnet CLI</td><td>dotnet CLI / MSBuild</td><td>nuget.org</td><td>.NET team, high-throughput APIs, Windows or Linux</td><td>No .NET team → Go or Node.js</td><td>vs Go: comparable speed, larger enterprise ecosystem</td></tr>
+<tr><td class="fw">Minimal APIs (.NET 9)</td><td>9</td><td>C#</td><td>MIT</td><td>Microsoft</td><td><span class="b prod">Production</span></td><td>Async/await + thread pool (Kestrel)</td><td>GC — CLR</td><td>~500k req/s (same Kestrel base)</td><td>Same as ASP.NET Core — built on same runtime</td><td>Horizontal</td><td>Same as ASP.NET Core</td><td>NuGet / dotnet CLI</td><td>dotnet CLI</td><td>nuget.org</td><td>Simple APIs without MVC overhead, microservices</td><td>Complex routing, controllers, auth needed → ASP.NET Core MVC</td><td>vs ASP.NET MVC: less boilerplate, less structure</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">ASP.NET Core</td><td>~500k req/s (Kestrel, TechEmpower R22)</td><td>~300ms (JIT) / ~80ms (native AOT)</td><td>~200 MB (JIT) / ~50 MB (native AOT)</td><td>Async/await on thread pool (Kestrel I/O threads)</td></tr>
+<tr><td class="fw">Minimal APIs</td><td>~500k req/s (same Kestrel)</td><td>~200ms (less startup code)</td><td>~180 MB (JIT) / ~45 MB (native AOT)</td><td>Async/await on thread pool</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 20 — Rust
+══════════════════════════════════════ -->
+<h2 id="c20">20 — Backend — Rust <span class="b be">Backend</span></h2>
+<div class="cat-meta">Rust HTTP frameworks. No GC, borrow checker. Highest throughput and memory safety without runtime overhead.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Axum</td><td>0.7</td><td>Rust</td><td>MIT</td><td>Tokio team</td><td><span class="b prod">Production</span></td><td>Async (Tokio runtime)</td><td>Borrow checker — no GC, no runtime overhead</td><td>~600k req/s (TechEmpower R22)</td><td>Memory safety at compile time, no null, no buffer overflow</td><td>Horizontal</td><td>18k+ GitHub stars</td><td>Cargo</td><td>Cargo</td><td>crates.io</td><td>Maximum safety + performance, systems-level services</td><td>Rapid prototyping, team unfamiliar with Rust → Go</td><td>vs Actix-web: Tokio-native, simpler type model</td></tr>
+<tr><td class="fw">Actix-web</td><td>4.9</td><td>Rust</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Async (Actix actor system + Tokio)</td><td>Borrow checker — no GC</td><td>~700k req/s (TechEmpower R22 — historically #1)</td><td>Same Rust memory safety guarantees</td><td>Horizontal</td><td>21k+ GitHub stars</td><td>Cargo</td><td>Cargo</td><td>crates.io</td><td>Highest raw HTTP throughput needed</td><td>Simpler API preferred → Axum</td><td>vs Axum: marginally faster, more complex type constraints</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Axum</td><td>~600k req/s (TechEmpower R22)</td><td>~50ms</td><td>~8–20 MB (static Rust binary)</td><td>Async (Tokio — multi-thread executor)</td></tr>
+<tr><td class="fw">Actix-web</td><td>~700k req/s (TechEmpower R22)</td><td>~50ms</td><td>~8–20 MB (static Rust binary)</td><td>Async (Tokio + Actix actor system)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 21 — Elixir
+══════════════════════════════════════ -->
+<h2 id="c21">21 — Backend — Elixir <span class="b be">Backend</span></h2>
+<div class="cat-meta">BEAM VM — actor model, per-process GC, fault-tolerant by design. Best for real-time + concurrent systems.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Phoenix</td><td>1.7</td><td>Elixir</td><td>MIT</td><td>Chris McCord</td><td><span class="b prod">Production</span></td><td>Actor model (BEAM — millions of lightweight processes)</td><td>GC — per-process GC (BEAM, no stop-the-world)</td><td>~150k req/s + 2M+ WebSocket connections</td><td>CSRF, XSS, SQL injection via Ecto, secure defaults</td><td>Horizontal + Vertical</td><td>20k+ GitHub stars</td><td>Mix / Hex</td><td>Mix</td><td>hex.pm</td><td>Real-time apps, WebSockets, chat, IoT — massive concurrency</td><td>CPU-bound computation → Go or Rust</td><td>vs Node.js: 10× more WebSocket connections, fault-tolerant</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Phoenix</td><td>~150k req/s HTTP + 2M+ concurrent WebSocket</td><td>~500ms (BEAM boot)</td><td>~120–160 MB (BEAM + OTP)</td><td>Actor model — millions of isolated BEAM processes, no shared state</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 22 — Ruby
+══════════════════════════════════════ -->
+<h2 id="c22">22 — Backend — Ruby <span class="b be">Backend</span></h2>
+<div class="cat-meta">Ruby HTTP frameworks. Rails: convention over configuration. Sinatra: micro-framework.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Rails</td><td>7.2</td><td>Ruby</td><td>MIT</td><td>DHH / Rails Core Team</td><td><span class="b prod">Production</span></td><td>Thread-per-request (Puma) — GIL limits true parallelism</td><td>GC — MRI (generational GC)</td><td>~5k req/s (Puma, 4 workers)</td><td>CSRF, XSS, SQL injection via ActiveRecord, strong defaults</td><td>Horizontal</td><td>Gems: 165k+ on rubygems.org</td><td>Bundler / gem</td><td>Bundler / rake</td><td>rubygems.org</td><td>Startup speed, convention over config, prototypes, SaaS</td><td>High throughput → Go or Node.js</td><td>vs Sinatra: full-stack batteries, slower throughput</td></tr>
+<tr><td class="fw">Sinatra</td><td>4.0</td><td>Ruby</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Thread-per-request (Puma)</td><td>GC — MRI</td><td>~8k req/s</td><td>Minimal — no CSRF by default, explicit config</td><td>Horizontal</td><td>12k+ GitHub stars</td><td>Bundler / gem</td><td>Bundler / rake</td><td>rubygems.org</td><td>Simple APIs, microservices, Ruby team wanting minimal framework</td><td>Full-stack app → Rails</td><td>vs Rails: lighter, higher req/s, no conventions</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Rails</td><td>~5k req/s (Puma 4 workers)</td><td>~1–2s (Rails boot)</td><td>~120–160 MB (ruby:alpine)</td><td>Thread-per-request — GIL limits CPU parallelism</td></tr>
+<tr><td class="fw">Sinatra</td><td>~8k req/s</td><td>~300ms</td><td>~100–130 MB</td><td>Thread-per-request — GIL limits CPU parallelism</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 23 — PHP
+══════════════════════════════════════ -->
+<h2 id="c23">23 — Backend — PHP <span class="b be">Backend</span></h2>
+<div class="cat-meta">PHP server frameworks. Share-nothing process model. Powers 40% of the web.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Laravel</td><td>11</td><td>PHP</td><td>MIT</td><td>Taylor Otwell</td><td><span class="b prod">Production</span></td><td>Process-per-request (FPM) or Octane (Swoole / RoadRunner)</td><td>GC — refcount + cycle collector (per-request reset)</td><td>~8k req/s (FPM) / ~50k (Octane)</td><td>CSRF, XSS, SQL injection via Eloquent ORM, strong defaults</td><td>Horizontal</td><td>Packagist: 40M+ monthly downloads</td><td>Composer</td><td>Composer / artisan</td><td>packagist.org</td><td>Full-stack PHP, large PHP community, rapid prototyping</td><td>High concurrent connections → Node.js or Go</td><td>vs Symfony: faster DX, less flexibility</td></tr>
+<tr><td class="fw">Symfony</td><td>7.1</td><td>PHP</td><td>MIT</td><td>SensioLabs</td><td><span class="b prod">Production</span></td><td>Process-per-request (FPM)</td><td>GC — refcount + cycle collector</td><td>~6k req/s (FPM)</td><td>CSRF, XSS, mature security component</td><td>Horizontal</td><td>Packagist: 30M+ monthly downloads</td><td>Composer</td><td>Composer</td><td>packagist.org</td><td>Enterprise PHP, component-based, Drupal/API Platform underneath</td><td>Speed of delivery primary → Laravel</td><td>vs Laravel: more flexible, steeper learning curve</td></tr>
+<tr><td class="fw">Slim</td><td>4.14</td><td>PHP</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Process-per-request (FPM)</td><td>GC — refcount</td><td>~15k req/s (FPM — minimal overhead)</td><td>Minimal — PSR-7 standard, explicit middleware only</td><td>Horizontal</td><td>5M+ monthly Packagist downloads</td><td>Composer</td><td>Composer</td><td>packagist.org</td><td>Micro-APIs, PHP teams wanting minimal abstraction</td><td>Full-stack needs → Laravel</td><td>vs Laravel: 2× faster, no conventions</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Laravel</td><td>~8k (FPM) / ~50k (Octane)</td><td>~400ms (FPM) / persistent (Octane)</td><td>~100–140 MB (php:alpine)</td><td>Process-per-request (FPM) — no threads</td></tr>
+<tr><td class="fw">Symfony</td><td>~6k req/s (FPM)</td><td>~500ms (heavier DI boot)</td><td>~120–150 MB</td><td>Process-per-request (FPM)</td></tr>
+<tr><td class="fw">Slim</td><td>~15k req/s (FPM)</td><td>~100ms (minimal boot)</td><td>~80–100 MB</td><td>Process-per-request (FPM)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 24 — Swift
+══════════════════════════════════════ -->
+<h2 id="c24">24 — Backend — Swift <span class="b be">Backend</span></h2>
+<div class="cat-meta">Swift server frameworks. ARC memory model. No GC pauses. Ideal when team is already Swift/iOS.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Vapor</td><td>4.102</td><td>Swift</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Swift structured concurrency (async/await + actors)</td><td>ARC (Automatic Reference Counting) — no GC</td><td>~80k req/s</td><td>No built-in auth — Vapor-Auth plugin, Swift type safety</td><td>Horizontal</td><td>23k+ GitHub stars</td><td>Swift Package Manager (SPM)</td><td>swift build</td><td>swiftpackageindex.com</td><td>iOS/macOS team extending to server, ARC memory model, no GC pauses</td><td>Non-Swift team → Node.js or Go</td><td>vs Go: ARC vs GC, smaller ecosystem</td></tr>
+<tr><td class="fw">Hummingbird</td><td>2.0</td><td>Swift</td><td>Apache 2.0</td><td>Community</td><td><span class="b prod">Production</span></td><td>Swift structured concurrency</td><td>ARC</td><td>~100k req/s</td><td>Minimal surface — explicit middleware only</td><td>Horizontal</td><td>2k+ GitHub stars</td><td>SPM</td><td>swift build</td><td>swiftpackageindex.com</td><td>Higher throughput than Vapor, lighter dependencies</td><td>Rich plugin ecosystem needed → Vapor</td><td>vs Vapor: faster, smaller ecosystem, newer</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Vapor</td><td>~80k req/s</td><td>~100ms</td><td>~80–120 MB (Swift runtime)</td><td>Swift structured concurrency + SwiftNIO event loop</td></tr>
+<tr><td class="fw">Hummingbird</td><td>~100k req/s</td><td>~80ms</td><td>~70–100 MB</td><td>Swift structured concurrency + SwiftNIO event loop</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 25 — Scala
+══════════════════════════════════════ -->
+<h2 id="c25">25 — Backend — Scala <span class="b be">Backend</span></h2>
+<div class="cat-meta">Scala JVM frameworks. Functional + OOP. Strong type system. Used in high-scale data + finance.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Play Framework</td><td>3.0</td><td>Scala / Java</td><td>Apache 2.0</td><td>Lightbend</td><td><span class="b prod">Production</span></td><td>Reactive (Akka under the hood)</td><td>GC — JVM (G1GC)</td><td>~60k req/s</td><td>CSRF, XSS protection, mature security helpers</td><td>Horizontal</td><td>12k+ GitHub stars</td><td>sbt</td><td>sbt</td><td>mavenCentral</td><td>Scala team, reactive web apps, Akka ecosystem</td><td>No Scala team → Spring Boot</td><td>vs Spring Boot: reactive-first, Scala type system</td></tr>
+<tr><td class="fw">http4s</td><td>0.23</td><td>Scala</td><td>Apache 2.0</td><td>Community</td><td><span class="b prod">Production</span></td><td>Cats Effect (purely functional async)</td><td>GC — JVM</td><td>~80k req/s</td><td>Purely functional — no shared mutable state</td><td>Horizontal</td><td>2k+ GitHub stars</td><td>sbt / Scala CLI</td><td>sbt</td><td>mavenCentral</td><td>Pure functional Scala, Cats Effect ecosystem, type-safe HTTP</td><td>Team unfamiliar with FP → Play</td><td>vs Play: pure FP, steeper learning curve</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Play Framework</td><td>~60k req/s</td><td>~2s (JVM + Akka boot)</td><td>~220–280 MB (JRE + Akka)</td><td>Reactive (Akka actor system + Netty)</td></tr>
+<tr><td class="fw">http4s</td><td>~80k req/s</td><td>~1.5s (JVM)</td><td>~200–250 MB (JRE)</td><td>Cats Effect fiber-based async (green threads)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 26 — Clojure
+══════════════════════════════════════ -->
+<h2 id="c26">26 — Backend — Clojure <span class="b be">Backend</span></h2>
+<div class="cat-meta">Clojure JVM — Lisp on the JVM. Immutable data, STM concurrency. REPL-driven development.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Ring</td><td>1.12</td><td>Clojure</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Thread pool (Jetty / http-kit async)</td><td>GC — JVM (G1GC)</td><td>~40k req/s (http-kit async)</td><td>Minimal — explicit middleware model, Clojure immutability reduces state bugs</td><td>Horizontal</td><td>3k+ GitHub stars</td><td>Leiningen / deps.edn</td><td>Leiningen / deps.edn</td><td>clojars.org / mavenCentral</td><td>Clojure team, REPL-driven APIs, functional purity</td><td>No Clojure team → Go or Python</td><td>vs Pedestal: simpler model, less structure</td></tr>
+<tr><td class="fw">Pedestal</td><td>0.7</td><td>Clojure</td><td>Apache 2.0</td><td>Community / Cognitect</td><td><span class="b prod">Production</span></td><td>Async interceptor chain</td><td>GC — JVM</td><td>~50k req/s</td><td>Interceptor chain — each step explicit, no hidden middleware magic</td><td>Horizontal</td><td>2k+ GitHub stars</td><td>deps.edn / Leiningen</td><td>deps.edn</td><td>clojars.org</td><td>Interceptor-based architecture, async Clojure APIs</td><td>Simple API → Ring</td><td>vs Ring: async interceptors, more structure</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Ring</td><td>~40k req/s (http-kit async)</td><td>~2s (JVM + Clojure boot)</td><td>~200–250 MB (JRE)</td><td>Thread pool (Jetty) or async (http-kit)</td></tr>
+<tr><td class="fw">Pedestal</td><td>~50k req/s</td><td>~2s (JVM)</td><td>~200–250 MB (JRE)</td><td>Async interceptor chain (Jetty / Tomcat)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 27 — C++
+══════════════════════════════════════ -->
+<h2 id="c27">27 — Backend — C++ <span class="b be">Backend</span></h2>
+<div class="cat-meta">C++ HTTP frameworks. Manual memory management. Highest possible throughput. Used in HFT, game servers, system APIs.</div>
+
+<h3>Shared columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Version</th><th>Language</th><th>License</th><th>Maintained by</th><th>Maturity</th><th>Concurrency</th><th>Memory</th><th>Perf (p99 req/s)</th><th>Security posture</th><th>Scaling</th><th>Ecosystem</th><th>Pkg mgr</th><th>Build tool</th><th>Registry</th><th>When to use</th><th>When NOT</th><th>Tradeoff</th></tr></thead>
+<tbody>
+<tr><td class="fw">Drogon</td><td>1.9</td><td>C++17</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Coroutines + async (libuv-style event loop)</td><td>Manual (smart pointers — shared_ptr / unique_ptr)</td><td>~1.5M req/s (TechEmpower R22 — consistently top 3)</td><td>No memory safety guarantees — manual management, buffer overflow risk</td><td>Horizontal</td><td>10k+ GitHub stars</td><td>CMake / Conan / vcpkg</td><td>CMake</td><td>github.com / conan.io</td><td>Absolute maximum HTTP throughput, HFT, game server APIs</td><td>Rapid development team → Go or Rust</td><td>vs Rust Axum: faster raw throughput, unsafe memory model</td></tr>
+<tr><td class="fw">Crow</td><td>1.1</td><td>C++14/17</td><td>BSD-3</td><td>Community</td><td><span class="b prod">Production</span></td><td>Multi-thread async (Boost.Asio)</td><td>Manual (smart pointers)</td><td>~500k req/s</td><td>Same C++ manual memory risks</td><td>Horizontal</td><td>9k+ GitHub stars</td><td>CMake / Conan</td><td>CMake</td><td>github.com</td><td>Simpler C++ HTTP API than Drogon, header-only</td><td>Absolute maximum perf → Drogon</td><td>vs Drogon: simpler API, 3× lower throughput</td></tr>
+</tbody></table></div>
+
+<h3>Backend-only columns</h3>
+<div class="tbl"><table>
+<thead><tr><th>Name</th><th>Throughput (req/s p99)</th><th>Cold start</th><th>Container size (Alpine)</th><th>Thread model</th></tr></thead>
+<tbody>
+<tr><td class="fw">Drogon</td><td>~1.5M req/s (TechEmpower R22)</td><td>~20ms</td><td>~5–15 MB (static binary)</td><td>Coroutines + multi-thread event loop</td></tr>
+<tr><td class="fw">Crow</td><td>~500k req/s</td><td>~20ms</td><td>~5–10 MB (header-only)</td><td>Multi-thread async (Boost.Asio)</td></tr>
+</tbody></table></div>
+
+</main>
+</body>
+</html>
