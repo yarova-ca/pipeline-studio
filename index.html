@@ -97,12 +97,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="08-canada-market.html">08 CA market</a>
   <a href="09-linux-distros.html">09 Linux distros</a>
   <a href="10-linux-compliance.html">10 Linux compliance</a>
+  <a href="11-dockerfile-catalog.html">11 Dockerfiles</a>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-title">Pipeline Studio</div>
-<div class="page-meta">10 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; verified 2026-05-27</div>
+<div class="page-meta">11 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; verified 2026-05-27</div>
 
 <div class="hint-card">
   <strong>Purpose:</strong> Reference for building secure CI/CD pipelines across any framework, any regulated industry, any Canadian market.
@@ -110,7 +111,7 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
 </div>
 
 <!-- ═══ DOC CARDS ═══ -->
-<h2>All 10 docs</h2>
+<h2>All 11 docs</h2>
 <div class="cards-grid">
 
   <a href="01-framework-catalog.html" class="doc-card">
@@ -183,6 +184,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="doc-card-meta"><strong>Records:</strong> 22 distros · 5 matrices · 27 build-runner categories · 12 runtime output types · 27 Dockerfile pairings &nbsp;·&nbsp; <strong>Use when:</strong> selecting compliance, runtime compat, or writing Dockerfiles</div>
   </a>
 
+  <a href="11-dockerfile-catalog.html" class="doc-card">
+    <div class="doc-card-num">Doc 11</div>
+    <div class="doc-card-title">Dockerfile Catalog</div>
+    <div class="doc-card-desc">Actual Dockerfile content for all 75 framework records across 27 categories. Every Dockerfile uses multi-stage build (ubuntu:24.04 builder → minimal runtime). ARG-driven package manager selection (npm/yarn/pnpm, pip/poetry/uv, maven/gradle). Two named targets per Dockerfile: <strong>runtime</strong> (standard) and <strong>runtime-fips</strong> (FIPS-validated UBI9 / dotnet FIPS). CI-only categories (iOS, Android, Edge) show GitHub Actions YAML instead.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 75 frameworks · 27 categories · 62 Dockerfiles · 13 CI-only &nbsp;·&nbsp; <strong>Use when:</strong> writing or copying a production Dockerfile for any framework</div>
+  </a>
+
 </div>
 
 <!-- ═══ READING ORDER ═══ -->
@@ -214,6 +222,9 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   </div>
   <div class="order-item">
     <div><div class="order-item-title"><a href="10-linux-compliance.html">10 — Linux Compliance Matrices</a></div><div class="order-item-desc">Cross-reference the chosen distro against compliance frameworks, industry verticals, and framework categories. Read after 09.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="11-dockerfile-catalog.html">11 — Dockerfile Catalog</a></div><div class="order-item-desc">Copy the Dockerfile for your chosen framework. Select <code>--target runtime</code> or <code>--target runtime-fips</code>. Read after 09 and 10.</div></div>
   </div>
 </div>
 
@@ -264,6 +275,11 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="dep-from"><a href="10-linux-compliance.html">10 Linux Compliance</a></div>
     <div class="dep-arrow">→</div>
     <div class="dep-to">cross-references 09 distro catalog with 06/07 industry verticals and 01 framework categories — read after 09</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="11-dockerfile-catalog.html">11 Dockerfiles</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">expands 01 framework catalog with actual Dockerfile content; uses distro choices from 09 and FIPS/compliance context from 10 — read after 09 and 10</div>
   </div>
 </div>
 
