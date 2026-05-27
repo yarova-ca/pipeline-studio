@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Industry Schema — 74 industries, 16 verticals, all 10 columns populated per row.">
+<title>Industry Schema — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:220px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+main{flex:1;min-width:0;padding:40px 52px 100px}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+.section-legend{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:20px 0 28px;font-size:12px;line-height:1.6}
+.section-legend strong{color:var(--text-head)}
+.leg-row{margin-top:4px;color:var(--text)}
+.section-legend details{margin-top:12px;border-top:1px solid #c8dff5;padding-top:10px}
+.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none;display:flex;align-items:center;gap:6px}
+.section-legend summary::-webkit-details-marker{display:none}
+.section-legend summary::before{content:'▶';font-size:9px;display:inline-block;color:var(--blue)}
+.section-legend details[open] summary::before{content:'▼'}
+.section-legend summary .sum-label{flex:1}
+.expand-content{margin-top:10px;font-size:11px;line-height:1.7;color:var(--text)}
+.expand-content p{margin-bottom:6px}
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px;font-style:italic}
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.count-chip.ind-chip{border-left:3px solid var(--purple)}
+.count-chip.ind-chip .chip-num{color:var(--purple)}
+.count-chip.vert-chip{border-left:3px solid var(--blue)}
+.count-chip.vert-chip .chip-num{color:var(--blue)}
+.connect-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.connect-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+.connect-card h3{font-size:12px;font-weight:700;color:var(--text-head);margin-bottom:8px}
+.connect-card.no-effect{border-left:3px solid var(--text-dim)}
+.connect-card.has-effect{border-left:3px solid var(--blue)}
+.connect-row{font-size:12px;line-height:1.6;color:var(--text);margin-bottom:2px}
+.arrow{color:var(--text-dim);margin:0 4px}
+/* Schema table */
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
+.schema-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.schema-table thead tr{background:var(--bg2)}
+.schema-table th{text-align:left;padding:7px 14px;font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border)}
+.schema-table td{padding:7px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.schema-table tbody tr:last-child td{border-bottom:none}
+.schema-table tbody tr:hover{background:var(--bg2)}
+/* Full industry table */
+.tbl-scroll{overflow-x:auto}
+.ind-table{border-collapse:collapse;font-size:11.5px;min-width:1700px;width:100%}
+.ind-table thead tr{background:var(--bg2);position:sticky;top:0;z-index:1}
+.ind-table th{text-align:left;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);white-space:nowrap}
+.ind-table td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;font-size:11px;line-height:1.45}
+.ind-table tbody tr:hover{background:var(--bg2)}
+/* Column width classes */
+.c0{width:34px;min-width:34px;color:var(--text-dim);font-weight:600;text-align:right;white-space:nowrap}
+.c1{min-width:165px;font-weight:500}
+.c2{min-width:140px;color:var(--text-dim);font-size:11px}
+.c3{min-width:155px}
+.c4{min-width:145px;color:var(--text-dim)}
+.c5{min-width:130px;color:var(--text-dim)}
+.c6{min-width:110px;color:var(--text-dim)}
+.c7{min-width:195px}
+.c8{min-width:140px;color:var(--text-dim)}
+.c9{min-width:195px}
+.c10{min-width:150px;color:var(--text-dim)}
+/* Vertical divider rows */
+.vert-row td{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:5px 10px;border-bottom:1px solid var(--border)}
+.vert-row.fin td{background:#fff8e8;color:#7a4800;border-top:1px solid #f5d98a}
+.vert-row.health td{background:#f0fff4;color:#116329;border-top:1px solid #aadebc}
+.vert-row.gov td{background:#f0f6ff;color:#0550ae;border-top:1px solid #b6d7f5}
+.vert-row.def td{background:#faf0ff;color:#6e2f9a;border-top:1px solid #d8b4fe}
+.vert-row.energy td{background:#fff0e8;color:#8b3a00;border-top:1px solid #fdb98a}
+.vert-row.tech td{background:#f0faff;color:#0969da;border-top:1px solid #93c5fd}
+.vert-row.telecom td{background:#f5f0ff;color:#8250df;border-top:1px solid #c5a7f5}
+.vert-row.retail td{background:#fff8f0;color:#9a4800;border-top:1px solid #fed7aa}
+.vert-row.mfg td{background:#f8f8f8;color:#3a3a3a;border-top:1px solid #d0d0d0}
+.vert-row.media td{background:#fff0f5;color:#a40050;border-top:1px solid #fbcfe8}
+.vert-row.edu td{background:#f0fffe;color:#0e7a6a;border-top:1px solid #99f6e4}
+.vert-row.trans td{background:#f5f5ff;color:#3a3a9a;border-top:1px solid #c7d2fe}
+.vert-row.re td{background:#fefce8;color:#7a5a00;border-top:1px solid #fde68a}
+.vert-row.agri td{background:#f0fff0;color:#14532d;border-top:1px solid #86efac}
+.vert-row.legal td{background:#f8f5ff;color:#5b21b6;border-top:1px solid #ddd6fe}
+.vert-row.npo td{background:#fff5f5;color:#7f1d1d;border-top:1px solid #fecaca}
+.vert-count{float:right;font-size:9px;font-weight:400;opacity:.7}
+.tbl-foot{padding:7px 14px;font-size:11px;color:var(--text-dim);background:var(--bg2);border-top:2px solid var(--border);display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace}
+.tag-fips{font-size:10px;font-weight:600;color:#a40000;background:#fff0f0;border:1px solid #fca5a5;border-radius:3px;padding:1px 5px;white-space:nowrap}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;--blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#c5a7f5}
+  .section-legend{background:#1c2a3a;border-color:#2d4a6a}
+  .connect-card{background:#161b22}
+  code{background:#1c2028;border-color:#30363d}
+  .tag-fips{background:#2d0a0a;border-color:#6a1a1a}
+  .vert-row.fin td{background:#2a1e00;border-color:#6a4000}
+  .vert-row.health td{background:#0f2d1a;border-color:#1e5c35}
+  .vert-row.gov td{background:#1c2a3a;border-color:#2d4a6a}
+  .vert-row.def td{background:#1a0d2e;border-color:#4a2070}
+  .vert-row.energy td{background:#2a1400;border-color:#6a2800}
+  .vert-row.tech td{background:#0d2040;border-color:#1a4080}
+  .vert-row.telecom td{background:#1a0d30;border-color:#3d1a70}
+  .vert-row.retail td{background:#2a1800;border-color:#6a3400}
+  .vert-row.mfg td{background:#1c1c1c;border-color:#3a3a3a}
+  .vert-row.media td{background:#2a0018;border-color:#6a0040}
+  .vert-row.edu td{background:#002a28;border-color:#006a60}
+  .vert-row.trans td{background:#0a0a2a;border-color:#2a2a6a}
+  .vert-row.re td{background:#2a2000;border-color:#6a5000}
+  .vert-row.agri td{background:#0a2010;border-color:#1a5030}
+  .vert-row.legal td{background:#160a2a;border-color:#3a1a6a}
+  .vert-row.npo td{background:#2a0a0a;border-color:#6a1a1a}
+}
+@media print{.skip-link,nav{display:none}main{padding:20px}.section-legend{border:1px solid #ccc;background:none}}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-logo"><h1>Industry Schema</h1><p>Pipeline Studio Design Doc</p></div>
+  <div class="nav-section">Jump to</div>
+  <a href="#connections">Catalog connections</a>
+  <a href="#columns">Column schema</a>
+  <a href="#industries">All 74 industries</a>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<main id="main-content">
+<div class="page-title">Industry Schema</div>
+<div class="page-meta">74 industries · 16 verticals · 10 columns per row | Source: <code>06-industry-schema.md</code></div>
+
+<div class="counts-bar">
+  <div class="count-chip ind-chip"><div class="chip-num">74</div><div class="chip-label">Industries<br>total</div></div>
+  <div class="count-chip vert-chip"><div class="chip-num">16</div><div class="chip-label">Verticals<br>(parent groups)</div></div>
+  <div class="count-chip"><div class="chip-num">10</div><div class="chip-label">Columns<br>per row</div></div>
+</div>
+
+<div class="section-legend">
+  <strong>How industry selection changes the pipeline:</strong>
+  <div class="leg-row">Framework catalog — industry does NOT restrict frameworks. Any framework runs in any industry.</div>
+  <div class="leg-row">Exception: FIPS-140-2 compliance affects some runtimes. Rows with this restriction carry a <span class="tag-fips">FIPS required</span> note in Framework notes.</div>
+  <div class="leg-row">Pipeline tool catalog — industry DOES change the pipeline. Industry → auto-selects compliance standard → adds extra controls at specific stages.</div>
+  <details>
+    <summary><span class="sum-label">Column definitions — all 10</span></summary>
+    <div class="expand-content">
+      <p><strong>1 Industry</strong> — name of the industry.</p>
+      <p><strong>2 Vertical</strong> — parent group (one of 16 verticals).</p>
+      <p><strong>3 Mandatory compliance</strong> — legally required standards for this industry.</p>
+      <p><strong>4 Optional compliance</strong> — best-practice standards, not legally required.</p>
+      <p><strong>5 Regulatory body</strong> — the authority that enforces mandatory compliance.</p>
+      <p><strong>6 Data sensitivity</strong> — type of sensitive data handled: PII / PHI / PCI / Classified / Public.</p>
+      <p><strong>7 Pipeline stages affected</strong> — the specific stages that get extra controls when this industry is selected.</p>
+      <p><strong>8 Framework notes</strong> — any compliance-driven framework restrictions. "None" = all frameworks permitted.</p>
+      <p><strong>9 Key security requirements</strong> — top security requirements specific to this industry.</p>
+      <p><strong>10 Audit requirements</strong> — log retention period and audit trail requirements.</p>
+    </div>
+  </details>
+</div>
+
+<!-- Catalog connections -->
+<h2 id="connections">Catalog connections</h2>
+<div class="connect-grid">
+  <div class="connect-card no-effect">
+    <h3>Framework catalog — industry has no effect</h3>
+    <div class="connect-row">Any framework runs in any industry.</div>
+    <div class="connect-row">Industry does NOT restrict framework choice.</div>
+    <div class="connect-row" style="margin-top:6px;font-size:11.5px;color:var(--text-dim)">Exception: FIPS-140-2 required industries restrict runtimes to FIPS-certified builds.</div>
+  </div>
+  <div class="connect-card has-effect">
+    <h3>Pipeline tool catalog — industry changes the pipeline</h3>
+    <div class="connect-row">Industry <span class="arrow">→</span> auto-selects compliance standard.</div>
+    <div class="connect-row">Compliance <span class="arrow">→</span> adds extra controls at specific stages.</div>
+    <div class="connect-row">Those stages generate different files with those controls included.</div>
+  </div>
+</div>
+
+<!-- Column schema -->
+<h2 id="columns">Column schema</h2>
+<div class="section-sub">10 columns per row. Every row populates all 10.</div>
+<div class="tbl-wrap">
+  <table class="schema-table">
+    <thead><tr><th style="width:40px">#</th><th style="width:220px">Column</th><th>What it captures</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--text-dim);font-weight:600">1</td><td style="font-weight:500">Industry</td><td>Name</td></tr>
+      <tr><td style="color:var(--text-dim);font-weight:600">2</td><td style="font-weight:500">Vertical</td><td>Parent group</td></tr>
+      <tr><td style="color:var(--text-dim);font-weight:600">3</td><td style="font-weight:500">Mandatory compliance</td><td>Legally required standards</td></tr>
+      <tr><td style="color:var(--text-dim);font-weight:600">4</td><td style="font-weight:500">Optional compliance</td><td>Best practice standards</td></tr>
+      <tr><td style="color:var(--text-dim);font-weight:600">5</td><td style="font-weight:500">Regulatory body</td><td>Who enforces the rules</td></tr>
+      <tr><td style="color:var(--text-dim);font-weight:600">6</td><td style="font-weight:500">Data sensitivity</td><td>PII / PHI / PCI / Classified / Public</td></tr>
+      <tr><td style="color:var(--text-dim);font-weight:600">7</td><td style="font-weight:500">Pipeline stages affected</td><td>Which stages get extra controls</td></tr>
+      <tr><td style="color:var(--text-dim);font-weight:600">8</td><td style="font-weight:500">Framework notes</td><td>Any compliance-driven framework restrictions</td></tr>
+      <tr><td style="color:var(--text-dim);font-weight:600">9</td><td style="font-weight:500">Key security requirements</td><td>Top requirements specific to this industry</td></tr>
+      <tr><td style="color:var(--text-dim);font-weight:600">10</td><td style="font-weight:500">Audit requirements</td><td>Log retention period, audit trail needs</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Full industry table -->
+<h2 id="industries">All 74 industries — all 10 columns</h2>
+<div class="section-sub">Scroll horizontally to see all columns. Each row has all 10 columns populated.</div>
+<div class="tbl-wrap">
+  <div class="tbl-scroll">
+    <table class="ind-table">
+      <thead>
+        <tr>
+          <th class="c0">#</th>
+          <th class="c1">Industry</th>
+          <th class="c2">Vertical</th>
+          <th class="c3">Mandatory compliance</th>
+          <th class="c4">Optional compliance</th>
+          <th class="c5">Regulatory body</th>
+          <th class="c6">Data sensitivity</th>
+          <th class="c7">Pipeline stages affected</th>
+          <th class="c8">Framework notes</th>
+          <th class="c9">Key security requirements</th>
+          <th class="c10">Audit requirements</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- FINANCIAL SERVICES -->
+        <tr class="vert-row fin"><td colspan="11">Financial Services <span class="vert-count">7 industries</span></td></tr>
+        <tr>
+          <td class="c0">1</td><td class="c1">Banking — Retail / Commercial / Investment</td><td class="c2">Financial Services</td>
+          <td class="c3">PCI DSS, SOX, Dodd-Frank, BSA/AML</td>
+          <td class="c4">ISO 27001, SOC 2, NIST CSF</td>
+          <td class="c5">OCC, FDIC, Federal Reserve, SEC</td>
+          <td class="c6">PCI, PII</td>
+          <td class="c7">SCA, SAST, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Encryption at rest + transit, MFA, fraud detection, network segmentation</td>
+          <td class="c10">SOX: 7-year retention</td>
+        </tr>
+        <tr>
+          <td class="c0">2</td><td class="c1">Fintech / Payments</td><td class="c2">Financial Services</td>
+          <td class="c3">PCI DSS, BSA/AML, KYC</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">CFPB, FinCEN, state money transmitter regulators</td>
+          <td class="c6">PCI, PII</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Tokenization, end-to-end encryption, fraud detection</td>
+          <td class="c10">AML records: 5 years (FinCEN)</td>
+        </tr>
+        <tr>
+          <td class="c0">3</td><td class="c1">Insurance</td><td class="c2">Financial Services</td>
+          <td class="c3">State insurance regulations, NAIC Model Laws</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">State Departments of Insurance, NAIC</td>
+          <td class="c6">PII, PHI (health lines)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">PII protection, fraud detection, claims data integrity</td>
+          <td class="c10">State-specific: typically 7 years</td>
+        </tr>
+        <tr>
+          <td class="c0">4</td><td class="c1">Capital Markets / Trading</td><td class="c2">Financial Services</td>
+          <td class="c3">SOX, SEC Rule 17a-4, Dodd-Frank, MiFID II (EU)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">SEC, FINRA, CFTC</td>
+          <td class="c6">PII, proprietary trade data</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST, Perf test</td>
+          <td class="c8">None</td>
+          <td class="c9">Low-latency integrity, insider threat controls, encryption</td>
+          <td class="c10">Trade records: 3–7 years; books + records: 7 years (SOX)</td>
+        </tr>
+        <tr>
+          <td class="c0">5</td><td class="c1">Wealth Management</td><td class="c2">Financial Services</td>
+          <td class="c3">SEC Investment Advisers Act, FINRA rules, SOX</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">SEC, FINRA, state securities regulators</td>
+          <td class="c6">PII, financial data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Client data protection, access controls, fiduciary records</td>
+          <td class="c10">5–7 years (SEC/FINRA)</td>
+        </tr>
+        <tr>
+          <td class="c0">6</td><td class="c1">Cryptocurrency / Web3</td><td class="c2">Financial Services</td>
+          <td class="c3">AML/KYC (FinCEN), OFAC sanctions compliance</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">FinCEN, SEC (securities tokens), CFTC</td>
+          <td class="c6">PII, wallet/key data</td>
+          <td class="c7">SCA, SAST, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Private key management, smart contract audits, cold storage policy</td>
+          <td class="c10">AML records: 5 years (FinCEN)</td>
+        </tr>
+        <tr>
+          <td class="c0">7</td><td class="c1">Lending / Credit</td><td class="c2">Financial Services</td>
+          <td class="c3">FCRA, ECOA, TILA, HMDA, RESPA</td>
+          <td class="c4">SOC 2</td>
+          <td class="c5">CFPB, FTC, OCC, state regulators</td>
+          <td class="c6">PII, credit data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Data minimization, access controls, fair lending bias monitoring</td>
+          <td class="c10">FCRA/ECOA: 5 years</td>
+        </tr>
+
+        <!-- HEALTHCARE & LIFE SCIENCES -->
+        <tr class="vert-row health"><td colspan="11">Healthcare &amp; Life Sciences <span class="vert-count">6 industries</span></td></tr>
+        <tr>
+          <td class="c0">8</td><td class="c1">Healthcare / Hospitals</td><td class="c2">Healthcare &amp; Life Sciences</td>
+          <td class="c3">HIPAA</td>
+          <td class="c4">HITRUST, SOC 2, ISO 27001</td>
+          <td class="c5">HHS / OCR</td>
+          <td class="c6">PHI</td>
+          <td class="c7">Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">PHI encryption at rest + transit, audit logs, BAA required</td>
+          <td class="c10">6-year log retention minimum (HIPAA)</td>
+        </tr>
+        <tr>
+          <td class="c0">9</td><td class="c1">Health Insurance / Payers</td><td class="c2">Healthcare &amp; Life Sciences</td>
+          <td class="c3">HIPAA, ACA requirements</td>
+          <td class="c4">HITRUST, SOC 2</td>
+          <td class="c5">HHS / OCR, CMS, state DOI</td>
+          <td class="c6">PHI, PII</td>
+          <td class="c7">Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">PHI encryption, claims integrity, BAA required with all vendors</td>
+          <td class="c10">6 years (HIPAA)</td>
+        </tr>
+        <tr>
+          <td class="c0">10</td><td class="c1">Pharma / Biotech</td><td class="c2">Healthcare &amp; Life Sciences</td>
+          <td class="c3">HIPAA (clinical data), FDA 21 CFR Part 11, GxP</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FDA, EMA (EU)</td>
+          <td class="c6">PHI, research data, IP</td>
+          <td class="c7">SCA, SAST, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Data integrity (21 CFR Part 11), IP protection, complete audit trail</td>
+          <td class="c10">Clinical records: 10 years (21 CFR Part 11)</td>
+        </tr>
+        <tr>
+          <td class="c0">11</td><td class="c1">Medical Devices</td><td class="c2">Healthcare &amp; Life Sciences</td>
+          <td class="c3">FDA 21 CFR Part 820, FDA SaMD guidance, MDR (EU), IEC 62443</td>
+          <td class="c4">ISO 13485, SOC 2</td>
+          <td class="c5">FDA, EU MDR / CE Mark authorities</td>
+          <td class="c6">PHI, device telemetry</td>
+          <td class="c7">SCA, SAST, IaC scan, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">FDA requires SBOM for SaMD (Cybersecurity Guidance 2023)</td>
+          <td class="c9">Cybersecurity by design, vulnerability disclosure program, OTA update signing</td>
+          <td class="c10">Device history records: 2 years after product discontinuation (21 CFR 820)</td>
+        </tr>
+        <tr>
+          <td class="c0">12</td><td class="c1">Mental Health / Telehealth</td><td class="c2">Healthcare &amp; Life Sciences</td>
+          <td class="c3">HIPAA, 42 CFR Part 2 (substance abuse records)</td>
+          <td class="c4">HITRUST, SOC 2</td>
+          <td class="c5">HHS / OCR, SAMHSA</td>
+          <td class="c6">PHI (extra-sensitive behavioral health data)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Strict PHI controls, behavioral health data isolation, BAA required</td>
+          <td class="c10">HIPAA: 6 years; 42 CFR Part 2 records: indefinite hold</td>
+        </tr>
+        <tr>
+          <td class="c0">13</td><td class="c1">Clinical Research / CRO</td><td class="c2">Healthcare &amp; Life Sciences</td>
+          <td class="c3">HIPAA, FDA 21 CFR Part 11, ICH GCP</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FDA, IRB, EMA</td>
+          <td class="c6">PHI, clinical trial data</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Data integrity, audit trail, patient de-identification</td>
+          <td class="c10">Trial data: 15 years (ICH E6 GCP)</td>
+        </tr>
+
+        <!-- GOVERNMENT & PUBLIC SECTOR -->
+        <tr class="vert-row gov"><td colspan="11">Government &amp; Public Sector <span class="vert-count">4 industries</span></td></tr>
+        <tr>
+          <td class="c0">14</td><td class="c1">Federal Government</td><td class="c2">Government &amp; Public Sector</td>
+          <td class="c3">FedRAMP, FISMA, NIST 800-53, FIPS 140-2</td>
+          <td class="c4">ISO 27001, StateRAMP</td>
+          <td class="c5">OMB, CISA, agency-specific</td>
+          <td class="c6">PII, CUI, potentially Classified</td>
+          <td class="c7">SCA, SAST, IaC scan, Secrets scan, Container scan, Sign, SBOM + attest, SLSA provenance, DAST</td>
+          <td class="c8"><span class="tag-fips">FIPS required</span> — OpenSSL FIPS module required for crypto operations</td>
+          <td class="c9">Zero trust architecture, continuous monitoring, supply chain risk management</td>
+          <td class="c10">FISMA: 3-year minimum; classified systems: indefinite</td>
+        </tr>
+        <tr>
+          <td class="c0">15</td><td class="c1">State / Local Government</td><td class="c2">Government &amp; Public Sector</td>
+          <td class="c3">StateRAMP (or FedRAMP equivalent), state security policies, CJIS (if law enforcement data)</td>
+          <td class="c4">NIST CSF, ISO 27001</td>
+          <td class="c5">State CIO offices, CISA (guidance)</td>
+          <td class="c6">PII, CUI (federal grant programs)</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None (unless federal grant requires FIPS)</td>
+          <td class="c9">Ransomware resilience, voter data protection, public records compliance</td>
+          <td class="c10">State-specific: 3–7 years</td>
+        </tr>
+        <tr>
+          <td class="c0">16</td><td class="c1">Public Safety / Law Enforcement</td><td class="c2">Government &amp; Public Sector</td>
+          <td class="c3">CJIS Security Policy (FBI), state criminal justice regulations</td>
+          <td class="c4">NIST 800-53, ISO 27001</td>
+          <td class="c5">FBI CJIS, state police commissions, DOJ</td>
+          <td class="c6">Classified (CJI — Criminal Justice Information)</td>
+          <td class="c7">SCA, SAST, IaC scan, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8"><span class="tag-fips">FIPS required</span> — CJIS mandates FIPS 140-2 for all encryption</td>
+          <td class="c9">CJI access controls, biometric data protection, chain of custody</td>
+          <td class="c10">CJIS: 10-year audit log retention</td>
+        </tr>
+        <tr>
+          <td class="c0">17</td><td class="c1">Justice / Courts</td><td class="c2">Government &amp; Public Sector</td>
+          <td class="c3">CJIS (criminal case data), state court rules</td>
+          <td class="c4">NIST CSF, ISO 27001</td>
+          <td class="c5">Administrative Office of Courts, state supreme courts, DOJ</td>
+          <td class="c6">PII, CJI</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8"><span class="tag-fips">FIPS required</span> for criminal case data</td>
+          <td class="c9">Case data integrity, e-discovery compliance, role-based access</td>
+          <td class="c10">Court records: permanent retention in most jurisdictions</td>
+        </tr>
+
+        <!-- DEFENSE & INTELLIGENCE -->
+        <tr class="vert-row def"><td colspan="11">Defense &amp; Intelligence <span class="vert-count">4 industries</span></td></tr>
+        <tr>
+          <td class="c0">18</td><td class="c1">Defense / Military</td><td class="c2">Defense &amp; Intelligence</td>
+          <td class="c3">CMMC Level 2/3, NIST 800-171, ITAR, FedRAMP High</td>
+          <td class="c4">ISO 27001</td>
+          <td class="c5">DoD, DCSA, DSS</td>
+          <td class="c6">Classified (CUI, SECRET, TOP SECRET)</td>
+          <td class="c7">SCA, SAST, IaC scan, Secrets scan, Container scan, Sign, SBOM + attest, SLSA provenance, DAST</td>
+          <td class="c8"><span class="tag-fips">FIPS required</span> — some runtimes lack FIPS-certified builds; verify before selecting</td>
+          <td class="c9">Supply chain security, CUI protection, insider threat program, anti-tamper</td>
+          <td class="c10">Classified records: permanent (DoD 5015.2)</td>
+        </tr>
+        <tr>
+          <td class="c0">19</td><td class="c1">Aerospace</td><td class="c2">Defense &amp; Intelligence</td>
+          <td class="c3">ITAR, AS9100 (quality), FAA DO-178C (airborne software)</td>
+          <td class="c4">ISO 9001, CMMC (defense contracts)</td>
+          <td class="c5">FAA, DoD (defense), EASA (EU)</td>
+          <td class="c6">IP, design data, CUI (defense contracts)</td>
+          <td class="c7">SCA, SAST, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">FIPS required for defense contracts only; commercial aerospace: None</td>
+          <td class="c9">IP protection, supply chain integrity, software integrity verification</td>
+          <td class="c10">AS9100: quality records for product lifetime + 10 years</td>
+        </tr>
+        <tr>
+          <td class="c0">20</td><td class="c1">Intelligence / National Security</td><td class="c2">Defense &amp; Intelligence</td>
+          <td class="c3">ICD 503, CNSSI 1253, NIST 800-53 High, FISMA</td>
+          <td class="c4">N/A — mandatory controls dominate</td>
+          <td class="c5">DNI, NSA, CIA, FBI (agency-dependent)</td>
+          <td class="c6">TOP SECRET / SCI, Classified</td>
+          <td class="c7">SCA, SAST, IaC scan, Secrets scan, Container scan, Sign, SBOM + attest, SLSA provenance, DAST</td>
+          <td class="c8"><span class="tag-fips">FIPS required</span> — IC APL (Approved Products List) restricts some frameworks</td>
+          <td class="c9">Air-gap requirements, compartmentalization, TEMPEST shielding</td>
+          <td class="c10">Classified records: permanent or agency-defined (indefinite)</td>
+        </tr>
+        <tr>
+          <td class="c0">21</td><td class="c1">Space</td><td class="c2">Defense &amp; Intelligence</td>
+          <td class="c3">ITAR (space technology), FAA AST regulations</td>
+          <td class="c4">CMMC (defense payloads), ISO 27001</td>
+          <td class="c5">FAA, FCC (satellite spectrum), DoD (defense)</td>
+          <td class="c6">IP, CUI (defense), telemetry data</td>
+          <td class="c7">SCA, SAST, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">FIPS required for defense payload software; commercial: None</td>
+          <td class="c9">Supply chain integrity, telemetry encryption, anti-tamper controls</td>
+          <td class="c10">ITAR records: 5 years from export; mission records: agency-defined</td>
+        </tr>
+
+        <!-- ENERGY & ENVIRONMENT -->
+        <tr class="vert-row energy"><td colspan="11">Energy &amp; Environment <span class="vert-count">6 industries</span></td></tr>
+        <tr>
+          <td class="c0">22</td><td class="c1">Oil &amp; Gas</td><td class="c2">Energy &amp; Environment</td>
+          <td class="c3">TSA Pipeline Security Directives, API 1164, NERC CIP (grid-connected)</td>
+          <td class="c4">ISO 27001, IEC 62443</td>
+          <td class="c5">TSA, FERC, EPA, state regulators</td>
+          <td class="c6">OT/SCADA data, PII (employee), proprietary reserves data</td>
+          <td class="c7">SCA, IaC scan, Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">OT/IT convergence, SCADA protection, physical-cyber security</td>
+          <td class="c10">NERC CIP: 3 years; EPA reports: varies by permit</td>
+        </tr>
+        <tr>
+          <td class="c0">23</td><td class="c1">Utilities / Power Grid</td><td class="c2">Energy &amp; Environment</td>
+          <td class="c3">NERC CIP, TSA Security Directives, FERC regulations</td>
+          <td class="c4">IEC 62443, ISO 27001, NIST SP 800-82</td>
+          <td class="c5">NERC, FERC, state PUCs, DHS/CISA</td>
+          <td class="c6">OT/SCADA data, PII (customer)</td>
+          <td class="c7">SCA, IaC scan, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Critical infrastructure protection, OT/IT segmentation, incident response</td>
+          <td class="c10">NERC CIP: 3 years (most logs); 6 years (some controls)</td>
+        </tr>
+        <tr>
+          <td class="c0">24</td><td class="c1">Renewables / CleanTech</td><td class="c2">Energy &amp; Environment</td>
+          <td class="c3">NERC CIP (grid-connected), EPA reporting</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FERC, EPA, DOE, state PUCs</td>
+          <td class="c6">OT sensor data, PII (customer)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">SCADA/OT protection, grid connectivity security</td>
+          <td class="c10">FERC/EPA: 3–5 years</td>
+        </tr>
+        <tr>
+          <td class="c0">25</td><td class="c1">Nuclear</td><td class="c2">Energy &amp; Environment</td>
+          <td class="c3">NRC 10 CFR 73.54 (cyber security), NERC CIP, 10 CFR 50 (safety systems)</td>
+          <td class="c4">IEC 62443, NIST 800-82</td>
+          <td class="c5">NRC, DOE, DHS/CISA</td>
+          <td class="c6">Classified (nuclear design info), OT/Safety system data</td>
+          <td class="c7">SCA, SAST, IaC scan, Secrets scan, Container scan, Sign, SBOM + attest, SLSA provenance, DAST</td>
+          <td class="c8"><span class="tag-fips">FIPS required</span> — NRC-qualified software requirements restrict framework selection</td>
+          <td class="c9">Cyber security plan (NRC), safety-security interface, physical protection</td>
+          <td class="c10">NRC: quality assurance records 10-year minimum; safety records permanent</td>
+        </tr>
+        <tr>
+          <td class="c0">26</td><td class="c1">Water / Wastewater</td><td class="c2">Energy &amp; Environment</td>
+          <td class="c3">AWIA cyber assessments, EPA requirements</td>
+          <td class="c4">NIST CSF, IEC 62443</td>
+          <td class="c5">EPA, state environmental agencies, DHS/CISA</td>
+          <td class="c6">OT/SCADA data, vulnerability assessment data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">SCADA protection, vulnerability assessment confidentiality</td>
+          <td class="c10">AWIA: emergency response plans updated every 5 years</td>
+        </tr>
+        <tr>
+          <td class="c0">27</td><td class="c1">Mining</td><td class="c2">Energy &amp; Environment</td>
+          <td class="c3">MSHA IT requirements, EPA reporting</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">MSHA, EPA, state mining regulators</td>
+          <td class="c6">OT sensor data, PII (worker), environmental data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">OT/SCADA protection, safety system integrity</td>
+          <td class="c10">MSHA: 1–3 years; EPA: 3–5 years</td>
+        </tr>
+
+        <!-- TECHNOLOGY -->
+        <tr class="vert-row tech"><td colspan="11">Technology <span class="vert-count">5 industries</span></td></tr>
+        <tr>
+          <td class="c0">28</td><td class="c1">SaaS / Cloud Software</td><td class="c2">Technology</td>
+          <td class="c3">GDPR (EU users), CCPA (CA users), SOC 2</td>
+          <td class="c4">ISO 27001, CSA STAR, FedRAMP (if govt)</td>
+          <td class="c5">FTC, EU DPA, state AGs</td>
+          <td class="c6">PII (varies by product)</td>
+          <td class="c7">SCA, SAST, License scan, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Multi-tenant isolation, data residency controls, breach notification</td>
+          <td class="c10">GDPR: processing records indefinite; SOC 2: annual review</td>
+        </tr>
+        <tr>
+          <td class="c0">29</td><td class="c1">AI / ML Platforms</td><td class="c2">Technology</td>
+          <td class="c3">GDPR, EU AI Act (high-risk), CCPA, sector-specific (HIPAA if health AI)</td>
+          <td class="c4">ISO 42001, NIST AI RMF, SOC 2</td>
+          <td class="c5">FTC, EU AI Office, sector-specific regulators</td>
+          <td class="c6">PII (training data), model weights as IP</td>
+          <td class="c7">SCA, SAST, License scan, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Model integrity, training data provenance, bias monitoring, IP protection</td>
+          <td class="c10">GDPR: indefinite; EU AI Act: 10-year logs for high-risk systems</td>
+        </tr>
+        <tr>
+          <td class="c0">30</td><td class="c1">Cybersecurity</td><td class="c2">Technology</td>
+          <td class="c3">SOC 2, GDPR (EU), FTC Safeguards Rule</td>
+          <td class="c4">ISO 27001, ISO 27701</td>
+          <td class="c5">FTC, SEC (if public), CISA (incident reporting)</td>
+          <td class="c6">Sensitive client security data, vulnerability intel</td>
+          <td class="c7">SCA, SAST, License scan, Secrets scan, Container scan, Sign, SBOM + attest, SLSA provenance, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Pentest data protection, responsible disclosure, supply chain security</td>
+          <td class="c10">SOC 2: annual; FTC: incident records 5 years</td>
+        </tr>
+        <tr>
+          <td class="c0">31</td><td class="c1">Semiconductor / Hardware</td><td class="c2">Technology</td>
+          <td class="c3">ITAR (defense-grade chips), EAR (Export Administration Regulations)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">BIS, DDTC, DoD (defense)</td>
+          <td class="c6">IP (chip designs), CUI (defense)</td>
+          <td class="c7">SCA, SAST, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">FIPS required for defense contracts; commercial: None</td>
+          <td class="c9">IP protection, supply chain integrity, hardware tamper detection</td>
+          <td class="c10">ITAR/EAR: export records 5 years</td>
+        </tr>
+        <tr>
+          <td class="c0">32</td><td class="c1">Developer Tools / Platforms</td><td class="c2">Technology</td>
+          <td class="c3">GDPR (EU users), SOC 2</td>
+          <td class="c4">ISO 27001, FedRAMP (if govt customers)</td>
+          <td class="c5">FTC, EU DPA</td>
+          <td class="c6">Source code (customer IP), PII (developer accounts)</td>
+          <td class="c7">SCA, SAST, License scan, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Customer IP protection, secrets scanning, supply chain security</td>
+          <td class="c10">GDPR: indefinite; SOC 2: annual</td>
+        </tr>
+
+        <!-- TELECOMMUNICATIONS -->
+        <tr class="vert-row telecom"><td colspan="11">Telecommunications <span class="vert-count">4 industries</span></td></tr>
+        <tr>
+          <td class="c0">33</td><td class="c1">Telecom / Carriers</td><td class="c2">Telecommunications</td>
+          <td class="c3">CPNI (FCC Part 64), CALEA, FCC regulations</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FCC, FTC, state PUCs</td>
+          <td class="c6">CPNI, PII</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">CPNI protection, lawful intercept compliance, network integrity</td>
+          <td class="c10">CALEA: call records 18 months; FCC: varies by record type</td>
+        </tr>
+        <tr>
+          <td class="c0">34</td><td class="c1">Satellite</td><td class="c2">Telecommunications</td>
+          <td class="c3">FCC spectrum license requirements, ITAR (technology), ITU regulations</td>
+          <td class="c4">ISO 27001, CMMC (defense payloads)</td>
+          <td class="c5">FCC, ITU, DoD (defense payloads)</td>
+          <td class="c6">Telemetry data, IP, CUI (defense payloads)</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">FIPS required for defense payload software; commercial: None</td>
+          <td class="c9">Frequency protection, link encryption, jamming countermeasures</td>
+          <td class="c10">FCC license records: license term + 2 years</td>
+        </tr>
+        <tr>
+          <td class="c0">35</td><td class="c1">ISP / Broadband</td><td class="c2">Telecommunications</td>
+          <td class="c3">CPNI, CALEA, FCC broadband privacy (state-level post-2017)</td>
+          <td class="c4">ISO 27001</td>
+          <td class="c5">FCC, FTC, state AGs</td>
+          <td class="c6">CPNI, PII (subscriber data)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">CPNI protection, DNS security, network neutrality compliance</td>
+          <td class="c10">FCC CPNI records: 2 years; CALEA: 18 months</td>
+        </tr>
+        <tr>
+          <td class="c0">36</td><td class="c1">5G / Wireless</td><td class="c2">Telecommunications</td>
+          <td class="c3">FCC regulations, CPNI, 3GPP security standards</td>
+          <td class="c4">ISO 27001, NIST NCCoE 5G guidance</td>
+          <td class="c5">FCC, NTIA, DoD (spectrum sharing)</td>
+          <td class="c6">CPNI, location data, PII</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Radio access security, location data protection, supply chain (banned vendor list)</td>
+          <td class="c10">FCC: varies; location data: minimum 90 days</td>
+        </tr>
+
+        <!-- RETAIL & COMMERCE -->
+        <tr class="vert-row retail"><td colspan="11">Retail &amp; Commerce <span class="vert-count">5 industries</span></td></tr>
+        <tr>
+          <td class="c0">37</td><td class="c1">Retail / E-commerce</td><td class="c2">Retail &amp; Commerce</td>
+          <td class="c3">PCI DSS, CCPA (CA), GDPR (EU)</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">FTC, state AGs, EU DPA</td>
+          <td class="c6">PCI, PII</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Payment security, fraud detection, breach notification</td>
+          <td class="c10">PCI DSS: 12-month log retention; GDPR: indefinite</td>
+        </tr>
+        <tr>
+          <td class="c0">38</td><td class="c1">Supply Chain / Logistics</td><td class="c2">Retail &amp; Commerce</td>
+          <td class="c3">GDPR (EU), CCPA (CA), C-TPAT (customs security)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">CBP (US Customs), FTC, state regulators</td>
+          <td class="c6">PII (customer/driver), shipment data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Track-and-trace integrity, driver data protection, cargo data security</td>
+          <td class="c10">C-TPAT: 5 years; customs records: 5 years</td>
+        </tr>
+        <tr>
+          <td class="c0">39</td><td class="c1">Wholesale / Distribution</td><td class="c2">Retail &amp; Commerce</td>
+          <td class="c3">GDPR (EU), CCPA (CA)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, state regulators</td>
+          <td class="c6">PII (customer/supplier), B2B financial data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">ERP access controls, supplier data protection</td>
+          <td class="c10">3–5 years typical</td>
+        </tr>
+        <tr>
+          <td class="c0">40</td><td class="c1">Food &amp; Beverage</td><td class="c2">Retail &amp; Commerce</td>
+          <td class="c3">FDA FSMA traceability, HACCP records</td>
+          <td class="c4">ISO 22000, SOC 2</td>
+          <td class="c5">FDA, USDA, EPA</td>
+          <td class="c6">Supply chain data, PII (minimal — B2B focused)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Supply chain traceability, recipe/formula IP protection</td>
+          <td class="c10">FDA FSMA: 2-year traceability; HACCP: 6 months minimum</td>
+        </tr>
+        <tr>
+          <td class="c0">41</td><td class="c1">Fashion / Apparel</td><td class="c2">Retail &amp; Commerce</td>
+          <td class="c3">GDPR (EU e-commerce), CCPA (CA)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, state AGs</td>
+          <td class="c6">PII (customer purchase data)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Customer data protection, PCI DSS (card payments)</td>
+          <td class="c10">GDPR: indefinite; typical 3–5 years</td>
+        </tr>
+
+        <!-- MANUFACTURING & INDUSTRIAL -->
+        <tr class="vert-row mfg"><td colspan="11">Manufacturing &amp; Industrial <span class="vert-count">5 industries</span></td></tr>
+        <tr>
+          <td class="c0">42</td><td class="c1">Automotive</td><td class="c2">Manufacturing &amp; Industrial</td>
+          <td class="c3">ISO/SAE 21434 (cybersecurity), WP.29 UNECE (EU connected vehicles), GDPR (EU)</td>
+          <td class="c4">ISO 27001, TISAX</td>
+          <td class="c5">NHTSA (US), EU type approval authorities</td>
+          <td class="c6">PII (driver behavior, location), vehicle telemetry</td>
+          <td class="c7">SCA, SAST, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">FIPS required for defense vehicles; consumer automotive: None</td>
+          <td class="c9">OTA update security, vehicle-to-cloud security, data minimization</td>
+          <td class="c10">WP.29: cybersecurity records for vehicle lifetime + 10 years</td>
+        </tr>
+        <tr>
+          <td class="c0">43</td><td class="c1">Electronics / Consumer Hardware</td><td class="c2">Manufacturing &amp; Industrial</td>
+          <td class="c3">FCC Part 15 (radio emissions), CE marking (EU), GDPR (if connected)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FCC, EU product safety authorities, FTC</td>
+          <td class="c6">PII (if connected device), usage telemetry</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Secure boot, firmware signing, privacy by design</td>
+          <td class="c10">FCC: device lifetime; GDPR: indefinite</td>
+        </tr>
+        <tr>
+          <td class="c0">44</td><td class="c1">Industrial / Heavy Manufacturing</td><td class="c2">Manufacturing &amp; Industrial</td>
+          <td class="c3">OSHA safety system requirements, EPA environmental reporting</td>
+          <td class="c4">IEC 62443, ISO 27001</td>
+          <td class="c5">OSHA, EPA, state regulators</td>
+          <td class="c6">OT/SCADA data, PII (worker safety)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">OT/IT segmentation, safety system integrity, supply chain controls</td>
+          <td class="c10">OSHA: 3–5 years; EPA: varies by permit</td>
+        </tr>
+        <tr>
+          <td class="c0">45</td><td class="c1">Chemical</td><td class="c2">Manufacturing &amp; Industrial</td>
+          <td class="c3">CFATS, EPA RMP (Risk Management Plan), OSHA PSM</td>
+          <td class="c4">IEC 62443, ISO 27001</td>
+          <td class="c5">DHS/CISA (CFATS), EPA, OSHA</td>
+          <td class="c6">OT/SCADA data, CFATS vulnerability assessments (protected)</td>
+          <td class="c7">SCA, IaC scan, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">CFATS Top-Screen data protection, OT/IT security, physical-cyber convergence</td>
+          <td class="c10">CFATS: 3 years; EPA RMP: updated every 5 years</td>
+        </tr>
+        <tr>
+          <td class="c0">46</td><td class="c1">Pharma Manufacturing</td><td class="c2">Manufacturing &amp; Industrial</td>
+          <td class="c3">FDA 21 CFR Part 11, GMP, EU GMP Annex 11</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FDA, EMA (EU), national health authorities</td>
+          <td class="c6">Batch records, IP (formulations)</td>
+          <td class="c7">SCA, SAST, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Data integrity (21 CFR Part 11), audit trail, manufacturing system access controls</td>
+          <td class="c10">Batch records: 1 year past expiry or 3 years from lot release (21 CFR)</td>
+        </tr>
+
+        <!-- MEDIA & ENTERTAINMENT -->
+        <tr class="vert-row media"><td colspan="11">Media &amp; Entertainment <span class="vert-count">6 industries</span></td></tr>
+        <tr>
+          <td class="c0">47</td><td class="c1">Media / Publishing</td><td class="c2">Media &amp; Entertainment</td>
+          <td class="c3">GDPR (EU subscribers), CCPA (CA), COPPA (if child content)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, EU DPA, FCC (broadcast)</td>
+          <td class="c6">PII (subscriber), content IP</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">DRM protection, subscriber data security, paywall integrity</td>
+          <td class="c10">GDPR: indefinite; CCPA: 12-month consumer request records</td>
+        </tr>
+        <tr>
+          <td class="c0">48</td><td class="c1">Gaming</td><td class="c2">Media &amp; Entertainment</td>
+          <td class="c3">GDPR (EU players), COPPA (if under-13), CCPA (CA)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, EU DPA, state gaming commissions (gambling games)</td>
+          <td class="c6">PII (player data), PCI (in-game purchases)</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Anti-cheat integrity, player data protection, in-game economy security</td>
+          <td class="c10">GDPR: indefinite; COPPA: parental consent records 3 years</td>
+        </tr>
+        <tr>
+          <td class="c0">49</td><td class="c1">Streaming / OTT</td><td class="c2">Media &amp; Entertainment</td>
+          <td class="c3">GDPR (EU users), CCPA (CA), COPPA (if child content)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, EU DPA</td>
+          <td class="c6">PII (user viewing data), PCI (subscriptions)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">DRM, CDN security, subscriber data protection</td>
+          <td class="c10">GDPR: indefinite; CCPA: 12 months</td>
+        </tr>
+        <tr>
+          <td class="c0">50</td><td class="c1">Social Media</td><td class="c2">Media &amp; Entertainment</td>
+          <td class="c3">GDPR (EU), CCPA (CA), COPPA (if minors), EU DSA</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, EU DPA, EU DSC, state AGs</td>
+          <td class="c6">PII (extensive user data), behavioral profiles</td>
+          <td class="c7">SCA, SAST, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">PII protection at scale, content moderation systems, API rate limiting</td>
+          <td class="c10">GDPR: indefinite; CCPA: 12 months; EU DSA: annual risk assessment</td>
+        </tr>
+        <tr>
+          <td class="c0">51</td><td class="c1">Sports / Events</td><td class="c2">Media &amp; Entertainment</td>
+          <td class="c3">PCI DSS (ticketing), GDPR (EU), CCPA (CA)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, EU DPA, state regulators</td>
+          <td class="c6">PII (fan data), PCI (ticket payments)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Ticketing system integrity, payment security, venue operations security</td>
+          <td class="c10">PCI: 12 months; GDPR: indefinite</td>
+        </tr>
+        <tr>
+          <td class="c0">52</td><td class="c1">Music</td><td class="c2">Media &amp; Entertainment</td>
+          <td class="c3">GDPR (EU users), CCPA (CA)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, EU DPA, music licensing bodies</td>
+          <td class="c6">PII (listener/artist), royalty payment data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">DRM protection, royalty calculation integrity, artist data security</td>
+          <td class="c10">GDPR: indefinite; royalty records: 6 years typical</td>
+        </tr>
+
+        <!-- EDUCATION -->
+        <tr class="vert-row edu"><td colspan="11">Education <span class="vert-count">4 industries</span></td></tr>
+        <tr>
+          <td class="c0">53</td><td class="c1">K-12</td><td class="c2">Education</td>
+          <td class="c3">FERPA, COPPA, state student privacy laws (SOPPA etc.)</td>
+          <td class="c4">NIST CSF, SOC 2</td>
+          <td class="c5">US Dept of Education, FTC (COPPA), state DOE</td>
+          <td class="c6">PII (student educational records, minors' data)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Student data protection, parental consent management, age-appropriate design</td>
+          <td class="c10">FERPA: while enrolled + 5 years; COPPA: 3 years</td>
+        </tr>
+        <tr>
+          <td class="c0">54</td><td class="c1">Higher Education</td><td class="c2">Education</td>
+          <td class="c3">FERPA, HIPAA (student health services), GLBA (financial aid)</td>
+          <td class="c4">NIST CSF, ISO 27001</td>
+          <td class="c5">US Dept of Education, HHS, FTC (GLBA)</td>
+          <td class="c6">PII (student records), research data, PHI (health services)</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None (unless federal research contract requires FedRAMP)</td>
+          <td class="c9">Research data protection, student records access control, financial aid security</td>
+          <td class="c10">FERPA: 5 years; GLBA: 6 years</td>
+        </tr>
+        <tr>
+          <td class="c0">55</td><td class="c1">EdTech / Online Learning</td><td class="c2">Education</td>
+          <td class="c3">FERPA (school customers), COPPA (if K-12), CCPA (CA), GDPR (EU)</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">US Dept of Education, FTC, EU DPA</td>
+          <td class="c6">PII (learner data), minors' data (K-12)</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Learner data protection, proctoring privacy, parental consent</td>
+          <td class="c10">FERPA: 5 years; COPPA: 3 years; GDPR: indefinite</td>
+        </tr>
+        <tr>
+          <td class="c0">56</td><td class="c1">Corporate Training</td><td class="c2">Education</td>
+          <td class="c3">GDPR (EU employees), CCPA (CA employees)</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">FTC, EU DPA, state privacy regulators</td>
+          <td class="c6">PII (employee learning data)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Employee data protection, completion record integrity</td>
+          <td class="c10">GDPR: employment records 3–5 years (jurisdiction-dependent)</td>
+        </tr>
+
+        <!-- TRANSPORTATION & LOGISTICS -->
+        <tr class="vert-row trans"><td colspan="11">Transportation &amp; Logistics <span class="vert-count">6 industries</span></td></tr>
+        <tr>
+          <td class="c0">57</td><td class="c1">Airlines / Aviation</td><td class="c2">Transportation &amp; Logistics</td>
+          <td class="c3">TSA regulations, FAA cybersecurity guidance, GDPR (EU passengers)</td>
+          <td class="c4">ISO 27001, NIST CSF</td>
+          <td class="c5">FAA, TSA, DHS, EASA (EU)</td>
+          <td class="c6">PII (passenger PNR data), safety-critical system data</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None (FAA DO-178C governs airborne software separately from IT pipeline)</td>
+          <td class="c9">Passenger data protection, operations security, avionics cybersecurity</td>
+          <td class="c10">TSA: PNR data 7 years; FAA safety records: permanent</td>
+        </tr>
+        <tr>
+          <td class="c0">58</td><td class="c1">Shipping / Maritime</td><td class="c2">Transportation &amp; Logistics</td>
+          <td class="c3">USCG cybersecurity guidelines, EU NIS2, IMO MARPOL (environmental)</td>
+          <td class="c4">ISO 27001, BIMCO cybersecurity guidance</td>
+          <td class="c5">USCG, IMO, port state control authorities</td>
+          <td class="c6">PII (crew/passenger), cargo manifest data, OT (vessel systems)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">OT/IT convergence (ECDIS, AIS), cargo integrity, crew data protection</td>
+          <td class="c10">USCG: 3 years; IMO MARPOL: 3 years</td>
+        </tr>
+        <tr>
+          <td class="c0">59</td><td class="c1">Rail</td><td class="c2">Transportation &amp; Logistics</td>
+          <td class="c3">TSA Surface Security Directives, FRA cybersecurity regulations</td>
+          <td class="c4">IEC 62443, NIST CSF</td>
+          <td class="c5">FRA, TSA, DHS</td>
+          <td class="c6">OT/signaling system data, PII (passenger)</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Signaling system integrity, OT/IT segmentation, passenger data protection</td>
+          <td class="c10">FRA: safety records 3 years minimum</td>
+        </tr>
+        <tr>
+          <td class="c0">60</td><td class="c1">Trucking / Fleet</td><td class="c2">Transportation &amp; Logistics</td>
+          <td class="c3">FMCSA regulations, ELD (Electronic Logging Device) security requirements</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FMCSA, DOT, state DOTs</td>
+          <td class="c6">PII (driver hours of service), vehicle telemetry</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">ELD data integrity, driver data protection, route data security</td>
+          <td class="c10">FMCSA: ELD records 6 months; driver records 3 years</td>
+        </tr>
+        <tr>
+          <td class="c0">61</td><td class="c1">Ride-sharing / Mobility</td><td class="c2">Transportation &amp; Logistics</td>
+          <td class="c3">GDPR (EU), CCPA (CA), PCI DSS (payments), state TNC regulations</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">FTC, EU DPA, state PUCs / TNC regulators</td>
+          <td class="c6">PII (location, trip history), PCI (payments)</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Location data minimization, surge pricing integrity, driver/rider safety systems</td>
+          <td class="c10">GDPR: indefinite; CCPA: 12 months; PCI: 12 months</td>
+        </tr>
+        <tr>
+          <td class="c0">62</td><td class="c1">Last-mile Delivery</td><td class="c2">Transportation &amp; Logistics</td>
+          <td class="c3">GDPR (EU), CCPA (CA)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, EU DPA, state consumer protection</td>
+          <td class="c6">PII (delivery address, recipient data)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Delivery address protection, proof of delivery integrity</td>
+          <td class="c10">GDPR: indefinite; typical 3–5 years</td>
+        </tr>
+
+        <!-- REAL ESTATE & CONSTRUCTION -->
+        <tr class="vert-row re"><td colspan="11">Real Estate &amp; Construction <span class="vert-count">4 industries</span></td></tr>
+        <tr>
+          <td class="c0">63</td><td class="c1">Commercial Real Estate</td><td class="c2">Real Estate &amp; Construction</td>
+          <td class="c3">GDPR (EU), CCPA (CA), state real estate regulations</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">FTC, state real estate commissions, EU DPA</td>
+          <td class="c6">PII (tenant/buyer data), financial transaction data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Tenant data protection, transaction integrity, building automation security</td>
+          <td class="c10">Real estate transaction records: 7 years typical</td>
+        </tr>
+        <tr>
+          <td class="c0">64</td><td class="c1">Residential Real Estate</td><td class="c2">Real Estate &amp; Construction</td>
+          <td class="c3">FCRA, RESPA, TILA, GDPR (EU), CCPA (CA)</td>
+          <td class="c4">SOC 2</td>
+          <td class="c5">CFPB, FTC, state real estate commissions</td>
+          <td class="c6">PII (buyer/seller financial data), credit data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Buyer/seller financial data protection, wire fraud prevention</td>
+          <td class="c10">RESPA: 3 years; FCRA: 2 years</td>
+        </tr>
+        <tr>
+          <td class="c0">65</td><td class="c1">PropTech</td><td class="c2">Real Estate &amp; Construction</td>
+          <td class="c3">GDPR (EU), CCPA (CA), state real estate and lending regulations</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">FTC, CFPB (if lending features), EU DPA</td>
+          <td class="c6">PII (user property search data), financial data</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">User data protection, listing integrity, payment security</td>
+          <td class="c10">GDPR: indefinite; CCPA: 12 months</td>
+        </tr>
+        <tr>
+          <td class="c0">66</td><td class="c1">Construction / Engineering</td><td class="c2">Real Estate &amp; Construction</td>
+          <td class="c3">OSHA safety system records, EPA environmental reporting, state contractor licensing</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">OSHA, EPA, state contractor boards</td>
+          <td class="c6">PII (worker/subcontractor), project design IP</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Design IP protection, BIM access control, subcontractor data protection</td>
+          <td class="c10">OSHA: 3–5 years; EPA: varies by permit</td>
+        </tr>
+
+        <!-- AGRICULTURE -->
+        <tr class="vert-row agri"><td colspan="11">Agriculture <span class="vert-count">3 industries</span></td></tr>
+        <tr>
+          <td class="c0">67</td><td class="c1">AgTech</td><td class="c2">Agriculture</td>
+          <td class="c3">FDA FSMA (if food production data), EPA reporting</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">USDA, FDA, EPA</td>
+          <td class="c6">PII (farmer operational data), precision agriculture data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Farm data ownership protection, precision data integrity</td>
+          <td class="c10">USDA/FDA: 2–5 years depending on program</td>
+        </tr>
+        <tr>
+          <td class="c0">68</td><td class="c1">Food Production</td><td class="c2">Agriculture</td>
+          <td class="c3">FDA FSMA, USDA FSIS (meat/poultry), HACCP, EU Food Safety regulations</td>
+          <td class="c4">ISO 22000, BRC Global Standards</td>
+          <td class="c5">FDA, USDA FSIS, EU food safety authorities</td>
+          <td class="c6">Supply chain/traceability data, PII (minimal)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Traceability system integrity, supply chain data protection</td>
+          <td class="c10">FDA FSMA: 2-year traceability; HACCP: 6 months minimum</td>
+        </tr>
+        <tr>
+          <td class="c0">69</td><td class="c1">Precision Agriculture</td><td class="c2">Agriculture</td>
+          <td class="c3">EPA pesticide reporting, USDA program compliance</td>
+          <td class="c4">ISO 27001</td>
+          <td class="c5">EPA, USDA, state departments of agriculture</td>
+          <td class="c6">PII (farmer field data), precision agriculture sensor data</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Farm data sovereignty, drone/sensor data integrity</td>
+          <td class="c10">EPA: varies by program; USDA: 3 years</td>
+        </tr>
+
+        <!-- LEGAL & PROFESSIONAL SERVICES -->
+        <tr class="vert-row legal"><td colspan="11">Legal &amp; Professional Services <span class="vert-count">3 industries</span></td></tr>
+        <tr>
+          <td class="c0">70</td><td class="c1">Legal / LegalTech</td><td class="c2">Legal &amp; Professional Services</td>
+          <td class="c3">Attorney-client privilege requirements, GDPR (EU clients), CCPA (CA)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">State bar associations, FTC, EU DPA</td>
+          <td class="c6">Privileged communications, client confidential data, PII</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Attorney-client privilege protection, client matter isolation, confidentiality</td>
+          <td class="c10">State bar rules: matter files 7 years after close; GDPR: indefinite</td>
+        </tr>
+        <tr>
+          <td class="c0">71</td><td class="c1">Consulting</td><td class="c2">Legal &amp; Professional Services</td>
+          <td class="c3">GDPR (EU clients), CCPA (CA), sector-specific (inherits client requirements)</td>
+          <td class="c4">ISO 27001, SOC 2</td>
+          <td class="c5">FTC, EU DPA (varies by specialty)</td>
+          <td class="c6">Client confidential data, PII (project data)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None (inherits FIPS requirement if serving defense/gov clients)</td>
+          <td class="c9">Client data isolation, engagement confidentiality, IP protection</td>
+          <td class="c10">Varies by client contract: typically 5–7 years</td>
+        </tr>
+        <tr>
+          <td class="c0">72</td><td class="c1">Accounting / Audit</td><td class="c2">Legal &amp; Professional Services</td>
+          <td class="c3">SOX (public company audits), PCAOB standards, GAAP/IFRS record-keeping</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">SEC, PCAOB, AICPA, state CPA boards</td>
+          <td class="c6">Financial records, client confidential data, PII (tax records)</td>
+          <td class="c7">SCA, Secrets scan, Container scan, Sign, SBOM + attest, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Audit workpaper integrity, financial data protection, access segregation</td>
+          <td class="c10">SOX/PCAOB: audit workpapers 7 years</td>
+        </tr>
+
+        <!-- NON-PROFIT & SOCIAL -->
+        <tr class="vert-row npo"><td colspan="11">Non-profit &amp; Social <span class="vert-count">2 industries</span></td></tr>
+        <tr>
+          <td class="c0">73</td><td class="c1">Non-profit / NGO</td><td class="c2">Non-profit &amp; Social</td>
+          <td class="c3">GDPR (EU donors), CCPA (CA), IRS Form 990 disclosure requirements</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">IRS, FTC, state charity registration regulators</td>
+          <td class="c6">PII (donor data), financial contribution records</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Donor data protection, fundraising system integrity</td>
+          <td class="c10">IRS: 3-year tax records; state charity: varies; GDPR: indefinite</td>
+        </tr>
+        <tr>
+          <td class="c0">74</td><td class="c1">Social Enterprise</td><td class="c2">Non-profit &amp; Social</td>
+          <td class="c3">GDPR (EU), CCPA (CA), state corporate/nonprofit regulations</td>
+          <td class="c4">SOC 2, ISO 27001</td>
+          <td class="c5">FTC, state AGs, IRS (if nonprofit component)</td>
+          <td class="c6">PII (customer/beneficiary data)</td>
+          <td class="c7">Secrets scan, Container scan, Sign, DAST</td>
+          <td class="c8">None</td>
+          <td class="c9">Beneficiary data protection, dual mission data governance</td>
+          <td class="c10">IRS: 3 years (nonprofit component); GDPR: indefinite; typical 3–5 years</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">74 industries &nbsp;·&nbsp; 16 verticals &nbsp;·&nbsp; 10 columns per row</div>
+</div>
+
+</main>
+</body>
+</html>
