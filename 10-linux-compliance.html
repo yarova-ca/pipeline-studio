@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Linux Compliance Cross-Reference — 22 distros × 10 compliance frameworks, 16 industry verticals, and 9 framework categories. Companion to 09-linux-distros.html.">
+<meta name="description" content="Linux Compliance Cross-Reference — 22 distros × 4 matrices: compliance frameworks, industry verticals, 27 framework build-runner categories, and 12 runtime output types. Companion to 09-linux-distros.html.">
 <title>Linux Compliance — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,6 +66,18 @@ th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
 .tbl-wrap.compliance-tbl{border-top:3px solid var(--blue)}
 .tbl-wrap.industry-tbl{border-top:3px solid var(--red)}
 .tbl-wrap.framework-tbl{border-top:3px solid var(--green)}
+.tbl-wrap.build-tbl{border-top:3px solid var(--purple)}
+.tbl-wrap.runtime-tbl{border-top:3px solid var(--amber)}
+/* Build runner cells */
+.b-native{background:#d4f4dd;color:#1a7f37;font-weight:700;font-size:10px;border-radius:3px;padding:2px 4px}
+.b-install{background:#dbeeff;color:#0550ae;font-size:10px;border-radius:3px;padding:2px 4px}
+.b-work{background:#fff3cd;color:#9a6700;font-size:10px;border-radius:3px;padding:2px 4px}
+.b-na{color:var(--text-dim);font-size:10px}
+/* Runtime cells */
+.r-opt{background:#d4f4dd;color:#1a7f37;font-weight:700;font-size:10px;border-radius:3px;padding:2px 4px}
+.r-compat{background:#f0f0f5;color:#57606a;font-size:10px;border-radius:3px;padding:2px 4px}
+.r-work{background:#fff3cd;color:#9a6700;font-size:10px;border-radius:3px;padding:2px 4px}
+.r-no{color:var(--text-dim);font-size:10px}
 .tbl-scroll{overflow-x:auto}
 /* Cross-reference tables */
 .xref-table{border-collapse:collapse;font-size:11px;width:100%}
@@ -136,7 +148,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <div class="nav-section">Jump to</div>
   <a href="#compliance-matrix">Compliance matrix</a>
   <a href="#industry-matrix">Industry matrix</a>
-  <a href="#framework-matrix">Framework compat</a>
+  <a href="#build-matrix">Build runner compat</a>
+  <a href="#runtime-matrix">Runtime output compat</a>
   <div class="nav-section">All docs</div>
   <a href="index.html">⌂ Hub</a>
   <a href="01-framework-catalog.html">01 Frameworks</a>
@@ -154,7 +167,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <main id="main-content">
 <div class="page-title">Linux Compliance Cross-Reference</div>
-<div class="page-meta">22 distros &nbsp;·&nbsp; 3 matrices &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; industry schema: <a href="06-industry-schema.html">doc 06</a> / <a href="07-canada-schema.html">doc 07</a> &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a></div>
+<div class="page-meta">22 distros &nbsp;·&nbsp; 4 matrices &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; industry schema: <a href="06-industry-schema.html">doc 06</a> / <a href="07-canada-schema.html">doc 07</a> &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a></div>
 
 <!-- Counts bar -->
 <div class="counts-bar">
@@ -171,17 +184,22 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <div class="chip-label">Industry<br>verticals</div>
   </div>
   <div class="count-chip fwk-chip">
-    <div class="chip-num">9</div>
-    <div class="chip-label">Framework<br>categories</div>
+    <div class="chip-num">27</div>
+    <div class="chip-label">Build-time<br>framework categories</div>
+  </div>
+  <div class="count-chip" style="border-left:3px solid var(--amber)">
+    <div class="chip-num" style="color:var(--amber)">12</div>
+    <div class="chip-label">Runtime<br>output types</div>
   </div>
 </div>
 
 <!-- Top legend -->
 <div class="section-legend">
-  <strong>Three matrices — read independently:</strong><br>
+  <strong>Four matrices — read independently:</strong><br>
   <span class="leg-row"><strong>Matrix 1 — Compliance</strong>: which distros satisfy which regulatory frameworks. Use for selecting a compliant base OS.</span>
   <span class="leg-row"><strong>Matrix 2 — Industry</strong>: which distros are primary choices in each vertical. Use for industry-specific deployment decisions.</span>
-  <span class="leg-row"><strong>Matrix 3 — Framework compat</strong>: which distros work with which tech framework category from <a href="01-framework-catalog.html">doc 01</a>. Use for Dockerfile FROM line selection.</span>
+  <span class="leg-row"><strong>Matrix 3 — Build-runner compat</strong>: which distros can be used as the CI build environment for each of the 27 framework categories from <a href="01-framework-catalog.html">doc 01</a>. Covers Frontend Web, Mobile, and Backend.</span>
+  <span class="leg-row"><strong>Matrix 4 — Runtime output compat</strong>: which distros can host each runtime output type as a production container. 12 output types (static web, SSR, API servers, binaries, ML inference, and more).</span>
   <span class="leg-insight">Distro details (versions, image sizes, FIPS notes, tradeoffs): <a href="09-linux-distros.html">doc 09</a>.</span>
 
   <details>
@@ -212,12 +230,43 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     </div>
   </details>
 
+
   <details>
-    <summary><span class="sum-label">Framework compat — musl vs glibc warning</span></summary>
+    <summary><span class="sum-label">Build-time vs runtime — the critical distinction</span></summary>
     <div class="expand-content">
-      <p>The "Requires workaround" rating in Matrix 3 means: the framework works on this distro, but native modules or compiled extensions must be recompiled for musl. The default pip wheel or npm package may fail.</p>
-      <p>Alpine Linux uses musl. All other distros in this table use glibc. A "Requires workaround" rating applies only to Alpine.</p>
-      <p>Workaround: in the Dockerfile, install build tools (<code>apk add gcc musl-dev</code>), pip install from source instead of wheel, or use a multi-stage build where the build stage is Debian and the final stage is Alpine (copy the built binary, not the source).</p>
+      <p><strong>Build-time (Matrix 3)</strong>: the OS where your CI pipeline runs — it compiles code, installs dependencies, and runs tests. This is the CI runner.</p>
+      <p><strong>Runtime (Matrix 4)</strong>: the OS inside the final container that runs in production. This is the Dockerfile FROM image.</p>
+      <h4>Why they are often different distros</h4>
+      <p>Multi-stage Dockerfiles use a heavier build image for the compile step, then copy only the output artifact into a minimal runtime image. Example: build a Next.js app on Ubuntu 24.04 (needs Node.js, npm, TypeScript compiler), then copy the built output into an Alpine + Node.js runtime image — 80MB final vs 400MB if Ubuntu was the runtime.</p>
+      <h4>Go and Rust — extreme case</h4>
+      <p>A Go binary compiled with <code>CGO_ENABLED=0</code> is statically linked — no libc dependency. The runtime image can be <code>scratch</code> (zero bytes, no OS at all). Build anywhere, run on nothing. Rust with the <code>x86_64-unknown-linux-musl</code> target achieves the same.</p>
+      <h4>Implication for this doc</h4>
+      <p>Use doc 09 twice: once to select your CI runner distro (Matrix 3 tells you if it can build your framework), once to select your runtime container base (Matrix 4 tells you if it can host your output). They can and often should be different distros.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">Mobile build — Linux limitations (Matrix 3)</span></summary>
+    <div class="expand-content">
+      <p>Linux distros can build <em>some</em> mobile targets — but not all.</p>
+      <h4>Native iOS — Linux cannot build it</h4>
+      <p>iOS apps require macOS and Xcode. This is enforced by Apple's toolchain (codesigning, XCBuild). No Linux distro can build or sign a native iOS app. All cells in the Native iOS column in Matrix 3 are N/A for this reason.</p>
+      <h4>Native Android — Linux can build it</h4>
+      <p>Android apps require a JDK and the Android SDK/Gradle. Both are available on Linux. In Matrix 3, the Android column has the same value as the JVM column — if the distro can run a JVM build, it can build Android.</p>
+      <h4>React Native (Cross-platform JS)</h4>
+      <p>The JavaScript bundle can be built on any Linux distro that supports Node.js. iOS signing and device builds still require macOS. Android APK/AAB production builds can be done on Linux CI.</p>
+      <h4>Flutter (Cross-platform non-JS)</h4>
+      <p>Flutter uses Dart. Dart SDK is available on glibc distros (official dart.dev packages for Debian, Ubuntu, RHEL). Alpine (musl) is not officially supported — Dart doesn't ship a musl build. Flutter Android builds work on glibc Linux CI. iOS still requires macOS.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">Framework compat — musl vs glibc warning (Matrix 3 and 4)</span></summary>
+    <div class="expand-content">
+      <p>The "Workaround" rating in Matrix 3 (build runner) means: the framework's build tools run on this distro, but native modules or compiled extensions must be recompiled for musl. The default pip wheel or npm package may fail at build time.</p>
+      <p>The "Workaround" rating in Matrix 4 (runtime) means: the runtime works, but native extensions in the deployed artifact must have been compiled against musl — glibc-compiled binaries crash at runtime.</p>
+      <p>Alpine Linux uses musl. All other distros use glibc. "Workaround" ratings apply only to Alpine in both matrices.</p>
+      <p>Fix: in the Dockerfile, use a multi-stage build — build stage on Debian (glibc), copy the compiled binary to Alpine for the final stage. Or: rebuild all native extensions inside Alpine using <code>apk add gcc musl-dev</code>.</p>
     </div>
   </details>
 </div>
@@ -726,285 +775,1107 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 </div>
 
 <!-- ═══ MATRIX 3: FRAMEWORK COMPAT ═══ -->
-<h2 id="framework-matrix">Matrix 3 — Distro × Tech framework compatibility</h2>
-<p class="section-sub">Which distros work with which framework category from <a href="01-framework-catalog.html">doc 01</a>. Relevant for Dockerfile FROM line selection.</p>
+
+<h2 id="build-matrix">Matrix 3 — Distro × Framework build-runner compatibility</h2>
+<p class="section-sub">Can this distro be used as the CI runner OS to build this framework category? Covers all 27 categories from <a href="01-framework-catalog.html">doc 01</a>.</p>
 
 <div class="legend-row">
-  <span><span class="f-native">Native</span> = tested, no caveats — official images available or runtime works out of the box</span>
-  <span><span class="f-compat">Compat</span> = compatible — works, minor config needed</span>
-  <span><span class="f-workaround">Workaround</span> = musl compat issue — must rebuild native modules from source on Alpine</span>
-  <span><span class="f-no">—</span> = not applicable (K8s node OS, not a runtime base)</span>
+  <span><span class="b-native">Native</span> = in official package manager, zero extra config</span>
+  <span><span class="b-install">Install</span> = needs manual download or third-party repo, works reliably</span>
+  <span><span class="b-work">Workaround</span> = works, but musl compat issue or environment restriction requires extra steps</span>
+  <span><span class="b-na">—</span> = cannot use this distro as a CI runner for this category (no shell, immutable OS, or platform mismatch)</span>
 </div>
 
-<div class="tbl-wrap framework-tbl">
+<div class="tbl-wrap build-tbl">
   <div class="tbl-scroll">
     <table class="xref-table">
       <thead>
         <tr>
-          <th class="row-hd" title="Distro — same order as Matrix 1 and 2">Distro</th>
-          <th title="Node.js, Deno, Bun — JS/TS runtimes. node:alpine, node:slim, node:bookworm official images available.">Node / Deno / Bun</th>
-          <th title="Python 3. python:alpine, python:slim, python:bookworm official images. musl breakage for native extensions on Alpine.">Python</th>
-          <th title="Go. Statically-linked Go binaries run on scratch, Alpine, any glibc distro. cgo requires glibc.">Go</th>
-          <th title="Java (JVM), Kotlin, Scala. JVM is statically linked — runs on any glibc distro. Alpine requires eclipse-temurin musl build.">JVM (Java/Kotlin)</th>
-          <th title=".NET 8 / ASP.NET Core. Official mcr.microsoft.com images for Alpine, Debian, Ubuntu, RHEL UBI.">​.NET / C#</th>
-          <th title="Rust. Statically-linked Rust (musl target) runs on Alpine/scratch. Dynamic linking requires glibc target.">Rust</th>
-          <th title="Elixir / Erlang BEAM. Official hexpm/elixir images for Alpine and Debian.">Elixir / BEAM</th>
-          <th title="Ruby. ruby:alpine and ruby:slim official images. Some gems with native extensions require musl rebuild on Alpine.">Ruby</th>
-          <th title="PHP. php:alpine, php:fpm-alpine, php:apache-bookworm official images. Most PHP extensions are C — may require musl rebuild on Alpine.">PHP</th>
+          <th class="row-hd group-hd" rowspan="2">Distro</th>
+          <th class="group-hd" colspan="8">Frontend Web (all need Node.js build tools on CI runner)</th>
+          <th class="group-hd" colspan="5">Mobile</th>
+          <th class="group-hd" colspan="14">Backend</th>
+        </tr>
+        <tr>
+          <th title="SSR / Hybrid — Next.js, Nuxt, SvelteKit, Remix, Astro. Requires Node.js on CI runner for build. See 01-framework-catalog.html#ssr.">SSR</th>
+          <th title="CSR / SPA — React, Vue, Angular. Webpack or Vite build. Requires Node.js. See 01-framework-catalog.html.">CSR/SPA</th>
+          <th title="SSG — Gatsby, Eleventy, Hugo (Go). Node.js for JS-based; Go for Hugo. See 01-framework-catalog.html.">SSG</th>
+          <th title="Islands Architecture — Astro, Fresh. Node.js build. See 01-framework-catalog.html.">Islands</th>
+          <th title="Resumability — Qwik. Node.js build. See 01-framework-catalog.html.">Resumable</th>
+          <th title="Edge Rendering — Deno Deploy, Cloudflare Workers builds. Node.js or Deno on CI runner.">Edge</th>
+          <th title="Streaming SSR — React 18 Server Components, Next.js App Router. Node.js build.">Stream</th>
+          <th title="Micro-frontends — Module Federation (Webpack 5), Single-spa. Node.js build.">μFrontend</th>
+          <th title="Cross-platform JS — React Native, Expo. Node.js + Expo CLI on CI runner. iOS output still requires macOS for signing.">RN (JS)</th>
+          <th title="Cross-platform non-JS — Flutter/Dart. Dart SDK required on CI runner. Available on glibc distros; musl (Alpine) is not officially supported.">Flutter</th>
+          <th title="Native iOS — Swift/Objective-C + Xcode. REQUIRES macOS. No Linux distro can build or sign native iOS apps. All cells are N/A.">iOS</th>
+          <th title="Native Android — Kotlin/Java + Gradle + Android SDK. Runs on any distro that supports JVM. Same as JVM column.">Android</th>
+          <th title="Progressive Web App — Workbox, Vite PWA plugin. Node.js build. Same as SSG/CSR column.">PWA</th>
+          <th title="Node.js / Deno / Bun backend. Needs Node.js/Deno/Bun on CI runner.">Node</th>
+          <th title="Python — Django, Flask, FastAPI. pip + build tools on CI runner.">Python</th>
+          <th title="Go — statically linked by default. Minimal CI runner requirements.">Go</th>
+          <th title="Java — Maven or Gradle build. Requires JDK on CI runner.">Java</th>
+          <th title="Kotlin — Gradle build. Requires JDK on CI runner. Same as Java column.">Kotlin</th>
+          <th title=".NET / C# / ASP.NET Core. dotnet SDK on CI runner. Official Alpine support since .NET 8.">.NET</th>
+          <th title="Rust — cargo build. rustup install on all glibc distros. musl target available on Alpine.">Rust</th>
+          <th title="Elixir / Phoenix — mix build. Needs Erlang/OTP. Not in standard RHEL repos (requires EPEL or manual install).">Elixir</th>
+          <th title="Ruby — Bundler, rake. Available in package managers on all distros. Gems with C extensions need musl rebuild on Alpine.">Ruby</th>
+          <th title="PHP — Composer, phpunit. Available on all distros. PHP C extensions may need musl rebuild on Alpine.">PHP</th>
+          <th title="Swift — swift build. Official swift.org packages for Ubuntu 22.04 and 24.04. Manual install on other glibc distros. Not supported on musl (Alpine).">Swift</th>
+          <th title="Scala — sbt or Maven. Requires JDK. Same compat as Java column.">Scala</th>
+          <th title="Clojure — Leiningen or deps.edn. Requires JDK. Same compat as Java column.">Clojure</th>
+          <th title="C / C++ — gcc, g++, clang, cmake, make. Available on all distros except immutable OS and scratch. Alpine uses musl-based gcc.">C/C++</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td class="family-sep" colspan="10">Container-optimized</td></tr>
+        <tr><td class="family-sep" colspan="28">Container-optimized</td></tr>
         <tr>
           <td class="row-label">scratch</td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
         </tr>
         <tr>
           <td class="row-label">Alpine 3.21</td>
-          <td><span class="f-workaround">Workaround</span></td>
-          <td><span class="f-workaround">Workaround</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-workaround">Workaround</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-workaround">Workaround</span></td>
-          <td><span class="f-workaround">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-work">Workaround</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">UBI-micro 9</td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-compat">Compat</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
         </tr>
         <tr>
           <td class="row-label">UBI-minimal 9</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
         </tr>
         <tr>
           <td class="row-label">Distroless</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
         </tr>
         <tr>
           <td class="row-label">Wolfi / Chainguard</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">Azure Linux 3</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">Google COS</td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
-          <td><span class="f-no">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
         </tr>
-        <tr><td class="family-sep" colspan="10">General purpose</td></tr>
+        <tr><td class="family-sep" colspan="28">General purpose</td></tr>
         <tr>
           <td class="row-label">Debian 12</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">Ubuntu 22.04 LTS</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">Ubuntu 24.04 LTS</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">Fedora 42</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">Amazon Linux 2023</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">Photon OS 5</td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-compat">Compat</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
-        <tr><td class="family-sep" colspan="10">RHEL family</td></tr>
+        <tr><td class="family-sep" colspan="28">RHEL family</td></tr>
         <tr>
           <td class="row-label">RHEL 9</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">CentOS Stream 9</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">Rocky Linux 9</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">AlmaLinux 9</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
         <tr>
           <td class="row-label">Oracle Linux 9</td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-compat">Compat</span></td>
-          <td><span class="f-native">Native</span></td>
-          <td><span class="f-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-install">Install</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
+          <td><span class="b-native">Native</span></td>
         </tr>
-        <tr><td class="family-sep" colspan="10">Immutable / K8s-native (node OS — framework runs inside containers, not on the node)</td></tr>
+        <tr><td class="family-sep" colspan="28">Immutable / K8s-native (node OS — use for running containers, not building them)</td></tr>
         <tr>
           <td class="row-label">Flatcar</td>
-          <td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
         </tr>
         <tr>
           <td class="row-label">Talos Linux 1.10</td>
-          <td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
         </tr>
         <tr>
           <td class="row-label">Bottlerocket</td>
-          <td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
+          <td><span class="b-na">—</span></td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="tbl-foot">
-    <span>Workaround = Alpine musl only — must rebuild native modules from source or use multi-stage build</span>
-    <span>scratch = Go (CGO_ENABLED=0) and Rust (musl-target) only</span>
-    <span>K8s node OS = frameworks run inside containers on those nodes, not on the node OS itself</span>
+    <span>Native iOS (all rows): N/A — iOS builds require macOS + Xcode on the CI machine, not a Linux distro</span>
+    <span>Flutter: Dart SDK official packages for glibc distros; Alpine (musl) requires workaround</span>
+    <span>Swift: official swift.org packages for Ubuntu 22.04 + 24.04; manual download for RHEL, Debian, Wolfi</span>
+    <span>Elixir on RHEL family: not in standard repos — use EPEL repo or Erlang Solutions package</span>
+  </div>
+</div>
+
+<h2 id="runtime-matrix">Matrix 4 — Distro × Runtime output compatibility</h2>
+<p class="section-sub">Which distros can host each production output type as a container base. Rows = distros. Columns = runtime output types.</p>
+
+<div class="legend-row">
+  <span><span class="r-opt">Optimal</span> = first choice for this output type — official image or best-in-class support</span>
+  <span><span class="r-compat">Compat</span> = works, not the first choice — larger image or extra setup</span>
+  <span><span class="r-work">Workaround</span> = works with extra config (e.g., GPU drivers need glibc, or short EOL)</span>
+  <span><span class="r-no">Not supported</span> = cannot run this output type (no interpreter, no libc, no pkg mgr)</span>
+  <span><span class="r-no">—</span> = K8s node OS — containers run <em>on</em> this, not <em>as</em> this</span>
+</div>
+
+<div class="tbl-wrap runtime-tbl">
+  <div class="tbl-scroll">
+    <table class="xref-table">
+      <thead>
+        <tr>
+          <th class="row-hd" title="Distro — same order as Matrix 1, 2, and 3">Distro</th>
+          <th title="Static HTML/CSS/JS files served by Nginx or Caddy. Output of SSG and CSR/SPA builds. Any distro with Nginx available is optimal.">Static web</th>
+          <th title="Node.js server-side rendering — Next.js, Nuxt, Remix, SvelteKit in SSR mode. Requires Node.js runtime in the container.">Node SSR</th>
+          <th title="Node.js / Deno / Bun API server. Requires Node.js runtime in the container.">Node API</th>
+          <th title="Python web servers — Gunicorn (WSGI), Uvicorn/Hypercorn (ASGI). Django, Flask, FastAPI, Starlette output.">Python WSGI/ASGI</th>
+          <th title="Single Go binary (CGO_ENABLED=0). Statically linked — no libc needed. Optimal on scratch or distroless/static.">Go binary</th>
+          <th title="JVM application — Spring Boot, Quarkus, Ktor, Play. Requires JRE in the container. Java, Kotlin, Scala, Clojure.">JVM app</th>
+          <th title=".NET / ASP.NET Core runtime. mcr.microsoft.com/dotnet/runtime official images for Alpine, Debian, Ubuntu, RHEL UBI.">.NET app</th>
+          <th title="Rust binary. Static musl build = runs on scratch. Dynamic glibc build = requires glibc distro.">Rust binary</th>
+          <th title="Elixir Phoenix or Erlang application. Requires Erlang VM runtime in the container.">Elixir/BEAM</th>
+          <th title="Ruby on Rails, Sinatra, Hanami. Requires Ruby runtime. Official ruby:alpine and ruby:slim images.">Ruby/Rails</th>
+          <th title="PHP-FPM + Nginx. Laravel, Symfony, WordPress. Official php:alpine and php:fpm-alpine images.">PHP-FPM</th>
+          <th title="Python + NVIDIA CUDA or AMD ROCm GPU runtime. PyTorch, TensorFlow model serving. CUDA requires glibc — Alpine (musl) is not supported by NVIDIA CUDA container images. Ubuntu is optimal for CUDA.">ML inference</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="family-sep" colspan="13">Container-optimized</td></tr>
+        <tr>
+          <td class="row-label">scratch</td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Alpine 3.21</td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-work">Workaround</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">UBI-micro 9</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">UBI-minimal 9</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Distroless</td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+          <td><span class="r-no">Not supported</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Wolfi / Chainguard</td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+          <td><span class="r-work">Workaround</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Azure Linux 3</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Google COS</td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="13">General purpose</td></tr>
+        <tr>
+          <td class="row-label">Debian 12</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Ubuntu 22.04 LTS</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Ubuntu 24.04 LTS</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-opt">Optimal</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Fedora 42</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-work">Workaround</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Amazon Linux 2023</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Photon OS 5</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-work">Workaround</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="13">RHEL family</td></tr>
+        <tr>
+          <td class="row-label">RHEL 9</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">CentOS Stream 9</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-work">Workaround</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Rocky Linux 9</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">AlmaLinux 9</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Oracle Linux 9</td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+          <td><span class="r-compat">Compat</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="13">Immutable / K8s-native — containers run ON these nodes, not AS them</td></tr>
+        <tr>
+          <td class="row-label">Flatcar</td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Talos Linux 1.10</td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Bottlerocket</td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+          <td><span class="r-no">—</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">
+    <span>scratch: Go (CGO_ENABLED=0) and Rust static binary only — no libc, no shell, zero packages</span>
+    <span>Distroless: language-specific variants available — use gcr.io/distroless/nodejs, /python3, /java17, /static</span>
+    <span>ML inference: Ubuntu 22.04 and 24.04 are optimal — official NVIDIA CUDA container images are glibc / Ubuntu-based; Alpine (musl) is not supported</span>
+    <span>K8s node OS (Flatcar, Talos, Bottlerocket, Google COS): deploy containers on these nodes, not as them</span>
   </div>
 </div>
 
