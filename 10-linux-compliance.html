@@ -59,6 +59,15 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;paddi
 .count-chip.ind-chip .chip-num{color:var(--red)}
 .count-chip.fwk-chip{border-left:3px solid var(--green)}
 .count-chip.fwk-chip .chip-num{color:var(--green)}
+/* Key patterns callout box */
+.key-patterns{background:#fffbef;border:1px solid var(--amber);border-left:4px solid var(--amber);border-radius:7px;padding:12px 16px;margin:12px 0 20px;font-size:12px;line-height:1.7}
+.key-patterns h4{font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.key-patterns ul{padding-left:16px}
+.key-patterns li{margin-bottom:4px}
+/* Pattern chips for Matrix 5 */
+.p-multi{background:#d4f4dd;color:#1a7f37;font-weight:700;font-size:10px;border-radius:3px;padding:2px 5px}
+.p-single{background:#dbeeff;color:#0550ae;font-size:10px;border-radius:3px;padding:2px 5px}
+.p-ci{background:#f0f0f5;color:#57606a;font-size:10px;border-radius:3px;padding:2px 5px}
 /* Tooltip hint */
 th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
 /* Table wrapper */
@@ -124,6 +133,13 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   .section-legend details{border-top-color:#2d4a6a}
   code{background:#1c2028;border-color:#30363d}
   th[title]{border-bottom-color:var(--blue)}
+  .key-patterns{background:#2a2300;border-color:var(--amber)}
+  .p-multi{background:#0d2d1a;color:#3fb950}
+  .p-single{background:#0d2744;color:#79c0ff}
+  .b-native{background:#0d2d1a;color:#3fb950}
+  .b-work{background:#2d2000;color:#d29922}
+  .r-opt{background:#0d2d1a;color:#3fb950}
+  .r-work{background:#2d2000;color:#d29922}
   .c-yes{background:#0d2d1a;color:#3fb950}
   .c-par{background:#2d2000;color:#d29922}
   .i-primary{background:#0d2744;color:#79c0ff}
@@ -150,6 +166,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <a href="#industry-matrix">Industry matrix</a>
   <a href="#build-matrix">Build runner compat</a>
   <a href="#runtime-matrix">Runtime output compat</a>
+  <a href="#dockerfile-matrix">Dockerfile pairings</a>
   <div class="nav-section">All docs</div>
   <a href="index.html">⌂ Hub</a>
   <a href="01-framework-catalog.html">01 Frameworks</a>
@@ -167,7 +184,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <main id="main-content">
 <div class="page-title">Linux Compliance Cross-Reference</div>
-<div class="page-meta">22 distros &nbsp;·&nbsp; 4 matrices &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; industry schema: <a href="06-industry-schema.html">doc 06</a> / <a href="07-canada-schema.html">doc 07</a> &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a></div>
+<div class="page-meta">22 distros &nbsp;·&nbsp; 5 matrices &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; industry schema: <a href="06-industry-schema.html">doc 06</a> / <a href="07-canada-schema.html">doc 07</a> &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a></div>
 
 <!-- Counts bar -->
 <div class="counts-bar">
@@ -191,15 +208,20 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <div class="chip-num" style="color:var(--amber)">12</div>
     <div class="chip-label">Runtime<br>output types</div>
   </div>
+  <div class="count-chip" style="border-left:3px solid var(--purple)">
+    <div class="chip-num" style="color:var(--purple)">27</div>
+    <div class="chip-label">Dockerfile<br>pairings (Matrix 5)</div>
+  </div>
 </div>
 
 <!-- Top legend -->
 <div class="section-legend">
-  <strong>Four matrices — read independently:</strong><br>
+  <strong>Five matrices — read independently:</strong><br>
   <span class="leg-row"><strong>Matrix 1 — Compliance</strong>: which distros satisfy which regulatory frameworks. Use for selecting a compliant base OS.</span>
   <span class="leg-row"><strong>Matrix 2 — Industry</strong>: which distros are primary choices in each vertical. Use for industry-specific deployment decisions.</span>
   <span class="leg-row"><strong>Matrix 3 — Build-runner compat</strong>: which distros can be used as the CI build environment for each of the 27 framework categories from <a href="01-framework-catalog.html">doc 01</a>. Covers Frontend Web, Mobile, and Backend.</span>
   <span class="leg-row"><strong>Matrix 4 — Runtime output compat</strong>: which distros can host each runtime output type as a production container. 12 output types (static web, SSR, API servers, binaries, ML inference, and more).</span>
+  <span class="leg-row"><strong>Matrix 5 — Multi-stage Dockerfile pairings</strong>: for each of the 27 framework categories — which build image, which runtime image, which pattern (Multi-stage / Single-stage / CI-only). The pairing guide for writing Dockerfiles.</span>
   <span class="leg-insight">Distro details (versions, image sizes, FIPS notes, tradeoffs): <a href="09-linux-distros.html">doc 09</a>.</span>
 
   <details>
@@ -775,6 +797,17 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 </div>
 
 <!-- ═══ MATRIX 3: FRAMEWORK COMPAT ═══ -->
+
+<div class="key-patterns">
+  <h4>5 rules that explain 90% of Matrix 3 (build-runner)</h4>
+  <ul>
+    <li><strong>Alpine = Workaround for Node / Python / Ruby / PHP / JVM</strong> — musl libc breaks native C extensions. Exceptions: Go, Rust, and .NET support musl natively and show Native.</li>
+    <li><strong>scratch / Distroless / UBI-micro / Google COS / Flatcar / Talos / Bottlerocket = — everywhere</strong> — these have no shell. A CI build pipeline cannot run on them.</li>
+    <li><strong>Native iOS column = — on every distro</strong> — iOS builds require macOS + Xcode. No Linux distro can build or sign iOS apps.</li>
+    <li><strong>Swift = Native only on Ubuntu 22.04 and 24.04.</strong> Other distros require manual download from swift.org and show Install or Workaround.</li>
+    <li><strong>Elixir on RHEL family = Install (not Native).</strong> Elixir is not in standard RHEL / CentOS repos. Use EPEL or the Erlang Solutions package.</li>
+  </ul>
+</div>
 
 <h2 id="build-matrix">Matrix 3 — Distro × Framework build-runner compatibility</h2>
 <p class="section-sub">Can this distro be used as the CI runner OS to build this framework category? Covers all 27 categories from <a href="01-framework-catalog.html">doc 01</a>.</p>
@@ -1502,6 +1535,17 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   </div>
 </div>
 
+<div class="key-patterns">
+  <h4>5 rules that explain 90% of Matrix 4 (runtime)</h4>
+  <ul>
+    <li><strong>scratch = Go static binary and Rust static binary only.</strong> No libc, no shell, no packages. Everything else is Not supported.</li>
+    <li><strong>Distroless: use the language-specific variant.</strong> <code>gcr.io/distroless/nodejs22-debian12</code>, <code>/python3-debian12</code>, <code>/java21-debian12</code>. The wrong variant = Not supported.</li>
+    <li><strong>Alpine = Compat for everything except ML inference.</strong> NVIDIA CUDA container images require glibc — Alpine (musl) is not supported. ML inference on Alpine = Workaround requiring a custom CUDA build.</li>
+    <li><strong>Ubuntu 22.04 and 24.04 = Optimal for ML inference.</strong> All official NVIDIA CUDA container images are Ubuntu-based. Pick Ubuntu for any GPU / ML workload.</li>
+    <li><strong>Wolfi = Optimal for most runtime types.</strong> glibc (no musl breakage) + SBOM natively + Alpine-sized images + rolling CVE patches.</li>
+  </ul>
+</div>
+
 <h2 id="runtime-matrix">Matrix 4 — Distro × Runtime output compatibility</h2>
 <p class="section-sub">Which distros can host each production output type as a container base. Rows = distros. Columns = runtime output types.</p>
 
@@ -1876,6 +1920,233 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <span>Distroless: language-specific variants available — use gcr.io/distroless/nodejs, /python3, /java17, /static</span>
     <span>ML inference: Ubuntu 22.04 and 24.04 are optimal — official NVIDIA CUDA container images are glibc / Ubuntu-based; Alpine (musl) is not supported</span>
     <span>K8s node OS (Flatcar, Talos, Bottlerocket, Google COS): deploy containers on these nodes, not as them</span>
+  </div>
+</div>
+
+<!-- ═══ MATRIX 5: DOCKERFILE PAIRINGS ═══ -->
+
+<h2 id="dockerfile-matrix">Matrix 5 — Multi-stage Dockerfile pairing guide</h2>
+<p class="section-sub">For each of the 27 framework categories: which build image, which runtime image, and which pattern. This is the Dockerfile decision. Companion matrices: build-runner compat in <a href="#build-matrix">Matrix 3</a>, runtime compat in <a href="#runtime-matrix">Matrix 4</a>.</p>
+
+<div class="legend-row">
+  <span><span class="p-multi">Multi-stage</span> = two FROM stages: heavy build image → minimal runtime image (recommended default)</span>
+  <span><span class="p-single">Single-stage</span> = one FROM sufficient: build and runtime environment are the same</span>
+  <span><span class="p-ci">CI-only</span> = no OCI container at runtime: output is a device app, a bundle, or requires a platform that is not Linux</span>
+</div>
+
+<div class="tbl-wrap" style="border-top:3px solid var(--purple)">
+  <div class="tbl-scroll">
+    <table class="xref-table" style="min-width:1000px">
+      <thead>
+        <tr>
+          <th class="row-hd" style="min-width:160px">Framework</th>
+          <th style="min-width:210px">Build stage FROM</th>
+          <th style="min-width:210px">Runtime stage FROM</th>
+          <th style="min-width:90px">Pattern</th>
+          <th style="min-width:300px;text-align:left;padding-left:8px">Key note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="5" class="family-sep">Frontend Web — 8 categories</td></tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">SSR / Hybrid</a><br><small>Next.js, Nuxt, Remix, SvelteKit</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>node:22-alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Build: <code>npm ci &amp;&amp; npm run build</code>. Runtime: copy .next + node_modules. Node.js required at runtime for SSR.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">CSR / SPA</a><br><small>React CRA, Vue CLI, Angular</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>nginx:alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Build: <code>npm run build</code>. Runtime: Nginx serves static /dist. Zero Node.js dependency at runtime. CA certs not needed at runtime.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">SSG</a><br><small>Gatsby, Astro static, Eleventy</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>nginx:alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Output is static HTML/CSS/JS. Nginx runtime has zero Node.js dependency. Same final image as CSR/SPA.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Islands</a><br><small>Astro island, Fresh</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>nginx:alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Partial hydration output is static HTML + small JS islands. Nginx serves it. No server-side Node.js at runtime.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Resumability</a><br><small>Qwik</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>node:22-alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Qwik requires Node.js at runtime for SSR lazy-hydration. Same runtime pattern as SSR/Hybrid.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Edge Rendering</a><br><small>Next.js Edge, CF Workers</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><span class="cert-no" style="font-size:11px">N/A</span> — deploy to Cloudflare / Deno Deploy</td>
+          <td style="text-align:center"><span class="p-ci">CI-only</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Edge functions are deployed as worker bundles, not OCI containers. No Dockerfile at runtime.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Streaming SSR</a><br><small>React 18 RSC, Next.js App Router</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>node:22-alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">React 18 Server Components require Node.js at runtime for streaming. Same pattern as SSR/Hybrid.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Micro-frontends</a><br><small>Module Federation, single-spa</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>nginx:alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Module Federation output is static JS chunks. Nginx serves them. Each micro-frontend is a separate container.</td>
+        </tr>
+        <tr><td colspan="5" class="family-sep">Mobile — 5 categories</td></tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Cross-platform JS</a><br><small>React Native</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><span class="cert-no" style="font-size:11px">N/A</span> — device app (APK/AAB/IPA)</td>
+          <td style="text-align:center"><span class="p-ci">CI-only</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Android APK/AAB built on Linux CI. iOS IPA requires macOS CI. No OCI container at runtime — app runs on device.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Cross-platform non-JS</a><br><small>Flutter</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><span class="cert-no" style="font-size:11px">N/A</span> — device app</td>
+          <td style="text-align:center"><span class="p-ci">CI-only</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Flutter Android builds work on Linux CI (glibc required — not Alpine). iOS requires macOS CI. No OCI container at runtime.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Native iOS</a><br><small>Swift/UIKit/SwiftUI</small></td>
+          <td style="font-size:11px"><span class="cert-no" style="font-size:11px">macOS CI only</span></td>
+          <td style="font-size:11px"><span class="cert-no" style="font-size:11px">N/A</span></td>
+          <td style="text-align:center"><span class="p-ci">CI-only</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Requires macOS + Xcode + Apple developer certificate. All Linux distros are N/A. No Dockerfile exists for iOS.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Native Android</a><br><small>Kotlin/Java Android SDK</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><span class="cert-no" style="font-size:11px">N/A</span> — APK/AAB to Play Store</td>
+          <td style="text-align:center"><span class="p-ci">CI-only</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">JDK + Android SDK/Gradle on Ubuntu CI. Output is APK/AAB deployed to Play Store, not a container.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">PWA</a><br><small>Workbox, CRA PWA</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>nginx:alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">PWA is a static site with a service worker. Same Nginx runtime pattern as CSR/SPA.</td>
+        </tr>
+        <tr><td colspan="5" class="family-sep">Backend — 14 categories</td></tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Node / Deno / Bun</a><br><small>Express, Fastify, Hono</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>node:22-alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Build: <code>npm ci --production</code>. Runtime: copy node_modules + app. Alpine Node runtime = ~120MB vs Ubuntu ~400MB.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Python</a><br><small>Django, Flask, FastAPI</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>python:3.12-slim</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Build: <code>pip install</code> wheels. Runtime: copy venv. If FIPS required: use <code style="font-size:9px">ubi9/python-39</code>.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Go</a><br><small>net/http, Gin, Fiber</small></td>
+          <td style="font-size:11px"><code>alpine:3.21</code> or <code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>scratch</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px"><code>CGO_ENABLED=0 go build</code>. Runtime: scratch + <code>COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/</code>. Zero attack surface.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Java</a><br><small>Spring Boot, Quarkus, Micronaut</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code style="font-size:9px">gcr.io/distroless/java21-debian12</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Maven/Gradle build. Distroless Java runtime: no shell, JRE only, no package manager. ~80MB final image.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Kotlin</a><br><small>Ktor, Spring Boot Kotlin</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code style="font-size:9px">gcr.io/distroless/java21-debian12</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Same as Java — Kotlin compiles to JVM bytecode. Identical Dockerfile pattern.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">.NET</a><br><small>ASP.NET Core, Minimal APIs</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code style="font-size:9px">mcr.microsoft.com/dotnet/aspnet:8.0-alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px"><code>dotnet publish -c Release</code>. Alpine .NET runtime = small image. FIPS required: use <code style="font-size:9px">mcr.microsoft.com/dotnet/aspnet:8.0-cbl-mariner2.0-fips</code>.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Rust</a><br><small>Actix-web, Axum, Rocket</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>scratch</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px"><code>cargo build --release</code> with <code>x86_64-unknown-linux-musl</code> target. Statically linked binary. Runtime: scratch. Zero attack surface.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Elixir / BEAM</a><br><small>Phoenix, Plug</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code style="font-size:9px">hexpm/elixir:1.17-erlang-27-debian-bookworm-slim</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px"><code>mix release</code>. Runtime: Debian slim + Erlang VM. The mix release self-contains the BEAM runtime.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Ruby</a><br><small>Rails, Sinatra, Hanami</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>ruby:3.3-alpine</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">Build: <code>bundle install --without development</code>. Runtime: Alpine Ruby image. Alpine musl compat: pure-Ruby gems work; gems with native extensions require recompile.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">PHP</a><br><small>Laravel, Symfony, WordPress</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>php:8.3-fpm-alpine</code></td>
+          <td style="text-align:center"><span class="p-single">Single-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">PHP-FPM + Nginx in one stage. Composer install at build time. Alpine PHP-FPM runtime. Often single-stage since runtime = build env for PHP.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Swift</a><br><small>Vapor, Hummingbird</small></td>
+          <td style="font-size:11px"><code>ubuntu:22.04</code> or <code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>swift:6.0-noble-slim</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px"><code>swift build -c release</code>. Runtime: slim Swift image (Ubuntu Noble base). Swift toolchain on Ubuntu only — not available on Alpine or RHEL without manual install.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Scala</a><br><small>Play, Akka, http4s</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code style="font-size:9px">gcr.io/distroless/java21-debian12</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">sbt assembly (fat JAR). Runtime: Distroless Java. Same Dockerfile pattern as Java.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">Clojure</a><br><small>Ring, Luminus, Reitit</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code style="font-size:9px">gcr.io/distroless/java21-debian12</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">lein uberjar. Runtime: Distroless Java. Same Dockerfile pattern as Java and Scala.</td>
+        </tr>
+        <tr>
+          <td class="row-label"><a href="01-framework-catalog.html">C / C++</a><br><small>Crow, Pistache, Drogon</small></td>
+          <td style="font-size:11px"><code>ubuntu:24.04</code></td>
+          <td style="font-size:11px"><code>scratch</code> or <code>debian:12-slim</code></td>
+          <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
+          <td style="font-size:11px;text-align:left;padding-left:8px">cmake + make. Runtime: scratch if fully static-linked; debian:12-slim if dynamic libraries are required (e.g. libssl, libpq).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">
+    <span>Multi-stage pattern: use a heavy build image (tools, compilers, package managers) and copy only the compiled output to a minimal runtime image</span>
+    <span>Go + Rust: only languages that produce truly zero-dependency static binaries → scratch runtime is possible</span>
+    <span>JVM languages (Java, Kotlin, Scala, Clojure): Distroless java21 runtime = no shell, JRE only, ~80MB final image</span>
+    <span>Mobile (iOS, Android, React Native, Flutter): CI-only — no OCI container at runtime; output is deployed to app stores or devices</span>
   </div>
 </div>
 
