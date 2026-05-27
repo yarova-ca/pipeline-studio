@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Linux Compliance Cross-Reference — 22 distros × 10 compliance frameworks, 16 industry verticals, and 9 framework categories. Companion to 09-linux-distros.html.">
+<title>Linux Compliance — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:220px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a[aria-current="page"]{color:var(--blue);font-weight:600;border-left-color:var(--blue)}
+main{flex:1;min-width:0;padding:40px 52px 100px}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+/* Section legend */
+.section-legend{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:20px 0 28px;font-size:12px;line-height:1.6}
+.section-legend strong{color:var(--text-head)}
+.leg-row{margin-top:4px;color:var(--text)}
+.leg-insight{margin-top:6px;color:var(--text-dim);font-style:italic}
+.section-legend details{margin-top:12px;border-top:1px solid #c8dff5;padding-top:10px}
+.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none;display:flex;align-items:center;gap:6px}
+.section-legend summary::-webkit-details-marker{display:none}
+.section-legend summary::before{content:'▶';font-size:9px;display:inline-block;color:var(--blue)}
+.section-legend details[open] summary::before{content:'▼'}
+.section-legend summary .sum-label{flex:1}
+.expand-content{margin-top:10px;font-size:11px;line-height:1.7;color:var(--text)}
+.expand-content p{margin-bottom:6px}
+.expand-content h4{font-size:11px;font-weight:700;color:var(--text-head);margin:12px 0 3px;text-transform:uppercase;letter-spacing:.04em}
+/* Headings */
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px;font-style:italic}
+/* Counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.count-chip.dist-chip{border-left:3px solid var(--purple)}
+.count-chip.dist-chip .chip-num{color:var(--purple)}
+.count-chip.comp-chip{border-left:3px solid var(--blue)}
+.count-chip.comp-chip .chip-num{color:var(--blue)}
+.count-chip.ind-chip{border-left:3px solid var(--red)}
+.count-chip.ind-chip .chip-num{color:var(--red)}
+.count-chip.fwk-chip{border-left:3px solid var(--green)}
+.count-chip.fwk-chip .chip-num{color:var(--green)}
+/* Tooltip hint */
+th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
+/* Table wrapper */
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
+.tbl-wrap.compliance-tbl{border-top:3px solid var(--blue)}
+.tbl-wrap.industry-tbl{border-top:3px solid var(--red)}
+.tbl-wrap.framework-tbl{border-top:3px solid var(--green)}
+.tbl-scroll{overflow-x:auto}
+/* Cross-reference tables */
+.xref-table{border-collapse:collapse;font-size:11px;width:100%}
+.xref-table thead tr{background:var(--bg2)}
+.xref-table th{text-align:center;padding:6px 8px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid var(--border);white-space:nowrap}
+.xref-table th.row-hd{text-align:left;min-width:150px;padding-left:12px}
+.xref-table th.group-hd{background:var(--bg3);color:var(--text-head);font-size:9px;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+.xref-table td{padding:5px 8px;border-bottom:1px solid var(--border);text-align:center;font-size:11px;vertical-align:middle}
+.xref-table td.row-label{text-align:left;padding-left:12px;font-weight:500;font-size:11px;white-space:nowrap;min-width:150px}
+.xref-table td.family-sep{background:var(--bg2);font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;padding:4px 12px;text-align:left;border-top:2px solid var(--border)}
+.xref-table tbody tr:hover{background:var(--bg2)}
+.xref-table tbody tr:last-child td{border-bottom:none}
+/* Compliance cells */
+.c-yes{background:#d4f4dd;color:#1a7f37;font-weight:700;font-size:10px;border-radius:3px;padding:2px 5px}
+.c-par{background:#fff3cd;color:#9a6700;font-weight:700;font-size:10px;border-radius:3px;padding:2px 5px}
+.c-no{color:var(--text-dim);font-size:10px}
+/* Industry cells */
+.i-primary{background:#dbeeff;color:#0550ae;font-weight:700;font-size:10px;border-radius:3px;padding:2px 4px}
+.i-ok{background:#f0f0f5;color:#57606a;font-size:10px;border-radius:3px;padding:2px 4px}
+.i-avoid{background:#ffe3e3;color:#a40000;font-size:10px;border-radius:3px;padding:2px 4px}
+/* Framework compat cells */
+.f-native{background:#d4f4dd;color:#1a7f37;font-weight:700;font-size:10px;border-radius:3px;padding:2px 4px}
+.f-compat{background:#f0f0f5;color:#57606a;font-size:10px;border-radius:3px;padding:2px 4px}
+.f-workaround{background:#fff3cd;color:#9a6700;font-size:10px;border-radius:3px;padding:2px 4px}
+.f-no{color:var(--text-dim);font-size:10px}
+/* Legend row */
+.legend-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px}
+.legend-row span{display:flex;align-items:center;gap:6px}
+/* Table footer */
+.tbl-foot{padding:7px 14px;font-size:11px;color:var(--text-dim);background:var(--bg2);border-top:2px solid var(--border);display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+/* Misc */
+code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#c5a7f5;
+  }
+  .section-legend{background:#1c2a3a;border-color:#2d4a6a}
+  .section-legend details{border-top-color:#2d4a6a}
+  code{background:#1c2028;border-color:#30363d}
+  th[title]{border-bottom-color:var(--blue)}
+  .c-yes{background:#0d2d1a;color:#3fb950}
+  .c-par{background:#2d2000;color:#d29922}
+  .i-primary{background:#0d2744;color:#79c0ff}
+  .i-avoid{background:#2d0a0a;color:#ff7b7b}
+  .f-native{background:#0d2d1a;color:#3fb950}
+  .f-workaround{background:#2d2000;color:#d29922}
+}
+@media print{
+  .skip-link,nav{display:none}
+  main{padding:20px}
+  .section-legend{border:1px solid #ccc;background:none}
+  h2{margin-top:24px}
+  .tbl-wrap{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-logo"><h1>Linux Compliance</h1><p>Pipeline Studio Design Doc</p></div>
+  <div class="nav-section">Jump to</div>
+  <a href="#compliance-matrix">Compliance matrix</a>
+  <a href="#industry-matrix">Industry matrix</a>
+  <a href="#framework-matrix">Framework compat</a>
+  <div class="nav-section">All docs</div>
+  <a href="index.html">⌂ Hub</a>
+  <a href="01-framework-catalog.html">01 Frameworks</a>
+  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
+  <a href="03-stage-types.html">03 Stage types</a>
+  <a href="04-tool-catalog.html">04 Tool catalog</a>
+  <a href="05-invariants.html">05 Invariants</a>
+  <a href="06-industry-schema.html">06 US industries</a>
+  <a href="07-canada-schema.html">07 CA industries</a>
+  <a href="08-canada-market.html">08 CA market</a>
+  <a href="09-linux-distros.html">09 Linux distros</a>
+  <a href="10-linux-compliance.html" aria-current="page">10 Linux compliance</a>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<main id="main-content">
+<div class="page-title">Linux Compliance Cross-Reference</div>
+<div class="page-meta">22 distros &nbsp;·&nbsp; 3 matrices &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; industry schema: <a href="06-industry-schema.html">doc 06</a> / <a href="07-canada-schema.html">doc 07</a> &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a></div>
+
+<!-- Counts bar -->
+<div class="counts-bar">
+  <div class="count-chip dist-chip">
+    <div class="chip-num">22</div>
+    <div class="chip-label">Distros<br>across 4 families</div>
+  </div>
+  <div class="count-chip comp-chip">
+    <div class="chip-num">10</div>
+    <div class="chip-label">Compliance<br>frameworks</div>
+  </div>
+  <div class="count-chip ind-chip">
+    <div class="chip-num">16</div>
+    <div class="chip-label">Industry<br>verticals</div>
+  </div>
+  <div class="count-chip fwk-chip">
+    <div class="chip-num">9</div>
+    <div class="chip-label">Framework<br>categories</div>
+  </div>
+</div>
+
+<!-- Top legend -->
+<div class="section-legend">
+  <strong>Three matrices — read independently:</strong><br>
+  <span class="leg-row"><strong>Matrix 1 — Compliance</strong>: which distros satisfy which regulatory frameworks. Use for selecting a compliant base OS.</span>
+  <span class="leg-row"><strong>Matrix 2 — Industry</strong>: which distros are primary choices in each vertical. Use for industry-specific deployment decisions.</span>
+  <span class="leg-row"><strong>Matrix 3 — Framework compat</strong>: which distros work with which tech framework category from <a href="01-framework-catalog.html">doc 01</a>. Use for Dockerfile FROM line selection.</span>
+  <span class="leg-insight">Distro details (versions, image sizes, FIPS notes, tradeoffs): <a href="09-linux-distros.html">doc 09</a>.</span>
+
+  <details>
+    <summary><span class="sum-label">Compliance standard definitions</span></summary>
+    <div class="expand-content">
+      <h4>FIPS 140-2 / 140-3</h4>
+      <p>Federal Information Processing Standard. US gov requirement for cryptographic modules. Required for FedRAMP Moderate+, DoD IL2+, ITAR. FIPS 140-2 still valid; new certs issued under 140-3.</p>
+      <h4>FedRAMP</h4>
+      <p>Federal Risk and Authorization Management Program. US gov cloud security framework. Moderate = standard agencies. High = sensitive data (DoD, Intelligence, Healthcare). Distro must supply a FIPS-validated crypto module at FedRAMP Moderate+.</p>
+      <h4>HIPAA</h4>
+      <p>Health Insurance Portability and Accountability Act. US healthcare data privacy. No specific OS requirement — distro must support encryption-at-rest and encryption-in-transit, and have audit logging capability.</p>
+      <h4>PCI-DSS</h4>
+      <p>Payment Card Industry Data Security Standard. Required for any system that stores, processes, or transmits cardholder data. Requires CIS or DISA STIG hardening, patch management, and audit logging.</p>
+      <h4>SOC 2 Type II</h4>
+      <p>Service Organization Control 2. Audit of security, availability, and confidentiality controls. No specific OS requirement — auditor evaluates controls on whatever OS is used. CIS Benchmark hardening is commonly cited evidence.</p>
+      <h4>ISO 27001</h4>
+      <p>International standard for information security management systems. Applies globally. No specific OS requirement — requires documented access controls, patch management, and incident response.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">SBOM and SLSA — supply chain compliance</span></summary>
+    <div class="expand-content">
+      <h4>SBOM</h4>
+      <p>Software Bill of Materials — a machine-readable list of all components in a software artifact. Required by US Executive Order 14028 (2021) for software sold to the US government. Wolfi/Chainguard produces an SBOM for every package natively. Other distros require third-party tools (Syft, Trivy) to generate an SBOM post-build.</p>
+      <h4>SLSA</h4>
+      <p>Supply-chain Levels for Software Artifacts — a framework for measuring build pipeline integrity. Level 3 requires a hermetic build, reproducible artifacts, and provenance attestation. Wolfi/Chainguard images are built at SLSA Level 3 natively. All other distros require additional build pipeline tooling to reach SLSA Level 3.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">Framework compat — musl vs glibc warning</span></summary>
+    <div class="expand-content">
+      <p>The "Requires workaround" rating in Matrix 3 means: the framework works on this distro, but native modules or compiled extensions must be recompiled for musl. The default pip wheel or npm package may fail.</p>
+      <p>Alpine Linux uses musl. All other distros in this table use glibc. A "Requires workaround" rating applies only to Alpine.</p>
+      <p>Workaround: in the Dockerfile, install build tools (<code>apk add gcc musl-dev</code>), pip install from source instead of wheel, or use a multi-stage build where the build stage is Debian and the final stage is Alpine (copy the built binary, not the source).</p>
+    </div>
+  </details>
+</div>
+
+<!-- ═══ MATRIX 1: COMPLIANCE ═══ -->
+<h2 id="compliance-matrix">Matrix 1 — Distro × Compliance framework</h2>
+<p class="section-sub">Which distros satisfy which compliance frameworks. Rows = distros (same order as doc 09). Columns = frameworks.</p>
+
+<div class="legend-row">
+  <span><span class="c-yes">Yes</span> = certified / officially supported</span>
+  <span><span class="c-par">Par</span> = partial — mode available or in progress, no independent cert</span>
+  <span><span class="c-no">—</span> = not available or not applicable</span>
+</div>
+
+<div class="tbl-wrap compliance-tbl">
+  <div class="tbl-scroll">
+    <table class="xref-table">
+      <thead>
+        <tr>
+          <th class="row-hd" title="Linux distro or base image — same order as 09-linux-distros.html">Distro</th>
+          <th title="FIPS 140-2 / 140-3: validated cryptographic module available from the vendor">FIPS</th>
+          <th title="FedRAMP Moderate: distro can be used in a FedRAMP Moderate authorized environment">FedRAMP Mod</th>
+          <th title="FedRAMP High: distro can be used in a FedRAMP High authorized environment">FedRAMP High</th>
+          <th title="HIPAA: distro supports encryption and audit logging requirements">HIPAA</th>
+          <th title="PCI-DSS v4: distro has CIS Benchmark or DISA STIG hardening available">PCI-DSS</th>
+          <th title="SOC 2 Type II: CIS Benchmark available for this distro — commonly cited evidence">SOC 2</th>
+          <th title="ISO 27001: distro supports documented patch management and access controls">ISO 27001</th>
+          <th title="CIS Benchmark: Center for Internet Security hardening guide published for this distro">CIS</th>
+          <th title="DISA STIG: official DoD Security Technical Implementation Guide published for this distro">DISA STIG</th>
+          <th title="SBOM native: distro natively produces a Software Bill of Materials for every package without third-party tooling">SBOM native</th>
+          <th title="SLSA Level 3: distro build pipeline meets Supply-chain Level 3 provenance requirements natively">SLSA L3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="family-sep" colspan="12">Container-optimized</td></tr>
+        <tr>
+          <td class="row-label">scratch</td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Alpine 3.21</td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">UBI-micro 9</td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">UBI-minimal 9</td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Distroless</td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Wolfi / Chainguard</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Azure Linux 3</td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Google COS</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="12">General purpose</td></tr>
+        <tr>
+          <td class="row-label">Debian 12</td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Ubuntu 22.04 LTS</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Ubuntu 24.04 LTS</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Fedora 42</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Amazon Linux 2023</td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Photon OS 5</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="12">RHEL family</td></tr>
+        <tr>
+          <td class="row-label">RHEL 9</td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">CentOS Stream 9</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Rocky Linux 9</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">AlmaLinux 9</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Oracle Linux 9</td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="12">Immutable / K8s-native</td></tr>
+        <tr>
+          <td class="row-label">Flatcar</td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Talos Linux 1.10</td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-par">Par</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Bottlerocket</td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-yes">Yes</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+          <td><span class="c-no">—</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">
+    <span>FIPS Yes: UBI-micro/minimal, Azure Linux 3, Ubuntu 22.04/24.04 (Pro), AL2023, RHEL 9, Oracle Linux 9, Bottlerocket (GovCloud)</span>
+    <span>DISA STIG Yes: Ubuntu 22.04, Ubuntu 24.04, RHEL 9, Oracle Linux 9</span>
+    <span>SBOM native: Wolfi / Chainguard only</span>
+    <span>SLSA L3 native: Wolfi / Chainguard only</span>
+  </div>
+</div>
+
+<!-- ═══ MATRIX 2: INDUSTRY ═══ -->
+<h2 id="industry-matrix">Matrix 2 — Distro × Industry vertical</h2>
+<p class="section-sub">Which distros are primary or acceptable choices per vertical. Industry details: <a href="06-industry-schema.html">doc 06</a> (US) and <a href="07-canada-schema.html">doc 07</a> (Canada).</p>
+
+<div class="legend-row">
+  <span><span class="i-primary">Pri</span> = primary choice for this vertical (compliance requirements best met)</span>
+  <span><span class="i-ok">OK</span> = acceptable (works, but not the first recommendation)</span>
+  <span><span class="i-avoid">Avoid</span> = not recommended for this vertical</span>
+  <span><span class="c-no">—</span> = not applicable (K8s node OS, not a container base)</span>
+</div>
+
+<div class="tbl-wrap industry-tbl">
+  <div class="tbl-scroll">
+    <table class="xref-table">
+      <thead>
+        <tr>
+          <th class="row-hd" title="Distro — same order as Matrix 1">Distro</th>
+          <th title="Finance: banking, insurance, capital markets — PCI-DSS, SOC 2, FIPS often required">Fin</th>
+          <th title="Healthcare: hospitals, pharma, medical devices — HIPAA, SOC 2 required">Health</th>
+          <th title="Government: federal and state agencies — FedRAMP, FIPS, DISA STIG required">Gov</th>
+          <th title="Defense: DoD, intelligence, defense contractors — FedRAMP High, IL4+, DISA STIG required">Defense</th>
+          <th title="Energy: utilities, oil and gas, renewables — NERC CIP, IEC 62443">Energy</th>
+          <th title="Technology: SaaS, cloud, developer tools — SOC 2, ISO 27001">Tech</th>
+          <th title="Telecom: carriers, ISPs, network equipment — NERC, FCC compliance">Telecom</th>
+          <th title="Retail: e-commerce, brick-and-mortar — PCI-DSS required">Retail</th>
+          <th title="Manufacturing: industrial, automotive, aerospace — ISO 27001, IEC 62443">Mfg</th>
+          <th title="Media: streaming, publishing, gaming — SOC 2, copyright protection">Media</th>
+          <th title="Education: universities, K-12, EdTech — FERPA, COPPA">Edu</th>
+          <th title="Transportation: logistics, aviation, rail — NERC, safety standards">Trans</th>
+          <th title="Real Estate: proptech, title, mortgage — SOC 2, PCI-DSS">RE</th>
+          <th title="Agriculture: agtech, food supply chain — ISO 27001">Agri</th>
+          <th title="Legal: law firms, legaltech — data confidentiality, SOC 2">Legal</th>
+          <th title="Non-profit: NGOs, foundations — minimal compliance burden">NPO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="family-sep" colspan="17">Container-optimized</td></tr>
+        <tr>
+          <td class="row-label">scratch</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Alpine 3.21</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">UBI-micro 9</td>
+          <td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">UBI-minimal 9</td>
+          <td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Distroless</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Wolfi / Chainguard</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Azure Linux 3</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Google COS</td>
+          <td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="i-primary">Pri</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td><td><span class="c-no">—</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="17">General purpose</td></tr>
+        <tr>
+          <td class="row-label">Debian 12</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Ubuntu 22.04 LTS</td>
+          <td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Ubuntu 24.04 LTS</td>
+          <td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Fedora 42</td>
+          <td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Amazon Linux 2023</td>
+          <td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td>
+        </tr>
+        <tr>
+          <td class="row-label"><small style="color:var(--text-dim)">(AL2023 = AWS only — Pri means: primary on AWS for this vertical. Avoid on non-AWS.)</small></td>
+          <td colspan="16"></td>
+        </tr>
+        <tr>
+          <td class="row-label">Photon OS 5</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label"><small style="color:var(--text-dim)">(Photon OS 5 = VMware/Broadcom ecosystem only — OK means: acceptable within VMware environments.)</small></td>
+          <td colspan="16"></td>
+        </tr>
+        <tr><td class="family-sep" colspan="17">RHEL family</td></tr>
+        <tr>
+          <td class="row-label">RHEL 9</td>
+          <td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">CentOS Stream 9</td>
+          <td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Rocky Linux 9</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">AlmaLinux 9</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Oracle Linux 9</td>
+          <td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="17">Immutable / K8s-native (node OS — not a container base)</td></tr>
+        <tr>
+          <td class="row-label">Flatcar</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-avoid">Avoid</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Talos Linux 1.10</td>
+          <td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td><td><span class="i-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Bottlerocket</td>
+          <td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td><td><span class="i-primary">Pri</span></td>
+        </tr>
+        <tr>
+          <td class="row-label"><small style="color:var(--text-dim)">(Bottlerocket = EKS node OS on AWS — Pri means: primary on AWS EKS for this vertical. Avoid on non-AWS EKS.)</small></td>
+          <td colspan="16"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">
+    <span>Gov/Defense primary: UBI-micro, UBI-minimal, Ubuntu 22.04/24.04, AL2023, RHEL 9, Oracle Linux 9</span>
+    <span>Finance primary: UBI-micro/minimal, Ubuntu 22.04/24.04, AL2023, RHEL 9, Oracle Linux 9</span>
+    <span>Avoid Gov/Defense: Alpine (no FIPS), Debian 12 (no FIPS/STIG), Fedora (13-month EOL), CentOS Stream (upstream/pre-release), Rocky/Alma (no independent FIPS cert)</span>
+  </div>
+</div>
+
+<!-- ═══ MATRIX 3: FRAMEWORK COMPAT ═══ -->
+<h2 id="framework-matrix">Matrix 3 — Distro × Tech framework compatibility</h2>
+<p class="section-sub">Which distros work with which framework category from <a href="01-framework-catalog.html">doc 01</a>. Relevant for Dockerfile FROM line selection.</p>
+
+<div class="legend-row">
+  <span><span class="f-native">Native</span> = tested, no caveats — official images available or runtime works out of the box</span>
+  <span><span class="f-compat">Compat</span> = compatible — works, minor config needed</span>
+  <span><span class="f-workaround">Workaround</span> = musl compat issue — must rebuild native modules from source on Alpine</span>
+  <span><span class="f-no">—</span> = not applicable (K8s node OS, not a runtime base)</span>
+</div>
+
+<div class="tbl-wrap framework-tbl">
+  <div class="tbl-scroll">
+    <table class="xref-table">
+      <thead>
+        <tr>
+          <th class="row-hd" title="Distro — same order as Matrix 1 and 2">Distro</th>
+          <th title="Node.js, Deno, Bun — JS/TS runtimes. node:alpine, node:slim, node:bookworm official images available.">Node / Deno / Bun</th>
+          <th title="Python 3. python:alpine, python:slim, python:bookworm official images. musl breakage for native extensions on Alpine.">Python</th>
+          <th title="Go. Statically-linked Go binaries run on scratch, Alpine, any glibc distro. cgo requires glibc.">Go</th>
+          <th title="Java (JVM), Kotlin, Scala. JVM is statically linked — runs on any glibc distro. Alpine requires eclipse-temurin musl build.">JVM (Java/Kotlin)</th>
+          <th title=".NET 8 / ASP.NET Core. Official mcr.microsoft.com images for Alpine, Debian, Ubuntu, RHEL UBI.">​.NET / C#</th>
+          <th title="Rust. Statically-linked Rust (musl target) runs on Alpine/scratch. Dynamic linking requires glibc target.">Rust</th>
+          <th title="Elixir / Erlang BEAM. Official hexpm/elixir images for Alpine and Debian.">Elixir / BEAM</th>
+          <th title="Ruby. ruby:alpine and ruby:slim official images. Some gems with native extensions require musl rebuild on Alpine.">Ruby</th>
+          <th title="PHP. php:alpine, php:fpm-alpine, php:apache-bookworm official images. Most PHP extensions are C — may require musl rebuild on Alpine.">PHP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="family-sep" colspan="10">Container-optimized</td></tr>
+        <tr>
+          <td class="row-label">scratch</td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Alpine 3.21</td>
+          <td><span class="f-workaround">Workaround</span></td>
+          <td><span class="f-workaround">Workaround</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-workaround">Workaround</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-workaround">Workaround</span></td>
+          <td><span class="f-workaround">Workaround</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">UBI-micro 9</td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-compat">Compat</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">UBI-minimal 9</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Distroless</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Wolfi / Chainguard</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Azure Linux 3</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Google COS</td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+          <td><span class="f-no">—</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="10">General purpose</td></tr>
+        <tr>
+          <td class="row-label">Debian 12</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Ubuntu 22.04 LTS</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Ubuntu 24.04 LTS</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Fedora 42</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Amazon Linux 2023</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Photon OS 5</td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-compat">Compat</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="10">RHEL family</td></tr>
+        <tr>
+          <td class="row-label">RHEL 9</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">CentOS Stream 9</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Rocky Linux 9</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">AlmaLinux 9</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Oracle Linux 9</td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-compat">Compat</span></td>
+          <td><span class="f-native">Native</span></td>
+          <td><span class="f-native">Native</span></td>
+        </tr>
+        <tr><td class="family-sep" colspan="10">Immutable / K8s-native (node OS — framework runs inside containers, not on the node)</td></tr>
+        <tr>
+          <td class="row-label">Flatcar</td>
+          <td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Talos Linux 1.10</td>
+          <td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td>
+        </tr>
+        <tr>
+          <td class="row-label">Bottlerocket</td>
+          <td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td><td><span class="f-no">—</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">
+    <span>Workaround = Alpine musl only — must rebuild native modules from source or use multi-stage build</span>
+    <span>scratch = Go (CGO_ENABLED=0) and Rust (musl-target) only</span>
+    <span>K8s node OS = frameworks run inside containers on those nodes, not on the node OS itself</span>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

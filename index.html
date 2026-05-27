@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Pipeline Studio — 8 design docs covering frameworks, pipeline stages, tools, invariants, and industry schemas">
+<meta name="description" content="Pipeline Studio — 10 design docs covering frameworks, pipeline stages, tools, invariants, industry schemas, and Linux distro selection">
 <title>Pipeline Studio — Hub</title>
 <style>
 :root{
@@ -95,12 +95,14 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="06-industry-schema.html">06 US industries</a>
   <a href="07-canada-schema.html">07 CA industries</a>
   <a href="08-canada-market.html">08 CA market</a>
+  <a href="09-linux-distros.html">09 Linux distros</a>
+  <a href="10-linux-compliance.html">10 Linux compliance</a>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-title">Pipeline Studio</div>
-<div class="page-meta">8 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; verified 2026-05-26</div>
+<div class="page-meta">10 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; verified 2026-05-27</div>
 
 <div class="hint-card">
   <strong>Purpose:</strong> Reference for building secure CI/CD pipelines across any framework, any regulated industry, any Canadian market.
@@ -108,7 +110,7 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
 </div>
 
 <!-- ═══ DOC CARDS ═══ -->
-<h2>All 8 docs</h2>
+<h2>All 10 docs</h2>
 <div class="cards-grid">
 
   <a href="01-framework-catalog.html" class="doc-card">
@@ -167,6 +169,20 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="doc-card-meta"><strong>Records:</strong> 73 industries · 5 market dimensions · 14 hubs · 8 certs &nbsp;·&nbsp; <strong>Use when:</strong> choosing a target industry, city, or immigration route in Canada</div>
   </a>
 
+  <a href="09-linux-distros.html" class="doc-card">
+    <div class="doc-card-num">Doc 09</div>
+    <div class="doc-card-title">Linux Distro Catalog</div>
+    <div class="doc-card-desc">22 Linux distributions across 4 families — Container-optimized, General purpose, RHEL family, and Immutable/K8s-native. Every distro compared on 14 columns: libc, package manager, image size, FIPS, DISA STIG, CIS benchmark, EOL, when to use, when NOT, primary tradeoff.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 22 distros · 4 families · 14 columns &nbsp;·&nbsp; <strong>Use when:</strong> selecting a base image or CI runner OS</div>
+  </a>
+
+  <a href="10-linux-compliance.html" class="doc-card">
+    <div class="doc-card-num">Doc 10</div>
+    <div class="doc-card-title">Linux Compliance Matrices</div>
+    <div class="doc-card-desc">Three cross-reference matrices for all 22 distros: compliance readiness (FIPS, FedRAMP, HIPAA, PCI-DSS, SOC 2, ISO 27001, SBOM, SLSA), industry vertical fit (16 verticals), and framework category compatibility (9 categories across Node, Python, Go, JVM, .NET, Rust, Elixir, Ruby, PHP).</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 22 distros · 11 compliance frameworks · 16 industry verticals · 9 framework categories &nbsp;·&nbsp; <strong>Use when:</strong> verifying distro compliance eligibility or framework compat</div>
+  </a>
+
 </div>
 
 <!-- ═══ READING ORDER ═══ -->
@@ -192,6 +208,12 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   </div>
   <div class="order-item">
     <div><div class="order-item-title"><a href="08-canada-market.html">08 — Canada Market Navigation</a> (Canada only)</div><div class="order-item-desc">Navigate Canadian market entry — hubs, demand, wages, immigration pathway.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="09-linux-distros.html">09 — Linux Distro Catalog</a> (orthogonal)</div><div class="order-item-desc">Select a base image or CI runner OS. Understand libc, FIPS status, EOL, and tradeoffs before writing any FROM line.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="10-linux-compliance.html">10 — Linux Compliance Matrices</a></div><div class="order-item-desc">Cross-reference the chosen distro against compliance frameworks, industry verticals, and framework categories. Read after 09.</div></div>
   </div>
 </div>
 
@@ -233,6 +255,16 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="dep-arrow">→</div>
     <div class="dep-to">orthogonal — framework choice does not change the pipeline</div>
   </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="09-linux-distros.html">09 Linux Distros</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">orthogonal to pipeline shape — distro choice does not change stage order; FIPS and DISA STIG distros add signing requirements in 04 and 05</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="10-linux-compliance.html">10 Linux Compliance</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">cross-references 09 distro catalog with 06/07 industry verticals and 01 framework categories — read after 09</div>
+  </div>
 </div>
 
 <!-- ═══ GLOSSARY ═══ -->
@@ -245,8 +277,8 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
 <tr><td>SAST</td><td>Static Application Security Testing — scans source code for insecure patterns without running the code.</td><td>02, 03, 04, 05</td></tr>
 <tr><td>DAST</td><td>Dynamic Application Security Testing — runs the application and probes it for vulnerabilities over HTTP.</td><td>02, 03, 04, 05</td></tr>
 <tr><td>IaC</td><td>Infrastructure as Code — Terraform, Helm, Kubernetes manifests, CloudFormation, etc. Checked by checkov and hadolint.</td><td>02, 03, 04, 05</td></tr>
-<tr><td>SBOM</td><td>Software Bill of Materials — machine-readable list of every component in the build artifact. Required for supply chain compliance.</td><td>02, 03, 04, 05</td></tr>
-<tr><td>SLSA</td><td>Supply-chain Levels for Software Artifacts — provenance attestation proving the artifact was built by a trusted pipeline from a known source.</td><td>02, 03, 04, 05</td></tr>
+<tr><td>SBOM</td><td>Software Bill of Materials — machine-readable list of every component in the build artifact. Required for supply chain compliance.</td><td>02, 03, 04, 05, 10</td></tr>
+<tr><td>SLSA</td><td>Supply-chain Levels for Software Artifacts — provenance attestation proving the artifact was built by a trusted pipeline from a known source.</td><td>02, 03, 04, 05, 10</td></tr>
 <tr><td>OIDC</td><td>OpenID Connect — used for keyless CI authentication. Each job gets a short-lived token; no stored credentials in CI.</td><td>02, 03, 04, 05</td></tr>
 <tr><td>PIPEDA</td><td>Personal Information Protection and Electronic Documents Act — Canada's federal private-sector privacy law.</td><td>07, 08</td></tr>
 <tr><td>OSFI</td><td>Office of the Superintendent of Financial Institutions — Canadian federal financial regulator.</td><td>07, 08</td></tr>
@@ -259,6 +291,14 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
 <tr><td>PNP</td><td>Provincial Nominee Program — each province nominates candidates for permanent residency. Adds ~600 CRS points when issued.</td><td>08</td></tr>
 <tr><td>DevOps</td><td>Development Operations — workflow and infrastructure stages (build, deploy, tag, test, notify). Failure = engineering team owns the fix.</td><td>02, 03, 04</td></tr>
 <tr><td>DevSecOps</td><td>Development Security Operations — security enforcement stages (scan, sign, attest, verify, policy). Failure = artifact does not ship.</td><td>02, 03, 04, 05</td></tr>
+<tr><td>libc</td><td>C standard library — the lowest-level runtime every Linux process links against. Determines binary compatibility across distros.</td><td>09, 10</td></tr>
+<tr><td>glibc</td><td>GNU C Library — the standard libc used by Debian, Ubuntu, RHEL, Fedora, and most general-purpose distros. Broad binary compatibility.</td><td>09, 10</td></tr>
+<tr><td>musl</td><td>Alternative C library used by Alpine Linux. Smaller and stricter than glibc. ~15% of precompiled glibc binaries fail on musl without recompilation.</td><td>09, 10</td></tr>
+<tr><td>OCI</td><td>Open Container Initiative — industry standard for container image formats and runtimes. An "OCI image" is a standard Docker-compatible container image.</td><td>09, 10</td></tr>
+<tr><td>UBI</td><td>Universal Base Image — Red Hat's free-to-redistribute RHEL subset. Includes FIPS crypto modules. Three tiers: UBI-minimal, UBI-micro, and standard UBI.</td><td>09, 10</td></tr>
+<tr><td>FIPS 140-2 / 140-3</td><td>US federal cryptographic module validation standards (NIST). Required for US government contracts. FIPS 140-2 closing new submissions September 2026; 140-3 is the current standard.</td><td>09, 10</td></tr>
+<tr><td>DISA STIG</td><td>Defense Information Systems Agency Security Technical Implementation Guide — hardening checklist for DoD and FedRAMP High workloads. Per-distro STIGs published at public.cyber.mil.</td><td>09, 10</td></tr>
+<tr><td>CIS Benchmark</td><td>Center for Internet Security hardening guide — scored configuration checks for OS, container, and cloud targets. Widely used in SOC 2 and ISO 27001 audits.</td><td>09, 10</td></tr>
 </tbody>
 </table>
 </div>
