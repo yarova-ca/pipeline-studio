@@ -2377,10 +2377,13 @@ jobs:
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> requirements*.txt pyproject.toml* ./
 <span class="df-kw">RUN</span> if [ &quot;$PM&quot; = &quot;uv&quot; ]; then \
-      pip install uv &amp;&amp; uv pip install --system --prefix=/install -r requirements.txt; \
+      pip install uv &amp;&amp; \
+      mkdir -p /install/lib/python3.12/site-packages &amp;&amp; \
+      uv pip install -t /install/lib/python3.12/site-packages -r requirements.txt; \
     elif [ &quot;$PM&quot; = &quot;poetry&quot; ]; then \
-      pip install poetry &amp;&amp; poetry config virtualenvs.create false &amp;&amp; \
-      poetry install --no-dev --no-interaction; \
+      pip install poetry &amp;&amp; \
+      poetry export -f requirements.txt --without-hashes -o /tmp/req.txt &amp;&amp; \
+      pip install --prefix=/install -r /tmp/req.txt; \
     else \
       pip install --prefix=/install -r requirements.txt; \
     fi
@@ -2423,10 +2426,13 @@ jobs:
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> requirements*.txt pyproject.toml* ./
 <span class="df-kw">RUN</span> if [ &quot;$PM&quot; = &quot;uv&quot; ]; then \
-      pip install uv &amp;&amp; uv pip install --system --prefix=/install -r requirements.txt; \
+      pip install uv &amp;&amp; \
+      mkdir -p /install/lib/python3.12/site-packages &amp;&amp; \
+      uv pip install -t /install/lib/python3.12/site-packages -r requirements.txt; \
     elif [ &quot;$PM&quot; = &quot;poetry&quot; ]; then \
-      pip install poetry &amp;&amp; poetry config virtualenvs.create false &amp;&amp; \
-      poetry install --no-dev --no-interaction; \
+      pip install poetry &amp;&amp; \
+      poetry export -f requirements.txt --without-hashes -o /tmp/req.txt &amp;&amp; \
+      pip install --prefix=/install -r /tmp/req.txt; \
     else \
       pip install --prefix=/install -r requirements.txt; \
     fi
@@ -2469,10 +2475,13 @@ jobs:
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> requirements*.txt pyproject.toml* ./
 <span class="df-kw">RUN</span> if [ &quot;$PM&quot; = &quot;uv&quot; ]; then \
-      pip install uv &amp;&amp; uv pip install --system --prefix=/install -r requirements.txt; \
+      pip install uv &amp;&amp; \
+      mkdir -p /install/lib/python3.12/site-packages &amp;&amp; \
+      uv pip install -t /install/lib/python3.12/site-packages -r requirements.txt; \
     elif [ &quot;$PM&quot; = &quot;poetry&quot; ]; then \
-      pip install poetry &amp;&amp; poetry config virtualenvs.create false &amp;&amp; \
-      poetry install --no-dev --no-interaction; \
+      pip install poetry &amp;&amp; \
+      poetry export -f requirements.txt --without-hashes -o /tmp/req.txt &amp;&amp; \
+      pip install --prefix=/install -r /tmp/req.txt; \
     else \
       pip install --prefix=/install -r requirements.txt; \
     fi
@@ -2515,10 +2524,13 @@ jobs:
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> requirements*.txt pyproject.toml* ./
 <span class="df-kw">RUN</span> if [ &quot;$PM&quot; = &quot;uv&quot; ]; then \
-      pip install uv &amp;&amp; uv pip install --system --prefix=/install -r requirements.txt; \
+      pip install uv &amp;&amp; \
+      mkdir -p /install/lib/python3.12/site-packages &amp;&amp; \
+      uv pip install -t /install/lib/python3.12/site-packages -r requirements.txt; \
     elif [ &quot;$PM&quot; = &quot;poetry&quot; ]; then \
-      pip install poetry &amp;&amp; poetry config virtualenvs.create false &amp;&amp; \
-      poetry install --no-dev --no-interaction; \
+      pip install poetry &amp;&amp; \
+      poetry export -f requirements.txt --without-hashes -o /tmp/req.txt &amp;&amp; \
+      pip install --prefix=/install -r /tmp/req.txt; \
     else \
       pip install --prefix=/install -r requirements.txt; \
     fi
@@ -3176,6 +3188,7 @@ jobs:
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi AS runtime-fips</span>
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/_build/prod/rel/my_app .
+<span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 4000
 <span class="df-kw">CMD</span> [&quot;./bin/my_app&quot;, &quot;start&quot;]</div>
     <p class="df-note note-info">Replace <code>my_app</code> with your OTP application name from mix.exs. The release binary is at <code>_build/prod/rel/&lt;app_name&gt;/bin/&lt;app_name&gt;</code>.</p>
@@ -3236,6 +3249,7 @@ jobs:
 <span class="df-kw">COPY</span> --from=builder /vendor/bundle /vendor/bundle
 <span class="df-kw">COPY</span> --from=builder /app .
 <span class="df-kw">ENV</span> BUNDLE_PATH=/vendor/bundle
+<span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;bundle&quot;, &quot;exec&quot;, &quot;rails&quot;, &quot;server&quot;, &quot;-b&quot;, &quot;0.0.0.0&quot;]</div>
     <p class="df-note note-info">If your app uses Active Storage or Action Cable, add the required system packages (<code>libvips</code>, <code>redis</code>) to the runtime Alpine apk install.</p>
@@ -3276,12 +3290,13 @@ jobs:
 <span class="df-kw">COPY</span> --from=builder /vendor/bundle /vendor/bundle
 <span class="df-kw">COPY</span> --from=builder /app .
 <span class="df-kw">ENV</span> BUNDLE_PATH=/vendor/bundle
+<span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 4567
 <span class="df-kw">CMD</span> [&quot;bundle&quot;, &quot;exec&quot;, &quot;ruby&quot;, &quot;app.rb&quot;]</div>
   </div>
 </details>
 <h2 id="cat-php">PHP — Web Frameworks</h2>
-<p class="section-sub">Single-stage image: php:8.3-fpm-alpine with nginx. Composer installs dependencies at image build time.</p>
+<p class="section-sub">Multi-stage: ubuntu:24.04 builder (Composer) → php:8.3-fpm-alpine runtime with nginx. FIPS variant targets ubi9/php-83.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
   <table class="xref-table">
@@ -3294,9 +3309,9 @@ jobs:
       <th>Port</th>
     </tr></thead>
     <tbody>
-<tr><td class="row-label">Laravel <small style="color:var(--text-dim)">12</small></td><td><code style="font-size:10px">php:8.3-fpm-alpine</code></td><td><code style="font-size:10px">php:8.3-fpm-alpine</code></td><td style="text-align:center"><span class="p-single">Single-stage</span></td><td style="font-size:11px">composer</td><td style="text-align:center;font-family:monospace;font-size:11px">80</td></tr>
-<tr><td class="row-label">Symfony <small style="color:var(--text-dim)">7.2</small></td><td><code style="font-size:10px">php:8.3-fpm-alpine</code></td><td><code style="font-size:10px">php:8.3-fpm-alpine</code></td><td style="text-align:center"><span class="p-single">Single-stage</span></td><td style="font-size:11px">composer</td><td style="text-align:center;font-family:monospace;font-size:11px">80</td></tr>
-<tr><td class="row-label">Slim <small style="color:var(--text-dim)">4.14</small></td><td><code style="font-size:10px">php:8.3-fpm-alpine</code></td><td><code style="font-size:10px">php:8.3-fpm-alpine</code></td><td style="text-align:center"><span class="p-single">Single-stage</span></td><td style="font-size:11px">composer</td><td style="text-align:center;font-family:monospace;font-size:11px">80</td></tr>
+<tr><td class="row-label">Laravel <small style="color:var(--text-dim)">12</small></td><td><code style="font-size:10px">ubuntu:24.04</code></td><td><code style="font-size:10px">php:8.3-fpm-alpine</code></td><td style="text-align:center"><span class="p-multi">Multi-stage</span></td><td style="font-size:11px">composer</td><td style="text-align:center;font-family:monospace;font-size:11px">80</td></tr>
+<tr><td class="row-label">Symfony <small style="color:var(--text-dim)">7.2</small></td><td><code style="font-size:10px">ubuntu:24.04</code></td><td><code style="font-size:10px">php:8.3-fpm-alpine</code></td><td style="text-align:center"><span class="p-multi">Multi-stage</span></td><td style="font-size:11px">composer</td><td style="text-align:center;font-family:monospace;font-size:11px">80</td></tr>
+<tr><td class="row-label">Slim <small style="color:var(--text-dim)">4.14</small></td><td><code style="font-size:10px">ubuntu:24.04</code></td><td><code style="font-size:10px">php:8.3-fpm-alpine</code></td><td style="text-align:center"><span class="p-multi">Multi-stage</span></td><td style="font-size:11px">composer</td><td style="text-align:center;font-family:monospace;font-size:11px">80</td></tr>
     </tbody>
   </table>
   </div>
@@ -3304,77 +3319,116 @@ jobs:
 <details class="fw-details">
   <summary>
     <span class="sum-label">Laravel <span style="color:var(--text-dim);font-weight:400">12</span></span>
-    <span class="p-single pat-chip">Single-stage</span>
+    <span class="p-multi pat-chip">Multi-stage</span>
   </summary>
   <div class="expand-content">
-    <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px">PHP-FPM serves PHP files via nginx in the same container. Laravel requires an nginx.conf that routes requests to index.php.</p>
-    <div class="dockerfile-block"><span class="df-comment"># Single-stage: build + runtime in one image</span>
-<span class="df-stage">FROM php:8.3-fpm-alpine</span>
-<span class="df-kw">RUN</span> apk add --no-cache nginx curl unzip ca-certificates &amp;&amp; \
-    docker-php-ext-install pdo pdo_mysql opcache
-<span class="df-kw">WORKDIR</span> /var/www/html
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px">PHP-FPM serves PHP files via nginx. Builder stage runs Composer; runtime stage is php:8.3-fpm-alpine. FIPS variant: ubi9/php-83.</p>
+    <div class="dockerfile-block"><span class="df-comment"># ── build ──────────────────────────────────────────────────────────────────</span>
+<span class="df-stage">FROM ubuntu:24.04 AS builder</span>
+<span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y curl ca-certificates php8.3-cli php8.3-mbstring \
+    php8.3-xml php8.3-curl unzip &amp;&amp; rm -rf /var/lib/apt/lists/*
 <span class="df-kw">RUN</span> curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+<span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> composer.json composer.lock ./
 <span class="df-kw">RUN</span> composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
-<span class="df-kw">COPY</span> --chown=www-data:www-data . .
+<span class="df-kw">COPY</span> . .
 <span class="df-kw">RUN</span> composer dump-autoload --optimize
+
+<span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
+<span class="df-stage">FROM php:8.3-fpm-alpine AS runtime</span>
+<span class="df-kw">RUN</span> apk add --no-cache nginx ca-certificates &amp;&amp; \
+    docker-php-ext-install pdo pdo_mysql opcache
+<span class="df-kw">WORKDIR</span> /var/www/html
+<span class="df-kw">COPY</span> --from=builder --chown=www-data:www-data /app .
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
 <span class="df-kw">EXPOSE</span> 80 9000
-<span class="df-kw">CMD</span> sh -c &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;
+<span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]
 
-<span class="df-comment"># FIPS variant: switch to ubi9/php image</span>
-<span class="df-comment"># FROM registry.access.redhat.com/ubi9/php-83 AS runtime-fips</span></div>
+<span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
+<span class="df-stage">FROM registry.access.redhat.com/ubi9/php-83 AS runtime-fips</span>
+<span class="df-kw">RUN</span> dnf install -y nginx &amp;&amp; dnf clean all
+<span class="df-kw">WORKDIR</span> /var/www/html
+<span class="df-kw">COPY</span> --from=builder --chown=apache:apache /app .
+<span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
+<span class="df-kw">EXPOSE</span> 8080 9000
+<span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]</div>
     <p class="df-note note-info">For production, consider separating nginx and PHP-FPM into separate containers with a shared volume. This single-container pattern is suitable for simple deployments.</p>
   </div>
 </details>
 <details class="fw-details">
   <summary>
     <span class="sum-label">Symfony <span style="color:var(--text-dim);font-weight:400">7.2</span></span>
-    <span class="p-single pat-chip">Single-stage</span>
+    <span class="p-multi pat-chip">Multi-stage</span>
   </summary>
   <div class="expand-content">
-    <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px">Symfony with PHP-FPM + nginx. Same pattern as Laravel — Composer installs at build time.</p>
-    <div class="dockerfile-block"><span class="df-comment"># Single-stage: build + runtime in one image</span>
-<span class="df-stage">FROM php:8.3-fpm-alpine</span>
-<span class="df-kw">RUN</span> apk add --no-cache nginx curl unzip ca-certificates &amp;&amp; \
-    docker-php-ext-install pdo pdo_mysql opcache
-<span class="df-kw">WORKDIR</span> /var/www/html
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px">Symfony with PHP-FPM + nginx. Multi-stage: ubuntu:24.04 builder → php:8.3-fpm-alpine runtime. FIPS: ubi9/php-83.</p>
+    <div class="dockerfile-block"><span class="df-comment"># ── build ──────────────────────────────────────────────────────────────────</span>
+<span class="df-stage">FROM ubuntu:24.04 AS builder</span>
+<span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y curl ca-certificates php8.3-cli php8.3-mbstring \
+    php8.3-xml php8.3-curl unzip &amp;&amp; rm -rf /var/lib/apt/lists/*
 <span class="df-kw">RUN</span> curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+<span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> composer.json composer.lock ./
 <span class="df-kw">RUN</span> composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
-<span class="df-kw">COPY</span> --chown=www-data:www-data . .
+<span class="df-kw">COPY</span> . .
 <span class="df-kw">RUN</span> composer dump-autoload --optimize
+
+<span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
+<span class="df-stage">FROM php:8.3-fpm-alpine AS runtime</span>
+<span class="df-kw">RUN</span> apk add --no-cache nginx ca-certificates &amp;&amp; \
+    docker-php-ext-install pdo pdo_mysql opcache
+<span class="df-kw">WORKDIR</span> /var/www/html
+<span class="df-kw">COPY</span> --from=builder --chown=www-data:www-data /app .
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
 <span class="df-kw">EXPOSE</span> 80 9000
-<span class="df-kw">CMD</span> sh -c &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;
+<span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]
 
-<span class="df-comment"># FIPS variant: switch to ubi9/php image</span>
-<span class="df-comment"># FROM registry.access.redhat.com/ubi9/php-83 AS runtime-fips</span></div>
+<span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
+<span class="df-stage">FROM registry.access.redhat.com/ubi9/php-83 AS runtime-fips</span>
+<span class="df-kw">RUN</span> dnf install -y nginx &amp;&amp; dnf clean all
+<span class="df-kw">WORKDIR</span> /var/www/html
+<span class="df-kw">COPY</span> --from=builder --chown=apache:apache /app .
+<span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
+<span class="df-kw">EXPOSE</span> 8080 9000
+<span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]</div>
   </div>
 </details>
 <details class="fw-details">
   <summary>
     <span class="sum-label">Slim <span style="color:var(--text-dim);font-weight:400">4.14</span></span>
-    <span class="p-single pat-chip">Single-stage</span>
+    <span class="p-multi pat-chip">Multi-stage</span>
   </summary>
   <div class="expand-content">
-    <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px">Slim microframework. Lighter than Laravel/Symfony — fewer Composer dependencies, faster build.</p>
-    <div class="dockerfile-block"><span class="df-comment"># Single-stage: build + runtime in one image</span>
-<span class="df-stage">FROM php:8.3-fpm-alpine</span>
-<span class="df-kw">RUN</span> apk add --no-cache nginx curl unzip ca-certificates &amp;&amp; \
-    docker-php-ext-install pdo pdo_mysql opcache
-<span class="df-kw">WORKDIR</span> /var/www/html
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px">Slim microframework. Lighter than Laravel/Symfony — fewer Composer dependencies, faster build. Multi-stage with FIPS target.</p>
+    <div class="dockerfile-block"><span class="df-comment"># ── build ──────────────────────────────────────────────────────────────────</span>
+<span class="df-stage">FROM ubuntu:24.04 AS builder</span>
+<span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y curl ca-certificates php8.3-cli php8.3-mbstring \
+    php8.3-xml php8.3-curl unzip &amp;&amp; rm -rf /var/lib/apt/lists/*
 <span class="df-kw">RUN</span> curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+<span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> composer.json composer.lock ./
 <span class="df-kw">RUN</span> composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
-<span class="df-kw">COPY</span> --chown=www-data:www-data . .
+<span class="df-kw">COPY</span> . .
 <span class="df-kw">RUN</span> composer dump-autoload --optimize
+
+<span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
+<span class="df-stage">FROM php:8.3-fpm-alpine AS runtime</span>
+<span class="df-kw">RUN</span> apk add --no-cache nginx ca-certificates &amp;&amp; \
+    docker-php-ext-install pdo pdo_mysql opcache
+<span class="df-kw">WORKDIR</span> /var/www/html
+<span class="df-kw">COPY</span> --from=builder --chown=www-data:www-data /app .
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
 <span class="df-kw">EXPOSE</span> 80 9000
-<span class="df-kw">CMD</span> sh -c &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;
+<span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]
 
-<span class="df-comment"># FIPS variant: switch to ubi9/php image</span>
-<span class="df-comment"># FROM registry.access.redhat.com/ubi9/php-83 AS runtime-fips</span></div>
+<span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
+<span class="df-stage">FROM registry.access.redhat.com/ubi9/php-83 AS runtime-fips</span>
+<span class="df-kw">RUN</span> dnf install -y nginx &amp;&amp; dnf clean all
+<span class="df-kw">WORKDIR</span> /var/www/html
+<span class="df-kw">COPY</span> --from=builder --chown=apache:apache /app .
+<span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
+<span class="df-kw">EXPOSE</span> 8080 9000
+<span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]</div>
   </div>
 </details>
 <h2 id="cat-swift-server">Swift Server Frameworks</h2>
@@ -3408,10 +3462,10 @@ jobs:
 <span class="df-stage">FROM ubuntu:24.04 AS builder</span>
 <span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y curl ca-certificates libcurl4-openssl-dev \
     libssl-dev libc6-dev &amp;&amp; rm -rf /var/lib/apt/lists/*
-<span class="df-kw">RUN</span> SWIFT_VER=swift-6.0.3-RELEASE &amp;&amp; \
-    curl -fsSL https://download.swift.org/${SWIFT_VER}-ubuntu24.04/${SWIFT_VER}-ubuntu24.04.tar.gz \
+<span class="df-kw">RUN</span> SWIFT_TAG=swift-6.0.3-RELEASE &amp;&amp; \
+    curl -fsSL https://download.swift.org/swift-6.0.3-release/ubuntu2404/${SWIFT_TAG}/${SWIFT_TAG}-ubuntu24.04.tar.gz \
     | tar xz -C /opt &amp;&amp; \
-    ln -s /opt/${SWIFT_VER}-ubuntu24.04/usr/bin/swift /usr/local/bin/swift
+    ln -s /opt/${SWIFT_TAG}-ubuntu24.04/usr/bin/swift /usr/local/bin/swift
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> Package.swift Package.resolved ./
 <span class="df-kw">RUN</span> swift package resolve
@@ -3446,10 +3500,10 @@ jobs:
 <span class="df-stage">FROM ubuntu:24.04 AS builder</span>
 <span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y curl ca-certificates libcurl4-openssl-dev \
     libssl-dev libc6-dev &amp;&amp; rm -rf /var/lib/apt/lists/*
-<span class="df-kw">RUN</span> SWIFT_VER=swift-6.0.3-RELEASE &amp;&amp; \
-    curl -fsSL https://download.swift.org/${SWIFT_VER}-ubuntu24.04/${SWIFT_VER}-ubuntu24.04.tar.gz \
+<span class="df-kw">RUN</span> SWIFT_TAG=swift-6.0.3-RELEASE &amp;&amp; \
+    curl -fsSL https://download.swift.org/swift-6.0.3-release/ubuntu2404/${SWIFT_TAG}/${SWIFT_TAG}-ubuntu24.04.tar.gz \
     | tar xz -C /opt &amp;&amp; \
-    ln -s /opt/${SWIFT_VER}-ubuntu24.04/usr/bin/swift /usr/local/bin/swift
+    ln -s /opt/${SWIFT_TAG}-ubuntu24.04/usr/bin/swift /usr/local/bin/swift
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> Package.swift Package.resolved ./
 <span class="df-kw">RUN</span> swift package resolve
@@ -3680,11 +3734,10 @@ jobs:
   </summary>
   <div class="expand-content">
     <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px">Drogon C++ HTTP framework. Use <code>--target runtime-static</code> for scratch; <code>--target runtime-dynamic</code> for debian:12-slim.</p>
-    <div class="dockerfile-block"><span class="df-arg">ARG LINK=static</span>
+    <div class="dockerfile-block"><span class="df-comment"># Build target: --target runtime-static (scratch) or --target runtime-dynamic (debian:12-slim)</span>
 
 <span class="df-comment"># ── build ──────────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM ubuntu:24.04 AS builder</span>
-<span class="df-arg">ARG LINK</span>
 <span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y cmake build-essential libssl-dev \
     libbrotli-dev ca-certificates &amp;&amp; rm -rf /var/lib/apt/lists/*
 <span class="df-kw">WORKDIR</span> /app
@@ -3721,11 +3774,10 @@ jobs:
   </summary>
   <div class="expand-content">
     <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px">Crow header-only C++ HTTP framework. Same cmake → scratch/debian pattern as Drogon.</p>
-    <div class="dockerfile-block"><span class="df-arg">ARG LINK=static</span>
+    <div class="dockerfile-block"><span class="df-comment"># Build target: --target runtime-static (scratch) or --target runtime-dynamic (debian:12-slim)</span>
 
 <span class="df-comment"># ── build ──────────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM ubuntu:24.04 AS builder</span>
-<span class="df-arg">ARG LINK</span>
 <span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y cmake build-essential libssl-dev \
     libbrotli-dev ca-certificates &amp;&amp; rm -rf /var/lib/apt/lists/*
 <span class="df-kw">WORKDIR</span> /app
