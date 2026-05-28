@@ -1,0 +1,40 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 05 — Test  |  14 Node/Deno/Bun — Elysia 1.2
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Elysia repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "05 Test — Elysia 1.2"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1'
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: bun test --coverage
+
+      # ── OPTIONAL: Codecov coverage upload ─────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+
+      # ── OPTIONAL: SonarCloud (requires SONAR_TOKEN secret) ────────
+      # - name: SonarCloud analysis
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

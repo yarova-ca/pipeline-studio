@@ -1,0 +1,45 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 03 — Build Artifact  |  10 Cross-platform non-JS — .NET MAUI 10
+# Output: APK / IPA / MSIX
+# No Docker image is built — this framework targets mobile/edge platforms.
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your .NET MAUI repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "03 Build Artifact — .NET MAUI 10"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0'
+      - uses: actions/checkout@v4
+      # ── DEFAULT: dotnet build ──────────────────────
+      - name: Build — dotnet
+        run: dotnet build -c Release
+
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk---ipa---msix
+          path: |
+            build/
+            dist/
+            *.apk
+            *.ipa
+            *.aab
+            *.msix
+          retention-days: 30

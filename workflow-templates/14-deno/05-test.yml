@@ -1,0 +1,40 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 05 — Test  |  14 Node/Deno/Bun — Deno 2.3
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Deno repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "05 Test — Deno 2.3"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: '2.3'
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: deno test --coverage=cov/ && deno coverage cov/ --lcov > cov.lcov
+
+      # ── OPTIONAL: Codecov coverage upload ─────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+
+      # ── OPTIONAL: SonarCloud (requires SONAR_TOKEN secret) ────────
+      # - name: SonarCloud analysis
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

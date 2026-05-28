@@ -1,0 +1,32 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 04 — Test  |  10 Cross-platform non-JS — Flutter 3.44
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Flutter repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "04 Test — Flutter 3.44"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.0'
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: flutter test --coverage
+      # ── OPTIONAL: Codecov ─────────────────────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}

@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 """
-Generate 75 GitHub Actions workflow YAML templates for pipeline-studio.
+Generate pipeline-studio workflow templates — Option A structure.
 
-Outputs to: workflow-templates/{slug}.yml
+Output: workflow-templates/{slug}/ folder per framework.
+  Multi-stage (62): 7 YAML files per folder.
+  CI-only (13):     5 YAML files per folder.
 
-Each file is copy-paste ready. Developer copies to their repo's
-.github/workflows/ci.yml and it works immediately.
-
-Usage:
-    python3 scripts/generate_workflow_templates.py
+Usage: python3 scripts/generate_workflow_templates.py
 """
 
-import os
+import os, shutil
 
-# ─── FRAMEWORK DATA (same source of truth as issue templates) ─────────────
+OUT = "workflow-templates"
 
+# ─── FRAMEWORKS ──────────────────────────────────────────────────────────────
 FRAMEWORKS = [
 # 01 SSR/Hybrid
 {'num':21,'cat':'01 SSR/Hybrid','name':'Next.js','ver':'16.2.6','slug':'01-nextjs','lang':'nodejs-node','pattern':'multi-stage','runtime':'node:22-alpine','fips_rt':'registry.access.redhat.com/ubi9/nodejs-22-minimal','port':3000},
@@ -120,378 +119,505 @@ FRAMEWORKS = [
 {'num':95,'cat':'27 C/C++','name':'Crow','ver':'1.3.2','slug':'27-crow','lang':'cpp','pattern':'multi-stage','runtime':'debian:12-slim','fips_rt':'registry.access.redhat.com/ubi9/ubi-micro','port':8080},
 ]
 
-# ─── LANGUAGE PROFILES ──────────────────────────────────────────────────
+# ─── LANGUAGE PROFILES ───────────────────────────────────────────────────────
 
 LANG = {
-
-'nodejs-node': {
-    'setup': """      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'""",
-    'sca': "npm audit --audit-level=high\n          # alternatives: yarn audit --level high | pnpm audit --audit-level high | osv-scanner --lockfile package-lock.json",
-    'sast': "semgrep --config=auto .\n          # alternatives: njsscan --json . > njsscan.json | eslint . --plugin security",
-    'codeql_lang': 'javascript-typescript',
-    'license': "npx license-checker --production --failOn 'GPL;AGPL'",
-    'build': "npm ci && npm run build\n          # alternatives: yarn install --frozen-lockfile && yarn build | pnpm install --frozen-lockfile && pnpm build",
-    'test': "npm test -- --coverage --coverageReporters=lcov",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json\n          # alternatives: cyclonedx-npm --output sbom.cdx.json",
-},
-
-'nodejs-nginx': {
-    'setup': """      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'""",
-    'sca': "npm audit --audit-level=high\n          # alternatives: yarn audit --level high | pnpm audit --audit-level high | osv-scanner --lockfile package-lock.json",
-    'sast': "semgrep --config=auto .\n          # alternatives: njsscan --json . > njsscan.json | eslint . --plugin security",
-    'codeql_lang': 'javascript-typescript',
-    'license': "npx license-checker --production --failOn 'GPL;AGPL'",
-    'build': "npm ci && npm run build\n          # alternatives: yarn install --frozen-lockfile && yarn build | pnpm install --frozen-lockfile && pnpm build",
-    'test': "npm test -- --coverage --coverageReporters=lcov",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'hugo': {
-    'setup': """      - uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: '0.161.0'
-          extended: true""",
-    'sca': "osv-scanner --lockfile go.sum\n          # alternatives: nancy (go list -json -m all | nancy sleuth)",
-    'sast': "semgrep --config=auto .",
-    'codeql_lang': 'go',
-    'license': "go-licenses check ./...",
-    'build': "hugo --minify",
-    'test': "hugo --minify && echo 'Build clean'",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'deno': {
-    'setup': """      - uses: denoland/setup-deno@v2
-        with:
-          deno-version: '2.3'""",
-    'sca': "deno audit\n          # alternatives: osv-scanner --lockfile deno.lock",
-    'sast': "semgrep --config=auto .",
-    'codeql_lang': 'javascript-typescript',
-    'license': "deno run --allow-read jsr:@nicolo-ribaudo/deno-license-checker",
-    'build': "deno task build",
-    'test': "deno test --coverage=cov/ && deno coverage cov/ --lcov > cov.lcov",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'bun': {
-    'setup': """      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: '1'""",
-    'sca': "bun pm audit\n          # alternatives: osv-scanner --lockfile bun.lockb",
-    'sast': "semgrep --config=auto .",
-    'codeql_lang': 'javascript-typescript',
-    'license': "bunx license-checker --production --failOn 'GPL;AGPL'",
-    'build': "bun install --frozen-lockfile && bun build",
-    'test': "bun test --coverage",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'python': {
-    'setup': """      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-          cache: 'pip'""",
-    'sca': "pip-audit --vulnerability-service pypi\n          # alternatives: safety check --json | osv-scanner --lockfile requirements.txt | snyk test",
-    'sast': "bandit -r . -ll -o bandit.json -f json && cat bandit.json\n          # alternatives: semgrep --config=auto . | CodeQL",
-    'codeql_lang': 'python',
-    'license': "pip-licenses --format=json --output-file=licenses.json && cat licenses.json",
-    'build': "pip install -r requirements.txt\n          # alternatives: poetry install --no-dev | uv pip install -r requirements.txt",
-    'test': "pytest --cov=. --cov-report=xml",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json\n          # alternatives: cyclonedx-py -o sbom.cdx.json",
-},
-
-'go': {
-    'setup': """      - uses: actions/setup-go@v5
-        with:
-          go-version: '1.23'
-          cache: true""",
-    'sca': "govulncheck ./...\n          # alternatives: nancy (go list -json -m all | nancy sleuth) | osv-scanner --lockfile go.sum",
-    'sast': "gosec -fmt json -out gosec.json ./... && cat gosec.json\n          # alternatives: staticcheck ./... | semgrep --config=auto .",
-    'codeql_lang': 'go',
-    'license': "go-licenses check ./...",
-    'build': "CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app ./...",
-    'test': "go test ./... -coverprofile=coverage.out",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json\n          # alternatives: cyclonedx-gomod app -output sbom.cdx.json",
-},
-
-'java': {
-    'setup': """      - uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'maven'""",
-    'sca': "mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7\n          # alternatives: osv-scanner --lockfile pom.xml | snyk test",
-    'sast': "semgrep --config=auto .\n          # alternatives: mvn spotbugs:check | CodeQL",
-    'codeql_lang': 'java',
-    'license': "mvn license:check\n          # alternatives: ./gradlew checkLicense",
-    'build': "mvn -B package --file pom.xml -DskipTests\n          # alternatives: ./gradlew build -x test",
-    'test': "mvn test\n          # alternatives: ./gradlew test",
-    'sbom': "mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom && syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'kotlin': {
-    'setup': """      - uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'gradle'""",
-    'sca': "dependency-check --scan . --format JSON\n          # alternatives: osv-scanner --lockfile gradle.lockfile | snyk test",
-    'sast': "./gradlew detekt\n          # alternatives: semgrep --config=auto . | CodeQL",
-    'codeql_lang': 'java-kotlin',
-    'license': "./gradlew checkLicense",
-    'build': "./gradlew build -x test",
-    'test': "./gradlew test",
-    'sbom': "./gradlew cyclonedxBom && syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'dotnet': {
-    'setup': """      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0'""",
-    'sca': "dotnet list package --vulnerable --include-transitive\n          # alternatives: osv-scanner --lockfile packages.lock.json | snyk test",
-    'sast': "semgrep --config=auto .\n          # alternatives: security-code-scan | CodeQL (csharp)",
-    'codeql_lang': 'csharp',
-    'license': "dotnet-project-licenses --input . --output licenses.json",
-    'build': "dotnet publish -c Release -o out --self-contained false",
-    'test': "dotnet test --collect:\"XPlat Code Coverage\"",
-    'sbom': "cyclonedx . --output sbom.cdx.json && syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'rust': {
-    'setup': """      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2""",
-    'sca': "cargo audit\n          # alternatives: cargo deny check | osv-scanner --lockfile Cargo.lock",
-    'sast': "cargo clippy -- -D warnings\n          # alternatives: semgrep --config=auto . | CodeQL (rust)",
-    'codeql_lang': 'rust',
-    'license': "cargo license --json",
-    'build': "cargo build --release --target x86_64-unknown-linux-musl",
-    'test': "cargo test --workspace",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json\n          # alternatives: cargo cyclonedx --format json",
-},
-
-'elixir': {
-    'setup': """      - uses: erlef/setup-beam@v1
-        with:
-          elixir-version: '1.17'
-          otp-version: '27'""",
-    'sca': "mix deps.audit\n          # alternatives: mix hex.audit | osv-scanner --lockfile mix.lock",
-    'sast': "mix sobelow --config\n          # alternatives: mix credo --strict | semgrep --config=auto .",
-    'codeql_lang': 'python',  # no Elixir CodeQL support
-    'license': "mix licenses",
-    'build': "MIX_ENV=prod mix do deps.get, release",
-    'test': "mix test --cover",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'ruby': {
-    'setup': """      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          bundler-cache: true""",
-    'sca': "bundle exec bundle-audit check --update\n          # alternatives: osv-scanner --lockfile Gemfile.lock | snyk test",
-    'sast': "bundle exec brakeman -o brakeman.json\n          # alternatives: semgrep --config=auto . | CodeQL (ruby)",
-    'codeql_lang': 'ruby',
-    'license': "bundle exec license_finder",
-    'build': "bundle install --without development test",
-    'test': "bundle exec rspec --format documentation",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'php': {
-    'setup': """      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          tools: composer:v2""",
-    'sca': "composer audit\n          # alternatives: local-php-security-checker | osv-scanner --lockfile composer.lock",
-    'sast': "vendor/bin/psalm --output-format=json\n          # alternatives: vendor/bin/phpstan analyse --level max | semgrep --config=auto .",
-    'codeql_lang': 'python',  # no PHP CodeQL support
-    'license': "vendor/bin/composer-license-checker check",
-    'build': "composer install --no-dev --optimize-autoloader",
-    'test': "vendor/bin/phpunit --coverage-clover coverage.xml",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'swift-server': {
-    'setup': """      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: '6.0'""",
-    'sca': "osv-scanner --lockfile Package.resolved\n          # alternatives: snyk test",
-    'sast': "semgrep --config=auto .\n          # alternatives: CodeQL (swift)",
-    'codeql_lang': 'swift',
-    'license': "swift package-list --output-format json",
-    'build': "swift build -c release",
-    'test': "swift test --enable-code-coverage",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'scala': {
-    'setup': """      - uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'sbt'""",
-    'sca': "sbt dependencyCheck\n          # alternatives: osv-scanner --lockfile build.sbt | snyk test",
-    'sast': "semgrep --config=auto .\n          # alternatives: scalafmt --check | CodeQL (java)",
-    'codeql_lang': 'java',
-    'license': "sbt dumpLicenseReport",
-    'build': "sbt assembly\n          # alternatives: sbt dist (for Play Framework)",
-    'test': "sbt test",
-    'sbom': "sbt cyclonedxBom && syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'clojure': {
-    'setup': """      - uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-      - uses: DeLaGuardo/setup-clojure@13
-        with:
-          lein: '2.11'""",
-    'sca': "clojure -M:nvd check\n          # alternatives: osv-scanner --lockfile deps.edn | snyk test",
-    'sast': "clj-kondo --lint src\n          # alternatives: semgrep --config=auto . | CodeQL (java)",
-    'codeql_lang': 'java',
-    'license': "lein licenses",
-    'build': "lein uberjar\n          # alternatives: clojure -T:build uber",
-    'test': "lein test",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-'cpp': {
-    'setup': """      - name: Install build tools
-        run: sudo apt-get install -y cmake clang clang-tidy cppcheck""",
-    'sca': "osv-scanner --lockfile conan.lock\n          # alternatives: vcpkg audit | snyk test",
-    'sast': "cppcheck --enable=all --xml . 2> cppcheck.xml && cat cppcheck.xml\n          # alternatives: clang-tidy -p build src/**/*.cpp | semgrep --config=auto .",
-    'codeql_lang': 'cpp',
-    'license': "licensecheck -r .",
-    'build': "cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build",
-    'test': "cd build && ctest --output-on-failure",
-    'sbom': "syft packages $REGISTRY/$IMAGE_NAME:${{ github.sha }} -o spdx-json > sbom.spdx.json",
-},
-
-# ─── CI-only language groups ─────────────────────────────────────────────
-
-'mobile-js': {
-    'setup': """      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'""",
-    'sca': "npm audit --audit-level=high",
-    'sast': "semgrep --config=auto .",
-    'codeql_lang': 'javascript-typescript',
-    'license': "npx license-checker --production --failOn 'GPL;AGPL'",
-    'build': "npx react-native build-android\n          # alternatives: eas build --profile preview --platform android | ionic build --prod",
-    'test': "npm test -- --coverage",
-    'artifact': 'APK / IPA',
-},
-
-'flutter': {
-    'setup': """      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.44.0'""",
-    'sca': "osv-scanner --lockfile pubspec.lock",
-    'sast': "semgrep --config=auto .",
-    'codeql_lang': 'java-kotlin',
-    'license': "dart pub deps --json | python3 scripts/extract-licenses.py",
-    'build': "flutter build apk --release\n          # alternatives: flutter build ios --release | flutter build appbundle",
-    'test': "flutter test --coverage",
-    'artifact': 'APK / IPA',
-},
-
-'dotnet-mobile': {
-    'setup': """      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0'""",
-    'sca': "dotnet list package --vulnerable --include-transitive",
-    'sast': "semgrep --config=auto .",
-    'codeql_lang': 'csharp',
-    'license': "dotnet-project-licenses --input . --output licenses.json",
-    'build': "dotnet build -c Release\n          # targets: -f net10.0-android | -f net10.0-ios | -f net10.0-maccatalyst",
-    'test': "dotnet test --collect:\"XPlat Code Coverage\"",
-    'artifact': 'APK / IPA / MSIX',
-},
-
-'ios-native': {
-    'setup': """      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: 'latest-stable'""",
-    'sca': "osv-scanner --lockfile Package.resolved",
-    'sast': "semgrep --config=auto .",
-    'codeql_lang': 'swift',
-    'license': "swift package-list --output-format json",
-    'build': "xcodebuild -scheme MyApp -configuration Release archive -archivePath MyApp.xcarchive",
-    'test': "xcodebuild test -scheme MyApp -destination 'platform=iOS Simulator,name=iPhone 16'",
-    'artifact': 'IPA',
-},
-
-'android-native': {
-    'setup': """      - uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: 'gradle'""",
-    'sca': "dependency-check --scan . --format JSON",
-    'sast': "./gradlew detekt\n          # alternatives: semgrep --config=auto . | CodeQL (java-kotlin)",
-    'codeql_lang': 'java-kotlin',
-    'license': "./gradlew checkLicense",
-    'build': "./gradlew assembleRelease\n          # alternatives: ./gradlew bundleRelease (for AAB)",
-    'test': "./gradlew test",
-    'artifact': 'APK / AAB',
-},
-
-'edge': {
-    'setup': """      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'""",
-    'sca': "npm audit --audit-level=high",
-    'sast': "semgrep --config=auto .",
-    'codeql_lang': 'javascript-typescript',
-    'license': "npx license-checker --production --failOn 'GPL;AGPL'",
-    'build': "npm run build\n          # alternatives: wrangler build | vercel build",
-    'test': "npm test -- --coverage",
-    'artifact': 'edge bundle',
-},
-
+'nodejs-node': {'setup': "      - uses: actions/setup-node@v4\n        with:\n          node-version: '22'\n          cache: 'npm'", 'sca_cmd': 'npm audit --audit-level=high', 'sca_name': 'npm audit', 'sast_cmd': None, 'codeql_lang': 'javascript-typescript', 'license_cmd': "npx license-checker --production --failOn 'GPL;AGPL'", 'build_cmd': 'npm ci && npm run build', 'test_cmd': 'npm test -- --coverage --coverageReporters=lcov', 'eco': 'nodejs'},
+'nodejs-nginx': {'setup': "      - uses: actions/setup-node@v4\n        with:\n          node-version: '22'\n          cache: 'npm'", 'sca_cmd': 'npm audit --audit-level=high', 'sca_name': 'npm audit', 'sast_cmd': None, 'codeql_lang': 'javascript-typescript', 'license_cmd': "npx license-checker --production --failOn 'GPL;AGPL'", 'build_cmd': 'npm ci && npm run build', 'test_cmd': 'npm test -- --coverage --coverageReporters=lcov', 'eco': 'nodejs'},
+'hugo': {'setup': "      - uses: peaceiris/actions-hugo@v3\n        with:\n          hugo-version: '0.161.0'\n          extended: true", 'sca_cmd': 'osv-scanner --lockfile go.sum', 'sca_name': 'osv-scanner', 'sast_cmd': None, 'codeql_lang': 'go', 'license_cmd': 'go-licenses check ./...', 'build_cmd': 'hugo --minify', 'test_cmd': "hugo --minify && echo 'Build clean'", 'eco': 'go'},
+'deno': {'setup': "      - uses: denoland/setup-deno@v2\n        with:\n          deno-version: '2.3'", 'sca_cmd': 'deno audit', 'sca_name': 'deno audit', 'sast_cmd': None, 'codeql_lang': 'javascript-typescript', 'license_cmd': 'deno run --allow-read jsr:@nicolo-ribaudo/deno-license-checker', 'build_cmd': 'deno task build', 'test_cmd': 'deno test --coverage=cov/ && deno coverage cov/ --lcov > cov.lcov', 'eco': 'deno'},
+'bun': {'setup': "      - uses: oven-sh/setup-bun@v2\n        with:\n          bun-version: '1'", 'sca_cmd': 'bun pm audit', 'sca_name': 'bun pm audit', 'sast_cmd': None, 'codeql_lang': 'javascript-typescript', 'license_cmd': "bunx license-checker --production --failOn 'GPL;AGPL'", 'build_cmd': 'bun install --frozen-lockfile && bun build', 'test_cmd': 'bun test --coverage', 'eco': 'bun'},
+'python': {'setup': "      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.12'\n          cache: 'pip'", 'sca_cmd': 'pip-audit --vulnerability-service pypi', 'sca_name': 'pip-audit', 'sast_cmd': 'bandit -r . -ll -o bandit.json -f json', 'sast_name': 'Bandit', 'codeql_lang': 'python', 'license_cmd': 'pip-licenses --format=json --output-file=licenses.json', 'build_cmd': 'pip install -r requirements.txt', 'test_cmd': 'pytest --cov=. --cov-report=xml', 'eco': 'python'},
+'go': {'setup': "      - uses: actions/setup-go@v5\n        with:\n          go-version: '1.23'\n          cache: true", 'sca_cmd': 'govulncheck ./...', 'sca_name': 'govulncheck', 'sast_cmd': 'gosec -fmt json -out gosec.json ./...', 'sast_name': 'gosec', 'codeql_lang': 'go', 'license_cmd': 'go-licenses check ./...', 'build_cmd': 'CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app ./...', 'test_cmd': 'go test ./... -coverprofile=coverage.out', 'eco': 'go'},
+'java': {'setup': "      - uses: actions/setup-java@v4\n        with:\n          java-version: '21'\n          distribution: 'temurin'\n          cache: 'maven'", 'sca_cmd': 'mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7', 'sca_name': 'OWASP Dependency-Check', 'sast_cmd': None, 'codeql_lang': 'java', 'license_cmd': 'mvn license:check', 'build_cmd': 'mvn -B package --file pom.xml -DskipTests', 'test_cmd': 'mvn test', 'eco': 'java'},
+'kotlin': {'setup': "      - uses: actions/setup-java@v4\n        with:\n          java-version: '21'\n          distribution: 'temurin'\n          cache: 'gradle'", 'sca_cmd': 'dependency-check --scan . --format JSON', 'sca_name': 'OWASP Dependency-Check', 'sast_cmd': './gradlew detekt', 'sast_name': 'Detekt', 'codeql_lang': 'java-kotlin', 'license_cmd': './gradlew checkLicense', 'build_cmd': './gradlew build -x test', 'test_cmd': './gradlew test', 'eco': 'kotlin'},
+'dotnet': {'setup': "      - uses: actions/setup-dotnet@v4\n        with:\n          dotnet-version: '9.0'", 'sca_cmd': 'dotnet list package --vulnerable --include-transitive', 'sca_name': 'dotnet vulnerable packages', 'sast_cmd': None, 'codeql_lang': 'csharp', 'license_cmd': 'dotnet-project-licenses --input . --output licenses.json', 'build_cmd': 'dotnet publish -c Release -o out --self-contained false', 'test_cmd': 'dotnet test --collect:"XPlat Code Coverage"', 'eco': 'dotnet'},
+'rust': {'setup': "      - uses: dtolnay/rust-toolchain@stable\n      - uses: Swatinem/rust-cache@v2", 'sca_cmd': 'cargo audit', 'sca_name': 'cargo audit', 'sast_cmd': 'cargo clippy -- -D warnings', 'sast_name': 'Clippy', 'codeql_lang': 'rust', 'license_cmd': 'cargo license --json', 'build_cmd': 'cargo build --release --target x86_64-unknown-linux-musl', 'test_cmd': 'cargo test --workspace', 'eco': 'rust'},
+'elixir': {'setup': "      - uses: erlef/setup-beam@v1\n        with:\n          elixir-version: '1.17'\n          otp-version: '27'", 'sca_cmd': 'mix deps.audit', 'sca_name': 'mix deps.audit', 'sast_cmd': 'mix sobelow --config', 'sast_name': 'Sobelow', 'codeql_lang': 'python', 'license_cmd': 'mix licenses', 'build_cmd': 'MIX_ENV=prod mix do deps.get, release', 'test_cmd': 'mix test --cover', 'eco': 'elixir'},
+'ruby': {'setup': "      - uses: ruby/setup-ruby@v1\n        with:\n          ruby-version: '3.3'\n          bundler-cache: true", 'sca_cmd': 'bundle exec bundle-audit check --update', 'sca_name': 'bundler-audit', 'sast_cmd': 'bundle exec brakeman -o brakeman.json', 'sast_name': 'Brakeman', 'codeql_lang': 'ruby', 'license_cmd': 'bundle exec license_finder', 'build_cmd': 'bundle install --without development test', 'test_cmd': 'bundle exec rspec --format documentation', 'eco': 'ruby'},
+'php': {'setup': "      - uses: shivammathur/setup-php@v2\n        with:\n          php-version: '8.3'\n          tools: composer:v2", 'sca_cmd': 'composer audit', 'sca_name': 'composer audit', 'sast_cmd': 'vendor/bin/psalm --output-format=json', 'sast_name': 'Psalm', 'codeql_lang': 'python', 'license_cmd': 'vendor/bin/composer-license-checker check', 'build_cmd': 'composer install --no-dev --optimize-autoloader', 'test_cmd': 'vendor/bin/phpunit --coverage-clover coverage.xml', 'eco': 'php'},
+'swift-server': {'setup': "      - uses: swift-actions/setup-swift@v2\n        with:\n          swift-version: '6.0'", 'sca_cmd': 'osv-scanner --lockfile Package.resolved', 'sca_name': 'osv-scanner', 'sast_cmd': None, 'codeql_lang': 'swift', 'license_cmd': 'swift package-list --output-format json', 'build_cmd': 'swift build -c release', 'test_cmd': 'swift test --enable-code-coverage', 'eco': 'swift'},
+'scala': {'setup': "      - uses: actions/setup-java@v4\n        with:\n          java-version: '21'\n          distribution: 'temurin'\n          cache: 'sbt'", 'sca_cmd': 'sbt dependencyCheck', 'sca_name': 'sbt dependencyCheck', 'sast_cmd': None, 'codeql_lang': 'java', 'license_cmd': 'sbt dumpLicenseReport', 'build_cmd': 'sbt assembly', 'test_cmd': 'sbt test', 'eco': 'scala'},
+'clojure': {'setup': "      - uses: actions/setup-java@v4\n        with:\n          java-version: '21'\n          distribution: 'temurin'\n      - uses: DeLaGuardo/setup-clojure@13\n        with:\n          lein: '2.11'", 'sca_cmd': 'clojure -M:nvd check', 'sca_name': 'nvd-clojure', 'sast_cmd': 'clj-kondo --lint src', 'sast_name': 'clj-kondo', 'codeql_lang': 'java', 'license_cmd': 'lein licenses', 'build_cmd': 'lein uberjar', 'test_cmd': 'lein test', 'eco': 'clojure'},
+'cpp': {'setup': "      - name: Install build tools\n        run: sudo apt-get install -y cmake clang clang-tidy cppcheck", 'sca_cmd': 'osv-scanner --lockfile conan.lock', 'sca_name': 'osv-scanner', 'sast_cmd': 'cppcheck --enable=all --xml . 2> cppcheck.xml', 'sast_name': 'cppcheck', 'codeql_lang': 'cpp', 'license_cmd': 'licensecheck -r .', 'build_cmd': 'cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build', 'test_cmd': 'cd build && ctest --output-on-failure', 'eco': 'cpp'},
+'mobile-js': {'setup': "      - uses: actions/setup-node@v4\n        with:\n          node-version: '22'\n          cache: 'npm'", 'sca_cmd': 'npm audit --audit-level=high', 'sca_name': 'npm audit', 'sast_cmd': None, 'codeql_lang': 'javascript-typescript', 'license_cmd': "npx license-checker --production --failOn 'GPL;AGPL'", 'build_cmd': 'npx react-native build-android', 'test_cmd': 'npm test -- --coverage', 'artifact': 'APK / IPA', 'eco': 'nodejs'},
+'flutter': {'setup': "      - uses: subosito/flutter-action@v2\n        with:\n          flutter-version: '3.44.0'", 'sca_cmd': 'osv-scanner --lockfile pubspec.lock', 'sca_name': 'osv-scanner', 'sast_cmd': None, 'codeql_lang': 'java-kotlin', 'license_cmd': 'dart pub deps --json | python3 scripts/extract-licenses.py', 'build_cmd': 'flutter build apk --release', 'test_cmd': 'flutter test --coverage', 'artifact': 'APK / IPA', 'eco': 'dart'},
+'dotnet-mobile': {'setup': "      - uses: actions/setup-dotnet@v4\n        with:\n          dotnet-version: '10.0'", 'sca_cmd': 'dotnet list package --vulnerable --include-transitive', 'sca_name': 'dotnet vulnerable', 'sast_cmd': None, 'codeql_lang': 'csharp', 'license_cmd': 'dotnet-project-licenses --input . --output licenses.json', 'build_cmd': 'dotnet build -c Release', 'test_cmd': 'dotnet test --collect:"XPlat Code Coverage"', 'artifact': 'APK / IPA / MSIX', 'eco': 'dotnet'},
+'ios-native': {'setup': "      - uses: maxim-lobanov/setup-xcode@v1\n        with:\n          xcode-version: 'latest-stable'", 'sca_cmd': 'osv-scanner --lockfile Package.resolved', 'sca_name': 'osv-scanner', 'sast_cmd': None, 'codeql_lang': 'swift', 'license_cmd': 'swift package-list --output-format json', 'build_cmd': "xcodebuild -scheme MyApp -configuration Release archive -archivePath MyApp.xcarchive", 'test_cmd': "xcodebuild test -scheme MyApp -destination 'platform=iOS Simulator,name=iPhone 16'", 'artifact': 'IPA', 'eco': 'swift'},
+'android-native': {'setup': "      - uses: actions/setup-java@v4\n        with:\n          java-version: '17'\n          distribution: 'temurin'\n          cache: 'gradle'", 'sca_cmd': 'dependency-check --scan . --format JSON', 'sca_name': 'OWASP Dependency-Check', 'sast_cmd': './gradlew detekt', 'sast_name': 'Detekt', 'codeql_lang': 'java-kotlin', 'license_cmd': './gradlew checkLicense', 'build_cmd': './gradlew assembleRelease', 'test_cmd': './gradlew test', 'artifact': 'APK / AAB', 'eco': 'kotlin'},
+'edge': {'setup': "      - uses: actions/setup-node@v4\n        with:\n          node-version: '22'\n          cache: 'npm'", 'sca_cmd': 'npm audit --audit-level=high', 'sca_name': 'npm audit', 'sast_cmd': None, 'codeql_lang': 'javascript-typescript', 'license_cmd': "npx license-checker --production --failOn 'GPL;AGPL'", 'build_cmd': 'npm run build', 'test_cmd': 'npm test -- --coverage', 'artifact': 'edge bundle', 'eco': 'nodejs'},
 }
 
-# ─── WORKFLOW GENERATORS ─────────────────────────────────────────────────
+# ─── SCA ALTERNATIVES per ecosystem ─────────────────────────────────────────
 
-def workflow_multistage(fw):
-    lang = LANG[fw['lang']]
-    name = fw['name']
-    ver = fw['ver']
-    cat = fw['cat']
-    port = fw['port'] or 8080
-    runtime = fw['runtime']
-    fips_rt = fw['fips_rt']
-    has_fips = fips_rt not in ('N/A', '')
-    fips_block = f"""
+SCA_ALTS = {
+'nodejs': """      #
+      # ── ALTERNATIVE: yarn audit ──────────────────────────────────
+      # - name: SCA — yarn audit
+      #   run: yarn audit --level high
+      #
+      # ── ALTERNATIVE: pnpm audit ──────────────────────────────────
+      # - name: SCA — pnpm audit
+      #   run: pnpm audit --audit-level high
+      #
+      # ── ALTERNATIVE: osv-scanner ─────────────────────────────────
+      # - name: SCA — osv-scanner
+      #   uses: google/osv-scanner-action@v1
+      #   with:
+      #     scan-args: --lockfile=package-lock.json
+      #
+      # ── ALTERNATIVE: Snyk (requires SNYK_TOKEN secret) ───────────
+      # - name: SCA — Snyk
+      #   uses: snyk/actions/node@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}""",
+'python': """      #
+      # ── ALTERNATIVE: safety ──────────────────────────────────────
+      # - name: SCA — safety
+      #   run: pip install safety && safety check -r requirements.txt --json
+      #
+      # ── ALTERNATIVE: osv-scanner ─────────────────────────────────
+      # - name: SCA — osv-scanner
+      #   uses: google/osv-scanner-action@v1
+      #   with:
+      #     scan-args: --lockfile=requirements.txt
+      #
+      # ── ALTERNATIVE: Snyk (requires SNYK_TOKEN secret) ───────────
+      # - name: SCA — Snyk
+      #   uses: snyk/actions/python@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}""",
+'go': """      #
+      # ── ALTERNATIVE: nancy ───────────────────────────────────────
+      # - name: SCA — nancy
+      #   run: go list -json -m all | docker run --rm -i sonatypecommunity/nancy:latest sleuth
+      #
+      # ── ALTERNATIVE: osv-scanner ─────────────────────────────────
+      # - name: SCA — osv-scanner
+      #   uses: google/osv-scanner-action@v1
+      #   with:
+      #     scan-args: --lockfile=go.sum""",
+'java': """      #
+      # ── ALTERNATIVE: Gradle OWASP ────────────────────────────────
+      # - name: SCA — Gradle dependencyCheckAnalyze
+      #   run: ./gradlew dependencyCheckAnalyze
+      #
+      # ── ALTERNATIVE: Snyk (requires SNYK_TOKEN secret) ───────────
+      # - name: SCA — Snyk Maven
+      #   uses: snyk/actions/maven@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}""",
+'kotlin': """      #
+      # ── ALTERNATIVE: Snyk (requires SNYK_TOKEN secret) ───────────
+      # - name: SCA — Snyk Gradle
+      #   uses: snyk/actions/gradle@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}""",
+'dotnet': """      #
+      # ── ALTERNATIVE: OWASP Dependency-Check ──────────────────────
+      # - name: SCA — OWASP Dependency-Check
+      #   uses: dependency-check/Dependency-Check_Action@main
+      #   with:
+      #     project: 'my-project'
+      #     path: '.'
+      #     format: 'JSON'
+      #     args: '--failOnCVSS 7'
+      #
+      # ── ALTERNATIVE: Snyk (requires SNYK_TOKEN secret) ───────────
+      # - name: SCA — Snyk .NET
+      #   uses: snyk/actions/dotnet@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}""",
+'rust': """      #
+      # ── ALTERNATIVE: cargo deny ──────────────────────────────────
+      # - name: SCA — cargo deny
+      #   uses: EmbarkStudios/cargo-deny-action@v1
+      #   with:
+      #     command: check advisories""",
+'ruby': """      #
+      # ── ALTERNATIVE: Snyk (requires SNYK_TOKEN secret) ───────────
+      # - name: SCA — Snyk Ruby
+      #   uses: snyk/actions/ruby@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}""",
+'php': """      #
+      # ── ALTERNATIVE: local-php-security-checker ──────────────────
+      # - name: SCA — local-php-security-checker
+      #   run: |
+      #     curl -L https://github.com/fabpot/local-php-security-checker/releases/download/v2.0.6/local-php-security-checker_linux_amd64 -o security-checker
+      #     chmod +x security-checker && ./security-checker security:check composer.lock""",
+'swift': """      #
+      # ── ALTERNATIVE: Snyk (requires SNYK_TOKEN secret) ───────────
+      # - name: SCA — Snyk Swift
+      #   uses: snyk/actions/swift@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}""",
+'elixir': """      #
+      # ── ALTERNATIVE: mix hex.audit ───────────────────────────────
+      # - name: SCA — mix hex.audit
+      #   run: mix hex.audit""",
+}
+SCA_ALTS['scala'] = SCA_ALTS['java']
+SCA_ALTS['clojure'] = SCA_ALTS['java']
+SCA_ALTS['cpp'] = SCA_ALTS['rust']
+SCA_ALTS['deno'] = SCA_ALTS['rust']
+SCA_ALTS['bun'] = SCA_ALTS['nodejs']
+SCA_ALTS['dart'] = ''
 
-      - name: Build and push — FIPS image
-        run: |
-          docker buildx build --platform linux/amd64 \\
-            --push --target runtime-fips \\
-            -t $REGISTRY/$IMAGE_NAME:${{{{ github.sha }}}}-fips \\
-            .
-          # FIPS runtime: {fips_rt}""" if has_fips else ""
+# ─── SAST ALTERNATIVES per ecosystem ────────────────────────────────────────
 
+SAST_ALTS = {
+'nodejs': """      #
+      # ── ALTERNATIVE: NodeJsScan ──────────────────────────────────
+      # - name: SAST — NodeJsScan
+      #   uses: ajinabraham/njsscan-action@master
+      #   with:
+      #     args: '. --sarif --output njsscan.sarif'
+      # - name: Upload NodeJsScan SARIF
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: njsscan.sarif
+      #
+      # ── ALTERNATIVE: ESLint security ─────────────────────────────
+      # - name: SAST — ESLint security plugin
+      #   run: |
+      #     npm install --save-dev eslint-plugin-security
+      #     npx eslint --plugin security .""",
+'python': """      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto
+      #
+      # ── ALTERNATIVE: Pylint security ─────────────────────────────
+      # - name: SAST — Pylint
+      #   run: pip install pylint && pylint --disable=all --enable=W0611,W0612 . || true""",
+'go': """      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto
+      #
+      # ── ALTERNATIVE: staticcheck ──────────────────────────────────
+      # - name: SAST — staticcheck
+      #   uses: dominikh/staticcheck-action@v1.3.0""",
+'java': """      #
+      # ── ALTERNATIVE: SpotBugs / Find Security Bugs ────────────────
+      # - name: SAST — SpotBugs
+      #   run: mvn spotbugs:check -Dspotbugs.plugins=com.h3xstream.findsecbugs:findsecbugs-plugin:1.13.0
+      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto""",
+'kotlin': """      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto
+      #
+      # ── ALTERNATIVE: Android Lint ────────────────────────────────
+      # - name: SAST — Android Lint
+      #   run: ./gradlew lint""",
+'dotnet': """      #
+      # ── ALTERNATIVE: Security Code Scan ──────────────────────────
+      # - name: SAST — Security Code Scan
+      #   run: dotnet add package SecurityCodeScan.VS2019 && dotnet build --configuration Release
+      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto""",
+'rust': """      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto
+      #
+      # ── ALTERNATIVE: cargo-geiger (unsafe code detector) ─────────
+      # - name: SAST — cargo-geiger
+      #   run: cargo install cargo-geiger && cargo geiger 2>&1 || true""",
+'ruby': """      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto
+      #
+      # ── ALTERNATIVE: RuboCop security ────────────────────────────
+      # - name: SAST — RuboCop
+      #   run: gem install rubocop rubocop-rails && rubocop --only Security""",
+'php': """      #
+      # ── ALTERNATIVE: PHPStan ─────────────────────────────────────
+      # - name: SAST — PHPStan
+      #   run: vendor/bin/phpstan analyse --level max src/
+      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto""",
+'swift': """      #
+      # ── ALTERNATIVE: SwiftLint ────────────────────────────────────
+      # - name: SAST — SwiftLint
+      #   run: brew install swiftlint && swiftlint --strict
+      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto""",
+'elixir': """      #
+      # ── ALTERNATIVE: Credo ───────────────────────────────────────
+      # - name: SAST — Credo
+      #   run: mix credo --strict
+      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto""",
+'cpp': """      #
+      # ── ALTERNATIVE: clang-tidy ───────────────────────────────────
+      # - name: SAST — clang-tidy
+      #   run: run-clang-tidy -p build src/**/*.cpp
+      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto""",
+}
+SAST_ALTS['scala'] = SAST_ALTS['java']
+SAST_ALTS['clojure'] = SAST_ALTS['java']
+for k in ['deno', 'bun', 'dart']:
+    SAST_ALTS[k] = SAST_ALTS['nodejs']
+
+# ─── UNIVERSAL ALTERNATIVES ──────────────────────────────────────────────────
+
+REGISTRY_ALTS = """      #
+      # ── ALTERNATIVE: AWS ECR (OIDC) ──────────────────────────────
+      # Requires: AWS_ACCOUNT_ID secret + OIDC role with ECR push
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-ecr
+      #     aws-region: us-east-1
+      # - name: Login to ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v2
+      # # env override: REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #
+      # ── ALTERNATIVE: GCP Artifact Registry (Workload Identity) ───
+      # Requires: WORKLOAD_IDENTITY_PROVIDER + GCP_SERVICE_ACCOUNT secrets
+      # - name: Authenticate to GCP
+      #   id: auth
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      #     service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      # - name: Login to Artifact Registry
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ${{ secrets.GCP_REGION }}-docker.pkg.dev
+      #     username: oauth2accesstoken
+      #     password: ${{ steps.auth.outputs.access_token }}
+      # # env override: REGISTRY: ${{ secrets.GCP_REGION }}-docker.pkg.dev
+      #
+      # ── ALTERNATIVE: Azure ACR (OIDC) ────────────────────────────
+      # Requires: AZURE_CLIENT_ID + AZURE_TENANT_ID + AZURE_SUBSCRIPTION_ID + ACR_NAME
+      # - name: Login to Azure
+      #   uses: azure/login@v2
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      # - name: Login to ACR
+      #   run: az acr login --name ${{ secrets.ACR_NAME }}
+      # # env override: REGISTRY: ${{ secrets.ACR_NAME }}.azurecr.io
+      #
+      # ── ALTERNATIVE: Red Hat Quay.io ──────────────────────────────
+      # Requires: QUAY_USERNAME + QUAY_PASSWORD secrets
+      # - name: Login to Quay.io
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: quay.io
+      #     username: ${{ secrets.QUAY_USERNAME }}
+      #     password: ${{ secrets.QUAY_PASSWORD }}
+      # # env override: REGISTRY: quay.io
+      #
+      # ── ALTERNATIVE: Docker Hub ───────────────────────────────────
+      # Requires: DOCKERHUB_USERNAME + DOCKERHUB_TOKEN secrets
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # # env override: REGISTRY: docker.io"""
+
+CONTAINER_SCAN_ALTS = """      #
+      # ── ALTERNATIVE: Grype ───────────────────────────────────────
+      # - name: Container scan — Grype
+      #   uses: anchore/scan-action@v3
+      #   with:
+      #     image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+      #     fail-build: 'true'
+      #     severity-cutoff: high
+      #     output-format: sarif
+      # - name: Upload Grype SARIF
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: results.sarif
+      #
+      # ── ALTERNATIVE: Snyk Container (requires SNYK_TOKEN) ────────
+      # - name: Container scan — Snyk
+      #   uses: snyk/actions/docker@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      #   with:
+      #     image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+      #     args: --severity-threshold=high --sarif-file-output=snyk.sarif
+      # - name: Upload Snyk SARIF
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: snyk.sarif
+      #
+      # ── ALTERNATIVE: Docker Scout ─────────────────────────────────
+      # Requires: DOCKER_SCOUT_HUB_USER + DOCKER_SCOUT_HUB_PASSWORD secrets
+      # - name: Container scan — Docker Scout
+      #   uses: docker/scout-action@v1
+      #   with:
+      #     command: cves
+      #     image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+      #     only-severities: critical,high
+      #     exit-code: true"""
+
+IAC_ALTS = """      #
+      # ── ALTERNATIVE: KICS ────────────────────────────────────────
+      # - name: IAC scan — KICS
+      #   uses: checkmarx/kics-github-action@v2
+      #   with:
+      #     path: '.'
+      #     output_formats: 'sarif'
+      #     output_path: 'kics-results.sarif'
+      #     fail_on: high
+      # - name: Upload KICS SARIF
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: kics-results.sarif
+      #
+      # ── ALTERNATIVE: Trivy config scan ───────────────────────────
+      # - name: IAC scan — Trivy config
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     scan-type: config
+      #     scan-ref: .
+      #     format: sarif
+      #     output: trivy-iac.sarif
+      # - name: Upload Trivy IAC SARIF
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: trivy-iac.sarif
+      #
+      # ── ALTERNATIVE: tfsec (Terraform-specific) ──────────────────
+      # - name: IAC scan — tfsec
+      #   uses: aquasecurity/tfsec-action@v1.0.0"""
+
+SECRETS_ALTS = """      #
+      # ── ALTERNATIVE: TruffleHog ──────────────────────────────────
+      # - name: Secrets scan — TruffleHog
+      #   uses: trufflesecurity/trufflehog@main
+      #   with:
+      #     path: ./
+      #     base: ${{ github.event.repository.default_branch }}
+      #     head: HEAD
+      #     extra_args: --debug --only-verified
+      #
+      # ── ALTERNATIVE: GitGuardian (requires GITGUARDIAN_API_KEY) ──
+      # - name: Secrets scan — GitGuardian
+      #   uses: GitGuardian/ggshield-action@v1
+      #   env:
+      #     GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+      #   with:
+      #     args: secret scan ci"""
+
+BUILD_ALTS = {
+'nodejs': """      #
+      # ── ALTERNATIVE: yarn ────────────────────────────────────────
+      # - name: Build — yarn
+      #   run: yarn install --frozen-lockfile && yarn build
+      #
+      # ── ALTERNATIVE: pnpm ────────────────────────────────────────
+      # - name: Build — pnpm
+      #   run: pnpm install --frozen-lockfile && pnpm build
+      #
+      # ── ALTERNATIVE: bun ─────────────────────────────────────────
+      # - name: Build — bun
+      #   run: bun install --frozen-lockfile && bun run build""",
+'java': """      #
+      # ── ALTERNATIVE: Gradle ──────────────────────────────────────
+      # - name: Build — Gradle
+      #   run: ./gradlew build -x test""",
+'python': """      #
+      # ── ALTERNATIVE: poetry ──────────────────────────────────────
+      # - name: Build — poetry
+      #   run: pip install poetry && poetry install --no-dev
+      #
+      # ── ALTERNATIVE: uv ──────────────────────────────────────────
+      # - name: Build — uv
+      #   run: pip install uv && uv pip install -r requirements.txt""",
+'mobile-js': """      #
+      # ── ALTERNATIVE: Expo EAS Build ──────────────────────────────
+      # - name: Build — Expo EAS
+      #   run: npx eas-cli build --profile preview --platform android --non-interactive
+      #
+      # ── ALTERNATIVE: Ionic ───────────────────────────────────────
+      # - name: Build — Ionic
+      #   run: npx ionic build --prod""",
+'flutter': """      #
+      # ── ALTERNATIVE: flutter build ios ───────────────────────────
+      # - name: Build — flutter iOS
+      #   run: flutter build ios --release --no-codesign
+      #
+      # ── ALTERNATIVE: App Bundle (AAB) ────────────────────────────
+      # - name: Build — flutter appbundle
+      #   run: flutter build appbundle --release""",
+'android-native': """      #
+      # ── ALTERNATIVE: AAB (App Bundle) ────────────────────────────
+      # - name: Build — gradle bundleRelease
+      #   run: ./gradlew bundleRelease""",
+'edge': """      #
+      # ── ALTERNATIVE: Wrangler (Cloudflare) ───────────────────────
+      # - name: Build — Wrangler
+      #   run: npx wrangler build
+      #
+      # ── ALTERNATIVE: Vercel ──────────────────────────────────────
+      # - name: Build — Vercel
+      #   run: npx vercel build --prod""",
+}
+BUILD_ALTS['kotlin'] = BUILD_ALTS['java']
+BUILD_ALTS['scala'] = BUILD_ALTS['java']
+BUILD_ALTS['clojure'] = BUILD_ALTS['java']
+
+def sca_alt(fw):
+    e = LANG[fw['lang']].get('eco', 'nodejs')
+    return SCA_ALTS.get(e, '')
+
+def sast_alt(fw):
+    e = LANG[fw['lang']].get('eco', 'nodejs')
+    return SAST_ALTS.get(e, '')
+
+def build_alt(fw):
+    e = LANG[fw['lang']].get('eco', 'nodejs')
+    return BUILD_ALTS.get(e, '')
+
+# ─── STAGE GENERATORS ────────────────────────────────────────────────────────
+
+def s01_pre_commit(fw):
     return f"""\
-# ─────────────────────────────────────────────────────────────────────────
-# Pipeline: {cat} — {name} {ver}
-# Pattern:  Multi-stage Docker (build image: ubuntu:24.04, runtime: {runtime})
-# Copy to:  .github/workflows/ci.yml in your {name} project repo
-#
-# Requirements: Dockerfile with --target runtime (and optionally --target runtime-fips)
-# Secrets needed: none for GHCR  |  AWS_ACCOUNT_ID for ECR  |  see Registry section
-# ─────────────────────────────────────────────────────────────────────────
+# ════════════════════════════════════════════════════════════════════
+# Stage 01 — Pre-Commit  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Runs on: every push and pull_request to main
+# Purpose: fast code-quality gates before all other stages
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
 
-name: CI — {name} {ver}
+name: "01 Pre-Commit — {fw['name']} {fw['ver']}"
 
 on:
   push:
@@ -501,17 +627,9 @@ on:
 
 permissions:
   contents: read
-  id-token: write        # OIDC — keyless cosign signing + registry auth
-  packages: write        # GHCR push
-  security-events: write # CodeQL / Trivy SARIF upload
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{{{ github.repository }}}}
 
 jobs:
 
-  # ── Phase 1 — pre-commit (every push / PR) ─────────────────────────────
   pre-commit:
     runs-on: ubuntu-24.04
     steps:
@@ -519,32 +637,90 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      # ── DEFAULT: pre-commit framework ────────────────────────────
       - uses: pre-commit/action@v3.0.1
+      #
+      # ── ALTERNATIVE: commitlint (commit message format) ──────────
+      # - name: Lint commit messages
+      #   uses: wagoid/commitlint-github-action@v6
+      #
+      # ── ALTERNATIVE: super-linter ────────────────────────────────
+      # - name: Super-Linter
+      #   uses: super-linter/super-linter@v7
+      #   env:
+      #     GITHUB_TOKEN: ${{{{ secrets.GITHUB_TOKEN }}}}
+"""
 
-  # ── Phase 2 — security gates (parallel, on every PR push) ──────────────
+def s02_security_gates(fw):
+    lang = LANG[fw['lang']]
+    sca_name = lang['sca_name']
+    sca_cmd = lang['sca_cmd']
+    sca_a = sca_alt(fw)
+
+    sast_custom = lang.get('sast_cmd')
+    sast_primary_name = lang.get('sast_name', 'Semgrep')
+    sast_a = sast_alt(fw)
+
+    if sast_custom:
+        sast_primary = f"""      # ── DEFAULT: {sast_primary_name} ─────────────────────────────────────
+      - name: SAST — {sast_primary_name}
+        run: {sast_custom}
+      #
+      # ── ALTERNATIVE: Semgrep (language-agnostic) ─────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto"""
+    else:
+        sast_primary = f"""      # ── DEFAULT: Semgrep ─────────────────────────────────────────
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto"""
+
+    return f"""\
+# ════════════════════════════════════════════════════════════════════
+# Stage 02 — Security Gates  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Jobs: sca  sast  codeql  license-scan  iac-scan  secrets-scan
+# All jobs run in PARALLEL — no ordering dependency between them.
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "02 Security Gates — {fw['name']} {fw['ver']}"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write  # SARIF upload to GitHub Security tab
+
+jobs:
+
+  # ── SCA: Software Composition Analysis (dependency vulnerabilities) ──
   sca:
     runs-on: ubuntu-24.04
-    needs: pre-commit
     steps:
 {lang['setup']}
       - uses: actions/checkout@v4
-      - name: SCA — dependency audit
-        run: |
-          {lang['sca']}
+      # ── DEFAULT: {sca_name} ──────────────────────────────────────
+      - name: SCA — {sca_name}
+        run: {sca_cmd}
+{sca_a}
 
+  # ── SAST: Static Application Security Testing (code-level bugs) ─────
   sast:
     runs-on: ubuntu-24.04
-    needs: pre-commit
     steps:
       - uses: actions/checkout@v4
-      - uses: returntocorp/semgrep-action@v1
-        with:
-          config: auto
-        # alternatives: see issue template for language-specific SAST tools
+{sast_primary}
+{sast_a}
 
+  # ── CodeQL (GitHub-native SAST + dataflow analysis) ─────────────────
   codeql:
     runs-on: ubuntu-24.04
-    needs: pre-commit
     steps:
       - uses: actions/checkout@v4
       - uses: github/codeql-action/init@v3
@@ -553,83 +729,171 @@ jobs:
       - uses: github/codeql-action/autobuild@v3
       - uses: github/codeql-action/analyze@v3
 
+  # ── License scan (detect copyleft licenses in dependencies) ─────────
   license-scan:
     runs-on: ubuntu-24.04
-    needs: pre-commit
     steps:
 {lang['setup']}
       - uses: actions/checkout@v4
       - name: License check
-        run: |
-          {lang['license']}
+        run: {lang['license_cmd']}
+      #
+      # ── ALTERNATIVE: FOSSA (commercial, full license intelligence) ─
+      # - name: License scan — FOSSA
+      #   uses: fossas/fossa-action@main
+      #   with:
+      #     api-key: ${{{{ secrets.FOSSA_API_KEY }}}}
 
+  # ── IAC scan (Infrastructure as Code misconfigurations) ─────────────
   iac-scan:
     runs-on: ubuntu-24.04
-    needs: pre-commit
     steps:
       - uses: actions/checkout@v4
+      # ── DEFAULT: Checkov ─────────────────────────────────────────
       - uses: bridgecrewio/checkov-action@v12
         with:
           directory: .
-          soft_fail: true   # set to false on main-branch job
-        # alternatives: KICS | trivy config .
+          soft_fail: true  # REPLACE: false to hard-fail on violations
+{IAC_ALTS}
 
+  # ── Secrets scan (leaked credentials and API keys) ───────────────────
   secrets-scan:
     runs-on: ubuntu-24.04
-    needs: pre-commit
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # full history required for Gitleaks delta scan
+      # ── DEFAULT: Gitleaks ─────────────────────────────────────────
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{{{ secrets.GITHUB_TOKEN }}}}
-        # alternatives: trufflehog | GitGuardian ggshield
+{SECRETS_ALTS}
+"""
 
-  # ── PR build + container scan (PR only, no push to registry) ───────────
+def s03_build_pr(fw):
+    fips_rt = fw.get('fips_rt', 'N/A')
+    has_fips = fips_rt not in ('N/A', '', None)
+    return f"""\
+# ════════════════════════════════════════════════════════════════════
+# Stage 03 — PR Build + Container Scan  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Runs on: pull_request to main ONLY — no image push to registry
+# Requires: Dockerfile in repo root with --target runtime stage
+# Runtime image: {fw['runtime']}
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "03 PR Build + Scan — {fw['name']} {fw['ver']}"
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write        # needed for GHCR --load (even without push)
+  security-events: write # SARIF upload
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{{{ github.repository }}}}  # REPLACE: your-org/your-image-name
+
+jobs:
+
   build-pr:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
-    needs: [sca, sast, codeql, license-scan, iac-scan, secrets-scan]
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build image (no push)
+      - name: Build image (no push — PR validation only)
         run: |
           docker build --platform linux/amd64 \\
             --target runtime \\
             -t $REGISTRY/$IMAGE_NAME:pr-${{{{ github.sha }}}} \\
             --load .
 
-      - name: SBOM — PR stage
+      - name: Generate SBOM (PR build)
         uses: anchore/syft-action@v1
         with:
           image: ${{{{ env.REGISTRY }}}}/${{{{ env.IMAGE_NAME }}}}:pr-${{{{ github.sha }}}}
           output-file: sbom-pr.spdx.json
 
+      # ── DEFAULT: Trivy container scan ─────────────────────────────
       - name: Container scan — Trivy
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{{{ env.REGISTRY }}}}/${{{{ env.IMAGE_NAME }}}}:pr-${{{{ github.sha }}}}
           format: sarif
-          output: trivy-results.sarif
+          output: trivy-pr.sarif
           exit-code: '1'
           severity: HIGH,CRITICAL
-        # alternatives: grype | snyk container test | docker scout cves
-
       - name: Upload Trivy SARIF
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: trivy-results.sarif
+          sarif_file: trivy-pr.sarif
+{CONTAINER_SCAN_ALTS}
+"""
 
-  # ── Phase 3 — main build: sign, SBOM, SLSA, test, DAST (main only) ────
+def s04_build_push_sign(fw):
+    fips_rt = fw.get('fips_rt', 'N/A')
+    has_fips = fips_rt not in ('N/A', '', None)
+    lang = LANG[fw['lang']]
+    build_cmd = lang['build_cmd']
+    b_alt = build_alt(fw)
+
+    fips_block = ""
+    if has_fips:
+        fips_block = f"""
+      - name: Build and push — FIPS image (--target runtime-fips)
+        run: |
+          docker buildx build --platform linux/amd64 \\
+            --push --target runtime-fips \\
+            -t $REGISTRY/$IMAGE_NAME:${{{{ github.sha }}}}-fips \\
+            .
+          # FIPS runtime: {fips_rt}"""
+
+    return f"""\
+# ════════════════════════════════════════════════════════════════════
+# Stage 04 — Build / Push / Sign + SLSA  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Runs on: push to main ONLY
+# Pushes to: GHCR (default) — see ALTERNATIVE registry blocks below
+# Runtime image: {fw['runtime']}
+# FIPS image:    {fips_rt if has_fips else 'N/A — no FIPS variant for this framework'}
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "04 Build Push Sign — {fw['name']} {fw['ver']}"
+
+on:
+  push:
+    branches: [main]
+
+# ── Required secrets ──────────────────────────────────────────────
+# GHCR (default):  none — uses GITHUB_TOKEN automatically
+# ECR:             AWS_ACCOUNT_ID + OIDC role with ECR push
+# GCP AR:          WORKLOAD_IDENTITY_PROVIDER + GCP_SERVICE_ACCOUNT
+# ACR:             AZURE_CLIENT_ID + AZURE_TENANT_ID + AZURE_SUBSCRIPTION_ID + ACR_NAME
+# Quay.io:         QUAY_USERNAME + QUAY_PASSWORD
+# Docker Hub:      DOCKERHUB_USERNAME + DOCKERHUB_TOKEN
+# Snyk (optional): SNYK_TOKEN
+# ─────────────────────────────────────────────────────────────────
+
+permissions:
+  contents: read
+  id-token: write        # OIDC for keyless cosign signing + cloud registry auth
+  packages: write        # GHCR push
+  security-events: write # Trivy SARIF upload
+
+env:
+  REGISTRY: ghcr.io                        # REPLACE: swap to ECR/GCP/ACR below
+  IMAGE_NAME: ${{{{ github.repository }}}}     # REPLACE: your-org/your-image-name
+
+jobs:
+
   build-push-sign:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
-    needs: [sca, sast, codeql, license-scan, iac-scan, secrets-scan]
     outputs:
       image-digest: ${{{{ steps.push.outputs.digest }}}}
     steps:
@@ -638,23 +902,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # ── DEFAULT: Log in to GHCR ───────────────────────────────────
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{{{ env.REGISTRY }}}}
           username: ${{{{ github.actor }}}}
           password: ${{{{ secrets.GITHUB_TOKEN }}}}
-        # For ECR: use aws-actions/amazon-ecr-login with OIDC (no stored credentials)
-        # For GCP AR: use google-github-actions/auth + docker/login-action
-        # For ACR: use azure/login + docker/login-action
+{REGISTRY_ALTS}
 
 {lang['setup']}
 
+      # ── DEFAULT: {build_cmd.split()[0]} build ──────────────────────
       - name: App build
-        run: |
-          {lang['build']}
+        run: {build_cmd}
+{b_alt}
 
-      - name: Build and push — standard image
+      - name: Build and push — standard image (--target runtime)
         id: push
         run: |
           docker buildx build --platform linux/amd64 \\
@@ -664,34 +928,42 @@ jobs:
             .
 {fips_block}
 
-      - name: Container scan — registry image (post-push)
+      # ── DEFAULT: Trivy post-push scan ─────────────────────────────
+      - name: Container scan — Trivy (post-push)
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{{{ env.REGISTRY }}}}/${{{{ env.IMAGE_NAME }}}}:${{{{ github.sha }}}}
           exit-code: '1'
           severity: HIGH,CRITICAL
+          format: sarif
+          output: trivy-main.sarif
+      - name: Upload Trivy SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-main.sarif
+{CONTAINER_SCAN_ALTS}
 
       - name: Install cosign
         uses: sigstore/cosign-installer@v3
 
-      - name: Sign image (keyless OIDC)
-        run: |
-          cosign sign --yes \\
-            $REGISTRY/$IMAGE_NAME@${{{{ steps.push.outputs.digest }}}}
+      - name: Sign image (keyless OIDC — no stored private key)
+        run: cosign sign --yes $REGISTRY/$IMAGE_NAME@${{{{ steps.push.outputs.digest }}}}
 
-      - name: Generate SBOM + attest
+      - name: Generate SBOM
         uses: anchore/syft-action@v1
         with:
           image: ${{{{ env.REGISTRY }}}}/${{{{ env.IMAGE_NAME }}}}:${{{{ github.sha }}}}
           output-file: sbom.spdx.json
-      - run: |
+
+      - name: Attest SBOM to image
+        run: |
           cosign attest --yes \\
             --predicate sbom.spdx.json \\
             $REGISTRY/$IMAGE_NAME@${{{{ steps.push.outputs.digest }}}}
 
+  # ── SLSA Level 3 provenance (needs image digest from build-push-sign) ─
   slsa-provenance:
     needs: build-push-sign
-    if: github.ref == 'refs/heads/main'
     permissions:
       actions: read
       id-token: write
@@ -704,101 +976,29 @@ jobs:
       registry-username: ${{{{ github.actor }}}}
       registry-password: ${{{{ secrets.GITHUB_TOKEN }}}}
 
-  test:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-24.04
-    needs: pre-commit
-    steps:
-{lang['setup']}
-      - uses: actions/checkout@v4
-      - name: Run tests
-        run: |
-          {lang['test']}
-      - uses: codecov/codecov-action@v4
-        with:
-          token: ${{{{ secrets.CODECOV_TOKEN }}}}
-
-  release:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-24.04
-    needs: [build-push-sign, test]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Semantic release
-        uses: cycjimmy/semantic-release-action@v4
-        env:
-          GITHUB_TOKEN: ${{{{ secrets.GITHUB_TOKEN }}}}
-
-  notify:
-    if: always() && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-24.04
-    needs: [build-push-sign, test, release]
-    steps:
-      - uses: slackapi/slack-github-action@v1
-        with:
-          payload: |
-            {{
-              "text": "Pipeline ${{{{ job.status }}}}: {name} {ver} — ${{{{ github.sha }}}}"
-            }}
-        env:
-          SLACK_WEBHOOK_URL: ${{{{ secrets.SLACK_WEBHOOK_URL }}}}
-
-# ── Registry reference ────────────────────────────────────────────────────
-# GHCR (default above): uses GITHUB_TOKEN — no extra secrets needed
-#
-# AWS ECR:
-#   - uses: aws-actions/configure-aws-credentials@v4
-#     with: role-to-assume: arn:aws:iam::ACCOUNT:role/GitHubActions
-#   - uses: aws-actions/amazon-ecr-login@v2
-#
-# GCP Artifact Registry:
-#   - uses: google-github-actions/auth@v2
-#     with: workload_identity_provider: projects/PROJECT/locations/global/workloadIdentityPools/...
-#   - uses: docker/login-action@v3
-#     with: registry: REGION-docker.pkg.dev
-#
-# Azure ACR:
-#   - uses: azure/login@v2
-#     with: client-id / tenant-id / subscription-id (OIDC)
-#   - uses: docker/login-action@v3
-#     with: registry: myregistry.azurecr.io
-#
-# Red Hat Quay: registry: quay.io — username/password via secrets
-# Docker Hub:   registry: docker.io — username/password via secrets
-
-# ── Compliance delta reference ─────────────────────────────────────────────
-# FIPS:       use --target runtime-fips; push :$SHA-fips tag (block above)
-# PCI DSS:    trivy --severity CRITICAL --exit-code 1 (already set above)
-# HIPAA:      add PHI scan step: semgrep --config p/hipaa .
-# FedRAMP:    FIPS build required + SLSA Level 3 (both wired above)
-# CMMC:       named reviewers in CODEOWNERS; artifact retention in Actions settings
-# SOC 2:      upload-artifact for all scan results; retention-days: 90
-# SOX:        require 2+ approvers in branch protection; ticket ID in commit message
-# GDPR:       semgrep --config p/pii . — add as parallel job
-# PIPEDA:     semgrep --config p/pii . — ca-central-1 registry region
-# NERC CIP:   vendor all deps; block outbound in build via network policy
-# ISO 27001:  retention-days: 1825 (5 years) on all artifact uploads
+# ── Compliance delta checklist ─────────────────────────────────────
+# FIPS 140-2/3:  use --target runtime-fips (block above, wired for {fips_rt if has_fips else 'N/A'})
+# PCI DSS v4.0:  trivy --severity CRITICAL --exit-code 1 (already set)
+# HIPAA:         add step: semgrep --config p/hipaa .
+# FedRAMP:       FIPS image required + SLSA Level 3 (both above)
+# CMMC Level 2:  add CODEOWNERS; set artifact retention-days: 365
+# SOC 2 Type II: upload-artifact for scan results; retention-days: 90
+# SOX:           2+ approvers in branch protection (GitHub repo settings)
+# GDPR/PIPEDA:   add step: semgrep --config p/pii .
+# NERC CIP:      vendor all deps; add --network none to docker build
+# ISO 27001:     set retention-days: 1825 on all artifact uploads
 """
 
-def workflow_cionly(fw):
+def s05_test(fw):
     lang = LANG[fw['lang']]
-    name = fw['name']
-    ver = fw['ver']
-    cat = fw['cat']
-    artifact = lang.get('artifact', 'artifact')
-
     return f"""\
-# ─────────────────────────────────────────────────────────────────────────
-# Pipeline: {cat} — {name} {ver}
-# Pattern:  CI-only (no Docker — output is {artifact})
-# Copy to:  .github/workflows/ci.yml in your {name} project repo
-#
-# No Dockerfile required. Output artifact uploaded to GitHub Releases.
-# ─────────────────────────────────────────────────────────────────────────
+# ════════════════════════════════════════════════════════════════════
+# Stage 05 — Test  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
 
-name: CI — {name} {ver}
+name: "05 Test — {fw['name']} {fw['ver']}"
 
 on:
   push:
@@ -807,132 +1007,326 @@ on:
     branches: [main]
 
 permissions:
-  contents: write        # create releases
-  id-token: write        # OIDC
-  security-events: write # CodeQL / SARIF upload
+  contents: read
 
 jobs:
 
-  # ── Phase 1 — pre-commit ───────────────────────────────────────────────
-  pre-commit:
+  test:
     runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - uses: pre-commit/action@v3.0.1
-
-  # ── Phase 2 — security gates (parallel) ───────────────────────────────
-  sca:
-    runs-on: ubuntu-24.04
-    needs: pre-commit
     steps:
 {lang['setup']}
       - uses: actions/checkout@v4
-      - name: SCA — dependency audit
-        run: |
-          {lang['sca']}
-
-  sast:
-    runs-on: ubuntu-24.04
-    needs: pre-commit
-    steps:
-      - uses: actions/checkout@v4
-      - uses: returntocorp/semgrep-action@v1
-        with:
-          config: auto
-
-  codeql:
-    runs-on: ubuntu-24.04
-    needs: pre-commit
-    steps:
-      - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
-        with:
-          languages: {lang['codeql_lang']}
-      - uses: github/codeql-action/autobuild@v3
-      - uses: github/codeql-action/analyze@v3
-
-  secrets-scan:
-    runs-on: ubuntu-24.04
-    needs: pre-commit
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{{{ secrets.GITHUB_TOKEN }}}}
-
-  # ── Phase 3 — build artifact + release (main only) ────────────────────
-  build:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-24.04
-    needs: [sca, sast, codeql, secrets-scan]
-    steps:
-      - uses: actions/checkout@v4
-
-{lang['setup']}
-
-      - name: Build — {artifact}
-        run: |
-          {lang['build']}
-
       - name: Run tests
-        run: |
-          {lang['test']}
+        run: {lang['test_cmd']}
 
-      - uses: codecov/codecov-action@v4
+      # ── OPTIONAL: Codecov coverage upload ─────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{{{ secrets.CODECOV_TOKEN }}}}
+
+      # ── OPTIONAL: SonarCloud (requires SONAR_TOKEN secret) ────────
+      # - name: SonarCloud analysis
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{{{ secrets.GITHUB_TOKEN }}}}
+      #     SONAR_TOKEN: ${{{{ secrets.SONAR_TOKEN }}}}
+"""
+
+def s06_release(fw):
+    return f"""\
+# ════════════════════════════════════════════════════════════════════
+# Stage 06 — Release  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Runs on: push to main only
+# Default: semantic-release (reads commit messages for version bump)
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "06 Release — {fw['name']} {fw['ver']}"
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write  # needed to create tags and GitHub releases
+  id-token: write
+  packages: write
+
+jobs:
+
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
         with:
-          token: ${{{{ secrets.CODECOV_TOKEN }}}}
+          fetch-depth: 0  # full history required for semantic-release
 
+      # ── DEFAULT: semantic-release ─────────────────────────────────
       - name: Semantic release
         uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{{{ secrets.GITHUB_TOKEN }}}}
-
-      - name: Notify
-        uses: slackapi/slack-github-action@v1
-        with:
-          payload: |
-            {{
-              "text": "Build ${{{{ job.status }}}}: {name} {ver} — ${{{{ github.sha }}}}"
-            }}
-        env:
-          SLACK_WEBHOOK_URL: ${{{{ secrets.SLACK_WEBHOOK_URL }}}}
-
-# ── Compliance delta reference ─────────────────────────────────────────────
-# PCI DSS:  govulncheck / pip-audit with --exit-code 1 on CRITICAL
-# HIPAA:    semgrep --config p/hipaa . — add as parallel job
-# CMMC:     named reviewers in CODEOWNERS; artifact retention 3 years
-# SOC 2:    upload-artifact for all scan results; retention-days: 90
-# SOX:      require 2+ approvers in branch protection
-# GDPR:     semgrep --config p/pii . — add as parallel job
+      #
+      # ── ALTERNATIVE: Release Please (Google) ─────────────────────
+      # - uses: googleapis/release-please-action@v4
+      #   with:
+      #     release-type: node  # REPLACE: go | python | java | etc.
+      #
+      # ── ALTERNATIVE: GitHub Release (manual tag push) ─────────────
+      # - name: Create GitHub Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     tag: ${{{{ github.ref_name }}}}
+      #     generateReleaseNotes: true
 """
 
-def build_workflow(fw):
-    if fw['pattern'] == 'ci-only':
-        return workflow_cionly(fw)
-    else:
-        return workflow_multistage(fw)
+def s07_notify(fw):
+    return f"""\
+# ════════════════════════════════════════════════════════════════════
+# Stage 07 — Notify  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Triggers after: "04 Build Push Sign — {fw['name']} {fw['ver']}"
+# Runs on: main branch only, on workflow_run completion
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "07 Notify — {fw['name']} {fw['ver']}"
+
+on:
+  workflow_run:
+    # Must exactly match the 'name:' field in 04-build-push-sign.yml
+    workflows: ["04 Build Push Sign — {fw['name']} {fw['ver']}"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+
+  notify:
+    if: github.event.workflow_run.conclusion != 'skipped'
+    runs-on: ubuntu-24.04
+    steps:
+      # ── DEFAULT: Slack ────────────────────────────────────────────
+      - uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {{{{
+              "text": "Pipeline ${{{{ github.event.workflow_run.conclusion }}}}: {fw['name']} {fw['ver']} — ${{{{ github.event.workflow_run.head_sha }}}}"
+            }}}}
+        env:
+          SLACK_WEBHOOK_URL: ${{{{ secrets.SLACK_WEBHOOK_URL }}}}
+      #
+      # ── ALTERNATIVE: Microsoft Teams ──────────────────────────────
+      # - uses: aliencube/microsoft-teams-actions@v0.8.0
+      #   with:
+      #     webhook_uri: ${{{{ secrets.TEAMS_WEBHOOK_URL }}}}
+      #     title: "Pipeline ${{{{ github.event.workflow_run.conclusion }}}}"
+      #     summary: "{fw['name']} {fw['ver']} — ${{{{ github.event.workflow_run.head_sha }}}}"
+      #
+      # ── ALTERNATIVE: PagerDuty (failures only) ────────────────────
+      # - if: github.event.workflow_run.conclusion == 'failure'
+      #   uses: PagerDuty/pagerduty-send-event@v2
+      #   with:
+      #     integration-key: ${{{{ secrets.PAGERDUTY_INTEGRATION_KEY }}}}
+      #     payload-summary: "CI failed: {fw['name']} {fw['ver']}"
+"""
+
+# ─── CI-ONLY STAGE GENERATORS ────────────────────────────────────────────────
+
+def s03_build_artifact(fw):
+    lang = LANG[fw['lang']]
+    artifact = lang.get('artifact', 'artifact')
+    build_cmd = lang['build_cmd']
+    b_alt = build_alt(fw)
+
+    return f"""\
+# ════════════════════════════════════════════════════════════════════
+# Stage 03 — Build Artifact  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Output: {artifact}
+# No Docker image is built — this framework targets mobile/edge platforms.
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "03 Build Artifact — {fw['name']} {fw['ver']}"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+{lang['setup']}
+      - uses: actions/checkout@v4
+      # ── DEFAULT: {build_cmd.split()[0]} build ──────────────────────
+      - name: Build — {build_cmd.split()[0]}
+        run: {build_cmd}
+{b_alt}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: {artifact.lower().replace('/', '-').replace(' ', '-')}
+          path: |
+            build/
+            dist/
+            *.apk
+            *.ipa
+            *.aab
+            *.msix
+          retention-days: 30
+"""
+
+def s04_test_cionly(fw):
+    lang = LANG[fw['lang']]
+    return f"""\
+# ════════════════════════════════════════════════════════════════════
+# Stage 04 — Test  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "04 Test — {fw['name']} {fw['ver']}"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+{lang['setup']}
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: {lang['test_cmd']}
+      # ── OPTIONAL: Codecov ─────────────────────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{{{ secrets.CODECOV_TOKEN }}}}
+"""
+
+def s05_release_notify_cionly(fw):
+    lang = LANG[fw['lang']]
+    artifact = lang.get('artifact', 'artifact')
+    return f"""\
+# ════════════════════════════════════════════════════════════════════
+# Stage 05 — Release + Notify  |  {fw['cat']} — {fw['name']} {fw['ver']}
+# Runs on: push to main only
+# Copy to: .github/workflows/ in your {fw['name']} repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "05 Release Notify — {fw['name']} {fw['ver']}"
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      # ── DEFAULT: semantic-release ─────────────────────────────────
+      - name: Semantic release
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GITHUB_TOKEN: ${{{{ secrets.GITHUB_TOKEN }}}}
+      #
+      # ── ALTERNATIVE: Release Please ───────────────────────────────
+      # - uses: googleapis/release-please-action@v4
+      #   with:
+      #     release-type: node
+
+  notify:
+    needs: release
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      # ── DEFAULT: Slack ────────────────────────────────────────────
+      - uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {{{{
+              "text": "Pipeline ${{{{ job.status }}}}: {fw['name']} {fw['ver']} {artifact} — ${{{{ github.sha }}}}"
+            }}}}
+        env:
+          SLACK_WEBHOOK_URL: ${{{{ secrets.SLACK_WEBHOOK_URL }}}}
+      #
+      # ── ALTERNATIVE: Microsoft Teams ──────────────────────────────
+      # - uses: aliencube/microsoft-teams-actions@v0.8.0
+      #   with:
+      #     webhook_uri: ${{{{ secrets.TEAMS_WEBHOOK_URL }}}}
+      #     title: "Pipeline ${{{{ job.status }}}}"
+      #     summary: "{fw['name']} {fw['ver']} — ${{{{ github.sha }}}}"
+"""
+
+# ─── MAIN ────────────────────────────────────────────────────────────────────
 
 def main():
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    repo_root = os.path.dirname(script_dir)
-    out_dir = os.path.join(repo_root, 'workflow-templates')
-    os.makedirs(out_dir, exist_ok=True)
+    # Remove old flat yml files first
+    import glob
+    for f in glob.glob(f"{OUT}/*.yml"):
+        os.remove(f)
 
-    count = 0
+    total_dirs = 0
+    total_files = 0
+
     for fw in FRAMEWORKS:
-        content = build_workflow(fw)
-        filename = f"{fw['slug']}.yml"
-        filepath = os.path.join(out_dir, filename)
-        with open(filepath, 'w') as f:
-            f.write(content)
-        count += 1
+        folder = f"{OUT}/{fw['slug']}"
+        os.makedirs(folder, exist_ok=True)
+        total_dirs += 1
 
-    print(f"Generated {count} workflow templates → {out_dir}")
+        if fw['pattern'] == 'multi-stage':
+            stages = [
+                ('01-pre-commit.yml',      s01_pre_commit(fw)),
+                ('02-security-gates.yml',  s02_security_gates(fw)),
+                ('03-build-pr.yml',        s03_build_pr(fw)),
+                ('04-build-push-sign.yml', s04_build_push_sign(fw)),
+                ('05-test.yml',            s05_test(fw)),
+                ('06-release.yml',         s06_release(fw)),
+                ('07-notify.yml',          s07_notify(fw)),
+            ]
+        else:
+            stages = [
+                ('01-pre-commit.yml',          s01_pre_commit(fw)),
+                ('02-security-gates.yml',      s02_security_gates(fw)),
+                ('03-build-artifact.yml',      s03_build_artifact(fw)),
+                ('04-test.yml',                s04_test_cionly(fw)),
+                ('05-release-notify.yml',      s05_release_notify_cionly(fw)),
+            ]
+
+        for fname, content in stages:
+            fpath = f"{folder}/{fname}"
+            with open(fpath, 'w') as f:
+                f.write(content)
+            total_files += 1
+
+        pattern_label = '7 stages' if fw['pattern'] == 'multi-stage' else '5 stages'
+        print(f"  ✓ {folder}/  ({pattern_label})")
+
+    print(f"\nGenerated {total_dirs} framework folders, {total_files} YAML files")
+    print(f"Output: {OUT}/")
 
 if __name__ == '__main__':
     main()

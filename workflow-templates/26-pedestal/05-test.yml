@@ -1,0 +1,44 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 05 — Test  |  26 Clojure — Pedestal 0.7
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Pedestal repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "05 Test — Pedestal 0.7"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - uses: DeLaGuardo/setup-clojure@13
+        with:
+          lein: '2.11'
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: lein test
+
+      # ── OPTIONAL: Codecov coverage upload ─────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+
+      # ── OPTIONAL: SonarCloud (requires SONAR_TOKEN secret) ────────
+      # - name: SonarCloud analysis
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
