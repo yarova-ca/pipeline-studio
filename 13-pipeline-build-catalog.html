@@ -388,6 +388,131 @@ code.ic{background:var(--bg3);border:1px solid var(--border);border-radius:3px;p
       <p style="margin-top:10px"><strong>CI-only frameworks (13):</strong> React Native, Expo, Ionic, Flutter, .NET MAUI, Kotlin Multiplatform, Swift/SwiftUI, Objective-C, Kotlin Jetpack Compose, Java Android SDK, Next.js Edge, Hono Edge, Remix Cloudflare — no Dockerfile, no ENV instructions needed. Output is APK / IPA / edge bundle.</p>
     </div>
   </details>
+  <details>
+    <summary><span class="sum-label">Tool alternatives — all stages, all language families</span></summary>
+    <div class="expand-content">
+      <p><strong>Pick one tool per stage.</strong> All options listed. Commands are copy-pasteable. CodeQL requires GitHub Actions — shown as workflow step.</p>
+
+      <h4 style="margin:14px 0 6px">Dockerfile lint (Phase 1 — all dockerized frameworks)</h4>
+      <table class="xref-table" style="font-size:11px">
+        <thead><tr><th>Tool</th><th>Command</th><th>What it catches</th></tr></thead>
+        <tbody>
+          <tr><td><strong>hadolint</strong></td><td><code class="ic">hadolint Dockerfile</code></td><td>Dockerfile best practices, shell script issues in RUN</td></tr>
+          <tr><td><strong>checkov</strong></td><td><code class="ic">checkov -d . --framework dockerfile</code></td><td>Security misconfigs: root user, ADD vs COPY, exposed secrets</td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="margin:14px 0 6px">Secret scan (Phase 1 — all frameworks)</h4>
+      <table class="xref-table" style="font-size:11px">
+        <thead><tr><th>Tool</th><th>Command</th><th>What it catches</th></tr></thead>
+        <tbody>
+          <tr><td><strong>gitleaks</strong></td><td><code class="ic">gitleaks detect --staged</code></td><td>Secrets in staged files before commit</td></tr>
+          <tr><td><strong>trufflehog</strong></td><td><code class="ic">trufflehog git file://. --only-verified</code></td><td>Verified secrets in git history</td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="margin:14px 0 6px">SCA — Dependency audit (Phase 1 + Phase 2)</h4>
+      <table class="xref-table" style="font-size:11px">
+        <thead><tr><th>Tool</th><th>Language family</th><th>Command</th></tr></thead>
+        <tbody>
+          <tr><td><strong>npm audit</strong></td><td>Node.js (npm)</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+          <tr><td><strong>yarn audit</strong></td><td>Node.js (yarn)</td><td><code class="ic">yarn audit --level high</code></td></tr>
+          <tr><td><strong>pnpm audit</strong></td><td>Node.js (pnpm)</td><td><code class="ic">pnpm audit --audit-level high</code></td></tr>
+          <tr><td><strong>deno audit</strong></td><td>Deno</td><td><code class="ic">deno audit</code></td></tr>
+          <tr><td><strong>bun audit</strong></td><td>Bun</td><td><code class="ic">bun audit</code></td></tr>
+          <tr><td><strong>pip-audit</strong></td><td>Python</td><td><code class="ic">pip-audit --vulnerability-service pypi</code></td></tr>
+          <tr><td><strong>safety</strong></td><td>Python</td><td><code class="ic">safety check --json &gt; safety.json</code></td></tr>
+          <tr><td><strong>govulncheck</strong></td><td>Go</td><td><code class="ic">govulncheck ./...</code></td></tr>
+          <tr><td><strong>nancy</strong></td><td>Go</td><td><code class="ic">go list -json -m all | nancy sleuth</code></td></tr>
+          <tr><td><strong>mvn OWASP</strong></td><td>Java (Maven)</td><td><code class="ic">mvn org.owasp:dependency-check-maven:check</code></td></tr>
+          <tr><td><strong>gradle OWASP</strong></td><td>Java/Kotlin (Gradle)</td><td><code class="ic">./gradlew dependencyCheckAnalyze</code></td></tr>
+          <tr><td><strong>dotnet vuln</strong></td><td>.NET</td><td><code class="ic">dotnet list package --vulnerable --include-transitive</code></td></tr>
+          <tr><td><strong>cargo audit</strong></td><td>Rust</td><td><code class="ic">cargo audit --json &gt; cargo-audit.json</code></td></tr>
+          <tr><td><strong>cargo deny</strong></td><td>Rust</td><td><code class="ic">cargo deny check advisories</code></td></tr>
+          <tr><td><strong>mix audit</strong></td><td>Elixir</td><td><code class="ic">mix audit</code></td></tr>
+          <tr><td><strong>bundle audit</strong></td><td>Ruby</td><td><code class="ic">bundle audit check --update</code></td></tr>
+          <tr><td><strong>composer audit</strong></td><td>PHP</td><td><code class="ic">composer audit --format=json</code></td></tr>
+          <tr><td><strong>swift package audit</strong></td><td>Swift</td><td><code class="ic">swift package audit</code></td></tr>
+          <tr><td><strong>sbt dependencyCheck</strong></td><td>Scala</td><td><code class="ic">sbt dependencyCheck</code></td></tr>
+          <tr><td><strong>lein nvd</strong></td><td>Clojure</td><td><code class="ic">lein nvd check</code></td></tr>
+          <tr><td><strong>vcpkg</strong></td><td>C/C++</td><td><code class="ic">vcpkg x-check-support-status</code></td></tr>
+          <tr><td><strong>osv-scanner</strong></td><td>All (lockfile-based)</td><td><code class="ic">osv-scanner --recursive .</code></td></tr>
+          <tr><td><strong>snyk</strong></td><td>All</td><td><code class="ic">snyk test --severity-threshold=high</code></td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="margin:14px 0 6px">SAST — Static analysis (Phase 2)</h4>
+      <table class="xref-table" style="font-size:11px">
+        <thead><tr><th>Tool</th><th>Language family</th><th>Command / Step</th></tr></thead>
+        <tbody>
+          <tr><td><strong>semgrep</strong></td><td>All</td><td><code class="ic">semgrep --config=auto .</code></td></tr>
+          <tr><td><strong>CodeQL</strong></td><td>JS/TS, Python, Go, Java, Kotlin, Ruby, Swift, C/C++, C#</td><td><code class="ic">uses: github/codeql-action/analyze@v3</code> (GitHub Actions)</td></tr>
+          <tr><td><strong>njsscan</strong></td><td>Node.js</td><td><code class="ic">njsscan --json . &gt; njsscan.json</code></td></tr>
+          <tr><td><strong>eslint-security</strong></td><td>Node.js</td><td><code class="ic">eslint . --plugin security</code></td></tr>
+          <tr><td><strong>bandit</strong></td><td>Python</td><td><code class="ic">bandit -r . -ll -o bandit.json -f json</code></td></tr>
+          <tr><td><strong>pylint-security</strong></td><td>Python</td><td><code class="ic">pylint --load-plugins pylint_security src/</code></td></tr>
+          <tr><td><strong>gosec</strong></td><td>Go</td><td><code class="ic">gosec -fmt json -out gosec.json ./...</code></td></tr>
+          <tr><td><strong>staticcheck</strong></td><td>Go</td><td><code class="ic">staticcheck ./...</code></td></tr>
+          <tr><td><strong>spotbugs+pmd</strong></td><td>Java</td><td><code class="ic">mvn spotbugs:check pmd:check</code></td></tr>
+          <tr><td><strong>checkstyle</strong></td><td>Java</td><td><code class="ic">mvn checkstyle:check</code></td></tr>
+          <tr><td><strong>detekt</strong></td><td>Kotlin</td><td><code class="ic">./gradlew detekt</code></td></tr>
+          <tr><td><strong>ktlint</strong></td><td>Kotlin</td><td><code class="ic">./gradlew ktlintCheck</code></td></tr>
+          <tr><td><strong>dotnet warnings</strong></td><td>.NET</td><td><code class="ic">dotnet build /p:TreatWarningsAsErrors=true</code></td></tr>
+          <tr><td><strong>security-code-scan</strong></td><td>.NET</td><td><code class="ic">dotnet build /p:Analyzers=SecurityCodeScan.VS2019</code></td></tr>
+          <tr><td><strong>cargo clippy</strong></td><td>Rust</td><td><code class="ic">cargo clippy --all-targets -- -D warnings</code></td></tr>
+          <tr><td><strong>cargo geiger</strong></td><td>Rust</td><td><code class="ic">cargo geiger --all-features</code></td></tr>
+          <tr><td><strong>mix sobelow</strong></td><td>Elixir</td><td><code class="ic">mix sobelow --config</code></td></tr>
+          <tr><td><strong>mix credo</strong></td><td>Elixir</td><td><code class="ic">mix credo --strict</code></td></tr>
+          <tr><td><strong>brakeman</strong></td><td>Ruby</td><td><code class="ic">brakeman --exit-on-warn -o brakeman.json</code></td></tr>
+          <tr><td><strong>rubocop</strong></td><td>Ruby</td><td><code class="ic">rubocop --require rubocop-rails</code></td></tr>
+          <tr><td><strong>phpstan</strong></td><td>PHP</td><td><code class="ic">phpstan analyse --level=6</code></td></tr>
+          <tr><td><strong>psalm</strong></td><td>PHP</td><td><code class="ic">psalm --output-format=json</code></td></tr>
+          <tr><td><strong>swiftlint</strong></td><td>Swift</td><td><code class="ic">swiftlint lint --strict</code></td></tr>
+          <tr><td><strong>scalafix</strong></td><td>Scala</td><td><code class="ic">sbt scalafix</code></td></tr>
+          <tr><td><strong>clj-kondo</strong></td><td>Clojure</td><td><code class="ic">clj-kondo --lint src</code></td></tr>
+          <tr><td><strong>clang-tidy</strong></td><td>C/C++</td><td><code class="ic">clang-tidy src/**/*.cpp -- -I include</code></td></tr>
+          <tr><td><strong>cppcheck</strong></td><td>C/C++</td><td><code class="ic">cppcheck --enable=all --xml src/</code></td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="margin:14px 0 6px">Image scan (Phase 2 + Phase 3 — all dockerized)</h4>
+      <table class="xref-table" style="font-size:11px">
+        <thead><tr><th>Tool</th><th>Command</th><th>What it scans</th></tr></thead>
+        <tbody>
+          <tr><td><strong>trivy</strong></td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL $IMAGE</code></td><td>OS packages, language libs, misconfigs, secrets</td></tr>
+          <tr><td><strong>grype</strong></td><td><code class="ic">grype $IMAGE --fail-on high</code></td><td>OS packages, language libs (Anchore DB)</td></tr>
+          <tr><td><strong>docker scout</strong></td><td><code class="ic">docker scout cves $IMAGE</code></td><td>CVEs via Docker Hub integration</td></tr>
+          <tr><td><strong>snyk container</strong></td><td><code class="ic">snyk container test $IMAGE --severity-threshold=high</code></td><td>OS + app layer CVEs, Snyk DB</td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="margin:14px 0 6px">SBOM generation (Phase 3 — all dockerized)</h4>
+      <table class="xref-table" style="font-size:11px">
+        <thead><tr><th>Tool</th><th>Command</th><th>Output format</th></tr></thead>
+        <tbody>
+          <tr><td><strong>syft</strong></td><td><code class="ic">syft $REGISTRY/$IMAGE:$SHA -o spdx-json &gt; sbom.spdx.json</code></td><td>SPDX JSON</td></tr>
+          <tr><td><strong>cyclonedx-npm</strong></td><td><code class="ic">cyclonedx-npm --output sbom.cdx.json</code></td><td>CycloneDX JSON (Node.js)</td></tr>
+          <tr><td><strong>cyclonedx-py</strong></td><td><code class="ic">cyclonedx-py -o sbom.cdx.json</code></td><td>CycloneDX JSON (Python)</td></tr>
+          <tr><td><strong>cyclonedx-gomod</strong></td><td><code class="ic">cyclonedx-gomod app -output sbom.cdx.json</code></td><td>CycloneDX JSON (Go)</td></tr>
+          <tr><td><strong>mvn cyclonedx</strong></td><td><code class="ic">mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom</code></td><td>CycloneDX JSON (Java)</td></tr>
+          <tr><td><strong>cargo cyclonedx</strong></td><td><code class="ic">cargo cyclonedx -f json &gt; sbom.cdx.json</code></td><td>CycloneDX JSON (Rust)</td></tr>
+          <tr><td><strong>dotnet CycloneDX</strong></td><td><code class="ic">dotnet CycloneDX . -o sbom.cdx.json</code></td><td>CycloneDX JSON (.NET)</td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="margin:14px 0 6px">Image sign + attestation (Phase 3)</h4>
+      <table class="xref-table" style="font-size:11px">
+        <thead><tr><th>Tool</th><th>Command / Step</th><th>What it provides</th></tr></thead>
+        <tbody>
+          <tr><td><strong>cosign keyless</strong></td><td><code class="ic">cosign sign --yes $REGISTRY/$IMAGE@$DIGEST</code></td><td>Keyless OIDC signature via Sigstore Fulcio</td></tr>
+          <tr><td><strong>SLSA Level 3</strong></td><td><code class="ic">uses: slsa-framework/slsa-github-generator/...slsa3.yml@v2</code></td><td>Build provenance attestation — who built what from where</td></tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top:10px"><strong>CodeQL note:</strong> Supported languages: JavaScript/TypeScript, Python, Go, Java, Kotlin, Ruby, Swift, C/C++, C#.
+      Not supported: PHP, Elixir, Clojure, Scala, Rust, Deno, Bun — use semgrep for those.</p>
+    </div>
+  </details>
 </div>
 
 <h2 id="phase0">Phase 0 — Bootstrap (same for all 75 frameworks)</h2>
