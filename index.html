@@ -99,12 +99,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="10-linux-compliance.html">10 Linux compliance</a>
   <a href="11-dockerfile-catalog.html">11 Dockerfiles</a>
   <a href="12-compliance-variations.html">12 Compliance</a>
+  <a href="13-pipeline-build-catalog.html">13 Pipeline catalog</a>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-title">Pipeline Studio</div>
-<div class="page-meta">12 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; verified 2026-05-27</div>
+<div class="page-meta">13 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; 75 pipeline catalogs &nbsp;·&nbsp; verified 2026-05-27</div>
 
 <div class="hint-card">
   <strong>Purpose:</strong> Reference for building secure CI/CD pipelines across any framework, any regulated industry, any Canadian market.
@@ -112,7 +113,7 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
 </div>
 
 <!-- ═══ DOC CARDS ═══ -->
-<h2>All 11 docs</h2>
+<h2>All 13 docs</h2>
 <div class="cards-grid">
 
   <a href="01-framework-catalog.html" class="doc-card">
@@ -192,6 +193,20 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="doc-card-meta"><strong>Records:</strong> 75 frameworks · 27 categories · 62 Dockerfiles · 13 CI-only &nbsp;·&nbsp; <strong>Use when:</strong> writing or copying a production Dockerfile for any framework</div>
   </a>
 
+  <a href="12-compliance-variations.html" class="doc-card">
+    <div class="doc-card-num">Doc 12</div>
+    <div class="doc-card-title">Compliance Variations</div>
+    <div class="doc-card-desc">How 11 compliance standards (FIPS, PCI DSS, HIPAA, FedRAMP, CMMC, SOC 2, SOX, GDPR, PIPEDA, NERC CIP, ISO 27001) change Dockerfiles. Additive delta model: base Dockerfile from doc 11 + compliance layer on top. 10 industry profiles mapped to applicable standards.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 11 standards · 10 industry profiles · 5 concrete Dockerfile additions &nbsp;·&nbsp; <strong>Use when:</strong> applying compliance requirements to a production container image</div>
+  </a>
+
+  <a href="13-pipeline-build-catalog.html" class="doc-card">
+    <div class="doc-card-num">Doc 13</div>
+    <div class="doc-card-title">Pipeline Build Catalog</div>
+    <div class="doc-card-desc">Full CI/CD pipeline for all 75 frameworks. Every stage across all 6 phases (Bootstrap → Local Dev → PR Gate → Main Build → Registry → Promotions) with language-specific tools, exact commands, and DevSecOps/DevOps type. Compliance deltas for all 11 standards. Push format and OIDC auth for all 6 registries. Ticket-ready format for Notion/Jira import.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 75 frameworks · 6 phases · 11 compliance standards · 6 registries &nbsp;·&nbsp; <strong>Use when:</strong> planning or implementing the full CI/CD pipeline for any framework</div>
+  </a>
+
 </div>
 
 <!-- ═══ READING ORDER ═══ -->
@@ -229,6 +244,9 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   </div>
   <div class="order-item">
     <div><div class="order-item-title"><a href="12-compliance-variations.html">12 — Compliance Variations</a></div><div class="order-item-desc">Apply compliance layers on top of doc 11 Dockerfiles. 11 standards, 10 industry profiles, 5 concrete Dockerfile additions. Read after 11.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="13-pipeline-build-catalog.html">13 — Pipeline Build Catalog</a></div><div class="order-item-desc">Full pipeline for all 75 frameworks — every stage, every tool, every command. Compliance deltas and registry config included. Ticket-ready for Notion/Jira. Read after 02 and 11.</div></div>
   </div>
 </div>
 
@@ -289,6 +307,11 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="dep-from"><a href="12-compliance-variations.html">12 Compliance</a></div>
     <div class="dep-arrow">→</div>
     <div class="dep-to">compliance layers applied on top of 11 Dockerfiles; maps 10 industries to 11 standards; closes HEALTHCHECK and LABEL gaps in doc 11 — read after 11</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="13-pipeline-build-catalog.html">13 Pipeline Catalog</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">expands 02 pipeline schema with per-framework language-specific tools; cross-references 11 Dockerfiles for runtime image; applies 12 compliance deltas per phase — read after 02 and 11</div>
   </div>
 </div>
 
