@@ -1,4 +1,52 @@
-<!DOCTYPE html>
+#!/usr/bin/env python3
+"""Generate 16-maintainability-runbook.html."""
+
+OUT = '/mnt/c/Users/RohithY/yarova/pipeline-studio/16-maintainability-runbook.html'
+VERIFIED = '2026-05-28'
+
+DOCS = [
+    ('01','01-framework-catalog.html','01 Frameworks'),
+    ('02','02-pipeline-schema.html','02 Pipeline schema'),
+    ('03','03-stage-types.html','03 Stage types'),
+    ('04','04-tool-catalog.html','04 Tool catalog'),
+    ('05','05-invariants.html','05 Invariants'),
+    ('06','06-industry-schema.html','06 US industries'),
+    ('07','07-canada-schema.html','07 CA industries'),
+    ('08','08-canada-market.html','08 CA market'),
+    ('09','09-linux-distros.html','09 Linux distros'),
+    ('10','10-linux-compliance.html','10 Linux compliance'),
+    ('11','11-dockerfile-catalog.html','11 Dockerfiles'),
+    ('12','12-compliance-variations.html','12 Compliance'),
+    ('13','13-pipeline-build-catalog.html','13 Pipeline catalog'),
+    ('14','14-canada-industry-catalog.html','14 CA industries'),
+    ('15','15-version-registry.html','15 Version registry'),
+    ('16','16-maintainability-runbook.html','16 Runbook'),
+]
+
+def gen_nav():
+    links = []
+    sections = [
+        ('#add-doc', 'Adding a new doc'),
+        ('#update-version', 'Updating a version'),
+        ('#update-data', 'Updating market data'),
+        ('#nav-pattern', 'Nav link pattern'),
+        ('#index-pattern', 'index.html pattern'),
+        ('#gen-scripts', 'Generation scripts'),
+        ('#file-map', 'File map'),
+        ('#commit-style', 'Commit style'),
+    ]
+    for href, label in sections:
+        links.append(f'<a href="{href}">{label}</a>')
+    links.append('<hr style="border:none;border-top:1px solid var(--border);margin:6px 0">')
+    for num, href, label in DOCS:
+        aria = ' aria-current="page"' if num == '16' else ''
+        links.append(f'<a href="{href}"{aria}>{label}</a>')
+    links.append('<a href="#main-content" class="nav-top">↑ Back to top</a>')
+    return '\n  '.join(links)
+
+NAV = gen_nav()
+
+HTML = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6,134 +54,109 @@
 <title>16 — Maintainability Runbook | Pipeline Studio</title>
 <meta name="description" content="Runbook for maintaining all 16 pipeline-studio docs. Checklists for adding new docs, updating versions, updating data, and keeping nav/index in sync.">
 <style>
-:root{
+:root{{
   --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;
   --border:#d0d7de;--text:#1f2328;--text-dim:#656d76;--text-head:#1f2328;
   --blue:#0969da;--green:#1a7f37;--amber:#7a4f00;--purple:#6f42c1;--red:#b91c1c;
   --sidebar-w:220px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;
-  background:var(--bg);color:var(--text);line-height:1.5;display:flex;min-height:100vh}
-nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);
+}}
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;
+  background:var(--bg);color:var(--text);line-height:1.5;display:flex;min-height:100vh}}
+nav{{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);
   border-right:1px solid var(--border);padding:16px 0;position:sticky;top:0;height:100vh;
-  overflow-y:auto;flex-shrink:0}
-nav a{display:block;padding:5px 16px;font-size:12px;color:var(--text-dim);text-decoration:none;
-  transition:color .12s,background .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-nav a:hover{color:var(--text);background:var(--bg3)}
-nav a[aria-current]{color:var(--blue);font-weight:600;background:var(--bg3)}
-.nav-top{color:var(--text-dim)!important;margin-top:8px;border-top:1px solid var(--border)}
-main{flex:1;padding:24px 32px;max-width:1100px;overflow-x:auto}
-h1{font-size:20px;font-weight:700;color:var(--text-head);margin-bottom:4px}
-.page-meta{font-size:11px;color:var(--text-dim);margin-bottom:20px}
-h2{font-size:15px;font-weight:700;color:var(--text-head);margin:32px 0 6px;
-  padding-top:10px;border-top:2px solid var(--border)}
-h3{font-size:13px;font-weight:700;color:var(--text-head);margin:18px 0 6px}
-.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:12px}
-p{margin-bottom:8px;font-size:13px;line-height:1.6}
+  overflow-y:auto;flex-shrink:0}}
+nav a{{display:block;padding:5px 16px;font-size:12px;color:var(--text-dim);text-decoration:none;
+  transition:color .12s,background .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+nav a:hover{{color:var(--text);background:var(--bg3)}}
+nav a[aria-current]{{color:var(--blue);font-weight:600;background:var(--bg3)}}
+.nav-top{{color:var(--text-dim)!important;margin-top:8px;border-top:1px solid var(--border)}}
+main{{flex:1;padding:24px 32px;max-width:1100px;overflow-x:auto}}
+h1{{font-size:20px;font-weight:700;color:var(--text-head);margin-bottom:4px}}
+.page-meta{{font-size:11px;color:var(--text-dim);margin-bottom:20px}}
+h2{{font-size:15px;font-weight:700;color:var(--text-head);margin:32px 0 6px;
+  padding-top:10px;border-top:2px solid var(--border)}}
+h3{{font-size:13px;font-weight:700;color:var(--text-head);margin:18px 0 6px}}
+.section-sub{{font-size:11px;color:var(--text-dim);margin-bottom:12px}}
+p{{margin-bottom:8px;font-size:13px;line-height:1.6}}
 
 /* Checklist */
-.checklist{list-style:none;padding:0;margin:0 0 12px}
-.checklist li{display:flex;gap:8px;align-items:flex-start;padding:5px 0;
-  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}
-.checklist li:last-child{border-bottom:none}
-.step-num{min-width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+.checklist{{list-style:none;padding:0;margin:0 0 12px}}
+.checklist li{{display:flex;gap:8px;align-items:flex-start;padding:5px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}}
+.checklist li:last-child{{border-bottom:none}}
+.step-num{{min-width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
   font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-top:1px}
-.step-body{flex:1}
-.step-cmd{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  flex-shrink:0;margin-top:1px}}
+.step-body{{flex:1}}
+.step-cmd{{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
   background:var(--bg2);border:1px solid var(--border);border-radius:3px;
-  padding:3px 8px;margin-top:3px;white-space:pre-wrap;word-break:break-all}
-.step-why{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}
+  padding:3px 8px;margin-top:3px;white-space:pre-wrap;word-break:break-all}}
+.step-why{{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}}
 
 /* Warn / note blocks */
-.warn-block{background:#fff8c5;border:1px solid #e8d064;border-radius:6px;
-  padding:10px 14px;font-size:12px;margin:10px 0}
-.warn-block strong{color:var(--amber)}
-.note-block{background:#dbeeff;border:1px solid #b6d7f5;border-radius:6px;
-  padding:10px 14px;font-size:12px;margin:10px 0}
-.note-block strong{color:var(--blue)}
+.warn-block{{background:#fff8c5;border:1px solid #e8d064;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}}
+.warn-block strong{{color:var(--amber)}}
+.note-block{{background:#dbeeff;border:1px solid #b6d7f5;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}}
+.note-block strong{{color:var(--blue)}}
 
 /* Code blocks */
-pre.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+pre.code-block{{background:var(--bg2);border:1px solid var(--border);border-radius:6px;
   padding:12px 16px;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
-  overflow-x:auto;line-height:1.7;margin:8px 0}
-code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;background:var(--bg2);
-  border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+  overflow-x:auto;line-height:1.7;margin:8px 0}}
+code.ic{{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:3px;padding:1px 5px}}
 
 /* File map table */
-.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:12px}
-.xref-table{width:100%;border-collapse:collapse;font-size:12px}
-.xref-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
-  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap}
-.xref-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}
-.xref-table tr:last-child td{border-bottom:none}
-.xref-table tr:hover td{background:var(--bg2)}
+.tbl-wrap{{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:12px}}
+.xref-table{{width:100%;border-collapse:collapse;font-size:12px}}
+.xref-table th{{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
+  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap}}
+.xref-table td{{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}}
+.xref-table tr:last-child td{{border-bottom:none}}
+.xref-table tr:hover td{{background:var(--bg2)}}
 
 /* Counts bar */
-.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
-.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);
-  border:1px solid var(--border);border-radius:7px}
-.count-chip .chip-num{font-size:22px;font-weight:700;line-height:1}
-.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
-.c1{border-left:3px solid var(--blue)}.c1 .chip-num{color:var(--blue)}
-.c2{border-left:3px solid var(--green)}.c2 .chip-num{color:var(--green)}
-.c3{border-left:3px solid var(--amber)}.c3 .chip-num{color:var(--amber)}
-.c4{border-left:3px solid var(--purple)}.c4 .chip-num{color:var(--purple)}
+.counts-bar{{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}}
+.count-chip{{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:7px}}
+.count-chip .chip-num{{font-size:22px;font-weight:700;line-height:1}}
+.count-chip .chip-label{{font-size:11px;color:var(--text-dim);line-height:1.4}}
+.c1{{border-left:3px solid var(--blue)}}.c1 .chip-num{{color:var(--blue)}}
+.c2{{border-left:3px solid var(--green)}}.c2 .chip-num{{color:var(--green)}}
+.c3{{border-left:3px solid var(--amber)}}.c3 .chip-num{{color:var(--amber)}}
+.c4{{border-left:3px solid var(--purple)}}.c4 .chip-num{{color:var(--purple)}}
 
 /* Section accent */
-.section-accent-blue{border-top-color:var(--blue)}
-.section-accent-green{border-top-color:var(--green)}
-.section-accent-amber{border-top-color:var(--amber)}
-.section-accent-purple{border-top-color:var(--purple)}
+.section-accent-blue{{border-top-color:var(--blue)}}
+.section-accent-green{{border-top-color:var(--green)}}
+.section-accent-amber{{border-top-color:var(--amber)}}
+.section-accent-purple{{border-top-color:var(--purple)}}
 
-@media(prefers-color-scheme:dark){
-  :root{
+@media(prefers-color-scheme:dark){{
+  :root{{
     --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
     --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#e6edf3;
     --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--purple:#bc8cff;--red:#f85149;
-  }
-  .warn-block{background:#2d2100;border-color:#4a3800}
-  .note-block{background:#0d2744;border-color:#2d4a6a}
-}
-@media print{
-  nav{display:none}
-  main{max-width:100%;padding:12px}
-}
+  }}
+  .warn-block{{background:#2d2100;border-color:#4a3800}}
+  .note-block{{background:#0d2744;border-color:#2d4a6a}}
+}}
+@media print{{
+  nav{{display:none}}
+  main{{max-width:100%;padding:12px}}
+}}
 </style>
 </head>
 <body>
 <nav>
-  <a href="#add-doc">Adding a new doc</a>
-  <a href="#update-version">Updating a version</a>
-  <a href="#update-data">Updating market data</a>
-  <a href="#nav-pattern">Nav link pattern</a>
-  <a href="#index-pattern">index.html pattern</a>
-  <a href="#gen-scripts">Generation scripts</a>
-  <a href="#file-map">File map</a>
-  <a href="#commit-style">Commit style</a>
-  <hr style="border:none;border-top:1px solid var(--border);margin:6px 0">
-  <a href="01-framework-catalog.html">01 Frameworks</a>
-  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
-  <a href="03-stage-types.html">03 Stage types</a>
-  <a href="04-tool-catalog.html">04 Tool catalog</a>
-  <a href="05-invariants.html">05 Invariants</a>
-  <a href="06-industry-schema.html">06 US industries</a>
-  <a href="07-canada-schema.html">07 CA industries</a>
-  <a href="08-canada-market.html">08 CA market</a>
-  <a href="09-linux-distros.html">09 Linux distros</a>
-  <a href="10-linux-compliance.html">10 Linux compliance</a>
-  <a href="11-dockerfile-catalog.html">11 Dockerfiles</a>
-  <a href="12-compliance-variations.html">12 Compliance</a>
-  <a href="13-pipeline-build-catalog.html">13 Pipeline catalog</a>
-  <a href="14-canada-industry-catalog.html">14 CA industries</a>
-  <a href="15-version-registry.html">15 Version registry</a>
-  <a href="16-maintainability-runbook.html" aria-current="page">16 Runbook</a>
-  <a href="#main-content" class="nav-top">↑ Back to top</a>
+  {NAV}
 </nav>
 <main id="main-content">
 <h1>Maintainability Runbook</h1>
-<div class="page-meta">4 task types · 8 checklists · last updated 2026-05-28</div>
+<div class="page-meta">4 task types · 8 checklists · last updated {VERIFIED}</div>
 
 <div class="counts-bar">
   <div class="count-chip c1"><div class="chip-num">16</div><div class="chip-label">Docs in this<br>project</div></div>
@@ -204,7 +227,7 @@ for f in glob.glob('*.html'):
     with open(f) as fh: html = fh.read()
     if NEW in html or f == 'NN-doc-name.html': continue
     if BACK in html:
-        html = html.replace(BACK, NEW + '\n' + BACK)
+        html = html.replace(BACK, NEW + '\\n' + BACK)
         with open(f, 'w') as fh: fh.write(html)
         print('updated:', f)
 EOF</span>
@@ -628,3 +651,8 @@ update-versions-YYYY-MM-DD      # batch version update</pre>
 </main>
 </body>
 </html>
+'''
+
+with open(OUT, 'w', encoding='utf-8') as f:
+    f.write(HTML)
+print(f'Written {{len(HTML):,}} chars to {{OUT}}')
