@@ -7,7 +7,7 @@ assignees: ''
 
 **Category:** 10 Cross-platform non-JS
 **Pattern:** CI-only
-**Language:** Mobile non-JS
+**Language:** Flutter
 **Runtime image:** `N/A (CI-only — APK/IPA)`
 **FIPS runtime:** `N/A (no FIPS variant)`
 **Build image:** `ubuntu:24.04`
@@ -30,7 +30,7 @@ assignees: ''
 ---
 ## Phase 1 — Local Dev (on git commit)
 
-**IDE setup:** Android Studio / Xcode / VS Code + Flutter plugin
+**IDE setup:** VS Code + Flutter plugin / Android Studio + Flutter plugin
 
 **Pre-commit hooks** (all active in `.pre-commit-config.yaml`):
 
@@ -54,7 +54,7 @@ Install: `pre-commit install && pre-commit run --all-files`
 
 | Tool | Command |
 |---|---|
-| osv-scanner | `osv-scanner --lockfile pubspec.lock  # or packages.lock.json` |
+| osv-scanner | `osv-scanner --lockfile pubspec.lock` |
 | snyk | `snyk test --severity-threshold=high` |
 
 
@@ -63,7 +63,7 @@ Install: `pre-commit install && pre-commit run --all-files`
 | Tool | Command |
 |---|---|
 | semgrep | `semgrep --config=auto .` |
-| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin or csharp` |
+| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin` |
 
 
 ---
@@ -78,7 +78,7 @@ All security stages run in parallel after `pre-commit` passes.
 
 | Tool | Command |
 |---|---|
-| osv-scanner | `osv-scanner --lockfile pubspec.lock  # or packages.lock.json` |
+| osv-scanner | `osv-scanner --lockfile pubspec.lock` |
 | snyk | `snyk test --severity-threshold=high` |
 
 
@@ -87,13 +87,14 @@ All security stages run in parallel after `pre-commit` passes.
 | Tool | Command |
 |---|---|
 | semgrep | `semgrep --config=auto .` |
-| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin or csharp` |
+| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin` |
 
 
 **License scan ↗ parallel** (pick one):
 
 | Tool | Command |
 |---|---|
+| dart-pub-deps | `dart pub deps --json | python3 scripts/extract-licenses.py` |
 | FOSSA | `fossa analyze && fossa test` |
 
 
@@ -114,7 +115,7 @@ All security stages run in parallel after `pre-commit` passes.
 | GitGuardian | `ggshield secret scan repo .` |
 
 **Build (no container):**
-`flutter build apk --release  # or: dotnet build -c Release / ./gradlew assembleRelease`
+`flutter build apk --release  # alternatives: flutter build ios --release | flutter build appbundle`
 
 **PR review:**
 Human approval — CODEOWNERS enforced
@@ -129,7 +130,7 @@ Human approval — CODEOWNERS enforced
 
 | Tool | Command |
 |---|---|
-| osv-scanner | `osv-scanner --lockfile pubspec.lock  # or packages.lock.json` |
+| osv-scanner | `osv-scanner --lockfile pubspec.lock` |
 | snyk | `snyk test --severity-threshold=high` |
 
 
@@ -138,13 +139,14 @@ Human approval — CODEOWNERS enforced
 | Tool | Command |
 |---|---|
 | semgrep | `semgrep --config=auto .` |
-| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin or csharp` |
+| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin` |
 
 
 **License scan ↗ parallel** (pick one):
 
 | Tool | Command |
 |---|---|
+| dart-pub-deps | `dart pub deps --json | python3 scripts/extract-licenses.py` |
 | FOSSA | `fossa analyze && fossa test` |
 
 
@@ -157,11 +159,11 @@ Human approval — CODEOWNERS enforced
 
 
 **App build (APK / IPA):**
-`flutter build apk --release  # or: dotnet build -c Release / ./gradlew assembleRelease`
+`flutter build apk --release  # alternatives: flutter build ios --release | flutter build appbundle`
 
 
 **Tests + Codecov:**
-`flutter test --coverage  # or dotnet test / ./gradlew test`
+`flutter test --coverage && codecov`
 
 **Release tag:**
 `semantic-release --no-ci` — applies semver tag to source

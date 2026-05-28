@@ -140,7 +140,7 @@ code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;backgroun
   <div class="count-chip c1"><div class="chip-num">16</div><div class="chip-label">Docs in this<br>project</div></div>
   <div class="count-chip c2"><div class="chip-num">4</div><div class="chip-label">Task types<br>covered</div></div>
   <div class="count-chip c3"><div class="chip-num">8</div><div class="chip-label">Step-by-step<br>checklists</div></div>
-  <div class="count-chip c4"><div class="chip-num">3</div><div class="chip-label">Generation<br>scripts</div></div>
+  <div class="count-chip c4"><div class="chip-num">5</div><div class="chip-label">Generation<br>scripts</div></div>
 </div>
 
 <div class="note-block">
@@ -500,7 +500,7 @@ grep -c "dep-row" index.html     # must equal total doc count</span>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <h2 id="gen-scripts">Generation scripts — when and how to use</h2>
-<p class="section-sub">Two docs are generated from Python scripts. Never edit the HTML directly — edit the script and regenerate.</p>
+<p class="section-sub">Five outputs are generated from Python scripts in <code class="ic">scripts/</code>. Never edit generated files directly — edit the script and regenerate.</p>
 
 <div class="tbl-wrap">
 <table class="xref-table">
@@ -524,17 +524,25 @@ grep -c "dep-row" index.html     # must equal total doc count</span>
   <td>Adding a new doc (update DOCS list and file map). Changing any checklist step. Adding a new task type.</td>
   <td><code class="ic">python3 scripts/generate_16.py</code></td>
 </tr>
+<tr>
+  <td><code class="ic">scripts/generate_issue_templates.py</code></td>
+  <td><code class="ic">.github/ISSUE_TEMPLATE/pipeline-setup/*.md</code> — 75 files</td>
+  <td>Changing framework versions, runtimes, compliance standards, or tool options for any of the 75 frameworks. Adding a new framework.</td>
+  <td><code class="ic">python3 scripts/generate_issue_templates.py</code></td>
+</tr>
+<tr>
+  <td><code class="ic">scripts/generate_workflow_templates.py</code></td>
+  <td><code class="ic">workflow-templates/*.yml</code> — 75 files</td>
+  <td>Changing language toolchain steps, security gates, registry config, or pipeline structure for any of the 75 frameworks. Adding a new framework.</td>
+  <td><code class="ic">python3 scripts/generate_workflow_templates.py</code></td>
+</tr>
 </tbody>
 </table>
 </div>
 
-<div class="warn-block">
-  <strong>Scripts are in /tmp — they are not committed to the repo.</strong>
-  If the session is lost, the scripts must be regenerated from the HTML output + this runbook.
-  To prevent this: copy the scripts to a permanent location before closing the session.
-  <span class="step-cmd">cp scripts/generate_14.py /mnt/c/Users/RohithY/yarova/pipeline-studio/scripts/
-cp scripts/generate_15.py /mnt/c/Users/RohithY/yarova/pipeline-studio/scripts/
-cp scripts/generate_16.py /mnt/c/Users/RohithY/yarova/pipeline-studio/scripts/</span>
+<div class="note-block">
+  <strong>All 5 scripts are committed to <code class="ic">scripts/</code> in the repo.</strong>
+  They are the source of truth for generated outputs. Edit in place, regenerate, commit output + script together in the same PR.
 </div>
 
 <div class="note-block">

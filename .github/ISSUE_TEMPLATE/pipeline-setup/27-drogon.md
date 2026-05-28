@@ -8,7 +8,7 @@ assignees: ''
 **Category:** 27 C/C++
 **Pattern:** Multi-stage
 **Language:** C/C++
-**Runtime image:** `scratch (static) or debian:12-slim (dynamic)`
+**Runtime image:** `debian:12-slim`
 **FIPS runtime:** `registry.access.redhat.com/ubi9/ubi-micro`
 **Build image:** `ubuntu:24.04`
 **Port:** 8080

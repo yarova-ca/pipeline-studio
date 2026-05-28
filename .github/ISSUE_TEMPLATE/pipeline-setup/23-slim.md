@@ -6,10 +6,10 @@ assignees: ''
 ---
 
 **Category:** 23 PHP
-**Pattern:** Single-stage
+**Pattern:** Multi-stage
 **Language:** PHP
 **Runtime image:** `php:8.3-fpm-alpine`
-**FIPS runtime:** `php:8.3-fpm-alpine (no FIPS variant; use Alpine FIPS kernel)`
+**FIPS runtime:** `php:8.3-fpm-alpine (no dedicated FIPS variant)`
 **Build image:** `ubuntu:24.04`
 **Port:** 9000
 **Compliance:** FIPS 140-2/3 | PCI DSS | HIPAA | FedRAMP | CMMC | SOC 2 | SOX | GDPR | PIPEDA | NERC CIP | ISO 27001
