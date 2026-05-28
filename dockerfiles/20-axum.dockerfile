@@ -31,6 +31,26 @@ USER 65534:65534
 EXPOSE 8080
 ENTRYPOINT ["/app"]
 
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: gcr.io/distroless/static-debian12 — when TLS certs or timezone data needed at runtime
+#FROM gcr.io/distroless/static-debian12 AS runtime
+#COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+#COPY --from=build /app/target/x86_64-unknown-linux-musl/release/app /app
+#USER 65534:65534
+#EXPOSE 8080
+#ENTRYPOINT ["/app"]
+
+# Option: alpine:3.21 — shell available for debugging; apk available for runtime deps
+#FROM alpine:3.21 AS runtime
+#RUN apk add --no-cache ca-certificates tzdata && adduser -D -u 65534 nobody
+#COPY --from=build /app/target/x86_64-unknown-linux-musl/release/app /app
+#USER 65534:65534
+#EXPOSE 8080
+#ENTRYPOINT ["/app"]
+
 # ── Runtime — FIPS (ubi-micro) ────────────────────────────────────────────
 FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips
 COPY --from=build /app/target/x86_64-unknown-linux-musl/release/app /usr/local/bin/app

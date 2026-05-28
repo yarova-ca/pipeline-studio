@@ -35,3 +35,25 @@ USER app
 EXPOSE 8080
 # REPLACE: /app/app with your Swift target binary name
 ENTRYPOINT ["/app/app", "--hostname", "0.0.0.0", "--port", "8080"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: swift:6.0-jammy — Ubuntu Jammy, larger but maximum library compat
+#FROM swift:6.0-jammy AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build --chown=1001:0 /app/.build/release/App /app/app
+#USER app
+#EXPOSE 8080
+#ENTRYPOINT ["/app/app", "--hostname", "0.0.0.0", "--port", "8080"]
+
+# Option: swift:6.0-alpine — smallest Swift runtime image (~80MB smaller than noble-slim)
+#FROM swift:6.0-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/.build/release/App /app/app
+#USER app
+#EXPOSE 8080
+#ENTRYPOINT ["/app/app", "--hostname", "0.0.0.0", "--port", "8080"]

@@ -4,7 +4,7 @@
 # Output:    IPA (iOS archive)
 #
 # This framework produces a native platform artifact, not a container image.
-# The workflow YAML (workflow-templates/11-objc-uikit.yml) handles the build
+# The workflow YAML (workflow-templates/11-objc-uikit/) handles the build
 # entirely within GitHub Actions runners — no Dockerfile is required.
 #
 # If you need to wrap the artifact in a container (e.g. for internal testing

@@ -27,6 +27,28 @@ USER app
 EXPOSE 3000
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
 
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: ruby:3.3-slim — Debian slim, glibc (better native gem compat than Alpine musl)
+#FROM ruby:3.3-slim AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build --chown=app:app /app ./
+#USER app
+#EXPOSE 3000
+#CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+
+# Option: ruby:3.3 — full Debian bookworm (largest, most compat; use only if slim fails)
+#FROM ruby:3.3 AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build --chown=app:app /app ./
+#USER app
+#EXPOSE 3000
+#CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+
 # ── Runtime — FIPS (UBI9 ruby-32) ────────────────────────────────────────
 FROM registry.access.redhat.com/ubi9/ruby-32 AS runtime-fips
 WORKDIR /app

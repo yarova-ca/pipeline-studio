@@ -29,6 +29,30 @@ USER 1001
 EXPOSE 8080
 CMD ["gunicorn", "myproject.wsgi:application", "--bind", "0.0.0.0:8080"]
 
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: python:3.12-alpine — musl-based, ~50MB smaller; some C-extension wheels may need recompile
+#FROM python:3.12-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=1001:0 /venv /venv
+#COPY --chown=1001:0 . .
+#ENV PATH="/venv/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+#USER 1001
+#EXPOSE 8080
+#CMD ["gunicorn", "myproject.wsgi:application", "--bind", "0.0.0.0:8080"]
+
+# Option: cgr.dev/chainguard/python:3.12 — hardened, minimal, sigstore-verified; no pip in runtime
+#FROM cgr.dev/chainguard/python:3.12 AS runtime
+#WORKDIR /app
+#COPY --from=build --chown=65532:65532 /venv /venv
+#COPY --chown=65532:65532 . .
+#ENV PATH="/venv/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+#EXPOSE 8080
+#CMD ["gunicorn", "myproject.wsgi:application", "--bind", "0.0.0.0:8080"]
+
 # ── Runtime — FIPS ────────────────────────────────────────────────────────
 FROM registry.access.redhat.com/ubi9/python-39 AS runtime-fips
 WORKDIR /app

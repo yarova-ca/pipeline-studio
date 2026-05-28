@@ -18,7 +18,7 @@ COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 COPY . .
 
-# ── Runtime stage (standard — php-fpm) ────────────────────────────────────
+# ── Runtime stage (standard — php-fpm-alpine) ─────────────────────────────
 FROM php:8.3-fpm-alpine AS runtime
 WORKDIR /app
 RUN apk add --no-cache php83-pdo php83-pdo_mysql php83-opcache
@@ -26,3 +26,23 @@ COPY --from=build --chown=www-data:www-data /app ./
 USER www-data
 EXPOSE 9000
 CMD ["php-fpm", "-F"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: php:8.3-fpm — Debian bullseye slim (larger, more compat, easier ext install)
+#FROM php:8.3-fpm AS runtime
+#WORKDIR /app
+#RUN docker-php-ext-install pdo pdo_mysql opcache
+#COPY --from=build --chown=www-data:www-data /app ./
+#USER www-data
+#EXPOSE 9000
+#CMD ["php-fpm", "-F"]
+
+# Option: php:8.3-cli-alpine — for CLI workers / queue consumers (not http serving)
+#FROM php:8.3-cli-alpine AS runtime
+#WORKDIR /app
+#COPY --from=build --chown=www-data:www-data /app ./
+#USER www-data
+#CMD ["php", "artisan", "queue:work"]

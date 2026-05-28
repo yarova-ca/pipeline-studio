@@ -31,6 +31,27 @@ USER app
 EXPOSE 8080
 ENTRYPOINT ["/usr/local/bin/app"]
 
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: ubuntu:24.04 — when Debian slim is missing a required shared lib
+#FROM ubuntu:24.04 AS runtime
+#RUN apt-get update && apt-get install -y --no-install-recommends libssl3 zlib1g libjsoncpp25 && rm -rf /var/lib/apt/lists/*
+#RUN useradd -u 1001 -r app
+#COPY --from=build /app/build/app /usr/local/bin/app
+#USER app
+#EXPOSE 8080
+#ENTRYPOINT ["/usr/local/bin/app"]
+
+# Option: alpine:3.21 — smallest with shared lib support; may need musl recompile
+#FROM alpine:3.21 AS runtime
+#RUN apk add --no-cache libssl3 zlib libjsoncpp && adduser -D -u 1001 app
+#COPY --from=build /app/build/app /usr/local/bin/app
+#USER app
+#EXPOSE 8080
+#ENTRYPOINT ["/usr/local/bin/app"]
+
 # ── Runtime — FIPS (ubi-micro) ────────────────────────────────────────────
 FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips
 COPY --from=build /app/build/app /usr/local/bin/app

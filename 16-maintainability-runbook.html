@@ -532,8 +532,8 @@ grep -c "dep-row" index.html     # must equal total doc count</span>
 </tr>
 <tr>
   <td><code class="ic">scripts/generate_workflow_templates.py</code></td>
-  <td><code class="ic">workflow-templates/*.yml</code> — 75 files</td>
-  <td>Changing language toolchain steps, security gates, registry config, or pipeline structure for any of the 75 frameworks. Adding a new framework.</td>
+  <td><code class="ic">workflow-templates/{slug}/</code> — 75 folders, 499 YAML files (7 stages per multi-stage framework; 5 stages per CI-only/mobile/edge framework)</td>
+  <td>Changing language toolchain steps, security gates, registry config, signing, or pipeline structure for any of the 75 frameworks. Adding a new framework. Each stage file triggers independently — edit only the stage file that needs changing.</td>
   <td><code class="ic">python3 scripts/generate_workflow_templates.py</code></td>
 </tr>
 </tbody>

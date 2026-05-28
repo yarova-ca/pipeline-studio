@@ -33,6 +33,28 @@ EXPOSE 4000
 # REPLACE: myapp with your OTP release name (from mix.exs :app key)
 CMD ["bin/myapp", "start"]
 
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: hexpm/elixir:1.17-erlang-27-alpine-3.19 — Alpine, smaller image (~200MB vs ~400MB)
+#FROM hexpm/elixir:1.17-erlang-27-alpine-3.19 AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/_build/prod/rel/myapp ./
+#USER app
+#EXPOSE 4000
+#CMD ["bin/myapp", "start"]
+
+# Option: elixir:1.17-otp-27-alpine — official Elixir Alpine image
+#FROM elixir:1.17-otp-27-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/_build/prod/rel/myapp ./
+#USER app
+#EXPOSE 4000
+#CMD ["bin/myapp", "start"]
+
 # ── Runtime — FIPS (UBI9 minimal) ────────────────────────────────────────
 FROM registry.access.redhat.com/ubi9/ubi-minimal AS runtime-fips
 WORKDIR /app

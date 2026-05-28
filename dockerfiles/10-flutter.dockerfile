@@ -4,7 +4,7 @@
 # Output:    APK (Android) / IPA (iOS) / AppBundle
 #
 # This framework produces a native platform artifact, not a container image.
-# The workflow YAML (workflow-templates/10-flutter.yml) handles the build
+# The workflow YAML (workflow-templates/10-flutter/) handles the build
 # entirely within GitHub Actions runners — no Dockerfile is required.
 #
 # If you need to wrap the artifact in a container (e.g. for internal testing

@@ -8,6 +8,9 @@ Each file is copy-paste ready. Developer copies to their repo root as 'Dockerfil
 Multi-stage pattern: build (ubuntu:24.04) → runtime → runtime-fips (where applicable).
 CI-only frameworks (mobile, edge): placeholder file explaining no Docker needed.
 
+Every multi-stage Dockerfile includes commented-out alternative runtime images.
+Developer uncomments ONE alternative, deletes the rest.
+
 Usage:
     python3 scripts/generate_dockerfiles.py
 """
@@ -464,7 +467,7 @@ def df_cionly(fw):
 # Output:    {artifact}
 #
 # This framework produces a native platform artifact, not a container image.
-# The workflow YAML (workflow-templates/{fw['slug']}.yml) handles the build
+# The workflow YAML (workflow-templates/{fw['slug']}/) handles the build
 # entirely within GitHub Actions runners — no Dockerfile is required.
 #
 # If you need to wrap the artifact in a container (e.g. for internal testing
@@ -515,6 +518,30 @@ WORKDIR /app
 USER app
 EXPOSE {port}
 CMD ["node", "{cmd_arg}"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: node:22-slim — Debian-based, glibc (better native addon compatibility than Alpine musl)
+#FROM node:22-slim AS runtime
+#WORKDIR /app
+#RUN addgroup --system app && adduser --system --ingroup app app
+#COPY --from=build --chown=app:app /app/dist ./dist
+#COPY --from=build --chown=app:app /app/node_modules ./node_modules
+#COPY --from=build --chown=app:app /app/package.json ./
+#USER app
+#EXPOSE {port}
+#CMD ["node", "{cmd_arg}"]
+
+# Option: cgr.dev/chainguard/node:22 — hardened, minimal, sigstore-verified supply chain
+#FROM cgr.dev/chainguard/node:22 AS runtime
+#WORKDIR /app
+#COPY --from=build --chown=65532:65532 /app/dist ./dist
+#COPY --from=build --chown=65532:65532 /app/node_modules ./node_modules
+#COPY --from=build --chown=65532:65532 /app/package.json ./
+#EXPOSE {port}
+#CMD ["node", "{cmd_arg}"]
 {fips_block}"""
 
 def df_nodejs_nginx(fw):
@@ -566,6 +593,28 @@ COPY --from=build /app/{static_dir} /usr/share/nginx/html
 # Optional: COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE {fw['port']}
 CMD ["nginx", "-g", "daemon off;"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: nginx:1.27-stable-alpine3.21-slim — pinned stable slim tag (more predictable than :alpine)
+#FROM nginx:1.27-stable-alpine3.21-slim AS runtime
+#COPY --from=build /app/{static_dir} /usr/share/nginx/html
+#EXPOSE 80
+#CMD ["nginx", "-g", "daemon off;"]
+
+# Option: cgr.dev/chainguard/nginx:latest — hardened nginx, sigstore-verified, rootless by default
+#FROM cgr.dev/chainguard/nginx:latest AS runtime
+#COPY --from=build /app/{static_dir} /usr/share/nginx/html
+#EXPOSE 80
+
+# Option: caddy:2-alpine — replaces nginx entirely; HTTPS auto-provisioning, simpler config
+#FROM caddy:2-alpine AS runtime
+#COPY --from=build /app/{static_dir} /srv
+#COPY Caddyfile /etc/caddy/Caddyfile
+#EXPOSE 80 443
+#CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
 {fips_block}"""
 
 def df_python(fw):
@@ -617,6 +666,30 @@ WORKDIR /app
 USER 1001
 EXPOSE {port}
 CMD {cmd_json}
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: python:3.12-alpine — musl-based, ~50MB smaller; some C-extension wheels may need recompile
+#FROM python:3.12-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=1001:0 /venv /venv
+#COPY --chown=1001:0 . .
+#{lang['env']}
+#USER 1001
+#EXPOSE {port}
+#CMD {cmd_json}
+
+# Option: cgr.dev/chainguard/python:3.12 — hardened, minimal, sigstore-verified; no pip in runtime
+#FROM cgr.dev/chainguard/python:3.12 AS runtime
+#WORKDIR /app
+#COPY --from=build --chown=65532:65532 /venv /venv
+#COPY --chown=65532:65532 . .
+#{lang['env']}
+#EXPOSE {port}
+#CMD {cmd_json}
 {fips_block}"""
 
 def df_go(fw):
@@ -657,6 +730,26 @@ FROM {fw['runtime']} AS runtime
 USER 65534:65534
 EXPOSE {port}
 ENTRYPOINT ["/app"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: gcr.io/distroless/static-debian12 — when TLS certs or timezone data needed at runtime
+#FROM gcr.io/distroless/static-debian12 AS runtime
+#COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+#COPY --from=build /app/bin/app /app
+#USER 65534:65534
+#EXPOSE {port}
+#ENTRYPOINT ["/app"]
+
+# Option: alpine:3.21 — shell available for debugging; larger attack surface than scratch
+#FROM alpine:3.21 AS runtime
+#RUN apk add --no-cache ca-certificates tzdata && adduser -D -u 65534 nobody
+#COPY --from=build /app/bin/app /app
+#USER 65534:65534
+#EXPOSE {port}
+#ENTRYPOINT ["/app"]
 {fips_block}"""
 
 def df_java(fw):
@@ -699,6 +792,28 @@ WORKDIR /app
 USER 65534:65534
 EXPOSE {port}
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: eclipse-temurin:21-jre-alpine — smaller Alpine JRE, shell available
+#FROM eclipse-temurin:21-jre-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build /app/target/*.jar app.jar
+#USER 1001
+#EXPOSE {port}
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# Option: amazoncorretto:21-al2023-jdk — Amazon Corretto JDK on Amazon Linux 2023
+#FROM amazoncorretto:21-al2023-jdk AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build /app/target/*.jar app.jar
+#USER 1001
+#EXPOSE {port}
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 {fips_block}"""
 
 def df_kotlin(fw):
@@ -741,6 +856,28 @@ WORKDIR /app
 USER 65534:65534
 EXPOSE {port}
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: eclipse-temurin:21-jre-alpine — smaller Alpine JRE, shell available
+#FROM eclipse-temurin:21-jre-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build /app/build/libs/*-all.jar app.jar
+#USER 1001
+#EXPOSE {port}
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# Option: amazoncorretto:21-al2023-jdk — Amazon Corretto JDK on Amazon Linux 2023
+#FROM amazoncorretto:21-al2023-jdk AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build /app/build/libs/*-all.jar app.jar
+#USER 1001
+#EXPOSE {port}
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 {fips_block}"""
 
 def df_dotnet(fw):
@@ -787,6 +924,28 @@ USER app
 EXPOSE {port}
 # REPLACE: App.dll with your assembly name (project name without extension)
 ENTRYPOINT ["dotnet", "App.dll"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: mcr.microsoft.com/dotnet/aspnet:9.0-noble — Ubuntu Noble, glibc (better Linux compat)
+#FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble AS runtime
+#WORKDIR /app
+#RUN adduser -u 1001 -D app
+#COPY --from=build --chown=app:app /app/out ./
+#USER app
+#EXPOSE {port}
+#ENTRYPOINT ["dotnet", "App.dll"]
+
+# Option: mcr.microsoft.com/dotnet/aspnet:9.0 — Debian bookworm slim (default Microsoft base)
+#FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+#WORKDIR /app
+#RUN adduser -u 1001 -D app
+#COPY --from=build --chown=app:app /app/out ./
+#USER app
+#EXPOSE {port}
+#ENTRYPOINT ["dotnet", "App.dll"]
 {fips_block}"""
 
 def df_rust(fw):
@@ -827,6 +986,26 @@ FROM {fw['runtime']} AS runtime
 USER 65534:65534
 EXPOSE {port}
 ENTRYPOINT ["/app"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: gcr.io/distroless/static-debian12 — when TLS certs or timezone data needed at runtime
+#FROM gcr.io/distroless/static-debian12 AS runtime
+#COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+#COPY --from=build /app/target/x86_64-unknown-linux-musl/release/app /app
+#USER 65534:65534
+#EXPOSE {port}
+#ENTRYPOINT ["/app"]
+
+# Option: alpine:3.21 — shell available for debugging; apk available for runtime deps
+#FROM alpine:3.21 AS runtime
+#RUN apk add --no-cache ca-certificates tzdata && adduser -D -u 65534 nobody
+#COPY --from=build /app/target/x86_64-unknown-linux-musl/release/app /app
+#USER 65534:65534
+#EXPOSE {port}
+#ENTRYPOINT ["/app"]
 {fips_block}"""
 
 def df_elixir(fw):
@@ -873,6 +1052,28 @@ USER app
 EXPOSE {port}
 # REPLACE: myapp with your OTP release name (from mix.exs :app key)
 CMD ["bin/myapp", "start"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: hexpm/elixir:1.17-erlang-27-alpine-3.19 — Alpine, smaller image (~200MB vs ~400MB)
+#FROM hexpm/elixir:1.17-erlang-27-alpine-3.19 AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/_build/prod/rel/myapp ./
+#USER app
+#EXPOSE {port}
+#CMD ["bin/myapp", "start"]
+
+# Option: elixir:1.17-otp-27-alpine — official Elixir Alpine image
+#FROM elixir:1.17-otp-27-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/_build/prod/rel/myapp ./
+#USER app
+#EXPOSE {port}
+#CMD ["bin/myapp", "start"]
 {fips_block}"""
 
 def df_ruby(fw):
@@ -920,6 +1121,28 @@ WORKDIR /app
 USER app
 EXPOSE {port}
 CMD {cmd_json}
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: ruby:3.3-slim — Debian slim, glibc (better native gem compat than Alpine musl)
+#FROM ruby:3.3-slim AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build --chown=app:app /app ./
+#USER app
+#EXPOSE {port}
+#CMD {cmd_json}
+
+# Option: ruby:3.3 — full Debian bookworm (largest, most compat; use only if slim fails)
+#FROM ruby:3.3 AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build --chown=app:app /app ./
+#USER app
+#EXPOSE {port}
+#CMD {cmd_json}
 {fips_block}"""
 
 def df_php(fw):
@@ -944,7 +1167,7 @@ FROM ubuntu:24.04 AS build
 WORKDIR /app
 {lang['build_steps']}
 
-# ── Runtime stage (standard — php-fpm) ────────────────────────────────────
+# ── Runtime stage (standard — php-fpm-alpine) ─────────────────────────────
 FROM {fw['runtime']} AS runtime
 WORKDIR /app
 RUN apk add --no-cache php83-pdo php83-pdo_mysql php83-opcache
@@ -952,6 +1175,26 @@ RUN apk add --no-cache php83-pdo php83-pdo_mysql php83-opcache
 {lang['runtime_user']}
 EXPOSE {port}
 CMD ["php-fpm", "-F"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: php:8.3-fpm — Debian bullseye slim (larger, more compat, easier ext install)
+#FROM php:8.3-fpm AS runtime
+#WORKDIR /app
+#RUN docker-php-ext-install pdo pdo_mysql opcache
+#COPY --from=build --chown=www-data:www-data /app ./
+#USER www-data
+#EXPOSE {port}
+#CMD ["php-fpm", "-F"]
+
+# Option: php:8.3-cli-alpine — for CLI workers / queue consumers (not http serving)
+#FROM php:8.3-cli-alpine AS runtime
+#WORKDIR /app
+#COPY --from=build --chown=www-data:www-data /app ./
+#USER www-data
+#CMD ["php", "artisan", "queue:work"]
 """
 
 def df_swift(fw):
@@ -985,6 +1228,28 @@ USER app
 EXPOSE {port}
 # REPLACE: /app/app with your Swift target binary name
 ENTRYPOINT ["/app/app", "--hostname", "0.0.0.0", "--port", "{port}"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: swift:6.0-jammy — Ubuntu Jammy, larger but maximum library compat
+#FROM swift:6.0-jammy AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build --chown=1001:0 /app/.build/release/App /app/app
+#USER app
+#EXPOSE {port}
+#ENTRYPOINT ["/app/app", "--hostname", "0.0.0.0", "--port", "{port}"]
+
+# Option: swift:6.0-alpine — smallest Swift runtime image (~80MB smaller than noble-slim)
+#FROM swift:6.0-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/.build/release/App /app/app
+#USER app
+#EXPOSE {port}
+#ENTRYPOINT ["/app/app", "--hostname", "0.0.0.0", "--port", "{port}"]
 """
 
 def df_scala(fw):
@@ -1027,6 +1292,28 @@ WORKDIR /app
 USER 65534:65534
 EXPOSE {port}
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: eclipse-temurin:21-jre-alpine — smaller Alpine JRE, shell available for debugging
+#FROM eclipse-temurin:21-jre-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build /app/target/scala-*/*-assembly-*.jar app.jar
+#USER 1001
+#EXPOSE {port}
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# Option: amazoncorretto:21-al2023-jdk — Amazon Corretto on Amazon Linux 2023
+#FROM amazoncorretto:21-al2023-jdk AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build /app/target/scala-*/*-assembly-*.jar app.jar
+#USER 1001
+#EXPOSE {port}
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 {fips_block}"""
 
 def df_clojure(fw):
@@ -1069,6 +1356,28 @@ WORKDIR /app
 USER 65534:65534
 EXPOSE {port}
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: eclipse-temurin:21-jre-alpine — smaller Alpine JRE, shell available for debugging
+#FROM eclipse-temurin:21-jre-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build /app/target/*-standalone.jar app.jar
+#USER 1001
+#EXPOSE {port}
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# Option: amazoncorretto:21-al2023-jdk — Amazon Corretto on Amazon Linux 2023
+#FROM amazoncorretto:21-al2023-jdk AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build /app/target/*-standalone.jar app.jar
+#USER 1001
+#EXPOSE {port}
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 {fips_block}"""
 
 def df_deno(fw):
@@ -1102,6 +1411,25 @@ WORKDIR /app
 EXPOSE {port}
 # Deno permissions: add --allow-net --allow-read etc. as needed
 CMD ["deno", "task", "start"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: denoland/deno:2.3 — Debian-based, larger, more compat (glibc vs musl)
+#FROM denoland/deno:2.3 AS runtime
+#WORKDIR /app
+#USER 1001
+#COPY --from=build --chown=1001:0 /app ./
+#EXPOSE {port}
+#CMD ["deno", "task", "start"]
+
+# Option: denoland/deno:2.3-distroless — minimal, no shell, sigstore-verified
+#FROM denoland/deno:2.3-distroless AS runtime
+#WORKDIR /app
+#COPY --from=build --chown=65532:65532 /app ./
+#EXPOSE {port}
+#CMD ["deno", "task", "start"]
 """
 
 def df_bun(fw):
@@ -1137,6 +1465,30 @@ WORKDIR /app
 USER app
 EXPOSE {port}
 CMD {cmd_json}
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: oven/bun:1-slim — Debian slim, glibc (better compat for native addons)
+#FROM oven/bun:1-slim AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/dist ./dist
+#COPY --from=build --chown=app:app /app/package.json ./
+#USER app
+#EXPOSE {port}
+#CMD {cmd_json}
+
+# Option: oven/bun:1 — full Debian image (largest; use if slim or alpine fails)
+#FROM oven/bun:1 AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/dist ./dist
+#COPY --from=build --chown=app:app /app/package.json ./
+#USER app
+#EXPOSE {port}
+#CMD {cmd_json}
 """
 
 def df_cpp(fw):
@@ -1179,6 +1531,27 @@ RUN useradd -u 1001 -r app
 USER app
 EXPOSE {port}
 ENTRYPOINT ["/usr/local/bin/app"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: ubuntu:24.04 — when Debian slim is missing a required shared lib
+#FROM ubuntu:24.04 AS runtime
+#RUN apt-get update && apt-get install -y --no-install-recommends libssl3 zlib1g libjsoncpp25 && rm -rf /var/lib/apt/lists/*
+#RUN useradd -u 1001 -r app
+#COPY --from=build /app/build/app /usr/local/bin/app
+#USER app
+#EXPOSE {port}
+#ENTRYPOINT ["/usr/local/bin/app"]
+
+# Option: alpine:3.21 — smallest with shared lib support; may need musl recompile
+#FROM alpine:3.21 AS runtime
+#RUN apk add --no-cache libssl3 zlib libjsoncpp && adduser -D -u 1001 app
+#COPY --from=build /app/build/app /usr/local/bin/app
+#USER app
+#EXPOSE {port}
+#ENTRYPOINT ["/usr/local/bin/app"]
 {fips_block}"""
 
 # ─── DISPATCH ────────────────────────────────────────────────────────────

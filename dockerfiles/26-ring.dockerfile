@@ -30,6 +30,28 @@ USER 65534:65534
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: eclipse-temurin:21-jre-alpine — smaller Alpine JRE, shell available for debugging
+#FROM eclipse-temurin:21-jre-alpine AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build /app/target/*-standalone.jar app.jar
+#USER 1001
+#EXPOSE 8080
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# Option: amazoncorretto:21-al2023-jdk — Amazon Corretto on Amazon Linux 2023
+#FROM amazoncorretto:21-al2023-jdk AS runtime
+#WORKDIR /app
+#RUN useradd -u 1001 -r app
+#COPY --from=build /app/target/*-standalone.jar app.jar
+#USER 1001
+#EXPOSE 8080
+#ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
 # ── Runtime — FIPS (OpenJDK 21 on UBI9) ──────────────────────────────────
 FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips
 WORKDIR /deployments

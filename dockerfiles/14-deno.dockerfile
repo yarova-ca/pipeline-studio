@@ -27,3 +27,22 @@ COPY --from=build --chown=1001:0 /app ./
 EXPOSE 8000
 # Deno permissions: add --allow-net --allow-read etc. as needed
 CMD ["deno", "task", "start"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: denoland/deno:2.3 — Debian-based, larger, more compat (glibc vs musl)
+#FROM denoland/deno:2.3 AS runtime
+#WORKDIR /app
+#USER 1001
+#COPY --from=build --chown=1001:0 /app ./
+#EXPOSE 8000
+#CMD ["deno", "task", "start"]
+
+# Option: denoland/deno:2.3-distroless — minimal, no shell, sigstore-verified
+#FROM denoland/deno:2.3-distroless AS runtime
+#WORKDIR /app
+#COPY --from=build --chown=65532:65532 /app ./
+#EXPOSE 8000
+#CMD ["deno", "task", "start"]

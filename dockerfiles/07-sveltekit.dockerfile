@@ -31,6 +31,30 @@ USER app
 EXPOSE 3000
 CMD ["node", "build/index.js"]
 
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: node:22-slim — Debian-based, glibc (better native addon compatibility than Alpine musl)
+#FROM node:22-slim AS runtime
+#WORKDIR /app
+#RUN addgroup --system app && adduser --system --ingroup app app
+#COPY --from=build --chown=app:app /app/dist ./dist
+#COPY --from=build --chown=app:app /app/node_modules ./node_modules
+#COPY --from=build --chown=app:app /app/package.json ./
+#USER app
+#EXPOSE 3000
+#CMD ["node", "build/index.js"]
+
+# Option: cgr.dev/chainguard/node:22 — hardened, minimal, sigstore-verified supply chain
+#FROM cgr.dev/chainguard/node:22 AS runtime
+#WORKDIR /app
+#COPY --from=build --chown=65532:65532 /app/dist ./dist
+#COPY --from=build --chown=65532:65532 /app/node_modules ./node_modules
+#COPY --from=build --chown=65532:65532 /app/package.json ./
+#EXPOSE 3000
+#CMD ["node", "build/index.js"]
+
 # ── Runtime — FIPS ────────────────────────────────────────────────────────
 FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips
 WORKDIR /app

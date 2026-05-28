@@ -28,3 +28,27 @@ COPY --from=build --chown=app:app /app/package.json ./
 USER app
 EXPOSE 3000
 CMD ["bun", "run", "dist/index.js"]
+
+# ── Alternative runtime images ─────────────────────────────────────────────
+# Uncomment ONE block below instead of the standard runtime above.
+# Delete the standard block and all unused alternatives to keep it clean.
+
+# Option: oven/bun:1-slim — Debian slim, glibc (better compat for native addons)
+#FROM oven/bun:1-slim AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/dist ./dist
+#COPY --from=build --chown=app:app /app/package.json ./
+#USER app
+#EXPOSE 3000
+#CMD ["bun", "run", "dist/index.js"]
+
+# Option: oven/bun:1 — full Debian image (largest; use if slim or alpine fails)
+#FROM oven/bun:1 AS runtime
+#WORKDIR /app
+#RUN adduser -D -u 1001 app
+#COPY --from=build --chown=app:app /app/dist ./dist
+#COPY --from=build --chown=app:app /app/package.json ./
+#USER app
+#EXPOSE 3000
+#CMD ["bun", "run", "dist/index.js"]
