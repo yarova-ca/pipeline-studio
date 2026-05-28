@@ -1,0 +1,124 @@
+# ─────────────────────────────────────────────────────────────────────────
+# Pipeline: 10 Cross-platform non-JS — .NET MAUI 10
+# Pattern:  CI-only (no Docker — output is APK / IPA / MSIX)
+# Copy to:  .github/workflows/ci.yml in your .NET MAUI project repo
+#
+# No Dockerfile required. Output artifact uploaded to GitHub Releases.
+# ─────────────────────────────────────────────────────────────────────────
+
+name: CI — .NET MAUI 10
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write        # create releases
+  id-token: write        # OIDC
+  security-events: write # CodeQL / SARIF upload
+
+jobs:
+
+  # ── Phase 1 — pre-commit ───────────────────────────────────────────────
+  pre-commit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: pre-commit/action@v3.0.1
+
+  # ── Phase 2 — security gates (parallel) ───────────────────────────────
+  sca:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0'
+      - uses: actions/checkout@v4
+      - name: SCA — dependency audit
+        run: |
+          dotnet list package --vulnerable --include-transitive
+
+  sast:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto
+
+  codeql:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+      - uses: github/codeql-action/autobuild@v3
+      - uses: github/codeql-action/analyze@v3
+
+  secrets-scan:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── Phase 3 — build artifact + release (main only) ────────────────────
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    needs: [sca, sast, codeql, secrets-scan]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0'
+
+      - name: Build — APK / IPA / MSIX
+        run: |
+          dotnet build -c Release
+          # targets: -f net10.0-android | -f net10.0-ios | -f net10.0-maccatalyst
+
+      - name: Run tests
+        run: |
+          dotnet test --collect:"XPlat Code Coverage"
+
+      - uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Semantic release
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "Build ${{ job.status }}: .NET MAUI 10 — ${{ github.sha }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+# ── Compliance delta reference ─────────────────────────────────────────────
+# PCI DSS:  govulncheck / pip-audit with --exit-code 1 on CRITICAL
+# HIPAA:    semgrep --config p/hipaa . — add as parallel job
+# CMMC:     named reviewers in CODEOWNERS; artifact retention 3 years
+# SOC 2:    upload-artifact for all scan results; retention-days: 90
+# SOX:      require 2+ approvers in branch protection
+# GDPR:     semgrep --config p/pii . — add as parallel job
