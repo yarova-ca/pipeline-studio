@@ -7,7 +7,7 @@ assignees: ''
 
 **Category:** 10 Cross-platform non-JS
 **Pattern:** CI-only
-**Language:** Mobile non-JS
+**Language:** Android native
 **Runtime image:** `N/A (CI-only — APK/IPA)`
 **FIPS runtime:** `N/A (no FIPS variant)`
 **Build image:** `ubuntu:24.04`
@@ -30,7 +30,7 @@ assignees: ''
 ---
 ## Phase 1 — Local Dev (on git commit)
 
-**IDE setup:** Android Studio / Xcode / VS Code + Flutter plugin
+**IDE setup:** Android Studio + Lint + Detekt
 
 **Pre-commit hooks** (all active in `.pre-commit-config.yaml`):
 
@@ -54,7 +54,8 @@ Install: `pre-commit install && pre-commit run --all-files`
 
 | Tool | Command |
 |---|---|
-| osv-scanner | `osv-scanner --lockfile pubspec.lock  # or packages.lock.json` |
+| OWASP Dependency-Check | `dependency-check --scan . --format JSON` |
+| osv-scanner | `osv-scanner --lockfile gradle.lockfile` |
 | snyk | `snyk test --severity-threshold=high` |
 
 
@@ -63,7 +64,8 @@ Install: `pre-commit install && pre-commit run --all-files`
 | Tool | Command |
 |---|---|
 | semgrep | `semgrep --config=auto .` |
-| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin or csharp` |
+| detekt | `./gradlew detekt` |
+| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin` |
 
 
 ---
@@ -78,7 +80,8 @@ All security stages run in parallel after `pre-commit` passes.
 
 | Tool | Command |
 |---|---|
-| osv-scanner | `osv-scanner --lockfile pubspec.lock  # or packages.lock.json` |
+| OWASP Dependency-Check | `dependency-check --scan . --format JSON` |
+| osv-scanner | `osv-scanner --lockfile gradle.lockfile` |
 | snyk | `snyk test --severity-threshold=high` |
 
 
@@ -87,13 +90,15 @@ All security stages run in parallel after `pre-commit` passes.
 | Tool | Command |
 |---|---|
 | semgrep | `semgrep --config=auto .` |
-| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin or csharp` |
+| detekt | `./gradlew detekt` |
+| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin` |
 
 
 **License scan ↗ parallel** (pick one):
 
 | Tool | Command |
 |---|---|
+| license-gradle-plugin | `./gradlew checkLicense` |
 | FOSSA | `fossa analyze && fossa test` |
 
 
@@ -114,7 +119,7 @@ All security stages run in parallel after `pre-commit` passes.
 | GitGuardian | `ggshield secret scan repo .` |
 
 **Build (no container):**
-`flutter build apk --release  # or: dotnet build -c Release / ./gradlew assembleRelease`
+`./gradlew assembleRelease  # or bundleRelease for AAB`
 
 **PR review:**
 Human approval — CODEOWNERS enforced
@@ -129,7 +134,8 @@ Human approval — CODEOWNERS enforced
 
 | Tool | Command |
 |---|---|
-| osv-scanner | `osv-scanner --lockfile pubspec.lock  # or packages.lock.json` |
+| OWASP Dependency-Check | `dependency-check --scan . --format JSON` |
+| osv-scanner | `osv-scanner --lockfile gradle.lockfile` |
 | snyk | `snyk test --severity-threshold=high` |
 
 
@@ -138,13 +144,15 @@ Human approval — CODEOWNERS enforced
 | Tool | Command |
 |---|---|
 | semgrep | `semgrep --config=auto .` |
-| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin or csharp` |
+| detekt | `./gradlew detekt` |
+| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin` |
 
 
 **License scan ↗ parallel** (pick one):
 
 | Tool | Command |
 |---|---|
+| license-gradle-plugin | `./gradlew checkLicense` |
 | FOSSA | `fossa analyze && fossa test` |
 
 
@@ -156,12 +164,12 @@ Human approval — CODEOWNERS enforced
 | gitleaks | `gitleaks detect --source=. --report-path=gitleaks.json` |
 
 
-**App build (APK / IPA):**
-`flutter build apk --release  # or: dotnet build -c Release / ./gradlew assembleRelease`
+**App build (APK / AAB):**
+`./gradlew assembleRelease  # or bundleRelease for AAB`
 
 
 **Tests + Codecov:**
-`flutter test --coverage  # or dotnet test / ./gradlew test`
+`./gradlew test && codecov`
 
 **Release tag:**
 `semantic-release --no-ci` — applies semver tag to source
@@ -190,7 +198,7 @@ Human approval — CODEOWNERS enforced
 - [ ] Phase 0 complete (branch protection, OIDC, Renovate/Dependabot)
 - [ ] Phase 1 hooks installed and passing locally
 - [ ] Phase 2 gate passing — all parallel stages green (SAST, license, IaC, secrets)
-- [ ] Phase 3 app build clean — APK / IPA produced
+- [ ] Phase 3 app build clean — APK / AAB produced
 - [ ] Release tag applied (semver)
 - [ ] Tests passing + Codecov coverage uploaded
 - [ ] Compliance deltas applied for all applicable standards

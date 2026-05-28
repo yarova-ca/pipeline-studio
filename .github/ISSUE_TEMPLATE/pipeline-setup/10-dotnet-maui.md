@@ -7,7 +7,7 @@ assignees: ''
 
 **Category:** 10 Cross-platform non-JS
 **Pattern:** CI-only
-**Language:** Mobile non-JS
+**Language:** .NET Mobile (MAUI)
 **Runtime image:** `N/A (CI-only — APK/IPA)`
 **FIPS runtime:** `N/A (no FIPS variant)`
 **Build image:** `ubuntu:24.04`
@@ -30,7 +30,7 @@ assignees: ''
 ---
 ## Phase 1 — Local Dev (on git commit)
 
-**IDE setup:** Android Studio / Xcode / VS Code + Flutter plugin
+**IDE setup:** Visual Studio + .NET MAUI Workload
 
 **Pre-commit hooks** (all active in `.pre-commit-config.yaml`):
 
@@ -54,7 +54,8 @@ Install: `pre-commit install && pre-commit run --all-files`
 
 | Tool | Command |
 |---|---|
-| osv-scanner | `osv-scanner --lockfile pubspec.lock  # or packages.lock.json` |
+| dotnet-audit | `dotnet list package --vulnerable --include-transitive` |
+| osv-scanner | `osv-scanner --lockfile packages.lock.json` |
 | snyk | `snyk test --severity-threshold=high` |
 
 
@@ -63,7 +64,7 @@ Install: `pre-commit install && pre-commit run --all-files`
 | Tool | Command |
 |---|---|
 | semgrep | `semgrep --config=auto .` |
-| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin or csharp` |
+| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: csharp` |
 
 
 ---
@@ -78,7 +79,8 @@ All security stages run in parallel after `pre-commit` passes.
 
 | Tool | Command |
 |---|---|
-| osv-scanner | `osv-scanner --lockfile pubspec.lock  # or packages.lock.json` |
+| dotnet-audit | `dotnet list package --vulnerable --include-transitive` |
+| osv-scanner | `osv-scanner --lockfile packages.lock.json` |
 | snyk | `snyk test --severity-threshold=high` |
 
 
@@ -87,13 +89,14 @@ All security stages run in parallel after `pre-commit` passes.
 | Tool | Command |
 |---|---|
 | semgrep | `semgrep --config=auto .` |
-| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin or csharp` |
+| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: csharp` |
 
 
 **License scan ↗ parallel** (pick one):
 
 | Tool | Command |
 |---|---|
+| dotnet-project-licenses | `dotnet-project-licenses --input . --output licenses.json` |
 | FOSSA | `fossa analyze && fossa test` |
 
 
@@ -114,7 +117,7 @@ All security stages run in parallel after `pre-commit` passes.
 | GitGuardian | `ggshield secret scan repo .` |
 
 **Build (no container):**
-`flutter build apk --release  # or: dotnet build -c Release / ./gradlew assembleRelease`
+`dotnet build -c Release  # targets: -f net10.0-android | -f net10.0-ios | -f net10.0-maccatalyst`
 
 **PR review:**
 Human approval — CODEOWNERS enforced
@@ -129,7 +132,8 @@ Human approval — CODEOWNERS enforced
 
 | Tool | Command |
 |---|---|
-| osv-scanner | `osv-scanner --lockfile pubspec.lock  # or packages.lock.json` |
+| dotnet-audit | `dotnet list package --vulnerable --include-transitive` |
+| osv-scanner | `osv-scanner --lockfile packages.lock.json` |
 | snyk | `snyk test --severity-threshold=high` |
 
 
@@ -138,13 +142,14 @@ Human approval — CODEOWNERS enforced
 | Tool | Command |
 |---|---|
 | semgrep | `semgrep --config=auto .` |
-| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: java-kotlin or csharp` |
+| CodeQL | `uses: github/codeql-action/analyze@v3  # languages: csharp` |
 
 
 **License scan ↗ parallel** (pick one):
 
 | Tool | Command |
 |---|---|
+| dotnet-project-licenses | `dotnet-project-licenses --input . --output licenses.json` |
 | FOSSA | `fossa analyze && fossa test` |
 
 
@@ -156,12 +161,12 @@ Human approval — CODEOWNERS enforced
 | gitleaks | `gitleaks detect --source=. --report-path=gitleaks.json` |
 
 
-**App build (APK / IPA):**
-`flutter build apk --release  # or: dotnet build -c Release / ./gradlew assembleRelease`
+**App build (APK / IPA / MSIX):**
+`dotnet build -c Release  # targets: -f net10.0-android | -f net10.0-ios | -f net10.0-maccatalyst`
 
 
 **Tests + Codecov:**
-`flutter test --coverage  # or dotnet test / ./gradlew test`
+`dotnet test --collect:"XPlat Code Coverage" && codecov`
 
 **Release tag:**
 `semantic-release --no-ci` — applies semver tag to source
@@ -190,7 +195,7 @@ Human approval — CODEOWNERS enforced
 - [ ] Phase 0 complete (branch protection, OIDC, Renovate/Dependabot)
 - [ ] Phase 1 hooks installed and passing locally
 - [ ] Phase 2 gate passing — all parallel stages green (SAST, license, IaC, secrets)
-- [ ] Phase 3 app build clean — APK / IPA produced
+- [ ] Phase 3 app build clean — APK / IPA / MSIX produced
 - [ ] Release tag applied (semver)
 - [ ] Tests passing + Codecov coverage uploaded
 - [ ] Compliance deltas applied for all applicable standards

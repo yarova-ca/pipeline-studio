@@ -791,6 +791,49 @@ LANG = {
     'artifact': 'APK / IPA',
 },
 
+'flutter': {
+    'display': 'Flutter',
+    'ide': 'VS Code + Flutter plugin / Android Studio + Flutter plugin',
+    'has_dockerfile': False,
+    'sca_local': [
+        ('osv-scanner', 'osv-scanner --lockfile pubspec.lock'),
+        ('snyk', 'snyk test --severity-threshold=high'),
+    ],
+    'sast_local': [
+        ('semgrep', 'semgrep --config=auto .'),
+        ('CodeQL', 'uses: github/codeql-action/analyze@v3  # languages: java-kotlin'),
+    ],
+    'license': [
+        ('dart-pub-deps', 'dart pub deps --json | python3 scripts/extract-licenses.py'),
+        ('FOSSA', 'fossa analyze && fossa test'),
+    ],
+    'build_ci': 'flutter build apk --release  # alternatives: flutter build ios --release | flutter build appbundle',
+    'test': 'flutter test --coverage && codecov',
+    'artifact': 'APK / IPA',
+},
+
+'dotnet-mobile': {
+    'display': '.NET Mobile (MAUI)',
+    'ide': 'Visual Studio + .NET MAUI Workload',
+    'has_dockerfile': False,
+    'sca_local': [
+        ('dotnet-audit', 'dotnet list package --vulnerable --include-transitive'),
+        ('osv-scanner', 'osv-scanner --lockfile packages.lock.json'),
+        ('snyk', 'snyk test --severity-threshold=high'),
+    ],
+    'sast_local': [
+        ('semgrep', 'semgrep --config=auto .'),
+        ('CodeQL', 'uses: github/codeql-action/analyze@v3  # languages: csharp'),
+    ],
+    'license': [
+        ('dotnet-project-licenses', 'dotnet-project-licenses --input . --output licenses.json'),
+        ('FOSSA', 'fossa analyze && fossa test'),
+    ],
+    'build_ci': 'dotnet build -c Release  # targets: -f net10.0-android | -f net10.0-ios | -f net10.0-maccatalyst',
+    'test': 'dotnet test --collect:"XPlat Code Coverage" && codecov',
+    'artifact': 'APK / IPA / MSIX',
+},
+
 'ios-native': {
     'display': 'iOS native',
     'ide': 'Xcode + Instruments + SwiftLint',
@@ -901,9 +944,9 @@ FRAMEWORKS = [
 {'num':48,'cat':'09 Cross-platform JS','name':'Expo','ver':'52','slug':'09-expo','lang':'mobile-js','pattern':'ci-only','runtime':'N/A (CI-only — APK/IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
 {'num':49,'cat':'09 Cross-platform JS','name':'Ionic','ver':'8','slug':'09-ionic','lang':'mobile-js','pattern':'ci-only','runtime':'N/A (CI-only — APK/IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
 # 10 Cross-platform non-JS
-{'num':50,'cat':'10 Cross-platform non-JS','name':'Flutter','ver':'3.44','slug':'10-flutter','lang':'mobile-nonjs','pattern':'ci-only','runtime':'N/A (CI-only — APK/IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
-{'num':51,'cat':'10 Cross-platform non-JS','name':'.NET MAUI','ver':'10','slug':'10-dotnet-maui','lang':'mobile-nonjs','pattern':'ci-only','runtime':'N/A (CI-only — APK/IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
-{'num':52,'cat':'10 Cross-platform non-JS','name':'Kotlin Multiplatform','ver':'2.1','slug':'10-kmp','lang':'mobile-nonjs','pattern':'ci-only','runtime':'N/A (CI-only — APK/IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
+{'num':50,'cat':'10 Cross-platform non-JS','name':'Flutter','ver':'3.44','slug':'10-flutter','lang':'flutter','pattern':'ci-only','runtime':'N/A (CI-only — APK/IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
+{'num':51,'cat':'10 Cross-platform non-JS','name':'.NET MAUI','ver':'10','slug':'10-dotnet-maui','lang':'dotnet-mobile','pattern':'ci-only','runtime':'N/A (CI-only — APK/IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
+{'num':52,'cat':'10 Cross-platform non-JS','name':'Kotlin Multiplatform','ver':'2.1','slug':'10-kmp','lang':'android-native','pattern':'ci-only','runtime':'N/A (CI-only — APK/IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
 # 11 Native iOS
 {'num':53,'cat':'11 Native iOS','name':'Swift / SwiftUI','ver':'6','slug':'11-swift-swiftui','lang':'ios-native','pattern':'ci-only','runtime':'N/A (CI-only — IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
 {'num':54,'cat':'11 Native iOS','name':'Objective-C UIKit','ver':'SDK 17','slug':'11-objc-uikit','lang':'ios-native','pattern':'ci-only','runtime':'N/A (CI-only — IPA)','fips_rt':'N/A (no FIPS variant)','port':None},
@@ -949,9 +992,9 @@ FRAMEWORKS = [
 {'num':83,'cat':'22 Ruby','name':'Rails','ver':'8.0','slug':'22-rails','lang':'ruby','pattern':'multi-stage','runtime':'ruby:3.3-alpine','fips_rt':'registry.access.redhat.com/ubi9/ruby-32','port':3000},
 {'num':84,'cat':'22 Ruby','name':'Sinatra','ver':'4.0','slug':'22-sinatra','lang':'ruby','pattern':'multi-stage','runtime':'ruby:3.3-alpine','fips_rt':'registry.access.redhat.com/ubi9/ruby-32','port':3000},
 # 23 PHP
-{'num':85,'cat':'23 PHP','name':'Laravel','ver':'12','slug':'23-laravel','lang':'php','pattern':'single-stage','runtime':'php:8.3-fpm-alpine','fips_rt':'php:8.3-fpm-alpine (no FIPS variant; use Alpine FIPS kernel)','port':9000},
-{'num':86,'cat':'23 PHP','name':'Symfony','ver':'7.2','slug':'23-symfony','lang':'php','pattern':'single-stage','runtime':'php:8.3-fpm-alpine','fips_rt':'php:8.3-fpm-alpine (no FIPS variant; use Alpine FIPS kernel)','port':9000},
-{'num':87,'cat':'23 PHP','name':'Slim','ver':'4.14','slug':'23-slim','lang':'php','pattern':'single-stage','runtime':'php:8.3-fpm-alpine','fips_rt':'php:8.3-fpm-alpine (no FIPS variant; use Alpine FIPS kernel)','port':9000},
+{'num':85,'cat':'23 PHP','name':'Laravel','ver':'12','slug':'23-laravel','lang':'php','pattern':'multi-stage','runtime':'php:8.3-fpm-alpine','fips_rt':'php:8.3-fpm-alpine (no dedicated FIPS variant)','port':9000},
+{'num':86,'cat':'23 PHP','name':'Symfony','ver':'7.2','slug':'23-symfony','lang':'php','pattern':'multi-stage','runtime':'php:8.3-fpm-alpine','fips_rt':'php:8.3-fpm-alpine (no dedicated FIPS variant)','port':9000},
+{'num':87,'cat':'23 PHP','name':'Slim','ver':'4.14','slug':'23-slim','lang':'php','pattern':'multi-stage','runtime':'php:8.3-fpm-alpine','fips_rt':'php:8.3-fpm-alpine (no dedicated FIPS variant)','port':9000},
 # 24 Swift Server
 {'num':88,'cat':'24 Swift Server','name':'Vapor','ver':'4.121','slug':'24-vapor','lang':'swift-server','pattern':'multi-stage','runtime':'swift:6.0-noble-slim','fips_rt':'swift:6.0-noble-slim (no dedicated FIPS variant)','port':8080},
 {'num':89,'cat':'24 Swift Server','name':'Hummingbird','ver':'2.0','slug':'24-hummingbird','lang':'swift-server','pattern':'multi-stage','runtime':'swift:6.0-noble-slim','fips_rt':'swift:6.0-noble-slim (no dedicated FIPS variant)','port':8080},
@@ -962,8 +1005,8 @@ FRAMEWORKS = [
 {'num':92,'cat':'26 Clojure','name':'Ring','ver':'1.12','slug':'26-ring','lang':'clojure','pattern':'multi-stage','runtime':'gcr.io/distroless/java21-debian12','fips_rt':'registry.access.redhat.com/ubi9/openjdk-21-runtime','port':8080},
 {'num':93,'cat':'26 Clojure','name':'Pedestal','ver':'0.7','slug':'26-pedestal','lang':'clojure','pattern':'multi-stage','runtime':'gcr.io/distroless/java21-debian12','fips_rt':'registry.access.redhat.com/ubi9/openjdk-21-runtime','port':8080},
 # 27 C/C++
-{'num':94,'cat':'27 C/C++','name':'Drogon','ver':'1.9.13','slug':'27-drogon','lang':'cpp','pattern':'multi-stage','runtime':'scratch (static) or debian:12-slim (dynamic)','fips_rt':'registry.access.redhat.com/ubi9/ubi-micro','port':8080},
-{'num':95,'cat':'27 C/C++','name':'Crow','ver':'1.3.2','slug':'27-crow','lang':'cpp','pattern':'multi-stage','runtime':'scratch (static) or debian:12-slim (dynamic)','fips_rt':'registry.access.redhat.com/ubi9/ubi-micro','port':8080},
+{'num':94,'cat':'27 C/C++','name':'Drogon','ver':'1.9.13','slug':'27-drogon','lang':'cpp','pattern':'multi-stage','runtime':'debian:12-slim','fips_rt':'registry.access.redhat.com/ubi9/ubi-micro','port':8080},
+{'num':95,'cat':'27 C/C++','name':'Crow','ver':'1.3.2','slug':'27-crow','lang':'cpp','pattern':'multi-stage','runtime':'debian:12-slim','fips_rt':'registry.access.redhat.com/ubi9/ubi-micro','port':8080},
 ]
 
 # ─── TEMPLATE BUILDERS ──────────────────────────────────────────────────
