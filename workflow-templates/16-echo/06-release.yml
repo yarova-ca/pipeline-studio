@@ -1,0 +1,44 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 06 — Release  |  16 Go — Echo 4.12
+# Runs on: push to main only
+# Default: semantic-release (reads commit messages for version bump)
+# Copy to: .github/workflows/ in your Echo repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "06 Release — Echo 4.12"
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write  # needed to create tags and GitHub releases
+  id-token: write
+  packages: write
+
+jobs:
+
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history required for semantic-release
+
+      # ── DEFAULT: semantic-release ─────────────────────────────────
+      - name: Semantic release
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #
+      # ── ALTERNATIVE: Release Please (Google) ─────────────────────
+      # - uses: googleapis/release-please-action@v4
+      #   with:
+      #     release-type: node  # REPLACE: go | python | java | etc.
+      #
+      # ── ALTERNATIVE: GitHub Release (manual tag push) ─────────────
+      # - name: Create GitHub Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     tag: ${{ github.ref_name }}
+      #     generateReleaseNotes: true

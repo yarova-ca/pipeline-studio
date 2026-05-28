@@ -1,0 +1,39 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 05 — Test  |  27 C/C++ — Drogon 1.9.13
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Drogon repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "05 Test — Drogon 1.9.13"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Install build tools
+        run: sudo apt-get install -y cmake clang clang-tidy cppcheck
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: cd build && ctest --output-on-failure
+
+      # ── OPTIONAL: Codecov coverage upload ─────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+
+      # ── OPTIONAL: SonarCloud (requires SONAR_TOKEN secret) ────────
+      # - name: SonarCloud analysis
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

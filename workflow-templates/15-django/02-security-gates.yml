@@ -1,0 +1,172 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 02 — Security Gates  |  15 Python — Django 5.2
+# Jobs: sca  sast  codeql  license-scan  iac-scan  secrets-scan
+# All jobs run in PARALLEL — no ordering dependency between them.
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Django repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "02 Security Gates — Django 5.2"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write  # SARIF upload to GitHub Security tab
+
+jobs:
+
+  # ── SCA: Software Composition Analysis (dependency vulnerabilities) ──
+  sca:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - uses: actions/checkout@v4
+      # ── DEFAULT: pip-audit ──────────────────────────────────────
+      - name: SCA — pip-audit
+        run: pip-audit --vulnerability-service pypi
+      #
+      # ── ALTERNATIVE: safety ──────────────────────────────────────
+      # - name: SCA — safety
+      #   run: pip install safety && safety check -r requirements.txt --json
+      #
+      # ── ALTERNATIVE: osv-scanner ─────────────────────────────────
+      # - name: SCA — osv-scanner
+      #   uses: google/osv-scanner-action@v1
+      #   with:
+      #     scan-args: --lockfile=requirements.txt
+      #
+      # ── ALTERNATIVE: Snyk (requires SNYK_TOKEN secret) ───────────
+      # - name: SCA — Snyk
+      #   uses: snyk/actions/python@master
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  # ── SAST: Static Application Security Testing (code-level bugs) ─────
+  sast:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      # ── DEFAULT: Bandit ─────────────────────────────────────
+      - name: SAST — Bandit
+        run: bandit -r . -ll -o bandit.json -f json
+      #
+      # ── ALTERNATIVE: Semgrep (language-agnostic) ─────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto
+      #
+      # ── ALTERNATIVE: Semgrep ─────────────────────────────────────
+      # - uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: auto
+      #
+      # ── ALTERNATIVE: Pylint security ─────────────────────────────
+      # - name: SAST — Pylint
+      #   run: pip install pylint && pylint --disable=all --enable=W0611,W0612 . || true
+
+  # ── CodeQL (GitHub-native SAST + dataflow analysis) ─────────────────
+  codeql:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: python
+      - uses: github/codeql-action/autobuild@v3
+      - uses: github/codeql-action/analyze@v3
+
+  # ── License scan (detect copyleft licenses in dependencies) ─────────
+  license-scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - uses: actions/checkout@v4
+      - name: License check
+        run: pip-licenses --format=json --output-file=licenses.json
+      #
+      # ── ALTERNATIVE: FOSSA (commercial, full license intelligence) ─
+      # - name: License scan — FOSSA
+      #   uses: fossas/fossa-action@main
+      #   with:
+      #     api-key: ${{ secrets.FOSSA_API_KEY }}
+
+  # ── IAC scan (Infrastructure as Code misconfigurations) ─────────────
+  iac-scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      # ── DEFAULT: Checkov ─────────────────────────────────────────
+      - uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: .
+          soft_fail: true  # REPLACE: false to hard-fail on violations
+      #
+      # ── ALTERNATIVE: KICS ────────────────────────────────────────
+      # - name: IAC scan — KICS
+      #   uses: checkmarx/kics-github-action@v2
+      #   with:
+      #     path: '.'
+      #     output_formats: 'sarif'
+      #     output_path: 'kics-results.sarif'
+      #     fail_on: high
+      # - name: Upload KICS SARIF
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: kics-results.sarif
+      #
+      # ── ALTERNATIVE: Trivy config scan ───────────────────────────
+      # - name: IAC scan — Trivy config
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     scan-type: config
+      #     scan-ref: .
+      #     format: sarif
+      #     output: trivy-iac.sarif
+      # - name: Upload Trivy IAC SARIF
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: trivy-iac.sarif
+      #
+      # ── ALTERNATIVE: tfsec (Terraform-specific) ──────────────────
+      # - name: IAC scan — tfsec
+      #   uses: aquasecurity/tfsec-action@v1.0.0
+
+  # ── Secrets scan (leaked credentials and API keys) ───────────────────
+  secrets-scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history required for Gitleaks delta scan
+      # ── DEFAULT: Gitleaks ─────────────────────────────────────────
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #
+      # ── ALTERNATIVE: TruffleHog ──────────────────────────────────
+      # - name: Secrets scan — TruffleHog
+      #   uses: trufflesecurity/trufflehog@main
+      #   with:
+      #     path: ./
+      #     base: ${{ github.event.repository.default_branch }}
+      #     head: HEAD
+      #     extra_args: --debug --only-verified
+      #
+      # ── ALTERNATIVE: GitGuardian (requires GITGUARDIAN_API_KEY) ──
+      # - name: Secrets scan — GitGuardian
+      #   uses: GitGuardian/ggshield-action@v1
+      #   env:
+      #     GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+      #   with:
+      #     args: secret scan ci

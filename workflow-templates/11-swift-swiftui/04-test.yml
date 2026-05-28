@@ -1,0 +1,32 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 04 — Test  |  11 Native iOS — Swift / SwiftUI 6
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Swift / SwiftUI repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "04 Test — Swift / SwiftUI 6"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest-stable'
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: xcodebuild test -scheme MyApp -destination 'platform=iOS Simulator,name=iPhone 16'
+      # ── OPTIONAL: Codecov ─────────────────────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
