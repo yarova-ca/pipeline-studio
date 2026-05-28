@@ -177,7 +177,6 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <a href="09-linux-distros.html">09 Linux distros</a>
   <a href="10-linux-compliance.html">10 Linux compliance</a>
   <a href="11-dockerfile-catalog.html" aria-current="page">11 Dockerfiles</a>
-  <a href="12-compliance-variations.html">12 Compliance</a>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
@@ -348,22 +347,34 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/.next/standalone ./
 <span class="df-kw">COPY</span> --from=builder /app/.next/static ./.next/static
 <span class="df-kw">COPY</span> --from=builder /app/public ./public
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/.next/standalone ./
 <span class="df-kw">COPY</span> --from=builder /app/.next/static ./.next/static
 <span class="df-kw">COPY</span> --from=builder /app/public ./public
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]</div>
     <p class="df-note note-info">Requires <code>output: 'standalone'</code> in next.config.js. Without it, the standalone/ directory is not created and the runtime COPY commands will fail.</p>
@@ -408,22 +419,34 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/build ./build
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/server/index.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/build ./build
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/server/index.js&quot;]</div>
     <div class="vfy-block">
@@ -467,18 +490,30 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/.output ./.output
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;.output/server/index.mjs&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/.output ./.output
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;.output/server/index.mjs&quot;]</div>
     <div class="vfy-block">
@@ -522,22 +557,34 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/build ./build
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/index.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/build ./build
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/index.js&quot;]</div>
     <p class="df-note note-info">Install <code>@sveltejs/adapter-node</code> and set it in svelte.config.js. Default adapter (auto) does not produce a Node.js server.</p>
@@ -582,22 +629,34 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:4000/health || exit 1
 <span class="df-kw">EXPOSE</span> 4000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/app/server/server.mjs&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:4000/health || exit 1
 <span class="df-kw">EXPOSE</span> 4000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/app/server/server.mjs&quot;]</div>
     <p class="df-note note-info">Replace <code>app</code> in the CMD path with your Angular project name from angular.json. The server entry is <code>dist/&lt;projectName&gt;/server/server.mjs</code>.</p>
@@ -665,12 +724,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -713,12 +784,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -761,12 +844,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist/app/browser /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist/app/browser /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <p class="df-note note-info">Replace <code>app/browser</code> with your Angular project name. The correct path is in the <code>outputPath</code> field of <code>angular.json</code>.</p>
     <div class="vfy-block">
@@ -810,12 +905,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/build /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/build /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <p class="df-note note-info">This pattern requires <code>@sveltejs/adapter-static</code>. For SSR, see the SvelteKit entry in category 1.</p>
     <div class="vfy-block">
@@ -859,12 +966,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -929,12 +1048,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -977,12 +1108,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/_site /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/_site /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -1017,12 +1160,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/public /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/public /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -1065,12 +1220,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/public /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/public /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <p class="df-note note-info">Gatsby builds can require up to 2GB RAM. If the build OOMs inside Docker, set <code>--memory=2g</code> in your <code>docker build</code> command or CI environment.</p>
     <div class="vfy-block">
@@ -1134,12 +1301,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -1162,10 +1341,16 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <div class="dockerfile-block"><span class="df-comment"># Deno runs TypeScript natively — no Node.js or npm required</span>
 
 <span class="df-stage">FROM denoland/deno:2.3.3 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> . .
 <span class="df-kw">RUN</span> deno cache main.ts
 <span class="df-kw">USER</span> deno
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;deno&quot;, &quot;run&quot;, &quot;--allow-net&quot;, &quot;--allow-read&quot;, &quot;--allow-env&quot;, &quot;main.ts&quot;]
 
@@ -1231,22 +1416,34 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/server/entry.express.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/server/entry.express.js&quot;]</div>
     <div class="vfy-block">
@@ -1438,22 +1635,34 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/.next/standalone ./
 <span class="df-kw">COPY</span> --from=builder /app/.next/static ./.next/static
 <span class="df-kw">COPY</span> --from=builder /app/public ./public
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/.next/standalone ./
 <span class="df-kw">COPY</span> --from=builder /app/.next/static ./.next/static
 <span class="df-kw">COPY</span> --from=builder /app/public ./public
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]</div>
     <p class="df-note note-info">Enable streaming with React Suspense in your Server Components. Standalone output mode required: <code>output: 'standalone'</code>.</p>
@@ -1498,22 +1707,34 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/build ./build
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/server/index.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/build ./build
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/server/index.js&quot;]</div>
     <div class="vfy-block">
@@ -1557,22 +1778,34 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/build ./build
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/index.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/build ./build
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/index.js&quot;]</div>
     <div class="vfy-block">
@@ -1637,12 +1870,24 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -1685,12 +1930,24 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -1733,12 +1990,24 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -2261,12 +2530,24 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -2309,12 +2590,24 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM nginx:alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -2381,22 +2674,34 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/index.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/index.js&quot;]</div>
     <div class="vfy-block">
@@ -2440,22 +2745,34 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/app.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/app.js&quot;]</div>
     <div class="vfy-block">
@@ -2499,22 +2816,34 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/main.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/main.js&quot;]</div>
     <div class="vfy-block">
@@ -2558,22 +2887,34 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/index.js&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/dist ./dist
 <span class="df-kw">COPY</span> --from=builder /app/node_modules ./node_modules
 <span class="df-kw">COPY</span> --from=builder /app/package.json ./
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/index.js&quot;]</div>
     <div class="vfy-block">
@@ -2597,10 +2938,16 @@ jobs:
     <div class="dockerfile-block"><span class="df-comment"># Deno runs TypeScript natively — no Node.js or npm required</span>
 
 <span class="df-stage">FROM denoland/deno:2.3.3 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> . .
 <span class="df-kw">RUN</span> deno cache src/main.ts
 <span class="df-kw">USER</span> deno
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;deno&quot;, &quot;run&quot;, &quot;--allow-net&quot;, &quot;--allow-read&quot;, &quot;--allow-env&quot;, &quot;src/main.ts&quot;]
 
@@ -2627,10 +2974,18 @@ jobs:
     <div class="dockerfile-block"><span class="df-comment"># Bun runs TypeScript natively — no compilation step required</span>
 
 <span class="df-stage">FROM oven/bun:1.1-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> package.json bun.lockb ./
 <span class="df-kw">RUN</span> bun install --frozen-lockfile --production
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> . .
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;bun&quot;, &quot;run&quot;, &quot;src/index.ts&quot;]
 
@@ -2699,20 +3054,32 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM python:3.12-slim AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> groupadd -r appgroup &amp;&amp; useradd -r -g appgroup appuser
+<span class="df-kw">RUN</span> groupadd -g 1001 -r appgroup &amp;&amp; useradd -u 1001 -r -g appgroup appuser
 <span class="df-kw">COPY</span> --from=builder /install /usr/local
 <span class="df-kw">COPY</span> --from=builder /app .
-<span class="df-kw">USER</span> appuser
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD python3 -c &quot;import urllib.request; urllib.request.urlopen(&#x27;http://localhost:8000/health&#x27;)&quot; || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;uvicorn&quot;, &quot;app.main:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/python-311 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /install /usr/local
 <span class="df-kw">COPY</span> --from=builder /app .
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;uvicorn&quot;, &quot;app.main:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;]</div>
     <div class="vfy-block">
@@ -2757,20 +3124,32 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM python:3.12-slim AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> groupadd -r appgroup &amp;&amp; useradd -r -g appgroup appuser
+<span class="df-kw">RUN</span> groupadd -g 1001 -r appgroup &amp;&amp; useradd -u 1001 -r -g appgroup appuser
 <span class="df-kw">COPY</span> --from=builder /install /usr/local
 <span class="df-kw">COPY</span> --from=builder /app .
-<span class="df-kw">USER</span> appuser
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD python3 -c &quot;import urllib.request; urllib.request.urlopen(&#x27;http://localhost:8000/health&#x27;)&quot; || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;gunicorn&quot;, &quot;myproject.wsgi:application&quot;, &quot;--bind&quot;, &quot;0.0.0.0:8000&quot;, &quot;--workers&quot;, &quot;2&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/python-311 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /install /usr/local
 <span class="df-kw">COPY</span> --from=builder /app .
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;gunicorn&quot;, &quot;myproject.wsgi:application&quot;, &quot;--bind&quot;, &quot;0.0.0.0:8000&quot;, &quot;--workers&quot;, &quot;2&quot;]</div>
     <div class="vfy-block">
@@ -2815,20 +3194,32 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM python:3.12-slim AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> groupadd -r appgroup &amp;&amp; useradd -r -g appgroup appuser
+<span class="df-kw">RUN</span> groupadd -g 1001 -r appgroup &amp;&amp; useradd -u 1001 -r -g appgroup appuser
 <span class="df-kw">COPY</span> --from=builder /install /usr/local
 <span class="df-kw">COPY</span> --from=builder /app .
-<span class="df-kw">USER</span> appuser
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD python3 -c &quot;import urllib.request; urllib.request.urlopen(&#x27;http://localhost:8000/health&#x27;)&quot; || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;gunicorn&quot;, &quot;wsgi:app&quot;, &quot;--bind&quot;, &quot;0.0.0.0:8000&quot;, &quot;--workers&quot;, &quot;2&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/python-311 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /install /usr/local
 <span class="df-kw">COPY</span> --from=builder /app .
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;gunicorn&quot;, &quot;wsgi:app&quot;, &quot;--bind&quot;, &quot;0.0.0.0:8000&quot;, &quot;--workers&quot;, &quot;2&quot;]</div>
     <div class="vfy-block">
@@ -2873,20 +3264,32 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM python:3.12-slim AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> groupadd -r appgroup &amp;&amp; useradd -r -g appgroup appuser
+<span class="df-kw">RUN</span> groupadd -g 1001 -r appgroup &amp;&amp; useradd -u 1001 -r -g appgroup appuser
 <span class="df-kw">COPY</span> --from=builder /install /usr/local
 <span class="df-kw">COPY</span> --from=builder /app .
-<span class="df-kw">USER</span> appuser
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD python3 -c &quot;import urllib.request; urllib.request.urlopen(&#x27;http://localhost:8000/health&#x27;)&quot; || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;uvicorn&quot;, &quot;app:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/python-311 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /install /usr/local
 <span class="df-kw">COPY</span> --from=builder /app .
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;uvicorn&quot;, &quot;app:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;]</div>
     <div class="vfy-block">
@@ -2942,14 +3345,24 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM scratch AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 <span class="df-kw">COPY</span> --from=builder /app/server /server
+<span class="df-comment"># HEALTHCHECK: scratch has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/server /server
+<span class="df-comment"># HEALTHCHECK: ubi-micro has no curl/wget — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
@@ -2984,14 +3397,24 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM scratch AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 <span class="df-kw">COPY</span> --from=builder /app/server /server
+<span class="df-comment"># HEALTHCHECK: scratch has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/server /server
+<span class="df-comment"># HEALTHCHECK: ubi-micro has no curl/wget — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
@@ -3026,14 +3449,24 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM scratch AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 <span class="df-kw">COPY</span> --from=builder /app/server /server
+<span class="df-comment"># HEALTHCHECK: scratch has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/server /server
+<span class="df-comment"># HEALTHCHECK: ubi-micro has no curl/wget — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
@@ -3068,14 +3501,24 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM scratch AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 <span class="df-kw">COPY</span> --from=builder /app/server /server
+<span class="df-comment"># HEALTHCHECK: scratch has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/server /server
+<span class="df-comment"># HEALTHCHECK: ubi-micro has no curl/wget — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
@@ -3135,15 +3578,27 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM gcr.io/distroless/java21-debian12 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/*.jar app.jar
+<span class="df-comment"># HEALTHCHECK: distroless has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/*.jar app.jar
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
+<span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
@@ -3182,15 +3637,27 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM gcr.io/distroless/java21-debian12 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/quarkus-app/*.jar app.jar
+<span class="df-comment"># HEALTHCHECK: distroless has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/quarkus-app/*.jar app.jar
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
+<span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">This Dockerfile uses Quarkus JVM mode (fat JAR). Quarkus native mode requires a GraalVM builder and produces a native binary that can run on ubi9/ubi-micro instead of distroless/java21.</p>
@@ -3229,15 +3696,27 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM gcr.io/distroless/java21-debian12 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/*.jar app.jar
+<span class="df-comment"># HEALTHCHECK: distroless has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/*.jar app.jar
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
+<span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
@@ -3296,15 +3775,27 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM gcr.io/distroless/java21-debian12 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/build/libs/*-all.jar app.jar
+<span class="df-comment"># HEALTHCHECK: distroless has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/build/libs/*-all.jar app.jar
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
+<span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
@@ -3343,15 +3834,27 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM gcr.io/distroless/java21-debian12 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/build/libs/*.jar app.jar
+<span class="df-comment"># HEALTHCHECK: distroless has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/build/libs/*.jar app.jar
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
+<span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
@@ -3408,17 +3911,30 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /publish .
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget -qO- http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;dotnet&quot;, &quot;WebApp.dll&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM mcr.microsoft.com/dotnet/aspnet:9.0-cbl-mariner2.0-fips AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /publish .
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;dotnet&quot;, &quot;WebApp.dll&quot;]</div>
     <p class="df-note note-info">Replace <code>WebApp.dll</code> in CMD with your actual project output DLL name (matches the .csproj filename).</p>
@@ -3455,17 +3971,30 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
 <span class="df-kw">COPY</span> --from=builder /publish .
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget -qO- http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;dotnet&quot;, &quot;MinimalApi.dll&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM mcr.microsoft.com/dotnet/aspnet:9.0-cbl-mariner2.0-fips AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /publish .
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;dotnet&quot;, &quot;MinimalApi.dll&quot;]</div>
     <div class="vfy-block">
@@ -3522,14 +4051,24 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM scratch AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 <span class="df-kw">COPY</span> --from=builder /app/target/x86_64-unknown-linux-musl/release/axum-server /axum-server
+<span class="df-comment"># HEALTHCHECK: scratch has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/axum-server&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/target/x86_64-unknown-linux-musl/release/axum-server /axum-server
+<span class="df-comment"># HEALTHCHECK: ubi-micro has no curl/wget — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/axum-server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
@@ -3567,14 +4106,24 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM scratch AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 <span class="df-kw">COPY</span> --from=builder /app/target/x86_64-unknown-linux-musl/release/actix-server /actix-server
+<span class="df-comment"># HEALTHCHECK: scratch has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/actix-server&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/target/x86_64-unknown-linux-musl/release/actix-server /actix-server
+<span class="df-comment"># HEALTHCHECK: ubi-micro has no curl/wget — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/actix-server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
@@ -3636,20 +4185,32 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM debian:12-slim AS runtime</span>
-<span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y libncurses6 openssl libssl3 &amp;&amp; \
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
+<span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y libncurses6 openssl libssl3 curl &amp;&amp; \
     rm -rf /var/lib/apt/lists/*
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> groupadd -r app &amp;&amp; useradd -r -g app app
+<span class="df-kw">RUN</span> groupadd -g 1001 -r app &amp;&amp; useradd -u 1001 -r -g app app
 <span class="df-kw">COPY</span> --from=builder /app/_build/prod/rel/my_app .
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:4000/health || exit 1
 <span class="df-kw">EXPOSE</span> 4000
 <span class="df-kw">CMD</span> [&quot;./bin/my_app&quot;, &quot;start&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/_build/prod/rel/my_app .
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:4000/health || exit 1
 <span class="df-kw">EXPOSE</span> 4000
 <span class="df-kw">CMD</span> [&quot;./bin/my_app&quot;, &quot;start&quot;]</div>
     <p class="df-note note-info">Replace <code>my_app</code> with your OTP application name from mix.exs. The release binary is at <code>_build/prod/rel/&lt;app_name&gt;/bin/&lt;app_name&gt;</code>.</p>
@@ -3703,23 +4264,35 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM ruby:3.3-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
-<span class="df-kw">RUN</span> apk add --no-cache nodejs ca-certificates tzdata
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
+<span class="df-kw">RUN</span> apk add --no-cache nodejs ca-certificates tzdata wget
 <span class="df-kw">COPY</span> --from=builder /vendor/bundle /vendor/bundle
 <span class="df-kw">COPY</span> --from=builder /app .
 <span class="df-kw">ENV</span> BUNDLE_PATH=/vendor/bundle
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;bundle&quot;, &quot;exec&quot;, &quot;rails&quot;, &quot;server&quot;, &quot;-b&quot;, &quot;0.0.0.0&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ruby-32 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /vendor/bundle /vendor/bundle
 <span class="df-kw">COPY</span> --from=builder /app .
 <span class="df-kw">ENV</span> BUNDLE_PATH=/vendor/bundle
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;bundle&quot;, &quot;exec&quot;, &quot;rails&quot;, &quot;server&quot;, &quot;-b&quot;, &quot;0.0.0.0&quot;]</div>
     <p class="df-note note-info">If your app uses Active Storage or Action Cable, add the required system packages (<code>libvips</code>, <code>redis</code>) to the runtime Alpine apk install.</p>
@@ -3753,23 +4326,35 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM ruby:3.3-alpine AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">RUN</span> addgroup -S app &amp;&amp; adduser -S app -G app
-<span class="df-kw">RUN</span> apk add --no-cache nodejs ca-certificates tzdata
+<span class="df-kw">RUN</span> addgroup -g 1001 -S app &amp;&amp; adduser -u 1001 -S app -G app
+<span class="df-kw">RUN</span> apk add --no-cache nodejs ca-certificates tzdata wget
 <span class="df-kw">COPY</span> --from=builder /vendor/bundle /vendor/bundle
 <span class="df-kw">COPY</span> --from=builder /app .
 <span class="df-kw">ENV</span> BUNDLE_PATH=/vendor/bundle
-<span class="df-kw">USER</span> app
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget -qO- http://localhost:4567/health || exit 1
 <span class="df-kw">EXPOSE</span> 4567
 <span class="df-kw">CMD</span> [&quot;bundle&quot;, &quot;exec&quot;, &quot;ruby&quot;, &quot;app.rb&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ruby-32 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /vendor/bundle /vendor/bundle
 <span class="df-kw">COPY</span> --from=builder /app .
 <span class="df-kw">ENV</span> BUNDLE_PATH=/vendor/bundle
-<span class="df-kw">USER</span> 1001
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:4567/health || exit 1
 <span class="df-kw">EXPOSE</span> 4567
 <span class="df-kw">CMD</span> [&quot;bundle&quot;, &quot;exec&quot;, &quot;ruby&quot;, &quot;app.rb&quot;]</div>
     <div class="vfy-block">
@@ -3824,20 +4409,32 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM php:8.3-fpm-alpine AS runtime</span>
-<span class="df-kw">RUN</span> apk add --no-cache nginx ca-certificates &amp;&amp; \
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
+<span class="df-kw">RUN</span> apk add --no-cache nginx ca-certificates wget &amp;&amp; \
     docker-php-ext-install pdo pdo_mysql opcache
 <span class="df-kw">WORKDIR</span> /var/www/html
 <span class="df-kw">COPY</span> --from=builder --chown=www-data:www-data /app .
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80 9000
 <span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/php-83 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">RUN</span> dnf install -y nginx &amp;&amp; dnf clean all
 <span class="df-kw">WORKDIR</span> /var/www/html
 <span class="df-kw">COPY</span> --from=builder --chown=apache:apache /app .
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080 9000
 <span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]</div>
     <p class="df-note note-info">For production, consider separating nginx and PHP-FPM into separate containers with a shared volume. This single-container pattern is suitable for simple deployments.</p>
@@ -3872,20 +4469,32 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM php:8.3-fpm-alpine AS runtime</span>
-<span class="df-kw">RUN</span> apk add --no-cache nginx ca-certificates &amp;&amp; \
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
+<span class="df-kw">RUN</span> apk add --no-cache nginx ca-certificates wget &amp;&amp; \
     docker-php-ext-install pdo pdo_mysql opcache
 <span class="df-kw">WORKDIR</span> /var/www/html
 <span class="df-kw">COPY</span> --from=builder --chown=www-data:www-data /app .
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80 9000
 <span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/php-83 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">RUN</span> dnf install -y nginx &amp;&amp; dnf clean all
 <span class="df-kw">WORKDIR</span> /var/www/html
 <span class="df-kw">COPY</span> --from=builder --chown=apache:apache /app .
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080 9000
 <span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]</div>
     <div class="vfy-block">
@@ -3919,20 +4528,32 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM php:8.3-fpm-alpine AS runtime</span>
-<span class="df-kw">RUN</span> apk add --no-cache nginx ca-certificates &amp;&amp; \
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
+<span class="df-kw">RUN</span> apk add --no-cache nginx ca-certificates wget &amp;&amp; \
     docker-php-ext-install pdo pdo_mysql opcache
 <span class="df-kw">WORKDIR</span> /var/www/html
 <span class="df-kw">COPY</span> --from=builder --chown=www-data:www-data /app .
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
 <span class="df-kw">EXPOSE</span> 80 9000
 <span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/php-83 AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">RUN</span> dnf install -y nginx &amp;&amp; dnf clean all
 <span class="df-kw">WORKDIR</span> /var/www/html
 <span class="df-kw">COPY</span> --from=builder --chown=apache:apache /app .
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
 <span class="df-kw">EXPOSE</span> 8080 9000
 <span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]</div>
     <div class="vfy-block">
@@ -3990,15 +4611,30 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM swift:6.0-noble-slim AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
+<span class="df-kw">RUN</span> useradd -u 1001 -M -s /sbin/nologin appuser
 <span class="df-kw">COPY</span> --from=builder /app/.build/release/Run .
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;./Run&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/.build/release/Run .
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;./Run&quot;]</div>
     <p class="df-note note-info">Vapor's default binary name is <code>Run</code>. Replace with your target name from Package.swift if different.</p>
@@ -4037,15 +4673,30 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM swift:6.0-noble-slim AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
+<span class="df-kw">RUN</span> useradd -u 1001 -M -s /sbin/nologin appuser
 <span class="df-kw">COPY</span> --from=builder /app/.build/release/App .
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;./App&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/.build/release/App .
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;./App&quot;]</div>
     <p class="df-note note-info">Replace <code>App</code> in CMD with your Swift target name from Package.swift.</p>
@@ -4101,15 +4752,27 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM gcr.io/distroless/java21-debian12 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/scala-3.*/assembly/*-assembly-*.jar app.jar
+<span class="df-comment"># HEALTHCHECK: distroless has no shell — use Kubernetes httpGet liveness probe on port 9000</span>
 <span class="df-kw">EXPOSE</span> 9000
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/scala-3.*/assembly/*-assembly-*.jar app.jar
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:9000/actuator/health || exit 1
+<span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">EXPOSE</span> 9000
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
@@ -4145,15 +4808,27 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM gcr.io/distroless/java21-debian12 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/scala-3.*/assembly/*-assembly-*.jar app.jar
+<span class="df-comment"># HEALTHCHECK: distroless has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/scala-3.*/assembly/*-assembly-*.jar app.jar
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
+<span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
@@ -4209,15 +4884,27 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM gcr.io/distroless/java21-debian12 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/uberjar/*-standalone.jar app.jar
+<span class="df-comment"># HEALTHCHECK: distroless has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/uberjar/*-standalone.jar app.jar
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
+<span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
@@ -4253,15 +4940,27 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard) ─────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM gcr.io/distroless/java21-debian12 AS runtime</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/uberjar/*-standalone.jar app.jar
+<span class="df-comment"># HEALTHCHECK: distroless has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/openjdk-21-runtime AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">WORKDIR</span> /app
 <span class="df-kw">COPY</span> --from=builder /app/target/uberjar/*-standalone.jar app.jar
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
+<span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
@@ -4316,21 +5015,39 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard, static) ──────────────────────────────────────────────</span>
 <span class="df-stage">FROM scratch AS runtime-static</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 <span class="df-kw">COPY</span> --from=builder /app/build/drogon-server /drogon-server
+<span class="df-comment"># HEALTHCHECK: scratch has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/drogon-server&quot;]
 
 <span class="df-comment"># ── runtime (standard, dynamic) ─────────────────────────────────────────────</span>
 <span class="df-stage">FROM debian:12-slim AS runtime-dynamic</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
+<span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y ca-certificates curl &amp;&amp; rm -rf /var/lib/apt/lists/*
+<span class="df-kw">RUN</span> groupadd -g 1001 app &amp;&amp; useradd -u 1001 -g 1001 -M -s /sbin/nologin app
 <span class="df-kw">COPY</span> --from=builder /app/build/drogon-server /app/drogon-server
-<span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y ca-certificates &amp;&amp; rm -rf /var/lib/apt/lists/*
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/app/drogon-server&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/build/drogon-server /drogon-server
+<span class="df-comment"># HEALTHCHECK: ubi-micro has no curl/wget — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/drogon-server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
@@ -4365,21 +5082,39 @@ jobs:
 
 <span class="df-comment"># ── runtime (standard, static) ──────────────────────────────────────────────</span>
 <span class="df-stage">FROM scratch AS runtime-static</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 <span class="df-kw">COPY</span> --from=builder /app/build/crow-server /crow-server
+<span class="df-comment"># HEALTHCHECK: scratch has no shell — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/crow-server&quot;]
 
 <span class="df-comment"># ── runtime (standard, dynamic) ─────────────────────────────────────────────</span>
 <span class="df-stage">FROM debian:12-slim AS runtime-dynamic</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
+<span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y ca-certificates curl &amp;&amp; rm -rf /var/lib/apt/lists/*
+<span class="df-kw">RUN</span> groupadd -g 1001 app &amp;&amp; useradd -u 1001 -g 1001 -M -s /sbin/nologin app
 <span class="df-kw">COPY</span> --from=builder /app/build/crow-server /app/crow-server
-<span class="df-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y ca-certificates &amp;&amp; rm -rf /var/lib/apt/lists/*
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/app/crow-server&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/build/crow-server /crow-server
+<span class="df-comment"># HEALTHCHECK: ubi-micro has no curl/wget — use Kubernetes httpGet liveness probe on port 8080</span>
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/crow-server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
