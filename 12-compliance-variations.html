@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Compliance Variations — how FIPS, PCI DSS, HIPAA, FedRAMP, CMMC, SOC 2, SOX, GDPR, PIPEDA, NERC CIP, and ISO 27001 change Dockerfile contents. 11 standards, 10 industry profiles, 5 concrete additions.">
+<title>Compliance Variations — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:220px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a[aria-current="page"]{color:var(--blue);font-weight:600;border-left-color:var(--blue)}
+main{flex:1;min-width:0;padding:40px 52px 100px}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+/* Counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+/* Explanation block */
+.explain-block{background:#f0f6ff;border:1px solid #b6d7f5;border-left:4px solid var(--blue);border-radius:7px;padding:18px 22px;margin:0 0 32px}
+.explain-block h3{font-size:13px;font-weight:700;color:var(--text-head);margin-bottom:10px}
+.explain-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;font-size:12px;line-height:1.6}
+.explain-num{font-size:11px;font-weight:700;color:var(--blue);background:#dbeeff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.explain-text{color:var(--text)}
+.explain-text strong{color:var(--text-head)}
+/* Compliance chips */
+.comp-chip{font-size:10px;font-weight:700;border-radius:3px;padding:2px 7px;display:inline-block;margin:1px 2px}
+/* Ticks */
+.tick-yes{color:var(--green);font-weight:600;font-size:11px}
+.tick-no{color:var(--text-dim);font-size:11px}
+.tick-req{color:var(--red);font-weight:700;font-size:11px}
+.tick-rec{color:var(--amber);font-weight:600;font-size:11px}
+.tick-na{color:var(--text-dim);font-size:11px}
+/* Tables */
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px;font-style:italic}
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:12px 0 32px}
+.tbl-wrap.comp-tbl{border-top:3px solid var(--purple)}
+.tbl-wrap.industry-tbl{border-top:3px solid var(--green)}
+.tbl-wrap.delta-tbl{border-top:3px solid var(--blue)}
+.tbl-scroll{overflow-x:auto}
+.xref-table{border-collapse:collapse;font-size:11px;width:100%}
+.xref-table thead tr{background:var(--bg2)}
+.xref-table th{text-align:center;padding:6px 8px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid var(--border);white-space:nowrap}
+.xref-table th.row-hd{text-align:left;min-width:140px;padding-left:12px}
+.xref-table td{padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;font-size:11px;vertical-align:top;line-height:1.5}
+.xref-table td.center{text-align:center;vertical-align:middle}
+.xref-table tbody tr:hover{background:var(--bg2)}
+.xref-table tbody tr:last-child td{border-bottom:none}
+.xref-table td.row-label{padding-left:12px;font-weight:600;font-size:11px;white-space:nowrap;min-width:130px;vertical-align:middle}
+/* Gap analysis */
+.gap-yes{color:var(--green);font-weight:700;font-size:11px}
+.gap-no{color:var(--red);font-weight:700;font-size:11px}
+/* Addition cards */
+.addition-card{border:1px solid var(--border);border-radius:8px;margin:12px 0;overflow:hidden}
+.addition-card .add-head{background:var(--bg2);padding:12px 16px;border-bottom:1px solid var(--border)}
+.addition-card .add-title{font-size:13px;font-weight:700;color:var(--text-head)}
+.addition-card .add-applies{font-size:10px;color:var(--text-dim);margin-top:3px}
+.addition-card .add-body{padding:14px 16px}
+.addition-card .add-why{font-size:12px;color:var(--text);margin-bottom:10px;line-height:1.6;background:var(--bg3);border-left:3px solid var(--blue);padding:8px 12px;border-radius:0 5px 5px 0}
+.addition-card .add-note{font-size:11px;color:var(--text-dim);margin-top:8px;font-style:italic;padding:6px 10px;background:var(--bg2);border-radius:4px}
+/* Dockerfile block */
+.dockerfile-block{font-family:'JetBrains Mono','Fira Code',monospace;font-size:11px;line-height:1.7;white-space:pre;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:14px 18px;overflow-x:auto;color:var(--text);margin:10px 0}
+.df-comment{color:var(--text-dim)}
+.df-stage{color:var(--purple);font-weight:700}
+.df-arg{color:var(--amber)}
+.df-kw{color:var(--green);font-weight:600}
+/* Gap section */
+.gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.gap-card{border:1px solid var(--border);border-radius:7px;overflow:hidden}
+.gap-card .gc-head{padding:8px 14px;font-size:11px;font-weight:700}
+.gap-card.gc-ok .gc-head{background:#d4f4dd;color:#1a7f37;border-bottom:1px solid #b6e8c4}
+.gap-card.gc-miss .gc-head{background:#ffd7d5;color:#b91c1c;border-bottom:1px solid #f5b8b5}
+.gap-card .gc-list{padding:8px 14px;list-style:none;font-size:11px;line-height:1.9}
+/* Misc */
+code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#c5a7f5;
+  }
+  .explain-block{background:#0d2744;border-color:#2d4a6a}
+  .addition-card .add-why{background:#161b22;border-left-color:var(--blue)}
+  .addition-card .add-note{background:#21262d}
+  .dockerfile-block{background:#1c2028;border-color:#30363d}
+  code{background:#1c2028;border-color:#30363d}
+  .gap-card.gc-ok .gc-head{background:#0d2d1a;color:#3fb950;border-color:#1a4a28}
+  .gap-card.gc-miss .gc-head{background:#2a0a09;color:#f85149;border-color:#4a1a18}
+}
+@media print{.skip-link,nav{display:none}main{padding:20px}h2{margin-top:24px}.tbl-wrap{break-inside:avoid}.addition-card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-logo"><h1>Compliance Variations</h1><p>Pipeline Studio Design Doc</p></div>
+  <div class="nav-section">Sections</div>
+  <a href="#concept">1 How it works</a>
+  <a href="#standards">2 The 11 standards</a>
+  <a href="#industry-map">3 Industry map</a>
+  <a href="#dockerfile-delta">4 Dockerfile delta</a>
+  <a href="#additions">5 The 5 additions</a>
+  <a href="#gap-analysis">6 Gap analysis</a>
+  <div class="nav-section">All docs</div>
+  <a href="index.html">⌂ Hub</a>
+  <a href="01-framework-catalog.html">01 Frameworks</a>
+  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
+  <a href="03-stage-types.html">03 Stage types</a>
+  <a href="04-tool-catalog.html">04 Tool catalog</a>
+  <a href="05-invariants.html">05 Invariants</a>
+  <a href="06-industry-schema.html">06 US industries</a>
+  <a href="07-canada-schema.html">07 CA industries</a>
+  <a href="08-canada-market.html">08 CA market</a>
+  <a href="09-linux-distros.html">09 Linux distros</a>
+  <a href="10-linux-compliance.html">10 Linux compliance</a>
+  <a href="11-dockerfile-catalog.html">11 Dockerfiles</a>
+  <a href="12-compliance-variations.html" aria-current="page">12 Compliance</a>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+<main id="main-content">
+<div class="page-title">Compliance Variations</div>
+<div class="page-meta">11 standards &nbsp;·&nbsp; 10 industry profiles &nbsp;·&nbsp; Dockerfile catalog: <a href="11-dockerfile-catalog.html">doc 11</a> &nbsp;·&nbsp; Linux compliance: <a href="10-linux-compliance.html">doc 10</a></div>
+
+<div class="counts-bar">
+  <div class="count-chip" style="border-left:3px solid var(--purple)">
+    <div class="chip-num" style="color:var(--purple)">11</div>
+    <div class="chip-label">Compliance<br>standards</div>
+  </div>
+  <div class="count-chip" style="border-left:3px solid var(--green)">
+    <div class="chip-num" style="color:var(--green)">10</div>
+    <div class="chip-label">Industry<br>profiles</div>
+  </div>
+  <div class="count-chip" style="border-left:3px solid var(--blue)">
+    <div class="chip-num" style="color:var(--blue)">5</div>
+    <div class="chip-label">Concrete<br>Dockerfile additions</div>
+  </div>
+  <div class="count-chip" style="border-left:3px solid var(--red)">
+    <div class="chip-num" style="color:var(--red)">3</div>
+    <div class="chip-label">Gaps in<br>doc 11</div>
+  </div>
+</div>
+<h2 id="concept">How compliance affects Dockerfiles</h2>
+<p class="section-sub">Read this first. It explains the model — why compliance changes specific Dockerfile lines, and how to apply it.</p>
+<div class="explain-block">
+  <h3>The additive compliance model</h3>
+  <div class="explain-row"><div class="explain-num">1</div><div class="explain-text"><strong>A Dockerfile is the blueprint for what is inside the container.</strong> The container image is part of the system. Compliance standards govern the whole system — including the container image.</div></div>
+  <div class="explain-row"><div class="explain-num">2</div><div class="explain-text"><strong>You do not rewrite the Dockerfile per compliance standard.</strong> You start from the base Dockerfile in doc 11. Then you apply a compliance layer on top. The layer adds or replaces specific instructions.</div></div>
+  <div class="explain-row"><div class="explain-num">3</div><div class="explain-text"><strong>Doc 11 already handles FIPS</strong> via the <code>--target runtime-fips</code> named target. That is one example of the compliance layer model. The base Dockerfile is unchanged. The FIPS layer swaps the runtime base image to UBI9.</div></div>
+  <div class="explain-row"><div class="explain-num">4</div><div class="explain-text"><strong>The 5 compliance additions in section 5 are the remaining layers.</strong> Apply whichever your industry requires. Each addition is independent — you can apply one, several, or all five to the same Dockerfile.</div></div>
+  <div class="explain-row"><div class="explain-num">5</div><div class="explain-text"><strong>Compliance enforcement that does NOT change the Dockerfile</strong> — data residency (GDPR, PIPEDA), image signing (FedRAMP), and registry air-gapping (NERC CIP) — is enforced at the CI/CD pipeline and infrastructure layer, not the Dockerfile itself.</div></div>
+</div>
+<h2 id="standards">The 11 compliance standards</h2>
+<p class="section-sub">Each standard that affects container images. "Container requirement" is the minimum the standard demands from the image itself.</p>
+<div class="tbl-wrap comp-tbl"><div class="tbl-scroll">
+<table class="xref-table">
+  <thead><tr>
+    <th class="row-hd">Standard</th>
+    <th>Full name</th>
+    <th>Who it applies to</th>
+    <th>Container requirement</th>
+  </tr></thead>
+  <tbody>
+<tr><td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FIPS 140-2/3</span></td><td style="font-size:11px;color:var(--text-dim)">Federal Information Processing Standard — cryptographic module validation</td><td style="font-size:11px">US federal agencies, defense contractors, regulated financial institutions</td><td style="font-size:11px">Base image must be FIPS-validated. All crypto must use FIPS-approved modules.</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#dbeeff;color:#0550ae" data-dark="background:#0d2744;color:#79c0ff">PCI DSS</span></td><td style="font-size:11px;color:var(--text-dim)">Payment Card Industry Data Security Standard</td><td style="font-size:11px">Any organisation that processes, stores, or transmits credit/debit card data</td><td style="font-size:11px">CIS-hardened or distroless base. No unnecessary tools in runtime image. Non-root user. Read-only filesystem.</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#d4f4dd;color:#1a7f37" data-dark="background:#0d2d1a;color:#3fb950">HIPAA</span></td><td style="font-size:11px;color:var(--text-dim)">Health Insurance Portability and Accountability Act</td><td style="font-size:11px">US healthcare providers, health insurers, business associates handling PHI</td><td style="font-size:11px">CIS-hardened base. PHI (protected health info) must never appear in image layers, ENV, or logs.</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FedRAMP</span></td><td style="font-size:11px;color:var(--text-dim)">Federal Risk and Authorization Management Program</td><td style="font-size:11px">Cloud services sold to US federal agencies</td><td style="font-size:11px">FIPS + STIG-hardened base. Signed images. Immutable audit log. HEALTHCHECK required.</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">CMMC</span></td><td style="font-size:11px;color:var(--text-dim)">Cybersecurity Maturity Model Certification</td><td style="font-size:11px">US Department of Defense contractors handling CUI</td><td style="font-size:11px">FIPS mandatory. Geo-restricted image registry. Signed images. CUI must never be in image layers.</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span></td><td style="font-size:11px;color:var(--text-dim)">System and Organisation Controls 2</td><td style="font-size:11px">SaaS companies and service providers that store customer data</td><td style="font-size:11px">HEALTHCHECK required for availability evidence. Logging required for security evidence.</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOX</span></td><td style="font-size:11px;color:var(--text-dim)">Sarbanes-Oxley Act</td><td style="font-size:11px">US publicly traded companies and their subsidiaries</td><td style="font-size:11px">Change management: every image build must be traceable to a commit, ticket, and approver.</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c" data-dark="background:#2a0a09;color:#f85149">GDPR</span></td><td style="font-size:11px;color:var(--text-dim)">General Data Protection Regulation</td><td style="font-size:11px">Any organisation processing personal data of EU residents</td><td style="font-size:11px">PII must never appear in image layers, ENV, or container logs. Data residency enforced at the orchestration layer, not Dockerfile.</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c" data-dark="background:#2a0a09;color:#f85149">PIPEDA</span></td><td style="font-size:11px;color:var(--text-dim)">Personal Information Protection and Electronic Documents Act</td><td style="font-size:11px">Canadian organisations that collect personal information in commercial activity</td><td style="font-size:11px">Data must remain in Canada. Enforced at registry and orchestration level, not Dockerfile.</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#f0f0f5;color:#57606a" data-dark="background:#21262d;color:#8b949e">NERC CIP</span></td><td style="font-size:11px;color:var(--text-dim)">North American Electric Reliability Corporation Critical Infrastructure Protection</td><td style="font-size:11px">Electric utilities, power grid operators, bulk electric system owners</td><td style="font-size:11px">Air-gapped registry. No internet pulls at build or runtime. Strict patch cadence (35-day cycle).</td></tr>
+<tr><td class="row-label"><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px;color:var(--text-dim)">International Standard for Information Security Management Systems</td><td style="font-size:11px">Any organisation seeking formal information security certification</td><td style="font-size:11px">Vulnerability scanning of images at build time. Access control. Logging. Change management.</td></tr>
+  </tbody>
+</table>
+</div></div>
+<h2 id="industry-map">Industry → compliance map</h2>
+<p class="section-sub">Which standards apply to which industries, and the net Dockerfile change that results.</p>
+<div class="tbl-wrap industry-tbl"><div class="tbl-scroll">
+<table class="xref-table">
+  <thead><tr>
+    <th class="row-hd">Industry</th>
+    <th>Primary standard</th>
+    <th>Secondary</th>
+    <th>Key Dockerfile delta</th>
+  </tr></thead>
+  <tbody>
+<tr><td class="row-label">US Healthcare</td><td><span class="comp-chip" style="background:#d4f4dd;color:#1a7f37" data-dark="background:#0d2d1a;color:#3fb950">HIPAA</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span> <span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">HITRUST</span></td><td style="font-size:11px">CIS-hardened base, non-root UID, HEALTHCHECK, immutable audit log (6 yr)</td></tr>
+<tr><td class="row-label">US Finance / Banking</td><td><span class="comp-chip" style="background:#dbeeff;color:#0550ae" data-dark="background:#0d2744;color:#79c0ff">PCI DSS</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOX</span> <span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">FIPS 140-2</span></td><td style="font-size:11px">Distroless/CIS base, TLS 1.2+, no weak crypto, FIPS certs, read-only FS</td></tr>
+<tr><td class="row-label">US Federal / Gov</td><td><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FedRAMP</span> <span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FISMA</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">FIPS 140-3</span> <span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">CMMC</span></td><td style="font-size:11px">UBI9 only, STIG-hardened, signed images, HEALTHCHECK, FedRAMP SIEM</td></tr>
+<tr><td class="row-label">Defense / Aerospace</td><td><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">CMMC</span> <span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">ITAR</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">FIPS 140-3</span></td><td style="font-size:11px">FIPS-only base, geo-restricted registry, CUI never in image</td></tr>
+<tr><td class="row-label">Energy / Utilities</td><td><span class="comp-chip" style="background:#f0f0f5;color:#57606a" data-dark="background:#21262d;color:#8b949e">NERC CIP</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">FIPS 140-2</span></td><td style="font-size:11px">Air-gapped registry, no public pulls, read-only FS, 35-day patch cycle</td></tr>
+<tr><td class="row-label">Public Companies</td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOX</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px">Signed images, Git SHA + approver LABEL, immutable deploy audit log</td></tr>
+<tr><td class="row-label">SaaS / Tech</td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px">HEALTHCHECK, LABEL build date, audit log shipped to immutable store</td></tr>
+<tr><td class="row-label">Retail / E-commerce</td><td><span class="comp-chip" style="background:#dbeeff;color:#0550ae" data-dark="background:#0d2744;color:#79c0ff">PCI DSS</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span></td><td style="font-size:11px">Distroless/CIS base, non-root, TLS 1.2+, card data never in image</td></tr>
+<tr><td class="row-label">EU / European orgs</td><td><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c" data-dark="background:#2a0a09;color:#f85149">GDPR</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px">PII never in image/ENV/logs, TLS 1.2+, access log with erasure mechanism</td></tr>
+<tr><td class="row-label">Canadian orgs</td><td><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c" data-dark="background:#2a0a09;color:#f85149">PIPEDA</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px">Personal data never in image, Canadian data residency enforced at infra</td></tr>
+  </tbody>
+</table>
+</div></div>
+<h2 id="dockerfile-delta">Dockerfile element delta per standard</h2>
+<p class="section-sub">What each standard requires for each Dockerfile element. Five most impactful standards shown. For CMMC, SOX, GDPR, PIPEDA, NERC CIP, and ISO 27001: see the standards table above.</p>
+<div class="tbl-wrap delta-tbl"><div class="tbl-scroll">
+<table class="xref-table">
+  <thead><tr>
+    <th class="row-hd">Dockerfile element</th>
+    <th><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FIPS 140-2/3</span></th><th><span class="comp-chip" style="background:#dbeeff;color:#0550ae" data-dark="background:#0d2744;color:#79c0ff">PCI DSS</span></th><th><span class="comp-chip" style="background:#d4f4dd;color:#1a7f37" data-dark="background:#0d2d1a;color:#3fb950">HIPAA</span></th><th><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FedRAMP</span></th><th><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span></th>
+  </tr></thead>
+  <tbody>
+<tr><td class="row-label">Base image</td><td style="font-size:10px">ubi9 / ubi9/nodejs / ubi9/python-311 / dotnet FIPS</td><td style="font-size:10px">cgr.dev/chainguard/* or distroless</td><td style="font-size:10px">CIS-hardened alpine or distroless</td><td style="font-size:10px">ubi9 (STIG-hardened) — no other base allowed</td><td style="font-size:10px">Any minimal base (alpine, distroless)</td></tr>
+<tr><td class="row-label">USER</td><td style="font-size:10px">Non-root + specific UID (1001)</td><td style="font-size:10px">Non-root mandatory</td><td style="font-size:10px">Non-root + specific UID</td><td style="font-size:10px">Non-root UID 1001:1001</td><td style="font-size:10px">Non-root</td></tr>
+<tr><td class="row-label">HEALTHCHECK</td><td class="center"><span class="tick-no">✗ No</span></td><td class="center"><span class="tick-rec">Recommended</span></td><td class="center"><span class="tick-req">Required</span></td><td class="center"><span class="tick-req">Required</span></td><td class="center"><span class="tick-req">Required</span></td></tr>
+<tr><td class="row-label">LABEL</td><td class="center"><span class="tick-no">✗ No</span></td><td style="font-size:10px">Image ID + build date</td><td class="center"><span class="tick-no">✗ No</span></td><td style="font-size:10px">Image provenance + STIG version + build date</td><td style="font-size:10px">Build date + image ID</td></tr>
+<tr><td class="row-label">Read-only FS</td><td class="center"><span class="tick-no">✗ No</span></td><td class="center"><span class="tick-req">Required</span></td><td class="center"><span class="tick-no">✗ No</span></td><td class="center"><span class="tick-req">Required</span></td><td class="center"><span class="tick-rec">Recommended</span></td></tr>
+<tr><td class="row-label">TLS / crypto</td><td style="font-size:10px">FIPS-validated certs only</td><td style="font-size:10px">TLS 1.2+ only, no RC4/3DES/export ciphers</td><td style="font-size:10px">TLS 1.2+</td><td style="font-size:10px">FIPS-validated TLS 1.2+ only</td><td style="font-size:10px">TLS 1.2+</td></tr>
+<tr><td class="row-label">Secrets</td><td style="font-size:10px">Approved KMS (AWS GovCloud KMS, Azure Gov KeyVault)</td><td style="font-size:10px">Vault required — no ENV secrets, no ARG secrets</td><td style="font-size:10px">PHI never in image — use external secret store</td><td style="font-size:10px">AWS GovCloud KMS or Azure Gov KeyVault only</td><td style="font-size:10px">No ENV secrets</td></tr>
+<tr><td class="row-label">Logging</td><td style="font-size:10px">Audit log mandatory</td><td style="font-size:10px">Log all access attempts — ship to SIEM</td><td style="font-size:10px">Immutable audit log, 6-year retention</td><td style="font-size:10px">Immutable audit log — ship to FedRAMP-authorised SIEM</td><td style="font-size:10px">Audit log shipped to immutable store</td></tr>
+  </tbody>
+</table>
+</div></div>
+<h2 id="additions">The 5 concrete Dockerfile additions</h2>
+<p class="section-sub">Copy-paste additions for the most common compliance requirements. Apply on top of any doc 11 Dockerfile. Each is independent.</p>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">1. HEALTHCHECK instruction</div>
+    <div class="add-applies">Applies to: FedRAMP (required) · HIPAA (required) · SOC 2 (required) · NERC CIP (required)</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">Orchestrators (Kubernetes, ECS) use HEALTHCHECK to determine liveness. Compliance auditors require proof the container self-reports health status.</div>
+    <div class="dockerfile-block"><span class="df-comment"># Add inside the runtime stage, before CMD</span>
+<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:$PORT/health || exit 1</div>
+    <div class="add-note">Replace $PORT with your framework port. For scratch/distroless runtimes: copy a static health-check binary instead of curl.</div>
+  </div>
+</div>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">2. LABEL provenance</div>
+    <div class="add-applies">Applies to: FedRAMP (required) · CMMC (required) · SOX (required) · PCI DSS (recommended) · NERC CIP (recommended)</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">Every deployed image must be traceable to a commit, a build pipeline run, and an approver. Labels are the standard mechanism.</div>
+    <div class="dockerfile-block"><span class="df-comment"># Add inside the runtime stage</span>
+<span class="df-arg">ARG GIT_SHA=unknown</span>
+<span class="df-arg">ARG BUILD_DATE=unknown</span>
+<span class="df-arg">ARG COMPLIANCE=none</span>
+<span class="df-kw">LABEL</span> org.opencontainers.image.created=&quot;$BUILD_DATE&quot; \
+      org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
+      org.opencontainers.image.title=&quot;myapp&quot; \
+      org.compliance.standard=&quot;$COMPLIANCE&quot; \
+      org.compliance.stig-version=&quot;V1R3&quot;
+
+<span class="df-comment"># Build with:</span>
+<span class="df-comment"># docker build --build-arg GIT_SHA=$(git rev-parse HEAD) \</span>
+<span class="df-comment">#              --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \</span>
+<span class="df-comment">#              --build-arg COMPLIANCE=fedramp \</span>
+<span class="df-comment">#              --target runtime .</span></div>
+    <div class="add-note">ARG values do not persist in the final image ENV — they only set LABEL values at build time. No secret exposure risk.</div>
+  </div>
+</div>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">3. Non-root user with specific UID</div>
+    <div class="add-applies">Applies to: PCI DSS (mandatory) · HIPAA (mandatory) · FedRAMP (mandatory UID 1001) · CMMC (mandatory)</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">If a process running as root escapes the container, it has root on the host. A specific UID (not just &quot;a non-root user&quot;) allows Kubernetes PodSecurityPolicy to enforce runAsNonRoot.</div>
+    <div class="dockerfile-block"><span class="df-comment"># Add inside the runtime stage before EXPOSE</span>
+<span class="df-comment"># Alpine / scratch pattern:</span>
+<span class="df-kw">RUN</span> addgroup -g 1001 -S appgroup &amp;&amp; adduser -u 1001 -S appuser -G appgroup
+<span class="df-kw">USER</span> 1001:1001
+
+<span class="df-comment"># Debian / Ubuntu pattern:</span>
+<span class="df-kw">RUN</span> groupadd -g 1001 appgroup &amp;&amp; \
+    useradd -u 1001 -g 1001 -s /sbin/nologin -M appuser
+<span class="df-kw">USER</span> 1001:1001</div>
+    <div class="add-note">Doc 11 already sets USER. This addition makes the UID explicit (1001) for FedRAMP and CMMC auditors who check UID values, not just &quot;non-root&quot;.</div>
+  </div>
+</div>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">4. Base image swap for compliance tier</div>
+    <div class="add-applies">Applies to: FIPS/FedRAMP (UBI9 required) · PCI DSS (CIS/distroless required) · NERC CIP (air-gapped registry required)</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">The runtime base image determines which crypto libraries are available at runtime. FIPS requires the OS to use only FIPS-validated crypto — the base image controls this.</div>
+    <div class="dockerfile-block"><span class="df-comment"># Doc 11 already has --target runtime and --target runtime-fips.</span>
+<span class="df-comment"># Additional targets for other compliance tiers:</span>
+
+<span class="df-comment"># ── runtime-pci (PCI DSS: distroless, minimal attack surface) ──────────────</span>
+<span class="df-stage">FROM cgr.dev/chainguard/node:latest AS runtime-pci</span>
+<span class="df-kw">WORKDIR</span> /app
+<span class="df-kw">COPY</span> --from=builder /app/dist ./dist
+<span class="df-kw">USER</span> 65532
+<span class="df-kw">EXPOSE</span> 3000
+<span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/server.js&quot;]
+
+<span class="df-comment"># ── runtime-nerc (NERC CIP: air-gapped — replace registry.internal with yours)</span>
+<span class="df-stage">FROM registry.internal.yourco.com/base/node:22-alpine AS runtime-nerc</span>
+<span class="df-kw">WORKDIR</span> /app
+<span class="df-kw">COPY</span> --from=builder /app/dist ./dist
+<span class="df-kw">USER</span> 1001:1001
+<span class="df-kw">EXPOSE</span> 3000
+<span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/server.js&quot;]</div>
+    <div class="add-note">For NERC CIP: all FROM references must point to your internal air-gapped registry. Never pull from docker.io, gcr.io, or quay.io in a CIP environment.</div>
+  </div>
+</div>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">5. Tool removal in builder stage</div>
+    <div class="add-applies">Applies to: PCI DSS (required) · CIS Benchmark Level 2 (required) · ISO 27001 (recommended)</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">Tools left in an image layer are accessible if the container is compromised. curl, wget, and package managers are attack vectors. Removing them from the runtime stage eliminates them.</div>
+    <div class="dockerfile-block"><span class="df-comment"># Builder stage: install tools, use them, then remove in same RUN layer</span>
+<span class="df-stage">FROM ubuntu:24.04 AS builder</span>
+<span class="df-kw">RUN</span> apt-get update &amp;&amp; \
+    apt-get install -y curl build-essential ca-certificates &amp;&amp; \
+<span class="df-comment">    # ... your build steps here ... \</span>
+    apt-get remove -y curl build-essential &amp;&amp; \
+    apt-get autoremove -y &amp;&amp; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
+
+<span class="df-comment"># Runtime stage has none of these tools because it starts from a clean base</span>
+<span class="df-stage">FROM node:22-alpine AS runtime</span>
+<span class="df-comment"># curl is not present in this stage at all</span></div>
+    <div class="add-note">Multi-stage builds (doc 11 pattern) already achieve this for the runtime stage. This addition applies to cases where a single-stage is unavoidable or the builder stage itself is audited.</div>
+  </div>
+</div>
+<h2 id="gap-analysis">Gap analysis — doc 11 vs compliance requirements</h2>
+<p class="section-sub">What doc 11 already handles, and what must be added for full compliance coverage.</p>
+<div class="gap-grid">
+  <div class="gap-card gc-ok">
+    <div class="gc-head">✓ Already covered in doc 11</div>
+    <ul class="gc-list"><li>✓ FIPS base image via <code>--target runtime-fips</code> (all 75 frameworks)</li>
+<li>✓ Non-root USER in every runtime stage</li>
+<li>✓ CA certificates copied for scratch/distroless runtimes</li>
+<li>✓ FIPS note in every verify block</li></ul>
+  </div>
+  <div class="gap-card gc-miss">
+    <div class="gc-head">✗ Missing from doc 11 (use section 5 additions)</div>
+    <ul class="gc-list"><li>✗ HEALTHCHECK — missing from all Dockerfiles (required: FedRAMP, HIPAA, SOC 2, NERC CIP)</li>
+<li>✗ LABEL provenance — missing (required: FedRAMP, CMMC, SOX; recommended: PCI DSS)</li>
+<li>✗ Explicit UID 1001 — USER is set but not always to a specific numeric UID (required: FedRAMP, CMMC)</li></ul>
+  </div>
+</div>
+<p style="font-size:11px;color:var(--text-dim);margin-top:12px">
+  Data residency (GDPR, PIPEDA), image signing (FedRAMP, CMMC), registry air-gapping (NERC CIP),
+  and SIEM log shipping (all standards) are enforced at the CI/CD and infrastructure layer —
+  they cannot be expressed in a Dockerfile.
+</p>
+
+</main>
+</body>
+</html>
