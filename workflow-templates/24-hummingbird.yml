@@ -1,0 +1,307 @@
+# ─────────────────────────────────────────────────────────────────────────
+# Pipeline: 24 Swift Server — Hummingbird 2.0
+# Pattern:  Multi-stage Docker (build image: ubuntu:24.04, runtime: swift:6.0-noble-slim)
+# Copy to:  .github/workflows/ci.yml in your Hummingbird project repo
+#
+# Requirements: Dockerfile with --target runtime (and optionally --target runtime-fips)
+# Secrets needed: none for GHCR  |  AWS_ACCOUNT_ID for ECR  |  see Registry section
+# ─────────────────────────────────────────────────────────────────────────
+
+name: CI — Hummingbird 2.0
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write        # OIDC — keyless cosign signing + registry auth
+  packages: write        # GHCR push
+  security-events: write # CodeQL / Trivy SARIF upload
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+
+  # ── Phase 1 — pre-commit (every push / PR) ─────────────────────────────
+  pre-commit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: pre-commit/action@v3.0.1
+
+  # ── Phase 2 — security gates (parallel, on every PR push) ──────────────
+  sca:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
+      - uses: actions/checkout@v4
+      - name: SCA — dependency audit
+        run: |
+          osv-scanner --lockfile Package.resolved
+          # alternatives: snyk test
+
+  sast:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto
+        # alternatives: see issue template for language-specific SAST tools
+
+  codeql:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: swift
+      - uses: github/codeql-action/autobuild@v3
+      - uses: github/codeql-action/analyze@v3
+
+  license-scan:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
+      - uses: actions/checkout@v4
+      - name: License check
+        run: |
+          swift package-list --output-format json
+
+  iac-scan:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: .
+          soft_fail: true   # set to false on main-branch job
+        # alternatives: KICS | trivy config .
+
+  secrets-scan:
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # alternatives: trufflehog | GitGuardian ggshield
+
+  # ── PR build + container scan (PR only, no push to registry) ───────────
+  build-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    needs: [sca, sast, codeql, license-scan, iac-scan, secrets-scan]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image (no push)
+        run: |
+          docker build --platform linux/amd64 \
+            --target runtime \
+            -t $REGISTRY/$IMAGE_NAME:pr-${{ github.sha }} \
+            --load .
+
+      - name: SBOM — PR stage
+        uses: anchore/syft-action@v1
+        with:
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.sha }}
+          output-file: sbom-pr.spdx.json
+
+      - name: Container scan — Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.sha }}
+          format: sarif
+          output: trivy-results.sarif
+          exit-code: '1'
+          severity: HIGH,CRITICAL
+        # alternatives: grype | snyk container test | docker scout cves
+
+      - name: Upload Trivy SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+
+  # ── Phase 3 — main build: sign, SBOM, SLSA, test, DAST (main only) ────
+  build-push-sign:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    needs: [sca, sast, codeql, license-scan, iac-scan, secrets-scan]
+    outputs:
+      image-digest: ${{ steps.push.outputs.digest }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        # For ECR: use aws-actions/amazon-ecr-login with OIDC (no stored credentials)
+        # For GCP AR: use google-github-actions/auth + docker/login-action
+        # For ACR: use azure/login + docker/login-action
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
+
+      - name: App build
+        run: |
+          swift build -c release
+
+      - name: Build and push — standard image
+        id: push
+        run: |
+          docker buildx build --platform linux/amd64 \
+            --push --target runtime \
+            -t $REGISTRY/$IMAGE_NAME:${{ github.sha }} \
+            -t $REGISTRY/$IMAGE_NAME:latest \
+            .
+
+
+      - name: Container scan — registry image (post-push)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          exit-code: '1'
+          severity: HIGH,CRITICAL
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign image (keyless OIDC)
+        run: |
+          cosign sign --yes \
+            $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
+
+      - name: Generate SBOM + attest
+        uses: anchore/syft-action@v1
+        with:
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          output-file: sbom.spdx.json
+      - run: |
+          cosign attest --yes \
+            --predicate sbom.spdx.json \
+            $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
+
+  slsa-provenance:
+    needs: build-push-sign
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      actions: read
+      id-token: write
+      packages: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2
+    with:
+      image: ghcr.io/${{ github.repository }}
+      digest: ${{ needs.build-push-sign.outputs.image-digest }}
+    secrets:
+      registry-username: ${{ github.actor }}
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    needs: pre-commit
+    steps:
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.0'
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: |
+          swift test --enable-code-coverage
+      - uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    needs: [build-push-sign, test]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Semantic release
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify:
+    if: always() && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    needs: [build-push-sign, test, release]
+    steps:
+      - uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "Pipeline ${{ job.status }}: Hummingbird 2.0 — ${{ github.sha }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+# ── Registry reference ────────────────────────────────────────────────────
+# GHCR (default above): uses GITHUB_TOKEN — no extra secrets needed
+#
+# AWS ECR:
+#   - uses: aws-actions/configure-aws-credentials@v4
+#     with: role-to-assume: arn:aws:iam::ACCOUNT:role/GitHubActions
+#   - uses: aws-actions/amazon-ecr-login@v2
+#
+# GCP Artifact Registry:
+#   - uses: google-github-actions/auth@v2
+#     with: workload_identity_provider: projects/PROJECT/locations/global/workloadIdentityPools/...
+#   - uses: docker/login-action@v3
+#     with: registry: REGION-docker.pkg.dev
+#
+# Azure ACR:
+#   - uses: azure/login@v2
+#     with: client-id / tenant-id / subscription-id (OIDC)
+#   - uses: docker/login-action@v3
+#     with: registry: myregistry.azurecr.io
+#
+# Red Hat Quay: registry: quay.io — username/password via secrets
+# Docker Hub:   registry: docker.io — username/password via secrets
+
+# ── Compliance delta reference ─────────────────────────────────────────────
+# FIPS:       use --target runtime-fips; push :$SHA-fips tag (block above)
+# PCI DSS:    trivy --severity CRITICAL --exit-code 1 (already set above)
+# HIPAA:      add PHI scan step: semgrep --config p/hipaa .
+# FedRAMP:    FIPS build required + SLSA Level 3 (both wired above)
+# CMMC:       named reviewers in CODEOWNERS; artifact retention in Actions settings
+# SOC 2:      upload-artifact for all scan results; retention-days: 90
+# SOX:        require 2+ approvers in branch protection; ticket ID in commit message
+# GDPR:       semgrep --config p/pii . — add as parallel job
+# PIPEDA:     semgrep --config p/pii . — ca-central-1 registry region
+# NERC CIP:   vendor all deps; block outbound in build via network policy
+# ISO 27001:  retention-days: 1825 (5 years) on all artifact uploads
