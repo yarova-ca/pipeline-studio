@@ -139,7 +139,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <a href="11-dockerfile-catalog.html">11 Dockerfiles</a>
   <a href="12-compliance-variations.html" aria-current="page">12 Compliance</a>
   <a href="13-pipeline-build-catalog.html">13 Pipeline catalog</a>
-  <a href="#main-content" class="nav-top">↑ Back to top</a>
+  <a href="14-canada-industry-catalog.html">14 CA industries</a>
+<a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 <main id="main-content">
 <div class="page-title">Compliance Variations</div>
@@ -159,7 +160,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <div class="chip-label">Concrete<br>Dockerfile additions</div>
   </div>
   <div class="count-chip" style="border-left:3px solid var(--red)">
-    <div class="chip-num" style="color:var(--red)">3</div>
+    <div class="chip-num" style="color:var(--red)">1</div>
     <div class="chip-label">Gaps in<br>doc 11</div>
   </div>
 </div>
@@ -359,13 +360,14 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <ul class="gc-list"><li>✓ FIPS base image via <code>--target runtime-fips</code> (all 75 frameworks)</li>
 <li>✓ Non-root USER in every runtime stage</li>
 <li>✓ CA certificates copied for scratch/distroless runtimes</li>
-<li>✓ FIPS note in every verify block</li></ul>
+<li>✓ FIPS note in every verify block</li>
+<li>✓ HEALTHCHECK in all 75 runtime stages (--interval=30s --timeout=5s --retries=3)</li>
+<li>✓ LABEL provenance — <code>org.opencontainers.image.revision</code> and <code>org.opencontainers.image.created</code> in all runtime stages</li>
+<li>✓ Explicit numeric UID — <code>USER 1001:1001</code> in all non-Deno frameworks</li></ul>
   </div>
   <div class="gap-card gc-miss">
-    <div class="gc-head">✗ Missing from doc 11 (use section 5 additions)</div>
-    <ul class="gc-list"><li>✗ HEALTHCHECK — missing from all Dockerfiles (required: FedRAMP, HIPAA, SOC 2, NERC CIP)</li>
-<li>✗ LABEL provenance — missing (required: FedRAMP, CMMC, SOX; recommended: PCI DSS)</li>
-<li>✗ Explicit UID 1001 — USER is set but not always to a specific numeric UID (required: FedRAMP, CMMC)</li></ul>
+    <div class="gc-head">✗ One edge case remaining in doc 11</div>
+    <ul class="gc-list"><li>✗ Fresh (Deno) uses <code>USER deno</code> — not a numeric UID (required: FedRAMP, CMMC). Fix: replace with <code>USER 65532:65532</code> (Deno's system UID) when FedRAMP or CMMC compliance is required.</li></ul>
   </div>
 </div>
 <p style="font-size:11px;color:var(--text-dim);margin-top:12px">

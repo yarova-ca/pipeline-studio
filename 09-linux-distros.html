@@ -151,7 +151,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <a href="11-dockerfile-catalog.html">11 Dockerfiles</a>
   <a href="12-compliance-variations.html">12 Compliance</a>
   <a href="13-pipeline-build-catalog.html">13 Pipeline catalog</a>
-  <a href="#main-content" class="nav-top">↑ Back to top</a>
+  <a href="14-canada-industry-catalog.html">14 CA industries</a>
+<a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
@@ -202,7 +203,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <div class="expand-content">
       <p><strong>FIPS 140-2 / 140-3</strong> (Federal Information Processing Standard) is a US government standard for cryptographic modules. It certifies that the specific implementation of AES, SHA, RSA, and other algorithms meets NSA/NIST requirements.</p>
       <h4>FIPS 140-2 vs 140-3</h4>
-      <p>FIPS 140-2 was the previous standard. NIST closed new FIPS 140-2 submissions in September 2026 — existing validated modules remain valid indefinitely. New certifications are now issued under FIPS 140-3 (ISO/IEC 19790). For compliance purposes, both 140-2 and 140-3 validated modules are accepted by US government auditors.</p>
+      <p>FIPS 140-2 was the previous standard. NIST will close new FIPS 140-2 submissions in September 2026 — existing validated modules remain valid indefinitely. New certifications will be issued under FIPS 140-3 (ISO/IEC 19790). For compliance purposes, both 140-2 and 140-3 validated modules are accepted by US government auditors.</p>
       <h4>When required</h4>
       <p>US federal contracts (FedRAMP Moderate and High), DoD IL2–IL6, ITAR-controlled systems, and some financial sector contracts (FFIEC, OCC guidance) require FIPS 140-2 or 140-3 validated modules.</p>
       <h4>What "FIPS" means in this table</h4>
@@ -490,7 +491,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
           <td class="c1">Chromium OS-derived</td>
           <td class="c2">glibc</td>
           <td class="c3">none (read-only OS)</td>
-          <td class="c4">~2.5 GB (VM image — not a container base)</td>
+          <td class="c4">~2.5 GB (GKE node OS — not a Dockerfile FROM image)</td>
           <td class="carch">x86_64 + ARM64</td>
           <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
           <td class="ccerts"><span class="cert-no">N/A</span></td>
