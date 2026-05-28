@@ -98,12 +98,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="09-linux-distros.html">09 Linux distros</a>
   <a href="10-linux-compliance.html">10 Linux compliance</a>
   <a href="11-dockerfile-catalog.html">11 Dockerfiles</a>
+  <a href="12-compliance-variations.html">12 Compliance</a>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-title">Pipeline Studio</div>
-<div class="page-meta">11 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; verified 2026-05-27</div>
+<div class="page-meta">12 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; verified 2026-05-27</div>
 
 <div class="hint-card">
   <strong>Purpose:</strong> Reference for building secure CI/CD pipelines across any framework, any regulated industry, any Canadian market.
@@ -226,6 +227,9 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <div class="order-item">
     <div><div class="order-item-title"><a href="11-dockerfile-catalog.html">11 — Dockerfile Catalog</a></div><div class="order-item-desc">Copy the Dockerfile for your chosen framework. Select <code>--target runtime</code> or <code>--target runtime-fips</code>. Read after 09 and 10.</div></div>
   </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="12-compliance-variations.html">12 — Compliance Variations</a></div><div class="order-item-desc">Apply compliance layers on top of doc 11 Dockerfiles. 11 standards, 10 industry profiles, 5 concrete Dockerfile additions. Read after 11.</div></div>
+  </div>
 </div>
 
 <!-- ═══ DEPENDENCY MAP ═══ -->
@@ -280,6 +284,11 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="dep-from"><a href="11-dockerfile-catalog.html">11 Dockerfiles</a></div>
     <div class="dep-arrow">→</div>
     <div class="dep-to">expands 01 framework catalog with actual Dockerfile content; uses distro choices from 09 and FIPS/compliance context from 10 — read after 09 and 10</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="12-compliance-variations.html">12 Compliance</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">compliance layers applied on top of 11 Dockerfiles; maps 10 industries to 11 standards; closes HEALTHCHECK and LABEL gaps in doc 11 — read after 11</div>
   </div>
 </div>
 
