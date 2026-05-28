@@ -81,6 +81,21 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;paddi
 .df-note{margin-top:8px;padding:8px 12px;border-radius:5px;font-size:11px;line-height:1.6}
 .note-warn{background:#fffbef;border:1px solid var(--amber);border-left:3px solid var(--amber);color:#7a5200}
 .note-info{background:#f0f6ff;border:1px solid #b6d7f5;border-left:3px solid var(--blue);color:#0550ae}
+/* Verify block */
+.vfy-block{margin-top:12px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.vfy-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);padding:6px 12px;background:var(--bg3);border-bottom:1px solid var(--border)}
+.vfy-steps{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.vfy-step{display:flex;align-items:baseline;gap:10px}
+.vfy-n{font-size:10px;font-weight:700;color:var(--text-dim);width:14px;flex-shrink:0}
+.vfy-desc{font-size:10px;font-weight:600;color:var(--text-dim);width:46px;flex-shrink:0}
+.vfy-cmd{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:2px 8px;color:var(--text);user-select:all;white-space:nowrap}
+.vfy-note{font-size:10px;color:var(--text-dim);padding:0 12px 8px;font-style:italic}
+.vfy-ci{font-size:11px;color:var(--text-dim);padding:8px 12px;font-style:italic}
+@media(prefers-color-scheme:dark){
+  .vfy-block{border-color:#30363d}
+  .vfy-label{background:#21262d;border-color:#30363d}
+  .vfy-cmd{background:#1c2028;border-color:#30363d;color:#e6edf3}
+}
 /* Misc */
 code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace}
 .skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
@@ -351,6 +366,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]</div>
     <p class="df-note note-info">Requires <code>output: 'standalone'</code> in next.config.js. Without it, the standalone/ directory is not created and the runtime COPY commands will fail.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -401,6 +425,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/server/index.js&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -447,6 +480,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;.output/server/index.mjs&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -498,6 +540,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/index.js&quot;]</div>
     <p class="df-note note-info">Install <code>@sveltejs/adapter-node</code> and set it in svelte.config.js. Default adapter (auto) does not produce a Node.js server.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -549,6 +600,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">EXPOSE</span> 4000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/app/server/server.mjs&quot;]</div>
     <p class="df-note note-info">Replace <code>app</code> in the CMD path with your Angular project name from angular.json. The server entry is <code>dist/&lt;projectName&gt;/server/server.mjs</code>.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 4000:4000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:4000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-csr-spa">CSR / SPA</h2>
@@ -611,6 +671,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -650,6 +719,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -690,6 +768,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/dist/app/browser /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
     <p class="df-note note-info">Replace <code>app/browser</code> with your Angular project name. The correct path is in the <code>outputPath</code> field of <code>angular.json</code>.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -730,6 +817,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/build /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
     <p class="df-note note-info">This pattern requires <code>@sveltejs/adapter-static</code>. For SSR, see the SvelteKit entry in category 1.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -769,6 +865,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-ssg">SSG — Static Site Generation</h2>
@@ -830,6 +935,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -869,6 +983,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/_site /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -900,6 +1023,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/public /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -940,6 +1072,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/public /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
     <p class="df-note note-info">Gatsby builds can require up to 2GB RAM. If the build OOMs inside Docker, set <code>--memory=2g</code> in your <code>docker build</code> command or CI environment.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-islands">Islands Architecture</h2>
@@ -999,6 +1140,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -1020,6 +1170,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <span class="df-comment"># FIPS: run on a FIPS-enabled host; Deno itself uses BoringSSL, not OpenSSL</span>
 <span class="df-comment"># Use ubi9 host + volume-mount /app for strict FIPS environments</span></div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8000:8000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-resumability">Resumability</h2>
@@ -1089,6 +1248,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/server/entry.express.js&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-edge-rendering">Edge Rendering</h2>
@@ -1143,6 +1311,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 #           vercel-token: ${{ secrets.VERCEL_TOKEN }}
 #           vercel-org-id: ${{ secrets.ORG_ID}}
 #           vercel-project-id: ${{ secrets.PROJECT_ID}}</div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <details class="fw-details">
@@ -1178,6 +1347,7 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 #       - uses: cloudflare/wrangler-action@v3
 #         with:
 #           apiToken: ${{ secrets.CF_API_TOKEN }}</div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <details class="fw-details">
@@ -1213,6 +1383,7 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 #       - uses: cloudflare/wrangler-action@v3
 #         with:
 #           apiToken: ${{ secrets.CF_API_TOKEN }}</div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <h2 id="cat-streaming-ssr">Streaming SSR</h2>
@@ -1285,6 +1456,15 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]</div>
     <p class="df-note note-info">Enable streaming with React Suspense in your Server Components. Standalone output mode required: <code>output: 'standalone'</code>.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -1335,6 +1515,15 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/server/index.js&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -1385,6 +1574,15 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;build/index.js&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-microfrontends">Micro-frontends</h2>
@@ -1445,6 +1643,15 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -1484,6 +1691,15 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -1523,6 +1739,15 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-cross-platform-js">Cross-platform JS (Mobile)</h2>
@@ -1584,6 +1809,7 @@ jobs:
       - run: npm ci &amp;&amp; cd ios &amp;&amp; pod install
       - run: xcodebuild -workspace ios/App.xcworkspace -scheme App archive -archivePath build/App.xcarchive</div>
     <p class="df-note note-warn">iOS builds MUST run on <code>macos-latest</code>. <code>ubuntu-latest</code> will fail with "Xcode not found".</p>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <details class="fw-details">
@@ -1614,6 +1840,7 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       # iOS: eas build --platform ios requires paid Apple Developer account</div>
     <p class="df-note note-info">EAS Build requires an Expo account. Free tier has build limits. For self-hosted builds, see the React Native workflow above.</p>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <details class="fw-details">
@@ -1645,6 +1872,7 @@ jobs:
           name: ionic-apk
           path: android/app/build/outputs/apk/release/*.apk</div>
     <p class="df-note note-warn">iOS builds MUST run on <code>macos-latest</code>.</p>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <h2 id="cat-cross-platform-native">Cross-platform Non-JS (Mobile)</h2>
@@ -1703,6 +1931,7 @@ jobs:
         with: { flutter-version: &#x27;3.44.0&#x27;, channel: &#x27;stable&#x27; }
       - run: flutter pub get &amp;&amp; flutter build ios --release --no-codesign</div>
     <p class="df-note note-warn">iOS builds require <code>macos-latest</code>. Linux runners cannot build Flutter iOS.</p>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <details class="fw-details">
@@ -1741,6 +1970,7 @@ jobs:
       - run: dotnet workload install maui-ios
       - run: dotnet build -f net9.0-ios -c Release</div>
     <p class="df-note note-warn">iOS target requires <code>macos-latest</code>. Windows target requires <code>windows-latest</code>. Ubuntu supports Android only.</p>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <details class="fw-details">
@@ -1779,6 +2009,7 @@ jobs:
       - run: ./gradlew :shared:compileKotlinIosArm64
       - run: xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp archive</div>
     <p class="df-note note-warn">iOS framework compilation requires <code>macos-latest</code> runner.</p>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <h2 id="cat-native-ios">Native iOS</h2>
@@ -1840,6 +2071,7 @@ jobs:
           name: MyApp-ipa
           path: build/MyApp.ipa</div>
     <p class="df-note note-warn">Xcode is macOS-only. <code>ubuntu-latest</code> runners will fail immediately. A Mac or macOS GitHub Actions runner is required.</p>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <details class="fw-details">
@@ -1881,6 +2113,7 @@ jobs:
           name: UIKitApp-ipa
           path: build/UIKitApp.ipa</div>
     <p class="df-note note-warn">Xcode is macOS-only. <code>ubuntu-latest</code> will fail.</p>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <h2 id="cat-native-android">Native Android</h2>
@@ -1937,6 +2170,7 @@ jobs:
         with:
           name: ComposeApp-release
           path: app/build/outputs/apk/release/*.apk</div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <details class="fw-details">
@@ -1973,6 +2207,7 @@ jobs:
         with:
           name: JavaAndroidApp-release
           path: app/build/outputs/apk/release/*.apk</div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
 <h2 id="cat-pwa">PWA — Progressive Web App</h2>
@@ -2032,6 +2267,15 @@ jobs:
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2071,6 +2315,15 @@ jobs:
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nginx-122 AS runtime-fips</span>
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">EXPOSE</span> 8080</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-node-deno-bun">Node / Deno / Bun — Backend Servers</h2>
@@ -2145,6 +2398,15 @@ jobs:
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/index.js&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2195,6 +2457,15 @@ jobs:
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/app.js&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2245,6 +2516,15 @@ jobs:
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/main.js&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2295,6 +2575,15 @@ jobs:
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/index.js&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2316,6 +2605,15 @@ jobs:
 
 <span class="df-comment"># FIPS: run on a FIPS-enabled host; Deno itself uses BoringSSL, not OpenSSL</span>
 <span class="df-comment"># Use ubi9 host + volume-mount /app for strict FIPS environments</span></div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8000:8000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2336,6 +2634,15 @@ jobs:
 <span class="df-kw">CMD</span> [&quot;bun&quot;, &quot;run&quot;, &quot;src/index.ts&quot;]
 
 <span class="df-comment"># FIPS: Bun uses BoringSSL internally; for strict FIPS use ubi9 host</span></div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-python">Python — Web Frameworks</h2>
@@ -2407,6 +2714,15 @@ jobs:
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;uvicorn&quot;, &quot;app.main:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8000:8000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2456,6 +2772,15 @@ jobs:
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;gunicorn&quot;, &quot;myproject.wsgi:application&quot;, &quot;--bind&quot;, &quot;0.0.0.0:8000&quot;, &quot;--workers&quot;, &quot;2&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8000:8000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2505,6 +2830,15 @@ jobs:
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;gunicorn&quot;, &quot;wsgi:app&quot;, &quot;--bind&quot;, &quot;0.0.0.0:8000&quot;, &quot;--workers&quot;, &quot;2&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8000:8000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2554,6 +2888,15 @@ jobs:
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 8000
 <span class="df-kw">CMD</span> [&quot;uvicorn&quot;, &quot;app:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8000:8000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-go">Go — HTTP Frameworks</h2>
@@ -2609,6 +2952,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2642,6 +2994,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2675,6 +3036,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2708,6 +3078,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-java">Java — Backend Frameworks</h2>
@@ -2767,6 +3146,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2805,6 +3193,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">This Dockerfile uses Quarkus JVM mode (fat JAR). Quarkus native mode requires a GraalVM builder and produces a native binary that can run on ubi9/ubi-micro instead of distroless/java21.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2843,6 +3240,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-kotlin">Kotlin — Backend Frameworks</h2>
@@ -2901,6 +3307,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -2939,6 +3354,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-dotnet">.NET — ASP.NET Core</h2>
@@ -2997,6 +3421,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;dotnet&quot;, &quot;WebApp.dll&quot;]</div>
     <p class="df-note note-info">Replace <code>WebApp.dll</code> in CMD with your actual project output DLL name (matches the .csproj filename).</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -3034,6 +3467,15 @@ jobs:
 <span class="df-kw">COPY</span> --from=builder /publish .
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;dotnet&quot;, &quot;MinimalApi.dll&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-rust">Rust — Web Frameworks</h2>
@@ -3090,6 +3532,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/axum-server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -3126,6 +3577,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/actix-server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-elixir">Elixir / BEAM</h2>
@@ -3192,6 +3652,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 4000
 <span class="df-kw">CMD</span> [&quot;./bin/my_app&quot;, &quot;start&quot;]</div>
     <p class="df-note note-info">Replace <code>my_app</code> with your OTP application name from mix.exs. The release binary is at <code>_build/prod/rel/&lt;app_name&gt;/bin/&lt;app_name&gt;</code>.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 4000:4000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:4000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-ruby">Ruby — Web Frameworks</h2>
@@ -3253,6 +3722,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 3000
 <span class="df-kw">CMD</span> [&quot;bundle&quot;, &quot;exec&quot;, &quot;rails&quot;, &quot;server&quot;, &quot;-b&quot;, &quot;0.0.0.0&quot;]</div>
     <p class="df-note note-info">If your app uses Active Storage or Action Cable, add the required system packages (<code>libvips</code>, <code>redis</code>) to the runtime Alpine apk install.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:3000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -3293,6 +3771,15 @@ jobs:
 <span class="df-kw">USER</span> 1001
 <span class="df-kw">EXPOSE</span> 4567
 <span class="df-kw">CMD</span> [&quot;bundle&quot;, &quot;exec&quot;, &quot;ruby&quot;, &quot;app.rb&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 4567:4567 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:4567/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-php">PHP — Web Frameworks</h2>
@@ -3353,6 +3840,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080 9000
 <span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]</div>
     <p class="df-note note-info">For production, consider separating nginx and PHP-FPM into separate containers with a shared volume. This single-container pattern is suitable for simple deployments.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -3391,6 +3887,15 @@ jobs:
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
 <span class="df-kw">EXPOSE</span> 8080 9000
 <span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -3429,6 +3934,15 @@ jobs:
 <span class="df-kw">COPY</span> docker/nginx.conf /etc/nginx/nginx.conf
 <span class="df-kw">EXPOSE</span> 8080 9000
 <span class="df-kw">CMD</span> [&quot;sh&quot;, &quot;-c&quot;, &quot;php-fpm -D &amp;&amp; nginx -g &#x27;daemon off;&#x27;&quot;]</div>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:80 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-swift-server">Swift Server Frameworks</h2>
@@ -3487,6 +4001,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;./Run&quot;]</div>
     <p class="df-note note-info">Vapor's default binary name is <code>Run</code>. Replace with your target name from Package.swift if different.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -3525,6 +4048,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;./App&quot;]</div>
     <p class="df-note note-info">Replace <code>App</code> in CMD with your Swift target name from Package.swift.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-scala">Scala — Backend Frameworks</h2>
@@ -3580,6 +4112,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 9000
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 9000:9000 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:9000/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -3615,6 +4156,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-clojure">Clojure — Backend Frameworks</h2>
@@ -3670,6 +4220,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -3705,6 +4264,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">ENTRYPOINT</span> [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]</div>
     <p class="df-note note-info">Distroless runtime: no shell (<code>/bin/sh</code>), no package manager, no OS-level utilities. <code>CMD</code> and <code>ENTRYPOINT</code> must use JSON array format. <code>docker exec</code> debugging is unavailable — use <code>:debug</code> tag for troubleshooting.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <h2 id="cat-cpp">C / C++ — HTTP Frameworks</h2>
@@ -3765,6 +4333,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/drogon-server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 <details class="fw-details">
@@ -3805,6 +4382,15 @@ jobs:
 <span class="df-kw">EXPOSE</span> 8080
 <span class="df-kw">CMD</span> [&quot;/crow-server&quot;]</div>
     <p class="df-note note-warn">CA certs: <code>scratch</code> runtime has no certificate bundle. The <code>COPY --from=builder /etc/ssl/certs/ca-certificates.crt</code> line in this Dockerfile copies them from the builder stage. Without this line, all outbound HTTPS calls fail at runtime.</p>
+    <div class="vfy-block">
+      <p class="vfy-label">Verify</p>
+      <div class="vfy-steps">
+        <div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div>
+        <div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div>
+        <div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/ &amp;&amp; echo OK</code></div>
+      </div>
+      <p class="vfy-note">FIPS variant: replace <code>--target runtime</code> with <code>--target runtime-fips</code> in step 1.</p>
+    </div>
   </div>
 </details>
 
