@@ -143,7 +143,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <div class="counts-bar">
   <div class="count-chip c1"><div class="chip-num">73</div><div class="chip-label">Industries<br>catalogued</div></div>
   <div class="count-chip c2"><div class="chip-num">16</div><div class="chip-label">Verticals<br>covered</div></div>
-  <div class="count-chip c3"><div class="chip-num">10</div><div class="chip-label">Provinces<br>mapped</div></div>
+  <div class="count-chip c3"><div class="chip-num">10</div><div class="chip-label">Provinces<br>mapped (not territories)</div></div>
   <div class="count-chip c4"><div class="chip-num">11</div><div class="chip-label">Compliance<br>frameworks</div></div>
   <div class="count-chip c5"><div class="chip-num">73</div><div class="chip-label">Employer<br>lists</div></div>
 </div>
@@ -151,6 +151,26 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <div class="section-legend">
   <div><strong>What this file is:</strong> Deep-dive intelligence for every Canadian industry — what systems are built, what projects are common, named employers by province, tech stack signals, compliance requirements, and entry notes.</div>
   <div style="margin-top:4px"><strong>When to read:</strong> Before targeting a Canadian industry, province, or employer. Use with 08-canada-market.html for wage and demand data.</div>
+  <div style="margin-top:4px;font-size:11px;color:var(--text-dim)"><strong>Scope note:</strong> Provinces only (ON, QC, BC, AB, MB, SK, NS, NB, PEI, NL). Territories (YT, NT, NU) are not mapped here — tech employer density in territories is negligible for most industries. See 07-canada-schema.html for all 13 jurisdictions.</div>
+  <details>
+    <summary><span class="sum-label">Chip legend — Tier, Demand, Entry</span></summary>
+    <div class="expand-content">
+      <table class="xref-table" style="font-size:11px">
+        <thead><tr><th>Chip</th><th>Value</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="4"><strong>Tier</strong> — employer concentration</td><td>T1</td><td>3+ major employers active in this industry in Canada</td></tr>
+          <tr><td>T2</td><td>1–2 major employers + SME cluster (SME = company under ~500 employees)</td></tr>
+          <tr><td>T3</td><td>SME-dominated — no single employer holds more than 20% of roles</td></tr>
+          <tr><td>T4</td><td>Government-only — more than 80% of roles are in the public sector</td></tr>
+          <tr><td rowspan="4"><strong>Demand</strong> — hiring signal</td><td style="color:var(--green);font-weight:700">Hot</td><td>Active hiring, roles open longer than 60 days, salary premiums observed</td></tr>
+          <tr><td style="color:var(--amber);font-weight:700">Warm</td><td>Steady hiring, normal fill times, competitive but not scarce</td></tr>
+          <tr><td>Flat</td><td>Hiring at replacement rate only — no net headcount growth</td></tr>
+          <tr><td style="color:var(--red);font-weight:700">Declining</td><td>Net headcount reduction — more exits than new roles</td></tr>
+          <tr><td><strong>Entry</strong> — difficulty 1–5</td><td>1–5</td><td>1 = open volume hiring. 3 = competitive + credentials expected. 5 = clearance + rare cert + network required</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
   <details>
     <summary><span class="sum-label">How to read each industry card — 6 sections explained</span></summary>
     <div class="expand-content">
