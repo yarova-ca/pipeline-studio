@@ -101,12 +101,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="12-compliance-variations.html">12 Compliance</a>
   <a href="13-pipeline-build-catalog.html">13 Pipeline catalog</a>
   <a href="14-canada-industry-catalog.html">14 CA industries</a>
+<a href="15-version-registry.html">15 Version registry</a>
 <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-title">Pipeline Studio</div>
-<div class="page-meta">14 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; 75 pipeline catalogs &nbsp;·&nbsp; 73 CA industry deep-dives &nbsp;·&nbsp; verified 2026-05-28</div>
+<div class="page-meta">15 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; 75 pipeline catalogs &nbsp;·&nbsp; 73 CA industry deep-dives &nbsp;·&nbsp; verified 2026-05-28</div>
 
 <div class="hint-card">
   <strong>Purpose:</strong> Reference for building secure CI/CD pipelines across any framework, any regulated industry, any Canadian market.
@@ -215,6 +216,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="doc-card-meta"><strong>Records:</strong> 73 industries · 16 verticals · 10 provinces · 11 compliance frameworks · 73 employer lists &nbsp;·&nbsp; <strong>Use when:</strong> targeting a Canadian industry for a role, consulting engagement, or product</div>
   </a>
 
+  <a href="15-version-registry.html" class="doc-card">
+    <div class="doc-card-num">Doc 15</div>
+    <div class="doc-card-title">Version &amp; Source Registry</div>
+    <div class="doc-card-desc">Master version tracking page for all items across all 15 docs. Every framework, CI tool, base image, Linux distro, and compliance standard: current version, source URL, docs where used, last verified date, and review cadence. Single page to maintain everything.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> all versioned items · 6 categories · cadence guide &nbsp;·&nbsp; <strong>Use when:</strong> verifying or updating any version across the pipeline-studio docs</div>
+  </a>
+
 </div>
 
 <!-- ═══ READING ORDER ═══ -->
@@ -258,6 +266,9 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   </div>
   <div class="order-item">
     <div><div class="order-item-title"><a href="14-canada-industry-catalog.html">14 — Canada Industry Catalog</a></div><div class="order-item-desc">Deep-dive for all 73 Canadian industries — systems, project types, employers by province, tech stack, compliance, and entry notes. Read after 08 to combine market-level data with industry-level intelligence.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="15-version-registry.html">15 — Version Registry</a></div><div class="order-item-desc">Maintenance reference only — not part of the reading flow. Open it when verifying or updating any version across the docs. Review base images every 30 days, everything else every 90 days.</div></div>
   </div>
 </div>
 
@@ -328,6 +339,11 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="dep-from"><a href="14-canada-industry-catalog.html">14 CA Industry Catalog</a></div>
     <div class="dep-arrow">→</div>
     <div class="dep-to">extends 07 and 08 with per-industry deep-dives — systems, project types, employers, tech stack, compliance, entry notes — read after 07 and 08</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="15-version-registry.html">15 Version Registry</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">aggregates versioned items from all 14 docs — maintenance reference, no reading dependency</div>
   </div>
 </div>
 
