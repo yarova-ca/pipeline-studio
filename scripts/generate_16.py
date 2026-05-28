@@ -1,0 +1,658 @@
+#!/usr/bin/env python3
+"""Generate 16-maintainability-runbook.html."""
+
+OUT = '/mnt/c/Users/RohithY/yarova/pipeline-studio/16-maintainability-runbook.html'
+VERIFIED = '2026-05-28'
+
+DOCS = [
+    ('01','01-framework-catalog.html','01 Frameworks'),
+    ('02','02-pipeline-schema.html','02 Pipeline schema'),
+    ('03','03-stage-types.html','03 Stage types'),
+    ('04','04-tool-catalog.html','04 Tool catalog'),
+    ('05','05-invariants.html','05 Invariants'),
+    ('06','06-industry-schema.html','06 US industries'),
+    ('07','07-canada-schema.html','07 CA industries'),
+    ('08','08-canada-market.html','08 CA market'),
+    ('09','09-linux-distros.html','09 Linux distros'),
+    ('10','10-linux-compliance.html','10 Linux compliance'),
+    ('11','11-dockerfile-catalog.html','11 Dockerfiles'),
+    ('12','12-compliance-variations.html','12 Compliance'),
+    ('13','13-pipeline-build-catalog.html','13 Pipeline catalog'),
+    ('14','14-canada-industry-catalog.html','14 CA industries'),
+    ('15','15-version-registry.html','15 Version registry'),
+    ('16','16-maintainability-runbook.html','16 Runbook'),
+]
+
+def gen_nav():
+    links = []
+    sections = [
+        ('#add-doc', 'Adding a new doc'),
+        ('#update-version', 'Updating a version'),
+        ('#update-data', 'Updating market data'),
+        ('#nav-pattern', 'Nav link pattern'),
+        ('#index-pattern', 'index.html pattern'),
+        ('#gen-scripts', 'Generation scripts'),
+        ('#file-map', 'File map'),
+        ('#commit-style', 'Commit style'),
+    ]
+    for href, label in sections:
+        links.append(f'<a href="{href}">{label}</a>')
+    links.append('<hr style="border:none;border-top:1px solid var(--border);margin:6px 0">')
+    for num, href, label in DOCS:
+        aria = ' aria-current="page"' if num == '16' else ''
+        links.append(f'<a href="{href}"{aria}>{label}</a>')
+    links.append('<a href="#main-content" class="nav-top">↑ Back to top</a>')
+    return '\n  '.join(links)
+
+NAV = gen_nav()
+
+HTML = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16 — Maintainability Runbook | Pipeline Studio</title>
+<meta name="description" content="Runbook for maintaining all 16 pipeline-studio docs. Checklists for adding new docs, updating versions, updating data, and keeping nav/index in sync.">
+<style>
+:root{{
+  --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d0d7de;--text:#1f2328;--text-dim:#656d76;--text-head:#1f2328;
+  --blue:#0969da;--green:#1a7f37;--amber:#7a4f00;--purple:#6f42c1;--red:#b91c1c;
+  --sidebar-w:220px;
+}}
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;
+  background:var(--bg);color:var(--text);line-height:1.5;display:flex;min-height:100vh}}
+nav{{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);
+  border-right:1px solid var(--border);padding:16px 0;position:sticky;top:0;height:100vh;
+  overflow-y:auto;flex-shrink:0}}
+nav a{{display:block;padding:5px 16px;font-size:12px;color:var(--text-dim);text-decoration:none;
+  transition:color .12s,background .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+nav a:hover{{color:var(--text);background:var(--bg3)}}
+nav a[aria-current]{{color:var(--blue);font-weight:600;background:var(--bg3)}}
+.nav-top{{color:var(--text-dim)!important;margin-top:8px;border-top:1px solid var(--border)}}
+main{{flex:1;padding:24px 32px;max-width:1100px;overflow-x:auto}}
+h1{{font-size:20px;font-weight:700;color:var(--text-head);margin-bottom:4px}}
+.page-meta{{font-size:11px;color:var(--text-dim);margin-bottom:20px}}
+h2{{font-size:15px;font-weight:700;color:var(--text-head);margin:32px 0 6px;
+  padding-top:10px;border-top:2px solid var(--border)}}
+h3{{font-size:13px;font-weight:700;color:var(--text-head);margin:18px 0 6px}}
+.section-sub{{font-size:11px;color:var(--text-dim);margin-bottom:12px}}
+p{{margin-bottom:8px;font-size:13px;line-height:1.6}}
+
+/* Checklist */
+.checklist{{list-style:none;padding:0;margin:0 0 12px}}
+.checklist li{{display:flex;gap:8px;align-items:flex-start;padding:5px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}}
+.checklist li:last-child{{border-bottom:none}}
+.step-num{{min-width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px}}
+.step-body{{flex:1}}
+.step-cmd{{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:3px 8px;margin-top:3px;white-space:pre-wrap;word-break:break-all}}
+.step-why{{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}}
+
+/* Warn / note blocks */
+.warn-block{{background:#fff8c5;border:1px solid #e8d064;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}}
+.warn-block strong{{color:var(--amber)}}
+.note-block{{background:#dbeeff;border:1px solid #b6d7f5;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}}
+.note-block strong{{color:var(--blue)}}
+
+/* Code blocks */
+pre.code-block{{background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  padding:12px 16px;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  overflow-x:auto;line-height:1.7;margin:8px 0}}
+code.ic{{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:3px;padding:1px 5px}}
+
+/* File map table */
+.tbl-wrap{{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:12px}}
+.xref-table{{width:100%;border-collapse:collapse;font-size:12px}}
+.xref-table th{{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
+  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap}}
+.xref-table td{{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}}
+.xref-table tr:last-child td{{border-bottom:none}}
+.xref-table tr:hover td{{background:var(--bg2)}}
+
+/* Counts bar */
+.counts-bar{{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}}
+.count-chip{{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:7px}}
+.count-chip .chip-num{{font-size:22px;font-weight:700;line-height:1}}
+.count-chip .chip-label{{font-size:11px;color:var(--text-dim);line-height:1.4}}
+.c1{{border-left:3px solid var(--blue)}}.c1 .chip-num{{color:var(--blue)}}
+.c2{{border-left:3px solid var(--green)}}.c2 .chip-num{{color:var(--green)}}
+.c3{{border-left:3px solid var(--amber)}}.c3 .chip-num{{color:var(--amber)}}
+.c4{{border-left:3px solid var(--purple)}}.c4 .chip-num{{color:var(--purple)}}
+
+/* Section accent */
+.section-accent-blue{{border-top-color:var(--blue)}}
+.section-accent-green{{border-top-color:var(--green)}}
+.section-accent-amber{{border-top-color:var(--amber)}}
+.section-accent-purple{{border-top-color:var(--purple)}}
+
+@media(prefers-color-scheme:dark){{
+  :root{{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#e6edf3;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--purple:#bc8cff;--red:#f85149;
+  }}
+  .warn-block{{background:#2d2100;border-color:#4a3800}}
+  .note-block{{background:#0d2744;border-color:#2d4a6a}}
+}}
+@media print{{
+  nav{{display:none}}
+  main{{max-width:100%;padding:12px}}
+}}
+</style>
+</head>
+<body>
+<nav>
+  {NAV}
+</nav>
+<main id="main-content">
+<h1>Maintainability Runbook</h1>
+<div class="page-meta">4 task types · 8 checklists · last updated {VERIFIED}</div>
+
+<div class="counts-bar">
+  <div class="count-chip c1"><div class="chip-num">16</div><div class="chip-label">Docs in this<br>project</div></div>
+  <div class="count-chip c2"><div class="chip-num">4</div><div class="chip-label">Task types<br>covered</div></div>
+  <div class="count-chip c3"><div class="chip-num">8</div><div class="chip-label">Step-by-step<br>checklists</div></div>
+  <div class="count-chip c4"><div class="chip-num">2</div><div class="chip-label">Generation<br>scripts</div></div>
+</div>
+
+<div class="note-block">
+  <strong>Who this is for:</strong> Anyone (human or AI) adding, modifying, or maintaining any file in this repo.
+  Read the relevant section before touching any file. All steps are mandatory — none are optional unless labeled <em>skip when</em>.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="add-doc" class="section-accent-blue">Adding a new doc (doc N)</h2>
+<p class="section-sub">Use this checklist every time a new HTML doc is added, whether doc 17, 20, or any number.</p>
+
+<div class="warn-block">
+  <strong>Do this in order.</strong> Steps 1–3 must complete before step 4. Steps 4–6 can run in any order after step 3.
+</div>
+
+<h3>Step 1 — Create the HTML file</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      Create the file at: <code class="ic">/mnt/c/Users/RohithY/yarova/pipeline-studio/NN-doc-name.html</code>
+      <span class="step-why">Why: all docs live in the root of pipeline-studio — no subdirectories.</span>
+      <span class="step-cmd">touch NN-doc-name.html</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      Use an existing doc as a CSS/nav template base. Copy from: <code class="ic">08-canada-market.html</code> (cleanest nav pattern).
+      <span class="step-why">Why: all docs share the same CSS variables, font stack, sidebar width (220px), and nav structure. Diverging breaks dark mode and print styles.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      Add all 16 existing doc links to the new doc's nav sidebar.
+      <span class="step-why">Why: every doc must link to every other doc — this is the only navigation mechanism.</span>
+      <span class="step-cmd">grep -A2 'nav-top' 08-canada-market.html  # copy the nav block pattern</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      Mark the new doc's own nav link with <code class="ic">aria-current="page"</code>.
+      <span class="step-why">Why: this is how the sidebar highlights the active doc — missing it leaves no visual indicator of which doc you're reading.</span>
+    </span>
+  </li>
+</ol>
+
+<h3>Step 2 — Add the new doc's nav link to all existing docs</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      In every existing HTML file, add the new link before the <code class="ic">↑ Back to top</code> line.
+      <span class="step-why">Why: the nav link must appear in all existing docs — readers of any doc must be able to reach the new one.</span>
+      <span class="step-cmd">python3 - &lt;&lt;'EOF'
+NEW = '&lt;a href="NN-doc-name.html"&gt;NN Doc label&lt;/a&gt;'
+BACK = '&lt;a href="#main-content" class="nav-top"&gt;↑ Back to top&lt;/a&gt;'
+import glob
+for f in glob.glob('*.html'):
+    with open(f) as fh: html = fh.read()
+    if NEW in html or f == 'NN-doc-name.html': continue
+    if BACK in html:
+        html = html.replace(BACK, NEW + '\\n' + BACK)
+        with open(f, 'w') as fh: fh.write(html)
+        print('updated:', f)
+EOF</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">6</span>
+    <span class="step-body">
+      Verify: every HTML file now contains the new link.
+      <span class="step-cmd">grep -rL 'NN-doc-name.html' *.html</span>
+      <span class="step-why">Why: any file missing the link breaks navigation from that doc to the new one. Output must be empty (no files missing the link).</span>
+    </span>
+  </li>
+</ol>
+
+<h3>Step 3 — Update index.html</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">7</span>
+    <span class="step-body">
+      Update the <strong>page-meta count chip</strong>: <code class="ic">N design docs</code> → <code class="ic">N+1 design docs</code>.
+      <span class="step-why">Why: the page meta is the first thing readers see — a stale count implies the docs are not maintained.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">8</span>
+    <span class="step-body">
+      Add a <strong>doc card</strong> to the "All N+1 docs" grid. Copy the card template below.
+      <span class="step-why">Why: the index is the entry point — a missing card means the doc is invisible to new readers.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">9</span>
+    <span class="step-body">
+      Update the <strong>"All N docs" h2 heading</strong> to <code class="ic">All N+1 docs</code>.
+    </span>
+  </li>
+  <li>
+    <span class="step-num">10</span>
+    <span class="step-body">
+      Add an entry to the <strong>Recommended reading order</strong> section.
+      <span class="step-why">Why: reading order tells readers when to use the new doc relative to existing ones — without it, readers encounter it out of context.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">11</span>
+    <span class="step-body">
+      Add an entry to the <strong>Cross-doc dependencies</strong> section.
+      <span class="step-why">Why: the dependency map shows which docs the new one depends on — missing it means the relationship is undocumented.</span>
+    </span>
+  </li>
+</ol>
+
+<h3>Step 4 — Update doc 15 (Version Registry)</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">12</span>
+    <span class="step-body">
+      Add any new versioned items from the new doc to <code class="ic">15-version-registry.html</code>.
+      <span class="step-why">Why: doc 15 is the single maintenance index — a versioned item not listed there will never be updated.</span>
+      To add: open <code class="ic">scripts/generate_15.py</code> → add entries to the <code class="ic">ITEMS</code> list → re-run the script.
+      <span class="step-cmd">python3 scripts/generate_15.py</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">13</span>
+    <span class="step-body">
+      Update doc 15's nav to include the new doc link (it will be added automatically in step 5 above if you ran the nav script).
+      Verify: <code class="ic">grep 'NN-doc-name.html' 15-version-registry.html</code>
+    </span>
+  </li>
+</ol>
+
+<h3>Step 5 — Update this runbook (doc 16)</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">14</span>
+    <span class="step-body">
+      Update the <strong>File map</strong> section below to include the new doc.
+      <span class="step-why">Why: the file map is the authoritative list of all docs — a missing entry creates confusion about what exists.</span>
+      To update: open <code class="ic">scripts/generate_16.py</code> → add row to DOCS list and file map table → re-run.
+      <span class="step-cmd">python3 scripts/generate_16.py</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">15</span>
+    <span class="step-body">
+      Update the counts bar at the top of this page: <code class="ic">16 Docs</code> → <code class="ic">17 Docs</code>.
+    </span>
+  </li>
+</ol>
+
+<h3>Doc card template for index.html</h3>
+<pre class="code-block">&lt;a href="NN-doc-name.html" class="doc-card"&gt;
+  &lt;div class="doc-card-num"&gt;Doc NN&lt;/div&gt;
+  &lt;div class="doc-card-title"&gt;[Title]&lt;/div&gt;
+  &lt;div class="doc-card-desc"&gt;[One paragraph — what it is, what it covers, key counts.]&lt;/div&gt;
+  &lt;div class="doc-card-meta"&gt;&lt;strong&gt;Records:&lt;/strong&gt; [key counts] &amp;nbsp;·&amp;nbsp; &lt;strong&gt;Use when:&lt;/strong&gt; [specific trigger]&lt;/div&gt;
+&lt;/a&gt;</pre>
+
+<h3>Dependency map entry template for index.html</h3>
+<pre class="code-block">&lt;div class="dep-row" style="padding:8px 16px"&gt;
+  &lt;div class="dep-from"&gt;&lt;a href="NN-doc-name.html"&gt;NN Doc label&lt;/a&gt;&lt;/div&gt;
+  &lt;div class="dep-arrow"&gt;→&lt;/div&gt;
+  &lt;div class="dep-to"&gt;[what this doc depends on and what it extends]&lt;/div&gt;
+&lt;/div&gt;</pre>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="update-version" class="section-accent-green">Updating a version</h2>
+<p class="section-sub">Use when any tool, framework, base image, or distro version changes. Check doc 15 for review cadence.</p>
+
+<ol class="checklist">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      Open <a href="15-version-registry.html" style="color:var(--blue)">doc 15 — Version Registry</a>. Find the item. Click its source link.
+      <span class="step-why">Why: doc 15 lists every versioned item with its source URL — no need to search individual docs.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      Note the new version. Note which docs it appears in (the "Used in" badges column).
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      Update the version string in every listed doc.
+      <span class="step-why">Why: the same item appears in multiple docs — updating only one creates inconsistency that the next audit will flag.</span>
+      <span class="step-cmd">grep -n "OldVersion" doc-NN.html  # find exact location first</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      For base images: also update the <code class="ic">FROM</code> tag in the actual Dockerfile shown in doc 11.
+      <span class="step-why">Why: doc 11 contains literal Dockerfile content that readers copy — a stale FROM tag ships a vulnerable image.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      Update the "Last verified" date in doc 15 for the changed item.
+      To do: open <code class="ic">scripts/generate_15.py</code> → update the <code class="ic">VERIFIED</code> constant at the top to today's date → re-run.
+      <span class="step-cmd">python3 scripts/generate_15.py</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">6</span>
+    <span class="step-body">
+      Commit with exact format:
+      <span class="step-cmd">git commit -m "Update [item name] [old version] → [new version] (verified YYYY-MM-DD)"</span>
+    </span>
+  </li>
+</ol>
+
+<div class="warn-block">
+  <strong>Base image version change requires extra check:</strong> when <code class="ic">node:22-alpine</code> bumps to <code class="ic">node:24-alpine</code>, the Node.js major version inside the container changes. Verify the framework in doc 01 still supports that Node.js version before shipping. Check: <a href="01-framework-catalog.html" style="color:var(--blue)">doc 01 framework runtime column</a>.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="update-data" class="section-accent-amber">Updating market or industry data</h2>
+<p class="section-sub">Use when re-verifying Canadian market data (docs 07, 08, 14) or US industry data (doc 06). Annual cadence.</p>
+
+<ol class="checklist">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      Identify what changed: demand signal, wage band, tier, employer name, compliance framework, or entry notes.
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      Update the relevant doc:
+      <span class="step-why">Why: data is in three separate docs — 07 (schema/compliance), 08 (market signals), 14 (deep-dive). All three must stay consistent.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      Cross-check: if demand changes in doc 08 for an industry, verify the same industry's entry notes in doc 14 still match.
+      <span class="step-why">Why: a "Flat" demand industry in doc 08 with "Hot — roles open immediately" entry notes in doc 14 is a direct contradiction.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      Update the <code class="ic">data verified</code> date in the page-meta line of each updated doc.
+      <span class="step-cmd">grep -n "data verified" doc-NN.html  # find the meta line</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      Update the market data row in doc 15 (last verified date).
+    </span>
+  </li>
+</ol>
+
+<h3>Docs that must stay consistent with each other</h3>
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>Data point</th><th>Primary doc</th><th>Must match in</th><th>What to check</th></tr></thead>
+<tbody>
+<tr><td>Industry demand signal</td><td><a href="08-canada-market.html">08</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Entry Notes card — "hot demand" language must not contradict doc 08 chip</td></tr>
+<tr><td>Industry tier (T1–T4)</td><td><a href="08-canada-market.html">08</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Summary table tier chip in doc 14 must match doc 08 Tier column</td></tr>
+<tr><td>Compliance framework per industry</td><td><a href="07-canada-schema.html">07</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Compliance card in doc 14 must list same frameworks as doc 07</td></tr>
+<tr><td>Wage band</td><td><a href="08-canada-market.html">08</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Wage chip in doc 14 summary must match doc 08 Wage column</td></tr>
+<tr><td>Hub / province presence</td><td><a href="08-canada-market.html">08</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Employers by Province card in doc 14 must only list provinces shown in doc 08 Primary hubs</td></tr>
+<tr><td>US industry compliance</td><td><a href="06-industry-schema.html">06</a></td><td><a href="10-linux-compliance.html">10</a></td><td>Industry vertical rows in doc 10 Matrix 2 must match doc 06 compliance column</td></tr>
+</tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="nav-pattern" class="section-accent-purple">Nav link pattern — exact format required</h2>
+<p class="section-sub">Every nav sidebar in every doc must follow this exact structure. Deviation breaks navigation.</p>
+
+<h3>Standard nav link (all docs except the active one)</h3>
+<pre class="code-block">&lt;a href="NN-doc-name.html"&gt;NN Label text&lt;/a&gt;</pre>
+
+<h3>Active doc nav link (the doc you are currently in)</h3>
+<pre class="code-block">&lt;a href="NN-doc-name.html" aria-current="page"&gt;NN Label text&lt;/a&gt;</pre>
+
+<h3>Back to top link — always last in nav</h3>
+<p>Two variants exist in the repo. Both are correct — do not change them:</p>
+<pre class="code-block">&lt;!-- Most docs use: --&gt;
+&lt;a href="#main-content" class="nav-top"&gt;↑ Back to top&lt;/a&gt;
+
+&lt;!-- Doc 14 uses HTML entity (both render identically): --&gt;
+&lt;a href="#main-content" class="nav-top"&gt;&amp;#8593; Back to top&lt;/a&gt;</pre>
+
+<div class="warn-block">
+  <strong>When adding a nav link:</strong> always insert it immediately before the <code class="ic">Back to top</code> line — never after. The Back to top link must always be last.
+</div>
+
+<h3>Nav label format</h3>
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>Doc</th><th>Exact nav label</th></tr></thead>
+<tbody>
+<tr><td>01</td><td>01 Frameworks</td></tr>
+<tr><td>02</td><td>02 Pipeline schema</td></tr>
+<tr><td>03</td><td>03 Stage types</td></tr>
+<tr><td>04</td><td>04 Tool catalog</td></tr>
+<tr><td>05</td><td>05 Invariants</td></tr>
+<tr><td>06</td><td>06 US industries</td></tr>
+<tr><td>07</td><td>07 CA industries</td></tr>
+<tr><td>08</td><td>08 CA market</td></tr>
+<tr><td>09</td><td>09 Linux distros</td></tr>
+<tr><td>10</td><td>10 Linux compliance</td></tr>
+<tr><td>11</td><td>11 Dockerfiles</td></tr>
+<tr><td>12</td><td>12 Compliance</td></tr>
+<tr><td>13</td><td>13 Pipeline catalog</td></tr>
+<tr><td>14</td><td>14 CA industries</td></tr>
+<tr><td>15</td><td>15 Version registry</td></tr>
+<tr><td>16</td><td>16 Runbook</td></tr>
+</tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="index-pattern">index.html — what must change for every new doc</h2>
+<p class="section-sub">index.html has 5 locations that must be updated for every new doc. Missing any one creates an inconsistency.</p>
+
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>#</th><th>Location in index.html</th><th>What to change</th><th>How to find it</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>page-meta line</td><td><code class="ic">N design docs</code> → <code class="ic">N+1 design docs</code></td><td><code class="ic">grep -n "design docs" index.html</code></td></tr>
+<tr><td>2</td><td>"All N docs" h2 heading</td><td><code class="ic">All N docs</code> → <code class="ic">All N+1 docs</code></td><td><code class="ic">grep -n "All [0-9]* docs" index.html</code></td></tr>
+<tr><td>3</td><td>Doc cards grid</td><td>Add new <code class="ic">&lt;a class="doc-card"&gt;</code> block after the last card</td><td><code class="ic">grep -n "doc-card-num" index.html | tail -1</code></td></tr>
+<tr><td>4</td><td>Recommended reading order</td><td>Add <code class="ic">&lt;div class="order-item"&gt;</code> block in correct position</td><td><code class="ic">grep -n "order-item" index.html | tail -1</code></td></tr>
+<tr><td>5</td><td>Cross-doc dependencies</td><td>Add <code class="ic">&lt;div class="dep-row"&gt;</code> block</td><td><code class="ic">grep -n "dep-row" index.html | tail -1</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note-block">
+  <strong>Verify all 5 updated:</strong>
+  <span class="step-cmd" style="display:block;margin-top:4px">grep -c "doc-card-num" index.html  # must equal total doc count
+grep -c "order-item" index.html  # must equal total doc count
+grep -c "dep-row" index.html     # must equal total doc count</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="gen-scripts">Generation scripts — when and how to use</h2>
+<p class="section-sub">Two docs are generated from Python scripts. Never edit the HTML directly — edit the script and regenerate.</p>
+
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>Script</th><th>Generates</th><th>Edit when</th><th>Run command</th></tr></thead>
+<tbody>
+<tr>
+  <td><code class="ic">scripts/generate_14.py</code></td>
+  <td><a href="14-canada-industry-catalog.html">14-canada-industry-catalog.html</a></td>
+  <td>Adding or changing any industry, employer, tech stack, compliance, or entry note. Changing CSS. Adding a new vertical.</td>
+  <td><code class="ic">python3 scripts/generate_14.py</code></td>
+</tr>
+<tr>
+  <td><code class="ic">scripts/generate_15.py</code></td>
+  <td><a href="15-version-registry.html">15-version-registry.html</a></td>
+  <td>Adding a new versioned item. Updating a version. Changing a source URL. Adding a new doc (add its items). Changing review cadence.</td>
+  <td><code class="ic">python3 scripts/generate_15.py</code></td>
+</tr>
+<tr>
+  <td><code class="ic">scripts/generate_16.py</code></td>
+  <td><a href="16-maintainability-runbook.html">16-maintainability-runbook.html</a> (this file)</td>
+  <td>Adding a new doc (update DOCS list and file map). Changing any checklist step. Adding a new task type.</td>
+  <td><code class="ic">python3 scripts/generate_16.py</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="warn-block">
+  <strong>Scripts are in /tmp — they are not committed to the repo.</strong>
+  If the session is lost, the scripts must be regenerated from the HTML output + this runbook.
+  To prevent this: copy the scripts to a permanent location before closing the session.
+  <span class="step-cmd">cp scripts/generate_14.py /mnt/c/Users/RohithY/yarova/pipeline-studio/scripts/
+cp scripts/generate_15.py /mnt/c/Users/RohithY/yarova/pipeline-studio/scripts/
+cp scripts/generate_16.py /mnt/c/Users/RohithY/yarova/pipeline-studio/scripts/</span>
+</div>
+
+<div class="note-block">
+  <strong>After running any generation script:</strong> the generated HTML file must be added to a new branch and PR — never commit directly to main.
+  <span class="step-cmd" style="display:block;margin-top:4px">git checkout -b update-doc-NN-description
+git add NN-doc-name.html
+git commit -m "Update [doc name] — [what changed]"
+git push -u origin update-doc-NN-description
+gh pr create --title "..." --body "..."</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="file-map">File map — all files in this repo</h2>
+<p class="section-sub">Complete list of every file. Status: Generated = produced by a script. Hand-authored = written directly.</p>
+
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>File</th><th>Doc #</th><th>Type</th><th>Generated by</th><th>Depends on</th><th>Nav links to</th></tr></thead>
+<tbody>
+<tr><td><a href="index.html">index.html</a></td><td>—</td><td>Hub / entry point</td><td>Hand-authored</td><td>All docs (lists them)</td><td>All docs</td></tr>
+<tr><td><a href="01-framework-catalog.html">01-framework-catalog.html</a></td><td>01</td><td>Reference table</td><td>Hand-authored</td><td>None</td><td>All docs</td></tr>
+<tr><td><a href="02-pipeline-schema.html">02-pipeline-schema.html</a></td><td>02</td><td>Reference diagram + table</td><td>Hand-authored</td><td>None</td><td>All docs</td></tr>
+<tr><td><a href="03-stage-types.html">03-stage-types.html</a></td><td>03</td><td>Reference table</td><td>Hand-authored</td><td>02</td><td>All docs</td></tr>
+<tr><td><a href="04-tool-catalog.html">04-tool-catalog.html</a></td><td>04</td><td>Reference table</td><td>Hand-authored</td><td>02, 03</td><td>All docs</td></tr>
+<tr><td><a href="05-invariants.html">05-invariants.html</a></td><td>05</td><td>Reference table</td><td>Hand-authored</td><td>02, 03, 04</td><td>All docs</td></tr>
+<tr><td><a href="06-industry-schema.html">06-industry-schema.html</a></td><td>06</td><td>Reference table</td><td>Hand-authored</td><td>None</td><td>All docs</td></tr>
+<tr><td><a href="07-canada-schema.html">07-canada-schema.html</a></td><td>07</td><td>Reference table</td><td>Hand-authored</td><td>06 (same structure)</td><td>All docs</td></tr>
+<tr><td><a href="08-canada-market.html">08-canada-market.html</a></td><td>08</td><td>Reference table + heatmap</td><td>Hand-authored</td><td>07</td><td>All docs</td></tr>
+<tr><td><a href="09-linux-distros.html">09-linux-distros.html</a></td><td>09</td><td>Reference table</td><td>Hand-authored</td><td>None</td><td>All docs</td></tr>
+<tr><td><a href="10-linux-compliance.html">10-linux-compliance.html</a></td><td>10</td><td>Cross-ref matrices</td><td>Hand-authored</td><td>09</td><td>All docs</td></tr>
+<tr><td><a href="11-dockerfile-catalog.html">11-dockerfile-catalog.html</a></td><td>11</td><td>Dockerfile catalog</td><td>Hand-authored</td><td>01, 09, 10</td><td>All docs</td></tr>
+<tr><td><a href="12-compliance-variations.html">12-compliance-variations.html</a></td><td>12</td><td>Compliance delta reference</td><td>Hand-authored</td><td>11</td><td>All docs</td></tr>
+<tr><td><a href="13-pipeline-build-catalog.html">13-pipeline-build-catalog.html</a></td><td>13</td><td>Pipeline build catalog</td><td>Hand-authored</td><td>02, 11, 12</td><td>All docs</td></tr>
+<tr><td><a href="14-canada-industry-catalog.html">14-canada-industry-catalog.html</a></td><td>14</td><td>Industry deep-dive accordion</td><td><code class="ic">scripts/generate_14.py</code></td><td>07, 08</td><td>All docs</td></tr>
+<tr><td><a href="15-version-registry.html">15-version-registry.html</a></td><td>15</td><td>Version tracking table</td><td><code class="ic">scripts/generate_15.py</code></td><td>All docs (aggregates)</td><td>All docs</td></tr>
+<tr><td><a href="16-maintainability-runbook.html">16-maintainability-runbook.html</a></td><td>16</td><td>Maintenance runbook</td><td><code class="ic">scripts/generate_16.py</code></td><td>All docs (describes)</td><td>All docs</td></tr>
+</tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="commit-style">Commit style — required format</h2>
+<p class="section-sub">All commits to this repo must follow this format. No exceptions.</p>
+
+<h3>Rules</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">R1</span>
+    <span class="step-body">
+      <strong>Never commit directly to main.</strong> Always: new branch → commit → PR → merge.
+      <span class="step-why">Why: direct commits to main bypass review and break the audit trail.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">R2</span>
+    <span class="step-body">
+      <strong>One topic per PR.</strong> A version update PR contains only version changes. A new doc PR contains only the new doc and nav updates.
+      <span class="step-why">Why: mixed PRs make rollback impossible without also reverting unrelated changes.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">R3</span>
+    <span class="step-body">
+      <strong>Commit message: plain English, one line, why not what.</strong>
+      No <code class="ic">feat:</code>, <code class="ic">fix:</code>, <code class="ic">chore:</code> prefixes.
+    </span>
+  </li>
+</ol>
+
+<h3>Commit message examples</h3>
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>Task type</th><th>Good message</th><th>Bad message</th></tr></thead>
+<tbody>
+<tr><td>Version update</td><td><code class="ic">Update Trivy v0.58 → v0.60 (verified 2026-08-15)</code></td><td><code class="ic">fix: update version</code></td></tr>
+<tr><td>New doc</td><td><code class="ic">Add doc 17 — US pipeline build catalog (74 industries)</code></td><td><code class="ic">feat: add new page</code></td></tr>
+<tr><td>Data update</td><td><code class="ic">Update CA market data demand signals — Q3 2026 verify</code></td><td><code class="ic">update data</code></td></tr>
+<tr><td>Bug fix</td><td><code class="ic">Fix broken anchor links in doc 13 compliance table</code></td><td><code class="ic">fix: anchors</code></td></tr>
+<tr><td>Nav fix</td><td><code class="ic">Add doc 17 nav link to all existing docs</code></td><td><code class="ic">update nav</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Branch name format</h3>
+<pre class="code-block">add-docNN-short-description     # new doc
+update-docNN-what-changed       # single doc update
+fix-what-was-broken             # bug fix
+update-versions-YYYY-MM-DD      # batch version update</pre>
+
+</main>
+</body>
+</html>
+'''
+
+with open(OUT, 'w', encoding='utf-8') as f:
+    f.write(HTML)
+print(f'Written {{len(HTML):,}} chars to {{OUT}}')

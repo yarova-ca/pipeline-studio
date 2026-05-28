@@ -102,12 +102,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="13-pipeline-build-catalog.html">13 Pipeline catalog</a>
   <a href="14-canada-industry-catalog.html">14 CA industries</a>
 <a href="15-version-registry.html">15 Version registry</a>
+<a href="16-maintainability-runbook.html">16 Runbook</a>
 <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-title">Pipeline Studio</div>
-<div class="page-meta">15 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; 75 pipeline catalogs &nbsp;·&nbsp; 73 CA industry deep-dives &nbsp;·&nbsp; verified 2026-05-28</div>
+<div class="page-meta">16 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; 75 pipeline catalogs &nbsp;·&nbsp; 73 CA industry deep-dives &nbsp;·&nbsp; verified 2026-05-28</div>
 
 <div class="hint-card">
   <strong>Purpose:</strong> Reference for building secure CI/CD pipelines across any framework, any regulated industry, any Canadian market.
@@ -223,6 +224,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="doc-card-meta"><strong>Records:</strong> all versioned items · 6 categories · cadence guide &nbsp;·&nbsp; <strong>Use when:</strong> verifying or updating any version across the pipeline-studio docs</div>
   </a>
 
+  <a href="16-maintainability-runbook.html" class="doc-card">
+    <div class="doc-card-num">Doc 16</div>
+    <div class="doc-card-title">Maintainability Runbook</div>
+    <div class="doc-card-desc">Step-by-step checklists for maintaining this repo: adding a new doc (15-step checklist), updating any version, updating market data, and keeping nav/index in sync. Includes nav label table, commit style guide, file map, and generation script reference.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 4 task types · 8 checklists · file map for all 16 docs &nbsp;·&nbsp; <strong>Use when:</strong> adding a new doc, updating a version, or re-verifying any data</div>
+  </a>
+
 </div>
 
 <!-- ═══ READING ORDER ═══ -->
@@ -269,6 +277,9 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   </div>
   <div class="order-item">
     <div><div class="order-item-title"><a href="15-version-registry.html">15 — Version Registry</a></div><div class="order-item-desc">Maintenance reference only — not part of the reading flow. Open it when verifying or updating any version across the docs. Review base images every 30 days, everything else every 90 days.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="16-maintainability-runbook.html">16 — Maintainability Runbook</a></div><div class="order-item-desc">Maintenance reference only. Read before adding a new doc, running a version update batch, or re-verifying data. Contains the exact checklist for every maintenance task.</div></div>
   </div>
 </div>
 
@@ -344,6 +355,11 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="dep-from"><a href="15-version-registry.html">15 Version Registry</a></div>
     <div class="dep-arrow">→</div>
     <div class="dep-to">aggregates versioned items from all 14 docs — maintenance reference, no reading dependency</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="16-maintainability-runbook.html">16 Runbook</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">describes maintenance procedures for all 16 docs — no reading dependency; use as a how-to reference</div>
   </div>
 </div>
 
