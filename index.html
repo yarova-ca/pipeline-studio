@@ -114,12 +114,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="14-canada-industry-catalog.html">14 CA industries</a>
 <a href="15-version-registry.html">15 Version registry</a>
 <a href="16-maintainability-runbook.html">16 Runbook</a>
+<a href="17-feature-matrix.html">17 Feature matrix</a>
 <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-title">Pipeline Studio</div>
-<div class="page-meta">16 design docs &nbsp;·&nbsp; 30 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 105 Dockerfile records &nbsp;·&nbsp; 105 pipeline catalogs &nbsp;·&nbsp; 73 CA industry deep-dives &nbsp;·&nbsp; verified 2026-05-29</div>
+<div class="page-meta">17 design docs &nbsp;·&nbsp; 30 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 105 Dockerfile records &nbsp;·&nbsp; 105 pipeline catalogs &nbsp;·&nbsp; 73 CA industry deep-dives &nbsp;·&nbsp; verified 2026-05-29</div>
 
 <div class="hint-card">
   <strong>Purpose:</strong> Reference for building secure CI/CD pipelines across any framework, any regulated industry, any Canadian market.
@@ -127,7 +128,7 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
 </div>
 
 <!-- ═══ DOC CARDS ═══ -->
-<h2>All 16 docs</h2>
+<h2>All 17 docs</h2>
 <div class="cards-grid">
 
   <a href="01-framework-catalog.html" class="doc-card">
@@ -242,6 +243,13 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="doc-card-meta"><strong>Records:</strong> 4 task types · 8 checklists · file map for all 16 docs &nbsp;·&nbsp; <strong>Use when:</strong> adding a new doc, updating a version, or re-verifying any data</div>
   </a>
 
+  <a href="17-feature-matrix.html" class="doc-card">
+    <div class="doc-card-num">Doc 17</div>
+    <div class="doc-card-title">Feature Axis Matrix</div>
+    <div class="doc-card-desc">Cross-reference of all 7 build axes (RUNTIME, PKG_MANAGER, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM) against all 30 service groups. Shows which axes apply to which groups, per-axis value tables, example build commands, and implementation status (implemented vs designed).</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 7 axes · 30 groups · 4 categories · 3 tiers &nbsp;·&nbsp; <strong>Use when:</strong> deciding which build axis to implement next, or checking axis applicability for a group</div>
+  </a>
+
 </div>
 
 <!-- ═══ READING ORDER ═══ -->
@@ -291,6 +299,9 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   </div>
   <div class="order-item">
     <div><div class="order-item-title"><a href="16-maintainability-runbook.html">16 — Maintainability Runbook</a></div><div class="order-item-desc">Maintenance reference only. Read before adding a new doc, running a version update batch, or re-verifying data. Contains the exact checklist for every maintenance task.</div></div>
+  </div>
+  <div class="order-item">
+    <div><div class="order-item-title"><a href="17-feature-matrix.html">17 — Feature Axis Matrix</a></div><div class="order-item-desc">Cross-reference for all 7 build axes × 30 service groups. Read when deciding which axis to implement next or verifying which axes apply to a specific service group.</div></div>
   </div>
 </div>
 
@@ -445,6 +456,11 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div class="dep-from"><a href="16-maintainability-runbook.html">16 Runbook</a></div>
     <div class="dep-arrow">→</div>
     <div class="dep-to">describes maintenance procedures for all 16 docs — no reading dependency; use as a how-to reference</div>
+  </div>
+  <div class="dep-row" style="padding:8px 16px">
+    <div class="dep-from"><a href="17-feature-matrix.html">17 Feature matrix</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">cross-reference of build axes against service groups; standalone — no reading dependency; use when planning next axis implementation</div>
   </div>
 </div>
 
