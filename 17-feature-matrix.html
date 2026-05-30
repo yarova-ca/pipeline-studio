@@ -111,6 +111,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   h2{margin-top:24px}
   .cat-row td,.count-chip{background:none!important;border-color:#ccc!important;color:#000!important}
 }
+.note-block{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:10px 14px;margin:6px 0 14px;font-size:12px;line-height:1.8}
 </style>
 </head>
 <body>
@@ -233,34 +234,32 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 
 <!-- ═══ GROUP MATRIX ═══ -->
 <h2 id="matrix">Group Eligibility Matrix</h2>
-<p class="section-sub">
-  Which build args apply to each group.
-  <span class="cell-y">Y</span> = applies fully.
-  <span class="cell-p">*</span> = different pattern (see Notes).
-  <span class="cell-n">—</span> = does not apply.
-  Rows are colour-grouped by category.
-  <strong>Server — API tier (14–20)</strong> is the primary implementation target.
-</p>
+<p class="section-sub">Rows are colour-grouped by category. <strong>Server — API tier (14–20)</strong> is the primary implementation target.</p>
+<div class="legend-box">
+  <div><span class="cell-y">Y</span> &nbsp;Applies — standard <code>--build-arg</code> pattern works for this group</div>
+  <div><span class="cell-p">*</span> &nbsp;Different mechanism — applies but not via standard pattern (see Notes)</div>
+  <div><span class="cell-n">—</span> &nbsp;Does not apply — build arg has no effect on this group</div>
+</div>
 
 <div class="tbl-scroll">
 <table class="mtx-table">
   <thead>
     <tr>
       <th style="text-align:left">Group</th>
-      <th>RUNTIME</th>
-      <th>PKG_MGR</th>
-      <th>BUILD_TOOL</th>
-      <th>COMPLIANCE</th>
-      <th>OBS</th>
-      <th>AUTH</th>
-      <th>ORM</th>
+      <th title="Swap the base image — security posture and compliance eligibility">RUNTIME</th>
+      <th title="Replace npm with pnpm / yarn / bun (JS/TS only)">PKG_MGR</th>
+      <th title="Replace Vite with webpack / rspack / esbuild (JS/TS only)">BUILD_TOOL</th>
+      <th title="Add PCI / FIPS / HIPAA / PIPEDA middleware and startup checks">COMPLIANCE</th>
+      <th title="Add OpenTelemetry / Prometheus / Datadog instrumentation">OBS</th>
+      <th title="Add JWT / OAuth2 / OIDC / API key / mTLS middleware">AUTH</th>
+      <th title="Add database library + schema (Prisma, GORM, SQLAlchemy, etc.)">ORM</th>
     </tr>
   </thead>
   <tbody>
 
     <!-- FRONTEND / STATIC -->
     <tr class="cat-row frontend">
-      <td colspan="8">Frontend &amp; Static — groups 01–08, 13 <span class="cat-badge">nginx static or SSR Node</span></td>
+      <td colspan="8">Frontend &amp; Static — groups 01–08, 13 <span class="cat-badge">static groups (02/03/08/13): nginx only — no COMPLIANCE/AUTH/ORM · SSR groups (01/04/05/07): partial (*)</span></td>
     </tr>
     <tr>
       <td>01 — SSR / Full-stack <small style="color:var(--text-dim)">(Next.js, Nuxt, Remix, SvelteKit)</small></td>
@@ -490,7 +489,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 
     <!-- CI-ONLY / NATIVE -->
     <tr class="cat-row cionly">
-      <td colspan="8">CI-only / Native — groups 09–12 <span class="cat-badge">no Docker · no server · no axes apply</span></td>
+      <td colspan="8">CI-only / Native — groups 09–12 <span class="cat-badge">no Docker · no server process · build args have no effect · platform-native CI only</span></td>
     </tr>
     <tr>
       <td>09 — Mobile / React Native <small style="color:var(--text-dim)">(Expo, Ionic, React Native)</small></td>
@@ -521,7 +520,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 <h2 id="axis-detail">Per-Axis Detail</h2>
 <p class="section-sub">Click any axis to expand. Values, constraints, and example build command.</p>
 
-<details class="axis-details">
+<details class="axis-details" open>
   <summary><span class="axis-num">1</span> RUNTIME — Runtime variant <span class="s-impl" style="margin-left:8px">Implemented</span></summary>
   <div class="expand-content">
     <p style="margin-bottom:10px;font-size:12px">Selects which base image the runtime stage uses. Affects security posture, image size, and compliance eligibility.</p>
@@ -541,7 +540,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </details>
 
-<details class="axis-details">
+<details class="axis-details" open>
   <summary><span class="axis-num">2</span> PKG_MANAGER — Package manager swap <span class="s-des" style="margin-left:8px">Designed</span></summary>
   <div class="expand-content">
     <p style="margin-bottom:10px;font-size:12px">Replaces npm in JS/TS Dockerfiles. Applies to groups 01–08, 13, 14. Group 06 (Cloudflare Workers): applies to lock file for wrangler deploy — not a Docker build arg.</p>
@@ -561,7 +560,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </details>
 
-<details class="axis-details">
+<details class="axis-details" open>
   <summary><span class="axis-num">3</span> BUILD_TOOL — Build tool swap <span class="s-des" style="margin-left:8px">Designed</span></summary>
   <div class="expand-content">
     <p style="margin-bottom:10px;font-size:12px">Replaces Vite as the JS/TS bundler. Applies to groups 01–08, 13, 14 where bundling applies.</p>
@@ -581,7 +580,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </details>
 
-<details class="axis-details">
+<details class="axis-details" open>
   <summary><span class="axis-num">4</span> COMPLIANCE — Compliance preset <span class="s-des" style="margin-left:8px">Designed</span></summary>
   <div class="expand-content">
     <p style="margin-bottom:10px;font-size:12px">Adds middleware, headers, library swaps, and startup checks for a regulatory regime. Applies to all server groups. SSR groups 01/04/05/07 use HTTP handler level (same pattern).</p>
@@ -605,7 +604,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </details>
 
-<details class="axis-details">
+<details class="axis-details" open>
   <summary><span class="axis-num">5</span> OBSERVABILITY — Observability stack <span class="s-des" style="margin-left:8px">Designed</span></summary>
   <div class="expand-content">
     <p style="margin-bottom:10px;font-size:12px">Adds traces, metrics, and logs instrumentation. Applies to all server groups. OTel is the recommended value — vendor-neutral, works with Jaeger, Grafana, Datadog.</p>
@@ -624,7 +623,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </details>
 
-<details class="axis-details">
+<details class="axis-details" open>
   <summary><span class="axis-num">6</span> AUTH — Auth strategy <span class="s-des" style="margin-left:8px">Designed</span></summary>
   <div class="expand-content">
     <p style="margin-bottom:10px;font-size:12px">Adds request authentication middleware. Standard HTTP middleware pattern applies to groups 14–30. Groups 01/04/05/07 (SSR): middleware applies to API routes only — page routes use framework-native auth (Next-Auth, SvelteKit hooks).</p>
@@ -646,7 +645,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </details>
 
-<details class="axis-details">
+<details class="axis-details" open>
   <summary><span class="axis-num">7</span> ORM — ORM / Database layer <span class="s-des" style="margin-left:8px">Designed</span></summary>
   <div class="expand-content">
     <p style="margin-bottom:10px;font-size:12px">Adds a database connection library and a minimal schema example. Applies to groups 14–27 only. Protocol groups (28–30) are transport layers — they don't own the data model.</p>
@@ -675,22 +674,28 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 <!-- ═══ NOTES ═══ -->
 <h2 id="notes">Notes on <span style="background:#fff8c5;border:1px solid #e8d064;border-radius:3px;padding:1px 7px;font-size:12px;color:var(--amber)">* partial</span> cells</h2>
 
-<h3>Groups 01, 04, 05, 07 — COMPLIANCE and OBSERVABILITY marked *</h3>
-<p style="font-size:12px;margin-bottom:8px">COMPLIANCE applies at the HTTP handler level — same pattern as pure API servers. <span class="cell-y">Y</span> behavior.</p>
-<p style="font-size:12px;margin-bottom:16px">OBSERVABILITY: OTel SDK applies at server startup — same pattern. <span class="cell-y">Y</span> behavior.</p>
-<p style="font-size:12px;margin-bottom:4px">Marked <span class="cell-p">*</span> as a reminder that these are full-stack frameworks — verify the HTTP handler entry point before adding middleware.</p>
+<h3>Groups 01, 04, 05, 07 — COMPLIANCE and OBSERVABILITY <span class="cell-p">*</span></h3>
+<div class="note-block">
+  <strong>Pattern:</strong> HTTP handler level — same as pure API servers.<br>
+  <strong>Behavior:</strong> applies fully.<br>
+  <strong>Why *:</strong> reminder that these are full-stack frameworks — verify the HTTP handler entry point before adding middleware.
+</div>
 
-<h3>Groups 01, 04, 05, 07 — AUTH marked *</h3>
-<p style="font-size:12px;margin-bottom:4px"><strong>What works:</strong> JWT Bearer middleware on API routes within the framework.</p>
-<p style="font-size:12px;margin-bottom:4px"><strong>What does not work:</strong> Standard JWT middleware on page routes (SSR pages use cookies / framework-native auth).</p>
-<p style="font-size:12px;margin-bottom:4px"><strong>Next.js:</strong> Use Next-Auth for page auth. JWT Bearer middleware for <code>/api/*</code> routes only.</p>
-<p style="font-size:12px;margin-bottom:4px"><strong>SvelteKit:</strong> Use SvelteKit hooks (<code>hooks.server.ts</code>) for session. JWT Bearer for API endpoints.</p>
-<p style="font-size:12px;margin-bottom:16px"><strong>Remix:</strong> Use Remix sessions for page auth. JWT Bearer for resource routes.</p>
+<h3>Groups 01, 04, 05, 07 — AUTH <span class="cell-p">*</span></h3>
+<div class="note-block">
+  <strong>What works:</strong> JWT Bearer middleware on <code>/api/*</code> routes within the framework.<br>
+  <strong>What does not work:</strong> standard JWT middleware on SSR page routes.<br>
+  <strong>Next.js page routes:</strong> use Next-Auth.<br>
+  <strong>SvelteKit page routes:</strong> use <code>hooks.server.ts</code> sessions.<br>
+  <strong>Remix page routes:</strong> use Remix sessions.
+</div>
 
-<h3>Group 06 — PKG_MANAGER marked *</h3>
-<p style="font-size:12px;margin-bottom:4px">Group 06 (Cloudflare Workers) has no Dockerfile — RUNTIME and BUILD_TOOL do not apply.</p>
-<p style="font-size:12px;margin-bottom:4px">PKG_MANAGER applies to the local lock file used by <code>wrangler deploy</code>, not via a <code>docker build --build-arg</code>.</p>
-<p style="font-size:12px">Set the package manager in the project's <code>package.json</code> <code>packageManager</code> field — not via Docker.</p>
+<h3>Group 06 — PKG_MANAGER <span class="cell-p">*</span></h3>
+<div class="note-block">
+  <strong>Applies via:</strong> lock file used by <code>wrangler deploy</code> — not a <code>docker build --build-arg</code>.<br>
+  <strong>Does not apply:</strong> RUNTIME, BUILD_TOOL — group 06 has no Dockerfile.<br>
+  <strong>How to set:</strong> configure <code>packageManager</code> field in <code>package.json</code>.
+</div>
 
 </main>
 </body>
