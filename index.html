@@ -68,10 +68,21 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
 /* Hint card */
 .hint-card{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;font-size:12px;line-height:1.6;color:var(--text-dim);margin-bottom:8px}
 .hint-card strong{color:var(--text-head)}
+/* Scenario paths */
+.sp-list{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.sp-block{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:10px 14px}
+.sp-label{font-size:11.5px;font-weight:600;color:var(--text-head);margin-bottom:6px}
+.sp-hint{font-size:11px;color:var(--text-dim);margin-top:5px;line-height:1.5}
+.sp-chain{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.sp-node{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;background:#dbeeff;color:var(--blue);border:1px solid #b6d7f5;border-radius:3px;text-decoration:none;white-space:nowrap}
+.sp-node:hover{background:#b6d7f5;text-decoration:none}
+.sp-arr{font-size:11px;color:var(--text-dim);flex-shrink:0}
 @media(prefers-color-scheme:dark){
   :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--text-dim:#848d97;--text-head:#e6edf3}
   .doc-card:hover{box-shadow:0 2px 8px rgba(56,139,253,.15)}
   .hint-card{background:#1c2a3a;border-color:#2d4a6a;color:var(--text-dim)}
+  .sp-node{background:#0d2744;border-color:#2d4a6a;color:#58a6ff}
+  .sp-node:hover{background:#1c3a5e}
 }
 @media print{
   .skip-link,nav{display:none}
@@ -108,7 +119,7 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
 
 <main id="main-content">
 <div class="page-title">Pipeline Studio</div>
-<div class="page-meta">16 design docs &nbsp;·&nbsp; 27 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 75 Dockerfile records &nbsp;·&nbsp; 75 pipeline catalogs &nbsp;·&nbsp; 73 CA industry deep-dives &nbsp;·&nbsp; verified 2026-05-28</div>
+<div class="page-meta">16 design docs &nbsp;·&nbsp; 30 framework categories &nbsp;·&nbsp; 44 pipeline stages &nbsp;·&nbsp; 25 invariants &nbsp;·&nbsp; 74 US + 73 CA industries &nbsp;·&nbsp; 22 Linux distros &nbsp;·&nbsp; 105 Dockerfile records &nbsp;·&nbsp; 105 pipeline catalogs &nbsp;·&nbsp; 73 CA industry deep-dives &nbsp;·&nbsp; verified 2026-05-29</div>
 
 <div class="hint-card">
   <strong>Purpose:</strong> Reference for building secure CI/CD pipelines across any framework, any regulated industry, any Canadian market.
@@ -192,8 +203,8 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="11-dockerfile-catalog.html" class="doc-card">
     <div class="doc-card-num">Doc 11</div>
     <div class="doc-card-title">Dockerfile Catalog</div>
-    <div class="doc-card-desc">Actual Dockerfile content for all 75 framework records across 27 categories. Every Dockerfile uses multi-stage build (ubuntu:24.04 builder → minimal runtime). ARG-driven package manager selection (npm/yarn/pnpm, pip/poetry/uv, maven/gradle). Two named targets per Dockerfile: <strong>runtime</strong> (standard) and <strong>runtime-fips</strong> (FIPS-validated UBI9 / dotnet FIPS). CI-only categories (iOS, Android, Edge) show GitHub Actions YAML instead.</div>
-    <div class="doc-card-meta"><strong>Records:</strong> 75 frameworks · 27 categories · 62 Dockerfiles · 13 CI-only &nbsp;·&nbsp; <strong>Use when:</strong> writing or copying a production Dockerfile for any framework</div>
+    <div class="doc-card-desc">Actual Dockerfile content for all 105 framework records across 30 categories. Every Dockerfile uses multi-stage build (ubuntu:24.04 builder → minimal runtime). ARG-driven package manager selection (npm/yarn/pnpm, pip/poetry/uv, maven/gradle). Two named targets per Dockerfile: <strong>runtime</strong> (standard) and <strong>runtime-fips</strong> (FIPS-validated UBI9 / dotnet FIPS). CI-only categories (iOS, Android, Edge) show GitHub Actions YAML instead.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 105 frameworks · 30 categories · 92 Dockerfiles · 13 CI-only &nbsp;·&nbsp; <strong>Use when:</strong> writing or copying a production Dockerfile for any framework</div>
   </a>
 
   <a href="12-compliance-variations.html" class="doc-card">
@@ -206,8 +217,8 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <a href="13-pipeline-build-catalog.html" class="doc-card">
     <div class="doc-card-num">Doc 13</div>
     <div class="doc-card-title">Pipeline Build Catalog</div>
-    <div class="doc-card-desc">Full CI/CD pipeline for all 75 frameworks. Every stage across all 6 phases (Bootstrap → Local Dev → PR Gate → Main Build → Registry → Promotions) with language-specific tools, exact commands, and DevSecOps/DevOps type. Compliance deltas for all 11 standards. Push format and OIDC auth for all 6 registries. Ticket-ready format for Notion/Jira import.</div>
-    <div class="doc-card-meta"><strong>Records:</strong> 75 frameworks · 6 phases · 11 compliance standards · 6 registries &nbsp;·&nbsp; <strong>Use when:</strong> planning or implementing the full CI/CD pipeline for any framework</div>
+    <div class="doc-card-desc">Full CI/CD pipeline for all 105 frameworks. Every stage across all 6 phases (Bootstrap → Local Dev → PR Gate → Main Build → Registry → Promotions) with language-specific tools, exact commands, and DevSecOps/DevOps type. Compliance deltas for all 11 standards. Push format and OIDC auth for all 6 registries. Ticket-ready format for Notion/Jira import.</div>
+    <div class="doc-card-meta"><strong>Records:</strong> 105 frameworks · 6 phases · 11 compliance standards · 6 registries &nbsp;·&nbsp; <strong>Use when:</strong> planning or implementing the full CI/CD pipeline for any framework</div>
   </a>
 
   <a href="14-canada-industry-catalog.html" class="doc-card">
@@ -270,7 +281,7 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
     <div><div class="order-item-title"><a href="12-compliance-variations.html">12 — Compliance Variations</a></div><div class="order-item-desc">Apply compliance layers on top of doc 11 Dockerfiles. 11 standards, 10 industry profiles, 5 concrete Dockerfile additions. Read after 11.</div></div>
   </div>
   <div class="order-item">
-    <div><div class="order-item-title"><a href="13-pipeline-build-catalog.html">13 — Pipeline Build Catalog</a></div><div class="order-item-desc">Full pipeline for all 75 frameworks — every stage, every tool, every command. Compliance deltas and registry config included. Ticket-ready for Notion/Jira. Read after 02 and 11.</div></div>
+    <div><div class="order-item-title"><a href="13-pipeline-build-catalog.html">13 — Pipeline Build Catalog</a></div><div class="order-item-desc">Full pipeline for all 105 frameworks — every stage, every tool, every command. Compliance deltas and registry config included. Ticket-ready for Notion/Jira. Read after 02 and 11.</div></div>
   </div>
   <div class="order-item">
     <div><div class="order-item-title"><a href="14-canada-industry-catalog.html">14 — Canada Industry Catalog</a></div><div class="order-item-desc">Deep-dive for all 73 Canadian industries — systems, project types, employers by province, tech stack, compliance, and entry notes. Read after 08 to combine market-level data with industry-level intelligence.</div></div>
@@ -281,6 +292,75 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:24px 0 8px}
   <div class="order-item">
     <div><div class="order-item-title"><a href="16-maintainability-runbook.html">16 — Maintainability Runbook</a></div><div class="order-item-desc">Maintenance reference only. Read before adding a new doc, running a version update batch, or re-verifying data. Contains the exact checklist for every maintenance task.</div></div>
   </div>
+</div>
+
+<!-- ═══ SCENARIO PATHS ═══ -->
+<h2>Use-case reading paths</h2>
+<div class="sp-list">
+
+  <div class="sp-block">
+    <div class="sp-label">Canadian regulated industry (fintech · healthcare · government)</div>
+    <div class="sp-chain">
+      <a href="08-canada-market.html" class="sp-node">08 CA Market</a><span class="sp-arr">→</span>
+      <a href="14-canada-industry-catalog.html#fin" class="sp-node">14 Industries</a><span class="sp-arr">→</span>
+      <a href="01-framework-catalog.html" class="sp-node">01 Frameworks</a><span class="sp-arr">→</span>
+      <a href="10-linux-compliance.html" class="sp-node">10 Compliance</a><span class="sp-arr">→</span>
+      <a href="11-dockerfile-catalog.html" class="sp-node">11 Dockerfiles</a><span class="sp-arr">→</span>
+      <a href="12-compliance-variations.html" class="sp-node">12 Compliance layers</a><span class="sp-arr">→</span>
+      <a href="13-pipeline-build-catalog.html" class="sp-node">13 Pipeline</a>
+    </div>
+    <div class="sp-hint">Start with 08 to pick hub/province. Then 14 to identify which systems get built and which regulations apply. 12 adds the Dockerfile compliance layers (PIPEDA, OSFI, FINTRAC) on top of 11.</div>
+  </div>
+
+  <div class="sp-block">
+    <div class="sp-label">Protocol service — gRPC, GraphQL, or WebSocket</div>
+    <div class="sp-chain">
+      <a href="01-framework-catalog.html#c28" class="sp-node">01 #c28–30</a><span class="sp-arr">→</span>
+      <a href="15-version-registry.html#protocols" class="sp-node">15 #protocols</a><span class="sp-arr">→</span>
+      <a href="11-dockerfile-catalog.html#cat-grpc" class="sp-node">11 #cat-grpc</a><span class="sp-arr">→</span>
+      <a href="13-pipeline-build-catalog.html#grpc" class="sp-node">13 #grpc</a>
+    </div>
+    <div class="sp-hint">All 3 protocol groups (28 gRPC · 29 GraphQL · 30 WebSocket) have dedicated sections in 01, 11, 13, and 15. Use the anchor links to jump directly — no need to scroll through framework sections.</div>
+  </div>
+
+  <div class="sp-block">
+    <div class="sp-label">Federal government Canada — ITSG-33 / Protected B</div>
+    <div class="sp-chain">
+      <a href="08-canada-market.html" class="sp-node">08 CA Market</a><span class="sp-arr">→</span>
+      <a href="14-canada-industry-catalog.html#gov" class="sp-node">14 #gov</a><span class="sp-arr">→</span>
+      <a href="07-canada-schema.html" class="sp-node">07 CA Industries</a><span class="sp-arr">→</span>
+      <a href="10-linux-compliance.html" class="sp-node">10 Compliance</a><span class="sp-arr">→</span>
+      <a href="12-compliance-variations.html" class="sp-node">12 Compliance layers</a><span class="sp-arr">→</span>
+      <a href="05-invariants.html" class="sp-node">05 Invariants</a><span class="sp-arr">→</span>
+      <a href="11-dockerfile-catalog.html" class="sp-node">11 Dockerfiles</a><span class="sp-arr">→</span>
+      <a href="13-pipeline-build-catalog.html" class="sp-node">13 Pipeline</a>
+    </div>
+    <div class="sp-hint">14 #gov covers GCKey, Protected B, WCAG 2.1 AA, Official Languages Act. Reliability Status clearance minimum for all federal roles. Secret clearance needed for ~40% of federal IT positions.</div>
+  </div>
+
+  <div class="sp-block">
+    <div class="sp-label">Picking a backend framework from scratch</div>
+    <div class="sp-chain">
+      <a href="01-framework-catalog.html" class="sp-node">01 Frameworks</a><span class="sp-arr">→</span>
+      <a href="15-version-registry.html" class="sp-node">15 Versions</a><span class="sp-arr">→</span>
+      <a href="11-dockerfile-catalog.html" class="sp-node">11 Dockerfiles</a><span class="sp-arr">→</span>
+      <a href="13-pipeline-build-catalog.html" class="sp-node">13 Pipeline</a>
+    </div>
+    <div class="sp-hint">01 narrows choices by language and architecture category. 15 confirms current stable versions. 11 gives the copy-paste Dockerfile. 13 gives the full per-framework pipeline — every tool, every stage command.</div>
+  </div>
+
+  <div class="sp-block">
+    <div class="sp-label">Defense / CMMC / ITAR contractor</div>
+    <div class="sp-chain">
+      <a href="08-canada-market.html" class="sp-node">08 CA Market</a><span class="sp-arr">→</span>
+      <a href="14-canada-industry-catalog.html#def" class="sp-node">14 #def</a><span class="sp-arr">→</span>
+      <a href="10-linux-compliance.html" class="sp-node">10 Compliance</a><span class="sp-arr">→</span>
+      <a href="12-compliance-variations.html" class="sp-node">12 Compliance layers</a><span class="sp-arr">→</span>
+      <a href="05-invariants.html" class="sp-node">05 Invariants</a>
+    </div>
+    <div class="sp-hint">14 #def covers DND, CSE, CSIS-adjacent roles. Top Secret clearance required for 3 of 5 defense industry segments. Canadian citizenship required for Secret and above. CMMC Level 2 applies to US defense subcontracts.</div>
+  </div>
+
 </div>
 
 <!-- ═══ DEPENDENCY MAP ═══ -->

@@ -156,6 +156,10 @@ code.ic{background:var(--bg3);border:1px solid var(--border);border-radius:3px;p
   <a href="#scala">25 — Scala</a>
   <a href="#clojure">26 — Clojure</a>
   <a href="#cpp">27 — C / C++</a>
+  <div class="nav-section">Protocols</div>
+  <a href="#grpc">28 — gRPC</a>
+  <a href="#graphql">29 — GraphQL</a>
+  <a href="#websocket">30 — WebSocket</a>
   <div class="nav-section">All docs</div>
   <a href="index.html">⌂ Hub</a>
   <a href="01-framework-catalog.html">01 Frameworks</a>
@@ -616,6 +620,7 @@ code.ic{background:var(--bg3);border:1px solid var(--border);border-radius:3px;p
 <tr><td class="row-label">Nuxt <small style="color:var(--text-dim)">4.4</small></td><td style="font-size:11px">Node.js</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">npm|yarn|pnpm</td><td><code class="ic" style="font-size:10px">node:22-alpine</code></td></tr>
 <tr><td class="row-label">SvelteKit <small style="color:var(--text-dim)">2.57</small></td><td style="font-size:11px">Node.js</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">npm|yarn|pnpm</td><td><code class="ic" style="font-size:10px">node:22-alpine</code></td></tr>
 <tr><td class="row-label">Angular SSR <small style="color:var(--text-dim)">20</small></td><td style="font-size:11px">Node.js</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">4000</td><td style="font-size:11px">npm|yarn|pnpm</td><td><code class="ic" style="font-size:10px">node:22-alpine</code></td></tr>
+<tr><td class="row-label">Solid Start <small style="color:var(--text-dim)">1.0</small></td><td style="font-size:11px">Node.js</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">npm|pnpm|yarn</td><td><code class="ic" style="font-size:10px">node:22-alpine</code></td></tr>
     </tbody>
   </table>
   </div>
@@ -1135,6 +1140,110 @@ code.ic{background:var(--bg3);border:1px solid var(--border);border-radius:3px;p
 </div>
   </div>
 </details>
+<details class="fw-details">
+  <summary>
+    <span class="sum-label">Solid Start <span style="color:var(--text-dim);font-weight:400">1.0</span></span>
+    <span style="font-size:10px;color:var(--text-dim);margin-left:4px">Node.js</span>
+    <span class="p-multi pat-chip">Multi-stage</span>
+  </summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> npm run build outputs to .output/ — copy .output/ to runtime stage</p><p class="note-info"><strong>SCA note:</strong> Replace npm audit with pnpm audit or yarn audit per ARG PM</p>
+<div class="phase-strip">
+  <span class="ph-chip p0">Phase 0</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p1">Phase 1</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p2">Phase 2</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p3">Phase 3</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip preg">Registry</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip ppromo">Promotions</span>
+</div>
+<div class="tbl-wrap">
+  <div class="tbl-scroll">
+  <table class="xref-table">
+    <thead><tr>
+      <th class="row-hd" style="min-width:160px">Stage</th>
+      <th style="min-width:90px">Type</th>
+      <th style="min-width:200px">Tool(s)</th>
+      <th style="min-width:280px">Key command / action</th>
+    </tr></thead>
+    <tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, same for all frameworks — see global section below)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Branch protection</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub repo settings / GitLab protected branches</td><td><code class="ic">Protect main; require PR; enforce status checks; no direct push</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">CODEOWNERS</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub CODEOWNERS file</td><td><code class="ic">echo &quot;* @your-team&quot; &gt; .github/CODEOWNERS</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">OIDC trust</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">GitHub OIDC + cloud IAM / Workload Identity</td><td><code class="ic">Add permissions: id-token: write to all CI workflows; no stored cloud credentials</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Registry access</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Registry IAM / robot account</td><td><code class="ic">Scope push permission to exact repo + branch only; pull allowed from all</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Kyverno admission policy</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Kyverno + Kubernetes</td><td><code class="ic">Block unsigned or unscanned images cluster-wide; enforce runAsNonRoot</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Dependency update automation</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Renovate / Dependabot</td><td><code class="ic">Add .github/dependabot.yml or renovate.json; weekly updates; auto-merge patch</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph1" style="padding:5px 10px">Phase 1 — Local Dev (git commit trigger)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IDE setup</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">VS Code + Vite plugin + ESLint + Prettier</td><td><code class="ic">Install from extension marketplace</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit hooks</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">hadolint, gitleaks</td><td><code class="ic">pre-commit install &amp;&amp; pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Local secret scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">gitleaks</td><td><code class="ic">gitleaks detect --source=. --no-banner</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate (every PR push)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit (CI)</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pre-commit</td><td><code class="ic">pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Lint ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">eslint, typescript-check, vitest</td><td><code class="ic">npx eslint . &amp;&amp; npx tsc --noEmit &amp;&amp; vitest run</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SCA ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SAST ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">semgrep</td><td><code class="ic">semgrep --config=auto .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">License ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">license-checker</td><td><code class="ic">npx license-checker --production --failOn &quot;GPL;AGPL&quot;</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IaC scan ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">checkov</td><td><code class="ic">checkov -d . --quiet --soft-fail</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Secrets ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">truffleHog</td><td><code class="ic">trufflehog git --only-verified .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build (no push)</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker build --platform linux/amd64 --target runtime -t app:pr-${{ github.sha }} --load .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM generate</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">syft</td><td><code class="ic">syft packages docker:app:pr-$SHA -o spdx-json &gt; sbom.json</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Container scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL app:pr-$SHA</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PR review</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub required reviewers</td><td><code class="ic">Human approval — CODEOWNERS enforced</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build (merge to main)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit (CI)</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pre-commit</td><td><code class="ic">pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SCA ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SAST ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">semgrep</td><td><code class="ic">semgrep --config=auto .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">License ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">license-checker</td><td><code class="ic">npx license-checker --production --failOn &quot;GPL;AGPL&quot;</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IaC scan ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">checkov</td><td><code class="ic">checkov -d . --quiet</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Secrets ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">truffleHog</td><td><code class="ic">trufflehog git --only-verified .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build + Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --platform linux/amd64 --push --target runtime -t $REGISTRY/$IMAGE:$SHA .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build FIPS + Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --platform linux/amd64 --push --target runtime-fips -t $REGISTRY/$IMAGE:$SHA-fips .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Release tag</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">semantic-release / git tag</td><td><code class="ic">semantic-release --no-ci → applies semver tag to image</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Container scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL $REGISTRY/$IMAGE:$SHA</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Sign</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign (keyless OIDC)</td><td><code class="ic">cosign sign --yes $REGISTRY/$IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM generate + attest</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">syft + cosign attest</td><td><code class="ic">syft packages $IMAGE@$DIGEST -o spdx-json | cosign attest --yes --predicate -</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SLSA provenance</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">slsa-github-generator</td><td><code class="ic">uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Tests + Codecov</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">vitest</td><td><code class="ic">vitest run --coverage &amp;&amp; codecov</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DAST</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">OWASP ZAP</td><td><code class="ic">zap-baseline.py -t http://localhost:3000</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Perf test</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">k6</td><td><code class="ic">k6 run perf/smoke.js</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Notify</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Slack / Teams</td><td><code class="ic">slackapi/slack-github-action with job status</code></td></tr>
+<tr><td colspan="4" class="phase-hdr phreg" style="padding:5px 10px">Registry — after Phase 3 completes</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Image store</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Docker registry (see Registry section)</td><td><code class="ic">Push completed in Phase 3 Build + Push above</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Sign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign verify</td><td><code class="ic">cosign verify --certificate-identity=$ID --certificate-oidc-issuer=$ISS $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM attach</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">oras attach</td><td><code class="ic">oras attach --artifact-type application/vnd.cyclonedx $IMAGE@$DIGEST sbom.json</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SLSA attach</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">oras attach</td><td><code class="ic">Attached automatically by slsa-github-generator output</code></td></tr>
+<tr><td colspan="4" class="phase-hdr phpromo" style="padding:5px 10px">Promotions — DEV → TEST → STAGING → PROD (same pattern for all frameworks)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in dev/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from dev overlay; wait for rollout</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: Integration tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">pytest / Jest / go test / curl</td><td><code class="ic">Run integration test suite against deployed service</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers listed in environment settings</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in test/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from test overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: Integration + contract tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Pact / Dredd + test suite</td><td><code class="ic">Run contract and integration tests</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers before staging promotion</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in staging/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from staging overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: Regression tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">full test suite</td><td><code class="ic">Run full regression test suite</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers before production promotion</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in prod/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from prod overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: Argo Rollouts canary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Argo Rollouts</td><td><code class="ic">Canary: 10% → 25% → 50% → 100% over 30 min</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: Monitor → complete/rollback</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Prometheus + Argo Rollouts</td><td><code class="ic">Auto-rollback if error rate &gt;1% or p99 &gt;2s</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+  </div>
+</details>
 <h2 id="csr-spa">02 — CSR / SPA</h2>
 <div class="section-sub">Client-side rendering. Output: static dist/ served by nginx. No Node.js at runtime. &nbsp;·&nbsp; <a href="01-framework-catalog.html#csr-spa" style="color:var(--blue)">See framework catalog →</a></div>
 <div class="sum-tbl-wrap">
@@ -1154,6 +1263,8 @@ code.ic{background:var(--bg3);border:1px solid var(--border);border-radius:3px;p
 <tr><td class="row-label">Angular <small style="color:var(--text-dim)">20</small></td><td style="font-size:11px">Node.js → nginx</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">80</td><td style="font-size:11px">npm|yarn|pnpm</td><td><code class="ic" style="font-size:10px">nginx:alpine</code></td></tr>
 <tr><td class="row-label">Svelte <small style="color:var(--text-dim)">5</small></td><td style="font-size:11px">Node.js → nginx</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">80</td><td style="font-size:11px">npm|yarn|pnpm</td><td><code class="ic" style="font-size:10px">nginx:alpine</code></td></tr>
 <tr><td class="row-label">Solid.js <small style="color:var(--text-dim)">2.0</small></td><td style="font-size:11px">Node.js → nginx</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">80</td><td style="font-size:11px">npm|yarn|pnpm</td><td><code class="ic" style="font-size:10px">nginx:alpine</code></td></tr>
+<tr><td class="row-label">Preact <small style="color:var(--text-dim)">10.25</small></td><td style="font-size:11px">Browser (Node.js builder → nginx)</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">80</td><td style="font-size:11px">npm|pnpm|yarn</td><td><code class="ic" style="font-size:10px">nginx:alpine</code></td></tr>
+<tr><td class="row-label">Lit <small style="color:var(--text-dim)">3.2</small></td><td style="font-size:11px">Browser / Web Components (Node.js builder → nginx)</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">80</td><td style="font-size:11px">npm|pnpm|yarn</td><td><code class="ic" style="font-size:10px">nginx:alpine</code></td></tr>
     </tbody>
   </table>
   </div>
@@ -1638,6 +1749,212 @@ code.ic{background:var(--bg3);border:1px solid var(--border);border-radius:3px;p
 <tr class=""><td class="row-label" style="white-space:nowrap">SBOM generate + attest</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">syft + cosign attest</td><td><code class="ic">syft packages $IMAGE@$DIGEST -o spdx-json | cosign attest --yes --predicate -</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">SLSA provenance</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">slsa-github-generator</td><td><code class="ic">uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">Tests + Codecov</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Jest / Vitest / Playwright</td><td><code class="ic">npm test -- --coverage &amp;&amp; codecov</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DAST</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">OWASP ZAP</td><td><code class="ic">zap-baseline.py -t http://localhost:8080</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Perf test</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">k6</td><td><code class="ic">k6 run perf/smoke.js</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Notify</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Slack / Teams</td><td><code class="ic">slackapi/slack-github-action with job status</code></td></tr>
+<tr><td colspan="4" class="phase-hdr phreg" style="padding:5px 10px">Registry — after Phase 3 completes</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Image store</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Docker registry (see Registry section)</td><td><code class="ic">Push completed in Phase 3 Build + Push above</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Sign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign verify</td><td><code class="ic">cosign verify --certificate-identity=$ID --certificate-oidc-issuer=$ISS $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM attach</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">oras attach</td><td><code class="ic">oras attach --artifact-type application/vnd.cyclonedx $IMAGE@$DIGEST sbom.json</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SLSA attach</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">oras attach</td><td><code class="ic">Attached automatically by slsa-github-generator output</code></td></tr>
+<tr><td colspan="4" class="phase-hdr phpromo" style="padding:5px 10px">Promotions — DEV → TEST → STAGING → PROD (same pattern for all frameworks)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in dev/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from dev overlay; wait for rollout</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: Integration tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">pytest / Jest / go test / curl</td><td><code class="ic">Run integration test suite against deployed service</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers listed in environment settings</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in test/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from test overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: Integration + contract tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Pact / Dredd + test suite</td><td><code class="ic">Run contract and integration tests</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers before staging promotion</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in staging/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from staging overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: Regression tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">full test suite</td><td><code class="ic">Run full regression test suite</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers before production promotion</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in prod/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from prod overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: Argo Rollouts canary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Argo Rollouts</td><td><code class="ic">Canary: 10% → 25% → 50% → 100% over 30 min</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: Monitor → complete/rollback</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Prometheus + Argo Rollouts</td><td><code class="ic">Auto-rollback if error rate &gt;1% or p99 &gt;2s</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+  </div>
+</details>
+<details class="fw-details">
+  <summary>
+    <span class="sum-label">Preact <span style="color:var(--text-dim);font-weight:400">10.25</span></span>
+    <span style="font-size:10px;color:var(--text-dim);margin-left:4px">Browser (Node.js builder → nginx)</span>
+    <span class="p-multi pat-chip">Multi-stage</span>
+  </summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Vite outputs to dist/ — no Node.js at runtime; nginx serves static files</p><p class="note-info"><strong>SCA note:</strong> Replace npm audit with pnpm audit or yarn audit per ARG PM</p>
+<div class="phase-strip">
+  <span class="ph-chip p0">Phase 0</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p1">Phase 1</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p2">Phase 2</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p3">Phase 3</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip preg">Registry</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip ppromo">Promotions</span>
+</div>
+<div class="tbl-wrap">
+  <div class="tbl-scroll">
+  <table class="xref-table">
+    <thead><tr>
+      <th class="row-hd" style="min-width:160px">Stage</th>
+      <th style="min-width:90px">Type</th>
+      <th style="min-width:200px">Tool(s)</th>
+      <th style="min-width:280px">Key command / action</th>
+    </tr></thead>
+    <tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, same for all frameworks — see global section below)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Branch protection</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub repo settings / GitLab protected branches</td><td><code class="ic">Protect main; require PR; enforce status checks; no direct push</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">CODEOWNERS</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub CODEOWNERS file</td><td><code class="ic">echo &quot;* @your-team&quot; &gt; .github/CODEOWNERS</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">OIDC trust</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">GitHub OIDC + cloud IAM / Workload Identity</td><td><code class="ic">Add permissions: id-token: write to all CI workflows; no stored cloud credentials</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Registry access</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Registry IAM / robot account</td><td><code class="ic">Scope push permission to exact repo + branch only; pull allowed from all</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Kyverno admission policy</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Kyverno + Kubernetes</td><td><code class="ic">Block unsigned or unscanned images cluster-wide; enforce runAsNonRoot</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Dependency update automation</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Renovate / Dependabot</td><td><code class="ic">Add .github/dependabot.yml or renovate.json; weekly updates; auto-merge patch</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph1" style="padding:5px 10px">Phase 1 — Local Dev (git commit trigger)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IDE setup</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ESLint + Prettier + Error Lens (VS Code / WebStorm)</td><td><code class="ic">Install from extension marketplace</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit hooks</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">hadolint, gitleaks</td><td><code class="ic">pre-commit install &amp;&amp; pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Local secret scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">gitleaks</td><td><code class="ic">gitleaks detect --source=. --no-banner</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate (every PR push)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit (CI)</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pre-commit</td><td><code class="ic">pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SCA ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SAST ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">eslint, tsc, semgrep</td><td><code class="ic">npx eslint . &amp;&amp; npx tsc --noEmit &amp;&amp; semgrep --config=auto .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">License ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">license-checker</td><td><code class="ic">npx license-checker --production --failOn &quot;GPL;AGPL&quot;</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IaC scan ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">checkov</td><td><code class="ic">checkov -d . --quiet --soft-fail</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Secrets ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">truffleHog</td><td><code class="ic">trufflehog git --only-verified .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build (no push)</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker build --platform linux/amd64 --target runtime -t app:pr-${{ github.sha }} --load .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM generate</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">syft</td><td><code class="ic">syft packages docker:app:pr-$SHA -o spdx-json &gt; sbom.json</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Container scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL app:pr-$SHA</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PR review</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub required reviewers</td><td><code class="ic">Human approval — CODEOWNERS enforced</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build (merge to main)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit (CI)</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pre-commit</td><td><code class="ic">pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SCA ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SAST ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">eslint, tsc, semgrep</td><td><code class="ic">npx eslint . &amp;&amp; npx tsc --noEmit &amp;&amp; semgrep --config=auto .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">License ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">license-checker</td><td><code class="ic">npx license-checker --production --failOn &quot;GPL;AGPL&quot;</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IaC scan ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">checkov</td><td><code class="ic">checkov -d . --quiet</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Secrets ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">truffleHog</td><td><code class="ic">trufflehog git --only-verified .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build + Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --platform linux/amd64 --push --target runtime -t $REGISTRY/$IMAGE:$SHA .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build FIPS + Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --platform linux/amd64 --push --target runtime-fips -t $REGISTRY/$IMAGE:$SHA-fips .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Release tag</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">semantic-release / git tag</td><td><code class="ic">semantic-release --no-ci → applies semver tag to image</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Container scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL $REGISTRY/$IMAGE:$SHA</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Sign</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign (keyless OIDC)</td><td><code class="ic">cosign sign --yes $REGISTRY/$IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM generate + attest</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">syft + cosign attest</td><td><code class="ic">syft packages $IMAGE@$DIGEST -o spdx-json | cosign attest --yes --predicate -</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SLSA provenance</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">slsa-github-generator</td><td><code class="ic">uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Tests + Codecov</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">vitest / jest</td><td><code class="ic">vitest run --coverage &amp;&amp; codecov</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DAST</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">OWASP ZAP</td><td><code class="ic">zap-baseline.py -t http://localhost:8080</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Perf test</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">k6</td><td><code class="ic">k6 run perf/smoke.js</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Notify</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Slack / Teams</td><td><code class="ic">slackapi/slack-github-action with job status</code></td></tr>
+<tr><td colspan="4" class="phase-hdr phreg" style="padding:5px 10px">Registry — after Phase 3 completes</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Image store</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Docker registry (see Registry section)</td><td><code class="ic">Push completed in Phase 3 Build + Push above</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Sign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign verify</td><td><code class="ic">cosign verify --certificate-identity=$ID --certificate-oidc-issuer=$ISS $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM attach</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">oras attach</td><td><code class="ic">oras attach --artifact-type application/vnd.cyclonedx $IMAGE@$DIGEST sbom.json</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SLSA attach</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">oras attach</td><td><code class="ic">Attached automatically by slsa-github-generator output</code></td></tr>
+<tr><td colspan="4" class="phase-hdr phpromo" style="padding:5px 10px">Promotions — DEV → TEST → STAGING → PROD (same pattern for all frameworks)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in dev/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from dev overlay; wait for rollout</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: Integration tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">pytest / Jest / go test / curl</td><td><code class="ic">Run integration test suite against deployed service</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers listed in environment settings</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in test/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from test overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: Integration + contract tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Pact / Dredd + test suite</td><td><code class="ic">Run contract and integration tests</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers before staging promotion</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in staging/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from staging overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: Regression tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">full test suite</td><td><code class="ic">Run full regression test suite</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers before production promotion</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in prod/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from prod overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: Argo Rollouts canary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Argo Rollouts</td><td><code class="ic">Canary: 10% → 25% → 50% → 100% over 30 min</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: Monitor → complete/rollback</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Prometheus + Argo Rollouts</td><td><code class="ic">Auto-rollback if error rate &gt;1% or p99 &gt;2s</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+  </div>
+</details>
+<details class="fw-details">
+  <summary>
+    <span class="sum-label">Lit <span style="color:var(--text-dim);font-weight:400">3.2</span></span>
+    <span style="font-size:10px;color:var(--text-dim);margin-left:4px">Browser / Web Components (Node.js builder → nginx)</span>
+    <span class="p-multi pat-chip">Multi-stage</span>
+  </summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Vite bundles Web Components to dist/ — nginx serves static files at runtime; no Node.js needed</p><p class="note-info"><strong>SCA note:</strong> Replace npm audit with pnpm audit or yarn audit per ARG PM</p>
+<div class="phase-strip">
+  <span class="ph-chip p0">Phase 0</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p1">Phase 1</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p2">Phase 2</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p3">Phase 3</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip preg">Registry</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip ppromo">Promotions</span>
+</div>
+<div class="tbl-wrap">
+  <div class="tbl-scroll">
+  <table class="xref-table">
+    <thead><tr>
+      <th class="row-hd" style="min-width:160px">Stage</th>
+      <th style="min-width:90px">Type</th>
+      <th style="min-width:200px">Tool(s)</th>
+      <th style="min-width:280px">Key command / action</th>
+    </tr></thead>
+    <tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, same for all frameworks — see global section below)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Branch protection</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub repo settings / GitLab protected branches</td><td><code class="ic">Protect main; require PR; enforce status checks; no direct push</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">CODEOWNERS</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub CODEOWNERS file</td><td><code class="ic">echo &quot;* @your-team&quot; &gt; .github/CODEOWNERS</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">OIDC trust</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">GitHub OIDC + cloud IAM / Workload Identity</td><td><code class="ic">Add permissions: id-token: write to all CI workflows; no stored cloud credentials</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Registry access</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Registry IAM / robot account</td><td><code class="ic">Scope push permission to exact repo + branch only; pull allowed from all</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Kyverno admission policy</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Kyverno + Kubernetes</td><td><code class="ic">Block unsigned or unscanned images cluster-wide; enforce runAsNonRoot</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Dependency update automation</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Renovate / Dependabot</td><td><code class="ic">Add .github/dependabot.yml or renovate.json; weekly updates; auto-merge patch</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph1" style="padding:5px 10px">Phase 1 — Local Dev (git commit trigger)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IDE setup</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">VS Code lit-plugin + ESLint + Prettier</td><td><code class="ic">Install from extension marketplace</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit hooks</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">hadolint, gitleaks</td><td><code class="ic">pre-commit install &amp;&amp; pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Local secret scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">gitleaks</td><td><code class="ic">gitleaks detect --source=. --no-banner</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate (every PR push)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit (CI)</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pre-commit</td><td><code class="ic">pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SCA ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SAST ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">eslint, tsc, semgrep</td><td><code class="ic">npx eslint . &amp;&amp; npx tsc --noEmit &amp;&amp; semgrep --config=auto .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">License ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">license-checker</td><td><code class="ic">npx license-checker --production --failOn &quot;GPL;AGPL&quot;</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IaC scan ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">checkov</td><td><code class="ic">checkov -d . --quiet --soft-fail</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Secrets ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">truffleHog</td><td><code class="ic">trufflehog git --only-verified .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build (no push)</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker build --platform linux/amd64 --target runtime -t app:pr-${{ github.sha }} --load .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM generate</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">syft</td><td><code class="ic">syft packages docker:app:pr-$SHA -o spdx-json &gt; sbom.json</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Container scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL app:pr-$SHA</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PR review</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub required reviewers</td><td><code class="ic">Human approval — CODEOWNERS enforced</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build (merge to main)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit (CI)</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pre-commit</td><td><code class="ic">pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SCA ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SAST ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">eslint, tsc, semgrep</td><td><code class="ic">npx eslint . &amp;&amp; npx tsc --noEmit &amp;&amp; semgrep --config=auto .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">License ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">license-checker</td><td><code class="ic">npx license-checker --production --failOn &quot;GPL;AGPL&quot;</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IaC scan ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">checkov</td><td><code class="ic">checkov -d . --quiet</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Secrets ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">truffleHog</td><td><code class="ic">trufflehog git --only-verified .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build + Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --platform linux/amd64 --push --target runtime -t $REGISTRY/$IMAGE:$SHA .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build FIPS + Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --platform linux/amd64 --push --target runtime-fips -t $REGISTRY/$IMAGE:$SHA-fips .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Release tag</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">semantic-release / git tag</td><td><code class="ic">semantic-release --no-ci → applies semver tag to image</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Container scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL $REGISTRY/$IMAGE:$SHA</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Sign</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign (keyless OIDC)</td><td><code class="ic">cosign sign --yes $REGISTRY/$IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM generate + attest</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">syft + cosign attest</td><td><code class="ic">syft packages $IMAGE@$DIGEST -o spdx-json | cosign attest --yes --predicate -</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SLSA provenance</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">slsa-github-generator</td><td><code class="ic">uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Tests + Codecov</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">vitest / jest + Web Test Runner</td><td><code class="ic">vitest run --coverage &amp;&amp; codecov</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">DAST</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">OWASP ZAP</td><td><code class="ic">zap-baseline.py -t http://localhost:8080</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">Perf test</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">k6</td><td><code class="ic">k6 run perf/smoke.js</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">Notify</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Slack / Teams</td><td><code class="ic">slackapi/slack-github-action with job status</code></td></tr>
@@ -4541,6 +4858,7 @@ jobs:
 <tr><td class="row-label">Hono <small style="color:var(--text-dim)">4.7</small></td><td style="font-size:11px">Node.js</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">npm|yarn|pnpm</td><td><code class="ic" style="font-size:10px">node:22-alpine</code></td></tr>
 <tr><td class="row-label">Deno <small style="color:var(--text-dim)">2.3</small></td><td style="font-size:11px">Deno</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">8000</td><td style="font-size:11px">deno</td><td><code class="ic" style="font-size:10px">denoland/deno:2.3.3</code></td></tr>
 <tr><td class="row-label">Elysia <small style="color:var(--text-dim)">1.2</small></td><td style="font-size:11px">Bun</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">bun</td><td><code class="ic" style="font-size:10px">oven/bun:1.1-alpine</code></td></tr>
+<tr><td class="row-label">Bun (native) <small style="color:var(--text-dim)">1.1</small></td><td style="font-size:11px">Bun</td><td><span class="p-single">Single-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">bun</td><td><code class="ic" style="font-size:10px">oven/bun:1.1-alpine</code></td></tr>
     </tbody>
   </table>
   </div>
@@ -5141,6 +5459,108 @@ jobs:
 <tr class=""><td class="row-label" style="white-space:nowrap">DEV: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from dev overlay; wait for rollout</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">DEV: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">DEV: Integration tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">pytest / Jest / go test / curl</td><td><code class="ic">Run integration test suite against deployed service</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers listed in environment settings</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in test/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from test overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: Integration + contract tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Pact / Dredd + test suite</td><td><code class="ic">Run contract and integration tests</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">TEST: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers before staging promotion</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in staging/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from staging overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: Regression tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">full test suite</td><td><code class="ic">Run full regression test suite</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">STAGING: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers before production promotion</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in prod/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from prod overlay</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: Argo Rollouts canary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Argo Rollouts</td><td><code class="ic">Canary: 10% → 25% → 50% → 100% over 30 min</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PROD: Monitor → complete/rollback</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Prometheus + Argo Rollouts</td><td><code class="ic">Auto-rollback if error rate &gt;1% or p99 &gt;2s</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+  </div>
+</details>
+<details class="fw-details">
+  <summary>
+    <span class="sum-label">Bun (native) <span style="color:var(--text-dim);font-weight:400">1.1</span></span>
+    <span style="font-size:10px;color:var(--text-dim);margin-left:4px">Bun</span>
+    <span class="p-single pat-chip">Single-stage</span>
+  </summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Bun runs TypeScript natively — no compilation step needed; <code class="ic">bun build src/index.ts --target bun</code> bundles for production</p><p class="note-info"><strong>SCA note:</strong> bun audit reads bun.lockb for CVE database lookups</p>
+<div class="phase-strip">
+  <span class="ph-chip p0">Phase 0</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p1">Phase 1</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p2">Phase 2</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip p3">Phase 3</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip preg">Registry</span>
+  <span style="color:var(--text-dim);padding:3px 2px">→</span>
+  <span class="ph-chip ppromo">Promotions</span>
+</div>
+<div class="tbl-wrap">
+  <div class="tbl-scroll">
+  <table class="xref-table">
+    <thead><tr>
+      <th class="row-hd" style="min-width:160px">Stage</th>
+      <th style="min-width:90px">Type</th>
+      <th style="min-width:200px">Tool(s)</th>
+      <th style="min-width:280px">Key command / action</th>
+    </tr></thead>
+    <tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, same for all frameworks — see global section below)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Branch protection</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub repo settings / GitLab protected branches</td><td><code class="ic">Protect main; require PR; enforce status checks; no direct push</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">CODEOWNERS</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub CODEOWNERS file</td><td><code class="ic">echo &quot;* @your-team&quot; &gt; .github/CODEOWNERS</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">OIDC trust</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">GitHub OIDC + cloud IAM / Workload Identity</td><td><code class="ic">Add permissions: id-token: write to all CI workflows; no stored cloud credentials</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Registry access</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Registry IAM / robot account</td><td><code class="ic">Scope push permission to exact repo + branch only; pull allowed from all</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Kyverno admission policy</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Kyverno + Kubernetes</td><td><code class="ic">Block unsigned or unscanned images cluster-wide; enforce runAsNonRoot</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Dependency update automation</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Renovate / Dependabot</td><td><code class="ic">Add .github/dependabot.yml or renovate.json; weekly updates; auto-merge patch</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph1" style="padding:5px 10px">Phase 1 — Local Dev (git commit trigger)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IDE setup</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">VS Code + Bun extension + ESLint</td><td><code class="ic">Install from extension marketplace</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit hooks</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">hadolint, gitleaks</td><td><code class="ic">pre-commit install &amp;&amp; pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Local secret scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">gitleaks</td><td><code class="ic">gitleaks detect --source=. --no-banner</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate (every PR push)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit (CI)</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pre-commit</td><td><code class="ic">pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SCA ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">bun audit</td><td><code class="ic">bun audit</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SAST ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">semgrep</td><td><code class="ic">semgrep --config=auto .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">License ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">license-checker</td><td><code class="ic">npx license-checker --production --failOn &quot;GPL;AGPL&quot;</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IaC scan ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">checkov</td><td><code class="ic">checkov -d . --quiet --soft-fail</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Secrets ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">truffleHog</td><td><code class="ic">trufflehog git --only-verified .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Build (no push)</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker build --platform linux/amd64 -t app:pr-${{ github.sha }} --load .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM generate</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">syft</td><td><code class="ic">syft packages docker:app:pr-$SHA -o spdx-json &gt; sbom.json</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Container scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL app:pr-$SHA</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">PR review</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub required reviewers</td><td><code class="ic">Human approval — CODEOWNERS enforced</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build (merge to main)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Pre-commit (CI)</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pre-commit</td><td><code class="ic">pre-commit run --all-files</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SCA ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">bun audit</td><td><code class="ic">bun audit</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SAST ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">semgrep</td><td><code class="ic">semgrep --config=auto .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">License ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">license-checker</td><td><code class="ic">npx license-checker --production --failOn &quot;GPL;AGPL&quot;</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">IaC scan ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">checkov</td><td><code class="ic">checkov -d . --quiet</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Secrets ↗ parallel</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">truffleHog</td><td><code class="ic">trufflehog git --only-verified .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Bundle + Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --platform linux/amd64 --push -t $REGISTRY/$IMAGE:$SHA .</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Release tag</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">semantic-release / git tag</td><td><code class="ic">semantic-release --no-ci → applies semver tag to image</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Container scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL $REGISTRY/$IMAGE:$SHA</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Sign</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign (keyless OIDC)</td><td><code class="ic">cosign sign --yes $REGISTRY/$IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM generate + attest</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">syft + cosign attest</td><td><code class="ic">syft packages $IMAGE@$DIGEST -o spdx-json | cosign attest --yes --predicate -</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SLSA provenance</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">slsa-github-generator</td><td><code class="ic">uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Tests + Codecov</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">bun test</td><td><code class="ic">bun test --coverage &amp;&amp; codecov</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DAST</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">OWASP ZAP</td><td><code class="ic">zap-baseline.py -t http://localhost:3000</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Perf test</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">k6</td><td><code class="ic">k6 run perf/smoke.js</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Notify</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Slack / Teams</td><td><code class="ic">slackapi/slack-github-action with job status</code></td></tr>
+<tr><td colspan="4" class="phase-hdr phreg" style="padding:5px 10px">Registry — after Phase 3 completes</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Image store</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Docker registry (see Registry section)</td><td><code class="ic">Push completed in Phase 3 Bundle + Push above</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">Sign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign verify</td><td><code class="ic">cosign verify --certificate-identity=$ID --certificate-oidc-issuer=$ISS $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SBOM attach</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">oras attach</td><td><code class="ic">oras attach --artifact-type application/vnd.cyclonedx $IMAGE@$DIGEST sbom.json</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">SLSA attach</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">oras attach</td><td><code class="ic">Attached automatically by slsa-github-generator output</code></td></tr>
+<tr><td colspan="4" class="phase-hdr phpromo" style="padding:5px 10px">Promotions — DEV → TEST → STAGING → PROD (same pattern for all frameworks)</td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in dev/kustomization.yaml</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from dev overlay; wait for rollout</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: cosign verify</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign</td><td><code class="ic">cosign verify --certificate-identity=$ID $IMAGE@$DIGEST</code></td></tr>
+<tr class=""><td class="row-label" style="white-space:nowrap">DEV: Integration tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">bun test / curl</td><td><code class="ic">Run integration test suite against deployed service</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">DEV: Gate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">GitHub environment protection rule</td><td><code class="ic">Required approvers listed in environment settings</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">TEST: GitOps PR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">git + GitHub PR</td><td><code class="ic">Bump image digest in test/kustomization.yaml</code></td></tr>
 <tr class=""><td class="row-label" style="white-space:nowrap">TEST: ArgoCD / Flux deploy</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">ArgoCD / Flux</td><td><code class="ic">Sync from test overlay</code></td></tr>
@@ -8619,6 +9039,569 @@ jobs:
   </table>
   </div>
 </div>
+  </div>
+</details>
+
+
+<!-- ══════════════════════════════════════
+     SECTION 28 — gRPC
+══════════════════════════════════════ -->
+<h2 id="grpc">28 — gRPC</h2>
+<p class="section-sub">HTTP/2 + Protocol Buffers. Port 50051 default. proto file compiled at build time. HTTP health sidecar on 8080 for Kubernetes probes.</p>
+<div class="tbl-wrap" style="margin-bottom:16px"><div class="tbl-scroll"><table class="xref-table">
+  <thead><tr><th class="row-hd">Framework</th><th>Runtime</th><th>Pattern</th><th>Port</th><th>Pkg mgr</th><th>Base image</th></tr></thead>
+  <tbody>
+<tr><td class="row-label">grpc-go <small style="color:var(--text-dim)">1.63</small></td><td style="font-size:11px">Go</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">50051</td><td style="font-size:11px">go mod</td><td><code class="ic" style="font-size:10px">gcr.io/distroless/static</code></td></tr>
+<tr><td class="row-label">grpc-java <small style="color:var(--text-dim)">1.63</small></td><td style="font-size:11px">JVM</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">50051</td><td style="font-size:11px">Gradle</td><td><code class="ic" style="font-size:10px">eclipse-temurin:21-jre-alpine</code></td></tr>
+<tr><td class="row-label">grpcio <small style="color:var(--text-dim)">1.63</small></td><td style="font-size:11px">Python</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">50051</td><td style="font-size:11px">pip / uv</td><td><code class="ic" style="font-size:10px">python:3.12-alpine</code></td></tr>
+<tr><td class="row-label">@grpc/grpc-js <small style="color:var(--text-dim)">1.10</small></td><td style="font-size:11px">Node.js</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">50051</td><td style="font-size:11px">npm / pnpm</td><td><code class="ic" style="font-size:10px">node:22-alpine</code></td></tr>
+<tr><td class="row-label">grpc-dotnet <small style="color:var(--text-dim)">2.62</small></td><td style="font-size:11px">.NET</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">50051</td><td style="font-size:11px">NuGet</td><td><code class="ic" style="font-size:10px">mcr.microsoft.com/dotnet/aspnet:8.0-alpine</code></td></tr>
+<tr><td class="row-label">tonic <small style="color:var(--text-dim)">0.11</small></td><td style="font-size:11px">Rust</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">50051</td><td style="font-size:11px">cargo</td><td><code class="ic" style="font-size:10px">gcr.io/distroless/static</code></td></tr>
+<tr><td class="row-label">grpc-swift <small style="color:var(--text-dim)">2.0</small></td><td style="font-size:11px">Swift</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">50051</td><td style="font-size:11px">swift</td><td><code class="ic" style="font-size:10px">swift:5.10-slim</code></td></tr>
+<tr><td class="row-label">grpc-kotlin <small style="color:var(--text-dim)">1.4</small></td><td style="font-size:11px">JVM</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">50051</td><td style="font-size:11px">Gradle</td><td><code class="ic" style="font-size:10px">eclipse-temurin:21-jre-alpine</code></td></tr>
+<tr><td class="row-label">connect-go <small style="color:var(--text-dim)">0.5</small></td><td style="font-size:11px">Go</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">8080</td><td style="font-size:11px">go mod</td><td><code class="ic" style="font-size:10px">gcr.io/distroless/static</code></td></tr>
+<tr><td class="row-label">grpc-php <small style="color:var(--text-dim)">1.63</small></td><td style="font-size:11px">PHP</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">50051</td><td style="font-size:11px">Composer</td><td><code class="ic" style="font-size:10px">php:8.3-fpm-alpine</code></td></tr>
+  </tbody>
+</table></div></div>
+
+<details class="fw-details">
+  <summary><span class="sum-label">grpc-go <span style="color:var(--text-dim);font-weight:400">1.63</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Go</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> proto generation runs before go build. Use buf or protoc.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p1">Phase 1</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip ppromo">Promotions</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, see global section)</td></tr>
+<tr><td class="row-label">Proto toolchain install</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">buf CLI or protoc</td><td><code class="ic">go install github.com/bufbuild/buf/cmd/buf@latest</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph1" style="padding:5px 10px">Phase 1 — Local Dev</td></tr>
+<tr><td class="row-label">IDE setup</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">VS Code Go extension + gopls</td><td><code class="ic">Install golang.go extension; enable gopls</code></td></tr>
+<tr><td class="row-label">Proto generation</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">buf generate</td><td><code class="ic">buf generate</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">Proto lint</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">buf lint</td><td><code class="ic">buf lint</code></td></tr>
+<tr><td class="row-label">SCA</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">govulncheck</td><td><code class="ic">govulncheck ./...</code></td></tr>
+<tr><td class="row-label">SAST</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">gosec + semgrep</td><td><code class="ic">gosec ./... &amp;&amp; semgrep --config=auto .</code></td></tr>
+<tr><td class="row-label">Unit tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">go test</td><td><code class="ic">go test ./... -race -count=1</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Proto codegen</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">buf generate</td><td><code class="ic">buf generate</code></td></tr>
+<tr><td class="row-label">Build binary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">go build</td><td><code class="ic">CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/server</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td class="row-label">Image scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL $IMAGE</code></td></tr>
+<tr><td class="row-label">Sign image</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cosign (keyless OIDC)</td><td><code class="ic">cosign sign --yes $IMAGE</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push (OIDC auth)</td><td><code class="ic">docker push ghcr.io/OWNER/grpc-go-svc:$GIT_SHA</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-promo" style="padding:5px 10px">Promotions</td></tr>
+<tr><td class="row-label">Tag promote</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker tag</td><td><code class="ic">docker tag ghcr.io/OWNER/grpc-go-svc:$GIT_SHA ghcr.io/OWNER/grpc-go-svc:prod</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 50051:50051 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">grpc-java <span style="color:var(--text-dim);font-weight:400">1.63</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">JVM</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> protobuf-gradle-plugin generates Java stubs during Gradle build.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p1">Phase 1</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip ppromo">Promotions</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, see global section)</td></tr>
+<tr><td colspan="4" class="phase-hdr ph1" style="padding:5px 10px">Phase 1 — Local Dev</td></tr>
+<tr><td class="row-label">IDE setup</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">IntelliJ IDEA + Protobuf plugin</td><td><code class="ic">Install Protobuf Support plugin in IntelliJ</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Gradle dependency-check</td><td><code class="ic">./gradlew dependencyCheckAnalyze</code></td></tr>
+<tr><td class="row-label">Tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">JUnit 5 + Gradle</td><td><code class="ic">./gradlew test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build JAR + proto stubs</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Gradle (protobuf-gradle-plugin auto-runs)</td><td><code class="ic">./gradlew shadowJar</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td class="row-label">Image scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL $IMAGE</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/grpc-java-svc:$GIT_SHA</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-promo" style="padding:5px 10px">Promotions</td></tr>
+<tr><td class="row-label">Tag promote</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker tag</td><td><code class="ic">docker tag ghcr.io/OWNER/grpc-java-svc:$GIT_SHA ghcr.io/OWNER/grpc-java-svc:prod</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 50051:50051 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">grpcio <span style="color:var(--text-dim);font-weight:400">1.63</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Python</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> grpc_tools generates Python stubs. Use grpc.aio for async handlers.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p1">Phase 1</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip ppromo">Promotions</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, see global section)</td></tr>
+<tr><td colspan="4" class="phase-hdr ph1" style="padding:5px 10px">Phase 1 — Local Dev</td></tr>
+<tr><td class="row-label">Proto generation</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">grpc_tools.protoc</td><td><code class="ic">python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. proto/service.proto</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pip-audit</td><td><code class="ic">pip-audit</code></td></tr>
+<tr><td class="row-label">Tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">pytest</td><td><code class="ic">pytest -x</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Proto codegen</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">grpc_tools</td><td><code class="ic">python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. proto/service.proto</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td class="row-label">Image scan</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">trivy</td><td><code class="ic">trivy image --exit-code 1 --severity HIGH,CRITICAL $IMAGE</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/grpcio-svc:$GIT_SHA</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-promo" style="padding:5px 10px">Promotions</td></tr>
+<tr><td class="row-label">Tag promote</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker tag</td><td><code class="ic">docker tag ghcr.io/OWNER/grpcio-svc:$GIT_SHA ghcr.io/OWNER/grpcio-svc:prod</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 50051:50051 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">@grpc/grpc-js <span style="color:var(--text-dim);font-weight:400">1.10</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Node.js</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Use @grpc/proto-loader for dynamic loading, or protoc for static TypeScript stubs.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p1">Phase 1</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip ppromo">Promotions</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, see global section)</td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+<tr><td class="row-label">Tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">jest / vitest</td><td><code class="ic">npm test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">tsc</td><td><code class="ic">npm run build</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/node-grpc-svc:$GIT_SHA</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-promo" style="padding:5px 10px">Promotions</td></tr>
+<tr><td class="row-label">Tag promote</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker tag</td><td><code class="ic">docker tag ghcr.io/OWNER/node-grpc-svc:$GIT_SHA ghcr.io/OWNER/node-grpc-svc:prod</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 50051:50051 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">grpc-dotnet <span style="color:var(--text-dim);font-weight:400">2.62</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">.NET</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Grpc.Tools NuGet package runs protoc automatically during dotnet build.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p1">Phase 1</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip ppromo">Promotions</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, see global section)</td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">dotnet list package --vulnerable</td><td><code class="ic">dotnet list package --vulnerable --include-transitive</code></td></tr>
+<tr><td class="row-label">Tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">dotnet test</td><td><code class="ic">dotnet test --no-build</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Publish</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">dotnet publish</td><td><code class="ic">dotnet publish -c Release -o /app/publish</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/grpc-dotnet-svc:$GIT_SHA</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-promo" style="padding:5px 10px">Promotions</td></tr>
+<tr><td class="row-label">Tag promote</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker tag</td><td><code class="ic">docker tag ghcr.io/OWNER/grpc-dotnet-svc:$GIT_SHA ghcr.io/OWNER/grpc-dotnet-svc:prod</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 50051:50051 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">tonic <span style="color:var(--text-dim);font-weight:400">0.11</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Rust</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> tonic-build in build.rs generates Rust code from .proto at compile time.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p1">Phase 1</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip ppromo">Promotions</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph0" style="padding:5px 10px">Phase 0 — Bootstrap (once, see global section)</td></tr>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cargo audit</td><td><code class="ic">cargo audit</code></td></tr>
+<tr><td class="row-label">Tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">cargo test</td><td><code class="ic">cargo test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build release binary (proto codegen in build.rs)</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">cargo build</td><td><code class="ic">cargo build --release</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/tonic-svc:$GIT_SHA</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-promo" style="padding:5px 10px">Promotions</td></tr>
+<tr><td class="row-label">Tag promote</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker tag</td><td><code class="ic">docker tag ghcr.io/OWNER/tonic-svc:$GIT_SHA ghcr.io/OWNER/tonic-svc:prod</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 50051:50051 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">grpc-swift <span style="color:var(--text-dim);font-weight:400">2.0</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Swift</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> protoc-gen-swift and protoc-gen-grpc-swift generate Swift stubs.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Proto codegen</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">protoc + protoc-gen-swift</td><td><code class="ic">protoc --swift_out=. --grpc-swift_out=. proto/service.proto</code></td></tr>
+<tr><td class="row-label">Build binary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">swift build</td><td><code class="ic">swift build -c release</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/grpc-swift-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 50051:50051 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">grpc-kotlin <span style="color:var(--text-dim);font-weight:400">1.4</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">JVM</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> protoc-gen-grpc-kotlin Gradle plugin generates coroutine-based stubs.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build JAR (proto codegen auto)</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Gradle</td><td><code class="ic">./gradlew shadowJar</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/grpc-kotlin-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 50051:50051 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">connect-go <span style="color:var(--text-dim);font-weight:400">0.5</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Go</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> buf generate with connect-go plugin outputs HTTP/1.1+gRPC compatible handlers.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Proto codegen</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">buf generate (connect-go plugin)</td><td><code class="ic">buf generate</code></td></tr>
+<tr><td class="row-label">Build binary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">go build</td><td><code class="ic">CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/server</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/connect-go-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf http://localhost:8080/grpc.health.v1.Health/Check &amp;&amp; echo OK</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">grpc-php <span style="color:var(--text-dim);font-weight:400">1.63</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">PHP</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> grpc_php_plugin generates PHP stubs via protoc. PHP-FPM serves gRPC via a gateway.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Proto codegen</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">protoc + grpc_php_plugin</td><td><code class="ic">protoc --php_out=. --grpc_out=. --plugin=protoc-gen-grpc=grpc_php_plugin proto/service.proto</code></td></tr>
+<tr><td class="row-label">Install deps</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Composer</td><td><code class="ic">composer install --no-dev --optimize-autoloader</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/grpc-php-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 50051:50051 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</code></div></div></div>
+  </div>
+</details>
+
+<!-- ══════════════════════════════════════
+     SECTION 29 — GraphQL
+══════════════════════════════════════ -->
+<h2 id="graphql">29 — GraphQL</h2>
+<p class="section-sub">Single endpoint POST /graphql. Schema-first SDL or code-first. DataLoader for N+1 batching. Disable introspection in production.</p>
+<div class="tbl-wrap" style="margin-bottom:16px"><div class="tbl-scroll"><table class="xref-table">
+  <thead><tr><th class="row-hd">Framework</th><th>Runtime</th><th>Pattern</th><th>Port</th><th>Pkg mgr</th><th>Base image</th></tr></thead>
+  <tbody>
+<tr><td class="row-label">Apollo Server <small style="color:var(--text-dim)">4.10</small></td><td style="font-size:11px">Node.js</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">4000</td><td style="font-size:11px">npm / pnpm</td><td><code class="ic" style="font-size:10px">node:22-alpine</code></td></tr>
+<tr><td class="row-label">GraphQL Yoga <small style="color:var(--text-dim)">5.6</small></td><td style="font-size:11px">Node.js</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">4000</td><td style="font-size:11px">npm / pnpm</td><td><code class="ic" style="font-size:10px">node:22-alpine</code></td></tr>
+<tr><td class="row-label">Strawberry <small style="color:var(--text-dim)">0.235</small></td><td style="font-size:11px">Python</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">8000</td><td style="font-size:11px">pip / uv</td><td><code class="ic" style="font-size:10px">python:3.12-alpine</code></td></tr>
+<tr><td class="row-label">gqlgen <small style="color:var(--text-dim)">0.17</small></td><td style="font-size:11px">Go</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">8080</td><td style="font-size:11px">go mod</td><td><code class="ic" style="font-size:10px">gcr.io/distroless/static</code></td></tr>
+<tr><td class="row-label">Spring for GraphQL <small style="color:var(--text-dim)">1.3</small></td><td style="font-size:11px">JVM</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">8080</td><td style="font-size:11px">Gradle / Maven</td><td><code class="ic" style="font-size:10px">eclipse-temurin:21-jre-alpine</code></td></tr>
+<tr><td class="row-label">Hot Chocolate <small style="color:var(--text-dim)">14</small></td><td style="font-size:11px">.NET</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">8080</td><td style="font-size:11px">NuGet</td><td><code class="ic" style="font-size:10px">mcr.microsoft.com/dotnet/aspnet:8.0-alpine</code></td></tr>
+<tr><td class="row-label">graphql-ruby <small style="color:var(--text-dim)">2.3</small></td><td style="font-size:11px">Ruby</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">Bundler</td><td><code class="ic" style="font-size:10px">ruby:3.3-alpine</code></td></tr>
+<tr><td class="row-label">async-graphql <small style="color:var(--text-dim)">7.0</small></td><td style="font-size:11px">Rust</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">8080</td><td style="font-size:11px">cargo</td><td><code class="ic" style="font-size:10px">gcr.io/distroless/static</code></td></tr>
+  </tbody>
+</table></div></div>
+
+<details class="fw-details">
+  <summary><span class="sum-label">Apollo Server <span style="color:var(--text-dim);font-weight:400">4.10</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Node.js</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Disable introspection in production via <code>introspection: false</code> in ApolloServer config.</p>
+    <div class="phase-strip"><span class="ph-chip p0">Phase 0</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+<tr><td class="row-label">Schema validate</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">graphql-inspector</td><td><code class="ic">npx graphql-inspector validate schema.graphql</code></td></tr>
+<tr><td class="row-label">Tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">jest</td><td><code class="ic">npm test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">tsc</td><td><code class="ic">npm run build</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/apollo-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 4000:4000 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf -X POST -H 'Content-Type: application/json' -d '{"query":"{__typename}"}' http://localhost:4000/graphql &amp;&amp; echo OK</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">GraphQL Yoga <span style="color:var(--text-dim);font-weight:400">5.6</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Node.js</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Fetch API native — runs on Node, Bun, Deno, Cloudflare Workers without code changes.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit</td><td><code class="ic">npm audit --audit-level=high</code></td></tr>
+<tr><td class="row-label">Tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">vitest</td><td><code class="ic">npm test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build + Docker</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">tsc + docker buildx</td><td><code class="ic">npm run build &amp;&amp; docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/yoga-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 4000:4000 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf -X POST -H 'Content-Type: application/json' -d '{"query":"{__typename}"}' http://localhost:4000/graphql &amp;&amp; echo OK</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">Strawberry <span style="color:var(--text-dim);font-weight:400">0.235</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Python</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Schema generated from Python type annotations — no SDL file needed.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pip-audit</td><td><code class="ic">pip-audit</code></td></tr>
+<tr><td class="row-label">Tests</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">pytest</td><td><code class="ic">pytest -x</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/strawberry-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8000:8000 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf -X POST -H 'Content-Type: application/json' -d '{"query":"{__typename}"}' http://localhost:8000/graphql &amp;&amp; echo OK</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">gqlgen <span style="color:var(--text-dim);font-weight:400">0.17</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Go</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> <code>go run github.com/99designs/gqlgen generate</code> must run before go build.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">govulncheck + go test</td><td><code class="ic">govulncheck ./... &amp;&amp; go test ./...</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Schema codegen</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">gqlgen</td><td><code class="ic">go run github.com/99designs/gqlgen generate</code></td></tr>
+<tr><td class="row-label">Build binary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">go build</td><td><code class="ic">CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/server</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/gqlgen-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf -X POST -H 'Content-Type: application/json' -d '{"query":"{__typename}"}' http://localhost:8080/graphql &amp;&amp; echo OK</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">Spring for GraphQL <span style="color:var(--text-dim);font-weight:400">1.3</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">JVM</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Annotation-driven — no SDL file or code generation step required.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Gradle dependency-check + test</td><td><code class="ic">./gradlew dependencyCheckAnalyze test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build JAR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Gradle bootJar</td><td><code class="ic">./gradlew bootJar</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/spring-graphql-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf -X POST -H 'Content-Type: application/json' -d '{"query":"{__typename}"}' http://localhost:8080/graphql &amp;&amp; echo OK</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">Hot Chocolate <span style="color:var(--text-dim);font-weight:400">14</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">.NET</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Code-first or SDL-first — no external code generation tool required.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">dotnet list package --vulnerable + dotnet test</td><td><code class="ic">dotnet list package --vulnerable &amp;&amp; dotnet test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Publish</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">dotnet publish</td><td><code class="ic">dotnet publish -c Release -o /app/publish</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/hotchocolate-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf -X POST -H 'Content-Type: application/json' -d '{"query":"{__typename}"}' http://localhost:8080/graphql &amp;&amp; echo OK</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">graphql-ruby <span style="color:var(--text-dim);font-weight:400">2.3</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Ruby</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Rails integration standard. Disable introspection via <code>disable_introspection_entry_points</code> in schema.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">bundle audit + rspec</td><td><code class="ic">bundle exec bundle-audit check --update &amp;&amp; bundle exec rspec</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Precompile assets</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">rake</td><td><code class="ic">bundle exec rake assets:precompile</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/graphql-ruby-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf -X POST -H 'Content-Type: application/json' -d '{"query":"{__typename}"}' http://localhost:3000/graphql &amp;&amp; echo OK</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">async-graphql <span style="color:var(--text-dim);font-weight:400">7.0</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Rust</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Derive macros generate schema at compile time — no separate codegen step.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cargo audit + cargo test</td><td><code class="ic">cargo audit &amp;&amp; cargo test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build release binary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">cargo build</td><td><code class="ic">cargo build --release</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/async-graphql-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8080:8080 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">curl -sf -X POST -H 'Content-Type: application/json' -d '{"query":"{__typename}"}' http://localhost:8080/graphql &amp;&amp; echo OK</code></div></div></div>
+  </div>
+</details>
+
+<!-- ══════════════════════════════════════
+     SECTION 30 — WebSocket
+══════════════════════════════════════ -->
+<h2 id="websocket">30 — WebSocket</h2>
+<p class="section-sub">Full-duplex persistent TCP via HTTP Upgrade. Real-time messaging. Horizontal scaling requires sticky sessions + Redis pub/sub or NATS.</p>
+<div class="tbl-wrap" style="margin-bottom:16px"><div class="tbl-scroll"><table class="xref-table">
+  <thead><tr><th class="row-hd">Framework</th><th>Runtime</th><th>Pattern</th><th>Port</th><th>Pkg mgr</th><th>Base image</th></tr></thead>
+  <tbody>
+<tr><td class="row-label">ws <small style="color:var(--text-dim)">8.17</small></td><td style="font-size:11px">Node.js</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">npm / pnpm</td><td><code class="ic" style="font-size:10px">node:22-alpine</code></td></tr>
+<tr><td class="row-label">gorilla/websocket <small style="color:var(--text-dim)">1.5</small></td><td style="font-size:11px">Go</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">go mod</td><td><code class="ic" style="font-size:10px">gcr.io/distroless/static</code></td></tr>
+<tr><td class="row-label">websockets <small style="color:var(--text-dim)">12.0</small></td><td style="font-size:11px">Python</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">8765</td><td style="font-size:11px">pip / uv</td><td><code class="ic" style="font-size:10px">python:3.12-alpine</code></td></tr>
+<tr><td class="row-label">Java-WebSocket <small style="color:var(--text-dim)">1.5</small></td><td style="font-size:11px">JVM</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">8887</td><td style="font-size:11px">Gradle</td><td><code class="ic" style="font-size:10px">eclipse-temurin:21-jre-alpine</code></td></tr>
+<tr><td class="row-label">Phoenix Channels <small style="color:var(--text-dim)">1.7</small></td><td style="font-size:11px">Elixir / BEAM</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">4000</td><td style="font-size:11px">mix</td><td><code class="ic" style="font-size:10px">hexpm/elixir:alpine</code></td></tr>
+<tr><td class="row-label">tokio-tungstenite <small style="color:var(--text-dim)">0.23</small></td><td style="font-size:11px">Rust</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">3000</td><td style="font-size:11px">cargo</td><td><code class="ic" style="font-size:10px">gcr.io/distroless/static</code></td></tr>
+<tr><td class="row-label">SignalR <small style="color:var(--text-dim)">8.0</small></td><td style="font-size:11px">.NET</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">5000</td><td style="font-size:11px">NuGet</td><td><code class="ic" style="font-size:10px">mcr.microsoft.com/dotnet/aspnet:8.0-alpine</code></td></tr>
+<tr><td class="row-label">faye-websocket <small style="color:var(--text-dim)">0.11</small></td><td style="font-size:11px">Ruby</td><td><span class="p-multi">Multi-stage</span></td><td style="font-size:11px;font-family:monospace">9292</td><td style="font-size:11px">Bundler</td><td><code class="ic" style="font-size:10px">ruby:3.3-alpine</code></td></tr>
+  </tbody>
+</table></div></div>
+
+<details class="fw-details">
+  <summary><span class="sum-label">ws <span style="color:var(--text-dim);font-weight:400">8.17</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Node.js</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> HTTP health sidecar required — wget cannot check ws:// endpoints. Expose /health on port 3001.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">npm audit + jest</td><td><code class="ic">npm audit --audit-level=high &amp;&amp; npm test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build + Docker</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">tsc + docker buildx</td><td><code class="ic">npm run build &amp;&amp; docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/ws-node-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">npx wscat -c ws://localhost:3000/ws --execute "ping"</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">gorilla/websocket <span style="color:var(--text-dim);font-weight:400">1.5</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Go</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Note:</strong> gorilla/websocket is archived. New Go projects: use nhooyr.io/websocket. Existing codebases: gorilla works.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">govulncheck + go test</td><td><code class="ic">govulncheck ./... &amp;&amp; go test ./... -race</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build binary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">go build</td><td><code class="ic">CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/server</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/ws-go-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">npx wscat -c ws://localhost:3000/ws --execute "ping"</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">websockets <span style="color:var(--text-dim);font-weight:400">12.0</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Python</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> ASGI-compatible. Run with uvicorn for production. Health endpoint on port 8766.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">pip-audit + pytest</td><td><code class="ic">pip-audit &amp;&amp; pytest -x</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/ws-python-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8765:8765 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">npx wscat -c ws://localhost:8765/ws --execute "ping"</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">Java-WebSocket <span style="color:var(--text-dim);font-weight:400">1.5</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">JVM</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Expose HTTP /health on separate port 8888 for Kubernetes probes.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">Gradle dependency-check + test</td><td><code class="ic">./gradlew dependencyCheckAnalyze test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build JAR</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Gradle shadowJar</td><td><code class="ic">./gradlew shadowJar</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/ws-java-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 8887:8887 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">npx wscat -c ws://localhost:8887 --execute "ping"</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">Phoenix Channels <span style="color:var(--text-dim);font-weight:400">1.7</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Elixir / BEAM</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Phoenix.PubSub handles distributed pub/sub natively — no Redis needed for same-cluster broadcast.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">mix hex.audit + mix test</td><td><code class="ic">mix hex.audit &amp;&amp; mix test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Release build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">mix release</td><td><code class="ic">MIX_ENV=prod mix release</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/phoenix-channels-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 4000:4000 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">npx wscat -c ws://localhost:4000/socket/websocket --execute "ping"</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">tokio-tungstenite <span style="color:var(--text-dim);font-weight:400">0.23</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Rust</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> ~500k concurrent connections per node — lowest memory per connection of all implementations.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">cargo audit + cargo test</td><td><code class="ic">cargo audit &amp;&amp; cargo test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Build release binary</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">cargo build</td><td><code class="ic">cargo build --release</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/ws-rust-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 3000:3000 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">npx wscat -c ws://localhost:3000/ws --execute "ping"</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">SignalR <span style="color:var(--text-dim);font-weight:400">8.0</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">.NET</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Azure SignalR Service backplane removes sticky session requirement for horizontal scaling.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">dotnet list package --vulnerable + dotnet test</td><td><code class="ic">dotnet list package --vulnerable &amp;&amp; dotnet test</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Publish</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">dotnet publish</td><td><code class="ic">dotnet publish -c Release -o /app/publish</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/signalr-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 5000:5000 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">npx wscat -c ws://localhost:5000/hub --execute "ping"</code></div></div></div>
+  </div>
+</details>
+
+<details class="fw-details">
+  <summary><span class="sum-label">faye-websocket <span style="color:var(--text-dim);font-weight:400">0.11</span></span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">Ruby</span><span class="p-multi pat-chip">Multi-stage</span></summary>
+  <div class="expand-content">
+    <p class="note-info"><strong>Build note:</strong> Rack-compatible — mount alongside Rails/Sinatra for co-located HTTP + WebSocket on same port.</p>
+    <div class="phase-strip"><span class="ph-chip p2">Phase 2</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip p3">Phase 3</span><span style="color:var(--text-dim);padding:3px 2px">→</span><span class="ph-chip preg">Registry</span></div>
+    <div class="tbl-wrap"><div class="tbl-scroll"><table class="xref-table"><thead><tr><th class="row-hd" style="min-width:160px">Stage</th><th style="min-width:90px">Type</th><th style="min-width:200px">Tool(s)</th><th style="min-width:280px">Key command / action</th></tr></thead><tbody>
+<tr><td colspan="4" class="phase-hdr ph2" style="padding:5px 10px">Phase 2 — PR Gate</td></tr>
+<tr><td class="row-label">SCA + Tests</td><td><span class="type-devsec">DevSecOps</span></td><td style="font-size:11px">bundle audit + rspec</td><td><code class="ic">bundle exec bundle-audit check --update &amp;&amp; bundle exec rspec</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph3" style="padding:5px 10px">Phase 3 — Main Build</td></tr>
+<tr><td class="row-label">Install deps</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">Bundler</td><td><code class="ic">bundle install --without development test</code></td></tr>
+<tr><td class="row-label">Docker build</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker buildx</td><td><code class="ic">docker buildx build --target runtime -t $IMAGE .</code></td></tr>
+<tr><td colspan="4" class="phase-hdr ph-reg" style="padding:5px 10px">Registry</td></tr>
+<tr><td class="row-label">Push</td><td><span class="type-devops">DevOps</span></td><td style="font-size:11px">docker push</td><td><code class="ic">docker push ghcr.io/OWNER/ws-ruby-svc:$GIT_SHA</code></td></tr>
+    </tbody></table></div></div>
+    <div class="vfy-block"><p class="vfy-label">Verify</p><div class="vfy-steps"><div class="vfy-step"><span class="vfy-n">1</span><span class="vfy-desc">Build</span><code class="vfy-cmd">docker build --target runtime -t app .</code></div><div class="vfy-step"><span class="vfy-n">2</span><span class="vfy-desc">Run</span><code class="vfy-cmd">docker run --rm -p 9292:9292 app</code></div><div class="vfy-step"><span class="vfy-n">3</span><span class="vfy-desc">Smoke</span><code class="vfy-cmd">npx wscat -c ws://localhost:9292/ws --execute "ping"</code></div></div></div>
   </div>
 </details>
 

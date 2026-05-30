@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="27-category framework catalog — Frontend, Mobile, Backend. 22 columns per framework including perf data, versions, tradeoffs, and when to use.">
+<meta name="description" content="30-category framework catalog — Frontend, Mobile, Backend. 22 columns per framework including perf data, versions, tradeoffs, and when to use.">
 <title>Framework Catalog — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -103,6 +103,17 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   .b{border:1px solid #999;background:none;color:#000}
   h2{margin-top:24px}
 }
+/* xref strip — cross-doc links after each group header */
+.xref-strip{display:flex;align-items:center;gap:6px;margin:4px 0 8px;flex-wrap:wrap}
+.xref-strip .xs-label{font-size:10px;color:var(--text-dim);flex-shrink:0}
+.doc-badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;
+  border-radius:3px;background:#dbeeff;color:var(--blue);border:1px solid #b6d7f5;
+  text-decoration:none;white-space:nowrap}
+.doc-badge:hover{background:#b6d7f5}
+@media(prefers-color-scheme:dark){
+  .doc-badge{background:#0d2744;border-color:#2d4a6a;color:#58a6ff}
+  .doc-badge:hover{background:#1c3a5e}
+}
 </style>
 </head>
 <body>
@@ -140,6 +151,10 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
   <a href="#c25">25 — Scala</a>
   <a href="#c26">26 — Clojure</a>
   <a href="#c27">27 — C++</a>
+  <div class="nav-section">Protocols</div>
+  <a href="#c28">28 — gRPC</a>
+  <a href="#c29">29 — GraphQL</a>
+  <a href="#c30">30 — WebSocket</a>
   <div class="nav-section">All docs</div>
   <a href="index.html">⌂ Hub</a>
   <a href="01-framework-catalog.html" aria-current="page">01 Frameworks</a>
@@ -163,10 +178,10 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 
 <main id="main-content">
 <div class="page-title">Framework Catalog</div>
-<div class="page-meta">27 categories &nbsp;·&nbsp; 22 columns per category (18 shared + 4 category-specific) &nbsp;·&nbsp; all rows filled</div>
+<div class="page-meta">30 categories &nbsp;·&nbsp; 22 columns per category (18 shared + 4 category-specific) &nbsp;·&nbsp; all rows filled</div>
 
 <div class="counts-bar">
-  <div class="count-chip cat-chip"><div class="chip-num">27</div><div class="chip-label">Categories<br>(Frontend · Mobile · Backend)</div></div>
+  <div class="count-chip cat-chip"><div class="chip-num">30</div><div class="chip-label">Categories<br>(Frontend · Mobile · Backend · Protocols)</div></div>
   <div class="count-chip col-chip"><div class="chip-num">22</div><div class="chip-label">Columns<br>per category</div></div>
   <div class="count-chip"><div class="chip-num">18</div><div class="chip-label">Shared<br>columns</div></div>
   <div class="count-chip"><div class="chip-num">4</div><div class="chip-label">Category-specific<br>columns</div></div>
@@ -209,6 +224,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c1">1 — Frontend — SSR / Hybrid <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">Server renders HTML per request. Frameworks handle both server and client logic.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-ssr-hybrid" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#ssr-hybrid" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -237,6 +253,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <tr><td class="fw"><a href="https://nuxt.com">Nuxt</a></td><td><a href="https://github.com/nuxt/nuxt/releases">4.4</a></td><td>TS / JS</td><td>MIT</td><td>NuxtLabs</td><td><span class="b prod">Production</span></td><td>Sequential load() per route — ReadableStream for streaming</td><td>GC — V8. Per-request server state in Nitro server heap</td><td>TTFB p99: ~80ms warm (<a href="https://web.dev/articles/ttfb">web.dev/ttfb</a>)</td><td>~70–100 kb</td><td>Server exposed, Nitro server, no built-in auth</td><td>Horizontal</td><td>1.5M+ weekly npm downloads</td><td>npm, pnpm, yarn, bun</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Vue team, full-stack Vue apps</td><td>React team → Next.js</td><td>vs Next.js: Vue ecosystem, smaller community</td><td>SSR, CSR, SSG, ISR — per-page</td><td>Full — partial hydration via islands plugin</td><td>Node.js / Edge (Cloudflare, Vercel)</td></tr>
 <tr><td class="fw"><a href="https://kit.svelte.dev">SvelteKit</a></td><td><a href="https://github.com/sveltejs/kit/releases">2.57</a></td><td>TS / JS</td><td>MIT</td><td>Vercel</td><td><span class="b prod">Production</span></td><td>Sequential load() per route — ReadableStream for streaming</td><td>GC — V8. Per-request state — no virtual DOM overhead</td><td>TTFB p99: ~50ms warm (<a href="https://web.dev/articles/ttfb">web.dev/ttfb</a>)</td><td>~20–50 kb</td><td>Server exposed, adapter-based, no built-in auth</td><td>Horizontal</td><td>700k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Smallest bundle, compile-time reactivity</td><td>Large React team → Next.js</td><td>vs Next.js: smaller bundle, smaller community</td><td>SSR, CSR, SSG — per-route</td><td>Full — minimal overhead, no virtual DOM</td><td>Node.js / Edge (Cloudflare, Vercel, Deno)</td></tr>
 <tr><td class="fw"><a href="https://angular.dev">Angular SSR</a></td><td><a href="https://github.com/angular/angular/releases">20</a></td><td>TS</td><td>MIT</td><td>Google</td><td><span class="b prod">Production</span></td><td>Zone.js change detection — Signals (v17+) for fine-grained updates</td><td>GC — V8. Zone.js patch tree + component tree in heap</td><td>TTFB p99: ~90ms warm (<a href="https://web.dev/articles/ttfb">web.dev/ttfb</a>)</td><td>~80–120 kb</td><td>Strong DI system, CSP requires config, no built-in auth</td><td>Horizontal</td><td>3M+ weekly npm downloads</td><td>npm</td><td>Angular CLI / esbuild</td><td>npmjs.com</td><td>Enterprise Java-background teams, strict structure</td><td>Small team, fast iteration → Next.js</td><td>vs Next.js: more opinionated, heavier DX overhead</td><td>SSR, CSR — app-wide</td><td>Full — hydration improved in v17+</td><td>Node.js only</td></tr>
+<tr><td class="fw"><a href="https://start.solidjs.com">Solid Start</a></td><td><a href="https://github.com/solidjs/solid-start/releases">1.0</a></td><td>TS / JS</td><td>MIT</td><td>Community / Ryan Carniato</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8) — fine-grained reactive graph, no virtual DOM diffing</td><td>GC — V8. Per-request server state — fine-grained signals, lower heap than React hydration</td><td>TTFB p99: ~55ms warm</td><td>~10–30 kb (no virtual DOM overhead)</td><td>Server exposed, no built-in auth — fine-grained reactivity unusual attack model</td><td>Horizontal</td><td>30k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite</td><td>npmjs.com</td><td>SolidJS team wanting SSR — max performance + React-like syntax</td><td>Large team expecting React ecosystem → Next.js</td><td>vs Next.js: faster rendering via fine-grained signals, smaller ecosystem</td><td>SSR, CSR — route-level</td><td>Full (fine-grained reactive signals — not VDOM-based)</td><td>Node.js / Edge (Netlify, Cloudflare)</td></tr>
 </tbody></table></div>
 
 <!-- ══════════════════════════════════════
@@ -245,6 +262,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c2">2 — Frontend — CSR / SPA <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">Browser renders all HTML. Server sends JS bundle only. No server-rendered HTML.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-csr-spa" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#csr-spa" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -273,6 +291,8 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <tr><td class="fw"><a href="https://angular.dev">Angular</a></td><td><a href="https://github.com/angular/angular/releases">20</a></td><td>TS</td><td>MIT</td><td>Google</td><td><span class="b prod">Production</span></td><td>Zone.js change detection — Signals (v17+) for fine-grained updates</td><td>GC — V8. Zone.js patch tree + component tree in heap</td><td>TTI p99: ~3s on 4G (heavier initial bundle)</td><td>~80–120 kb (esbuild reduces this)</td><td>Strong DI, built-in sanitization, no built-in auth</td><td>Horizontal (CDN)</td><td>3M+ weekly npm downloads</td><td>npm</td><td>Angular CLI / esbuild</td><td>npmjs.com</td><td>Enterprise, Java-background teams, opinionated structure</td><td>Small team, fast prototyping → Vue / React</td><td>vs React: more structured, heavier toolchain</td><td>CSR only (add Angular SSR)</td><td>N/A — client-only</td><td>Browser</td></tr>
 <tr><td class="fw"><a href="https://svelte.dev">Svelte</a></td><td><a href="https://github.com/sveltejs/svelte/releases">5</a></td><td>TS / JS</td><td>MIT</td><td>Vercel</td><td><span class="b prod">Production</span></td><td>Compiler-based reactivity — no virtual DOM, no diffing</td><td>GC — V8. No virtual DOM — compiled signals, lower heap use</td><td>TTI p99: ~0.8s on 4G (smallest runtime)</td><td>~5–15 kb (no runtime overhead)</td><td>XSS if {@html} misused, no virtual DOM attack surface</td><td>Horizontal (CDN)</td><td>700k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Smallest bundle, compile-time reactivity, no runtime overhead</td><td>Large team expecting React patterns → React</td><td>vs React: near-zero runtime, much smaller community</td><td>CSR only (add SvelteKit for SSR)</td><td>N/A — client-only</td><td>Browser</td></tr>
 <tr><td class="fw"><a href="https://solidjs.com">Solid.js</a></td><td><a href="https://github.com/solidjs/solid/releases">2.0</a></td><td>TS / JS</td><td>MIT</td><td>Community / Ryan Carniato</td><td><span class="b beta">Beta</span></td><td>Fine-grained reactive graph — no virtual DOM, no diffing</td><td>GC — V8. Fine-grained reactive graph — no virtual DOM</td><td>TTI p99: ~0.6s on 4G</td><td>~6–12 kb</td><td>XSS if innerHTML misused, fine-grained reactivity model</td><td>Horizontal (CDN)</td><td>80k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / esbuild</td><td>npmjs.com</td><td>Maximum runtime performance, React-like syntax</td><td>Large team, ecosystem maturity needed → React</td><td>vs React: faster runtime, tiny ecosystem</td><td>CSR only (add SolidStart for SSR)</td><td>N/A — client-only</td><td>Browser</td></tr>
+<tr><td class="fw"><a href="https://preactjs.com">Preact</a></td><td><a href="https://github.com/preactjs/preact/releases">10.25</a></td><td>TS / JS</td><td>MIT</td><td>Jason Miller / Community</td><td><span class="b prod">Production</span></td><td>Single render cycle — preact/compat enables React Concurrent features via compatibility layer</td><td>GC — V8. 3 kB virtual DOM — 20× smaller heap footprint than React's 45 kB runtime</td><td>TTI p99: ~0.8s on 4G (3 kB runtime vs React's 45 kB)</td><td>~3 kb (framework) + app code</td><td>XSS via dangerouslySetInnerHTML (React-compatible API) — same risks as React</td><td>Horizontal (CDN)</td><td>2M+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / esbuild</td><td>npmjs.com</td><td>Performance-critical apps, embedded widgets, mobile web, React migration path</td><td>Full React ecosystem (hooks libraries, tooling) needed → React</td><td>vs React: 20× smaller runtime, React-compatible via compat layer</td><td>CSR only (add preact-iso or Fresh for SSR)</td><td>N/A — client-only</td><td>Browser</td></tr>
+<tr><td class="fw"><a href="https://lit.dev">Lit</a></td><td><a href="https://github.com/lit/lit/releases">3.2</a></td><td>TS / JS</td><td>BSD-3-Clause</td><td>Google</td><td><span class="b prod">Production</span></td><td>Single-thread async (V8) — native browser custom element lifecycle, no virtual DOM</td><td>GC — V8. Native Web Component lifecycle — shadow DOM per component, minimal framework heap</td><td>TTI p99: ~0.5s on 4G (6 kB runtime, native browser APIs)</td><td>~6 kb (framework) + component code</td><td>Shadow DOM isolation per component — XSS contained within shadow root</td><td>Horizontal (CDN)</td><td>500k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Vite / Rollup</td><td>npmjs.com</td><td>Shareable UI components across frameworks, design systems, micro-frontends</td><td>Single-framework team with React/Vue chosen → use that framework's component model</td><td>vs React: native browser standard — components work in any framework or vanilla HTML</td><td>CSR (Web Components standard — @lit-labs/ssr for server-side)</td><td>N/A — native browser custom elements, no hydration step</td><td>Browser (framework-agnostic — works in React, Vue, Angular, vanilla)</td></tr>
 </tbody></table></div>
 
 <!-- ══════════════════════════════════════
@@ -281,6 +301,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c3">3 — Frontend — SSG <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">All pages pre-built at compile time. Served as static files. No runtime server needed.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-ssg" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#ssg" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -316,6 +337,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c4">4 — Frontend — Islands Architecture <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">Mostly static HTML with isolated interactive JS "islands". Only island components hydrate.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-islands" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#islands" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -349,6 +371,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c5">5 — Frontend — Resumability <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">Serializes server state into HTML. Browser resumes — not re-executes — on load. Zero hydration cost.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-resumability" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#resumability" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -381,6 +404,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c6">6 — Frontend — Edge Rendering <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">Renders HTML at CDN edge nodes worldwide. Sub-60ms TTFB. No origin server round-trip.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-edge-rendering" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#edge-rendering" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -415,6 +439,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c7">7 — Frontend — Streaming SSR <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">Sends HTML in chunks as it is generated. Browser renders above-the-fold before full page is ready.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-streaming-ssr" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#streaming-ssr" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -449,6 +474,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c8">8 — Frontend — Micro-frontends <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">Multiple independently deployed frontend apps composed into one page. Different teams own different sections.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-microfrontends" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#micro-frontends" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -518,6 +544,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c9">9 — Mobile — Cross-platform JS <span class="b mob">Mobile</span></h2>
 <div class="cat-meta">JS/TS codebase targets iOS and Android. Bridges to native APIs via JS runtime.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-cross-platform-js" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#cross-platform-js" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -552,6 +579,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c10">10 — Mobile — Cross-platform non-JS <span class="b mob">Mobile</span></h2>
 <div class="cat-meta">Non-JS language compiles to native iOS and Android. No JS runtime on device.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-cross-platform-native" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#cross-platform-nonjs" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -586,6 +614,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c11">11 — Mobile — Native iOS <span class="b mob">Mobile</span></h2>
 <div class="cat-meta">Apple-native SDKs only. Maximum platform API access, best performance on iOS hardware.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-native-ios" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#native-ios" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -619,6 +648,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c12">12 — Mobile — Native Android <span class="b mob">Mobile</span></h2>
 <div class="cat-meta">Android-native SDKs only. Maximum platform API access, best performance on Android hardware.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-native-android" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#native-android" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -652,6 +682,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c13">13 — Mobile — PWA <span class="b mob">Mobile</span></h2>
 <div class="cat-meta">Web app installable on device via browser. Offline via Service Worker. No app store required.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-pwa" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#pwa" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -716,6 +747,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c14">14 — Backend — Node.js / Deno / Bun <span class="b be">Backend</span></h2>
 <div class="cat-meta">JS/TS server-side runtimes. Node.js: npm ecosystem. Deno: secure by default. Bun: fast all-in-one.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-node-deno-bun" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#node-backend" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -745,6 +777,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <tr><td class="fw"><a href="https://hono.dev">Hono</a></td><td><a href="https://github.com/honojs/hono/releases">4.7</a></td><td>TS / JS</td><td>MIT</td><td>Community / Yusuke Wada</td><td><span class="b prod">Production</span></td><td>Multi-runtime async — same handler runs on Node / Deno / Bun / CF Workers</td><td>GC — V8. Near-zero heap — no class instantiation</td><td>p99: ~3ms (Bun runtime)</td><td>~100k req/s (Bun) / ~80k (Node)</td><td>Minimal surface — web-standard APIs only</td><td>Horizontal</td><td>600k+ weekly npm downloads</td><td>npm, pnpm</td><td>esbuild / Vite</td><td>npmjs.com</td><td>Edge + multi-runtime API (Node, Deno, Bun, Cloudflare)</td><td>Node.js-only middleware ecosystem needed → Fastify</td><td>vs Fastify: multi-runtime, no Node.js-specific middleware</td><td>~100ms (Bun) / ~200ms (Node)</td><td>~100 MB (Bun) / ~150 MB (Node)</td><td>Single-thread async (multi-runtime)</td></tr>
 <tr><td class="fw"><a href="https://deno.com">Deno</a></td><td><a href="https://github.com/denoland/deno/releases">2.3</a></td><td>TS / JS</td><td>MIT</td><td>Deno Land</td><td><span class="b prod">Production</span></td><td>Single-thread async + Workers API for true parallelism</td><td>GC — V8. Permissions state + module cache</td><td>p99: ~6ms (native HTTP)</td><td>~60k req/s (native HTTP)</td><td>Permissions model — deny-by-default filesystem, network, env access</td><td>Horizontal</td><td>90k+ GitHub stars</td><td>Deno (built-in)</td><td>esbuild (built-in)</td><td>jsr.io / deno.land/x</td><td>Security-first server, TypeScript without build step</td><td>npm-heavy codebase → Node.js</td><td>vs Node.js: deny-by-default security, smaller npm compat</td><td>~150ms</td><td>~200 MB (deno:alpine)</td><td>Single-thread async + Workers for parallel</td></tr>
 <tr><td class="fw"><a href="https://elysiajs.com">Elysia</a></td><td><a href="https://github.com/elysiajs/elysia/releases">1.2</a></td><td>TS</td><td>MIT</td><td>SaltyAom / Community</td><td><span class="b prod">Production</span></td><td>Single-thread async — Bun runtime only, JavaScriptCore event loop</td><td>GC — JavaScriptCore (Bun). Near-zero heap — value-based routing, no class overhead</td><td>p99: ~1ms (Bun runtime, consistently fastest TS framework)</td><td>~120k req/s (<a href="https://www.techempower.com/benchmarks/#section=data-r22&hw=ph&test=json">TechEmpower R22 JSON — Bun</a>)</td><td>End-to-end type safety via Eden treaty — type errors at compile time</td><td>Horizontal</td><td>30k+ GitHub stars</td><td>bun</td><td>Bun (no bundler)</td><td>npmjs.com / jsr.io</td><td>Maximum Bun throughput, end-to-end TypeScript type safety, Eden RPC</td><td>Non-Bun runtime required → Hono</td><td>vs Hono: Bun-only, higher throughput, end-to-end type safety</td><td>~50ms (Bun cold start)</td><td>~100 MB (oven-sh/bun:alpine)</td><td>Single-thread async (Bun only — not Node/Deno compatible)</td></tr>
+<tr><td class="fw"><a href="https://bun.sh">Bun (native)</a></td><td><a href="https://github.com/oven-sh/bun/releases">1.1</a></td><td>TS / JS</td><td>MIT</td><td>Oven</td><td><span class="b prod">Production</span></td><td>Single-thread async — JavaScriptCore event loop (not V8), Bun.serve() built-in HTTP</td><td>GC — JavaScriptCore (JSC). Near-zero framework heap — no middleware chain, no DI container</td><td>p99: ~1ms (Bun.serve() — consistently fastest JS HTTP baseline)</td><td>~130k req/s (raw Bun.serve() — no framework overhead)</td><td>Minimal surface — no middleware magic, Bun's built-in TLS support</td><td>Horizontal</td><td>80k+ GitHub stars</td><td>bun</td><td>Bun (built-in bundler + runtime)</td><td>npmjs.com</td><td>Maximum raw Bun throughput, Bun-first teams, ultra-low latency APIs without framework overhead</td><td>npm ecosystem compatibility critical or multi-runtime required → Hono or Fastify</td><td>vs Elysia: raw Bun.serve() — no framework overhead, no type safety layer — lower DX, higher throughput</td><td>~30ms</td><td>~80 MB (oven-sh/bun:alpine)</td><td>Single-thread async (Bun / JavaScriptCore — not Node.js or Deno compatible)</td></tr>
 </tbody></table></div>
 
 <!-- ══════════════════════════════════════
@@ -753,6 +786,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c15">15 — Backend — Python <span class="b be">Backend</span></h2>
 <div class="cat-meta">Python server frameworks. Best for ML/AI integrations and data science teams.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-python" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#python" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -788,6 +822,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c16">16 — Backend — Go <span class="b be">Backend</span></h2>
 <div class="cat-meta">Go HTTP frameworks. Go's goroutines and static binary make it ideal for high-throughput APIs.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-go" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#go" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -823,6 +858,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c17">17 — Backend — Java <span class="b be">Backend</span></h2>
 <div class="cat-meta">JVM-based Java frameworks. Enterprise-grade, strong typing, large corporate adoption.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-java" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#java" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -857,6 +893,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c18">18 — Backend — Kotlin <span class="b be">Backend</span></h2>
 <div class="cat-meta">Kotlin server frameworks. Coroutines for async. JVM interop. JetBrains tooling.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-kotlin" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#kotlin" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -890,6 +927,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c19">19 — Backend — .NET / C# <span class="b be">Backend</span></h2>
 <div class="cat-meta">Microsoft .NET runtime. Cross-platform since .NET Core. Native AOT available in .NET 8+.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-dotnet" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#dotnet" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -923,6 +961,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c20">20 — Backend — Rust <span class="b be">Backend</span></h2>
 <div class="cat-meta">Rust HTTP frameworks. No GC, borrow checker. Highest throughput and memory safety without runtime overhead.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-rust" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#rust" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -956,6 +995,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c21">21 — Backend — Elixir <span class="b be">Backend</span></h2>
 <div class="cat-meta">BEAM VM — actor model, per-process GC, fault-tolerant by design. Best for real-time + concurrent systems.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-elixir" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#elixir" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -988,6 +1028,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c22">22 — Backend — Ruby <span class="b be">Backend</span></h2>
 <div class="cat-meta">Ruby HTTP frameworks. Rails: convention over configuration. Sinatra: micro-framework.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-ruby" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#ruby" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -1021,6 +1062,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c23">23 — Backend — PHP <span class="b be">Backend</span></h2>
 <div class="cat-meta">PHP server frameworks. Share-nothing process model. Powers 40% of the web.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-php" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#php" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -1055,6 +1097,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c24">24 — Backend — Swift <span class="b be">Backend</span></h2>
 <div class="cat-meta">Swift server frameworks. ARC memory model. No GC pauses. Ideal when team is already Swift/iOS.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-swift-server" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#swift-server" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -1088,6 +1131,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c25">25 — Backend — Scala <span class="b be">Backend</span></h2>
 <div class="cat-meta">Scala JVM frameworks. Functional + OOP. Strong type system. Used in high-scale data + finance.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-scala" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#scala" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -1121,6 +1165,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c26">26 — Backend — Clojure <span class="b be">Backend</span></h2>
 <div class="cat-meta">Clojure JVM — Lisp on the JVM. Immutable data, STM concurrency. REPL-driven development.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-clojure" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#clojure" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -1154,6 +1199,7 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <h2 id="c27">27 — Backend — C++ <span class="b be">Backend</span></h2>
 <div class="cat-meta">C++ HTTP frameworks. Manual memory management. Highest possible throughput. Used in HFT, game servers, system APIs.</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-cpp" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#cpp" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
 <thead><tr>
 <th>Name</th><th>Version</th><th>Language</th>
@@ -1179,6 +1225,128 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 <tbody>
 <tr><td class="fw"><a href="https://github.com/drogonframework/drogon">Drogon</a></td><td><a href="https://github.com/drogonframework/drogon/releases">1.9.13</a></td><td>C++17</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Coroutines + multi-thread event loop (libuv-style)</td><td>Manual — smart pointers (shared_ptr / unique_ptr). No GC — deterministic allocation</td><td>p99: &lt;1ms (<a href="https://www.techempower.com/benchmarks/#section=data-r22&hw=ph&test=json">TechEmpower R22 JSON — consistently top 3</a>)</td><td>~1.5M req/s (<a href="https://www.techempower.com/benchmarks/#section=data-r22&hw=ph&test=json">TechEmpower R22 JSON</a>)</td><td>No memory safety guarantees — manual management, buffer overflow risk</td><td>Horizontal</td><td>10k+ GitHub stars</td><td>CMake / Conan / vcpkg</td><td>CMake</td><td>github.com / conan.io</td><td>Absolute maximum HTTP throughput, HFT, game server APIs</td><td>Rapid development team → Go or Rust</td><td>vs Rust Axum: faster raw throughput, unsafe memory model</td><td>~20ms</td><td>~5–15 MB (static binary)</td><td>Coroutines + multi-thread event loop</td></tr>
 <tr><td class="fw"><a href="https://crowcpp.org">Crow</a></td><td><a href="https://github.com/CrowCpp/Crow/releases">1.3.2</a></td><td>C++14/17</td><td>BSD-3</td><td>Community</td><td><span class="b prod">Production</span></td><td>Multi-thread async (Boost.Asio thread pool)</td><td>Manual — smart pointers. Header-only library — no separate build step</td><td>p99: ~1ms</td><td>~500k req/s</td><td>Same C++ manual memory risks</td><td>Horizontal</td><td>9k+ GitHub stars</td><td>CMake / Conan</td><td>CMake</td><td>github.com</td><td>Simpler C++ HTTP API than Drogon, header-only</td><td>Absolute maximum perf → Drogon</td><td>vs Drogon: simpler API, 3× lower throughput</td><td>~20ms</td><td>~5–10 MB (header-only)</td><td>Multi-thread async (Boost.Asio)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 28 — gRPC
+══════════════════════════════════════ -->
+<h2 id="c28">28 — Protocol — gRPC <span class="b be">Protocol</span></h2>
+<div class="cat-meta">Google Remote Procedure Call. HTTP/2 + Protocol Buffers. Binary wire format. Strong typing via .proto schema. Streaming RPC (unary, server, client, bidirectional). Default port 50051.</div>
+<div class="cat-verified">Data verified: 2026-05-29 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-grpc" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#grpc" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#protocols" class="doc-badge">15 Versions</a></div>
+<div class="tbl"><table>
+<thead><tr>
+<th>Name</th><th>Version</th><th>Language</th>
+<th title="MIT: use commercially, no conditions. Apache 2.0: preserve notices.">License</th>
+<th title="Corporate-backed = faster security patches. Community = roadmap driven by contributors.">Maintained by</th>
+<th title="Production = battle-tested at scale, API stable.">Maturity</th>
+<th title="How the implementation handles concurrent RPC calls.">Concurrency</th>
+<th title="How memory is managed for the gRPC server process.">Memory</th>
+<th title="p99 unary RPC latency in ms under sustained load, local loopback.">p99 latency</th>
+<th title="Peak unary RPCs/s under sustained load, single process.">Throughput</th>
+<th title="TLS/mTLS support. Interceptor support for auth and observability.">Security posture</th>
+<th title="Horizontal = standard server scaling. HTTP/2 multiplexing reduces connection count vs REST.">Scaling</th>
+<th title="GitHub stars or downloads as proxy for ecosystem maturity.">Ecosystem</th>
+<th>Pkg mgr</th>
+<th title="Build tool + proto code generation tool.">Build tool</th>
+<th>Registry</th>
+<th>When to use</th><th>When NOT</th>
+<th title="Always stated vs the closest real alternative.">Tradeoff</th>
+<th title="Time from container boot to first RPC served.">Cold start</th>
+<th title="Base container image size on Alpine Linux.">Container size</th>
+<th title="How CPU cores and threads are utilized.">Thread model</th>
+</tr></thead>
+<tbody>
+<tr><td class="fw"><a href="https://pkg.go.dev/google.golang.org/grpc">grpc-go</a></td><td><a href="https://github.com/grpc/grpc-go/releases">1.63</a></td><td>Go</td><td>Apache 2.0</td><td>Google</td><td><span class="b prod">Production</span></td><td>Goroutines — M:N green threads, HTTP/2 multiplexed streams per connection</td><td>GC — Go. Per-stream goroutine stack (2 kB initial). Low GC pause — well-suited for long-lived streams</td><td>p99: ~0.3ms unary RPC (local)</td><td>~200k RPCs/s (unary, single process)</td><td>TLS 1.3 built-in, mTLS native, interceptor chain for auth and tracing</td><td>Horizontal (HTTP/2 — fewer connections than REST)</td><td>20k+ GitHub stars</td><td>go mod</td><td>Go (buf or protoc for proto generation)</td><td>pkg.go.dev</td><td>Highest-performance Go microservices, service mesh, server + client streaming</td><td>Browser clients without grpc-web proxy → ConnectRPC or REST</td><td>vs REST: 5–10× throughput, binary protocol — not human-readable, requires proto schema</td><td>~20ms</td><td>~15 MB (golang:alpine)</td><td>Goroutines (M:N green threads — auto-scales to all CPUs)</td></tr>
+<tr><td class="fw"><a href="https://github.com/grpc/grpc-java">grpc-java</a></td><td><a href="https://github.com/grpc/grpc-java/releases">1.63</a></td><td>Java</td><td>Apache 2.0</td><td>Google</td><td><span class="b prod">Production</span></td><td>Async via Netty event loop — non-blocking I/O with Netty NIO transport</td><td>JVM heap — Netty ByteBuf pool. JVM base overhead ~100 MB heap</td><td>p99: ~0.5ms unary RPC</td><td>~150k RPCs/s (unary, Netty)</td><td>TLS via Netty SSL, mTLS, channel credentials, server interceptors</td><td>Horizontal</td><td>10k+ GitHub stars</td><td>Maven / Gradle</td><td>Maven / Gradle (protoc + protobuf-gradle-plugin)</td><td>Maven Central</td><td>Java/Spring microservices, existing JVM ecosystem, Android gRPC clients</td><td>Startup time critical (serverless) → grpc-go or grpc-node</td><td>vs grpc-go: comparable warm throughput, higher startup overhead and container size</td><td>~2s (JVM startup)</td><td>~200 MB (eclipse-temurin:21-alpine)</td><td>Non-blocking async (Netty NIO — boss/worker thread pool)</td></tr>
+<tr><td class="fw"><a href="https://grpc.io/docs/languages/python/">grpcio</a></td><td><a href="https://pypi.org/project/grpcio/">1.63</a></td><td>Python</td><td>Apache 2.0</td><td>Google</td><td><span class="b prod">Production</span></td><td>Async (grpc.aio + asyncio) — C-core underlying transport bypasses Python GIL for I/O</td><td>Python heap + C-core native memory. GIL still applies for Python handler code</td><td>p99: ~1ms unary RPC (Python overhead on C-core)</td><td>~20k RPCs/s (GIL limits Python handler concurrency)</td><td>TLS via C-core (OpenSSL), mTLS, server interceptors</td><td>Horizontal (multiple processes to bypass GIL)</td><td>20M+ weekly PyPI downloads</td><td>pip / uv / poetry</td><td>pip (grpcio-tools for proto generation)</td><td>PyPI</td><td>Python ML model serving, data science microservices, consuming gRPC APIs from Python</td><td>High concurrency required → grpc-go. Performance-critical server → grpc-go</td><td>vs grpcio-asyncio: sync grpcio blocks GIL per handler — use grpc.aio for async</td><td>~500ms</td><td>~130 MB (python:3.12-alpine)</td><td>Async (asyncio + C-core async I/O — GIL limits handler parallelism)</td></tr>
+<tr><td class="fw"><a href="https://github.com/grpc/grpc-node">@grpc/grpc-js</a></td><td><a href="https://github.com/grpc/grpc-node/releases">1.10</a></td><td>JS / TS</td><td>Apache 2.0</td><td>Google</td><td><span class="b prod">Production</span></td><td>Single-thread event loop — pure JS transport, no C bindings required</td><td>GC — V8. No C-core dependency — pure JavaScript implementation</td><td>p99: ~2ms unary RPC (V8 GC pauses)</td><td>~30k RPCs/s</td><td>TLS via Node.js native tls module, mTLS channel credentials, call interceptors</td><td>Horizontal</td><td>3M+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Node.js (proto-loader for dynamic proto loading or protoc for static)</td><td>npmjs.com</td><td>Node.js gRPC clients/servers, TypeScript microservices, interop with Go/Java gRPC</td><td>Native binary performance → grpc-go. Complex bidirectional streaming at scale → grpc-go</td><td>vs grpc-go: pure JS — 5× higher latency, same HTTP/2 protocol wire compatibility</td><td>~300ms</td><td>~150 MB (node:alpine)</td><td>Single-thread event loop (Node.js — use cluster for multi-core)</td></tr>
+<tr><td class="fw"><a href="https://learn.microsoft.com/en-us/aspnet/core/grpc/">grpc-dotnet</a></td><td><a href="https://github.com/grpc/grpc-dotnet/releases">2.62</a></td><td>C#</td><td>Apache 2.0</td><td>Microsoft</td><td><span class="b prod">Production</span></td><td>Async/await (Task) — Kestrel HTTP/2 server, fully async pipeline</td><td>.NET GC — managed heap. Kestrel socket buffers, low framework overhead</td><td>p99: ~0.5ms unary RPC (Kestrel + .NET async)</td><td>~120k RPCs/s</td><td>TLS via Kestrel, mTLS client certificates, ASP.NET Core auth middleware</td><td>Horizontal</td><td>4k+ GitHub stars (part of ASP.NET Core)</td><td>NuGet (dotnet CLI)</td><td>dotnet CLI (Grpc.Tools for proto generation)</td><td>NuGet.org</td><td>.NET microservices, ASP.NET Core APIs replacing REST, Azure workloads</td><td>Browser clients without grpc-web → REST. Non-.NET clients → standard gRPC + proxy</td><td>vs REST (ASP.NET Core): 3× throughput, binary protocol — debugging harder without grpc-ui</td><td>~500ms (JIT) / ~200ms (AOT)</td><td>~80 MB (dotnet:8.0-alpine)</td><td>Async/await (Thread pool — scales to all CPUs)</td></tr>
+<tr><td class="fw"><a href="https://github.com/hyperium/tonic">tonic</a></td><td><a href="https://github.com/hyperium/tonic/releases">0.11</a></td><td>Rust</td><td>MIT</td><td>Community (LukeMathWalker)</td><td><span class="b prod">Production</span></td><td>Async (Tokio) — zero-cost abstractions, work-stealing multi-thread runtime</td><td>No GC — deterministic allocation. Tokio async runtime near-zero overhead per task</td><td>p99: ~0.2ms unary RPC (lowest latency among major gRPC implementations)</td><td>~250k RPCs/s</td><td>TLS via rustls (memory-safe, no OpenSSL CVE risk), mTLS, tower middleware interceptors</td><td>Horizontal</td><td>10k+ GitHub stars</td><td>cargo</td><td>cargo (tonic-build for proto generation in build.rs)</td><td>crates.io</td><td>Lowest latency gRPC, memory safety critical, Rust microservices, embedded service mesh</td><td>Rapid prototyping → grpc-go. Python/Java team → use that language's gRPC impl</td><td>vs grpc-go: lower latency, no GC pauses, higher compile complexity and learning curve</td><td>~10ms</td><td>~15 MB (rust:alpine / distroless)</td><td>Async Tokio (multi-threaded work-stealing — scales to all CPUs)</td></tr>
+<tr><td class="fw"><a href="https://github.com/grpc/grpc-swift">grpc-swift</a></td><td><a href="https://github.com/grpc/grpc-swift/releases">2.0</a></td><td>Swift</td><td>Apache 2.0</td><td>Apple / gRPC team</td><td><span class="b prod">Production</span></td><td>Swift structured concurrency (async/await) — SwiftNIO event loop</td><td>ARC — no GC, deterministic memory management, low per-stream overhead</td><td>p99: ~0.4ms unary RPC</td><td>~100k RPCs/s</td><td>TLS via SwiftNIO SSL (BoringSSL), mTLS, interceptors</td><td>Horizontal</td><td>4k+ GitHub stars</td><td>Swift Package Manager</td><td>swift (protoc + grpc-swift-plugin)</td><td>swift.org / GitHub</td><td>iOS/macOS gRPC clients, Vapor server with gRPC, Swift server microservices</td><td>Non-Apple platform primary → grpc-go. Python/Java team → use their impl</td><td>vs grpc-go: native iOS/macOS integration advantage, smaller Linux server ecosystem</td><td>~100ms</td><td>~50 MB (swift:5.10-alpine)</td><td>Swift structured concurrency (SwiftNIO NIO event loop — multi-threaded)</td></tr>
+<tr><td class="fw"><a href="https://github.com/grpc/grpc-kotlin">grpc-kotlin</a></td><td><a href="https://github.com/grpc/grpc-kotlin/releases">1.4</a></td><td>Kotlin</td><td>Apache 2.0</td><td>Google</td><td><span class="b prod">Production</span></td><td>Coroutines — suspending functions, non-blocking on Kotlin coroutine dispatcher</td><td>JVM heap — Kotlin coroutines minimal overhead vs Java threads. Netty ByteBuf pool</td><td>p99: ~0.5ms unary RPC (JVM, Netty backend)</td><td>~120k RPCs/s</td><td>TLS via Netty SSL, mTLS channel credentials, coroutine-aware interceptors</td><td>Horizontal</td><td>2k+ GitHub stars</td><td>Gradle</td><td>Gradle (protoc + grpc-kotlin plugin)</td><td>Maven Central</td><td>Kotlin microservices, Android coroutine gRPC clients, Spring Boot Kotlin</td><td>Pure Java team → grpc-java directly. Performance critical → grpc-go</td><td>vs grpc-java: idiomatic Kotlin coroutines, same JVM warm throughput</td><td>~2s (JVM startup)</td><td>~200 MB (eclipse-temurin:21-alpine)</td><td>Coroutines (Kotlin coroutine dispatcher — non-blocking on JVM thread pool)</td></tr>
+<tr><td class="fw"><a href="https://connectrpc.com">connect-go</a></td><td><a href="https://github.com/connectrpc/connect-go/releases">0.5</a></td><td>Go</td><td>Apache 2.0</td><td>Buf Technologies</td><td><span class="b prod">Production</span></td><td>Goroutines — same as net/http, compatible with gRPC + gRPC-Web + Connect protocols</td><td>GC — Go. net/http2 transport, minimal overhead — no separate gRPC runtime</td><td>p99: ~0.4ms unary RPC</td><td>~180k RPCs/s</td><td>TLS via Go stdlib, mTLS, works with standard HTTP reverse proxies (no envoy required)</td><td>Horizontal (compatible with standard HTTP load balancers)</td><td>6k+ GitHub stars</td><td>go mod</td><td>Go (buf generate for proto + connect-go plugin)</td><td>pkg.go.dev</td><td>gRPC + browser clients without grpc-web proxy, standard HTTP LBs, buf.build ecosystem</td><td>Existing envoy + raw gRPC only → grpc-go. Non-Go teams</td><td>vs grpc-go: HTTP/1.1 + browser compatible without proxy, slightly lower raw throughput</td><td>~20ms</td><td>~15 MB (golang:alpine)</td><td>Goroutines (M:N green threads — auto-scales to all CPUs)</td></tr>
+<tr><td class="fw"><a href="https://grpc.io/docs/languages/php/">grpc-php</a></td><td><a href="https://github.com/grpc/grpc/releases">1.63</a></td><td>PHP</td><td>Apache 2.0</td><td>Google</td><td><span class="b prod">Production</span></td><td>Synchronous (PHP-FPM) — each request in new FPM worker, no async model</td><td>PHP GC — ZendEngine per-request. grpc C extension is C-based native memory</td><td>p99: ~3ms unary RPC (PHP-FPM overhead)</td><td>~10k RPCs/s (FPM worker pool limit)</td><td>TLS via OpenSSL (grpc C-core), mTLS supported</td><td>Horizontal (PHP-FPM process pool)</td><td>1M+ monthly Packagist downloads</td><td>Composer</td><td>Composer (protoc + grpc_php_plugin)</td><td>Packagist</td><td>PHP services consuming gRPC APIs (GCP client libs, Shopify), Laravel gRPC clients</td><td>PHP as high-traffic gRPC server → use grpc-go as sidecar. Any server workload → Go/Java</td><td>vs REST: binary efficiency gained at client, lost to PHP-FPM per-request overhead at server</td><td>~200ms (FPM worker init)</td><td>~100 MB (php:8.3-fpm-alpine)</td><td>Synchronous (PHP-FPM — one request per worker process)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 29 — GraphQL
+══════════════════════════════════════ -->
+<h2 id="c29">29 — Protocol — GraphQL <span class="b be">Protocol</span></h2>
+<div class="cat-meta">Query language for APIs. Single endpoint POST /graphql. Client specifies exact shape of data. Schema-first with SDL. Introspection built-in. N+1 solved via DataLoader.</div>
+<div class="cat-verified">Data verified: 2026-05-29 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-graphql" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#graphql" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#protocols" class="doc-badge">15 Versions</a></div>
+<div class="tbl"><table>
+<thead><tr>
+<th>Name</th><th>Version</th><th>Language</th>
+<th title="MIT: use commercially, no conditions. Apache 2.0: preserve notices.">License</th>
+<th title="Corporate-backed = faster security patches. Community = roadmap driven by contributors.">Maintained by</th>
+<th title="Production = battle-tested at scale, API stable.">Maturity</th>
+<th title="How the server handles concurrent GraphQL queries.">Concurrency</th>
+<th title="How memory is managed. DataLoader batching reduces per-query heap allocation.">Memory</th>
+<th title="p99 query latency in ms under sustained load, simple query (no DB).">p99 latency</th>
+<th title="Peak queries/s under sustained load, simple query, single process.">Throughput</th>
+<th title="Introspection disable in prod, depth limiting, query complexity limits, persisted queries.">Security posture</th>
+<th title="Horizontal = standard server scaling.">Scaling</th>
+<th title="npm/PyPI/pkg.go.dev downloads or GitHub stars.">Ecosystem</th>
+<th>Pkg mgr</th>
+<th title="Build tool + schema generation approach.">Build tool</th>
+<th>Registry</th>
+<th>When to use</th><th>When NOT</th>
+<th title="Always stated vs the closest real alternative.">Tradeoff</th>
+<th title="Time from container boot to first query served.">Cold start</th>
+<th title="Base container image size on Alpine Linux.">Container size</th>
+<th title="How CPU cores and threads are utilized.">Thread model</th>
+</tr></thead>
+<tbody>
+<tr><td class="fw"><a href="https://www.apollographql.com/docs/apollo-server/">Apollo Server</a></td><td><a href="https://github.com/apollographql/apollo-server/releases">4.10</a></td><td>JS / TS</td><td>MIT</td><td>Apollo GraphQL</td><td><span class="b prod">Production</span></td><td>Single-thread event loop — async resolver pipeline, DataLoader for batching</td><td>GC — V8. Schema cache at boot (~10 MB). DataLoader batch window per request</td><td>p99: ~5ms (simple query, no DB)</td><td>~20k queries/s</td><td>Introspection disabled in production mode, persisted queries, depth limiting via plugins</td><td>Horizontal</td><td>3M+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Node.js (schema-first SDL or code-first)</td><td>npmjs.com</td><td>Node.js GraphQL APIs, large Apollo ecosystem (Federation, Studio, Rover), schema registry</td><td>Simple CRUD → REST. High throughput → gRPC. PHP/Python primary → use their impl</td><td>vs REST: flexible client queries, higher server complexity — query parsing overhead per request</td><td>~300ms</td><td>~150 MB (node:alpine)</td><td>Single-thread event loop</td></tr>
+<tr><td class="fw"><a href="https://the-guild.dev/graphql/yoga-server">GraphQL Yoga</a></td><td><a href="https://github.com/dotansimha/graphql-yoga/releases">5.6</a></td><td>JS / TS</td><td>MIT</td><td>The Guild</td><td><span class="b prod">Production</span></td><td>Single-thread event loop — Fetch API compatible, runs on Node.js / Edge / Bun / Deno</td><td>GC — V8. Lightweight — no Apollo runtime overhead, fetch-native transport</td><td>p99: ~3ms (simple query, no DB)</td><td>~30k queries/s</td><td>Persisted operations, envelop plugin system for depth limiting and auth</td><td>Horizontal</td><td>500k+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Node.js / Edge / Bun / Deno (code-first or SDL)</td><td>npmjs.com</td><td>Lightweight GraphQL on any JS runtime, edge GraphQL, The Guild ecosystem (mesh, codegen)</td><td>Apollo Federation at scale → Apollo Server + Federation. Complex Studio tooling → Apollo</td><td>vs Apollo Server: lighter, multi-runtime, no Studio — smaller managed tooling ecosystem</td><td>~200ms</td><td>~150 MB (node:alpine) / ~60 MB (bun:alpine)</td><td>Single-thread event loop (multi-runtime)</td></tr>
+<tr><td class="fw"><a href="https://strawberry.rocks">Strawberry</a></td><td><a href="https://github.com/strawberry-graphql/strawberry/releases">0.235</a></td><td>Python</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Async (asyncio) — ASGI-compatible, resolvers can be async coroutines</td><td>Python heap + SQLAlchemy/Django ORM per request. GIL limits CPU parallelism</td><td>p99: ~8ms (simple query, asyncio, no DB)</td><td>~5k queries/s (Python GIL)</td><td>Extension system for depth limiting, max complexity, persisted queries via extensions</td><td>Horizontal (multiple processes)</td><td>4k+ GitHub stars</td><td>pip / poetry / uv</td><td>Python (type annotations drive schema generation — no SDL file required)</td><td>PyPI</td><td>Python teams, type-annotation-driven schema, Django/FastAPI + GraphQL, Pydantic integration</td><td>High throughput → gRPC. JS team → Apollo. Go team → gqlgen</td><td>vs Ariadne (SDL-first): code-first types feel native to Python, SDL-first gives schema portability</td><td>~500ms</td><td>~130 MB (python:3.12-alpine)</td><td>Async (asyncio ASGI — GIL limits parallel handler threads)</td></tr>
+<tr><td class="fw"><a href="https://gqlgen.com">gqlgen</a></td><td><a href="https://github.com/99designs/gqlgen/releases">0.17</a></td><td>Go</td><td>MIT</td><td>99designs / Community</td><td><span class="b prod">Production</span></td><td>Goroutines — SDL-first code generation, each resolver in its own goroutine</td><td>GC — Go. Code-generated type-safe resolvers — no runtime reflection overhead</td><td>p99: ~1ms (simple query, no DB)</td><td>~50k queries/s</td><td>Generated type-safe resolvers eliminate reflection injection risk, query complexity limits</td><td>Horizontal</td><td>10k+ GitHub stars</td><td>go mod</td><td>Go (gqlgen generate — SDL → Go type-safe resolver stubs)</td><td>pkg.go.dev</td><td>Go GraphQL APIs, type-safe resolver generation, high-throughput Go microservices</td><td>JS team → Apollo. Python team → Strawberry. Simple REST → chi/gin REST</td><td>vs graphql-go: gqlgen generates type-safe resolver code — no runtime reflection, better perf</td><td>~20ms</td><td>~15 MB (golang:alpine)</td><td>Goroutines (M:N — each resolver can run in parallel goroutine)</td></tr>
+<tr><td class="fw"><a href="https://spring.io/projects/spring-graphql">Spring for GraphQL</a></td><td><a href="https://github.com/spring-projects/spring-graphql/releases">1.3</a></td><td>Java</td><td>Apache 2.0</td><td>VMware / Spring</td><td><span class="b prod">Production</span></td><td>Async (Spring WebFlux / Reactor) or blocking (Spring MVC) — annotation-driven resolvers</td><td>JVM heap — Spring context + schema registration at boot. ~150 MB heap baseline</td><td>p99: ~3ms (simple query, WebFlux)</td><td>~30k queries/s</td><td>Spring Security integration, query complexity limits via instrumentation, introspection control</td><td>Horizontal</td><td>3k+ GitHub stars (part of Spring ecosystem)</td><td>Maven / Gradle</td><td>Maven / Gradle (Spring Initializr — annotation-driven, no code generation step)</td><td>Maven Central</td><td>Java Spring teams adding GraphQL, existing Spring Boot microservices, Spring Security integration</td><td>New Go/Python project → use that language. Startup critical → gqlgen</td><td>vs REST (Spring MVC): adds GraphQL query flexibility, higher schema maintenance overhead</td><td>~3s (Spring context startup)</td><td>~200 MB (eclipse-temurin:21-alpine)</td><td>Async reactive (Reactor — Project Loom in JDK 21 for virtual thread option)</td></tr>
+<tr><td class="fw"><a href="https://chillicream.com/docs/hotchocolate">Hot Chocolate</a></td><td><a href="https://github.com/ChilliCream/graphql-platform/releases">14</a></td><td>C#</td><td>MIT</td><td>ChilliCream</td><td><span class="b prod">Production</span></td><td>Async/await (Task) — DataLoader built-in, query plan execution engine</td><td>.NET GC — DataLoader batching reduces per-field heap allocation. Schema pre-compiled</td><td>p99: ~2ms (simple query, no DB)</td><td>~40k queries/s</td><td>Persisted queries, query complexity, depth limits, field-level authorization via middleware</td><td>Horizontal</td><td>5k+ GitHub stars</td><td>NuGet (dotnet CLI)</td><td>dotnet CLI (code-first or SDL-first, no external code generation)</td><td>NuGet.org</td><td>.NET teams, schema stitching / federation, built-in DataLoader, Banana Cake Pop IDE</td><td>JS team → Apollo. Go team → gqlgen. Simple APIs → REST</td><td>vs REST (ASP.NET): flexible queries, higher schema complexity — justified for multi-client APIs</td><td>~500ms</td><td>~80 MB (dotnet:8.0-alpine)</td><td>Async/await (Thread pool — scales to all CPUs)</td></tr>
+<tr><td class="fw"><a href="https://graphql-ruby.org">graphql-ruby</a></td><td><a href="https://github.com/rmosolgo/graphql-ruby/releases">2.3</a></td><td>Ruby</td><td>MIT</td><td>Robert Mosolgo / Community</td><td><span class="b prod">Production</span></td><td>Single-thread (MRI GIL) — async via Dataloader gem, Fiber-based concurrency with Async</td><td>Ruby GC — object heap per request. Rails integration adds ~200 MB baseline</td><td>p99: ~10ms (simple query, Rails + Puma)</td><td>~3k queries/s (MRI GIL)</td><td>Query depth limiting, complexity analysis, persisted queries, field-level authorization</td><td>Horizontal</td><td>5M+ monthly Rubygems downloads</td><td>Bundler / gem</td><td>Bundler (code-first schema DSL, no proto or SDL file)</td><td>RubyGems.org</td><td>Rails apps adding GraphQL, GitHub-style API (GitHub's GraphQL runs on graphql-ruby)</td><td>High throughput → gRPC. Python team → Strawberry. New project → gqlgen or Apollo</td><td>vs REST (Rails): GitHub proved large-scale viability — MRI GIL limits single-process concurrency</td><td>~800ms (Rails boot)</td><td>~160 MB (ruby:3.3-alpine)</td><td>Single-thread (MRI GIL — Puma multi-process for concurrency)</td></tr>
+<tr><td class="fw"><a href="https://async-graphql.github.io/async-graphql">async-graphql</a></td><td><a href="https://github.com/async-graphql/async-graphql/releases">7.0</a></td><td>Rust</td><td>MIT / Apache 2.0</td><td>Community</td><td><span class="b prod">Production</span></td><td>Async (Tokio) — derive macro–driven schema, zero-cost async resolvers</td><td>No GC — deterministic allocation. Derive macros generate schema at compile time, no runtime cost</td><td>p99: ~0.5ms (simple query, no DB)</td><td>~80k queries/s</td><td>Query depth and complexity limits built-in, field-level auth via guards, no runtime reflection</td><td>Horizontal</td><td>3k+ GitHub stars</td><td>cargo</td><td>cargo (derive macros — schema generated from Rust struct annotations at compile time)</td><td>crates.io</td><td>Lowest latency GraphQL, Rust microservices, compile-time schema validation, zero runtime overhead</td><td>Rapid prototyping → Apollo or Yoga. Java/Python team → use their impl</td><td>vs Apollo Server: 10× throughput, no runtime overhead, high Rust compile complexity</td><td>~10ms</td><td>~15 MB (rust:alpine / distroless)</td><td>Async Tokio (multi-threaded work-stealing — scales to all CPUs)</td></tr>
+</tbody></table></div>
+
+<!-- ══════════════════════════════════════
+     CATEGORY 30 — WebSocket
+══════════════════════════════════════ -->
+<h2 id="c30">30 — Protocol — WebSocket <span class="b be">Protocol</span></h2>
+<div class="cat-meta">Full-duplex persistent TCP connection over HTTP Upgrade. Real-time bidirectional messaging. Endpoint: ws://host/ws (wss:// for TLS). RFC 6455. No polling — server pushes events.</div>
+<div class="cat-verified">Data verified: 2026-05-29 · Check releases before adopting</div>
+<div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-websocket" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#websocket" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#protocols" class="doc-badge">15 Versions</a></div>
+<div class="tbl"><table>
+<thead><tr>
+<th>Name</th><th>Version</th><th>Language</th>
+<th title="MIT: use commercially, no conditions. Apache 2.0: preserve notices.">License</th>
+<th title="Corporate-backed or Community.">Maintained by</th>
+<th title="Production = battle-tested at scale, API stable.">Maturity</th>
+<th title="How the server handles many concurrent WebSocket connections.">Concurrency</th>
+<th title="How memory scales with concurrent connections. Each open WS connection holds a goroutine, socket, and frame buffer.">Memory</th>
+<th title="p99 message round-trip latency in ms, same datacenter.">p99 latency</th>
+<th title="Peak concurrent connections per server node. Beyond this: horizontal scaling required.">Max connections</th>
+<th title="TLS (wss://), origin checking, CSRF (WS auth), per-message auth, rate limiting.">Security posture</th>
+<th title="Horizontal via sticky sessions or message broker (Redis pub/sub, NATS). Stateful — harder than REST.">Scaling</th>
+<th title="GitHub stars or downloads.">Ecosystem</th>
+<th>Pkg mgr</th>
+<th title="Build tool.">Build tool</th>
+<th>Registry</th>
+<th>When to use</th><th>When NOT</th>
+<th title="Always stated vs the closest real alternative.">Tradeoff</th>
+<th title="Time from container boot to first connection accepted.">Cold start</th>
+<th title="Base container image size on Alpine Linux.">Container size</th>
+<th title="How CPU cores and threads are utilized.">Thread model</th>
+</tr></thead>
+<tbody>
+<tr><td class="fw"><a href="https://github.com/websockets/ws">ws</a></td><td><a href="https://github.com/websockets/ws/releases">8.17</a></td><td>JS / TS</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Single-thread event loop — each connection is an EventEmitter, message events queued</td><td>GC — V8. ~10 kB per idle connection. 10k connections ≈ 100 MB heap</td><td>p99: ~1ms (same datacenter)</td><td>~10k connections/node (V8 heap limit)</td><td>Origin header check, per-message auth via onmessage handler, rate limiting external</td><td>Horizontal (sticky sessions + Redis pub/sub for broadcast)</td><td>80M+ weekly npm downloads</td><td>npm, pnpm, yarn</td><td>Node.js (no bundler needed)</td><td>npmjs.com</td><td>Node.js real-time apps, chat, live dashboards, collaborative tools</td><td>100k+ connections per node → Go gorilla or Rust tungstenite. Fan-out broadcast → Phoenix Channels</td><td>vs socket.io: lower-level, no auto-reconnect or rooms — add manually or use socket.io</td><td>~300ms</td><td>~150 MB (node:alpine)</td><td>Single-thread event loop (Node.js — cluster for multi-core)</td></tr>
+<tr><td class="fw"><a href="https://github.com/gorilla/websocket">gorilla/websocket</a></td><td><a href="https://github.com/gorilla/websocket/releases">1.5</a></td><td>Go</td><td>BSD-2-Clause</td><td>Community (archived — use nhooyr.io/websocket for new projects)</td><td><span class="b prod">Production</span></td><td>Goroutines — one goroutine per connection reader, one per writer</td><td>GC — Go. ~8 kB per goroutine stack. 100k connections ≈ 1.6 GB (goroutine stack overhead)</td><td>p99: ~0.5ms (same datacenter)</td><td>~100k connections/node</td><td>Origin checking built-in, TLS via net/http, per-message token auth pattern</td><td>Horizontal (sticky sessions + Redis pub/sub)</td><td>20k+ GitHub stars</td><td>go mod</td><td>Go (no bundler)</td><td>pkg.go.dev</td><td>Go real-time services, high connection count, existing gorilla/mux codebase</td><td>New Go projects → nhooyr.io/websocket (gorilla archived). Fan-out at scale → Phoenix</td><td>vs nhooyr.io/websocket: gorilla is archived, still works — nhooyr has cleaner context API</td><td>~20ms</td><td>~15 MB (golang:alpine)</td><td>Goroutines (one per connection — M:N green threads)</td></tr>
+<tr><td class="fw"><a href="https://websockets.readthedocs.io">websockets</a></td><td><a href="https://github.com/python-websockets/websockets/releases">12.0</a></td><td>Python</td><td>BSD-3-Clause</td><td>Community (aaugustin)</td><td><span class="b prod">Production</span></td><td>Async (asyncio) — coroutine per connection, ASGI server compatible</td><td>Python heap — ~15 kB per connection object. GIL limits parallel message handling</td><td>p99: ~2ms (same datacenter)</td><td>~5k connections/node (Python GIL)</td><td>TLS via asyncio SSL, origin check, per-connection token auth handler</td><td>Horizontal (sticky sessions + Redis)</td><td>5M+ monthly PyPI downloads</td><td>pip / uv / poetry</td><td>Python (no bundler)</td><td>PyPI</td><td>Python real-time apps, ML model output streaming, asyncio services</td><td>High connection count → Go gorilla or Rust. Fast broadcast → Phoenix Channels</td><td>vs socket.io (Python): lower-level, no rooms or events — add manually</td><td>~500ms</td><td>~130 MB (python:3.12-alpine)</td><td>Async (asyncio — GIL limits parallel handler coroutines to one CPU)</td></tr>
+<tr><td class="fw"><a href="https://github.com/TooTallNate/Java-WebSocket">Java-WebSocket</a></td><td><a href="https://github.com/TooTallNate/Java-WebSocket/releases">1.5</a></td><td>Java</td><td>MIT</td><td>Community (TooTallNate)</td><td><span class="b prod">Production</span></td><td>Multi-thread — one thread per connection (blocking) or Netty NIO (async)</td><td>JVM heap — ~30 kB per connection thread stack. 1k connections ≈ 30 MB</td><td>p99: ~1ms (same datacenter)</td><td>~20k connections/node</td><td>TLS via Java SSL, origin checking, per-message auth handler</td><td>Horizontal (sticky sessions + Redis / Hazelcast)</td><td>2k+ GitHub stars</td><td>Maven / Gradle</td><td>Maven / Gradle</td><td>Maven Central</td><td>Java apps needing WebSocket, Android WebSocket client, existing Java codebase</td><td>High connection count → Netty raw WebSocket or grpc streaming. Kotlin → prefer Ktor</td><td>vs Spring WebSocket (STOMP): lower-level, simpler setup, no STOMP broker routing</td><td>~2s (JVM startup)</td><td>~200 MB (eclipse-temurin:21-alpine)</td><td>Multi-thread blocking or Netty NIO async</td></tr>
+<tr><td class="fw"><a href="https://hexdocs.pm/phoenix/channels.html">Phoenix Channels</a></td><td><a href="https://github.com/phoenixframework/phoenix/releases">1.7</a></td><td>Elixir</td><td>MIT</td><td>Chris McCord / Community</td><td><span class="b prod">Production</span></td><td>BEAM actor model — each connection is a lightweight process (~1 kB per process)</td><td>BEAM GC — per-process heap, collected independently. 1M connections ≈ 1 GB total</td><td>p99: ~0.3ms (same datacenter)</td><td>~1M connections/node (BEAM actor model — proven at scale)</td><td>TLS via Cowboy, per-channel topic auth, presence tracking built-in</td><td>Horizontal (Phoenix.PubSub — distributed pub/sub across nodes via pg adapter)</td><td>3k+ GitHub stars</td><td>mix</td><td>mix (Elixir build tool)</td><td>Hex.pm</td><td>Massive fan-out broadcast, 1M+ concurrent users, real-time presence, chat at scale</td><td>Small team unfamiliar with Elixir → ws (Node.js) or gorilla. Simple polling → SSE</td><td>vs Node.js ws: 100× more connections per node, Elixir learning curve required</td><td>~500ms (BEAM boot)</td><td>~80 MB (elixir:alpine)</td><td>BEAM actor model (lightweight processes — massively concurrent, preemptive scheduling)</td></tr>
+<tr><td class="fw"><a href="https://github.com/snapview/tokio-tungstenite">tokio-tungstenite</a></td><td><a href="https://github.com/snapview/tokio-tungstenite/releases">0.23</a></td><td>Rust</td><td>MIT</td><td>Community</td><td><span class="b prod">Production</span></td><td>Async (Tokio) — one Tokio task per connection, no goroutine/thread overhead</td><td>No GC — ~4 kB per connection task. 100k connections ≈ 400 MB (all connections active)</td><td>p99: ~0.2ms (same datacenter)</td><td>~500k connections/node</td><td>TLS via rustls (memory-safe), per-message auth via tower middleware</td><td>Horizontal (sticky sessions + NATS / Redis pub/sub)</td><td>3k+ GitHub stars</td><td>cargo</td><td>cargo</td><td>crates.io</td><td>Lowest latency WebSocket, Rust real-time services, game servers, trading systems</td><td>Rapid prototyping → ws (Node.js). Fan-out at scale → Phoenix. Team unfamiliar with Rust</td><td>vs Phoenix: similar connection density, lower latency — no built-in pub/sub or presence</td><td>~10ms</td><td>~15 MB (rust:alpine / distroless)</td><td>Async Tokio (multi-threaded work-stealing — scales to all CPUs)</td></tr>
+<tr><td class="fw"><a href="https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction">SignalR</a></td><td><a href="https://github.com/dotnet/aspnetcore/releases">8.0</a></td><td>C#</td><td>MIT</td><td>Microsoft</td><td><span class="b prod">Production</span></td><td>Async/await (Task) — Hub pattern, transport negotiation (WebSocket → SSE → Long Polling fallback)</td><td>.NET GC — Hub group state per connection. Backplane (Redis/Azure) offloads connection state</td><td>p99: ~1ms (same datacenter, WebSocket transport)</td><td>~20k connections/node</td><td>TLS via Kestrel, ASP.NET Core auth, per-hub method authorization, Azure SignalR Service for 100k+</td><td>Horizontal (Azure SignalR Service backplane — no sticky sessions needed)</td><td>3k+ GitHub stars (part of ASP.NET Core)</td><td>NuGet (dotnet CLI)</td><td>dotnet CLI</td><td>NuGet.org</td><td>.NET real-time apps, Blazor integration, Azure-hosted apps, enterprise with mixed transport needs</td><td>Non-.NET clients at scale → Phoenix or ws. Simple WebSocket → use raw WebSocket</td><td>vs raw WebSocket: auto-reconnect, groups/broadcast, transport fallback — higher abstraction overhead</td><td>~500ms</td><td>~80 MB (dotnet:8.0-alpine)</td><td>Async/await (Thread pool — scales to all CPUs)</td></tr>
+<tr><td class="fw"><a href="https://github.com/faye/faye-websocket-ruby">faye-websocket</a></td><td><a href="https://github.com/faye/faye-websocket-ruby/releases">0.11</a></td><td>Ruby</td><td>Apache 2.0</td><td>James Coglan / Community</td><td><span class="b prod">Production</span></td><td>Single-thread async (EventMachine) — non-blocking event loop for Ruby</td><td>Ruby GC — ~20 kB per connection object. EventMachine event loop heap</td><td>p99: ~2ms (same datacenter)</td><td>~5k connections/node (Ruby EventMachine)</td><td>TLS via EventMachine SSL, origin checking, per-connection auth hook</td><td>Horizontal (sticky sessions + Redis pub/sub via Faye pub/sub layer)</td><td>500k+ monthly Rubygems downloads</td><td>Bundler / gem</td><td>Bundler</td><td>RubyGems.org</td><td>Ruby/Rails real-time features, Action Cable alternative, Rack-compatible WebSocket upgrades</td><td>High connection count → Go gorilla. New Ruby real-time → Action Cable (Rails built-in)</td><td>vs Action Cable: lower-level, Rack-compatible, no Rails dependency — more flexible, less convenient</td><td>~800ms (Rails/EventMachine boot)</td><td>~160 MB (ruby:3.3-alpine)</td><td>Single-thread async (EventMachine — non-blocking Reactor pattern)</td></tr>
 </tbody></table></div>
 
 </main>
