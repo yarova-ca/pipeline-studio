@@ -598,7 +598,8 @@ USER 1001</pre>
             <tr><td>Elixir (21)</td><td><code>debian</code></td><td><code>alpine</code> · <code>fips</code></td><td></td></tr>
             <tr><td>Ruby (22)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td></td></tr>
             <tr><td>PHP (23)</td><td><code>alpine</code></td><td><code>debian</code></td><td>No <code>fips</code> — no FIPS-validated PHP base image exists</td></tr>
-            <tr><td>gRPC node + python (28)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td></td></tr>
+            <tr><td>gRPC — Node.js (28-node-grpc)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = node:22-bookworm-slim · alpine = node:22-alpine · fips = ubi9/nodejs-22-minimal</td></tr>
+            <tr><td>gRPC — Python (28-python-grpc)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = python:3.12-slim · alpine = python:3.12-alpine · fips = ubi9/python-39</td></tr>
           </tbody>
         </table>
         </div>
