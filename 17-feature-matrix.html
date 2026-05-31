@@ -784,31 +784,31 @@ readinessProbe:
     <details class="axis-details" open>
       <summary><span class="axis-num">Designed values — by service group</span></summary>
       <div class="expand-content">
-        <table class="gen-table" style="font-size:11.5px">
-          <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>SDK image when value = <code>sdk</code></th></tr></thead>
+        <table class="gen-table" style="font-size:11px">
+          <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>Image when value = <code>sdk</code></th><th>Image when value = <code>sdk-alpine</code></th></tr></thead>
           <tbody>
-            <tr><td>Node.js (01, 04, 05, 07, 14, 28-node-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code></td></tr>
-            <tr><td>Python (15, 28-python-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>python:3.12-slim-bookworm</code></td></tr>
-            <tr><td>Go (16, 28-go-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>golang:1.23-bookworm</code></td></tr>
-            <tr><td>Java (17, 28-java-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td></tr>
-            <tr><td>Kotlin (18, 28-kotlin-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td></tr>
-            <tr><td>.NET / C# (19, 28-dotnet-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0</code></td></tr>
-            <tr><td>Rust (20, 28-rust-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>rust:1.83-bookworm</code></td></tr>
-            <tr><td>Elixir (21, 30-ws-elixir)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>hexpm/elixir:1.17-erlang-27-debian-bookworm-slim</code></td></tr>
-            <tr><td>Ruby (22, 28-ruby-grpc, 29-graphql-ruby, 30-ws-ruby)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>ruby:3.3-bookworm</code></td></tr>
-            <tr><td>PHP (23, 28-php-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>php:8.3-cli-bookworm</code></td></tr>
-            <tr><td>Swift (24, 28-swift-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>swift:6.0-bookworm</code></td></tr>
-            <tr><td>Scala (25)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>sbtscala/scala-sbt:eclipse-temurin-21_1.10.11_3.6.4</code></td></tr>
-            <tr><td>Clojure (26)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>clojure:tools-deps-bookworm</code></td></tr>
-            <tr><td>C++ (27)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>debian:bookworm</code> (with GCC)</td></tr>
-            <tr><td>nginx static sites (02, 03, 08, 13)</td><td><code>ubuntu</code></td><td><code>node-sdk</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code> (for JS bundling)</td></tr>
+            <tr><td>Node.js (01, 04, 05, 07, 14, 28-node-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code></td><td><code>node:22-alpine</code></td></tr>
+            <tr><td>Python (15, 28-python-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>python:3.12-slim-bookworm</code></td><td><code>python:3.12-alpine</code></td></tr>
+            <tr><td>Go (16, 28-go-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>golang:1.23-bookworm</code></td><td><code>golang:1.23-alpine</code></td></tr>
+            <tr><td>Java (17, 28-java-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td><td><code>eclipse-temurin:21-jdk-alpine</code></td></tr>
+            <tr><td>Kotlin (18, 28-kotlin-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td><td><code>eclipse-temurin:21-jdk-alpine</code></td></tr>
+            <tr><td>.NET / C# (19, 28-dotnet-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0-alpine</code></td></tr>
+            <tr><td>Rust (20, 28-rust-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>rust:1.83-bookworm</code></td><td><code>rust:1.83-alpine</code></td></tr>
+            <tr><td>Elixir (21, 30-ws-elixir)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>hexpm/elixir:1.17-erlang-27-debian-bookworm-slim</code></td><td style="color:var(--text-dim)">❌ N/A — NIFs (C extensions used by many Hex packages) fail to compile on musl</td></tr>
+            <tr><td>Ruby (22, 28-ruby-grpc, 29-graphql-ruby, 30-ws-ruby)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>ruby:3.3-bookworm</code></td><td><code>ruby:3.3-alpine</code></td></tr>
+            <tr><td>PHP (23, 28-php-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>php:8.3-cli-bookworm</code></td><td><code>php:8.3-cli-alpine</code></td></tr>
+            <tr><td>Swift (24, 28-swift-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>swift:6.0-bookworm</code></td><td style="color:var(--text-dim)">❌ N/A — Apple does not publish an official Alpine Swift image</td></tr>
+            <tr><td>Scala (25)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>sbtscala/scala-sbt:eclipse-temurin-21_1.10.11_3.6.4</code></td><td style="color:var(--text-dim)">❌ N/A — sbtscala publishes no Alpine image</td></tr>
+            <tr><td>Clojure (26)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>clojure:tools-deps-bookworm</code></td><td style="color:var(--text-dim)">❌ N/A — no official Clojure Alpine image on Docker Hub</td></tr>
+            <tr><td>C++ (27)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>debian:bookworm</code> (GCC via apt)</td><td style="color:var(--text-dim)">❌ N/A — Alpine uses musl libc; glibc C++ binaries are incompatible</td></tr>
+            <tr><td>nginx static (02, 03, 08, 13)</td><td><code>ubuntu</code></td><td><code>node-sdk</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code> (JS bundling)</td><td><code>node:22-alpine</code> (JS bundling)</td></tr>
           </tbody>
         </table>
         <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px">
-          <code>ubuntu</code> = <code>ubuntu:24.04</code> — installs SDK via apt/rustup/curl scripts. Works for all languages.<br>
-          <code>sdk</code> = official language maintainer's image on Debian bookworm base. Compiler is pre-baked.<br>
-          <code>sdk-alpine</code> = official language image on Alpine base. Smaller build cache. Not available for Elixir, Swift, Scala, Clojure, C++.<br>
-          <code>custom</code> = supply your own image via <code>BUILD_BASE=your-registry/your-image:tag</code> sub-arg. For internal/air-gapped registries.<br>
+          <code>ubuntu</code> = <code>ubuntu:24.04</code> — installs any SDK via apt/rustup/curl. One Dockerfile pattern for all languages.<br>
+          <code>sdk</code> = official language image on Debian bookworm. Compiler pre-baked. No apt-get or curl needed in build stage.<br>
+          <code>sdk-alpine</code> = official language image on Alpine. Smaller layer cache. ❌ Not available for: Elixir · Swift · Scala · Clojure · C++.<br>
+          <code>custom</code> = your own image. Pass <code>BUILD_BASE=your-registry/your-image:tag</code> alongside <code>BUILD_IMAGE=custom</code>.<br>
           <strong>Groups 29 (GraphQL) and 30 (WebSocket):</strong> same BUILD_IMAGE values as the primary language group. 29-graphql-go → same as group 16. 30-ws-ruby → same as group 22. Etc.<br>
           <strong>Version rule:</strong> BUILD_IMAGE version tag must match RUNTIME version tag. See <a href="#axes-detail" onclick="document.querySelector('#axis-runtime-version')?.setAttribute('open','')">RUNTIME axis — Version relationship table</a> for the full version-to-code-repo mapping.
         </p>
