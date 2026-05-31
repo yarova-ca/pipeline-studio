@@ -194,6 +194,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   <a href="#groups">Service groups</a>
   <a href="#priority">Priority tiers</a>
   <a href="#axes-concept">What is an axis</a>
+  <a href="#builtins">Built-in features</a>
   <a href="#axes-detail">The 7 axes</a>
   <a href="#matrix">Group matrix</a>
   <a href="#examples">Real-world examples</a>
@@ -471,6 +472,107 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   All other 6 axes — <span class="s-des">Designed</span> — fully documented and planned, but not yet built into service source code. See <a href="#status">Implementation status</a> for details.
 </div>
 
+<!-- ═══ SECTION 2.5: BUILT-IN FEATURES ═══ -->
+<h2 id="builtins">Built-in features — no <code>--build-arg</code> needed</h2>
+<p class="section-sub">These features exist in every applicable service today. No configuration. No build-arg. Always present.</p>
+
+<div class="axis-card">
+  <div class="axis-card-head">
+    <span class="ac-num" style="background:#1a7f37">✓</span>
+    <span class="ac-name">Health Endpoints</span>
+    <span class="ac-arg">GET /health · /health/live · /health/ready</span>
+    <span class="s-impl">Implemented</span>
+  </div>
+  <div class="axis-card-body">
+    <p class="ac-what">Every server service automatically exposes 3 HTTP health routes from the moment it starts.<br>
+    No build-arg. No configuration. No code to write. They are wired in at the framework layer.</p>
+
+    <div class="ac-why">
+      <strong>Why health endpoints matter</strong><br>
+      Kubernetes uses these routes to manage the container lifecycle.<br>
+      Without them: Kubernetes cannot know if your service is alive or ready for traffic.<br>
+      With them: Kubernetes automatically restarts broken pods and routes traffic correctly.
+    </div>
+
+    <div class="ac-terms">
+      <strong>Liveness probe</strong> = Kubernetes checks this every few seconds. Non-200 → pod is restarted.<br>
+      <strong>Readiness probe</strong> = Kubernetes checks this before sending traffic. Non-200 → pod is taken out of the load balancer rotation.<br>
+      <strong>Probe</strong> = an automated HTTP call Kubernetes makes to the container to check its health.
+    </div>
+
+    <details class="axis-details" open>
+      <summary><span class="axis-num">Routes</span></summary>
+      <div class="expand-content">
+        <div class="tbl-wrap">
+        <table class="gen-table">
+          <thead><tr><th>Route</th><th>Purpose</th><th>Returns</th><th>When Kubernetes uses this</th></tr></thead>
+          <tbody>
+            <tr><td><code>GET /health</code></td><td>Manual health check — call this yourself to verify the service is up</td><td><code>200 {"status":"ok"}</code></td><td>Not a probe target. For human/monitoring use.</td></tr>
+            <tr><td><code>GET /health/live</code></td><td>Kubernetes liveness probe</td><td><code>200 {"status":"ok"}</code></td><td>Non-200 → Kubernetes restarts the pod</td></tr>
+            <tr><td><code>GET /health/ready</code></td><td>Kubernetes readiness probe</td><td><code>200 {"status":"ok"}</code></td><td>Non-200 → pod removed from load balancer rotation</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p><strong>Example:</strong></p>
+        <pre># Test locally — replace 3000 with your service port
+curl http://localhost:3000/health
+# Returns: {"status":"ok"}
+
+curl http://localhost:3000/health/live
+# Returns: {"status":"ok"}
+
+curl http://localhost:3000/health/ready
+# Returns: {"status":"ok"}</pre>
+
+        <p><strong>Kubernetes probe config example (in your deployment YAML):</strong></p>
+        <pre>livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: 3000
+  initialDelaySeconds: 3
+  periodSeconds: 5</pre>
+      </div>
+    </details>
+
+    <details class="axis-details" open>
+      <summary><span class="axis-num">Which services have health endpoints</span></summary>
+      <div class="expand-content">
+        <table class="gen-table" style="font-size:11.5px">
+          <thead><tr><th>Service group</th><th>Has health endpoints?</th><th>Port</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Node.js SSR (01, 07)</td><td>✅ Yes</td><td>3000</td><td>All Next.js, Nuxt, SvelteKit services</td></tr>
+            <tr><td>Node.js API (14)</td><td>✅ Yes</td><td>3000</td><td>Express, Fastify, Hono, NestJS</td></tr>
+            <tr><td>Python (15)</td><td>✅ Yes</td><td>8000</td><td>FastAPI, Django</td></tr>
+            <tr><td>Go (16)</td><td>✅ Yes</td><td>8080</td><td>Gin</td></tr>
+            <tr><td>Java (17)</td><td>✅ Yes</td><td>8080</td><td>Spring Boot</td></tr>
+            <tr><td>Kotlin (18)</td><td>✅ Yes</td><td>8080</td><td>Ktor</td></tr>
+            <tr><td>.NET (19)</td><td>✅ Yes</td><td>8080</td><td>ASP.NET Core</td></tr>
+            <tr><td>Rust (20)</td><td>✅ Yes</td><td>8080</td><td>Axum</td></tr>
+            <tr><td>Elixir (21)</td><td>✅ Yes</td><td>4000</td><td>Phoenix</td></tr>
+            <tr><td>Ruby (22)</td><td>✅ Yes</td><td>3000</td><td>Rails</td></tr>
+            <tr><td>PHP (23)</td><td>✅ Yes</td><td>8080</td><td>Laravel</td></tr>
+            <tr><td>gRPC (28)</td><td>✅ Yes (HTTP)</td><td>8080</td><td>HTTP health on port 8080. gRPC health on port 50051 via <code>grpcurl</code>.</td></tr>
+            <tr><td>nginx static sites (02, 03)</td><td>❌ No app health endpoint</td><td>80</td><td>nginx serves static files — no app process. Use <code>GET /</code> (port 80) for Kubernetes liveness.</td></tr>
+            <tr><td>06-hono-edge</td><td>❌ No</td><td>—</td><td>Cloudflare Workers — no container, no port. Platform-managed health.</td></tr>
+            <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>—</td><td>No server process. Mobile apps do not expose HTTP.</td></tr>
+          </tbody>
+        </table>
+
+        <p style="font-size:11.5px;margin-top:8px"><strong>gRPC health check via grpcurl:</strong></p>
+        <pre>grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</pre>
+      </div>
+    </details>
+  </div>
+</div>
+
 <!-- ═══ SECTION 3: THE 7 AXES EXPLAINED ═══ -->
 <h2 id="axes-detail">The 7 axes — what each one does</h2>
 <p class="section-sub">Each axis is a <code>--build-arg KEY=value</code> flag. Click any axis to expand its values table and example command.</p>
@@ -651,6 +753,21 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
   <div class="axis-card-body">
     <p class="ac-what">Swaps npm for a different JS/TS package manager inside the Dockerfile.</p>
     <p class="ac-what"><strong>Why JS/TS can swap:</strong> npm, pnpm, yarn, and bun all read the same <code>package.json</code> file. The input file does not change — only which tool reads it changes. This is why all four are interchangeable with one <code>--build-arg</code>.</p>
+    <p class="ac-what"><strong>Scope: applies to 14 of the 34 Tier 1 services.</strong> Only JS/TS services with a <code>package.json</code> can swap the package manager.</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service(s)</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>01-nextjs, 01-nuxt, 01-sveltekit, 07-nextjs-app-router</td><td>✅ Yes</td><td>JS/TS, use package.json</td></tr>
+        <tr><td>02-react, 02-vue, 02-angular, 02-svelte, 03-astro</td><td>✅ Yes</td><td>JS/TS, use package.json</td></tr>
+        <tr><td>14-express, 14-fastify, 14-nestjs, 14-hono</td><td>✅ Yes</td><td>JS/TS, use package.json</td></tr>
+        <tr><td>28-node-grpc</td><td>✅ Yes</td><td>JS/TS, uses package.json</td></tr>
+        <tr><td>03-hugo</td><td>❌ No</td><td>Go binary — no package.json exists</td></tr>
+        <tr><td>06-hono-edge</td><td>⭐ Different mechanism</td><td>Uses wrangler.toml — not a Dockerfile ARG. See matrix (⭐ cell).</td></tr>
+        <tr><td>09-react-native, 09-expo</td><td>❌ No</td><td>No Dockerfile. Mobile build — no Docker container.</td></tr>
+        <tr><td>10-flutter, 11-swift-swiftui, 12-kotlin-jetpack</td><td>❌ No</td><td>No Docker. Different language — no package.json.</td></tr>
+        <tr><td>15-27 (non-JS server services), 28-go-grpc, 28-java-grpc, 28-python-grpc</td><td>❌ No</td><td>Each non-JS language has exactly one package manager — nothing to swap.</td></tr>
+      </tbody>
+    </table>
     <div class="ac-terms">
       <strong>Package manager</strong> = tool that downloads and installs code libraries your project depends on.<br>
       <strong>Lock file</strong> = a file that records the exact version of every library installed, so the build is identical every time.
@@ -713,7 +830,22 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Swaps Vite for a different JS/TS bundler inside the Dockerfile. Applies to JS/TS groups only (01–08, 13, 14).</p>
+    <p class="ac-what">Swaps Vite for a different JS/TS bundler inside the Dockerfile. Applies to JS/TS services with Docker.</p>
+    <p class="ac-what"><strong>Does not apply to group 06 (hono-edge):</strong> Cloudflare Workers uses wrangler which mandates esbuild internally. The bundler is fixed by the platform — it cannot be swapped via <code>--build-arg</code>.</p>
+    <p class="ac-what"><strong>Scope: applies to 13 of the 34 Tier 1 services.</strong></p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service(s)</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>01-nextjs, 01-nuxt, 01-sveltekit, 07-nextjs-app-router</td><td>✅ Yes</td><td>JS/TS SSR — code bundled for browser delivery</td></tr>
+        <tr><td>02-react, 02-vue, 02-angular, 02-svelte, 03-astro</td><td>✅ Yes</td><td>JS/TS SPA/static — code bundled for browser</td></tr>
+        <tr><td>14-express, 14-fastify, 14-nestjs, 14-hono</td><td>✅ Yes</td><td>Node.js API — TypeScript compilation step uses bundler</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Wrangler mandates esbuild internally — platform-fixed, cannot swap via build-arg</td></tr>
+        <tr><td>03-hugo</td><td>❌ No</td><td>Hugo is a Go binary — no JS bundling step</td></tr>
+        <tr><td>28-node-grpc</td><td>❌ No</td><td>gRPC protocol layer — compiled TypeScript, not browser-bundled</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No Docker. Mobile build tools (Metro, Xcode, Gradle) are not swappable via this arg.</td></tr>
+        <tr><td>15-23, 28-go-grpc, 28-java-grpc, 28-python-grpc</td><td>❌ No</td><td>Server binaries — no browser bundling concept exists for these languages.</td></tr>
+      </tbody>
+    </table>
     <p class="ac-what"><strong>Why only JS/TS:</strong> Bundling exists because JS/TS code runs in browsers. A browser loads files over the internet — 500 separate file requests is too slow. A bundler combines those 500 files into 2–3 optimized files before deployment.</p>
     <p class="ac-what">Go, Python, Java, Rust, Ruby, PHP, Elixir, Swift, C# — these run on servers, not browsers. They compile to one binary or run source files directly. There are no separate files to bundle. The concept does not exist for these languages.</p>
     <div class="ac-terms">
@@ -767,7 +899,21 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Adds the security code your industry's regulations require — automatically, without you writing it. This includes middleware that runs on every request, response headers, startup checks, and log masking. Applies to all server groups.</p>
+    <p class="ac-what">Adds the security code your industry's regulations require — automatically, without you writing it. This includes middleware that runs on every request, response headers, startup checks, and log masking.</p>
+    <p class="ac-what"><strong>Scope: applies to 20 of the 34 Tier 1 services</strong> — all server services that process HTTP requests.</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service(s)</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>01-nextjs, 01-nuxt, 01-sveltekit, 07-nextjs-app-router</td><td>⭐ Partial</td><td>SSR services have server-side request handlers — compliance middleware can run there. Static assets are not affected.</td></tr>
+        <tr><td>14-express, 14-fastify, 14-nestjs, 14-hono</td><td>✅ Yes</td><td>Pure HTTP API — all requests pass through compliance middleware</td></tr>
+        <tr><td>15-fastapi, 15-django, 16-gin, 17-spring-boot, 18-ktor, 19-aspnet-core, 20-axum</td><td>✅ Yes</td><td>Pure HTTP API server — full middleware stack available</td></tr>
+        <tr><td>21-phoenix, 22-rails, 23-laravel</td><td>✅ Yes</td><td>Full-stack server frameworks — compliance middleware wires into request pipeline</td></tr>
+        <tr><td>28-go-grpc, 28-java-grpc, 28-python-grpc, 28-node-grpc</td><td>✅ Yes</td><td>gRPC interceptors serve the same role as HTTP middleware</td></tr>
+        <tr><td>02-react, 02-vue, 02-angular, 02-svelte, 03-astro, 03-hugo</td><td>❌ No</td><td>nginx serves pre-built static files — no request handler, no place to run middleware</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers — compliance is platform-managed, not added via Dockerfile args</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No server process. No Docker.</td></tr>
+      </tbody>
+    </table>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Your healthcare app must mask patient data in logs (HIPAA). Your payment app must enforce TLS and remove debug endpoints (PCI). Your Canadian app must consent-check every user request (PIPEDA). One arg handles all of this.
@@ -778,7 +924,9 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
       <strong>PHI</strong> (Protected Health Information) = patient data covered by HIPAA law in the US.<br>
       <strong>PCI DSS</strong> = Payment Card Industry Data Security Standard — required for any service that handles card data.
     </div>
-    <div class="ac-constraint">⚠ Rule: <code>COMPLIANCE=fips</code> requires <code>RUNTIME=ubi9</code>. The FIPS crypto module only ships in the UBI9 image. Building with fips + any other RUNTIME will fail with an error message.</div>
+    <div class="ac-constraint">⚠ Rule: <code>COMPLIANCE=fips</code> requires <code>RUNTIME=fips</code>.<br>
+    <code>RUNTIME=fips</code> selects the UBI9 (Red Hat Universal Base Image 9) which includes FIPS-validated OpenSSL.<br>
+    Building with <code>COMPLIANCE=fips</code> + any other <code>RUNTIME</code> value will fail at container startup — the FIPS module is absent in non-UBI9 images.</div>
     <details class="axis-details" open>
       <summary><span class="axis-num">Values</span></summary>
       <div class="expand-content">
@@ -788,7 +936,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
           <tbody>
             <tr><td><code>standard</code> (default)</td><td>Nothing extra — base service only</td><td>Commercial, SaaS, general use</td></tr>
             <tr><td><code>pci</code></td><td>TLS enforced on all routes, PCI audit headers added, debug endpoints removed, plaintext-secrets startup check</td><td>Payments, financial services handling card data</td></tr>
-            <tr><td><code>fips</code></td><td>FIPS-140-2 OpenSSL module active, non-FIPS cipher suites disabled</td><td>US federal government, defense, regulated finance — requires <code>RUNTIME=ubi9</code></td></tr>
+            <tr><td><code>fips</code></td><td>FIPS-140-2 OpenSSL module active, non-FIPS cipher suites disabled</td><td>US federal government, defense, regulated finance — requires <code>RUNTIME=fips</code></td></tr>
             <tr><td><code>hipaa</code></td><td>PHI field masking in all log output, audit trail middleware, verbose error messages disabled</td><td>Healthcare, life sciences, medical devices</td></tr>
             <tr><td><code>cmmc</code></td><td>Full audit log on every request, debug routes removed, no outbound internet at runtime, CUI data handling</td><td>Defense contractors, intelligence-adjacent services</td></tr>
             <tr><td><code>pipeda</code></td><td>Consent check middleware, data residency header (X-Data-Residency: CA), PII masking in logs</td><td>Any Canadian consumer-facing service</td></tr>
@@ -797,7 +945,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
           </tbody>
         </table>
         </div>
-        <pre>docker build --target runtime --build-arg RUNTIME=ubi9 --build-arg COMPLIANCE=fips -t my-service services/16-gin</pre>
+        <pre>docker build --target runtime --build-arg RUNTIME=fips --build-arg COMPLIANCE=fips -t my-service services/16-gin</pre>
       </div>
     </details>
   </div>
@@ -812,7 +960,17 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Adds code that reports what your service is doing in production — how fast requests are, how many errors occur, where time is being spent, and what path each request took through your system. Applies to all server groups.</p>
+    <p class="ac-what">Adds code that reports what your service is doing in production — how fast requests are, how many errors occur, where time is being spent, and what path each request took through your system.</p>
+    <p class="ac-what"><strong>Scope: applies to 20 of the 34 Tier 1 services</strong> — all server services with HTTP request handlers. Same exclusion set as COMPLIANCE.</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service group</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>01, 07 (SSR) + 14–23 (API servers) + 28 (gRPC)</td><td>✅ Yes / ⭐ Partial for SSR</td><td>Server has a request pipeline — instrumentation hooks into it</td></tr>
+        <tr><td>02, 03 (nginx static sites)</td><td>❌ No</td><td>nginx serves static files — no application code to instrument</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers — observability via Cloudflare's platform, not via this arg</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No server. No Docker. Mobile apps use platform-specific observability (Firebase, Datadog mobile SDK).</td></tr>
+      </tbody>
+    </table>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Without observability, when something breaks in production you are blind. You cannot tell if it is slow, erroring, or completely down without external monitoring. With <code>otel</code>, a dashboard like Grafana shows you request rates, latencies, and error traces in real time.
@@ -852,7 +1010,19 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Adds a verification gate at the entry point of your API. Every HTTP request must prove who it is before it reaches your route handler. Unauthenticated requests are rejected with 401 Unauthorized before any business logic runs. Applies to all server groups.</p>
+    <p class="ac-what">Adds a verification gate at the entry point of your API. Every HTTP request must prove who it is before it reaches your route handler. Unauthenticated requests are rejected with 401 Unauthorized before any business logic runs.</p>
+    <p class="ac-what"><strong>Scope: applies to 20 of the 34 Tier 1 services</strong> — all server services with a request entry point. Same exclusion set as COMPLIANCE.</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service group</th><th>Applies?</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>14–23 (pure API servers)</td><td>✅ Yes</td><td>Auth middleware gates all routes</td></tr>
+        <tr><td>28-go-grpc, 28-java-grpc, 28-python-grpc, 28-node-grpc</td><td>✅ Yes</td><td>gRPC interceptors handle auth on every RPC call</td></tr>
+        <tr><td>01, 07 (SSR — Next.js, Nuxt, SvelteKit)</td><td>⭐ Partial</td><td>Auth applies to API routes and server actions. Static page renders and assets are not auth-gated by default.</td></tr>
+        <tr><td>02, 03 (nginx static sites)</td><td>❌ No</td><td>nginx serves static files — no auth layer can run at the application level</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers — auth is wired differently (Cloudflare Access or JWT in worker code). Not a Dockerfile arg.</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No server. No Docker. Mobile apps call authenticated APIs — they don't serve them.</td></tr>
+      </tbody>
+    </table>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Without auth, anyone who knows your URL can call your API — read data, trigger actions, cause damage.
@@ -865,7 +1035,9 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
       <strong>OIDC</strong> (OpenID Connect) = identity layer on top of OAuth2. Returns a verified user identity, not just an access token.<br>
       <strong>mTLS</strong> (Mutual TLS) = both the client and server present certificates. Client must have a specific cert issued by your CA. Used in defense and zero-trust architectures.
     </div>
-    <div class="ac-constraint">⚠ Rule: <code>AUTH=mtls</code> requires <code>RUNTIME=ubi9</code> or <code>RUNTIME=chainguard</code>. mTLS requires FIPS-grade TLS libraries that only ship in those base images.</div>
+    <div class="ac-constraint">⚠ Rule: <code>AUTH=mtls</code> requires <code>RUNTIME=fips</code>.<br>
+    mTLS requires FIPS-grade TLS libraries. <code>RUNTIME=fips</code> selects the UBI9 (Red Hat) base image which includes them.<br>
+    Using <code>AUTH=mtls</code> with any other RUNTIME value will fail — the required TLS libraries are absent.</div>
     <details class="axis-details" open>
       <summary><span class="axis-num">Values</span></summary>
       <div class="expand-content">
@@ -878,7 +1050,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
             <tr><td><code>oauth2</code></td><td>OAuth2 client credentials flow — machine-to-machine API access</td><td>RFC 6749</td></tr>
             <tr><td><code>oidc</code></td><td>OpenID Connect — SSO with external identity provider (Okta, Auth0, Keycloak, Azure AD)</td><td>OpenID Core 1.0</td></tr>
             <tr><td><code>apikey</code></td><td>API key header validation — checks <code>X-API-Key</code> header on every request</td><td>Custom</td></tr>
-            <tr><td><code>mtls</code></td><td>Mutual TLS — client certificate required on every request. Requires ubi9 or chainguard base.</td><td>RFC 8705</td></tr>
+            <tr><td><code>mtls</code></td><td>Mutual TLS — client certificate required on every request. Requires <code>RUNTIME=fips</code> (UBI9 base).</td><td>RFC 8705</td></tr>
           </tbody>
         </table>
         </div>
@@ -897,7 +1069,21 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Adds a database connection library and a starter schema to your service so it can read and write to a database. Each language group gets the idiomatic database library for that language. Applies to pure API server groups 14–27 only.</p>
+    <p class="ac-what">Adds a database connection library and a starter schema to your service so it can read and write to a database. Each language group gets the idiomatic database library for that language.</p>
+    <p class="ac-what"><strong>Scope: applies to 14 of the 34 Tier 1 services</strong> — pure API server services only (groups 14–23).</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service(s)</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>14-express, 14-fastify, 14-nestjs, 14-hono</td><td>✅ Yes</td><td>Pure API — data ownership lives here</td></tr>
+        <tr><td>15-fastapi, 15-django, 16-gin, 17-spring-boot, 18-ktor, 19-aspnet-core, 20-axum</td><td>✅ Yes</td><td>Pure API — data ownership lives here</td></tr>
+        <tr><td>21-phoenix, 22-rails, 23-laravel</td><td>✅ Yes</td><td>Full-stack servers — data layer is central to all three frameworks</td></tr>
+        <tr><td>01, 07 (SSR)</td><td>❌ No</td><td>SSR is a rendering layer — it calls APIs rather than owning data. Add ORM to the API service behind it.</td></tr>
+        <tr><td>02, 03 (nginx static sites)</td><td>❌ No</td><td>Static files — no server process, no database connection possible</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers — edge runtime. Connects to D1/KV/R2 via Cloudflare bindings, not via ORM</td></tr>
+        <tr><td>28-grpc, 29-graphql, 30-websocket</td><td>❌ No</td><td>Protocol/transport layer — these pass messages. The data-owning API service behind them gets the ORM.</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No server. No Docker.</td></tr>
+      </tbody>
+    </table>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Without this axis, your service has no database. You would manually install the right library, write the connection config, and create a starter schema.
@@ -1270,19 +1456,19 @@ docker run --rm -p 8080:8080 my-service</pre>
 <div class="example-block">
   <div class="example-head">
     <span class="ex-num">3</span>
-    <span class="ex-scenario">Hardened production Node.js API — zero CVEs + SOC 2 + JWT + OTel + Prisma</span>
+    <span class="ex-scenario">Hardened production Node.js API — slim base + SOC 2 + JWT + OTel + Prisma</span>
   </div>
   <div class="example-body">
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Scenario: SaaS platform deploying to production. Security team requires zero CVEs. SOC 2 audit required. Full observability and database needed.</p>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Scenario: SaaS platform deploying to production. Reduced attack surface required. SOC 2 audit required. Full observability and database needed.</p>
 <pre>docker build --target runtime \
-  --build-arg RUNTIME=chainguard \
+  --build-arg RUNTIME=slim \
   --build-arg COMPLIANCE=soc2 \
   --build-arg AUTH=jwt \
   --build-arg OBSERVABILITY=otel \
   --build-arg ORM=prisma \
   -t prod-api services/14-express</pre>
     <ul class="ex-arg-list">
-      <li><code>RUNTIME=chainguard</code> <span class="ex-what">→ zero CVEs in base image · supply-chain signed · SBOM generated automatically</span></li>
+      <li><code>RUNTIME=slim</code> <span class="ex-what">→ node:22-slim base · no shell in running container · smaller attack surface</span></li>
       <li><code>COMPLIANCE=soc2</code> <span class="ex-what">→ immutable audit log · access control middleware · debug mode disabled</span></li>
       <li><code>AUTH=jwt</code> <span class="ex-what">→ Bearer token validation on all routes</span></li>
       <li><code>OBSERVABILITY=otel</code> <span class="ex-what">→ full traces, metrics, and logs via OpenTelemetry</span></li>
@@ -1290,7 +1476,7 @@ docker run --rm -p 8080:8080 my-service</pre>
     </ul>
     <div class="ex-result">
       <strong>What the running service has</strong>
-      Chainguard zero-CVE base · SOC 2 audit log · JWT auth · OpenTelemetry instrumentation · Prisma + database
+      slim no-shell base · SOC 2 audit log · JWT auth · OpenTelemetry instrumentation · Prisma + database
     </div>
   </div>
 </div>
@@ -1301,16 +1487,16 @@ docker run --rm -p 8080:8080 my-service</pre>
     <span class="ex-scenario">Federal/defense Java API — FIPS crypto + mTLS client certificates</span>
   </div>
   <div class="example-body">
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Scenario: Building a service for a US defense contractor. FIPS-validated cryptography required. Client certificate authentication required for every call. Note: FIPS and ubi9 must be used together.</p>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Scenario: Building a service for a US defense contractor. FIPS-validated cryptography required. Client certificate authentication required for every call. Note: <code>RUNTIME=fips</code> is mandatory when using <code>COMPLIANCE=fips</code> or <code>AUTH=mtls</code>.</p>
 <pre>docker build --target runtime \
-  --build-arg RUNTIME=ubi9 \
+  --build-arg RUNTIME=fips \
   --build-arg COMPLIANCE=fips \
   --build-arg AUTH=mtls \
-  -t defense-api services/17-spring</pre>
+  -t defense-api services/17-spring-boot</pre>
     <ul class="ex-arg-list">
-      <li><code>RUNTIME=ubi9</code> <span class="ex-what">→ Red Hat UBI9 base · required for FIPS — using <code>fips</code> without <code>ubi9</code> = build error</span></li>
+      <li><code>RUNTIME=fips</code> <span class="ex-what">→ Red Hat UBI9 base image · includes FIPS-140-2 validated OpenSSL · required for both COMPLIANCE=fips and AUTH=mtls</span></li>
       <li><code>COMPLIANCE=fips</code> <span class="ex-what">→ FIPS-140-2 OpenSSL module active · non-FIPS cipher suites disabled at startup</span></li>
-      <li><code>AUTH=mtls</code> <span class="ex-what">→ client certificate required on every request · requests without a valid cert → 401 · requires ubi9 or chainguard base</span></li>
+      <li><code>AUTH=mtls</code> <span class="ex-what">→ client certificate required on every request · requests without a valid cert → 401</span></li>
     </ul>
     <div class="ex-result">
       <strong>What the running service has</strong>
@@ -1321,14 +1507,21 @@ docker run --rm -p 8080:8080 my-service</pre>
 
 <!-- ═══ SECTION 6: IMPLEMENTATION STATUS ═══ -->
 <h2 id="status">Implementation status</h2>
-<p class="section-sub">Which axes are live today vs coming soon.</p>
+<p class="section-sub">What works today vs what is documented but not yet built.</p>
 
 <div class="status-grid">
   <div class="status-row-item">
     <div class="sr-chip-col"><span class="s-impl">Implemented</span></div>
     <div>
-      <div class="sr-axis">RUNTIME — Runtime variant</div>
-      <div class="sr-desc">Code exists in every applicable service today. You can use <code>--build-arg RUNTIME=chainguard</code> right now and it works.</div>
+      <div class="sr-axis">Health Endpoints — built-in feature (no <code>--build-arg</code> needed)</div>
+      <div class="sr-desc"><code>GET /health</code>, <code>GET /health/live</code>, <code>GET /health/ready</code> — present on every server service today. No configuration. See <a href="#builtins">Built-in features</a> for details.</div>
+    </div>
+  </div>
+  <div class="status-row-item">
+    <div class="sr-chip-col"><span class="s-impl">Implemented</span></div>
+    <div>
+      <div class="sr-axis">RUNTIME — Runtime variant (<code>--build-arg RUNTIME=</code>)</div>
+      <div class="sr-desc">Code exists in every applicable Tier 1 Docker service today. Use <code>--build-arg RUNTIME=alpine</code>, <code>RUNTIME=fips</code>, <code>RUNTIME=slim</code>, <code>RUNTIME=scratch</code>, <code>RUNTIME=distroless</code>, <code>RUNTIME=temurin</code>, or <code>RUNTIME=debian</code> right now.</div>
     </div>
   </div>
   <div class="status-row-item">
