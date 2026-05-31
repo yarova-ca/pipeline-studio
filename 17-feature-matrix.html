@@ -548,21 +548,27 @@ readinessProbe:
         <table class="gen-table" style="font-size:11.5px">
           <thead><tr><th>Service group</th><th>Has health endpoints?</th><th>Port</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td>Node.js SSR (01, 07)</td><td>✅ Yes</td><td>3000</td><td>All Next.js, Nuxt, SvelteKit services</td></tr>
-            <tr><td>Node.js API (14)</td><td>✅ Yes</td><td>3000</td><td>Express, Fastify, Hono, NestJS</td></tr>
-            <tr><td>Python (15)</td><td>✅ Yes</td><td>8000</td><td>FastAPI, Django</td></tr>
-            <tr><td>Go (16)</td><td>✅ Yes</td><td>8080</td><td>Gin</td></tr>
-            <tr><td>Java (17)</td><td>✅ Yes</td><td>8080</td><td>Spring Boot</td></tr>
-            <tr><td>Kotlin (18)</td><td>✅ Yes</td><td>8080</td><td>Ktor</td></tr>
-            <tr><td>.NET (19)</td><td>✅ Yes</td><td>8080</td><td>ASP.NET Core</td></tr>
-            <tr><td>Rust (20)</td><td>✅ Yes</td><td>8080</td><td>Axum</td></tr>
+            <tr><td>SSR + Island + Resumability (01, 04, 05, 07)</td><td>✅ Yes</td><td>3000 / 8000</td><td>Next.js, Nuxt, SvelteKit, Astro Islands, Qwik, Fresh (Deno = 8000)</td></tr>
+            <tr><td>Node.js API (14)</td><td>✅ Yes</td><td>3000 / 8000</td><td>Express, Fastify, Hono, NestJS = 3000. Deno = 8000.</td></tr>
+            <tr><td>Python (15)</td><td>✅ Yes</td><td>8080</td><td>FastAPI, Django, Flask, Starlette</td></tr>
+            <tr><td>Go (16)</td><td>✅ Yes</td><td>8080</td><td>Gin, Chi, Echo, Fiber</td></tr>
+            <tr><td>Java (17)</td><td>✅ Yes</td><td>8080</td><td>Spring Boot, Micronaut, Quarkus</td></tr>
+            <tr><td>Kotlin (18)</td><td>✅ Yes</td><td>8080</td><td>Ktor, Spring Boot (Kotlin)</td></tr>
+            <tr><td>.NET (19)</td><td>✅ Yes</td><td>8080</td><td>ASP.NET Core, Minimal APIs</td></tr>
+            <tr><td>Rust (20)</td><td>✅ Yes</td><td>8080</td><td>Axum, Actix-web</td></tr>
             <tr><td>Elixir (21)</td><td>✅ Yes</td><td>4000</td><td>Phoenix</td></tr>
-            <tr><td>Ruby (22)</td><td>✅ Yes</td><td>3000</td><td>Rails</td></tr>
-            <tr><td>PHP (23)</td><td>✅ Yes</td><td>8080</td><td>Laravel</td></tr>
-            <tr><td>gRPC (28)</td><td>✅ Yes (HTTP)</td><td>8080</td><td>HTTP health on port 8080. gRPC health on port 50051 via <code>grpcurl</code>.</td></tr>
-            <tr><td>nginx static sites (02, 03)</td><td>❌ No app health endpoint</td><td>80</td><td>nginx serves static files — no app process. Use <code>GET /</code> (port 80) for Kubernetes liveness.</td></tr>
-            <tr><td>06-hono-edge</td><td>❌ No</td><td>—</td><td>Cloudflare Workers — no container, no port. Platform-managed health.</td></tr>
-            <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>—</td><td>No server process. Mobile apps do not expose HTTP.</td></tr>
+            <tr><td>Ruby (22)</td><td>✅ Yes</td><td>3000</td><td>Rails, Sinatra</td></tr>
+            <tr><td>PHP (23)</td><td>✅ Yes</td><td>9000</td><td>php-fpm port. Laravel, Slim, Symfony. Needs nginx sidecar for HTTP.</td></tr>
+            <tr><td>Swift (24)</td><td>✅ Yes</td><td>8080</td><td>Vapor, Hummingbird</td></tr>
+            <tr><td>Scala (25)</td><td>✅ Yes</td><td>8080 / 9000</td><td>http4s = 8080. Play Framework = 9000.</td></tr>
+            <tr><td>Clojure (26)</td><td>✅ Yes</td><td>8080</td><td>Pedestal, Ring</td></tr>
+            <tr><td>C++ (27)</td><td>✅ Yes</td><td>8080</td><td>Crow, Drogon</td></tr>
+            <tr><td>gRPC (28)</td><td>✅ Yes (HTTP + gRPC)</td><td>8080 / 50051</td><td>HTTP health on port 8080. gRPC health on port 50051 via <code>grpcurl</code>.</td></tr>
+            <tr><td>GraphQL (29)</td><td>✅ Yes</td><td>4000 / 8080 / 8000</td><td>Apollo/Yoga = 4000. graphql-ruby = 4567. Strawberry = 8000. Others = 8080.</td></tr>
+            <tr><td>WebSocket (30)</td><td>✅ Yes</td><td>8080 / 9292</td><td>All = 8080 except 30-ws-ruby = 9292.</td></tr>
+            <tr><td>nginx static sites (02, 03, 08, 13)</td><td>❌ No app health endpoint</td><td>80</td><td>nginx serves static files — no app process. Use <code>GET /</code> (port 80) for Kubernetes liveness.</td></tr>
+            <tr><td>Edge (06)</td><td>❌ No Docker</td><td>—</td><td>Cloudflare Workers — no container, no port. Platform-managed health.</td></tr>
+            <tr><td>Mobile / Native (09–12)</td><td>❌ No server</td><td>—</td><td>No server process. Builds to app bundle. No HTTP.</td></tr>
           </tbody>
         </table>
 
