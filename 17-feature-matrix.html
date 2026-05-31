@@ -504,11 +504,61 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
       <summary><span class="axis-num">How it works inside every Dockerfile (3 steps)</span></summary>
       <div class="expand-content">
         <p><strong>Step 1 — Build stage creates a minimal user file.</strong></p>
+
+        <p><strong>Background: why does USER 1001 need a file?</strong></p>
+        <p>Every Linux system has a file at <code>/etc/passwd</code>.<br>
+        That file maps usernames to user IDs (UIDs).<br>
+        When a container starts and hits <code>USER 1001</code>, Docker looks up UID 1001 in <code>/etc/passwd</code>.</p>
+
+        <p>When <code>/etc/passwd</code> has the entry for UID 1001: container starts, app runs as that user.<br>
+        When <code>/etc/passwd</code> is missing the entry: container refuses to start.</p>
+
+        <p><strong>The problem: four image types, four incompatible tools</strong></p>
+        <table class="gen-table" style="font-size:11.5px">
+          <thead><tr><th>Base image type</th><th>How to add a user</th><th>Has a shell?</th><th>Can run RUN commands?</th></tr></thead>
+          <tbody>
+            <tr><td>Alpine</td><td><code>adduser -S -G app app</code></td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Debian / slim</td><td><code>useradd -u 1001 -r -g app app</code></td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td><strong>scratch</strong> (empty image)</td><td>No command exists</td><td>❌ No shell</td><td>❌ No</td></tr>
+            <tr><td><strong>distroless</strong> (no shell)</td><td>No command exists</td><td>❌ No shell</td><td>❌ No</td></tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:10px"><code>scratch</code> = a completely empty image. Zero OS. Zero tools. Only what you <code>COPY</code> into it.<br>
+        <code>distroless</code> = an image with no shell and no package manager — only the language runtime.<br>
+        Both accept <code>COPY</code>. Neither accepts <code>RUN</code>. <code>RUN</code> requires a shell to execute.</p>
+
+        <p><strong>The solution: make the file in the build stage, COPY it everywhere</strong></p>
+        <p>The build stage runs on <code>ubuntu:24.04</code>, which has a full shell.<br>
+        The <code>printf</code> command writes a three-line text file to <code>/tmp/app-passwd</code>.<br>
+        Each line is one user entry in the standard Unix passwd format.</p>
+
         <pre>RUN printf 'root:x:0:0:root:/root:/bin/sh\n\
 nobody:x:65534:65534:nobody:/nonexistent:/bin/false\n\
 app:x:1001:1001::/home/app:/sbin/nologin\n' &gt; /tmp/app-passwd \
  &amp;&amp; printf 'root:x:0:\nnobody:x:65534:\napp:x:1001:\n' &gt; /tmp/app-group</pre>
-        <p>Why: different base images use incompatible commands to create users — <code>adduser</code> on Alpine, <code>useradd</code> on Debian, and <em>no command at all</em> on <code>scratch</code> or <code>distroless</code> (which have no shell). Creating the user file once in the build stage and copying it into any runtime image solves all four cases with one mechanism.</p>
+
+        <p><strong>What each field in an <code>/etc/passwd</code> line means:</strong></p>
+        <table class="gen-table" style="font-size:11.5px">
+          <thead><tr><th>Line</th><th>name</th><th>password</th><th>UID</th><th>GID</th><th>comment</th><th>home</th><th>shell</th></tr></thead>
+          <tbody>
+            <tr><td><code>root:x:0:0:root:/root:/bin/sh</code></td><td>root</td><td>x (in shadow)</td><td>0</td><td>0</td><td>root</td><td>/root</td><td>/bin/sh</td></tr>
+            <tr><td><code>nobody:x:65534:65534:nobody:/nonexistent:/bin/false</code></td><td>nobody</td><td>x</td><td>65534</td><td>65534</td><td>nobody</td><td>/nonexistent</td><td>/bin/false</td></tr>
+            <tr><td><code>app:x:1001:1001::/home/app:/sbin/nologin</code></td><td>app</td><td>x</td><td>1001</td><td>1001</td><td>—</td><td>/home/app</td><td>/sbin/nologin</td></tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:8px"><code>/sbin/nologin</code> as the shell = this user cannot log in interactively.<br>
+        This is intentional — a service user must not be loginable.<br>
+        The container process runs as UID 1001 but no human can SSH in as that user.</p>
+
+        <p>Later, in the runtime stage:<br>
+        <code>COPY --from=build /tmp/app-passwd /etc/passwd</code> writes the file directly into the image layer.<br>
+        No shell needed. No <code>adduser</code> needed. Works in scratch. Works in distroless.</p>
+
+        <p>The <code>/etc/group</code> file does the same thing for group IDs.<br>
+        <code>app:x:1001:</code> = group named <code>app</code>, GID 1001, no extra members.<br>
+        Some tools (nginx, Java) log warnings if the group entry is missing.</p>
 
         <p><strong>Step 2 — All base image options defined as named stages.</strong></p>
         <pre># Node.js example — each language has its own set
