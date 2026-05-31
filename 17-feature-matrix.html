@@ -738,14 +738,97 @@ readinessProbe:
   </div>
 </div>
 
-<!-- ═══ SECTION 3: THE 7 AXES EXPLAINED ═══ -->
+<!-- ═══ SECTION 3: THE 8 AXES EXPLAINED ═══ -->
 <h2 id="axes-detail">The 8 axes — what each one does</h2>
 <p class="section-sub">Each axis is a <code>--build-arg KEY=value</code> flag. Click any axis to expand its values table and example command.</p>
 
-<!-- AXIS 1: RUNTIME -->
+<!-- AXIS 1: BUILD_IMAGE -->
 <div class="axis-card">
   <div class="axis-card-head">
     <span class="ac-num">1</span>
+    <span class="ac-name">Build Stage Image</span>
+    <span class="ac-arg">BUILD_IMAGE</span>
+    <span class="s-des">Designed</span>
+  </div>
+  <div class="axis-card-body">
+    <p class="ac-what">Swaps the base image used in the compilation stage of the Dockerfile. The build stage runs the compiler, SDK, and package manager — then is discarded. Only the runtime stage ships to production. This axis controls the supply chain trust boundary at build time.</p>
+    <p class="ac-what"><strong>Why it matters:</strong> A compromised build image can inject malicious code into your binary before the runtime stage strips everything else. All other axes plus health endpoints protect the running container — this axis protects what creates it.</p>
+    <p class="ac-what"><strong>Scope:</strong> Applies to all 99 services that have a Dockerfile. Does not apply to group 06 (Cloudflare Workers — no Dockerfile) and groups 09–12 (mobile/native — no Docker).</p>
+    <div class="ac-why">
+      <strong>Why you'd use this</strong><br>
+      Use <code>sdk</code> when your security team requires using the official language maintainer's image (not Ubuntu + apt install).<br>
+      Use <code>sdk-alpine</code> to reduce the build stage size — faster CI, smaller layer cache.<br>
+      Use <code>custom</code> to pull from your internal registry instead of Docker Hub (air-gapped environments, vetted internal images).
+    </div>
+    <div class="ac-terms">
+      <strong>Supply chain attack</strong> = injecting malicious code into software during the build process, before the final image is assembled.<br>
+      <strong>Internal registry</strong> = your organization's private image store — images scanned, approved, and hosted internally.<br>
+      <strong>SBOM</strong> (Software Bill of Materials) = signed list of every dependency in the image — generated automatically by some base images.
+    </div>
+    <details class="axis-details" open>
+      <summary><span class="axis-num">Current hardcoded values — what exists today (before this axis is implemented)</span></summary>
+      <div class="expand-content">
+        <p>Today the build stage image is hardcoded in every Dockerfile. No <code>--build-arg</code> exists yet.</p>
+        <table class="gen-table" style="font-size:11.5px">
+          <thead><tr><th>Service group(s)</th><th>Current build stage image</th><th>Why this image was chosen</th></tr></thead>
+          <tbody>
+            <tr><td>All non-gRPC Docker groups (01–03, 07, 14–23)</td><td><code>ubuntu:24.04</code></td><td>Universal base — can install any SDK via apt. One Dockerfile pattern covers all languages.</td></tr>
+            <tr><td>28-node-grpc</td><td><code>node:22-bookworm-slim</code></td><td>Node.js SDK pre-baked — no apt install needed. gRPC services use language-specific SDK images.</td></tr>
+            <tr><td>28-python-grpc</td><td><code>python:3.12-slim-bookworm</code></td><td>Python SDK pre-baked.</td></tr>
+            <tr><td>28-go-grpc</td><td><code>golang:1.22-bookworm</code></td><td>Go SDK pre-baked.</td></tr>
+            <tr><td>28-java-grpc</td><td><code>eclipse-temurin:21-jdk-bookworm</code></td><td>JDK pre-baked.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <details class="axis-details" open>
+      <summary><span class="axis-num">Designed values — by service group</span></summary>
+      <div class="expand-content">
+        <table class="gen-table" style="font-size:11.5px">
+          <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>SDK image when value = <code>sdk</code></th></tr></thead>
+          <tbody>
+            <tr><td>Node.js (01, 07, 14, 28-node-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code></td></tr>
+            <tr><td>Python (15, 28-python-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>python:3.12-slim-bookworm</code></td></tr>
+            <tr><td>Go (16, 28-go-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>golang:1.23-bookworm</code></td></tr>
+            <tr><td>Java (17, 28-java-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td></tr>
+            <tr><td>Kotlin (18, 28-kotlin-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td></tr>
+            <tr><td>.NET / C# (19, 28-dotnet-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0</code></td></tr>
+            <tr><td>Rust (20, 28-rust-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>rust:1.78-bookworm</code></td></tr>
+            <tr><td>Elixir (21, 30-ws-elixir)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>hexpm/elixir:1.17-erlang-27-debian-bookworm-slim</code></td></tr>
+            <tr><td>Ruby (22, 28-ruby-grpc, 29-graphql-ruby, 30-ws-ruby)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>ruby:3.3-bookworm</code></td></tr>
+            <tr><td>PHP (23, 28-php-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>php:8.3-cli-bookworm</code></td></tr>
+            <tr><td>Swift (24, 28-swift-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>swift:6.0-bookworm</code></td></tr>
+            <tr><td>Scala (25)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>sbtscala/scala-sbt:eclipse-temurin-21_1.10.11_3.6.4</code></td></tr>
+            <tr><td>Clojure (26)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>clojure:tools-deps-bookworm</code></td></tr>
+            <tr><td>C++ (27)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>debian:bookworm</code> (with GCC)</td></tr>
+            <tr><td>nginx static sites (02, 03, 08, 13)</td><td><code>ubuntu</code></td><td><code>node-sdk</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code> (for JS bundling)</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px">
+          <code>ubuntu</code> = <code>ubuntu:24.04</code> — installs SDK via apt/rustup/curl scripts. Works for all languages.<br>
+          <code>sdk</code> = official language maintainer's image on Debian bookworm base. Compiler is pre-baked.<br>
+          <code>sdk-alpine</code> = official language image on Alpine base. Smaller build cache. Not available for .NET, Elixir, Swift, Scala, Clojure.<br>
+          <code>custom</code> = supply your own image via <code>BUILD_BASE=your-registry/your-image:tag</code> sub-arg. For internal/air-gapped registries.
+        </p>
+        <pre># Example — use official Go SDK image for build (instead of ubuntu)
+docker build --target runtime \
+  --build-arg BUILD_IMAGE=sdk \
+  -t my-service services/16-gin
+
+# Example — use internal registry image for build (air-gapped environment)
+docker build --target runtime \
+  --build-arg BUILD_IMAGE=custom \
+  --build-arg BUILD_BASE=registry.internal.corp/go-builder:1.23 \
+  -t my-service services/16-gin</pre>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- AXIS 2: RUNTIME -->
+<div class="axis-card">
+  <div class="axis-card-head">
+    <span class="ac-num">2</span>
     <span class="ac-name">Runtime Variant</span>
     <span class="ac-arg">RUNTIME</span>
     <span class="s-impl">Implemented</span>
@@ -907,10 +990,10 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
   </div>
 </div>
 
-<!-- AXIS 2: PKG_MANAGER -->
+<!-- AXIS 3: PKG_MANAGER -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">2</span>
+    <span class="ac-num">3</span>
     <span class="ac-name">Package Manager Swap</span>
     <span class="ac-arg">PKG_MANAGER</span>
     <span class="s-des">Designed</span>
@@ -986,10 +1069,10 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
   </div>
 </div>
 
-<!-- AXIS 3: BUILD_TOOL -->
+<!-- AXIS 4: BUILD_TOOL -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">3</span>
+    <span class="ac-num">4</span>
     <span class="ac-name">Build Tool Swap</span>
     <span class="ac-arg">BUILD_TOOL</span>
     <span class="s-des">Designed</span>
@@ -1055,10 +1138,10 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
   </div>
 </div>
 
-<!-- AXIS 4: COMPLIANCE -->
+<!-- AXIS 5: COMPLIANCE -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">4</span>
+    <span class="ac-num">5</span>
     <span class="ac-name">Compliance Preset</span>
     <span class="ac-arg">COMPLIANCE</span>
     <span class="s-des">Designed</span>
@@ -1116,10 +1199,10 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
   </div>
 </div>
 
-<!-- AXIS 5: OBSERVABILITY -->
+<!-- AXIS 6: OBSERVABILITY -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">5</span>
+    <span class="ac-num">6</span>
     <span class="ac-name">Observability Stack</span>
     <span class="ac-arg">OBSERVABILITY</span>
     <span class="s-des">Designed</span>
@@ -1166,10 +1249,10 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
   </div>
 </div>
 
-<!-- AXIS 6: AUTH -->
+<!-- AXIS 7: AUTH -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">6</span>
+    <span class="ac-num">7</span>
     <span class="ac-name">Auth Strategy</span>
     <span class="ac-arg">AUTH</span>
     <span class="s-des">Designed</span>
@@ -1225,10 +1308,10 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
   </div>
 </div>
 
-<!-- AXIS 7: ORM -->
+<!-- AXIS 8: ORM -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">7</span>
+    <span class="ac-num">8</span>
     <span class="ac-name">ORM / Database Layer</span>
     <span class="ac-arg">ORM</span>
     <span class="s-des">Designed</span>
@@ -1287,88 +1370,6 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
   </div>
 </div>
 
-<!-- AXIS 8: BUILD_IMAGE -->
-<div class="axis-card">
-  <div class="axis-card-head">
-    <span class="ac-num">8</span>
-    <span class="ac-name">Build Stage Image</span>
-    <span class="ac-arg">BUILD_IMAGE</span>
-    <span class="s-des">Designed</span>
-  </div>
-  <div class="axis-card-body">
-    <p class="ac-what">Swaps the base image used in the compilation stage of the Dockerfile. The build stage runs the compiler, SDK, and package manager — then is discarded. Only the runtime stage ships to production. This axis controls the supply chain trust boundary at build time.</p>
-    <p class="ac-what"><strong>Why it matters:</strong> A compromised build image can inject malicious code into your binary before the runtime stage strips everything else. All 7 axes plus health endpoints protect the running container — this axis protects what creates it.</p>
-    <p class="ac-what"><strong>Scope:</strong> Applies to all 99 services that have a Dockerfile. Does not apply to group 06 (Cloudflare Workers — no Dockerfile) and groups 09–12 (mobile/native — no Docker).</p>
-    <div class="ac-why">
-      <strong>Why you'd use this</strong><br>
-      Use <code>sdk</code> when your security team requires using the official language maintainer's image (not Ubuntu + apt install).<br>
-      Use <code>sdk-alpine</code> to reduce the build stage size — faster CI, smaller layer cache.<br>
-      Use <code>custom</code> to pull from your internal registry instead of Docker Hub (air-gapped environments, vetted internal images).
-    </div>
-    <div class="ac-terms">
-      <strong>Supply chain attack</strong> = injecting malicious code into software during the build process, before the final image is assembled.<br>
-      <strong>Internal registry</strong> = your organization's private image store — images scanned, approved, and hosted internally.<br>
-      <strong>SBOM</strong> (Software Bill of Materials) = signed list of every dependency in the image — generated automatically by some base images.
-    </div>
-    <details class="axis-details" open>
-      <summary><span class="axis-num">Current hardcoded values — what exists today (before this axis is implemented)</span></summary>
-      <div class="expand-content">
-        <p>Today the build stage image is hardcoded in every Dockerfile. No <code>--build-arg</code> exists yet.</p>
-        <table class="gen-table" style="font-size:11.5px">
-          <thead><tr><th>Service group(s)</th><th>Current build stage image</th><th>Why this image was chosen</th></tr></thead>
-          <tbody>
-            <tr><td>All non-gRPC Docker groups (01–03, 07, 14–23)</td><td><code>ubuntu:24.04</code></td><td>Universal base — can install any SDK via apt. One Dockerfile pattern covers all languages.</td></tr>
-            <tr><td>28-node-grpc</td><td><code>node:22-bookworm-slim</code></td><td>Node.js SDK pre-baked — no apt install needed. gRPC services use language-specific SDK images.</td></tr>
-            <tr><td>28-python-grpc</td><td><code>python:3.12-slim-bookworm</code></td><td>Python SDK pre-baked.</td></tr>
-            <tr><td>28-go-grpc</td><td><code>golang:1.22-bookworm</code></td><td>Go SDK pre-baked.</td></tr>
-            <tr><td>28-java-grpc</td><td><code>eclipse-temurin:21-jdk-bookworm</code></td><td>JDK pre-baked.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </details>
-    <details class="axis-details" open>
-      <summary><span class="axis-num">Designed values — by service group</span></summary>
-      <div class="expand-content">
-        <table class="gen-table" style="font-size:11.5px">
-          <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>SDK image when value = <code>sdk</code></th></tr></thead>
-          <tbody>
-            <tr><td>Node.js (01, 07, 14, 28-node-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code></td></tr>
-            <tr><td>Python (15, 28-python-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>python:3.12-slim-bookworm</code></td></tr>
-            <tr><td>Go (16, 28-go-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>golang:1.23-bookworm</code></td></tr>
-            <tr><td>Java (17, 28-java-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td></tr>
-            <tr><td>Kotlin (18, 28-kotlin-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td></tr>
-            <tr><td>.NET / C# (19, 28-dotnet-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0</code></td></tr>
-            <tr><td>Rust (20, 28-rust-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>rust:1.78-bookworm</code></td></tr>
-            <tr><td>Elixir (21, 30-ws-elixir)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>hexpm/elixir:1.17-erlang-27-debian-bookworm-slim</code></td></tr>
-            <tr><td>Ruby (22, 28-ruby-grpc, 29-graphql-ruby, 30-ws-ruby)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>ruby:3.3-bookworm</code></td></tr>
-            <tr><td>PHP (23, 28-php-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>php:8.3-cli-bookworm</code></td></tr>
-            <tr><td>Swift (24, 28-swift-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>swift:6.0-bookworm</code></td></tr>
-            <tr><td>Scala (25)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>sbtscala/scala-sbt:eclipse-temurin-21_1.10.11_3.6.4</code></td></tr>
-            <tr><td>Clojure (26)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>clojure:tools-deps-bookworm</code></td></tr>
-            <tr><td>C++ (27)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>debian:bookworm</code> (with GCC)</td></tr>
-            <tr><td>nginx static sites (02, 03, 08, 13)</td><td><code>ubuntu</code></td><td><code>node-sdk</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code> (for JS bundling)</td></tr>
-          </tbody>
-        </table>
-        <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px">
-          <code>ubuntu</code> = <code>ubuntu:24.04</code> — installs SDK via apt/rustup/curl scripts. Works for all languages.<br>
-          <code>sdk</code> = official language maintainer's image on Debian bookworm base. Compiler is pre-baked.<br>
-          <code>sdk-alpine</code> = official language image on Alpine base. Smaller build cache. Not available for .NET, Elixir, Swift, Scala, Clojure.<br>
-          <code>custom</code> = supply your own image via <code>BUILD_BASE=your-registry/your-image:tag</code> sub-arg. For internal/air-gapped registries.
-        </p>
-        <pre># Example — use official Go SDK image for build (instead of ubuntu)
-docker build --target runtime \
-  --build-arg BUILD_IMAGE=sdk \
-  -t my-service services/16-gin
-
-# Example — use internal registry image for build (air-gapped environment)
-docker build --target runtime \
-  --build-arg BUILD_IMAGE=custom \
-  --build-arg BUILD_BASE=registry.internal.corp/go-builder:1.23 \
-  -t my-service services/16-gin</pre>
-      </div>
-    </details>
-  </div>
-</div>
 
 <!-- ═══ SECTION 4: GROUP ELIGIBILITY MATRIX ═══ -->
 <h2 id="matrix">Which axes apply to which groups</h2>
@@ -1792,7 +1793,7 @@ docker run --rm -p 8080:8080 my-service</pre>
   <div class="status-row-item">
     <div class="sr-chip-col"><span class="s-des">Designed</span></div>
     <div>
-      <div class="sr-axis">PKG_MANAGER, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM, BUILD_IMAGE</div>
+      <div class="sr-axis">BUILD_IMAGE, PKG_MANAGER, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM</div>
       <div class="sr-desc">All 7 are fully documented — what they do, which values they accept, which groups they apply to, how they compose. The Dockerfile changes and service-level code do not yet exist. Passing these args to the current services has no effect.</div>
     </div>
   </div>
