@@ -276,15 +276,15 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   <div class="cat-card c-api">
     <div class="cat-card-head">API Servers — primary target <span class="cat-grp-badge">groups 14–20</span></div>
     <div class="cat-examples">Express, Fastify, FastAPI, Gin, Spring Boot, Ktor, ASP.NET Core, Axum</div>
-    <div class="cat-axes-line">All 7 axes apply.</div>
-    <div class="cat-note">This is where most teams start. Pure HTTP API servers — every axis works with the standard <code>--build-arg</code> pattern.</div>
+    <div class="cat-axes-line">RUNTIME · COMPLIANCE · OBSERVABILITY · AUTH · ORM — all groups (14–20). PKG_MGR · BUILD_TOOL — group 14 (JS/TS) only.</div>
+    <div class="cat-note">Group 14 (Express, Fastify, Hono) is JS/TS — all 7 axes apply. Groups 15–20 (Python, Go, Java, Kotlin, C#, Rust) each have exactly one package manager and no bundling step — 5 of 7 axes apply.</div>
   </div>
 
   <div class="cat-card c-ext">
     <div class="cat-card-head">Extended Servers <span class="cat-grp-badge">groups 21–27</span></div>
     <div class="cat-examples">Phoenix (Elixir), Rails, Laravel, Vapor (Swift), Play (Scala), Pedestal (Clojure), Crow (C++)</div>
-    <div class="cat-axes-line">All 7 axes apply.</div>
-    <div class="cat-note">Same coverage as API Servers. Second implementation priority after groups 14–20.</div>
+    <div class="cat-axes-line">RUNTIME · COMPLIANCE · OBSERVABILITY · AUTH · ORM — all groups (21–27). PKG_MGR · BUILD_TOOL — not applicable.</div>
+    <div class="cat-note">Elixir uses Mix only. Ruby uses Bundler only. PHP uses Composer only. Swift uses SPM only. None have a bundling step. 5 of 7 axes apply to all extended server groups.</div>
   </div>
 
   <div class="cat-card c-proto">
@@ -398,15 +398,39 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Swaps npm for a different JavaScript/TypeScript package manager inside the Dockerfile. Applies to JS/TS groups only (01–08, 13, 14). Group 06 (Cloudflare Workers): applies via the lock file for <code>wrangler deploy</code>, not via Docker.</p>
+    <p class="ac-what">Swaps npm for a different JS/TS package manager inside the Dockerfile.</p>
+    <p class="ac-what"><strong>Why JS/TS can swap:</strong> npm, pnpm, yarn, and bun all read the same <code>package.json</code> file. The input file does not change — only which tool reads it changes. This is why all four are interchangeable with one <code>--build-arg</code>.</p>
+    <div class="ac-terms">
+      <strong>Package manager</strong> = tool that downloads and installs code libraries your project depends on.<br>
+      <strong>Lock file</strong> = a file that records the exact version of every library installed, so the build is identical every time.
+    </div>
+    <div class="ac-terms" style="margin-top:10px">
+      <strong>Which languages can swap — full breakdown:</strong>
+      <table class="gen-table" style="margin-top:8px;font-size:11.5px">
+        <thead><tr><th>Language</th><th>Group(s)</th><th>Options</th><th>Can swap?</th></tr></thead>
+        <tbody>
+          <tr><td>JS/TS</td><td>01–08, 13, 14</td><td>npm · pnpm · yarn · bun</td><td>✅ Yes — all read <code>package.json</code></td></tr>
+          <tr><td>Python</td><td>15</td><td>pip · poetry · uv</td><td>⚠️ Possible — needs Dockerfile work (different dep files per tool)</td></tr>
+          <tr><td>Java</td><td>17</td><td>Maven · Gradle</td><td>⚠️ Possible — needs Dockerfile work</td></tr>
+          <tr><td>Kotlin</td><td>18</td><td>Gradle · Maven</td><td>⚠️ Possible — needs Dockerfile work</td></tr>
+          <tr><td>Scala</td><td>25</td><td>sbt · mill · Gradle</td><td>⚠️ Possible — needs Dockerfile work</td></tr>
+          <tr><td>Clojure</td><td>26</td><td>Leiningen · deps.edn</td><td>⚠️ Possible — needs Dockerfile work</td></tr>
+          <tr><td>Go</td><td>16</td><td>go mod only</td><td>❌ No — one option, nothing to swap</td></tr>
+          <tr><td>Rust</td><td>20</td><td>Cargo only</td><td>❌ No — one option</td></tr>
+          <tr><td>PHP</td><td>23</td><td>Composer only</td><td>❌ No — one option</td></tr>
+          <tr><td>Ruby</td><td>22</td><td>Bundler only</td><td>❌ No — one option</td></tr>
+          <tr><td>Elixir</td><td>21</td><td>Mix only</td><td>❌ No — one option</td></tr>
+          <tr><td>Swift</td><td>24</td><td>SPM only</td><td>❌ No — one option</td></tr>
+          <tr><td>C#</td><td>19</td><td>NuGet only</td><td>❌ No — one option</td></tr>
+          <tr><td>C++</td><td>27</td><td>CMake + Conan/vcpkg</td><td>❌ No — build system not cleanly swappable via arg</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:11px;color:var(--text-dim);margin-top:6px">Current values table below shows the JS/TS options. Python/Java/Kotlin/Scala/Clojure values are not yet designed.</p>
+    </div>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Your team already uses pnpm in CI — this makes the container build consistent with your CI environment.
       Use <code>bun</code> for the fastest install times in Docker builds.
-    </div>
-    <div class="ac-terms">
-      <strong>Package manager</strong> = tool that downloads and installs third-party code libraries. npm, pnpm, yarn, and bun all do this — they differ in speed and disk usage.<br>
-      <strong>Lock file</strong> = a file that pins every dependency to an exact version, so builds are reproducible.
     </div>
     <details class="axis-details" open>
       <summary><span class="axis-num">Values</span></summary>
@@ -438,15 +462,29 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Swaps Vite for a different JavaScript/TypeScript bundler inside the Dockerfile. Applies to JS/TS groups only (01–08, 13, 14) where bundling applies.</p>
+    <p class="ac-what">Swaps Vite for a different JS/TS bundler inside the Dockerfile. Applies to JS/TS groups only (01–08, 13, 14).</p>
+    <p class="ac-what"><strong>Why only JS/TS:</strong> Bundling exists because JS/TS code runs in browsers. A browser loads files over the internet — 500 separate file requests is too slow. A bundler combines those 500 files into 2–3 optimized files before deployment.</p>
+    <p class="ac-what">Go, Python, Java, Rust, Ruby, PHP, Elixir, Swift, C# — these run on servers, not browsers. They compile to one binary or run source files directly. There are no separate files to bundle. The concept does not exist for these languages.</p>
+    <div class="ac-terms">
+      <strong>Bundler</strong> = tool that combines many JS/TS source files into fewer optimized files for delivery to a browser.<br>
+      <strong>HMR (Hot Module Replacement)</strong> = feature that updates the browser instantly when you save a file during development, without a full page reload.
+    </div>
+    <div class="ac-terms" style="margin-top:10px">
+      <strong>BUILD_TOOL by language:</strong>
+      <table class="gen-table" style="margin-top:8px;font-size:11.5px">
+        <thead><tr><th>Language</th><th>Has bundling step?</th><th>BUILD_TOOL applies?</th></tr></thead>
+        <tbody>
+          <tr><td>JS/TS (groups 01–08, 13, 14)</td><td>Yes — code runs in browser</td><td>✅ Yes</td></tr>
+          <tr><td>Python, Go, Rust, C#, Ruby, PHP, Elixir, Swift, C++</td><td>No — server runs binary or source directly</td><td>❌ No</td></tr>
+          <tr><td>Java / Kotlin / Scala</td><td>No — JVM (Java Virtual Machine) runs compiled bytecode directly</td><td>❌ No</td></tr>
+        </tbody>
+      </table>
+    </div>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Your existing codebase uses Webpack — this avoids rewriting your configuration.
       Use <code>rspack</code> if you want Webpack compatibility with faster build times.
       Use <code>esbuild</code> for the absolute fastest build with minimal config.
-    </div>
-    <div class="ac-terms">
-      <strong>Bundler</strong> = tool that combines many JS/TS source files into fewer optimized files for deployment. Vite, Webpack, Rspack, and esbuild all do this — they differ in speed and config complexity.
     </div>
     <details class="axis-details" open>
       <summary><span class="axis-num">Values</span></summary>
