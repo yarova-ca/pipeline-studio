@@ -568,6 +568,163 @@ readinessProbe:
 
         <p style="font-size:11.5px;margin-top:8px"><strong>gRPC health check via grpcurl:</strong></p>
         <pre>grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</pre>
+
+        <details class="axis-details" style="margin-top:12px">
+          <summary><span class="axis-num">Full list — all 105 services</span></summary>
+          <div class="expand-content">
+            <table class="gen-table" style="font-size:11px">
+              <thead><tr><th>Service</th><th>Framework</th><th>Tier</th><th>Health endpoints</th><th>Port</th></tr></thead>
+              <tbody>
+                <tr class="cat-row"><td colspan="5">Frontend SSR — groups 01, 04, 05, 07</td></tr>
+                <tr><td><code>01-angular-ssr</code></td><td>Angular SSR</td><td>2</td><td>✅ Yes</td><td>4000</td></tr>
+                <tr><td><code>01-nextjs</code></td><td>Next.js</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>01-nuxt</code></td><td>Nuxt</td><td>1</td><td>✅ Yes (at <code>/api/health*</code>)</td><td>3000</td></tr>
+                <tr><td><code>01-remix</code></td><td>Remix</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>01-solid-start</code></td><td>SolidStart</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>01-sveltekit</code></td><td>SvelteKit</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>04-astro</code></td><td>Astro Islands</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>04-fresh</code></td><td>Fresh (Deno)</td><td>2</td><td>✅ Yes</td><td>8000</td></tr>
+                <tr><td><code>05-qwik</code></td><td>Qwik</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>07-nextjs-app-router</code></td><td>Next.js App Router</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>07-remix</code></td><td>Remix</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>07-sveltekit</code></td><td>SvelteKit</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Frontend SPA + Static — groups 02, 03, 08, 13 — nginx serves static files, no app health endpoint</td></tr>
+                <tr><td><code>02-angular</code></td><td>Angular</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-lit</code></td><td>Lit</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-preact</code></td><td>Preact</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-react</code></td><td>React</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-solidjs</code></td><td>SolidJS</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-svelte</code></td><td>Svelte</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-vue</code></td><td>Vue</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>03-astro</code></td><td>Astro</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>03-eleventy</code></td><td>Eleventy</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>03-gatsby</code></td><td>Gatsby</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>03-hugo</code></td><td>Hugo</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>08-mf-rspack</code></td><td>Rspack MF</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>08-mf-webpack</code></td><td>Webpack MF</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>08-single-spa</code></td><td>single-spa</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>13-vite-pwa</code></td><td>Vite PWA</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>13-workbox</code></td><td>Workbox</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Edge — group 06 — Cloudflare Workers, no container, no port</td></tr>
+                <tr><td><code>06-hono-edge</code></td><td>Hono (Cloudflare Workers)</td><td>1</td><td>❌ no Docker</td><td>—</td></tr>
+                <tr><td><code>06-nextjs-edge</code></td><td>Next.js Edge (Vercel/CF)</td><td>2</td><td>❌ no Docker</td><td>—</td></tr>
+                <tr><td><code>06-remix-cloudflare</code></td><td>Remix (Cloudflare)</td><td>2</td><td>❌ no Docker</td><td>—</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Mobile / Native — groups 09–12 — no server process, builds to app bundle</td></tr>
+                <tr><td><code>09-expo</code></td><td>Expo</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>09-ionic</code></td><td>Ionic</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>09-react-native</code></td><td>React Native</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>10-dotnet-maui</code></td><td>.NET MAUI</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>10-flutter</code></td><td>Flutter</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>10-kmp</code></td><td>Kotlin Multiplatform</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>11-objc-uikit</code></td><td>Objective-C UIKit</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>11-swift-swiftui</code></td><td>Swift SwiftUI</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>12-java-android</code></td><td>Java Android</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>12-kotlin-jetpack</code></td><td>Kotlin Jetpack</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Node.js API servers — group 14</td></tr>
+                <tr><td><code>14-bun</code></td><td>Bun</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-deno</code></td><td>Deno</td><td>2</td><td>✅ Yes</td><td>8000</td></tr>
+                <tr><td><code>14-elysia</code></td><td>Elysia</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-express</code></td><td>Express.js</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-fastify</code></td><td>Fastify</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-hono</code></td><td>Hono</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-nestjs</code></td><td>NestJS</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Python servers — group 15</td></tr>
+                <tr><td><code>15-django</code></td><td>Django</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>15-fastapi</code></td><td>FastAPI</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>15-flask</code></td><td>Flask</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>15-starlette</code></td><td>Starlette</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Go servers — group 16</td></tr>
+                <tr><td><code>16-chi</code></td><td>Chi</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>16-echo</code></td><td>Echo</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>16-fiber</code></td><td>Fiber</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>16-gin</code></td><td>Gin</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Java servers — group 17</td></tr>
+                <tr><td><code>17-micronaut</code></td><td>Micronaut</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>17-quarkus</code></td><td>Quarkus</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>17-spring-boot</code></td><td>Spring Boot</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Kotlin servers — group 18</td></tr>
+                <tr><td><code>18-ktor</code></td><td>Ktor</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>18-spring-boot-kotlin</code></td><td>Spring Boot (Kotlin)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">.NET servers — group 19</td></tr>
+                <tr><td><code>19-aspnet-core</code></td><td>ASP.NET Core</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>19-minimal-apis</code></td><td>ASP.NET Minimal APIs</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Rust servers — group 20</td></tr>
+                <tr><td><code>20-actix-web</code></td><td>Actix-web</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>20-axum</code></td><td>Axum</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Elixir servers — group 21</td></tr>
+                <tr><td><code>21-phoenix</code></td><td>Phoenix</td><td>1</td><td>✅ Yes</td><td>4000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Ruby servers — group 22</td></tr>
+                <tr><td><code>22-rails</code></td><td>Rails</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>22-sinatra</code></td><td>Sinatra</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">PHP servers — group 23 — port 9000 is php-fpm; needs nginx sidecar for HTTP in production</td></tr>
+                <tr><td><code>23-laravel</code></td><td>Laravel</td><td>1</td><td>✅ Yes</td><td>9000</td></tr>
+                <tr><td><code>23-slim</code></td><td>Slim</td><td>2</td><td>✅ Yes</td><td>9000</td></tr>
+                <tr><td><code>23-symfony</code></td><td>Symfony</td><td>2</td><td>✅ Yes</td><td>9000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Swift servers — group 24</td></tr>
+                <tr><td><code>24-hummingbird</code></td><td>Hummingbird</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>24-vapor</code></td><td>Vapor</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Scala servers — group 25</td></tr>
+                <tr><td><code>25-http4s</code></td><td>http4s</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>25-play</code></td><td>Play Framework</td><td>2</td><td>✅ Yes</td><td>9000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Clojure servers — group 26</td></tr>
+                <tr><td><code>26-pedestal</code></td><td>Pedestal</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>26-ring</code></td><td>Ring</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">C++ servers — group 27</td></tr>
+                <tr><td><code>27-crow</code></td><td>Crow</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>27-drogon</code></td><td>Drogon</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">gRPC servers — group 28 — HTTP health on port 8080 + gRPC health on port 50051</td></tr>
+                <tr><td><code>28-dotnet-grpc</code></td><td>.NET gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-go-grpc</code></td><td>Go gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-java-grpc</code></td><td>Java gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-kotlin-grpc</code></td><td>Kotlin gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-node-grpc</code></td><td>Node.js gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-php-grpc</code></td><td>PHP gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-python-grpc</code></td><td>Python gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-ruby-grpc</code></td><td>Ruby gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-rust-grpc</code></td><td>Rust gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-swift-grpc</code></td><td>Swift gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">GraphQL servers — group 29</td></tr>
+                <tr><td><code>29-apollo</code></td><td>Apollo Server (Node)</td><td>2</td><td>✅ Yes</td><td>4000</td></tr>
+                <tr><td><code>29-async-graphql</code></td><td>async-graphql (Rust)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>29-gqlgen</code></td><td>gqlgen (Go)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>29-graphql-ruby</code></td><td>GraphQL Ruby</td><td>2</td><td>✅ Yes</td><td>4567</td></tr>
+                <tr><td><code>29-graphql-yoga</code></td><td>GraphQL Yoga (Node)</td><td>2</td><td>✅ Yes</td><td>4000</td></tr>
+                <tr><td><code>29-hot-chocolate</code></td><td>Hot Chocolate (.NET)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>29-spring-graphql</code></td><td>Spring GraphQL</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>29-strawberry</code></td><td>Strawberry (Python)</td><td>2</td><td>✅ Yes</td><td>8000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">WebSocket servers — group 30</td></tr>
+                <tr><td><code>30-ws-dotnet</code></td><td>ASP.NET Core WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-elixir</code></td><td>Phoenix Channels</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-go</code></td><td>Go WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-java</code></td><td>Java WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-node</code></td><td>Node.js WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-python</code></td><td>Python WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-ruby</code></td><td>Ruby WS</td><td>2</td><td>✅ Yes</td><td>9292</td></tr>
+                <tr><td><code>30-ws-rust</code></td><td>Tokio/axum WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
       </div>
     </details>
   </div>
