@@ -873,17 +873,17 @@ USER 1001</pre>
             <tr><td>Go servers (16) + go-grpc (28)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>scratch = empty image, static binary only</td></tr>
             <tr><td>Java (17) + java-grpc (28)</td><td><code>distroless</code></td><td><code>temurin</code> · <code>fips</code></td><td>distroless = gcr.io/distroless/java21</td></tr>
             <tr><td>Kotlin (18)</td><td><code>distroless</code></td><td><code>temurin</code> · <code>fips</code></td><td>temurin = eclipse-temurin:21-jre</td></tr>
-            <tr><td>.NET / C# (19)</td><td><code>alpine</code></td><td><code>debian</code> · <code>fips</code></td><td></td></tr>
-            <tr><td>Rust (20)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>static binary via CGO_ENABLED=0</td></tr>
-            <tr><td>Elixir (21)</td><td><code>debian</code></td><td><code>alpine</code> · <code>fips</code></td><td></td></tr>
-            <tr><td>Ruby (22)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td></td></tr>
+            <tr><td>.NET / C# (19)</td><td><code>alpine</code></td><td><code>debian</code> · <code>fips</code></td><td>alpine = aspnet:9.0-alpine · debian = aspnet:9.0-noble · fips = aspnet:9.0-cbl-mariner2.0-fips (CBL-Mariner, not UBI9)</td></tr>
+            <tr><td>Rust (20)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>static binary via musl target (<code>x86_64-unknown-linux-musl</code>)</td></tr>
+            <tr><td>Elixir (21)</td><td><code>debian</code></td><td><code>alpine</code> · <code>fips</code></td><td>debian = hexpm/elixir:1.17-erlang-27-debian-bookworm-slim · alpine = hexpm/elixir:1.17-erlang-27-alpine-3.19</td></tr>
+            <tr><td>Ruby (22)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td>alpine = ruby:3.3-alpine · slim = ruby:3.3-slim · fips = ubi9/ruby-32</td></tr>
             <tr><td>PHP (23)</td><td><code>alpine</code></td><td><code>debian</code></td><td>No <code>fips</code> — no FIPS-validated PHP base image exists</td></tr>
             <tr><td>gRPC — Node.js (28-node-grpc)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = node:22-bookworm-slim · alpine = node:22-alpine · fips = ubi9/nodejs-22-minimal</td></tr>
             <tr><td>gRPC — Python (28-python-grpc)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = python:3.12-slim · alpine = python:3.12-alpine · fips = ubi9/python-39</td></tr>
           </tbody>
         </table>
         </div>
-        <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px">All <code>fips</code> values use UBI9 (Red Hat Universal Base Image 9) — the only widely available FIPS-140-2 validated base image family.</p>
+        <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px"><strong>fips base images by language:</strong> Node.js / Python / Go / Java / Kotlin / Elixir / Ruby / Rust → UBI9 (Red Hat Universal Base Image 9). .NET (19) → CBL-Mariner (<code>aspnet:9.0-cbl-mariner2.0-fips</code>) — Microsoft's own FIPS-validated image, not UBI9. PHP has no fips value — no FIPS-validated PHP base image exists.</p>
 
         <p><strong>Example commands:</strong></p>
         <pre># Node.js — default (alpine)
