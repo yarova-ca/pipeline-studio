@@ -192,6 +192,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   <div class="nav-section">On this page</div>
   <a href="#intro">What is this page</a>
   <a href="#groups">Service groups</a>
+  <a href="#priority">Priority tiers</a>
   <a href="#axes-concept">What is an axis</a>
   <a href="#axes-detail">The 7 axes</a>
   <a href="#matrix">Group matrix</a>
@@ -300,6 +301,105 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     <div class="cat-axes-line">Zero axes apply.</div>
     <div class="cat-note">No Docker image. No server process. These are mobile and native app builds — <code>docker build --build-arg</code> has no effect. CI runs a platform-native build instead.</div>
   </div>
+</div>
+
+<!-- ─── PRIORITY TIERS ─── -->
+<h3 id="priority" style="margin-top:28px">Which services to maintain</h3>
+<p class="section-sub">105 services exist. Maintaining all equally is not realistic. This table shows which to prioritize and why.</p>
+
+<div class="tbl-wrap" style="margin-bottom:10px">
+<table class="gen-table">
+  <thead><tr><th colspan="2" style="background:var(--green);color:#fff">Tier 1 — Must maintain (30 services)</th></tr>
+  <tr><th>Service</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td><code>01-nextjs</code></td><td>Largest SSR framework. React ecosystem standard.</td></tr>
+    <tr><td><code>01-nuxt</code></td><td>Largest Vue SSR framework.</td></tr>
+    <tr><td><code>01-sveltekit</code></td><td>Svelte's only fullstack option. Fast-growing.</td></tr>
+    <tr><td><code>02-react</code></td><td>Most used JS framework on the planet.</td></tr>
+    <tr><td><code>02-vue</code></td><td>2nd most used. Large enterprise base.</td></tr>
+    <tr><td><code>02-angular</code></td><td>Enterprise standard. Google-backed.</td></tr>
+    <tr><td><code>02-svelte</code></td><td>Fastest growing. Unique compiler-based approach.</td></tr>
+    <tr><td><code>03-astro</code></td><td>Most popular modern static site generator.</td></tr>
+    <tr><td><code>03-hugo</code></td><td>Fastest SSG. Large content and docs user base.</td></tr>
+    <tr><td><code>06-hono-edge</code></td><td>Most popular Cloudflare Workers framework.</td></tr>
+    <tr><td><code>07-nextjs-app-router</code></td><td>This IS Next.js now. React Server Components.</td></tr>
+    <tr><td><code>09-react-native</code></td><td>Most popular cross-platform mobile.</td></tr>
+    <tr><td><code>09-expo</code></td><td>Standard way to ship React Native today.</td></tr>
+    <tr><td><code>10-flutter</code></td><td>Google-backed. Most popular cross-platform mobile after RN.</td></tr>
+    <tr><td><code>11-swift-swiftui</code></td><td>iOS native standard. No alternative.</td></tr>
+    <tr><td><code>12-kotlin-jetpack</code></td><td>Android native standard. No alternative.</td></tr>
+    <tr><td><code>14-express</code></td><td>Most used Node.js framework.</td></tr>
+    <tr><td><code>14-fastify</code></td><td>Fastest Node.js. Growing fast.</td></tr>
+    <tr><td><code>14-nestjs</code></td><td>Enterprise Node.js standard.</td></tr>
+    <tr><td><code>14-hono</code></td><td>Modern edge-first. Very popular.</td></tr>
+    <tr><td><code>15-fastapi</code></td><td>Most popular modern Python API.</td></tr>
+    <tr><td><code>15-django</code></td><td>Largest Python framework overall.</td></tr>
+    <tr><td><code>16-gin</code></td><td>Most popular Go framework.</td></tr>
+    <tr><td><code>17-spring-boot</code></td><td>Dominates Java enterprise globally.</td></tr>
+    <tr><td><code>18-ktor</code></td><td>Kotlin's primary server framework.</td></tr>
+    <tr><td><code>19-aspnet-core</code></td><td>.NET standard. Microsoft-backed.</td></tr>
+    <tr><td><code>20-axum</code></td><td>Most popular Rust web framework today.</td></tr>
+    <tr><td><code>21-phoenix</code></td><td>Only Elixir framework worth covering.</td></tr>
+    <tr><td><code>22-rails</code></td><td>Still widely used. Large existing codebase base.</td></tr>
+    <tr><td><code>23-laravel</code></td><td>Most popular PHP framework by far.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="tbl-wrap" style="margin-bottom:10px">
+<table class="gen-table">
+  <thead><tr><th colspan="2" style="background:var(--amber);color:#fff">Tier 2 — Keep if capacity allows (~15 services)</th></tr>
+  <tr><th>Service</th><th>Why lower priority</th></tr></thead>
+  <tbody>
+    <tr><td><code>01-remix</code></td><td>Declining vs Next.js</td></tr>
+    <tr><td><code>02-solidjs</code></td><td>Small but technically excellent</td></tr>
+    <tr><td><code>14-elysia</code></td><td>Bun-native, growing</td></tr>
+    <tr><td><code>14-bun</code></td><td>New runtime, growing fast</td></tr>
+    <tr><td><code>15-flask</code></td><td>Simpler Python — partial overlap with FastAPI</td></tr>
+    <tr><td><code>16-echo</code></td><td>2nd Go framework — minor variation from Gin</td></tr>
+    <tr><td><code>16-fiber</code></td><td>Performance-focused Go — niche use case</td></tr>
+    <tr><td><code>17-quarkus</code></td><td>Cloud-native Java — growing but smaller than Spring</td></tr>
+    <tr><td><code>18-spring-boot-kotlin</code></td><td>Spring + Kotlin — overlaps with 17 and 18</td></tr>
+    <tr><td><code>19-minimal-apis</code></td><td>Modern .NET — overlaps with aspnet-core</td></tr>
+    <tr><td><code>20-actix-web</code></td><td>Historically popular Rust — axum replacing it</td></tr>
+    <tr><td><code>24-vapor</code></td><td>Only Swift server option</td></tr>
+    <tr><td><code>08-mf-webpack</code></td><td>Module Federation — enterprise micro-frontend pattern</td></tr>
+    <tr><td><code>13-vite-pwa</code></td><td>PWA — still relevant for offline apps</td></tr>
+    <tr><td><code>28-go-grpc, 28-python-grpc, 28-node-grpc</code></td><td>gRPC for top 3 languages</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="tbl-wrap" style="margin-bottom:24px">
+<table class="gen-table">
+  <thead><tr><th colspan="3" style="background:var(--red);color:#fff">Skip — Legacy, niche, or redundant (~35 services)</th></tr>
+  <tr><th>Group</th><th>Services</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>02</td><td>preact, lit</td><td>Niche — minimal communities</td></tr>
+    <tr><td>03</td><td>gatsby, eleventy</td><td>Gatsby declining. Eleventy niche.</td></tr>
+    <tr><td>04</td><td>fresh</td><td>Deno Fresh — very small community</td></tr>
+    <tr><td>05</td><td>qwik</td><td>Tiny community</td></tr>
+    <tr><td>06</td><td>remix-cloudflare</td><td>Redundant with hono-edge</td></tr>
+    <tr><td>08</td><td>mf-rspack, single-spa</td><td>Niche patterns</td></tr>
+    <tr><td>09–10</td><td>ionic, dotnet-maui, kmp</td><td>Small communities</td></tr>
+    <tr><td>11</td><td>objc-uikit</td><td>Legacy — Obj-C is dead for new projects</td></tr>
+    <tr><td>12</td><td>java-android</td><td>Legacy — Kotlin replaced Java on Android</td></tr>
+    <tr><td>13</td><td>workbox</td><td>Library, not a framework</td></tr>
+    <tr><td>14</td><td>deno</td><td>Limited adoption outside Cloudflare</td></tr>
+    <tr><td>15</td><td>starlette</td><td>FastAPI is built on it — redundant</td></tr>
+    <tr><td>16</td><td>chi</td><td>Minimal Go router — too basic to template</td></tr>
+    <tr><td>17</td><td>micronaut</td><td>Small community vs Spring/Quarkus</td></tr>
+    <tr><td>22</td><td>sinatra</td><td>Niche minimal Ruby</td></tr>
+    <tr><td>23</td><td>slim, symfony</td><td>Laravel covers PHP</td></tr>
+    <tr><td>24</td><td>hummingbird</td><td>Tiny community</td></tr>
+    <tr><td>25</td><td>play, http4s</td><td>Scala niche overall</td></tr>
+    <tr><td>26</td><td>pedestal, ring</td><td>Clojure niche overall</td></tr>
+    <tr><td>27</td><td>crow, drogon</td><td>C++ server — very niche</td></tr>
+    <tr><td>28</td><td>remaining 7 gRPC variants</td><td>Lower priority languages</td></tr>
+    <tr><td>29</td><td>most GraphQL variants</td><td>Keep apollo + gqlgen + spring-graphql only</td></tr>
+    <tr><td>30</td><td>most WebSocket variants</td><td>Keep node + go + python only</td></tr>
+  </tbody>
+</table>
 </div>
 
 <!-- ═══ SECTION 2: WHAT IS A BUILD AXIS ═══ -->
