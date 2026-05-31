@@ -484,33 +484,91 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Swaps the base Linux image your service container runs on. Every Docker container starts from a base image — this axis lets you choose which one, trading off image size, security posture, and compliance eligibility.</p>
+    <p class="ac-what">Swaps the base Linux image your service container runs on. Every Docker container starts from a base image — this axis lets you choose which one, trading off image size, security posture, and compliance eligibility. <strong>This is the only axis implemented today.</strong> You can use it right now on all 28 Tier 1 services.</p>
     <div class="ac-why">
-      <strong>Why you'd use this</strong>
-      Use <code>chainguard</code> to ship a container with zero known security vulnerabilities — required by many enterprise security teams.
-      Use <code>ubi9</code> when your industry legally requires FIPS-validated cryptography (US federal government, defense contractors).
-      Use <code>slim</code> to reduce the attack surface by removing the shell entirely.
+      <strong>Why you'd use this</strong><br>
+      Use <code>fips</code> when your industry legally requires FIPS-validated cryptography (US federal government, defense contractors, healthcare).<br>
+      Use <code>slim</code> or <code>distroless</code> to reduce the attack surface — no shell, no package manager in the running image.<br>
+      Use <code>alpine</code> for the smallest standard image with broad ecosystem support.<br>
+      Use <code>scratch</code> for Go and Rust static binaries — the absolute minimum: zero OS, only your binary.
     </div>
     <div class="ac-terms">
-      <strong>CVE</strong> (Common Vulnerability and Exposure) = a publicly documented security flaw in software. Zero CVEs = no known flaws in the image.<br>
-      <strong>FIPS-140-2</strong> = US government standard for cryptographic modules. Required for federal IT systems.
+      <strong>CVE</strong> (Common Vulnerability and Exposure) = a publicly documented security flaw in software.<br>
+      <strong>FIPS-140-2</strong> = US government standard for cryptographic modules. Required for federal IT systems.<br>
+      <strong>Distroless</strong> = image with no shell and no package manager. Minimal attack surface. Default for Java and Kotlin.<br>
+      <strong>Scratch</strong> = completely empty image — only what you COPY into it. Default for Go and Rust static binaries.<br>
+      <strong>SBOM</strong> (Software Bill of Materials) = a signed list of every dependency in the image, generated automatically by some base images.
     </div>
+
     <details class="axis-details" open>
-      <summary><span class="axis-num">Values</span></summary>
+      <summary><span class="axis-num">How it works inside every Dockerfile (3 steps)</span></summary>
       <div class="expand-content">
+        <p><strong>Step 1 — Build stage creates a minimal user file.</strong></p>
+        <pre>RUN printf 'root:x:0:0:root:/root:/bin/sh\n\
+nobody:x:65534:65534:nobody:/nonexistent:/bin/false\n\
+app:x:1001:1001::/home/app:/sbin/nologin\n' &gt; /tmp/app-passwd \
+ &amp;&amp; printf 'root:x:0:\nnobody:x:65534:\napp:x:1001:\n' &gt; /tmp/app-group</pre>
+        <p>Why: different base images use incompatible commands to create users — <code>adduser</code> on Alpine, <code>useradd</code> on Debian, and <em>no command at all</em> on <code>scratch</code> or <code>distroless</code> (which have no shell). Creating the user file once in the build stage and copying it into any runtime image solves all four cases with one mechanism.</p>
+
+        <p><strong>Step 2 — All base image options defined as named stages.</strong></p>
+        <pre># Node.js example — each language has its own set
+FROM node:22-alpine AS base-alpine
+FROM node:22-slim   AS base-slim
+FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS base-fips</pre>
+        <p>Docker BuildKit (the modern Docker build engine) only pulls the stage that is selected. The other two are skipped entirely — no extra pull time.</p>
+
+        <p><strong>Step 3 — ARG selects which base image becomes the runtime stage.</strong></p>
+        <pre>ARG RUNTIME=alpine
+FROM base-${RUNTIME} AS runtime
+WORKDIR /app
+COPY --from=build /tmp/app-passwd /etc/passwd
+COPY --from=build /tmp/app-group  /etc/group
+COPY --from=build --chown=1001:1001 /app/dist ./dist
+USER 1001</pre>
+        <p>The <code>/etc/passwd</code> copy is what makes <code>USER 1001</code> work in scratch and distroless images — they have no <code>adduser</code> command, but COPY creates the file directly. A separate <code>runtime-fips</code> named stage is kept for backward compatibility with <code>--target runtime-fips</code>.</p>
+      </div>
+    </details>
+
+    <details class="axis-details" open>
+      <summary><span class="axis-num">Values — by service group</span></summary>
+      <div class="expand-content">
+        <p>Values differ per language group. Each group uses the base image ecosystem for that language.</p>
         <div class="tbl-wrap">
         <table class="gen-table">
-          <thead><tr><th>Value</th><th>Base image</th><th>Use when</th><th>Constraint</th></tr></thead>
+          <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td><code>standard</code> (default)</td><td>debian:bookworm-slim</td><td>Development, general commercial workloads</td><td>None</td></tr>
-            <tr><td><code>slim</code></td><td>gcr.io/distroless/base-debian12</td><td>No shell access needed, reduced attack surface</td><td>None</td></tr>
-            <tr><td><code>chainguard</code></td><td>cgr.dev/chainguard/static</td><td>Zero CVEs, SOC 2, supply-chain signed SBOM</td><td>None</td></tr>
-            <tr><td><code>ubi9</code></td><td>registry.access.redhat.com/ubi9-minimal</td><td>FIPS-140-2 crypto, federal/regulated workloads</td><td>Required when <code>COMPLIANCE=fips</code></td></tr>
-            <tr><td><code>edge</code></td><td>debian:bookworm-slim multi-arch</td><td>Build for linux/amd64 + linux/arm64 in one command</td><td>None</td></tr>
+            <tr><td>Node.js SSR + API (01, 07, 14)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td>slim = node:22-slim</td></tr>
+            <tr><td>nginx static sites (02, 03)</td><td><code>alpine</code></td><td><code>stable</code> · <code>fips</code></td><td>stable = nginx:1.27-stable</td></tr>
+            <tr><td>Python (15)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = python:3.12-slim</td></tr>
+            <tr><td>Go servers (16) + go-grpc (28)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>scratch = empty image, static binary only</td></tr>
+            <tr><td>Java (17) + java-grpc (28)</td><td><code>distroless</code></td><td><code>temurin</code> · <code>fips</code></td><td>distroless = gcr.io/distroless/java21</td></tr>
+            <tr><td>Kotlin (18)</td><td><code>distroless</code></td><td><code>temurin</code> · <code>fips</code></td><td>temurin = eclipse-temurin:21-jre</td></tr>
+            <tr><td>.NET / C# (19)</td><td><code>alpine</code></td><td><code>debian</code> · <code>fips</code></td><td></td></tr>
+            <tr><td>Rust (20)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>static binary via CGO_ENABLED=0</td></tr>
+            <tr><td>Elixir (21)</td><td><code>debian</code></td><td><code>alpine</code> · <code>fips</code></td><td></td></tr>
+            <tr><td>Ruby (22)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td></td></tr>
+            <tr><td>PHP (23)</td><td><code>alpine</code></td><td><code>debian</code></td><td>No <code>fips</code> — no FIPS-validated PHP base image exists</td></tr>
+            <tr><td>gRPC node + python (28)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td></td></tr>
           </tbody>
         </table>
         </div>
-        <pre>docker build --target runtime --build-arg RUNTIME=chainguard -t my-service services/14-express</pre>
+        <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px">All <code>fips</code> values use UBI9 (Red Hat Universal Base Image 9) — the only widely available FIPS-140-2 validated base image family.</p>
+
+        <p><strong>Example commands:</strong></p>
+        <pre># Node.js — default (alpine)
+docker build --target runtime -t my-service services/14-express
+
+# Node.js — FIPS
+docker build --target runtime --build-arg RUNTIME=fips -t my-service:fips services/14-express
+
+# Go — distroless (instead of default scratch)
+docker build --target runtime --build-arg RUNTIME=distroless -t my-service services/16-gin
+
+# Java — temurin (JRE with shell — useful for debugging)
+docker build --target runtime --build-arg RUNTIME=temurin -t my-service services/17-spring-boot
+
+# Backward compat — --target runtime-fips still works
+docker build --target runtime-fips -t my-service:fips services/14-express</pre>
       </div>
     </details>
   </div>
