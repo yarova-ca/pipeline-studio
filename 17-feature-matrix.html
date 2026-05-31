@@ -484,7 +484,10 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Swaps the base Linux image your service container runs on. Every Docker container starts from a base image — this axis lets you choose which one, trading off image size, security posture, and compliance eligibility. <strong>This is the only axis implemented today.</strong> You can use it right now on all 28 Tier 1 services.</p>
+    <p class="ac-what">Swaps the base Linux image your service container runs on. Every Docker container starts from a base image — this axis lets you choose which one, trading off image size, security posture, and compliance eligibility. <strong>This is the only axis implemented today.</strong></p>
+    <p class="ac-what">Applies to <strong>28 of the 34 Tier 1 services</strong> — the 28 that build to Docker containers.<br>
+    The other 6 Tier 1 services have no Docker container: <code>06-hono-edge</code> (Cloudflare Workers), <code>09-react-native</code>, <code>09-expo</code>, <code>10-flutter</code>, <code>11-swift-swiftui</code>, <code>12-kotlin-jetpack</code> (mobile/native apps).<br>
+    <code>--build-arg RUNTIME=</code> is a Docker-only argument. When there is no Dockerfile: this arg does not exist.</p>
     <div class="ac-why">
       <strong>Why you'd use this</strong><br>
       Use <code>fips</code> when your industry legally requires FIPS-validated cryptography (US federal government, defense contractors, healthcare).<br>
@@ -583,9 +586,18 @@ USER 1001</pre>
       <summary><span class="axis-num">Values — by service group</span></summary>
       <div class="expand-content">
         <p>Values differ per language group. Each group uses the base image ecosystem for that language.</p>
-        <p><strong>This table covers Tier 1 only (28 services).</strong><br>
-        Groups 09–12 (React Native, Flutter, iOS, Android) = no Docker — skip tier.<br>
-        Groups 24–27 (Swift, Scala, Clojure, C++) and 29–30 (GraphQL, WebSocket) = Tier 2 — RUNTIME not yet implemented.</p>
+        <p><strong>Scope: 28 of 34 Tier 1 services — Docker services only.</strong></p>
+        <table class="gen-table" style="font-size:11.5px;margin-bottom:10px">
+          <thead><tr><th>Service(s)</th><th>In this table?</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td>01, 02, 03, 07, 14–23, 28 (28 services)</td><td>✅ Yes</td><td>These build to Docker containers. RUNTIME applies.</td></tr>
+            <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers (V8 isolate — not a container). No Dockerfile. RUNTIME does not exist for this service.</td></tr>
+            <tr><td>09-react-native, 09-expo</td><td>❌ No</td><td>React Native builds to .apk / .ipa mobile apps. No container.</td></tr>
+            <tr><td>10-flutter</td><td>❌ No</td><td>Builds to mobile app. No container.</td></tr>
+            <tr><td>11-swift-swiftui</td><td>❌ No</td><td>iOS native — Xcode builds, no Docker.</td></tr>
+            <tr><td>12-kotlin-jetpack</td><td>❌ No</td><td>Android native — Android Studio/Gradle builds, no Docker.</td></tr>
+          </tbody>
+        </table>
         <div class="tbl-wrap">
         <table class="gen-table">
           <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>Notes</th></tr></thead>
