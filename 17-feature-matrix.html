@@ -787,13 +787,13 @@ readinessProbe:
         <table class="gen-table" style="font-size:11.5px">
           <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>SDK image when value = <code>sdk</code></th></tr></thead>
           <tbody>
-            <tr><td>Node.js (01, 07, 14, 28-node-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code></td></tr>
+            <tr><td>Node.js (01, 04, 05, 07, 14, 28-node-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code></td></tr>
             <tr><td>Python (15, 28-python-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>python:3.12-slim-bookworm</code></td></tr>
             <tr><td>Go (16, 28-go-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>golang:1.23-bookworm</code></td></tr>
             <tr><td>Java (17, 28-java-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td></tr>
             <tr><td>Kotlin (18, 28-kotlin-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td></tr>
             <tr><td>.NET / C# (19, 28-dotnet-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0</code></td></tr>
-            <tr><td>Rust (20, 28-rust-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>rust:1.78-bookworm</code></td></tr>
+            <tr><td>Rust (20, 28-rust-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>rust:1.83-bookworm</code></td></tr>
             <tr><td>Elixir (21, 30-ws-elixir)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>hexpm/elixir:1.17-erlang-27-debian-bookworm-slim</code></td></tr>
             <tr><td>Ruby (22, 28-ruby-grpc, 29-graphql-ruby, 30-ws-ruby)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>ruby:3.3-bookworm</code></td></tr>
             <tr><td>PHP (23, 28-php-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>php:8.3-cli-bookworm</code></td></tr>
@@ -807,8 +807,10 @@ readinessProbe:
         <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px">
           <code>ubuntu</code> = <code>ubuntu:24.04</code> — installs SDK via apt/rustup/curl scripts. Works for all languages.<br>
           <code>sdk</code> = official language maintainer's image on Debian bookworm base. Compiler is pre-baked.<br>
-          <code>sdk-alpine</code> = official language image on Alpine base. Smaller build cache. Not available for .NET, Elixir, Swift, Scala, Clojure.<br>
-          <code>custom</code> = supply your own image via <code>BUILD_BASE=your-registry/your-image:tag</code> sub-arg. For internal/air-gapped registries.
+          <code>sdk-alpine</code> = official language image on Alpine base. Smaller build cache. Not available for Elixir, Swift, Scala, Clojure, C++.<br>
+          <code>custom</code> = supply your own image via <code>BUILD_BASE=your-registry/your-image:tag</code> sub-arg. For internal/air-gapped registries.<br>
+          <strong>Groups 29 (GraphQL) and 30 (WebSocket):</strong> same BUILD_IMAGE values as the primary language group. 29-graphql-go → same as group 16. 30-ws-ruby → same as group 22. Etc.<br>
+          <strong>Version rule:</strong> BUILD_IMAGE version tag must match RUNTIME version tag. See <a href="#axes-detail" onclick="document.querySelector('#axis-runtime-version')?.setAttribute('open','')">RUNTIME axis — Version relationship table</a> for the full version-to-code-repo mapping.
         </p>
         <pre># Example — use official Go SDK image for build (instead of ubuntu)
 docker build --target runtime \
@@ -952,23 +954,26 @@ USER 1001</pre>
         <table class="gen-table">
           <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>Notes</th></tr></thead>
           <tbody>
-            <tr><td>Node.js SSR + API (01, 07, 14)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td>slim = node:22-slim</td></tr>
-            <tr><td>nginx static sites (02, 03)</td><td><code>alpine</code></td><td><code>stable</code> · <code>fips</code></td><td>stable = nginx:1.27-stable</td></tr>
+            <tr><td>Node.js SSR + API (01, 04, 05, 07, 14)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td>slim = node:22-slim · 04 = SvelteKit · 05 = Nuxt (both Node.js SSR)</td></tr>
+            <tr><td>nginx static sites (02, 03, 08, 13)</td><td><code>alpine</code></td><td><code>stable</code> · <code>fips</code></td><td>stable = nginx:1.27-stable · 08 = Angular · 13 = nginx-only static</td></tr>
             <tr><td>Python (15)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = python:3.12-slim</td></tr>
-            <tr><td>Go servers (16) + go-grpc (28)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>scratch = empty image, static binary only</td></tr>
-            <tr><td>Java (17) + java-grpc (28)</td><td><code>distroless</code></td><td><code>temurin</code> · <code>fips</code></td><td>distroless = gcr.io/distroless/java21</td></tr>
-            <tr><td>Kotlin (18)</td><td><code>distroless</code></td><td><code>temurin</code> · <code>fips</code></td><td>temurin = eclipse-temurin:21-jre</td></tr>
+            <tr><td>Go (16)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>scratch = empty image, static binary only · CGO_ENABLED=0 required</td></tr>
+            <tr><td>Java · Kotlin · Scala · Clojure (17, 18, 25, 26)</td><td><code>distroless</code></td><td><code>temurin</code> · <code>fips</code></td><td>JVM languages — same runtime family. distroless = gcr.io/distroless/java21 · temurin = eclipse-temurin:21-jre · fips = ubi9/openjdk-21-runtime</td></tr>
             <tr><td>.NET / C# (19)</td><td><code>alpine</code></td><td><code>debian</code> · <code>fips</code></td><td>alpine = aspnet:9.0-alpine · debian = aspnet:9.0-noble · fips = aspnet:9.0-cbl-mariner2.0-fips (CBL-Mariner, not UBI9)</td></tr>
             <tr><td>Rust (20)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>static binary via musl target (<code>x86_64-unknown-linux-musl</code>)</td></tr>
             <tr><td>Elixir (21)</td><td><code>debian</code></td><td><code>alpine</code> · <code>fips</code></td><td>debian = hexpm/elixir:1.17-erlang-27-debian-bookworm-slim · alpine = hexpm/elixir:1.17-erlang-27-alpine-3.19</td></tr>
             <tr><td>Ruby (22)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td>alpine = ruby:3.3-alpine · slim = ruby:3.3-slim · fips = ubi9/ruby-32</td></tr>
             <tr><td>PHP (23)</td><td><code>alpine</code></td><td><code>debian</code></td><td>No <code>fips</code> — no FIPS-validated PHP base image exists</td></tr>
+            <tr><td>Swift / Vapor (24)</td><td><code>slim</code></td><td><code>scratch</code></td><td>slim = swift:6.0-slim · scratch = fully static binary · No <code>fips</code> — Apple publishes no FIPS Swift container</td></tr>
+            <tr><td>C++ (27)</td><td><code>debian</code></td><td><code>alpine</code> · <code>scratch</code></td><td>debian = debian:bookworm-slim · scratch = fully static binary · No <code>fips</code> — no FIPS C++ base image exists</td></tr>
             <tr><td>gRPC — Node.js (28-node-grpc)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = node:22-bookworm-slim · alpine = node:22-alpine · fips = ubi9/nodejs-22-minimal</td></tr>
-            <tr><td>gRPC — Python (28-python-grpc)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = python:3.12-slim · alpine = python:3.12-alpine · fips = ubi9/python-39</td></tr>
+            <tr><td>gRPC — Python (28-python-grpc)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = python:3.12-slim · alpine = python:3.12-alpine · fips = ubi9/python-311</td></tr>
+            <tr><td>gRPC — other languages (28-go · 28-java · 28-kotlin · 28-dotnet · 28-rust · 28-elixir · 28-ruby · 28-php · 28-swift)</td><td colspan="3" style="color:var(--text-dim);font-size:11px">Same RUNTIME values as the primary language group above. Example: 28-go-grpc → same as group 16 (scratch default). 28-java-grpc → same as group 17 (distroless default). Etc.</td></tr>
+            <tr><td>GraphQL (29) · WebSocket (30) — all languages</td><td colspan="3" style="color:var(--text-dim);font-size:11px">Same RUNTIME values as the primary language group above. Example: 29-graphql-node → same as groups 01/14 (alpine default). 30-ws-go → same as group 16 (scratch default). Etc.</td></tr>
           </tbody>
         </table>
         </div>
-        <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px"><strong>fips base images by language:</strong> Node.js / Python / Go / Java / Kotlin / Elixir / Ruby / Rust → UBI9 (Red Hat Universal Base Image 9). .NET (19) → CBL-Mariner (<code>aspnet:9.0-cbl-mariner2.0-fips</code>) — Microsoft's own FIPS-validated image, not UBI9. PHP has no fips value — no FIPS-validated PHP base image exists.</p>
+        <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px"><strong>fips base images by language:</strong> Node.js / Python / Go / Java / Kotlin / Scala / Clojure / Elixir / Ruby / Rust → UBI9 (Red Hat Universal Base Image 9). .NET (19) → CBL-Mariner (<code>aspnet:9.0-cbl-mariner2.0-fips</code>) — Microsoft's FIPS-validated Linux, not UBI9. <strong>No fips:</strong> PHP (no FIPS PHP image exists anywhere) · Swift (Apple publishes no FIPS container) · C++ (no FIPS C++ base image exists).</p>
 
         <p><strong>Example commands:</strong></p>
         <pre># Node.js — default (alpine)
@@ -985,6 +990,38 @@ docker build --target runtime --build-arg RUNTIME=temurin -t my-service services
 
 # Backward compat — --target runtime-fips still works
 docker build --target runtime-fips -t my-service:fips services/14-express</pre>
+      </div>
+    </details>
+
+    <details class="axis-details" open id="axis-runtime-version">
+      <summary><span class="axis-num">Version relationship — build image, runtime image, and code repo</span></summary>
+      <div class="expand-content">
+        <p><strong>Rule:</strong> The SDK version in the build image must equal the SDK version in the runtime image. A mismatch = compiled for one version, runs on another — undefined behavior.</p>
+        <table class="gen-table" style="font-size:11px">
+          <thead><tr><th>Language</th><th>Code repo pins version via</th><th>Build image version</th><th>Runtime image version</th><th>Must match?</th></tr></thead>
+          <tbody>
+            <tr><td>Node.js</td><td><code>engines.node</code> in package.json</td><td>node:<strong>22</strong>-bookworm-slim</td><td>node:<strong>22</strong>-alpine</td><td>✅ Both = 22</td></tr>
+            <tr><td>Python</td><td><code>.python-version</code> or pyproject.toml</td><td>python:<strong>3.12</strong>-slim-bookworm</td><td>python:<strong>3.12</strong>-slim</td><td>✅ Both = 3.12</td></tr>
+            <tr><td>Go</td><td><code>go</code> directive in go.mod</td><td>golang:<strong>1.23</strong>-bookworm</td><td>scratch / distroless (no Go at runtime)</td><td>✅ Compiler only in build</td></tr>
+            <tr><td>Java</td><td><code>&lt;java.version&gt;</code> in pom.xml or <code>sourceCompatibility</code> in build.gradle</td><td>eclipse-temurin:<strong>21</strong>-jdk-bookworm</td><td>eclipse-temurin:<strong>21</strong>-jre / gcr.io/distroless/java<strong>21</strong></td><td>✅ Both = 21</td></tr>
+            <tr><td>Kotlin</td><td><code>jvmTarget</code> in build.gradle.kts</td><td>eclipse-temurin:<strong>21</strong>-jdk-bookworm</td><td>eclipse-temurin:<strong>21</strong>-jre</td><td>✅ Both = 21</td></tr>
+            <tr><td>Scala</td><td><code>scalaVersion</code> in build.sbt</td><td>sbtscala/scala-sbt:eclipse-temurin-<strong>21</strong>_…</td><td>eclipse-temurin:<strong>21</strong>-jre</td><td>✅ JDK/JRE both = 21</td></tr>
+            <tr><td>Clojure</td><td><code>clojure</code> version in deps.edn</td><td>clojure:tools-deps-bookworm (JDK <strong>21</strong>)</td><td>eclipse-temurin:<strong>21</strong>-jre</td><td>✅ Both = JVM 21</td></tr>
+            <tr><td>.NET / C#</td><td><code>&lt;TargetFramework&gt;net9.0&lt;/TargetFramework&gt;</code> in .csproj</td><td>mcr.microsoft.com/dotnet/sdk:<strong>9.0</strong></td><td>mcr.microsoft.com/dotnet/aspnet:<strong>9.0</strong></td><td>✅ Both = 9.0</td></tr>
+            <tr><td>Rust</td><td><code>edition</code> + rust-toolchain.toml</td><td>rust:<strong>1.83</strong>-bookworm</td><td>scratch / distroless (no Rust at runtime)</td><td>✅ Compiler only in build</td></tr>
+            <tr><td>Elixir</td><td><code>elixir</code> + <code>erlang</code> in .tool-versions</td><td>hexpm/elixir:<strong>1.17</strong>-erlang-<strong>27</strong>-debian-bookworm-slim</td><td>hexpm/elixir:<strong>1.17</strong>-erlang-<strong>27</strong>-debian-bookworm-slim</td><td>✅ Both = Elixir 1.17, Erlang 27</td></tr>
+            <tr><td>Ruby</td><td><code>.ruby-version</code> in repo root</td><td>ruby:<strong>3.3</strong>-bookworm</td><td>ruby:<strong>3.3</strong>-alpine</td><td>✅ Both = 3.3</td></tr>
+            <tr><td>PHP</td><td><code>require.php</code> in composer.json</td><td>php:<strong>8.3</strong>-cli-bookworm</td><td>php:<strong>8.3</strong>-fpm-alpine</td><td>✅ Both = 8.3</td></tr>
+            <tr><td>Swift</td><td><code>swift-version</code> in Package.swift</td><td>swift:<strong>6.0</strong>-bookworm</td><td>swift:<strong>6.0</strong>-slim</td><td>✅ Both = 6.0</td></tr>
+            <tr><td>C++</td><td>CMakeLists.txt / Makefile (GCC version via Debian base)</td><td>debian:bookworm (GCC 12)</td><td>debian:bookworm-slim (same glibc)</td><td>✅ Same Debian = same glibc</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:11px;color:var(--text-dim);margin-top:8px">
+          <strong>Compiled languages (Go, Rust):</strong> Runtime image has no SDK. Only build stage carries the compiler. Version only matters in build stage. Runtime image version = OS version, not language version.<br>
+          <strong>Interpreted languages (Node.js, Python, Ruby, PHP, Elixir):</strong> Runtime image provides the interpreter. Both build and runtime stages must carry the same interpreter version.<br>
+          <strong>Bytecode languages (Java, Kotlin, Scala, Clojure, .NET):</strong> Build stage = SDK (compiler + JDK). Runtime stage = JRE only (no compiler). JDK version must match JRE/aspnet version.<br>
+          <strong>Version upgrade workflow:</strong> 1) Update version in code repo file → 2) Update build image tag → 3) Update runtime image tag → 4) Both Dockerfile stages in one PR.
+        </p>
       </div>
     </details>
   </div>
