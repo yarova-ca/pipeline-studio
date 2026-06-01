@@ -18,7 +18,15 @@ load_dotenv()
 # Health endpoints are not limited — k8s probes must always pass.
 limiter = Limiter(key_func=get_remote_address)
 
-app = FastAPI(title="FastAPI 0.115")
+app = FastAPI(
+    title="FastAPI Service",
+    version="1.0.0",
+    openapi_tags=[
+        {"name": "auth", "description": "Authentication endpoints"},
+        {"name": "users", "description": "User and item CRUD"},
+        {"name": "health", "description": "Health check endpoints"},
+    ],
+)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 

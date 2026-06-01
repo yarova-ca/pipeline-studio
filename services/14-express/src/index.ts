@@ -1,5 +1,6 @@
 // tracing.js must be the very first import — OTel patches modules at load time.
 import './tracing.js'
+import { setupSwagger } from './swagger.js'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import 'dotenv/config'
@@ -57,6 +58,9 @@ app.get('/health/ready', async (_req, res) => {
     res.status(503).json({ status: 'error', db: 'disconnected' })
   }
 })
+
+// ── OpenAPI docs ───────────────────────────────────────────────────────────
+setupSwagger(app)
 
 // ── Feature routes ─────────────────────────────────────────────────────────
 app.use('/auth', authRouter)

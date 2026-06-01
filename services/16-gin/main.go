@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/yarova-ca/16-gin/internal/db"
 	"github.com/yarova-ca/16-gin/internal/routes"
 	"golang.org/x/time/rate"
@@ -119,6 +121,9 @@ func buildRouter() *gin.Engine {
 	// Auth and user routes.
 	routes.RegisterAuth(r)
 	routes.RegisterUsers(r)
+
+	// OpenAPI docs — served from docs/swagger.json.
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
 }

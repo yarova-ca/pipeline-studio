@@ -1,3 +1,106 @@
+/**
+ * @openapi
+ * /users/me/items:
+ *   get:
+ *     summary: List all items for current user
+ *     tags: [users]
+ *     security:
+ *       - bearerAuth: []
+ *       - apiKey: []
+ *     responses:
+ *       200:
+ *         description: List of items
+ *       401:
+ *         description: Not authenticated
+ *   post:
+ *     summary: Create an item for current user
+ *     tags: [users]
+ *     security:
+ *       - bearerAuth: []
+ *       - apiKey: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [title]
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Item created
+ *       400:
+ *         description: title is required
+ *       401:
+ *         description: Not authenticated
+ *
+ * /users/me/items/{id}:
+ *   get:
+ *     summary: Get one item by ID
+ *     tags: [users]
+ *     security:
+ *       - bearerAuth: []
+ *       - apiKey: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Item found
+ *       404:
+ *         description: Item not found
+ *   put:
+ *     summary: Update an item
+ *     tags: [users]
+ *     security:
+ *       - bearerAuth: []
+ *       - apiKey: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Item updated
+ *       404:
+ *         description: Item not found
+ *   delete:
+ *     summary: Delete an item
+ *     tags: [users]
+ *     security:
+ *       - bearerAuth: []
+ *       - apiKey: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Item deleted
+ *       404:
+ *         description: Item not found
+ */
 // Users route — CRUD for User's items.
 //
 // All routes require authentication (Bearer JWT or X-API-Key).
