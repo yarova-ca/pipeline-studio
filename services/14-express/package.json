@@ -1,24 +1,31 @@
 {
   "name": "14-express",
   "version": "1.0.0",
-  "description": "Minimal Express 5.0 starter \u2014 hello world + health endpoints",
+  "description": "Express 5.0 service starter \u2014 health endpoints, OAuth2 auth, Prisma ORM, CRUD",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "test": "jest --forceExit"
+    "test": "jest --forceExit",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.0.0",
+    "dotenv": "^16.4.5",
     "express": "^5.0.0",
-    "dotenv": "^16.4.5"
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.0",
     "@types/node": "^22.0.0",
     "@types/supertest": "^6.0.2",
     "jest": "^29.7.0",
+    "prisma": "^6.0.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.3.0",
     "tsx": "^4.19.0",
