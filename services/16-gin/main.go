@@ -6,9 +6,12 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/yarova-ca/16-gin/internal/db"
@@ -20,6 +23,38 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	"golang.org/x/time/rate"
 )
+
+// getEnvOrDefault returns the environment variable value or a fallback default.
+func getEnvOrDefault(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
+}
+
+// SecurityHeaders adds hardening response headers to every reply.
+func SecurityHeaders() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("X-Frame-Options", "DENY")
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("X-XSS-Protection", "1; mode=block")
+		c.Header("Referrer-Policy", "strict-origin-when-cross-origin")
+		c.Next()
+	}
+}
+
+// RequestID propagates or generates an X-Request-ID header on every request.
+func RequestID() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.GetHeader("X-Request-ID")
+		if id == "" {
+			id = uuid.New().String()
+		}
+		c.Set("request_id", id)
+		c.Header("X-Request-ID", id)
+		c.Next()
+	}
+}
 
 // rateLimiter is a token-bucket limiter shared across all requests.
 // Allows 100 requests per minute per process (global, not per-IP).
@@ -85,6 +120,21 @@ func main() {
 // Extracted so tests can call it without starting a real listener.
 func buildRouter() *gin.Engine {
 	r := gin.Default()
+
+	// ── CORS ───────────────────────────────────────────────────────────────
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     strings.Split(getEnvOrDefault("CORS_ORIGIN", "http://localhost:3000"), ","),
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Authorization", "X-API-Key", "X-Request-ID"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
+	// ── Security headers ───────────────────────────────────────────────────
+	r.Use(SecurityHeaders())
+
+	// ── Request ID ─────────────────────────────────────────────────────────
+	r.Use(RequestID())
 
 	// Ensure every response carries application/json content-type.
 	r.Use(func(c *gin.Context) {
