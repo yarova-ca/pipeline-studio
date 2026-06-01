@@ -470,7 +470,8 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 
 <div class="note-block" style="margin-top:0">
   <strong>Important: which axes work today vs which are coming soon</strong><br>
-  <code>RUNTIME</code> — <span class="s-impl">Implemented</span> — code exists in every applicable service. You can use it right now.<br>
+  <code>BUILD_IMAGE</code> — <span class="s-impl">Implemented</span> — <code>--build-arg BUILD_IMAGE=ubuntu|sdk|sdk-alpine|custom</code> works in all 92 Docker services right now.<br>
+  <code>RUNTIME</code> — <span class="s-impl">Implemented</span> — <code>--build-arg RUNTIME=alpine|slim|scratch|distroless|fips</code> works in all applicable services right now.<br>
   All other 6 axes — <span class="s-des">Designed</span> — fully documented and planned, but not yet built into service source code. See <a href="#status">Implementation status</a> for details.
 </div>
 
@@ -748,7 +749,7 @@ readinessProbe:
     <span class="ac-num">1</span>
     <span class="ac-name">Build Stage Image</span>
     <span class="ac-arg">BUILD_IMAGE</span>
-    <span class="s-des">Designed</span>
+    <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
     <p class="ac-what">Swaps the base image used in the compilation stage of the Dockerfile. The build stage runs the compiler, SDK, and package manager — then is discarded. Only the runtime stage ships to production. This axis controls the supply chain trust boundary at build time.</p>
@@ -766,17 +767,24 @@ readinessProbe:
       <strong>SBOM</strong> (Software Bill of Materials) = signed list of every dependency in the image — generated automatically by some base images.
     </div>
     <details class="axis-details" open>
-      <summary><span class="axis-num">Current hardcoded values — what exists today (before this axis is implemented)</span></summary>
+      <summary><span class="axis-num">What existed before — hardcoded build stage images (now replaced by BUILD_IMAGE ARG)</span></summary>
       <div class="expand-content">
-        <p>Today the build stage image is hardcoded in every Dockerfile. No <code>--build-arg</code> exists yet.</p>
+        <p><strong>Status:</strong> BUILD_IMAGE ARG is now implemented in all 92 Docker services. The table below shows what was hardcoded before this axis was added.</p>
         <table class="gen-table" style="font-size:11.5px">
-          <thead><tr><th>Service group(s)</th><th>Current build stage image</th><th>Why this image was chosen</th></tr></thead>
+          <thead><tr><th>Service group(s)</th><th>Previous hardcoded build stage image</th><th>Why this image was chosen</th></tr></thead>
           <tbody>
-            <tr><td>All non-gRPC Docker groups (01–03, 07, 14–23)</td><td><code>ubuntu:24.04</code></td><td>Universal base — can install any SDK via apt. One Dockerfile pattern covers all languages.</td></tr>
-            <tr><td>28-node-grpc</td><td><code>node:22-bookworm-slim</code></td><td>Node.js SDK pre-baked — no apt install needed. gRPC services use language-specific SDK images.</td></tr>
-            <tr><td>28-python-grpc</td><td><code>python:3.12-slim-bookworm</code></td><td>Python SDK pre-baked.</td></tr>
-            <tr><td>28-go-grpc</td><td><code>golang:1.22-bookworm</code></td><td>Go SDK pre-baked.</td></tr>
-            <tr><td>28-java-grpc</td><td><code>eclipse-temurin:21-jdk-bookworm</code></td><td>JDK pre-baked.</td></tr>
+            <tr><td>All groups 01–05, 07–08, 13–27 (non-gRPC, non-GraphQL, non-WebSocket)</td><td><code>ubuntu:24.04</code></td><td>Universal base — installs any SDK via apt. One Dockerfile pattern covers all languages.</td></tr>
+            <tr><td>28-node-grpc · 29-apollo · 29-graphql-yoga · 30-ws-node</td><td><code>node:22-bookworm-slim</code></td><td>Node.js SDK pre-baked in gRPC/GraphQL/WebSocket services.</td></tr>
+            <tr><td>28-python-grpc · 29-strawberry · 30-ws-python</td><td><code>python:3.12-slim-bookworm</code></td><td>Python SDK pre-baked.</td></tr>
+            <tr><td>28-go-grpc · 29-gqlgen · 30-ws-go</td><td><code>golang:1.22-bookworm</code></td><td>Go SDK pre-baked.</td></tr>
+            <tr><td>28-java-grpc · 29-spring-graphql · 30-ws-java</td><td><code>eclipse-temurin:21-jdk-jammy</code></td><td>JDK pre-baked (Maven installed separately).</td></tr>
+            <tr><td>28-kotlin-grpc</td><td><code>gradle:8.7-jdk21</code></td><td>Gradle + JDK pre-baked.</td></tr>
+            <tr><td>28-dotnet-grpc · 29-hot-chocolate · 30-ws-dotnet</td><td><code>mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim</code></td><td>.NET 8 SDK pre-baked.</td></tr>
+            <tr><td>28-rust-grpc · 29-async-graphql · 30-ws-rust</td><td><code>rust:1.78-bookworm</code></td><td>Rust SDK pre-baked.</td></tr>
+            <tr><td>28-ruby-grpc · 29-graphql-ruby · 30-ws-ruby</td><td><code>ruby:3.3-bookworm</code></td><td>Ruby SDK pre-baked.</td></tr>
+            <tr><td>28-php-grpc</td><td><code>php:8.3-fpm-bookworm</code></td><td>PHP-FPM SDK pre-baked.</td></tr>
+            <tr><td>28-swift-grpc</td><td><code>swift:5.10-bookworm</code></td><td>Swift SDK pre-baked.</td></tr>
+            <tr><td>30-ws-elixir</td><td><code>hexpm/elixir:1.17-erlang-27.3.4.12-debian-bookworm-20260518-slim</code></td><td>Elixir + Erlang/OTP SDK pre-baked.</td></tr>
           </tbody>
         </table>
       </div>
@@ -790,15 +798,15 @@ readinessProbe:
             <tr><td>Node.js (01, 04, 05, 07, 14, 28-node-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code></td><td><code>node:22-alpine</code></td></tr>
             <tr><td>Python (15, 28-python-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>python:3.12-slim-bookworm</code></td><td><code>python:3.12-alpine</code></td></tr>
             <tr><td>Go (16, 28-go-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>golang:1.23-bookworm</code></td><td><code>golang:1.23-alpine</code></td></tr>
-            <tr><td>Java (17, 28-java-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td><td><code>eclipse-temurin:21-jdk-alpine</code></td></tr>
-            <tr><td>Kotlin (18, 28-kotlin-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-bookworm</code></td><td><code>eclipse-temurin:21-jdk-alpine</code></td></tr>
+            <tr><td>Java (17, 28-java-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-jammy</code></td><td><code>eclipse-temurin:21-jdk-alpine</code></td></tr>
+            <tr><td>Kotlin (18, 28-kotlin-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-jammy</code></td><td><code>eclipse-temurin:21-jdk-alpine</code></td></tr>
             <tr><td>.NET / C# (19, 28-dotnet-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0-alpine</code></td></tr>
             <tr><td>Rust (20, 28-rust-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>rust:1.83-bookworm</code></td><td><code>rust:1.83-alpine</code></td></tr>
-            <tr><td>Elixir (21, 30-ws-elixir)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>hexpm/elixir:1.17-erlang-27-debian-bookworm-slim</code></td><td style="color:var(--text-dim)">❌ N/A — NIFs (C extensions used by many Hex packages) fail to compile on musl</td></tr>
+            <tr><td>Elixir (21, 30-ws-elixir)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>hexpm/elixir:1.17-erlang-27.3.4.12-debian-bookworm-20260518-slim</code></td><td style="color:var(--text-dim)">❌ N/A — NIFs (C extensions used by many Hex packages) fail to compile on musl</td></tr>
             <tr><td>Ruby (22, 28-ruby-grpc, 29-graphql-ruby, 30-ws-ruby)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>ruby:3.3-bookworm</code></td><td><code>ruby:3.3-alpine</code></td></tr>
             <tr><td>PHP (23, 28-php-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>php:8.3-cli-bookworm</code></td><td><code>php:8.3-cli-alpine</code></td></tr>
             <tr><td>Swift (24, 28-swift-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>swift:6.0-bookworm</code></td><td style="color:var(--text-dim)">❌ N/A — Apple does not publish an official Alpine Swift image</td></tr>
-            <tr><td>Scala (25)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>sbtscala/scala-sbt:eclipse-temurin-21_1.10.11_3.6.4</code></td><td style="color:var(--text-dim)">❌ N/A — sbtscala publishes no Alpine image</td></tr>
+            <tr><td>Scala (25)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>sbtscala/scala-sbt:eclipse-temurin-21.0.8_9_1.12.11_3.8.3</code></td><td style="color:var(--text-dim)">❌ N/A — sbtscala publishes no Alpine image</td></tr>
             <tr><td>Clojure (26)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>clojure:tools-deps-bookworm</code></td><td style="color:var(--text-dim)">❌ N/A — no official Clojure Alpine image on Docker Hub</td></tr>
             <tr><td>C++ (27)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>debian:bookworm</code> (GCC via apt)</td><td style="color:var(--text-dim)">❌ N/A — Alpine uses musl libc; glibc C++ binaries are incompatible</td></tr>
             <tr><td>nginx static (02, 03, 08, 13)</td><td><code>ubuntu</code></td><td><code>node-sdk</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code> (JS bundling)</td><td><code>node:22-alpine</code> (JS bundling)</td></tr>
@@ -961,7 +969,7 @@ USER 1001</pre>
             <tr><td>Java · Kotlin · Scala · Clojure (17, 18, 25, 26)</td><td><code>distroless</code></td><td><code>temurin</code> · <code>fips</code></td><td>JVM languages — same runtime family. distroless = gcr.io/distroless/java21 · temurin = eclipse-temurin:21-jre · fips = ubi9/openjdk-21-runtime</td></tr>
             <tr><td>.NET / C# (19)</td><td><code>alpine</code></td><td><code>debian</code> · <code>fips</code></td><td>alpine = aspnet:9.0-alpine · debian = aspnet:9.0-noble · fips = aspnet:9.0-cbl-mariner2.0-fips (CBL-Mariner, not UBI9)</td></tr>
             <tr><td>Rust (20)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>static binary via musl target (<code>x86_64-unknown-linux-musl</code>)</td></tr>
-            <tr><td>Elixir (21)</td><td><code>debian</code></td><td><code>alpine</code> · <code>fips</code></td><td>debian = hexpm/elixir:1.17-erlang-27-debian-bookworm-slim · alpine = hexpm/elixir:1.17-erlang-27-alpine-3.19</td></tr>
+            <tr><td>Elixir (21)</td><td><code>debian</code></td><td><code>alpine</code> · <code>fips</code></td><td>debian = hexpm/elixir:1.17-erlang-27.3.4.12-debian-bookworm-20260518-slim · alpine = hexpm/elixir:1.17-erlang-27.3.4.12-alpine-3.21.7</td></tr>
             <tr><td>Ruby (22)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td>alpine = ruby:3.3-alpine · slim = ruby:3.3-slim · fips = ubi9/ruby-32</td></tr>
             <tr><td>PHP (23)</td><td><code>alpine</code></td><td><code>debian</code></td><td>No <code>fips</code> — no FIPS-validated PHP base image exists</td></tr>
             <tr><td>Swift / Vapor (24)</td><td><code>slim</code></td><td><code>scratch</code></td><td>slim = swift:6.0-slim · scratch = fully static binary · No <code>fips</code> — Apple publishes no FIPS Swift container</td></tr>
@@ -1003,13 +1011,13 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
             <tr><td>Node.js</td><td><code>engines.node</code> in package.json</td><td>node:<strong>22</strong>-bookworm-slim</td><td>node:<strong>22</strong>-alpine</td><td>✅ Both = 22</td></tr>
             <tr><td>Python</td><td><code>.python-version</code> or pyproject.toml</td><td>python:<strong>3.12</strong>-slim-bookworm</td><td>python:<strong>3.12</strong>-slim</td><td>✅ Both = 3.12</td></tr>
             <tr><td>Go</td><td><code>go</code> directive in go.mod</td><td>golang:<strong>1.23</strong>-bookworm</td><td>scratch / distroless (no Go at runtime)</td><td>✅ Compiler only in build</td></tr>
-            <tr><td>Java</td><td><code>&lt;java.version&gt;</code> in pom.xml or <code>sourceCompatibility</code> in build.gradle</td><td>eclipse-temurin:<strong>21</strong>-jdk-bookworm</td><td>eclipse-temurin:<strong>21</strong>-jre / gcr.io/distroless/java<strong>21</strong></td><td>✅ Both = 21</td></tr>
-            <tr><td>Kotlin</td><td><code>jvmTarget</code> in build.gradle.kts</td><td>eclipse-temurin:<strong>21</strong>-jdk-bookworm</td><td>eclipse-temurin:<strong>21</strong>-jre</td><td>✅ Both = 21</td></tr>
+            <tr><td>Java</td><td><code>&lt;java.version&gt;</code> in pom.xml or <code>sourceCompatibility</code> in build.gradle</td><td>eclipse-temurin:<strong>21</strong>-jdk-jammy</td><td>eclipse-temurin:<strong>21</strong>-jre-jammy / gcr.io/distroless/java<strong>21</strong></td><td>✅ Both = 21</td></tr>
+            <tr><td>Kotlin</td><td><code>jvmTarget</code> in build.gradle.kts</td><td>eclipse-temurin:<strong>21</strong>-jdk-jammy</td><td>eclipse-temurin:<strong>21</strong>-jre-jammy</td><td>✅ Both = 21</td></tr>
             <tr><td>Scala</td><td><code>scalaVersion</code> in build.sbt</td><td>sbtscala/scala-sbt:eclipse-temurin-<strong>21</strong>_…</td><td>eclipse-temurin:<strong>21</strong>-jre</td><td>✅ JDK/JRE both = 21</td></tr>
             <tr><td>Clojure</td><td><code>clojure</code> version in deps.edn</td><td>clojure:tools-deps-bookworm (JDK <strong>21</strong>)</td><td>eclipse-temurin:<strong>21</strong>-jre</td><td>✅ Both = JVM 21</td></tr>
             <tr><td>.NET / C#</td><td><code>&lt;TargetFramework&gt;net9.0&lt;/TargetFramework&gt;</code> in .csproj</td><td>mcr.microsoft.com/dotnet/sdk:<strong>9.0</strong></td><td>mcr.microsoft.com/dotnet/aspnet:<strong>9.0</strong></td><td>✅ Both = 9.0</td></tr>
             <tr><td>Rust</td><td><code>edition</code> + rust-toolchain.toml</td><td>rust:<strong>1.83</strong>-bookworm</td><td>scratch / distroless (no Rust at runtime)</td><td>✅ Compiler only in build</td></tr>
-            <tr><td>Elixir</td><td><code>elixir</code> + <code>erlang</code> in .tool-versions</td><td>hexpm/elixir:<strong>1.17</strong>-erlang-<strong>27</strong>-debian-bookworm-slim</td><td>hexpm/elixir:<strong>1.17</strong>-erlang-<strong>27</strong>-debian-bookworm-slim</td><td>✅ Both = Elixir 1.17, Erlang 27</td></tr>
+            <tr><td>Elixir</td><td><code>elixir</code> + <code>erlang</code> in .tool-versions</td><td>hexpm/elixir:<strong>1.17</strong>-erlang-<strong>27.3.4.12</strong>-debian-bookworm-20260518-slim</td><td>hexpm/elixir:<strong>1.17</strong>-erlang-<strong>27.3.4.12</strong>-debian-bookworm-20260518-slim</td><td>✅ Both = Elixir 1.17, Erlang 27</td></tr>
             <tr><td>Ruby</td><td><code>.ruby-version</code> in repo root</td><td>ruby:<strong>3.3</strong>-bookworm</td><td>ruby:<strong>3.3</strong>-alpine</td><td>✅ Both = 3.3</td></tr>
             <tr><td>PHP</td><td><code>require.php</code> in composer.json</td><td>php:<strong>8.3</strong>-cli-bookworm</td><td>php:<strong>8.3</strong>-fpm-alpine</td><td>✅ Both = 8.3</td></tr>
             <tr><td>Swift</td><td><code>swift-version</code> in Package.swift</td><td>swift:<strong>6.0</strong>-bookworm</td><td>swift:<strong>6.0</strong>-slim</td><td>✅ Both = 6.0</td></tr>
@@ -1828,10 +1836,17 @@ docker run --rm -p 8080:8080 my-service</pre>
     </div>
   </div>
   <div class="status-row-item">
+    <div class="sr-chip-col"><span class="s-impl">Implemented</span></div>
+    <div>
+      <div class="sr-axis">BUILD_IMAGE — Build stage base image (<code>--build-arg BUILD_IMAGE=</code>)</div>
+      <div class="sr-desc">Code exists in all 92 Docker services. Use <code>--build-arg BUILD_IMAGE=ubuntu</code> (default), <code>BUILD_IMAGE=sdk</code>, <code>BUILD_IMAGE=sdk-alpine</code>, or <code>BUILD_IMAGE=custom --build-arg BUILD_BASE=your-registry/image:tag</code> right now. Also fixes the ARG RUNTIME scoping bug — RUNTIME ARG is now declared globally in all 28 affected services.</div>
+    </div>
+  </div>
+  <div class="status-row-item">
     <div class="sr-chip-col"><span class="s-des">Designed</span></div>
     <div>
-      <div class="sr-axis">BUILD_IMAGE, PKG_MANAGER, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM</div>
-      <div class="sr-desc">All 7 are fully documented — what they do, which values they accept, which groups they apply to, how they compose. The Dockerfile changes and service-level code do not yet exist. Passing these args to the current services has no effect.</div>
+      <div class="sr-axis">PKG_MANAGER, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM</div>
+      <div class="sr-desc">All 6 are fully documented — what they do, which values they accept, which groups they apply to, how they compose. The Dockerfile changes and service-level code do not yet exist. Passing these args to the current services has no effect.</div>
     </div>
   </div>
 </div>
