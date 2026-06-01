@@ -135,6 +135,22 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 /* why-exists box */
 .why-exists{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:0 0 28px;font-size:12px;line-height:1.7}
 .why-exists strong{color:var(--text-head)}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.how-to-read{background:#f6f8fa;border:1px solid var(--border);border-radius:7px;padding:14px 18px;margin:0 0 24px;font-size:12px;line-height:1.75}
+.how-to-read strong{color:var(--text-head)}
+@media(prefers-color-scheme:dark){
+  .why-block{background:#2a1f00;border-left-color:#d97706}
+  .decision-block{background:#0d2d1a;border-color:#1e5c35}
+  .failure-block{background:#3a0a0a;border-color:#6a1515}
+  .how-to-read{background:#161b22;border-color:#30363d}
+}
 </style>
 </head>
 <body>
@@ -208,6 +224,35 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
+     HOW TO READ + KEY DECISIONS
+════════════════════════════════════════════════════════════ -->
+<div class="how-to-read">
+  <strong>How to read this catalog</strong><br><br>
+  When you are starting a new project: read the <strong>When to use</strong> and <strong>When NOT</strong> columns in categories A–B (SSR/Hybrid and CSR/SPA).<br>
+  When you are evaluating performance: read the <strong>Perf</strong> and <strong>Bundle size</strong> columns and the rendering mode column.<br>
+  When you need compliance posture: read the <strong>Security posture</strong> and <strong>Maintained by</strong> columns — corporate-backed frameworks get faster security patches.<br><br>
+  <strong>Status column key:</strong> <span style="background:#dafbe1;color:#1a7f37;border-radius:3px;padding:1px 5px;font-size:10px;font-weight:700">Production</span> = API stable, battle-tested at scale. &nbsp; <span style="background:#fff8c5;color:#9a6700;border-radius:3px;padding:1px 5px;font-size:10px;font-weight:700">Beta</span> = API may change between releases. &nbsp; <span style="background:#ffebe9;color:#cf222e;border-radius:3px;padding:1px 5px;font-size:10px;font-weight:700">Legacy</span> = security patches only.
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> React over Angular as default SPA recommendation for most new projects.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> Angular as default — Angular requires TypeScript-only, Zone.js adds 40–80 kb, and the opinionated DI structure has a steeper learning curve for small teams.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> React has no built-in router, no built-in state manager, and no DI system — teams assemble these separately. Angular gives all three out of the box.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> FastAPI over Flask for Python API services.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> Flask as Python default — Flask is synchronous by default, has no built-in data validation, and generates no OpenAPI docs automatically. Flask apps in production require 4–6 extra libraries (Marshmallow, apispec, Celery, etc.) to reach FastAPI parity.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> FastAPI requires Python 3.7+ and async-aware team knowledge. Flask is simpler for beginners writing simple synchronous scripts.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> Gin over Echo for Go API services.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> Echo — Gin has 4× more GitHub stars and weekly downloads than Echo. The hiring pool of Go developers who know Gin is larger. Echo's API is slightly cleaner but the ecosystem advantage of Gin outweighs it.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Gin's error handling is less ergonomic than Echo's. Teams using Go generics heavily may prefer Echo or Fiber.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
      FRONTEND WEB SECTION LEGEND
 ════════════════════════════════════════════════════════════ -->
 <div class="section-legend">
@@ -243,6 +288,12 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 ══════════════════════════════════════ -->
 <h2 id="c1">1 — Frontend — SSR / Hybrid <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">Server renders HTML per request. Frameworks handle both server and client logic.</div>
+<div class="why-block"><strong>Why SSR:</strong> CSR (client-side rendering) sends an empty HTML page — search engines see blank content. SSR sends fully-rendered HTML. SEO-critical pages need SSR. Authenticated dashboards where SEO is irrelevant can use CSR instead.</div>
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> Next.js as the primary SSR recommendation.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> Remix as primary — Remix merged into React Router 7. Its ecosystem is smaller (600k vs 6M+ weekly downloads). Excellent form handling but fewer third-party integrations.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Next.js has Vercel-centric defaults. Teams deploying to AWS or self-hosting must configure adapters manually. Remix handles this more neutrally.</div>
+</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
 <div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-ssr-hybrid" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#ssr-hybrid" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>
@@ -282,6 +333,12 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 ══════════════════════════════════════ -->
 <h2 id="c2">2 — Frontend — CSR / SPA <span class="b fe">Frontend Web</span></h2>
 <div class="cat-meta">Browser renders all HTML. Server sends JS bundle only. No server-rendered HTML.</div>
+<div class="why-block"><strong>Why CSR:</strong> Authenticated apps (dashboards, admin panels, SaaS products) don't need SEO. CSR allows serving a single HTML file from a CDN — no server required, horizontal scaling is free. The cost is TTI (time-to-interactive) which is bundle-size-dependent.</div>
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> React over Vue as default CSR framework when team preference is neutral.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> Vue as default — Vue has a gentler learning curve but 5× fewer weekly npm downloads than React. The hiring pool for React developers is larger in North America and Europe. React's ecosystem (component libraries, testing tools, state managers) is deeper.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> React's JSX learning curve is steeper than Vue's SFC (single file component) format. Vue is the better choice when onboarding developers from non-JS backgrounds.</div>
+</div>
 <div class="cat-verified">Data verified: 2026-05-26 · Check releases before adopting</div>
 <div class="xref-strip"><span class="xs-label">See also:</span><a href="11-dockerfile-catalog.html#cat-csr-spa" class="doc-badge">11 Dockerfiles</a><a href="13-pipeline-build-catalog.html#csr-spa" class="doc-badge">13 Pipeline</a><a href="15-version-registry.html#frameworks" class="doc-badge">15 Versions</a></div>
 <div class="tbl"><table>

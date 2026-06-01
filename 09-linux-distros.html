@@ -134,6 +134,24 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   code{background:#1c2028;border-color:#30363d}
   th[title]{border-bottom-color:var(--blue)}
 }
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.quick-decision{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0 20px;border-radius:6px;overflow:hidden}
+.quick-decision th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--text-dim);border-bottom:2px solid var(--border)}
+.quick-decision td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55}
+.quick-decision tr:last-child td{border-bottom:none}
+.quick-decision tr:hover td{background:var(--bg2)}
+@media(prefers-color-scheme:dark){
+  .why-block{background:#2a1f00;border-left-color:#d97706}
+  .decision-block{background:#0d2d1a;border-color:#1e5c35}
+  .failure-block{background:#3a0a0a;border-color:#6a1515}
+}
 @media print{
   .skip-link,nav{display:none}
   main{padding:20px}
@@ -214,6 +232,39 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <div class="chip-num">4</div>
     <div class="chip-label">Use contexts:<br>container / CI / VM / K8s</div>
   </div>
+</div>
+
+<!-- Quick decision guide -->
+<div style="background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:14px 18px;margin:0 0 20px;font-size:12px">
+  <strong>Quick decision guide</strong>
+  <table class="quick-decision" style="margin-top:10px">
+    <thead><tr><th>If you need…</th><th>Use</th><th>Avoid</th></tr></thead>
+    <tbody>
+      <tr><td>Smallest possible image, Go or Rust static binary</td><td><code>scratch</code></td><td><code>alpine</code> — adds 7 MB you don't need for fully static binaries</td></tr>
+      <tr><td>Small image, Node.js or Python without glibc-dependent native modules</td><td><code>alpine:3.21</code></td><td><code>debian:12-slim</code> — 10× larger for no benefit if all packages are pure-language</td></tr>
+      <tr><td>glibc compatibility (Python native extensions, Node bcrypt/sharp)</td><td><code>debian:12-slim</code> or <code>ubuntu:24.04-minimal</code></td><td><code>alpine</code> — musl libc breaks precompiled glibc binaries without rebuild</td></tr>
+      <tr><td>FIPS 140-2/3 validated crypto (US federal, FedRAMP, DoD)</td><td><code>ubi9/ubi-micro</code> or <code>ubi9/nodejs-22-minimal</code></td><td><code>alpine</code> — no FIPS-validated module available</td></tr>
+      <tr><td>Zero shell, minimal CVE surface, glibc-linked binary</td><td><code>gcr.io/distroless/base-debian12</code></td><td><code>scratch</code> — scratch has no CA certs or glibc</td></tr>
+      <tr><td>CI runner with full toolchain (compilers, make, git)</td><td><code>ubuntu:24.04</code></td><td><code>alpine</code> — musl breaks many CI tool binaries (e.g., Trivy, some JVM tools)</td></tr>
+      <tr><td>SBOM-native supply chain compliance (EO 14028, SSDF)</td><td><code>cgr.dev/chainguard/wolfi-base</code></td><td><code>debian</code> — no per-package SBOM or SLSA provenance</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="failure-block" style="margin:0 0 16px">
+  <div><strong>If you use <code>scratch</code> as runtime and your app makes HTTPS calls:</strong></div>
+  <div><strong>Trigger:</strong> App binary starts in scratch container and attempts outbound HTTPS.</div>
+  <div><strong>System:</strong> TLS handshake fails — no CA certificate bundle present to verify server certificates.</div>
+  <div><strong>User sees:</strong> SSL error, certificate error, or connection refused — not a clear "missing certs" message.</div>
+  <div><strong>User can:</strong> Add <code>COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/</code> immediately after <code>FROM scratch</code>. Or switch to <code>gcr.io/distroless/base-debian12</code> which includes CA certs.</div>
+</div>
+
+<div class="failure-block" style="margin:0 0 16px">
+  <div><strong>If you run a glibc-compiled binary on Alpine:</strong></div>
+  <div><strong>Trigger:</strong> Any binary or native extension compiled against glibc is run inside an Alpine (musl) container.</div>
+  <div><strong>System:</strong> The binary fails to load — musl is not ABI-compatible with glibc. Python native extensions segfault. Node.js native modules fail to dlopen.</div>
+  <div><strong>User sees:</strong> <code>Error loading shared library libc.so.6: No such file or directory</code> or a segfault with no clear error.</div>
+  <div><strong>User can:</strong> Switch runtime to <code>debian:12-slim</code> (glibc). Or recompile the native extension on Alpine using <code>apk add build-base</code> before pip/npm install.</div>
 </div>
 
 <!-- Top-level knowledge legend -->
@@ -309,6 +360,24 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <!-- ═══ SECTION 1: CONTAINER-OPTIMIZED ═══ -->
 <h2 id="container-opt">Container-optimized base images</h2>
 <p class="section-sub">8 images — designed for use as the <code>FROM</code> line in a Dockerfile. Primary goal: minimal size and minimal attack surface.</p>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>alpine:3.21</code> as the default runtime base for all non-FIPS services.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> <code>debian:12-slim</code> as default — Debian-slim is ~75 MB vs Alpine's ~7 MB. For services without glibc-dependent native modules, the size difference provides no benefit and increases the CVE surface area.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Alpine uses musl libc. Services with Python native extensions (cryptography, lxml, numpy) or Node.js native modules (bcrypt, sharp) must switch to <code>debian:12-slim</code>.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>ubuntu:24.04</code> as the default builder stage image (not alpine).</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> <code>alpine:3.21</code> as builder — musl libc breaks many CI and build tools. Most package managers, compilers, and build scripts assume glibc. Using Alpine as builder causes sporadic build failures that are hard to diagnose.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Ubuntu builder images are ~500 MB vs Alpine's ~7 MB. The builder stage is discarded in multi-stage builds — its size does not affect the final runtime image.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>ubi9/ubi-micro</code> for FIPS runtime (not other FIPS options).</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> <code>azure-linux-2-fips</code> as universal FIPS default — Azure Linux FIPS is optimized for Azure-hosted workloads. UBI9 FIPS is multi-cloud, widely supported, and the standard for OpenShift and AWS GovCloud.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> UBI9 requires a Red Hat subscription to install additional RHEL packages. The base image itself is free to pull and run. Azure Linux FIPS has better integration with Azure Defender and ACR scanning.</div>
+</div>
 
 <div class="section-legend">
   <strong>These are not full operating systems.</strong> They are base layers for container images.<br>
@@ -557,6 +626,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <h2 id="general-purpose">General purpose</h2>
 <p class="section-sub">6 distros — full OS with package managers, shells, and broad ecosystem support. Used as container bases, CI runners, and VMs.</p>
 
+<div class="why-block"><strong>Why Ubuntu 24.04 over Debian 12 as builder stage:</strong> Ubuntu 24.04 is the <code>ubuntu-latest</code> GitHub Actions runner as of January 2025. Using the same OS for CI and your build stage eliminates environment-mismatch bugs where packages install correctly in CI but fail in Docker. Debian 12 is equally valid if you need strict minimal toolchain control.</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>debian:12-slim</code> as the glibc runtime base (not ubuntu:24.04-minimal).</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> ubuntu:24.04-minimal as glibc runtime — Ubuntu adds snap, systemd stubs, and Ubuntu-specific packages that add ~20 MB with no benefit in a container runtime. Debian slim is leaner for container use.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Debian uses apt, Ubuntu uses apt — they are compatible. But Debian security advisories (DSA) are separate from Ubuntu USN. You must track Debian's CVE feed for Debian-based runtime images.</div>
+</div>
+
 <div class="section-legend">
   <strong>Ubuntu 24.04 LTS</strong> is the default GitHub Actions runner OS as of 2026 (<code>ubuntu-latest</code> moved from 22.04 to 24.04 in January 2025).<br>
   <span class="leg-row"><strong>Debian slim</strong> is the most commonly used container base for glibc-dependent runtimes (Node.js, Python, Ruby, PHP) when image size matters and FIPS is not required.</span>
@@ -740,6 +817,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <!-- ═══ SECTION 3: RHEL FAMILY ═══ -->
 <h2 id="rhel-family">RHEL family — enterprise</h2>
 <p class="section-sub">5 distros — all binary-compatible with RHEL 9. Differ by vendor, FIPS certification status, and cost.</p>
+
+<div class="why-block"><strong>Why UBI9 (not full RHEL) for FIPS container runtime:</strong> UBI (Universal Base Image) is the free-to-redistribute subset of RHEL. It includes RHEL's FIPS-certified crypto module. A RHEL subscription is required only to install additional RHEL packages — not to pull or run the UBI image. This lets teams ship FIPS-compliant containers without paying for RHEL licenses per container.</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>ubi9/ubi-micro</code> for FIPS runtime over Rocky Linux 9 or AlmaLinux 9.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> Rocky Linux 9 / AlmaLinux 9 for FIPS — these distros use the same RHEL 9 crypto code but do NOT hold their own FIPS 140-2 certificate number. US government auditors who require a valid NIST certificate number must use RHEL 9 or Oracle Linux 9. UBI9 shares RHEL 9's certificate.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> UBI9 ties you to Red Hat's release cadence. Rocky and Alma have slightly faster community patch turnarounds for non-FIPS packages.</div>
+</div>
 
 <div class="section-legend">
   <strong>Only RHEL 9 and Oracle Linux 9 have independently certified FIPS 140-2 modules</strong> as of 2026.<br>

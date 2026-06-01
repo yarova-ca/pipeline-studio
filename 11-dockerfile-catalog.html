@@ -119,6 +119,24 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 .skip-link:focus{top:0}
 .nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
 .nav-top:hover{color:var(--blue);opacity:1}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.runtime-axis-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0 20px}
+.runtime-axis-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--text-dim);border-bottom:2px solid var(--border)}
+.runtime-axis-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55}
+.runtime-axis-table tr:last-child td{border-bottom:none}
+.runtime-axis-table tr:hover td{background:var(--bg2)}
+@media(prefers-color-scheme:dark){
+  .why-block{background:#2a1f00;border-left-color:#d97706}
+  .decision-block{background:#0d2d1a;border-color:#1e5c35}
+  .failure-block{background:#3a0a0a;border-color:#6a1515}
+}
 @media(prefers-color-scheme:dark){
   :root{
     --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
@@ -216,6 +234,51 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <div class="chip-num" style="color:var(--text-dim)">13</div>
     <div class="chip-label">CI-only<br>(no container at runtime)</div>
   </div>
+</div>
+
+<!-- WHY multi-stage + decision blocks -->
+<div class="why-block"><strong>Why multi-stage builds instead of single-stage:</strong> A single-stage Dockerfile leaves compilers, package managers, source code, and build caches in the final image. This produces images 3–10× larger and exposes build tools to attackers if the container is compromised. Multi-stage builds copy only the compiled output — build tools never reach production.</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> Separate <code>ARG BUILD_IMAGE</code> and <code>ARG RUNTIME</code> instead of a single image ARG.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> One ARG controlling both stages — if a single <code>IMAGE</code> arg drove both build and runtime, switching to a FIPS runtime would also force a FIPS build environment. These are independent concerns: you can build with Ubuntu and run on UBI9-FIPS.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Two ARGs means two decisions per Dockerfile. Teams must understand that <code>BUILD_IMAGE</code> affects CI build time and supply chain, while <code>RUNTIME</code> affects production attack surface and compliance.</div>
+</div>
+
+<div style="background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:14px 18px;margin:0 0 16px;font-size:12px">
+  <strong>Choosing your RUNTIME axis — 3-branch condition</strong>
+  <table class="runtime-axis-table" style="margin-top:10px">
+    <thead><tr><th>Condition</th><th>RUNTIME value</th><th>Base image used</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>FIPS 140-2/3 required (FedRAMP, DoD, ITAR)</td><td><code>fips</code></td><td><code>ubi9/nodejs-22-minimal</code> (Node) · <code>ubi9/ubi-micro</code> (Go/Rust) · <code>ubi9/python-311</code> (Python)</td><td>FIPS-validated crypto module active. Requires Red Hat subscription only to install extra packages.</td></tr>
+      <tr><td>glibc-dependent native modules in stack (bcrypt, sharp, lxml, numpy)</td><td><code>slim</code></td><td><code>node:22-slim</code> · <code>python:3.12-slim</code> · <code>ruby:3.3-slim</code></td><td>Debian-slim with glibc. ~75 MB. No FIPS. Broadest binary compatibility.</td></tr>
+      <tr><td>Pure-language stack, no native modules, no FIPS</td><td><code>alpine</code> (default)</td><td><code>node:22-alpine</code> · <code>golang:1.24-alpine</code> · <code>python:3.12-alpine</code></td><td>~7 MB runtime. musl libc. Fails for glibc-compiled binaries. Smallest CVE surface among full-OS images.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="failure-block" style="margin:0 0 16px">
+  <div><strong>If you use wrong EXPOSE port in Dockerfile:</strong></div>
+  <div><strong>Trigger:</strong> <code>EXPOSE 3000</code> in Dockerfile but the app actually listens on port 8080.</div>
+  <div><strong>System:</strong> Container starts. Kubernetes health probe hits port 3000 — connection refused. Pod stays in CrashLoopBackOff or NotReady.</div>
+  <div><strong>User sees:</strong> No traffic reaches the service. <code>kubectl describe pod</code> shows readiness probe failures.</div>
+  <div><strong>User can:</strong> Match EXPOSE to the actual app port. EXPOSE is documentation only — it does not configure port mapping. Fix the app's listen port or fix the EXPOSE directive to match.</div>
+</div>
+
+<div class="failure-block" style="margin:0 0 16px">
+  <div><strong>If you run as root in the container (missing USER directive):</strong></div>
+  <div><strong>Trigger:</strong> Dockerfile has no <code>USER</code> directive before <code>CMD</code>/<code>ENTRYPOINT</code>. Container runs as UID 0 (root).</div>
+  <div><strong>System:</strong> Container passes build and runs. Security scanner (Trivy, Snyk) reports CRITICAL: running as root. Some Kubernetes admission controllers (PSP, OPA Gatekeeper with restricted policy) reject the pod entirely.</div>
+  <div><strong>User sees:</strong> <code>Error from server: pods "my-app" is forbidden: unable to validate against any security policy</code> or a Trivy HIGH/CRITICAL finding in CI.</div>
+  <div><strong>User can:</strong> Add before CMD: <code>RUN addgroup -S app &amp;&amp; adduser -S app -G app</code> (Alpine) or <code>RUN useradd -r -u 1001 app</code> (Debian). Then add <code>USER app</code>.</div>
+</div>
+
+<div class="failure-block" style="margin:0 0 16px">
+  <div><strong>If you use <code>--target runtime</code> (non-FIPS) but the deployment environment requires FIPS:</strong></div>
+  <div><strong>Trigger:</strong> Image deployed to a FedRAMP or DoD environment without a FIPS-validated crypto module.</div>
+  <div><strong>System:</strong> Container runs. Compliance scanner detects non-UBI base image. Deployment fails compliance gate or audit finding is raised.</div>
+  <div><strong>User sees:</strong> Compliance scan failure: "Base image not FIPS-validated." Or audit finding: "Cryptographic module not NIST-certified."</div>
+  <div><strong>User can:</strong> Rebuild with <code>docker build --target runtime-fips .</code>. Verify with <code>docker inspect [image] | grep -i ubi</code> to confirm UBI9 base.</div>
 </div>
 
 <div class="section-legend">

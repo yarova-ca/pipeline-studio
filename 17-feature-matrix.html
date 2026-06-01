@@ -198,6 +198,24 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   .cat-card.c-api{background:transparent}
   .ex-result{background:#0d2d1a;border-color:#1e5c35}
 }
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.axis-explain-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0 20px}
+.axis-explain-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--text-dim);border-bottom:2px solid var(--border)}
+.axis-explain-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55}
+.axis-explain-table tr:last-child td{border-bottom:none}
+.axis-explain-table tr:hover td{background:var(--bg2)}
+@media(prefers-color-scheme:dark){
+  .why-block{background:#2a1f00;border-left-color:#d97706}
+  .decision-block{background:#0d2d1a;border-color:#1e5c35}
+  .failure-block{background:#3a0a0a;border-color:#6a1515}
+}
 @media print{
   .skip-link,nav{display:none}
   main{padding:20px}
@@ -259,6 +277,22 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-pillar">Pillar 2 — Frameworks &amp; Services &nbsp;·&nbsp; Related: <a href="01-framework-catalog.html">01 Framework catalog</a> &nbsp;·&nbsp; <a href="services/">[services/]</a></div>
 </div>
 <div class="page-meta">7 build axes · 30 service groups · beginner guide · what each axis does · why you'd use it · real examples</div>
+
+<div style="background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:14px 18px;margin:0 0 20px;font-size:12px;line-height:1.75">
+  <strong>What each axis means — quick reference</strong>
+  <table class="axis-explain-table" style="margin-top:10px">
+    <thead><tr><th>Axis</th><th>What it controls</th><th>Default</th><th>When to override</th></tr></thead>
+    <tbody>
+      <tr><td><code>BUILD_IMAGE</code></td><td>Which base image runs the compiler, package manager, and build tools. Controls supply chain trust boundary.</td><td><code>ubuntu:24.04</code></td><td>FIPS build environment required → use <code>sdk</code> (UBI9-based). Smaller build layer → <code>sdk-alpine</code>.</td></tr>
+      <tr><td><code>RUNTIME</code></td><td>Which base Linux image the compiled service runs on in production. Controls CVE surface and image size.</td><td><code>alpine</code></td><td>FIPS 140-2/3 required → <code>fips</code> (UBI9). glibc native modules needed → <code>slim</code>. Go/Rust static binary → <code>scratch</code> or <code>distroless</code>.</td></tr>
+      <tr><td><code>COMPLIANCE</code></td><td>Which regulatory rule set to activate — masks PII in logs, enables audit trails, forces TLS 1.2+.</td><td>none</td><td>Healthcare (HIPAA), payment processing (PCI-DSS), Canadian data residency (PIPEDA), US federal (FedRAMP).</td></tr>
+      <tr><td><code>AUTH</code></td><td>Which authentication method the service enforces on incoming requests.</td><td>none</td><td>Any service that should not be publicly accessible. JWT for stateless APIs. mTLS for service-to-service. API key for third-party integrations.</td></tr>
+      <tr><td><code>OBSERVABILITY</code></td><td>Which monitoring instrumentation is added — traces, metrics, and logs shipped to your tool.</td><td>none</td><td>Any production service. OpenTelemetry is the vendor-neutral default. Prometheus for Kubernetes-native monitoring.</td></tr>
+      <tr><td><code>ORM</code></td><td>Which database access library is wired up — connection pool, schema, and sample query.</td><td>none</td><td>Any service that reads or writes a relational database. ORM applies only to API server groups (14–27). Protocol servers (28–30) transport data but do not own rows.</td></tr>
+      <tr><td><code>PKG_MGR</code></td><td>Which package manager runs inside the Dockerfile (npm vs pnpm vs yarn for Node.js, pip vs poetry vs uv for Python).</td><td><code>npm</code> / <code>pip</code></td><td>Monorepo with pnpm workspaces → <code>pnpm</code>. Faster installs in CI → <code>pnpm</code> or <code>uv</code>. Dependency locking via poetry.lock → <code>poetry</code>.</td></tr>
+    </tbody>
+  </table>
+</div>
 
 <div class="counts-bar">
   <div class="count-chip axes-chip"><div class="chip-num">7</div><div class="chip-label">Ways to<br>customize</div></div>
@@ -338,6 +372,15 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <div class="cat-axes-line">Zero axes apply.</div>
     <div class="cat-note">No Docker image. No server process. These are mobile and native app builds — <code>docker build --build-arg</code> has no effect. CI runs a platform-native build instead.</div>
   </div>
+</div>
+
+<!-- ─── HOW TO READ THE MATRIX ─── -->
+<div style="background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:14px 18px;margin:16px 0 20px;font-size:12px;line-height:1.75">
+  <strong>How to read the matrix</strong><br><br>
+  When you see <span class="s-impl">Implemented</span>: the axis is built and works today. You can pass the <code>--build-arg</code> and it will change the output.<br>
+  When you see <span class="s-des">Designed</span>: the axis is fully specified but not yet in service source code. The <code>--build-arg</code> is accepted but has no effect yet.<br>
+  When a cell shows <span class="cell-y">✓</span>: the axis applies to that service group — it is relevant and either implemented or designed.<br>
+  When a cell shows <span class="cell-n">—</span>: the axis does not apply to that service group at all. For example, ORM does not apply to protocol servers because protocol servers do not own database rows.
 </div>
 
 <!-- ─── PRIORITY TIERS ─── -->
@@ -507,6 +550,23 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <code>BUILD_IMAGE</code> — <span class="s-impl">Implemented</span> — <code>--build-arg BUILD_IMAGE=ubuntu|sdk|sdk-alpine|custom</code> works in all 92 Docker services right now.<br>
   <code>RUNTIME</code> — <span class="s-impl">Implemented</span> — <code>--build-arg RUNTIME=alpine|slim|scratch|distroless|fips</code> works in all applicable services right now.<br>
   All other 6 axes — <span class="s-des">Designed</span> — fully documented and planned, but not yet built into service source code. See <a href="#status">Implementation status</a> for details.
+</div>
+
+<div class="why-block"><strong>Why axes are configurable at build time instead of at runtime:</strong> Build-time configuration means the final image contains only what it needs. A service built with <code>COMPLIANCE=hipaa</code> has the HIPAA audit code compiled in — there is no way to accidentally run the service without it. Runtime configuration via environment variables can be bypassed if an env var is missing or misconfigured.</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>RUNTIME=alpine</code> is the default for all Node.js, Go, Python, and Rust services.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> <code>slim</code> (Debian-slim) as default — Debian-slim images are ~75 MB vs Alpine's ~7 MB. For services with no glibc-dependent native modules, Alpine provides the same compatibility at 10× smaller size and a smaller CVE surface.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Alpine uses musl libc. Native modules compiled against glibc (bcrypt, sharp, lxml, etc.) will fail on Alpine. Teams using these must switch to <code>RUNTIME=slim</code>.</div>
+</div>
+
+<p style="font-size:12px;margin:10px 0 4px;font-weight:600;color:var(--text-head)">RUNTIME binary conditions:</p>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:10px 14px;margin-bottom:10px;font-size:12px;line-height:2">
+  When <code>RUNTIME=fips</code>: runtime stage switches to <code>ubi9/nodejs-22-minimal</code> (Node.js) or <code>ubi9/ubi-micro</code> (Go/Rust). FIPS 140-2 validated crypto module active.<br>
+  When <code>RUNTIME=alpine</code>: runtime stage uses <code>node:22-alpine</code> / <code>golang:1.24-alpine</code>. No FIPS validation. Smallest image size.<br>
+  When <code>RUNTIME=slim</code>: runtime stage uses Debian-slim. glibc available. Native modules work without recompile.<br>
+  When <code>RUNTIME=scratch</code>: runtime stage has no base OS. Only statically-linked Go or Rust binaries work. Zero CVEs possible.<br>
+  When <code>RUNTIME=distroless</code>: runtime stage uses <code>gcr.io/distroless/base-debian12</code>. glibc available, no shell, minimal CVE surface.
 </div>
 
 <!-- ═══ SECTION 2.5: BUILT-IN FEATURES ═══ -->

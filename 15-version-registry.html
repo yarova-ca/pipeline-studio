@@ -90,6 +90,23 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   .doc-badge{background:#0d2744;border-color:#2d4a6a;color:var(--blue)}
   .doc-badge:hover{background:var(--blue);color:#0d1117}
 }
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.update-steps{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px;line-height:1.9}
+.update-steps ol{padding-left:18px;margin-top:6px}
+.update-steps li{margin-bottom:3px}
+@media(prefers-color-scheme:dark){
+  .why-block{background:#2a1f00;border-left-color:#d97706}
+  .decision-block{background:#0d2d1a;border-color:#1e5c35}
+  .failure-block{background:#3a0a0a;border-color:#6a1515}
+  .update-steps{background:#161b22;border-color:#30363d}
+}
 @media print{
   nav{display:none}
   main{max-width:100%;padding:12px}
@@ -157,6 +174,18 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="count-chip c1"><div class="chip-num">6</div><div class="chip-label">Market &amp; industry<br>data sources</div></div>
 </div>
 
+<div class="why-block" style="margin-bottom:12px"><strong>Why this registry exists:</strong> Version strings are scattered across 13 docs. Without a single source of truth, docs drift — doc 11 references <code>node:22-alpine</code> while doc 13 still references <code>node:20-alpine</code>. This page is the authoritative list. Every doc pulls version strings from here.</div>
+
+<div class="why-block" style="margin-bottom:12px"><strong>Why different cadences per category:</strong> Base images (OS packages, libc, OpenSSL) receive CVE patches continuously. A stale base image tag from 6 weeks ago may have 10–30 known CVEs. Frameworks release less frequently but their major versions change pipeline behavior. Compliance standards change at most annually — quarterly checks are wasteful.</div>
+
+<div class="failure-block" style="margin-bottom:16px">
+  <div><strong>If a base image is not updated within 30 days:</strong></div>
+  <div><strong>Trigger:</strong> The pinned base image tag accumulates OS-level CVE patches that the tag has not received since the last pull.</div>
+  <div><strong>System:</strong> Trivy scan in CI detects CRITICAL or HIGH CVEs in the base layer. Build pipeline blocks at the scan stage.</div>
+  <div><strong>User sees:</strong> CI failure: "Trivy found CRITICAL CVEs in base image. Scan blocked." or similar message from the scanning tool configured in doc 04.</div>
+  <div><strong>User can:</strong> Update the base image tag in this registry, update the <code>FROM</code> tag in doc 11 Dockerfiles, and re-run the build. The scan must pass before the build proceeds.</div>
+</div>
+
 <div class="how-block">
   <h3>How to use this page — version maintenance workflow</h3>
   <ol>
@@ -178,6 +207,26 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
       <tr><td>Market &amp; industry data</td><td>365 days</td><td>Wage bands and demand signals shift with hiring cycles — annual re-verify is sufficient</td></tr>
     </tbody>
   </table>
+</div>
+
+<div class="update-steps">
+  <strong>How to update a version — step-by-step</strong>
+  <ol>
+    <li>Engineer opens this registry page and finds the item to update in the relevant category table.</li>
+    <li>Engineer clicks the source link in the "Source / release page" column — this opens the upstream release page.</li>
+    <li>Engineer compares the upstream latest version to the "Version in docs" column — notes old and new version strings.</li>
+    <li>When a version difference exists: engineer finds each doc listed in the "Used in" column and updates the version string there.</li>
+    <li>For base images: engineer also updates the <code>FROM</code> tag in the matching Dockerfile in doc 11 and any framework-specific service Dockerfiles.</li>
+    <li>Engineer updates the "Last verified" date in this registry to today's date.</li>
+    <li>Engineer commits with message: <code>Update [item name] [old-version] → [new-version] (verified [date])</code></li>
+    <li>CI pipeline runs Trivy scan against the updated image — scan must pass before the PR merges.</li>
+  </ol>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> Trivy as the CVE scanner for base image verification, not Grype.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> Grype — Grype has excellent CVE database coverage but Trivy also scans SBOM, Kubernetes manifests, Helm charts, and IaC (Terraform, CloudFormation) in a single tool. Running one scanner vs two reduces CI configuration and false-positive cross-validation overhead.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Trivy has occasional false positives on Alpine packages (musl-specific CVEs reported against glibc-rated severity). Teams must review Trivy findings against the actual impact on Alpine/musl systems, not just the raw CVSS score.</div>
 </div>
 
 
