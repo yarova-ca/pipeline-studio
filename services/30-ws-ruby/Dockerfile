@@ -21,4 +21,7 @@ COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY . .
 ENV PORT=9292 RACK_ENV=production
 EXPOSE 9292
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:9292/health/live || exit 1
+
 CMD ["bundle", "exec", "puma", "-b", "tcp://0.0.0.0:9292"]

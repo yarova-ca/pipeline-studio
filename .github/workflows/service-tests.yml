@@ -22,8 +22,14 @@ name: Service Tests
 on:
   push:
     branches: [main]
+    paths:
+      - 'services/**'
+      - '.github/workflows/service-tests.yml'
   pull_request:
     branches: [main]
+    paths:
+      - 'services/**'
+      - '.github/workflows/service-tests.yml'
 
 permissions:
   contents: read
@@ -32,6 +38,7 @@ jobs:
   # ── Node services ─────────────────────────────────────────────────────────
   test-node:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -69,10 +76,21 @@ jobs:
           NODE_ENV: test
           DATABASE_URL: postgresql://app:test@localhost:5432/test
           JWT_SECRET: test-secret-32-chars-long-minimum
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ matrix.service }}
+          path: |
+            services/${{ matrix.service }}/test-results/
+            services/${{ matrix.service }}/coverage/
+          retention-days: 7
+          if-no-files-found: ignore
 
   # ── Python services ────────────────────────────────────────────────────────
   test-python:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -93,10 +111,21 @@ jobs:
         env:
           DATABASE_URL: postgresql://app:test@localhost:5432/test
           JWT_SECRET: test-secret-32-chars-long-minimum
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ matrix.service }}
+          path: |
+            services/${{ matrix.service }}/test-results/
+            services/${{ matrix.service }}/coverage/
+          retention-days: 7
+          if-no-files-found: ignore
 
   # ── Go services ────────────────────────────────────────────────────────────
   test-go:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -116,10 +145,21 @@ jobs:
         env:
           DATABASE_URL: postgresql://app:test@localhost:5432/test
           JWT_SECRET: test-secret-32-chars-long-minimum
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ matrix.service }}
+          path: |
+            services/${{ matrix.service }}/test-results/
+            services/${{ matrix.service }}/coverage/
+          retention-days: 7
+          if-no-files-found: ignore
 
   # ── Java services ──────────────────────────────────────────────────────────
   test-java:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -138,10 +178,21 @@ jobs:
         env:
           DATABASE_URL: jdbc:h2:mem:test
           JWT_SECRET: test-secret-32-chars-long-minimum
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ matrix.service }}
+          path: |
+            services/${{ matrix.service }}/test-results/
+            services/${{ matrix.service }}/coverage/
+          retention-days: 7
+          if-no-files-found: ignore
 
   # ── Kotlin services ────────────────────────────────────────────────────────
   test-kotlin:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -164,6 +215,7 @@ jobs:
   # ── .NET services ─────────────────────────────────────────────────────────
   test-dotnet:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -183,6 +235,7 @@ jobs:
   # ── Rust services ─────────────────────────────────────────────────────────
   test-rust:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -206,6 +259,7 @@ jobs:
   # ── Ruby services ─────────────────────────────────────────────────────────
   test-ruby:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -232,6 +286,7 @@ jobs:
   # ── PHP services ──────────────────────────────────────────────────────────
   test-php:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -257,6 +312,7 @@ jobs:
   # ── Elixir services ────────────────────────────────────────────────────────
   test-elixir:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:

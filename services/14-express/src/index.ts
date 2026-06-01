@@ -2,18 +2,58 @@
 import './tracing.js'
 import { setupSwagger } from './swagger.js'
 import express from 'express'
+import helmet from 'helmet'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import rateLimit from 'express-rate-limit'
+import { randomUUID } from 'node:crypto'
 import 'dotenv/config'
 import { logger } from './logger.js'
 import { prisma } from './db/client.js'
 import authRouter from './routes/auth.js'
 import usersRouter from './routes/users.js'
 
+// Fix 14: Validate required environment variables at startup.
+// JWT_SECRET validation also runs inside middleware/auth.ts on module load.
+const requiredEnvVars = ['JWT_SECRET']
+const missingEnvVars = requiredEnvVars.filter(v => !process.env[v])
+if (missingEnvVars.length > 0) {
+  console.error(`Missing required env vars: ${missingEnvVars.join(', ')}`)
+  process.exit(1)
+}
+// Warn about optional vars that disable features.
+if (!process.env.AUTH_CLIENT_ID) console.warn('AUTH_CLIENT_ID not set — OAuth login disabled')
+if (!process.env.DATABASE_URL) console.warn('DATABASE_URL not set — database features disabled')
+
 const app = express()
 const PORT = Number(process.env.PORT ?? '3000')
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+// Fix 6: Helmet sets secure HTTP response headers (XSS protection, HSTS, etc.).
+// Must be first middleware so headers apply to every response.
+app.use(helmet())
+
+// Fix 10: Attach a unique request ID to every request for traceability.
+app.use((req, res, next) => {
+  const id = (req.headers['x-request-id'] as string) || randomUUID()
+  req.headers['x-request-id'] = id
+  res.setHeader('x-request-id', id)
+  next()
+})
+
+// Fix 5: CORS — restrict origins to the configured allowlist.
+app.use(cors({
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key', 'X-Request-ID'],
+}))
+
+// Fix 9: Cookie parser needed for OAuth state validation.
+app.use(cookieParser())
+
+// Fix 7: Limit request body size to prevent large-payload DoS.
+app.use(express.json({ limit: '10KB' }))
+app.use(express.urlencoded({ extended: true, limit: '10KB' }))
 
 // ── Request logging ────────────────────────────────────────────────────────
 app.use((req, _res, next) => {

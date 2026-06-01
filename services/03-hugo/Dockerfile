@@ -37,6 +37,9 @@ FROM registry.access.redhat.com/ubi9/nginx-122 AS base-fips
 FROM base-${RUNTIME} AS runtime
 COPY --from=build /app/public /usr/share/nginx/html
 EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:80/health || exit 1
+
 CMD ["nginx", "-g", "daemon off;"]
 
 # ── Runtime — FIPS ────────────────────────────────────────────────────────

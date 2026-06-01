@@ -22,4 +22,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 ENV PORT=8080
 EXPOSE 8080 8081
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8080/health/live || exit 1
+
 CMD ["java", "-jar", "app.jar"]

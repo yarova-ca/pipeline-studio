@@ -3,7 +3,7 @@
 All routes require a valid auth token via get_current_user dependency.
 
 Routes:
-  GET    /users/me/items        — list all items for current user
+  GET    /users/me/items        — list items (paginated, max 100 per page)
   POST   /users/me/items        — create a new item
   GET    /users/me/items/{id}   — get one item (404 if not found or not owned)
   PUT    /users/me/items/{id}   — update item title and/or description
@@ -12,9 +12,9 @@ Routes:
 
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
-from sqlalchemy import select
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel, Field
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.auth.dependencies import get_current_user
@@ -27,13 +27,15 @@ router = APIRouter()
 # ── Pydantic schemas ──────────────────────────────────────────────────────────
 
 class ItemCreate(BaseModel):
-    title: str
-    description: Optional[str] = None
+    # Fix 5: Add Field max_length validation to prevent unbounded string inputs.
+    title: str = Field(..., min_length=1, max_length=500)
+    description: Optional[str] = Field(None, max_length=2000)
 
 
 class ItemUpdate(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
+    # Fix 5: Apply same length limits to update schema.
+    title: Optional[str] = Field(None, min_length=1, max_length=500)
+    description: Optional[str] = Field(None, max_length=2000)
 
 
 class ItemResponse(BaseModel):
@@ -43,6 +45,13 @@ class ItemResponse(BaseModel):
     user_id: int
 
     model_config = {"from_attributes": True}
+
+
+class PaginatedItemsResponse(BaseModel):
+    items: list[ItemResponse]
+    total: int
+    limit: int
+    offset: int
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -63,16 +72,28 @@ async def _get_owned_item(item_id: int, user_id: int, db: AsyncSession) -> Item:
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
-@router.get("/users/me/items", response_model=list[ItemResponse])
+@router.get("/users/me/items", response_model=PaginatedItemsResponse)
 async def list_items(
+    # Fix 6: Paginated list — limit capped at 100, offset must be non-negative.
+    limit: int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0),
     current_user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-) -> list[Item]:
-    """Return all items owned by the authenticated user."""
-    result = await db.execute(
-        select(Item).where(Item.user_id == current_user["id"])
+) -> dict:
+    """Return paginated items owned by the authenticated user."""
+    user_id = current_user["id"]
+    items_result = await db.execute(
+        select(Item).where(Item.user_id == user_id).offset(offset).limit(limit)
     )
-    return list(result.scalars().all())
+    total_result = await db.execute(
+        select(func.count()).select_from(Item).where(Item.user_id == user_id)
+    )
+    return {
+        "items": list(items_result.scalars().all()),
+        "total": total_result.scalar_one(),
+        "limit": limit,
+        "offset": offset,
+    }
 
 
 @router.post("/users/me/items", response_model=ItemResponse, status_code=status.HTTP_201_CREATED)

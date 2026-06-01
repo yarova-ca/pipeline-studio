@@ -42,6 +42,9 @@ COPY --from=build /tmp/app-group /etc/group
 COPY --from=build --chown=1001:1001 /app ./
 USER 1001
 EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:3000/health/live || exit 1
+
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
 
 # ── Runtime — FIPS ────────────────────────────────────────────────────────

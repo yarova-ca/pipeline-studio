@@ -25,4 +25,7 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
 ENV PORT=4000 NODE_ENV=production
 EXPOSE 4000
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:4000/health/live',(r)=>r.statusCode===200?process.exit(0):process.exit(1))" || exit 1
+
 CMD ["node", "dist/index.js"]

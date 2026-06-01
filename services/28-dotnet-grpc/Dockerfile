@@ -25,4 +25,7 @@ WORKDIR /app
 COPY --from=build /publish .
 ENV GRPC_PORT=50051 HTTP_PORT=8080
 EXPOSE 50051 8080
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:50051/health/live || exit 1
 ENTRYPOINT ["dotnet", "28-dotnet-grpc.dll"]

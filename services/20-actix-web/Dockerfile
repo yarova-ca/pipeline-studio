@@ -64,4 +64,7 @@ FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips
 COPY --from=build /app/target/x86_64-unknown-linux-musl/release/20-actix-web /usr/local/bin/app
 USER 1001
 EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8080/health/live || exit 1
 ENTRYPOINT ["/usr/local/bin/app"]

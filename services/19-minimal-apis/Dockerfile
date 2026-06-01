@@ -69,4 +69,7 @@ COPY --from=build --chown=app:app /app/out ./
 USER app
 EXPOSE 8080
 # REPLACE: App.dll with your assembly name
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 ENTRYPOINT ["dotnet", "19-minimal-apis.dll"]

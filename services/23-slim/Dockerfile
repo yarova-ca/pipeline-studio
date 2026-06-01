@@ -33,6 +33,9 @@ RUN apk add --no-cache php83-pdo php83-pdo_mysql php83-opcache
 COPY --from=build --chown=www-data:www-data /app ./
 USER www-data
 EXPOSE 9000
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:9000/health/live || exit 1
+
 CMD ["php-fpm", "-F"]
 
 # ── Alternative runtime images ─────────────────────────────────────────────

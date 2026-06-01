@@ -21,4 +21,7 @@ COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY . .
 ENV PORT=4567 RACK_ENV=production
 EXPOSE 4567
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:4567/health/live || exit 1
+
 CMD ["bundle", "exec", "puma", "-b", "tcp://0.0.0.0:4567"]
