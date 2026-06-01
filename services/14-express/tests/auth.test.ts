@@ -11,28 +11,35 @@
 
 import request from 'supertest'
 import jwt from 'jsonwebtoken'
-import app from '../src/index.js'
 
 // ── Mock Prisma ────────────────────────────────────────────────────────────
-const mockUser = { id: 'user-1', email: 'test@example.com', name: 'Test User', apiKey: 'yar_testkey123' }
-
+// Data is inlined inside the factory — jest.mock() is hoisted before const
+// declarations, so outer variables are not yet initialised when the factory runs.
 jest.mock('@prisma/client', () => {
+  const user = { id: 'user-1', email: 'test@example.com', name: 'Test User', apiKey: 'yar_testkey123' }
   return {
     PrismaClient: jest.fn().mockImplementation(() => ({
       user: {
-        findUnique: jest.fn().mockImplementation(({ where }) => {
-          if (where.apiKey === 'yar_testkey123') return Promise.resolve(mockUser)
+        findUnique: jest.fn().mockImplementation(({ where }: { where: Record<string, string> }) => {
+          // Only return user when looking up by the correct apiKey value
+          if (where.apiKey === 'yar_testkey123') return Promise.resolve(user)
+          if (where.email === 'test@example.com') return Promise.resolve(user)
           return Promise.resolve(null)
         }),
-        upsert: jest.fn().mockResolvedValue(mockUser),
-        update: jest.fn().mockResolvedValue(mockUser),
+        upsert: jest.fn().mockResolvedValue(user),
+        update: jest.fn().mockResolvedValue(user),
       },
     })),
   }
 })
 
+import app from '../src/index.js'
+
+// ── Shared test data (mirrors what is inlined in the factory above) ────────
+const mockUser = { id: 'user-1', email: 'test@example.com', name: 'Test User', apiKey: 'yar_testkey123' }
+
 // ── Test JWT ───────────────────────────────────────────────────────────────
-const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-secret-change-in-production'
+const JWT_SECRET = process.env.JWT_SECRET ?? 'test-secret-that-is-at-least-32-chars-long'
 const validToken = jwt.sign(
   { id: mockUser.id, email: mockUser.email, name: mockUser.name },
   JWT_SECRET,
@@ -41,6 +48,10 @@ const validToken = jwt.sign(
 
 // ── Tests ──────────────────────────────────────────────────────────────────
 describe('GET /auth/me — requireAuth middleware', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('returns 401 when no auth provided', async () => {
     const res = await request(app).get('/auth/me')
     expect(res.status).toBe(401)
