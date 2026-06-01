@@ -58,6 +58,13 @@ func GetDB() *gorm.DB {
 	return instance
 }
 
+// GetDBOrNil returns the singleton *gorm.DB or nil if InitDB has not been called.
+// Use this in code paths where a missing DB is a valid state (e.g. health checks
+// in dev mode without DATABASE_URL set).
+func GetDBOrNil() *gorm.DB {
+	return instance
+}
+
 // SetDB replaces the singleton with the provided instance.
 // Used in tests to inject a test database without touching the real DATABASE_URL.
 func SetDB(db *gorm.DB) {

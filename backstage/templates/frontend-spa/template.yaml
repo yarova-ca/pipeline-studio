@@ -1,0 +1,148 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: frontend-spa
+  title: New Frontend SPA
+  description: >
+    Create a new single-page application with a chosen frontend framework,
+    CI/CD pipeline, Docker multi-stage build, and Nginx serving.
+  tags:
+    - frontend
+    - spa
+    - pipeline-studio
+  annotations:
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  owner: group:platform-team
+  type: website
+
+  parameters:
+    - title: Application details
+      required:
+        - name
+        - framework
+        - description
+      properties:
+        name:
+          title: App name
+          type: string
+          description: Slug for the application (lowercase, hyphens only).
+          pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+          ui:autofocus: true
+        description:
+          title: Description
+          type: string
+          description: One sentence — what this app does.
+        framework:
+          title: Framework
+          type: string
+          description: Frontend framework.
+          enum:
+            - react
+            - vue
+            - angular
+            - svelte
+            - solidjs
+            - preact
+            - lit
+            - nextjs
+            - nuxt
+            - sveltekit
+            - remix
+            - solid-start
+            - angular-ssr
+            - astro
+            - gatsby
+            - hugo
+            - eleventy
+            - qwik
+            - fresh
+          enumNames:
+            - React (SPA)
+            - Vue 3 (SPA)
+            - Angular (SPA)
+            - Svelte (SPA)
+            - SolidJS (SPA)
+            - Preact (SPA)
+            - Lit (Web Components)
+            - Next.js (SSR/SSG)
+            - Nuxt (SSR/SSG)
+            - SvelteKit (SSR/SSG)
+            - Remix (SSR)
+            - Solid Start (SSR)
+            - Angular SSR
+            - Astro (Islands)
+            - Gatsby (SSG)
+            - Hugo (SSG)
+            - Eleventy (SSG)
+            - Qwik (Resumable)
+            - Fresh (Deno Islands)
+
+    - title: Deploy options
+      properties:
+        target:
+          title: Deploy target
+          type: string
+          default: nginx
+          enum:
+            - nginx
+            - cloudflare-pages
+            - vercel
+            - netlify
+            - s3
+          enumNames:
+            - Nginx (self-hosted / Kubernetes)
+            - Cloudflare Pages
+            - Vercel
+            - Netlify
+            - S3 + CloudFront
+        repoVisibility:
+          title: Repository visibility
+          type: string
+          default: private
+          enum:
+            - private
+            - public
+          enumNames:
+            - Private
+            - Public
+
+  steps:
+    - id: fetch-template
+      name: Fetch base SPA template
+      action: fetch:template
+      input:
+        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-react
+        values:
+          name: ${{ parameters.name }}
+          framework: ${{ parameters.framework }}
+          description: ${{ parameters.description }}
+          target: ${{ parameters.target }}
+
+    - id: publish
+      name: Publish repository to GitHub
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: ${{ parameters.description }}
+        repoUrl: github.com?owner=yarova-ca&repo=${{ parameters.name }}
+        defaultBranch: main
+        repoVisibility: ${{ parameters.repoVisibility }}
+        protectDefaultBranch: true
+
+    - id: register
+      name: Register entity in catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: Repository
+        icon: github
+        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}

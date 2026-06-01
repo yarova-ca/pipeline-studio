@@ -1,0 +1,227 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: backend-service
+  title: New Backend Service
+  description: >
+    Create a new backend service with health endpoints, auth middleware,
+    ORM integration, CI/CD pipeline, Helm chart, and Kustomize overlays.
+  tags:
+    - backend
+    - recommended
+    - pipeline-studio
+  annotations:
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  owner: group:platform-team
+  type: service
+
+  parameters:
+    - title: Service details
+      required:
+        - name
+        - framework
+        - description
+      properties:
+        name:
+          title: Service name
+          type: string
+          description: >
+            Slug for the service (lowercase, hyphens only).
+            Example: my-payments-api
+          pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+          ui:autofocus: true
+        description:
+          title: Description
+          type: string
+          description: One sentence — what this service does.
+        framework:
+          title: Framework
+          type: string
+          description: Runtime + framework for the service.
+          enum:
+            - express
+            - fastify
+            - nestjs
+            - hono
+            - bun
+            - deno
+            - elysia
+            - fastapi
+            - django
+            - flask
+            - starlette
+            - gin
+            - chi
+            - echo
+            - fiber
+            - spring-boot
+            - micronaut
+            - quarkus
+            - ktor
+            - spring-boot-kotlin
+            - aspnet-core
+            - minimal-apis
+            - axum
+            - actix-web
+            - phoenix
+            - rails
+            - sinatra
+            - laravel
+            - symfony
+            - slim
+            - vapor
+            - hummingbird
+            - http4s
+            - play
+            - pedestal
+            - ring
+            - crow
+            - drogon
+          enumNames:
+            - Express (Node.js)
+            - Fastify (Node.js)
+            - NestJS (Node.js)
+            - Hono (Node.js/Edge)
+            - Bun
+            - Deno
+            - Elysia (Bun)
+            - FastAPI (Python)
+            - Django (Python)
+            - Flask (Python)
+            - Starlette (Python)
+            - Gin (Go)
+            - Chi (Go)
+            - Echo (Go)
+            - Fiber (Go)
+            - Spring Boot (Java)
+            - Micronaut (Java)
+            - Quarkus (Java)
+            - Ktor (Kotlin)
+            - Spring Boot (Kotlin)
+            - ASP.NET Core (.NET)
+            - Minimal APIs (.NET)
+            - Axum (Rust)
+            - Actix-Web (Rust)
+            - Phoenix (Elixir)
+            - Rails (Ruby)
+            - Sinatra (Ruby)
+            - Laravel (PHP)
+            - Symfony (PHP)
+            - Slim (PHP)
+            - Vapor (Swift)
+            - Hummingbird (Swift)
+            - http4s (Scala)
+            - Play (Scala)
+            - Pedestal (Clojure)
+            - Ring (Clojure)
+            - Crow (C++)
+            - Drogon (C++)
+
+    - title: Compliance profile
+      description: Select all compliance standards this service must satisfy.
+      properties:
+        compliance:
+          title: Compliance standards
+          type: array
+          items:
+            type: string
+            enum:
+              - none
+              - fips
+              - hipaa
+              - pipeda
+              - pci-dss
+              - fedramp
+              - soc2
+            enumNames:
+              - None
+              - FIPS 140-2 (US federal cryptography)
+              - HIPAA (US healthcare)
+              - PIPEDA (Canadian privacy)
+              - PCI-DSS (payment card)
+              - FedRAMP (US cloud)
+              - SOC 2 (general SaaS)
+          uniqueItems: true
+          default:
+            - none
+
+    - title: Deploy options
+      properties:
+        registry:
+          title: Container registry
+          type: string
+          default: ghcr
+          enum:
+            - ghcr
+            - ecr
+            - gar
+            - harbor
+          enumNames:
+            - GHCR (GitHub Container Registry)
+            - ECR (AWS Elastic Container Registry)
+            - GAR (Google Artifact Registry)
+            - Harbor (self-hosted)
+        deployMethod:
+          title: Deploy method
+          type: string
+          default: helm
+          enum:
+            - helm
+            - kustomize
+          enumNames:
+            - Helm chart
+            - Kustomize overlays
+        repoVisibility:
+          title: Repository visibility
+          type: string
+          default: private
+          enum:
+            - private
+            - public
+          enumNames:
+            - Private
+            - Public
+
+  steps:
+    - id: fetch-template
+      name: Fetch base service template
+      action: fetch:template
+      input:
+        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-express
+        values:
+          name: ${{ parameters.name }}
+          framework: ${{ parameters.framework }}
+          description: ${{ parameters.description }}
+          registry: ${{ parameters.registry }}
+          deployMethod: ${{ parameters.deployMethod }}
+          compliance: ${{ parameters.compliance }}
+
+    - id: publish
+      name: Publish repository to GitHub
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: ${{ parameters.description }}
+        repoUrl: github.com?owner=yarova-ca&repo=${{ parameters.name }}
+        defaultBranch: main
+        repoVisibility: ${{ parameters.repoVisibility }}
+        protectDefaultBranch: true
+        requireCodeOwnerReviews: true
+
+    - id: register
+      name: Register entity in catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: Repository
+        icon: github
+        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}
