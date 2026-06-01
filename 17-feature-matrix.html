@@ -14,8 +14,9 @@
   --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
   --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
   --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
-  --sidebar-w:220px;
+  --sidebar-w:240px;
 }
+
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
 nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
@@ -91,6 +92,28 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 .nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
 .nav-top:hover{color:var(--blue);opacity:1}
 .note-block{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:10px 14px;margin:6px 0 14px;font-size:12px;line-height:1.8}
+/* pillar nav */
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+/* Tier badges on priority tables */
+.tier1-head{background:var(--green);color:#fff}
+.tier2-head{background:var(--amber);color:#fff}
+.tier-skip-head{background:var(--red);color:#fff}
 /* ── NEW: Intro box ── */
 .intro-box{background:#f0f6ff;border:2px solid #b6d7f5;border-radius:10px;padding:20px 24px;margin:0 0 32px}
 .intro-box p{font-size:13px;line-height:1.75;color:var(--text);margin-bottom:16px}
@@ -187,43 +210,54 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to content</a>
-<nav>
-  <div class="nav-logo"><h1>Feature Matrix</h1><p>Pipeline Studio · 17</p></div>
-  <div class="nav-section">On this page</div>
-  <a href="#intro">What is this page</a>
-  <a href="#groups">Service groups</a>
-  <a href="#priority">Priority tiers</a>
-  <a href="#axes-concept">What is an axis</a>
-  <a href="#builtins">Built-in features</a>
-  <a href="#axes-detail">The 8 axes</a>
-  <a href="#matrix">Group matrix</a>
-  <a href="#examples">Real-world examples</a>
-  <a href="#status">Implementation status</a>
-  <a href="#notes">Notes</a>
-  <div class="nav-section">All docs</div>
-  <a href="index.html">⌂ Hub</a>
-  <a href="01-framework-catalog.html">01 Frameworks</a>
-  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
-  <a href="03-stage-types.html">03 Stage types</a>
-  <a href="04-tool-catalog.html">04 Tool catalog</a>
-  <a href="05-invariants.html">05 Invariants</a>
-  <a href="06-industry-schema.html">06 US industries</a>
-  <a href="07-canada-schema.html">07 CA industries</a>
-  <a href="08-canada-market.html">08 CA market</a>
-  <a href="09-linux-distros.html">09 Linux distros</a>
-  <a href="10-linux-compliance.html">10 Linux compliance</a>
-  <a href="11-dockerfile-catalog.html">11 Dockerfiles</a>
-  <a href="12-compliance-variations.html">12 Compliance</a>
-  <a href="13-pipeline-build-catalog.html">13 Pipeline catalog</a>
-  <a href="14-canada-industry-catalog.html">14 CA industries</a>
-  <a href="15-version-registry.html">15 Version registry</a>
-  <a href="16-maintainability-runbook.html">16 Runbook</a>
-  <a href="17-feature-matrix.html" aria-current="page">17 Feature matrix</a>
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">⌂ Hub</a>
+  <details open>
+    <summary>Frameworks &amp; Services<span class="pillar-badge">2</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link" aria-current="page">17 Feature matrix</a>
+  </details>
+  <details>
+    <summary>Build &amp; Runtime<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details>
+    <summary>Pipeline &amp; Tools<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industry Verticals<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details>
+    <summary>Operations<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+  </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
-<div class="page-title">Feature Axis Matrix</div>
+<div class="page-header">
+  <div class="page-title">Feature Axis Matrix</div>
+  <div class="page-covers"><strong>What this covers:</strong> 8 build axes for the service-starters repo — what each axis does, which service groups it applies to, implementation status, and real-world examples.</div>
+  <div class="page-when"><strong>When to read:</strong> Customizing a service starter with compliance, auth, observability, or ORM — or checking which <code>--build-arg</code> values actually work today vs are designed only.</div>
+  <div class="page-pillar">Pillar 2 — Frameworks &amp; Services &nbsp;·&nbsp; Related: <a href="01-framework-catalog.html">01 Framework catalog</a> &nbsp;·&nbsp; <a href="services/">[services/]</a></div>
+</div>
 <div class="page-meta">7 build axes · 30 service groups · beginner guide · what each axis does · why you'd use it · real examples</div>
 
 <div class="counts-bar">
@@ -312,122 +346,122 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 
 <div class="tbl-wrap" style="margin-bottom:10px">
 <table class="gen-table">
-  <thead><tr><th colspan="3" style="background:var(--green);color:#fff">Tier 1 — Must maintain (34 services)</th></tr>
-  <tr><th>Service</th><th>Category</th><th>Why</th></tr></thead>
+  <thead><tr><th colspan="4" class="tier1-head">Tier 1 — Must maintain (34 services)</th></tr>
+  <tr><th>Service</th><th>Category</th><th>Why</th><th>Code →</th></tr></thead>
   <tbody>
-    <tr><td><code>01-nextjs</code></td><td>SSR / Full-stack</td><td>Largest SSR framework. React ecosystem standard.</td></tr>
-    <tr><td><code>01-nuxt</code></td><td>SSR / Full-stack</td><td>Largest Vue SSR framework.</td></tr>
-    <tr><td><code>01-sveltekit</code></td><td>SSR / Full-stack</td><td>Svelte's only fullstack option. Fast-growing.</td></tr>
-    <tr><td><code>02-react</code></td><td>Frontend SPA</td><td>Most used JS framework on the planet.</td></tr>
-    <tr><td><code>02-vue</code></td><td>Frontend SPA</td><td>2nd most used. Large enterprise base.</td></tr>
-    <tr><td><code>02-angular</code></td><td>Frontend SPA</td><td>Enterprise standard. Google-backed.</td></tr>
-    <tr><td><code>02-svelte</code></td><td>Frontend SPA</td><td>Fastest growing. Unique compiler-based approach.</td></tr>
-    <tr><td><code>03-astro</code></td><td>Static Site Generator</td><td>Most popular modern static site generator.</td></tr>
-    <tr><td><code>03-hugo</code></td><td>Static Site Generator</td><td>Fastest SSG. Large content and docs user base.</td></tr>
-    <tr><td><code>06-hono-edge</code></td><td>Edge / Cloudflare Workers</td><td>Most popular Cloudflare Workers framework.</td></tr>
-    <tr><td><code>07-nextjs-app-router</code></td><td>Modern Routing / Server Components</td><td>This IS Next.js now. React Server Components.</td></tr>
-    <tr><td><code>09-react-native</code></td><td>Mobile / React Native</td><td>Most popular cross-platform mobile.</td></tr>
-    <tr><td><code>09-expo</code></td><td>Mobile / React Native</td><td>Standard way to ship React Native today.</td></tr>
-    <tr><td><code>10-flutter</code></td><td>Cross-platform Mobile</td><td>Google-backed. Most popular after React Native.</td></tr>
-    <tr><td><code>11-swift-swiftui</code></td><td>Native iOS</td><td>iOS native standard. No alternative.</td></tr>
-    <tr><td><code>12-kotlin-jetpack</code></td><td>Native Android</td><td>Android native standard. No alternative.</td></tr>
-    <tr><td><code>14-express</code></td><td>JS/TS Servers</td><td>Most used Node.js framework.</td></tr>
-    <tr><td><code>14-fastify</code></td><td>JS/TS Servers</td><td>Fastest Node.js. Growing fast.</td></tr>
-    <tr><td><code>14-nestjs</code></td><td>JS/TS Servers</td><td>Enterprise Node.js standard.</td></tr>
-    <tr><td><code>14-hono</code></td><td>JS/TS Servers</td><td>Modern edge-first. Very popular.</td></tr>
-    <tr><td><code>15-fastapi</code></td><td>Python Servers</td><td>Most popular modern Python API.</td></tr>
-    <tr><td><code>15-django</code></td><td>Python Servers</td><td>Largest Python framework overall.</td></tr>
-    <tr><td><code>16-gin</code></td><td>Go Servers</td><td>Most popular Go framework.</td></tr>
-    <tr><td><code>17-spring-boot</code></td><td>Java Servers</td><td>Dominates Java enterprise globally.</td></tr>
-    <tr><td><code>18-ktor</code></td><td>Kotlin Servers</td><td>Kotlin's primary server framework.</td></tr>
-    <tr><td><code>19-aspnet-core</code></td><td>.NET / C# Servers</td><td>.NET standard. Microsoft-backed.</td></tr>
-    <tr><td><code>20-axum</code></td><td>Rust Servers</td><td>Most popular Rust web framework today.</td></tr>
-    <tr><td><code>21-phoenix</code></td><td>Elixir Servers</td><td>Only Elixir framework worth covering.</td></tr>
-    <tr><td><code>22-rails</code></td><td>Ruby Servers</td><td>Still widely used. Large existing codebase.</td></tr>
-    <tr><td><code>23-laravel</code></td><td>PHP Servers</td><td>Most popular PHP framework by far.</td></tr>
-    <tr><td><code>28-go-grpc</code></td><td>gRPC Servers</td><td>Go is the most common gRPC server language.</td></tr>
-    <tr><td><code>28-java-grpc</code></td><td>gRPC Servers</td><td>Java microservices use gRPC heavily.</td></tr>
-    <tr><td><code>28-python-grpc</code></td><td>gRPC Servers</td><td>ML/AI services expose gRPC endpoints.</td></tr>
-    <tr><td><code>28-node-grpc</code></td><td>gRPC Servers</td><td>Node.js gRPC clients are very common.</td></tr>
+    <tr><td><code>01-nextjs</code></td><td>SSR / Full-stack</td><td>Largest SSR framework. React ecosystem standard.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-nextjs">01-nextjs/</a></td></tr>
+    <tr><td><code>01-nuxt</code></td><td>SSR / Full-stack</td><td>Largest Vue SSR framework.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-nuxt">01-nuxt/</a></td></tr>
+    <tr><td><code>01-sveltekit</code></td><td>SSR / Full-stack</td><td>Svelte's only fullstack option. Fast-growing.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-sveltekit">01-sveltekit/</a></td></tr>
+    <tr><td><code>02-react</code></td><td>Frontend SPA</td><td>Most used JS framework on the planet.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-react">02-react/</a></td></tr>
+    <tr><td><code>02-vue</code></td><td>Frontend SPA</td><td>2nd most used. Large enterprise base.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-vue">02-vue/</a></td></tr>
+    <tr><td><code>02-angular</code></td><td>Frontend SPA</td><td>Enterprise standard. Google-backed.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-angular">02-angular/</a></td></tr>
+    <tr><td><code>02-svelte</code></td><td>Frontend SPA</td><td>Fastest growing. Unique compiler-based approach.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-svelte">02-svelte/</a></td></tr>
+    <tr><td><code>03-astro</code></td><td>Static Site Generator</td><td>Most popular modern static site generator.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/03-astro">03-astro/</a></td></tr>
+    <tr><td><code>03-hugo</code></td><td>Static Site Generator</td><td>Fastest SSG. Large content and docs user base.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/03-hugo">03-hugo/</a></td></tr>
+    <tr><td><code>06-hono-edge</code></td><td>Edge / Cloudflare Workers</td><td>Most popular Cloudflare Workers framework.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/06-hono-edge">06-hono-edge/</a></td></tr>
+    <tr><td><code>07-nextjs-app-router</code></td><td>Modern Routing / Server Components</td><td>This IS Next.js now. React Server Components.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/07-nextjs-app-router">07-nextjs-app-router/</a></td></tr>
+    <tr><td><code>09-react-native</code></td><td>Mobile / React Native</td><td>Most popular cross-platform mobile.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/09-react-native">09-react-native/</a></td></tr>
+    <tr><td><code>09-expo</code></td><td>Mobile / React Native</td><td>Standard way to ship React Native today.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/09-expo">09-expo/</a></td></tr>
+    <tr><td><code>10-flutter</code></td><td>Cross-platform Mobile</td><td>Google-backed. Most popular after React Native.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/10-flutter">10-flutter/</a></td></tr>
+    <tr><td><code>11-swift-swiftui</code></td><td>Native iOS</td><td>iOS native standard. No alternative.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/11-swift-swiftui">11-swift-swiftui/</a></td></tr>
+    <tr><td><code>12-kotlin-jetpack</code></td><td>Native Android</td><td>Android native standard. No alternative.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/12-kotlin-jetpack">12-kotlin-jetpack/</a></td></tr>
+    <tr><td><code>14-express</code></td><td>JS/TS Servers</td><td>Most used Node.js framework.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-express">14-express/</a></td></tr>
+    <tr><td><code>14-fastify</code></td><td>JS/TS Servers</td><td>Fastest Node.js. Growing fast.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-fastify">14-fastify/</a></td></tr>
+    <tr><td><code>14-nestjs</code></td><td>JS/TS Servers</td><td>Enterprise Node.js standard.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-nestjs">14-nestjs/</a></td></tr>
+    <tr><td><code>14-hono</code></td><td>JS/TS Servers</td><td>Modern edge-first. Very popular.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-hono">14-hono/</a></td></tr>
+    <tr><td><code>15-fastapi</code></td><td>Python Servers</td><td>Most popular modern Python API.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/15-fastapi">15-fastapi/</a></td></tr>
+    <tr><td><code>15-django</code></td><td>Python Servers</td><td>Largest Python framework overall.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/15-django">15-django/</a></td></tr>
+    <tr><td><code>16-gin</code></td><td>Go Servers</td><td>Most popular Go framework.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-gin">16-gin/</a></td></tr>
+    <tr><td><code>17-spring-boot</code></td><td>Java Servers</td><td>Dominates Java enterprise globally.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/17-spring-boot">17-spring-boot/</a></td></tr>
+    <tr><td><code>18-ktor</code></td><td>Kotlin Servers</td><td>Kotlin's primary server framework.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/18-ktor">18-ktor/</a></td></tr>
+    <tr><td><code>19-aspnet-core</code></td><td>.NET / C# Servers</td><td>.NET standard. Microsoft-backed.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/19-aspnet-core">19-aspnet-core/</a></td></tr>
+    <tr><td><code>20-axum</code></td><td>Rust Servers</td><td>Most popular Rust web framework today.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/20-axum">20-axum/</a></td></tr>
+    <tr><td><code>21-phoenix</code></td><td>Elixir Servers</td><td>Only Elixir framework worth covering.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/21-phoenix">21-phoenix/</a></td></tr>
+    <tr><td><code>22-rails</code></td><td>Ruby Servers</td><td>Still widely used. Large existing codebase.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/22-rails">22-rails/</a></td></tr>
+    <tr><td><code>23-laravel</code></td><td>PHP Servers</td><td>Most popular PHP framework by far.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/23-laravel">23-laravel/</a></td></tr>
+    <tr><td><code>28-go-grpc</code></td><td>gRPC Servers</td><td>Go is the most common gRPC server language.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-go-grpc">28-go-grpc/</a></td></tr>
+    <tr><td><code>28-java-grpc</code></td><td>gRPC Servers</td><td>Java microservices use gRPC heavily.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-java-grpc">28-java-grpc/</a></td></tr>
+    <tr><td><code>28-python-grpc</code></td><td>gRPC Servers</td><td>ML/AI services expose gRPC endpoints.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-python-grpc">28-python-grpc/</a></td></tr>
+    <tr><td><code>28-node-grpc</code></td><td>gRPC Servers</td><td>Node.js gRPC clients are very common.</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-node-grpc">28-node-grpc/</a></td></tr>
   </tbody>
 </table>
 </div>
 
 <div class="tbl-wrap" style="margin-bottom:10px">
 <table class="gen-table">
-  <thead><tr><th colspan="3" style="background:var(--amber);color:#fff">Tier 2 — Keep if capacity allows (~17 services)</th></tr>
-  <tr><th>Service</th><th>Category</th><th>Why lower priority</th></tr></thead>
+  <thead><tr><th colspan="4" class="tier2-head">Tier 2 — Keep if capacity allows (~17 services)</th></tr>
+  <tr><th>Service</th><th>Category</th><th>Why lower priority</th><th>Code →</th></tr></thead>
   <tbody>
-    <tr><td><code>01-remix</code></td><td>SSR / Full-stack</td><td>Declining vs Next.js</td></tr>
-    <tr><td><code>02-solidjs</code></td><td>Frontend SPA</td><td>Small but technically excellent</td></tr>
-    <tr><td><code>08-mf-webpack</code></td><td>Module Federation</td><td>Enterprise micro-frontend pattern</td></tr>
-    <tr><td><code>13-vite-pwa</code></td><td>Progressive Web Apps</td><td>Still relevant for offline apps</td></tr>
-    <tr><td><code>14-elysia</code></td><td>JS/TS Servers</td><td>Bun-native, growing</td></tr>
-    <tr><td><code>14-bun</code></td><td>JS/TS Servers</td><td>New runtime, growing fast</td></tr>
-    <tr><td><code>15-flask</code></td><td>Python Servers</td><td>Simpler Python — partial overlap with FastAPI</td></tr>
-    <tr><td><code>16-echo</code></td><td>Go Servers</td><td>2nd Go framework — minor variation from Gin</td></tr>
-    <tr><td><code>16-fiber</code></td><td>Go Servers</td><td>Performance-focused Go — niche use case</td></tr>
-    <tr><td><code>17-quarkus</code></td><td>Java Servers</td><td>Cloud-native Java — growing but smaller than Spring</td></tr>
-    <tr><td><code>18-spring-boot-kotlin</code></td><td>Kotlin Servers</td><td>Spring + Kotlin — overlaps with Java and Kotlin groups</td></tr>
-    <tr><td><code>19-minimal-apis</code></td><td>.NET / C# Servers</td><td>Modern .NET — overlaps with aspnet-core</td></tr>
-    <tr><td><code>20-actix-web</code></td><td>Rust Servers</td><td>Historically popular — axum replacing it</td></tr>
-    <tr><td><code>24-vapor</code></td><td>Swift Servers</td><td>Only Swift server option</td></tr>
-    <tr><td><code>28-rust-grpc</code></td><td>gRPC Servers</td><td>Rust gRPC growing but smaller community</td></tr>
-    <tr><td><code>28-kotlin-grpc</code></td><td>gRPC Servers</td><td>Kotlin gRPC used in JVM microservices</td></tr>
-    <tr><td><code>29-apollo</code></td><td>GraphQL Servers</td><td>Most popular Node.js GraphQL server</td></tr>
+    <tr><td><code>01-remix</code></td><td>SSR / Full-stack</td><td>Declining vs Next.js</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-remix">01-remix/</a></td></tr>
+    <tr><td><code>02-solidjs</code></td><td>Frontend SPA</td><td>Small but technically excellent</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-solidjs">02-solidjs/</a></td></tr>
+    <tr><td><code>08-mf-webpack</code></td><td>Module Federation</td><td>Enterprise micro-frontend pattern</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/08-mf-webpack">08-mf-webpack/</a></td></tr>
+    <tr><td><code>13-vite-pwa</code></td><td>Progressive Web Apps</td><td>Still relevant for offline apps</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/13-vite-pwa">13-vite-pwa/</a></td></tr>
+    <tr><td><code>14-elysia</code></td><td>JS/TS Servers</td><td>Bun-native, growing</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-elysia">14-elysia/</a></td></tr>
+    <tr><td><code>14-bun</code></td><td>JS/TS Servers</td><td>New runtime, growing fast</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-bun">14-bun/</a></td></tr>
+    <tr><td><code>15-flask</code></td><td>Python Servers</td><td>Simpler Python — partial overlap with FastAPI</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/15-flask">15-flask/</a></td></tr>
+    <tr><td><code>16-echo</code></td><td>Go Servers</td><td>2nd Go framework — minor variation from Gin</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-echo">16-echo/</a></td></tr>
+    <tr><td><code>16-fiber</code></td><td>Go Servers</td><td>Performance-focused Go — niche use case</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-fiber">16-fiber/</a></td></tr>
+    <tr><td><code>17-quarkus</code></td><td>Java Servers</td><td>Cloud-native Java — growing but smaller than Spring</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/17-quarkus">17-quarkus/</a></td></tr>
+    <tr><td><code>18-spring-boot-kotlin</code></td><td>Kotlin Servers</td><td>Spring + Kotlin — overlaps with Java and Kotlin groups</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/18-spring-boot-kotlin">18-spring-boot-kotlin/</a></td></tr>
+    <tr><td><code>19-minimal-apis</code></td><td>.NET / C# Servers</td><td>Modern .NET — overlaps with aspnet-core</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/19-minimal-apis">19-minimal-apis/</a></td></tr>
+    <tr><td><code>20-actix-web</code></td><td>Rust Servers</td><td>Historically popular — axum replacing it</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/20-actix-web">20-actix-web/</a></td></tr>
+    <tr><td><code>24-vapor</code></td><td>Swift Servers</td><td>Only Swift server option</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/24-vapor">24-vapor/</a></td></tr>
+    <tr><td><code>28-rust-grpc</code></td><td>gRPC Servers</td><td>Rust gRPC growing but smaller community</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-rust-grpc">28-rust-grpc/</a></td></tr>
+    <tr><td><code>28-kotlin-grpc</code></td><td>gRPC Servers</td><td>Kotlin gRPC used in JVM microservices</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-kotlin-grpc">28-kotlin-grpc/</a></td></tr>
+    <tr><td><code>29-apollo</code></td><td>GraphQL Servers</td><td>Most popular Node.js GraphQL server</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-apollo">29-apollo/</a></td></tr>
   </tbody>
 </table>
 </div>
 
 <div class="tbl-wrap" style="margin-bottom:24px">
 <table class="gen-table">
-  <thead><tr><th colspan="3" style="background:var(--red);color:#fff">Skip — Legacy, niche, or redundant (~38 services)</th></tr>
-  <tr><th>Service</th><th>Category</th><th>Why</th></tr></thead>
+  <thead><tr><th colspan="4" class="tier-skip-head">Skip — Legacy, niche, or redundant (~38 services)</th></tr>
+  <tr><th>Service</th><th>Category</th><th>Why</th><th>Code →</th></tr></thead>
   <tbody>
-    <tr><td><code>02-preact</code></td><td>Frontend SPA</td><td>Niche — minimal community</td></tr>
-    <tr><td><code>02-lit</code></td><td>Frontend SPA</td><td>Web components — minimal community</td></tr>
-    <tr><td><code>03-gatsby</code></td><td>Static Site Generator</td><td>Declining significantly</td></tr>
-    <tr><td><code>03-eleventy</code></td><td>Static Site Generator</td><td>Niche — small dedicated community</td></tr>
-    <tr><td><code>04-fresh</code></td><td>Island Architecture</td><td>Deno Fresh — very small community</td></tr>
-    <tr><td><code>05-qwik</code></td><td>Resumability</td><td>Tiny community</td></tr>
-    <tr><td><code>06-remix-cloudflare</code></td><td>Edge / Cloudflare Workers</td><td>Redundant with hono-edge</td></tr>
-    <tr><td><code>08-mf-rspack</code></td><td>Module Federation</td><td>Niche — newer Rspack variant</td></tr>
-    <tr><td><code>08-single-spa</code></td><td>Module Federation</td><td>Declining micro-frontend approach</td></tr>
-    <tr><td><code>09-ionic</code></td><td>Mobile / React Native</td><td>Declining vs React Native and Flutter</td></tr>
-    <tr><td><code>10-dotnet-maui</code></td><td>Cross-platform Mobile</td><td>Small community</td></tr>
-    <tr><td><code>10-kmp</code></td><td>Cross-platform Mobile</td><td>Kotlin Multiplatform — still maturing</td></tr>
-    <tr><td><code>11-objc-uikit</code></td><td>Native iOS</td><td>Legacy — Obj-C dead for new projects</td></tr>
-    <tr><td><code>12-java-android</code></td><td>Native Android</td><td>Legacy — Kotlin replaced Java on Android</td></tr>
-    <tr><td><code>13-workbox</code></td><td>Progressive Web Apps</td><td>Library, not a framework</td></tr>
-    <tr><td><code>14-deno</code></td><td>JS/TS Servers</td><td>Limited adoption outside Cloudflare</td></tr>
-    <tr><td><code>15-starlette</code></td><td>Python Servers</td><td>FastAPI is built on it — redundant</td></tr>
-    <tr><td><code>16-chi</code></td><td>Go Servers</td><td>Minimal router — too basic to template</td></tr>
-    <tr><td><code>17-micronaut</code></td><td>Java Servers</td><td>Small community vs Spring and Quarkus</td></tr>
-    <tr><td><code>22-sinatra</code></td><td>Ruby Servers</td><td>Niche minimal Ruby</td></tr>
-    <tr><td><code>23-slim</code></td><td>PHP Servers</td><td>Laravel covers PHP</td></tr>
-    <tr><td><code>23-symfony</code></td><td>PHP Servers</td><td>Laravel covers PHP</td></tr>
-    <tr><td><code>24-hummingbird</code></td><td>Swift Servers</td><td>Tiny community</td></tr>
-    <tr><td><code>25-play</code></td><td>Scala Servers</td><td>Scala niche overall</td></tr>
-    <tr><td><code>25-http4s</code></td><td>Scala Servers</td><td>Scala niche overall</td></tr>
-    <tr><td><code>26-pedestal</code></td><td>Clojure Servers</td><td>Clojure niche overall</td></tr>
-    <tr><td><code>26-ring</code></td><td>Clojure Servers</td><td>Clojure niche overall</td></tr>
-    <tr><td><code>27-crow</code></td><td>C++ Servers</td><td>C++ server — very niche</td></tr>
-    <tr><td><code>27-drogon</code></td><td>C++ Servers</td><td>C++ server — very niche</td></tr>
-    <tr><td><code>28-dotnet-grpc</code></td><td>gRPC Servers</td><td>Lower priority language for gRPC</td></tr>
-    <tr><td><code>28-php-grpc</code></td><td>gRPC Servers</td><td>Lower priority language for gRPC</td></tr>
-    <tr><td><code>28-ruby-grpc</code></td><td>gRPC Servers</td><td>Lower priority language for gRPC</td></tr>
-    <tr><td><code>28-swift-grpc</code></td><td>gRPC Servers</td><td>Lower priority language for gRPC</td></tr>
-    <tr><td><code>29-graphql-yoga</code></td><td>GraphQL Servers</td><td>Overlaps with Apollo</td></tr>
-    <tr><td><code>29-gqlgen</code></td><td>GraphQL Servers</td><td>Keep only if Go GraphQL needed</td></tr>
-    <tr><td><code>29-spring-graphql</code></td><td>GraphQL Servers</td><td>Keep only if Java GraphQL needed</td></tr>
-    <tr><td><code>29-async-graphql</code></td><td>GraphQL Servers</td><td>Rust GraphQL — very niche</td></tr>
-    <tr><td><code>29-graphql-ruby</code></td><td>GraphQL Servers</td><td>Ruby GraphQL — small use case</td></tr>
-    <tr><td><code>29-hot-chocolate</code></td><td>GraphQL Servers</td><td>.NET GraphQL — niche</td></tr>
-    <tr><td><code>29-strawberry</code></td><td>GraphQL Servers</td><td>Python GraphQL — overlaps with FastAPI</td></tr>
-    <tr><td><code>30-ws-dotnet</code></td><td>WebSocket Servers</td><td>Lower priority language for WebSocket</td></tr>
-    <tr><td><code>30-ws-elixir</code></td><td>WebSocket Servers</td><td>Phoenix covers Elixir real-time</td></tr>
-    <tr><td><code>30-ws-java</code></td><td>WebSocket Servers</td><td>Spring WebSocket covers this</td></tr>
-    <tr><td><code>30-ws-ruby</code></td><td>WebSocket Servers</td><td>ActionCable in Rails covers this</td></tr>
+    <tr><td><code>02-preact</code></td><td>Frontend SPA</td><td>Niche — minimal community</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-preact">02-preact/</a></td></tr>
+    <tr><td><code>02-lit</code></td><td>Frontend SPA</td><td>Web components — minimal community</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-lit">02-lit/</a></td></tr>
+    <tr><td><code>03-gatsby</code></td><td>Static Site Generator</td><td>Declining significantly</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/03-gatsby">03-gatsby/</a></td></tr>
+    <tr><td><code>03-eleventy</code></td><td>Static Site Generator</td><td>Niche — small dedicated community</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/03-eleventy">03-eleventy/</a></td></tr>
+    <tr><td><code>04-fresh</code></td><td>Island Architecture</td><td>Deno Fresh — very small community</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/04-fresh">04-fresh/</a></td></tr>
+    <tr><td><code>05-qwik</code></td><td>Resumability</td><td>Tiny community</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/05-qwik">05-qwik/</a></td></tr>
+    <tr><td><code>06-remix-cloudflare</code></td><td>Edge / Cloudflare Workers</td><td>Redundant with hono-edge</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/06-remix-cloudflare">06-remix-cloudflare/</a></td></tr>
+    <tr><td><code>08-mf-rspack</code></td><td>Module Federation</td><td>Niche — newer Rspack variant</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/08-mf-rspack">08-mf-rspack/</a></td></tr>
+    <tr><td><code>08-single-spa</code></td><td>Module Federation</td><td>Declining micro-frontend approach</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/08-single-spa">08-single-spa/</a></td></tr>
+    <tr><td><code>09-ionic</code></td><td>Mobile / React Native</td><td>Declining vs React Native and Flutter</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/09-ionic">09-ionic/</a></td></tr>
+    <tr><td><code>10-dotnet-maui</code></td><td>Cross-platform Mobile</td><td>Small community</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/10-dotnet-maui">10-dotnet-maui/</a></td></tr>
+    <tr><td><code>10-kmp</code></td><td>Cross-platform Mobile</td><td>Kotlin Multiplatform — still maturing</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/10-kmp">10-kmp/</a></td></tr>
+    <tr><td><code>11-objc-uikit</code></td><td>Native iOS</td><td>Legacy — Obj-C dead for new projects</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/11-objc-uikit">11-objc-uikit/</a></td></tr>
+    <tr><td><code>12-java-android</code></td><td>Native Android</td><td>Legacy — Kotlin replaced Java on Android</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/12-java-android">12-java-android/</a></td></tr>
+    <tr><td><code>13-workbox</code></td><td>Progressive Web Apps</td><td>Library, not a framework</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/13-workbox">13-workbox/</a></td></tr>
+    <tr><td><code>14-deno</code></td><td>JS/TS Servers</td><td>Limited adoption outside Cloudflare</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-deno">14-deno/</a></td></tr>
+    <tr><td><code>15-starlette</code></td><td>Python Servers</td><td>FastAPI is built on it — redundant</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/15-starlette">15-starlette/</a></td></tr>
+    <tr><td><code>16-chi</code></td><td>Go Servers</td><td>Minimal router — too basic to template</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-chi">16-chi/</a></td></tr>
+    <tr><td><code>17-micronaut</code></td><td>Java Servers</td><td>Small community vs Spring and Quarkus</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/17-micronaut">17-micronaut/</a></td></tr>
+    <tr><td><code>22-sinatra</code></td><td>Ruby Servers</td><td>Niche minimal Ruby</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/22-sinatra">22-sinatra/</a></td></tr>
+    <tr><td><code>23-slim</code></td><td>PHP Servers</td><td>Laravel covers PHP</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/23-slim">23-slim/</a></td></tr>
+    <tr><td><code>23-symfony</code></td><td>PHP Servers</td><td>Laravel covers PHP</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/23-symfony">23-symfony/</a></td></tr>
+    <tr><td><code>24-hummingbird</code></td><td>Swift Servers</td><td>Tiny community</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/24-hummingbird">24-hummingbird/</a></td></tr>
+    <tr><td><code>25-play</code></td><td>Scala Servers</td><td>Scala niche overall</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/25-play">25-play/</a></td></tr>
+    <tr><td><code>25-http4s</code></td><td>Scala Servers</td><td>Scala niche overall</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/25-http4s">25-http4s/</a></td></tr>
+    <tr><td><code>26-pedestal</code></td><td>Clojure Servers</td><td>Clojure niche overall</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/26-pedestal">26-pedestal/</a></td></tr>
+    <tr><td><code>26-ring</code></td><td>Clojure Servers</td><td>Clojure niche overall</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/26-ring">26-ring/</a></td></tr>
+    <tr><td><code>27-crow</code></td><td>C++ Servers</td><td>C++ server — very niche</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/27-crow">27-crow/</a></td></tr>
+    <tr><td><code>27-drogon</code></td><td>C++ Servers</td><td>C++ server — very niche</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/27-drogon">27-drogon/</a></td></tr>
+    <tr><td><code>28-dotnet-grpc</code></td><td>gRPC Servers</td><td>Lower priority language for gRPC</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-dotnet-grpc">28-dotnet-grpc/</a></td></tr>
+    <tr><td><code>28-php-grpc</code></td><td>gRPC Servers</td><td>Lower priority language for gRPC</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-php-grpc">28-php-grpc/</a></td></tr>
+    <tr><td><code>28-ruby-grpc</code></td><td>gRPC Servers</td><td>Lower priority language for gRPC</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-ruby-grpc">28-ruby-grpc/</a></td></tr>
+    <tr><td><code>28-swift-grpc</code></td><td>gRPC Servers</td><td>Lower priority language for gRPC</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-swift-grpc">28-swift-grpc/</a></td></tr>
+    <tr><td><code>29-graphql-yoga</code></td><td>GraphQL Servers</td><td>Overlaps with Apollo</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-graphql-yoga">29-graphql-yoga/</a></td></tr>
+    <tr><td><code>29-gqlgen</code></td><td>GraphQL Servers</td><td>Keep only if Go GraphQL needed</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-gqlgen">29-gqlgen/</a></td></tr>
+    <tr><td><code>29-spring-graphql</code></td><td>GraphQL Servers</td><td>Keep only if Java GraphQL needed</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-spring-graphql">29-spring-graphql/</a></td></tr>
+    <tr><td><code>29-async-graphql</code></td><td>GraphQL Servers</td><td>Rust GraphQL — very niche</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-async-graphql">29-async-graphql/</a></td></tr>
+    <tr><td><code>29-graphql-ruby</code></td><td>GraphQL Servers</td><td>Ruby GraphQL — small use case</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-graphql-ruby">29-graphql-ruby/</a></td></tr>
+    <tr><td><code>29-hot-chocolate</code></td><td>GraphQL Servers</td><td>.NET GraphQL — niche</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-hot-chocolate">29-hot-chocolate/</a></td></tr>
+    <tr><td><code>29-strawberry</code></td><td>GraphQL Servers</td><td>Python GraphQL — overlaps with FastAPI</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-strawberry">29-strawberry/</a></td></tr>
+    <tr><td><code>30-ws-dotnet</code></td><td>WebSocket Servers</td><td>Lower priority language for WebSocket</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-dotnet">30-ws-dotnet/</a></td></tr>
+    <tr><td><code>30-ws-elixir</code></td><td>WebSocket Servers</td><td>Phoenix covers Elixir real-time</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-elixir">30-ws-elixir/</a></td></tr>
+    <tr><td><code>30-ws-java</code></td><td>WebSocket Servers</td><td>Spring WebSocket covers this</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-java">30-ws-java/</a></td></tr>
+    <tr><td><code>30-ws-ruby</code></td><td>WebSocket Servers</td><td>ActionCable in Rails covers this</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-ruby">30-ws-ruby/</a></td></tr>
   </tbody>
 </table>
 </div>
@@ -582,154 +616,154 @@ readinessProbe:
           <summary><span class="axis-num">Full list — all 105 services</span></summary>
           <div class="expand-content">
             <table class="gen-table" style="font-size:11px">
-              <thead><tr><th>Service</th><th>Framework</th><th>Tier</th><th>Health endpoints</th><th>Port</th></tr></thead>
+              <thead><tr><th>Service</th><th>Framework</th><th>Tier</th><th>Health endpoints</th><th>Port</th><th>Code →</th></tr></thead>
               <tbody>
-                <tr class="cat-row"><td colspan="5">Frontend SSR — groups 01, 04, 05, 07</td></tr>
-                <tr><td><code>01-angular-ssr</code></td><td>Angular SSR</td><td>2</td><td>✅ Yes</td><td>4000</td></tr>
-                <tr><td><code>01-nextjs</code></td><td>Next.js</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>01-nuxt</code></td><td>Nuxt</td><td>1</td><td>✅ Yes (at <code>/api/health*</code>)</td><td>3000</td></tr>
-                <tr><td><code>01-remix</code></td><td>Remix</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>01-solid-start</code></td><td>SolidStart</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>01-sveltekit</code></td><td>SvelteKit</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>04-astro</code></td><td>Astro Islands</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>04-fresh</code></td><td>Fresh (Deno)</td><td>2</td><td>✅ Yes</td><td>8000</td></tr>
-                <tr><td><code>05-qwik</code></td><td>Qwik</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>07-nextjs-app-router</code></td><td>Next.js App Router</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>07-remix</code></td><td>Remix</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>07-sveltekit</code></td><td>SvelteKit</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr class="cat-row"><td colspan="6">Frontend SSR — groups 01, 04, 05, 07</td></tr>
+                <tr><td><code>01-angular-ssr</code></td><td>Angular SSR</td><td>2</td><td>✅ Yes</td><td>4000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-angular-ssr">01-angular-ssr/</a></td></tr>
+                <tr><td><code>01-nextjs</code></td><td>Next.js</td><td>1</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-nextjs">01-nextjs/</a></td></tr>
+                <tr><td><code>01-nuxt</code></td><td>Nuxt</td><td>1</td><td>✅ Yes (at <code>/api/health*</code>)</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-nuxt">01-nuxt/</a></td></tr>
+                <tr><td><code>01-remix</code></td><td>Remix</td><td>2</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-remix">01-remix/</a></td></tr>
+                <tr><td><code>01-solid-start</code></td><td>SolidStart</td><td>2</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-solid-start">01-solid-start/</a></td></tr>
+                <tr><td><code>01-sveltekit</code></td><td>SvelteKit</td><td>1</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-sveltekit">01-sveltekit/</a></td></tr>
+                <tr><td><code>04-astro</code></td><td>Astro Islands</td><td>2</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/04-astro">04-astro/</a></td></tr>
+                <tr><td><code>04-fresh</code></td><td>Fresh (Deno)</td><td>2</td><td>✅ Yes</td><td>8000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/04-fresh">04-fresh/</a></td></tr>
+                <tr><td><code>05-qwik</code></td><td>Qwik</td><td>2</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/05-qwik">05-qwik/</a></td></tr>
+                <tr><td><code>07-nextjs-app-router</code></td><td>Next.js App Router</td><td>1</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/07-nextjs-app-router">07-nextjs-app-router/</a></td></tr>
+                <tr><td><code>07-remix</code></td><td>Remix</td><td>2</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/07-remix">07-remix/</a></td></tr>
+                <tr><td><code>07-sveltekit</code></td><td>SvelteKit</td><td>2</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/07-sveltekit">07-sveltekit/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Frontend SPA + Static — groups 02, 03, 08, 13 — nginx serves static files, no app health endpoint</td></tr>
-                <tr><td><code>02-angular</code></td><td>Angular</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>02-lit</code></td><td>Lit</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>02-preact</code></td><td>Preact</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>02-react</code></td><td>React</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>02-solidjs</code></td><td>SolidJS</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>02-svelte</code></td><td>Svelte</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>02-vue</code></td><td>Vue</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>03-astro</code></td><td>Astro</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>03-eleventy</code></td><td>Eleventy</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>03-gatsby</code></td><td>Gatsby</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>03-hugo</code></td><td>Hugo</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>08-mf-rspack</code></td><td>Rspack MF</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>08-mf-webpack</code></td><td>Webpack MF</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>08-single-spa</code></td><td>single-spa</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>13-vite-pwa</code></td><td>Vite PWA</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
-                <tr><td><code>13-workbox</code></td><td>Workbox</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr class="cat-row"><td colspan="6">Frontend SPA + Static — groups 02, 03, 08, 13 — nginx serves static files, no app health endpoint</td></tr>
+                <tr><td><code>02-angular</code></td><td>Angular</td><td>1</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-angular">02-angular/</a></td></tr>
+                <tr><td><code>02-lit</code></td><td>Lit</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-lit">02-lit/</a></td></tr>
+                <tr><td><code>02-preact</code></td><td>Preact</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-preact">02-preact/</a></td></tr>
+                <tr><td><code>02-react</code></td><td>React</td><td>1</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-react">02-react/</a></td></tr>
+                <tr><td><code>02-solidjs</code></td><td>SolidJS</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-solidjs">02-solidjs/</a></td></tr>
+                <tr><td><code>02-svelte</code></td><td>Svelte</td><td>1</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-svelte">02-svelte/</a></td></tr>
+                <tr><td><code>02-vue</code></td><td>Vue</td><td>1</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-vue">02-vue/</a></td></tr>
+                <tr><td><code>03-astro</code></td><td>Astro</td><td>1</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/03-astro">03-astro/</a></td></tr>
+                <tr><td><code>03-eleventy</code></td><td>Eleventy</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/03-eleventy">03-eleventy/</a></td></tr>
+                <tr><td><code>03-gatsby</code></td><td>Gatsby</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/03-gatsby">03-gatsby/</a></td></tr>
+                <tr><td><code>03-hugo</code></td><td>Hugo</td><td>1</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/03-hugo">03-hugo/</a></td></tr>
+                <tr><td><code>08-mf-rspack</code></td><td>Rspack MF</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/08-mf-rspack">08-mf-rspack/</a></td></tr>
+                <tr><td><code>08-mf-webpack</code></td><td>Webpack MF</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/08-mf-webpack">08-mf-webpack/</a></td></tr>
+                <tr><td><code>08-single-spa</code></td><td>single-spa</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/08-single-spa">08-single-spa/</a></td></tr>
+                <tr><td><code>13-vite-pwa</code></td><td>Vite PWA</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/13-vite-pwa">13-vite-pwa/</a></td></tr>
+                <tr><td><code>13-workbox</code></td><td>Workbox</td><td>2</td><td>❌ nginx-only</td><td>80</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/13-workbox">13-workbox/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Edge — group 06 — Cloudflare Workers, no container, no port</td></tr>
-                <tr><td><code>06-hono-edge</code></td><td>Hono (Cloudflare Workers)</td><td>1</td><td>❌ no Docker</td><td>—</td></tr>
-                <tr><td><code>06-nextjs-edge</code></td><td>Next.js Edge (Vercel/CF)</td><td>2</td><td>❌ no Docker</td><td>—</td></tr>
-                <tr><td><code>06-remix-cloudflare</code></td><td>Remix (Cloudflare)</td><td>2</td><td>❌ no Docker</td><td>—</td></tr>
+                <tr class="cat-row"><td colspan="6">Edge — group 06 — Cloudflare Workers, no container, no port</td></tr>
+                <tr><td><code>06-hono-edge</code></td><td>Hono (Cloudflare Workers)</td><td>1</td><td>❌ no Docker</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/06-hono-edge">06-hono-edge/</a></td></tr>
+                <tr><td><code>06-nextjs-edge</code></td><td>Next.js Edge (Vercel/CF)</td><td>2</td><td>❌ no Docker</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/06-nextjs-edge">06-nextjs-edge/</a></td></tr>
+                <tr><td><code>06-remix-cloudflare</code></td><td>Remix (Cloudflare)</td><td>2</td><td>❌ no Docker</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/06-remix-cloudflare">06-remix-cloudflare/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Mobile / Native — groups 09–12 — no server process, builds to app bundle</td></tr>
-                <tr><td><code>09-expo</code></td><td>Expo</td><td>1</td><td>❌ no server</td><td>—</td></tr>
-                <tr><td><code>09-ionic</code></td><td>Ionic</td><td>2</td><td>❌ no server</td><td>—</td></tr>
-                <tr><td><code>09-react-native</code></td><td>React Native</td><td>1</td><td>❌ no server</td><td>—</td></tr>
-                <tr><td><code>10-dotnet-maui</code></td><td>.NET MAUI</td><td>2</td><td>❌ no server</td><td>—</td></tr>
-                <tr><td><code>10-flutter</code></td><td>Flutter</td><td>1</td><td>❌ no server</td><td>—</td></tr>
-                <tr><td><code>10-kmp</code></td><td>Kotlin Multiplatform</td><td>2</td><td>❌ no server</td><td>—</td></tr>
-                <tr><td><code>11-objc-uikit</code></td><td>Objective-C UIKit</td><td>2</td><td>❌ no server</td><td>—</td></tr>
-                <tr><td><code>11-swift-swiftui</code></td><td>Swift SwiftUI</td><td>1</td><td>❌ no server</td><td>—</td></tr>
-                <tr><td><code>12-java-android</code></td><td>Java Android</td><td>2</td><td>❌ no server</td><td>—</td></tr>
-                <tr><td><code>12-kotlin-jetpack</code></td><td>Kotlin Jetpack</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+                <tr class="cat-row"><td colspan="6">Mobile / Native — groups 09–12 — no server process, builds to app bundle</td></tr>
+                <tr><td><code>09-expo</code></td><td>Expo</td><td>1</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/09-expo">09-expo/</a></td></tr>
+                <tr><td><code>09-ionic</code></td><td>Ionic</td><td>2</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/09-ionic">09-ionic/</a></td></tr>
+                <tr><td><code>09-react-native</code></td><td>React Native</td><td>1</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/09-react-native">09-react-native/</a></td></tr>
+                <tr><td><code>10-dotnet-maui</code></td><td>.NET MAUI</td><td>2</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/10-dotnet-maui">10-dotnet-maui/</a></td></tr>
+                <tr><td><code>10-flutter</code></td><td>Flutter</td><td>1</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/10-flutter">10-flutter/</a></td></tr>
+                <tr><td><code>10-kmp</code></td><td>Kotlin Multiplatform</td><td>2</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/10-kmp">10-kmp/</a></td></tr>
+                <tr><td><code>11-objc-uikit</code></td><td>Objective-C UIKit</td><td>2</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/11-objc-uikit">11-objc-uikit/</a></td></tr>
+                <tr><td><code>11-swift-swiftui</code></td><td>Swift SwiftUI</td><td>1</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/11-swift-swiftui">11-swift-swiftui/</a></td></tr>
+                <tr><td><code>12-java-android</code></td><td>Java Android</td><td>2</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/12-java-android">12-java-android/</a></td></tr>
+                <tr><td><code>12-kotlin-jetpack</code></td><td>Kotlin Jetpack</td><td>1</td><td>❌ no server</td><td>—</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/12-kotlin-jetpack">12-kotlin-jetpack/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Node.js API servers — group 14</td></tr>
-                <tr><td><code>14-bun</code></td><td>Bun</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>14-deno</code></td><td>Deno</td><td>2</td><td>✅ Yes</td><td>8000</td></tr>
-                <tr><td><code>14-elysia</code></td><td>Elysia</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>14-express</code></td><td>Express.js</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>14-fastify</code></td><td>Fastify</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>14-hono</code></td><td>Hono</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>14-nestjs</code></td><td>NestJS</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr class="cat-row"><td colspan="6">Node.js API servers — group 14</td></tr>
+                <tr><td><code>14-bun</code></td><td>Bun</td><td>2</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-bun">14-bun/</a></td></tr>
+                <tr><td><code>14-deno</code></td><td>Deno</td><td>2</td><td>✅ Yes</td><td>8000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-deno">14-deno/</a></td></tr>
+                <tr><td><code>14-elysia</code></td><td>Elysia</td><td>2</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-elysia">14-elysia/</a></td></tr>
+                <tr><td><code>14-express</code></td><td>Express.js</td><td>1</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-express">14-express/</a></td></tr>
+                <tr><td><code>14-fastify</code></td><td>Fastify</td><td>1</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-fastify">14-fastify/</a></td></tr>
+                <tr><td><code>14-hono</code></td><td>Hono</td><td>1</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-hono">14-hono/</a></td></tr>
+                <tr><td><code>14-nestjs</code></td><td>NestJS</td><td>1</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-nestjs">14-nestjs/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Python servers — group 15</td></tr>
-                <tr><td><code>15-django</code></td><td>Django</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>15-fastapi</code></td><td>FastAPI</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>15-flask</code></td><td>Flask</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>15-starlette</code></td><td>Starlette</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">Python servers — group 15</td></tr>
+                <tr><td><code>15-django</code></td><td>Django</td><td>1</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/15-django">15-django/</a></td></tr>
+                <tr><td><code>15-fastapi</code></td><td>FastAPI</td><td>1</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/15-fastapi">15-fastapi/</a></td></tr>
+                <tr><td><code>15-flask</code></td><td>Flask</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/15-flask">15-flask/</a></td></tr>
+                <tr><td><code>15-starlette</code></td><td>Starlette</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/15-starlette">15-starlette/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Go servers — group 16</td></tr>
-                <tr><td><code>16-chi</code></td><td>Chi</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>16-echo</code></td><td>Echo</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>16-fiber</code></td><td>Fiber</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>16-gin</code></td><td>Gin</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">Go servers — group 16</td></tr>
+                <tr><td><code>16-chi</code></td><td>Chi</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-chi">16-chi/</a></td></tr>
+                <tr><td><code>16-echo</code></td><td>Echo</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-echo">16-echo/</a></td></tr>
+                <tr><td><code>16-fiber</code></td><td>Fiber</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-fiber">16-fiber/</a></td></tr>
+                <tr><td><code>16-gin</code></td><td>Gin</td><td>1</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-gin">16-gin/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Java servers — group 17</td></tr>
-                <tr><td><code>17-micronaut</code></td><td>Micronaut</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>17-quarkus</code></td><td>Quarkus</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>17-spring-boot</code></td><td>Spring Boot</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">Java servers — group 17</td></tr>
+                <tr><td><code>17-micronaut</code></td><td>Micronaut</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/17-micronaut">17-micronaut/</a></td></tr>
+                <tr><td><code>17-quarkus</code></td><td>Quarkus</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/17-quarkus">17-quarkus/</a></td></tr>
+                <tr><td><code>17-spring-boot</code></td><td>Spring Boot</td><td>1</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/17-spring-boot">17-spring-boot/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Kotlin servers — group 18</td></tr>
-                <tr><td><code>18-ktor</code></td><td>Ktor</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>18-spring-boot-kotlin</code></td><td>Spring Boot (Kotlin)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">Kotlin servers — group 18</td></tr>
+                <tr><td><code>18-ktor</code></td><td>Ktor</td><td>1</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/18-ktor">18-ktor/</a></td></tr>
+                <tr><td><code>18-spring-boot-kotlin</code></td><td>Spring Boot (Kotlin)</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/18-spring-boot-kotlin">18-spring-boot-kotlin/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">.NET servers — group 19</td></tr>
-                <tr><td><code>19-aspnet-core</code></td><td>ASP.NET Core</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>19-minimal-apis</code></td><td>ASP.NET Minimal APIs</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">.NET servers — group 19</td></tr>
+                <tr><td><code>19-aspnet-core</code></td><td>ASP.NET Core</td><td>1</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/19-aspnet-core">19-aspnet-core/</a></td></tr>
+                <tr><td><code>19-minimal-apis</code></td><td>ASP.NET Minimal APIs</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/19-minimal-apis">19-minimal-apis/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Rust servers — group 20</td></tr>
-                <tr><td><code>20-actix-web</code></td><td>Actix-web</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>20-axum</code></td><td>Axum</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">Rust servers — group 20</td></tr>
+                <tr><td><code>20-actix-web</code></td><td>Actix-web</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/20-actix-web">20-actix-web/</a></td></tr>
+                <tr><td><code>20-axum</code></td><td>Axum</td><td>1</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/20-axum">20-axum/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Elixir servers — group 21</td></tr>
-                <tr><td><code>21-phoenix</code></td><td>Phoenix</td><td>1</td><td>✅ Yes</td><td>4000</td></tr>
+                <tr class="cat-row"><td colspan="6">Elixir servers — group 21</td></tr>
+                <tr><td><code>21-phoenix</code></td><td>Phoenix</td><td>1</td><td>✅ Yes</td><td>4000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/21-phoenix">21-phoenix/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Ruby servers — group 22</td></tr>
-                <tr><td><code>22-rails</code></td><td>Rails</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
-                <tr><td><code>22-sinatra</code></td><td>Sinatra</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr class="cat-row"><td colspan="6">Ruby servers — group 22</td></tr>
+                <tr><td><code>22-rails</code></td><td>Rails</td><td>1</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/22-rails">22-rails/</a></td></tr>
+                <tr><td><code>22-sinatra</code></td><td>Sinatra</td><td>2</td><td>✅ Yes</td><td>3000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/22-sinatra">22-sinatra/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">PHP servers — group 23 — port 9000 is php-fpm; needs nginx sidecar for HTTP in production</td></tr>
-                <tr><td><code>23-laravel</code></td><td>Laravel</td><td>1</td><td>✅ Yes</td><td>9000</td></tr>
-                <tr><td><code>23-slim</code></td><td>Slim</td><td>2</td><td>✅ Yes</td><td>9000</td></tr>
-                <tr><td><code>23-symfony</code></td><td>Symfony</td><td>2</td><td>✅ Yes</td><td>9000</td></tr>
+                <tr class="cat-row"><td colspan="6">PHP servers — group 23 — port 9000 is php-fpm; needs nginx sidecar for HTTP in production</td></tr>
+                <tr><td><code>23-laravel</code></td><td>Laravel</td><td>1</td><td>✅ Yes</td><td>9000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/23-laravel">23-laravel/</a></td></tr>
+                <tr><td><code>23-slim</code></td><td>Slim</td><td>2</td><td>✅ Yes</td><td>9000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/23-slim">23-slim/</a></td></tr>
+                <tr><td><code>23-symfony</code></td><td>Symfony</td><td>2</td><td>✅ Yes</td><td>9000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/23-symfony">23-symfony/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Swift servers — group 24</td></tr>
-                <tr><td><code>24-hummingbird</code></td><td>Hummingbird</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>24-vapor</code></td><td>Vapor</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">Swift servers — group 24</td></tr>
+                <tr><td><code>24-hummingbird</code></td><td>Hummingbird</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/24-hummingbird">24-hummingbird/</a></td></tr>
+                <tr><td><code>24-vapor</code></td><td>Vapor</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/24-vapor">24-vapor/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Scala servers — group 25</td></tr>
-                <tr><td><code>25-http4s</code></td><td>http4s</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>25-play</code></td><td>Play Framework</td><td>2</td><td>✅ Yes</td><td>9000</td></tr>
+                <tr class="cat-row"><td colspan="6">Scala servers — group 25</td></tr>
+                <tr><td><code>25-http4s</code></td><td>http4s</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/25-http4s">25-http4s/</a></td></tr>
+                <tr><td><code>25-play</code></td><td>Play Framework</td><td>2</td><td>✅ Yes</td><td>9000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/25-play">25-play/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">Clojure servers — group 26</td></tr>
-                <tr><td><code>26-pedestal</code></td><td>Pedestal</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>26-ring</code></td><td>Ring</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">Clojure servers — group 26</td></tr>
+                <tr><td><code>26-pedestal</code></td><td>Pedestal</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/26-pedestal">26-pedestal/</a></td></tr>
+                <tr><td><code>26-ring</code></td><td>Ring</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/26-ring">26-ring/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">C++ servers — group 27</td></tr>
-                <tr><td><code>27-crow</code></td><td>Crow</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>27-drogon</code></td><td>Drogon</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">C++ servers — group 27</td></tr>
+                <tr><td><code>27-crow</code></td><td>Crow</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/27-crow">27-crow/</a></td></tr>
+                <tr><td><code>27-drogon</code></td><td>Drogon</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/27-drogon">27-drogon/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">gRPC servers — group 28 — HTTP health on port 8080 + gRPC health on port 50051</td></tr>
-                <tr><td><code>28-dotnet-grpc</code></td><td>.NET gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
-                <tr><td><code>28-go-grpc</code></td><td>Go gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
-                <tr><td><code>28-java-grpc</code></td><td>Java gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
-                <tr><td><code>28-kotlin-grpc</code></td><td>Kotlin gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
-                <tr><td><code>28-node-grpc</code></td><td>Node.js gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
-                <tr><td><code>28-php-grpc</code></td><td>PHP gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
-                <tr><td><code>28-python-grpc</code></td><td>Python gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
-                <tr><td><code>28-ruby-grpc</code></td><td>Ruby gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
-                <tr><td><code>28-rust-grpc</code></td><td>Rust gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
-                <tr><td><code>28-swift-grpc</code></td><td>Swift gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr class="cat-row"><td colspan="6">gRPC servers — group 28 — HTTP health on port 8080 + gRPC health on port 50051</td></tr>
+                <tr><td><code>28-dotnet-grpc</code></td><td>.NET gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-dotnet-grpc">28-dotnet-grpc/</a></td></tr>
+                <tr><td><code>28-go-grpc</code></td><td>Go gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-go-grpc">28-go-grpc/</a></td></tr>
+                <tr><td><code>28-java-grpc</code></td><td>Java gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-java-grpc">28-java-grpc/</a></td></tr>
+                <tr><td><code>28-kotlin-grpc</code></td><td>Kotlin gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-kotlin-grpc">28-kotlin-grpc/</a></td></tr>
+                <tr><td><code>28-node-grpc</code></td><td>Node.js gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-node-grpc">28-node-grpc/</a></td></tr>
+                <tr><td><code>28-php-grpc</code></td><td>PHP gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-php-grpc">28-php-grpc/</a></td></tr>
+                <tr><td><code>28-python-grpc</code></td><td>Python gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-python-grpc">28-python-grpc/</a></td></tr>
+                <tr><td><code>28-ruby-grpc</code></td><td>Ruby gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-ruby-grpc">28-ruby-grpc/</a></td></tr>
+                <tr><td><code>28-rust-grpc</code></td><td>Rust gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-rust-grpc">28-rust-grpc/</a></td></tr>
+                <tr><td><code>28-swift-grpc</code></td><td>Swift gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-swift-grpc">28-swift-grpc/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">GraphQL servers — group 29</td></tr>
-                <tr><td><code>29-apollo</code></td><td>Apollo Server (Node)</td><td>2</td><td>✅ Yes</td><td>4000</td></tr>
-                <tr><td><code>29-async-graphql</code></td><td>async-graphql (Rust)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>29-gqlgen</code></td><td>gqlgen (Go)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>29-graphql-ruby</code></td><td>GraphQL Ruby</td><td>2</td><td>✅ Yes</td><td>4567</td></tr>
-                <tr><td><code>29-graphql-yoga</code></td><td>GraphQL Yoga (Node)</td><td>2</td><td>✅ Yes</td><td>4000</td></tr>
-                <tr><td><code>29-hot-chocolate</code></td><td>Hot Chocolate (.NET)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>29-spring-graphql</code></td><td>Spring GraphQL</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>29-strawberry</code></td><td>Strawberry (Python)</td><td>2</td><td>✅ Yes</td><td>8000</td></tr>
+                <tr class="cat-row"><td colspan="6">GraphQL servers — group 29</td></tr>
+                <tr><td><code>29-apollo</code></td><td>Apollo Server (Node)</td><td>2</td><td>✅ Yes</td><td>4000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-apollo">29-apollo/</a></td></tr>
+                <tr><td><code>29-async-graphql</code></td><td>async-graphql (Rust)</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-async-graphql">29-async-graphql/</a></td></tr>
+                <tr><td><code>29-gqlgen</code></td><td>gqlgen (Go)</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-gqlgen">29-gqlgen/</a></td></tr>
+                <tr><td><code>29-graphql-ruby</code></td><td>GraphQL Ruby</td><td>2</td><td>✅ Yes</td><td>4567</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-graphql-ruby">29-graphql-ruby/</a></td></tr>
+                <tr><td><code>29-graphql-yoga</code></td><td>GraphQL Yoga (Node)</td><td>2</td><td>✅ Yes</td><td>4000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-graphql-yoga">29-graphql-yoga/</a></td></tr>
+                <tr><td><code>29-hot-chocolate</code></td><td>Hot Chocolate (.NET)</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-hot-chocolate">29-hot-chocolate/</a></td></tr>
+                <tr><td><code>29-spring-graphql</code></td><td>Spring GraphQL</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-spring-graphql">29-spring-graphql/</a></td></tr>
+                <tr><td><code>29-strawberry</code></td><td>Strawberry (Python)</td><td>2</td><td>✅ Yes</td><td>8000</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-strawberry">29-strawberry/</a></td></tr>
 
-                <tr class="cat-row"><td colspan="5">WebSocket servers — group 30</td></tr>
-                <tr><td><code>30-ws-dotnet</code></td><td>ASP.NET Core WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>30-ws-elixir</code></td><td>Phoenix Channels</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>30-ws-go</code></td><td>Go WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>30-ws-java</code></td><td>Java WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>30-ws-node</code></td><td>Node.js WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>30-ws-python</code></td><td>Python WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
-                <tr><td><code>30-ws-ruby</code></td><td>Ruby WS</td><td>2</td><td>✅ Yes</td><td>9292</td></tr>
-                <tr><td><code>30-ws-rust</code></td><td>Tokio/axum WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr class="cat-row"><td colspan="6">WebSocket servers — group 30</td></tr>
+                <tr><td><code>30-ws-dotnet</code></td><td>ASP.NET Core WS</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-dotnet">30-ws-dotnet/</a></td></tr>
+                <tr><td><code>30-ws-elixir</code></td><td>Phoenix Channels</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-elixir">30-ws-elixir/</a></td></tr>
+                <tr><td><code>30-ws-go</code></td><td>Go WS</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-go">30-ws-go/</a></td></tr>
+                <tr><td><code>30-ws-java</code></td><td>Java WS</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-java">30-ws-java/</a></td></tr>
+                <tr><td><code>30-ws-node</code></td><td>Node.js WS</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-node">30-ws-node/</a></td></tr>
+                <tr><td><code>30-ws-python</code></td><td>Python WS</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-python">30-ws-python/</a></td></tr>
+                <tr><td><code>30-ws-ruby</code></td><td>Ruby WS</td><td>2</td><td>✅ Yes</td><td>9292</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-ruby">30-ws-ruby/</a></td></tr>
+                <tr><td><code>30-ws-rust</code></td><td>Tokio/axum WS</td><td>2</td><td>✅ Yes</td><td>8080</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-rust">30-ws-rust/</a></td></tr>
               </tbody>
             </table>
           </div>
