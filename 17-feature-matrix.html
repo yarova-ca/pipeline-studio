@@ -194,7 +194,8 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   <a href="#groups">Service groups</a>
   <a href="#priority">Priority tiers</a>
   <a href="#axes-concept">What is an axis</a>
-  <a href="#axes-detail">The 7 axes</a>
+  <a href="#builtins">Built-in features</a>
+  <a href="#axes-detail">The 8 axes</a>
   <a href="#matrix">Group matrix</a>
   <a href="#examples">Real-world examples</a>
   <a href="#status">Implementation status</a>
@@ -239,21 +240,23 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   <p>The <strong>service-starters</strong> repo has 105 ready-to-run service templates — one for each framework and language.
   Out of the box, each template is a minimal "hello world" service with health endpoints.
   <br><br>
-  This page explains <strong>7 ways to customize any service</strong> — swapping the base image, adding compliance rules, wiring up authentication, connecting a database — all with a single command.
+  This page explains <strong>8 ways to customize any service</strong> — swapping the build image, swapping the runtime image, adding compliance rules, wiring up authentication, connecting a database — all with a single command.
   No editing Dockerfiles. No writing code.</p>
 
   <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Here is the full command. Each <code>--build-arg</code> is one customization:</p>
 
   <div class="annotated-cmd">
 <pre>docker build --target runtime \
-  --build-arg RUNTIME=chainguard \
+  --build-arg BUILD_IMAGE=sdk \
+  --build-arg RUNTIME=slim \
   --build-arg COMPLIANCE=hipaa \
   --build-arg AUTH=jwt \
   --build-arg OBSERVABILITY=otel \
   --build-arg ORM=gorm \
   -t my-service services/16-gin</pre>
     <ul class="cmd-ann-list">
-      <li><code>RUNTIME=chainguard</code> <span class="ann-sep">→</span> <span class="ann-what">which base Linux image to use (affects security and CVEs)</span></li>
+      <li><code>BUILD_IMAGE=sdk</code> <span class="ann-sep">→</span> <span class="ann-what">which image runs the compiler and SDK (supply chain trust boundary)</span></li>
+      <li><code>RUNTIME=slim</code> <span class="ann-sep">→</span> <span class="ann-what">which base Linux image the service runs on (affects security and CVEs)</span></li>
       <li><code>COMPLIANCE=hipaa</code> <span class="ann-sep">→</span> <span class="ann-what">which regulatory rules to activate (HIPAA, PCI, FIPS, PIPEDA, etc.)</span></li>
       <li><code>AUTH=jwt</code> <span class="ann-sep">→</span> <span class="ann-what">which authentication method to enforce (JWT, OAuth2, API key, mTLS, etc.)</span></li>
       <li><code>OBSERVABILITY=otel</code> <span class="ann-sep">→</span> <span class="ann-what">which monitoring instrumentation to add (OpenTelemetry, Prometheus, Datadog)</span></li>
@@ -270,28 +273,28 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   <div class="cat-card c-frontend">
     <div class="cat-card-head">Frontend &amp; Static <span class="cat-grp-badge">groups 01–08 &amp; 13</span></div>
     <div class="cat-examples">React, Vue, Next.js, Nuxt, Svelte, Astro, Angular, Vite PWA, Cloudflare Workers</div>
-    <div class="cat-axes-line">Build axes that apply: <code>RUNTIME</code> · <code>PKG_MGR</code> · <code>BUILD_TOOL</code></div>
+    <div class="cat-axes-line">Build axes that apply: <code>BUILD_IMAGE</code> · <code>RUNTIME</code> · <code>PKG_MGR</code> · <code>BUILD_TOOL</code></div>
     <div class="cat-note">Served by nginx or Node.js. No server middleware entry point — so COMPLIANCE, AUTH, and ORM do not apply to pure static groups.</div>
   </div>
 
   <div class="cat-card c-api">
     <div class="cat-card-head">API Servers — primary target <span class="cat-grp-badge">groups 14–20</span></div>
     <div class="cat-examples">Express, Fastify, FastAPI, Gin, Spring Boot, Ktor, ASP.NET Core, Axum</div>
-    <div class="cat-axes-line">RUNTIME · COMPLIANCE · OBSERVABILITY · AUTH · ORM — all groups (14–20). PKG_MGR · BUILD_TOOL — group 14 (JS/TS) only.</div>
-    <div class="cat-note">Group 14 (Express, Fastify, Hono) is JS/TS — all 7 axes apply. Groups 15–20 (Python, Go, Java, Kotlin, C#, Rust) each have exactly one package manager and no bundling step — 5 of 7 axes apply.</div>
+    <div class="cat-axes-line">BUILD_IMAGE · RUNTIME · COMPLIANCE · OBSERVABILITY · AUTH · ORM — all groups (14–20). PKG_MGR · BUILD_TOOL — group 14 (JS/TS) only.</div>
+    <div class="cat-note">Group 14 (Express, Fastify, Hono) is JS/TS — all 8 axes apply. Groups 15–20 (Python, Go, Java, Kotlin, C#, Rust) each have exactly one package manager and no bundling step — 6 of 8 axes apply.</div>
   </div>
 
   <div class="cat-card c-ext">
     <div class="cat-card-head">Extended Servers <span class="cat-grp-badge">groups 21–27</span></div>
     <div class="cat-examples">Phoenix (Elixir), Rails, Laravel, Vapor (Swift), Play (Scala), Pedestal (Clojure), Crow (C++)</div>
-    <div class="cat-axes-line">RUNTIME · COMPLIANCE · OBSERVABILITY · AUTH · ORM — all groups (21–27). PKG_MGR · BUILD_TOOL — not applicable.</div>
-    <div class="cat-note">Elixir uses Mix only. Ruby uses Bundler only. PHP uses Composer only. Swift uses SPM only. None have a bundling step. 5 of 7 axes apply to all extended server groups.</div>
+    <div class="cat-axes-line">BUILD_IMAGE · RUNTIME · COMPLIANCE · OBSERVABILITY · AUTH · ORM — all groups (21–27). PKG_MGR · BUILD_TOOL — not applicable.</div>
+    <div class="cat-note">Elixir uses Mix only. Ruby uses Bundler only. PHP uses Composer only. Swift uses SPM only. None have a bundling step. 6 of 8 axes apply to all extended server groups.</div>
   </div>
 
   <div class="cat-card c-proto">
     <div class="cat-card-head">Protocol Servers <span class="cat-grp-badge">groups 28–30</span></div>
     <div class="cat-examples">gRPC (10 languages), GraphQL (8 frameworks), WebSocket (8 languages)</div>
-    <div class="cat-axes-line">6 of 7 axes apply — ORM does not.</div>
+    <div class="cat-axes-line">7 of 8 axes apply — ORM does not.</div>
     <div class="cat-note">ORM does not apply: protocol servers are transport layers, not data-owning services. They pass messages, not own rows.</div>
   </div>
 
@@ -467,59 +470,575 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 
 <div class="note-block" style="margin-top:0">
   <strong>Important: which axes work today vs which are coming soon</strong><br>
-  <code>RUNTIME</code> — <span class="s-impl">Implemented</span> — code exists in every applicable service. You can use it right now.<br>
+  <code>BUILD_IMAGE</code> — <span class="s-impl">Implemented</span> — <code>--build-arg BUILD_IMAGE=ubuntu|sdk|sdk-alpine|custom</code> works in all 92 Docker services right now.<br>
+  <code>RUNTIME</code> — <span class="s-impl">Implemented</span> — <code>--build-arg RUNTIME=alpine|slim|scratch|distroless|fips</code> works in all applicable services right now.<br>
   All other 6 axes — <span class="s-des">Designed</span> — fully documented and planned, but not yet built into service source code. See <a href="#status">Implementation status</a> for details.
 </div>
 
-<!-- ═══ SECTION 3: THE 7 AXES EXPLAINED ═══ -->
-<h2 id="axes-detail">The 7 axes — what each one does</h2>
-<p class="section-sub">Each axis is a <code>--build-arg KEY=value</code> flag. Click any axis to expand its values table and example command.</p>
+<!-- ═══ SECTION 2.5: BUILT-IN FEATURES ═══ -->
+<h2 id="builtins">Built-in features — no <code>--build-arg</code> needed</h2>
+<p class="section-sub">These features exist in every applicable service today. No configuration. No build-arg. Always present.</p>
 
-<!-- AXIS 1: RUNTIME -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">1</span>
-    <span class="ac-name">Runtime Variant</span>
-    <span class="ac-arg">RUNTIME</span>
+    <span class="ac-num" style="background:#1a7f37">✓</span>
+    <span class="ac-name">Health Endpoints</span>
+    <span class="ac-arg">GET /health · /health/live · /health/ready</span>
     <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Swaps the base Linux image your service container runs on. Every Docker container starts from a base image — this axis lets you choose which one, trading off image size, security posture, and compliance eligibility.</p>
+    <p class="ac-what">Every server service automatically exposes 3 HTTP health routes from the moment it starts.<br>
+    No build-arg. No configuration. No code to write. They are wired in at the framework layer.</p>
+
     <div class="ac-why">
-      <strong>Why you'd use this</strong>
-      Use <code>chainguard</code> to ship a container with zero known security vulnerabilities — required by many enterprise security teams.
-      Use <code>ubi9</code> when your industry legally requires FIPS-validated cryptography (US federal government, defense contractors).
-      Use <code>slim</code> to reduce the attack surface by removing the shell entirely.
+      <strong>Why health endpoints matter</strong><br>
+      Kubernetes uses these routes to manage the container lifecycle.<br>
+      Without them: Kubernetes cannot know if your service is alive or ready for traffic.<br>
+      With them: Kubernetes automatically restarts broken pods and routes traffic correctly.
     </div>
+
     <div class="ac-terms">
-      <strong>CVE</strong> (Common Vulnerability and Exposure) = a publicly documented security flaw in software. Zero CVEs = no known flaws in the image.<br>
-      <strong>FIPS-140-2</strong> = US government standard for cryptographic modules. Required for federal IT systems.
+      <strong>Liveness probe</strong> = Kubernetes checks this every few seconds. Non-200 → pod is restarted.<br>
+      <strong>Readiness probe</strong> = Kubernetes checks this before sending traffic. Non-200 → pod is taken out of the load balancer rotation.<br>
+      <strong>Probe</strong> = an automated HTTP call Kubernetes makes to the container to check its health.
     </div>
+
     <details class="axis-details" open>
-      <summary><span class="axis-num">Values</span></summary>
+      <summary><span class="axis-num">Routes</span></summary>
       <div class="expand-content">
         <div class="tbl-wrap">
         <table class="gen-table">
-          <thead><tr><th>Value</th><th>Base image</th><th>Use when</th><th>Constraint</th></tr></thead>
+          <thead><tr><th>Route</th><th>Purpose</th><th>Returns</th><th>When Kubernetes uses this</th></tr></thead>
           <tbody>
-            <tr><td><code>standard</code> (default)</td><td>debian:bookworm-slim</td><td>Development, general commercial workloads</td><td>None</td></tr>
-            <tr><td><code>slim</code></td><td>gcr.io/distroless/base-debian12</td><td>No shell access needed, reduced attack surface</td><td>None</td></tr>
-            <tr><td><code>chainguard</code></td><td>cgr.dev/chainguard/static</td><td>Zero CVEs, SOC 2, supply-chain signed SBOM</td><td>None</td></tr>
-            <tr><td><code>ubi9</code></td><td>registry.access.redhat.com/ubi9-minimal</td><td>FIPS-140-2 crypto, federal/regulated workloads</td><td>Required when <code>COMPLIANCE=fips</code></td></tr>
-            <tr><td><code>edge</code></td><td>debian:bookworm-slim multi-arch</td><td>Build for linux/amd64 + linux/arm64 in one command</td><td>None</td></tr>
+            <tr><td><code>GET /health</code></td><td>Manual health check — call this yourself to verify the service is up</td><td><code>200 {"status":"ok"}</code></td><td>Not a probe target. For human/monitoring use.</td></tr>
+            <tr><td><code>GET /health/live</code></td><td>Kubernetes liveness probe</td><td><code>200 {"status":"ok"}</code></td><td>Non-200 → Kubernetes restarts the pod</td></tr>
+            <tr><td><code>GET /health/ready</code></td><td>Kubernetes readiness probe</td><td><code>200 {"status":"ok"}</code></td><td>Non-200 → pod removed from load balancer rotation</td></tr>
           </tbody>
         </table>
         </div>
-        <pre>docker build --target runtime --build-arg RUNTIME=chainguard -t my-service services/14-express</pre>
+
+        <p><strong>Example:</strong></p>
+        <pre># Test locally — replace 3000 with your service port
+curl http://localhost:3000/health
+# Returns: {"status":"ok"}
+
+curl http://localhost:3000/health/live
+# Returns: {"status":"ok"}
+
+curl http://localhost:3000/health/ready
+# Returns: {"status":"ok"}</pre>
+
+        <p><strong>Kubernetes probe config example (in your deployment YAML):</strong></p>
+        <pre>livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: 3000
+  initialDelaySeconds: 3
+  periodSeconds: 5</pre>
+      </div>
+    </details>
+
+    <details class="axis-details" open>
+      <summary><span class="axis-num">Which services have health endpoints</span></summary>
+      <div class="expand-content">
+        <table class="gen-table" style="font-size:11.5px">
+          <thead><tr><th>Service group</th><th>Has health endpoints?</th><th>Port</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>SSR + Island + Resumability (01, 04, 05, 07)</td><td>✅ Yes</td><td>3000 / 8000</td><td>Next.js, Nuxt, SvelteKit, Astro Islands, Qwik, Fresh (Deno = 8000)</td></tr>
+            <tr><td>Node.js API (14)</td><td>✅ Yes</td><td>3000 / 8000</td><td>Express, Fastify, Hono, NestJS = 3000. Deno = 8000.</td></tr>
+            <tr><td>Python (15)</td><td>✅ Yes</td><td>8080</td><td>FastAPI, Django, Flask, Starlette</td></tr>
+            <tr><td>Go (16)</td><td>✅ Yes</td><td>8080</td><td>Gin, Chi, Echo, Fiber</td></tr>
+            <tr><td>Java (17)</td><td>✅ Yes</td><td>8080</td><td>Spring Boot, Micronaut, Quarkus</td></tr>
+            <tr><td>Kotlin (18)</td><td>✅ Yes</td><td>8080</td><td>Ktor, Spring Boot (Kotlin)</td></tr>
+            <tr><td>.NET (19)</td><td>✅ Yes</td><td>8080</td><td>ASP.NET Core, Minimal APIs</td></tr>
+            <tr><td>Rust (20)</td><td>✅ Yes</td><td>8080</td><td>Axum, Actix-web</td></tr>
+            <tr><td>Elixir (21)</td><td>✅ Yes</td><td>4000</td><td>Phoenix</td></tr>
+            <tr><td>Ruby (22)</td><td>✅ Yes</td><td>3000</td><td>Rails, Sinatra</td></tr>
+            <tr><td>PHP (23)</td><td>✅ Yes</td><td>9000</td><td>php-fpm port. Laravel, Slim, Symfony. Needs nginx sidecar for HTTP.</td></tr>
+            <tr><td>Swift (24)</td><td>✅ Yes</td><td>8080</td><td>Vapor, Hummingbird</td></tr>
+            <tr><td>Scala (25)</td><td>✅ Yes</td><td>8080 / 9000</td><td>http4s = 8080. Play Framework = 9000.</td></tr>
+            <tr><td>Clojure (26)</td><td>✅ Yes</td><td>8080</td><td>Pedestal, Ring</td></tr>
+            <tr><td>C++ (27)</td><td>✅ Yes</td><td>8080</td><td>Crow, Drogon</td></tr>
+            <tr><td>gRPC (28)</td><td>✅ Yes (HTTP + gRPC)</td><td>8080 / 50051</td><td>HTTP health on port 8080. gRPC health on port 50051 via <code>grpcurl</code>.</td></tr>
+            <tr><td>GraphQL (29)</td><td>✅ Yes</td><td>4000 / 8080 / 8000</td><td>Apollo/Yoga = 4000. graphql-ruby = 4567. Strawberry = 8000. Others = 8080.</td></tr>
+            <tr><td>WebSocket (30)</td><td>✅ Yes</td><td>8080 / 9292</td><td>All = 8080 except 30-ws-ruby = 9292.</td></tr>
+            <tr><td>nginx static sites (02, 03, 08, 13)</td><td>❌ No app health endpoint</td><td>80</td><td>nginx serves static files — no app process. Use <code>GET /</code> (port 80) for Kubernetes liveness.</td></tr>
+            <tr><td>Edge (06)</td><td>❌ No Docker</td><td>—</td><td>Cloudflare Workers — no container, no port. Platform-managed health.</td></tr>
+            <tr><td>Mobile / Native (09–12)</td><td>❌ No server</td><td>—</td><td>No server process. Builds to app bundle. No HTTP.</td></tr>
+          </tbody>
+        </table>
+
+        <p style="font-size:11.5px;margin-top:8px"><strong>gRPC health check via grpcurl:</strong></p>
+        <pre>grpcurl -plaintext localhost:50051 grpc.health.v1.Health/Check</pre>
+
+        <details class="axis-details" style="margin-top:12px">
+          <summary><span class="axis-num">Full list — all 105 services</span></summary>
+          <div class="expand-content">
+            <table class="gen-table" style="font-size:11px">
+              <thead><tr><th>Service</th><th>Framework</th><th>Tier</th><th>Health endpoints</th><th>Port</th></tr></thead>
+              <tbody>
+                <tr class="cat-row"><td colspan="5">Frontend SSR — groups 01, 04, 05, 07</td></tr>
+                <tr><td><code>01-angular-ssr</code></td><td>Angular SSR</td><td>2</td><td>✅ Yes</td><td>4000</td></tr>
+                <tr><td><code>01-nextjs</code></td><td>Next.js</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>01-nuxt</code></td><td>Nuxt</td><td>1</td><td>✅ Yes (at <code>/api/health*</code>)</td><td>3000</td></tr>
+                <tr><td><code>01-remix</code></td><td>Remix</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>01-solid-start</code></td><td>SolidStart</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>01-sveltekit</code></td><td>SvelteKit</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>04-astro</code></td><td>Astro Islands</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>04-fresh</code></td><td>Fresh (Deno)</td><td>2</td><td>✅ Yes</td><td>8000</td></tr>
+                <tr><td><code>05-qwik</code></td><td>Qwik</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>07-nextjs-app-router</code></td><td>Next.js App Router</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>07-remix</code></td><td>Remix</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>07-sveltekit</code></td><td>SvelteKit</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Frontend SPA + Static — groups 02, 03, 08, 13 — nginx serves static files, no app health endpoint</td></tr>
+                <tr><td><code>02-angular</code></td><td>Angular</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-lit</code></td><td>Lit</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-preact</code></td><td>Preact</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-react</code></td><td>React</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-solidjs</code></td><td>SolidJS</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-svelte</code></td><td>Svelte</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>02-vue</code></td><td>Vue</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>03-astro</code></td><td>Astro</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>03-eleventy</code></td><td>Eleventy</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>03-gatsby</code></td><td>Gatsby</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>03-hugo</code></td><td>Hugo</td><td>1</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>08-mf-rspack</code></td><td>Rspack MF</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>08-mf-webpack</code></td><td>Webpack MF</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>08-single-spa</code></td><td>single-spa</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>13-vite-pwa</code></td><td>Vite PWA</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+                <tr><td><code>13-workbox</code></td><td>Workbox</td><td>2</td><td>❌ nginx-only</td><td>80</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Edge — group 06 — Cloudflare Workers, no container, no port</td></tr>
+                <tr><td><code>06-hono-edge</code></td><td>Hono (Cloudflare Workers)</td><td>1</td><td>❌ no Docker</td><td>—</td></tr>
+                <tr><td><code>06-nextjs-edge</code></td><td>Next.js Edge (Vercel/CF)</td><td>2</td><td>❌ no Docker</td><td>—</td></tr>
+                <tr><td><code>06-remix-cloudflare</code></td><td>Remix (Cloudflare)</td><td>2</td><td>❌ no Docker</td><td>—</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Mobile / Native — groups 09–12 — no server process, builds to app bundle</td></tr>
+                <tr><td><code>09-expo</code></td><td>Expo</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>09-ionic</code></td><td>Ionic</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>09-react-native</code></td><td>React Native</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>10-dotnet-maui</code></td><td>.NET MAUI</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>10-flutter</code></td><td>Flutter</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>10-kmp</code></td><td>Kotlin Multiplatform</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>11-objc-uikit</code></td><td>Objective-C UIKit</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>11-swift-swiftui</code></td><td>Swift SwiftUI</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>12-java-android</code></td><td>Java Android</td><td>2</td><td>❌ no server</td><td>—</td></tr>
+                <tr><td><code>12-kotlin-jetpack</code></td><td>Kotlin Jetpack</td><td>1</td><td>❌ no server</td><td>—</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Node.js API servers — group 14</td></tr>
+                <tr><td><code>14-bun</code></td><td>Bun</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-deno</code></td><td>Deno</td><td>2</td><td>✅ Yes</td><td>8000</td></tr>
+                <tr><td><code>14-elysia</code></td><td>Elysia</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-express</code></td><td>Express.js</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-fastify</code></td><td>Fastify</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-hono</code></td><td>Hono</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>14-nestjs</code></td><td>NestJS</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Python servers — group 15</td></tr>
+                <tr><td><code>15-django</code></td><td>Django</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>15-fastapi</code></td><td>FastAPI</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>15-flask</code></td><td>Flask</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>15-starlette</code></td><td>Starlette</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Go servers — group 16</td></tr>
+                <tr><td><code>16-chi</code></td><td>Chi</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>16-echo</code></td><td>Echo</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>16-fiber</code></td><td>Fiber</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>16-gin</code></td><td>Gin</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Java servers — group 17</td></tr>
+                <tr><td><code>17-micronaut</code></td><td>Micronaut</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>17-quarkus</code></td><td>Quarkus</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>17-spring-boot</code></td><td>Spring Boot</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Kotlin servers — group 18</td></tr>
+                <tr><td><code>18-ktor</code></td><td>Ktor</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>18-spring-boot-kotlin</code></td><td>Spring Boot (Kotlin)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">.NET servers — group 19</td></tr>
+                <tr><td><code>19-aspnet-core</code></td><td>ASP.NET Core</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>19-minimal-apis</code></td><td>ASP.NET Minimal APIs</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Rust servers — group 20</td></tr>
+                <tr><td><code>20-actix-web</code></td><td>Actix-web</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>20-axum</code></td><td>Axum</td><td>1</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Elixir servers — group 21</td></tr>
+                <tr><td><code>21-phoenix</code></td><td>Phoenix</td><td>1</td><td>✅ Yes</td><td>4000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Ruby servers — group 22</td></tr>
+                <tr><td><code>22-rails</code></td><td>Rails</td><td>1</td><td>✅ Yes</td><td>3000</td></tr>
+                <tr><td><code>22-sinatra</code></td><td>Sinatra</td><td>2</td><td>✅ Yes</td><td>3000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">PHP servers — group 23 — port 9000 is php-fpm; needs nginx sidecar for HTTP in production</td></tr>
+                <tr><td><code>23-laravel</code></td><td>Laravel</td><td>1</td><td>✅ Yes</td><td>9000</td></tr>
+                <tr><td><code>23-slim</code></td><td>Slim</td><td>2</td><td>✅ Yes</td><td>9000</td></tr>
+                <tr><td><code>23-symfony</code></td><td>Symfony</td><td>2</td><td>✅ Yes</td><td>9000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Swift servers — group 24</td></tr>
+                <tr><td><code>24-hummingbird</code></td><td>Hummingbird</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>24-vapor</code></td><td>Vapor</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Scala servers — group 25</td></tr>
+                <tr><td><code>25-http4s</code></td><td>http4s</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>25-play</code></td><td>Play Framework</td><td>2</td><td>✅ Yes</td><td>9000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">Clojure servers — group 26</td></tr>
+                <tr><td><code>26-pedestal</code></td><td>Pedestal</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>26-ring</code></td><td>Ring</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">C++ servers — group 27</td></tr>
+                <tr><td><code>27-crow</code></td><td>Crow</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>27-drogon</code></td><td>Drogon</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">gRPC servers — group 28 — HTTP health on port 8080 + gRPC health on port 50051</td></tr>
+                <tr><td><code>28-dotnet-grpc</code></td><td>.NET gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-go-grpc</code></td><td>Go gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-java-grpc</code></td><td>Java gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-kotlin-grpc</code></td><td>Kotlin gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-node-grpc</code></td><td>Node.js gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-php-grpc</code></td><td>PHP gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-python-grpc</code></td><td>Python gRPC</td><td>1</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-ruby-grpc</code></td><td>Ruby gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-rust-grpc</code></td><td>Rust gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+                <tr><td><code>28-swift-grpc</code></td><td>Swift gRPC</td><td>2</td><td>✅ HTTP 8080 + gRPC 50051</td><td>50051/8080</td></tr>
+
+                <tr class="cat-row"><td colspan="5">GraphQL servers — group 29</td></tr>
+                <tr><td><code>29-apollo</code></td><td>Apollo Server (Node)</td><td>2</td><td>✅ Yes</td><td>4000</td></tr>
+                <tr><td><code>29-async-graphql</code></td><td>async-graphql (Rust)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>29-gqlgen</code></td><td>gqlgen (Go)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>29-graphql-ruby</code></td><td>GraphQL Ruby</td><td>2</td><td>✅ Yes</td><td>4567</td></tr>
+                <tr><td><code>29-graphql-yoga</code></td><td>GraphQL Yoga (Node)</td><td>2</td><td>✅ Yes</td><td>4000</td></tr>
+                <tr><td><code>29-hot-chocolate</code></td><td>Hot Chocolate (.NET)</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>29-spring-graphql</code></td><td>Spring GraphQL</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>29-strawberry</code></td><td>Strawberry (Python)</td><td>2</td><td>✅ Yes</td><td>8000</td></tr>
+
+                <tr class="cat-row"><td colspan="5">WebSocket servers — group 30</td></tr>
+                <tr><td><code>30-ws-dotnet</code></td><td>ASP.NET Core WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-elixir</code></td><td>Phoenix Channels</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-go</code></td><td>Go WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-java</code></td><td>Java WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-node</code></td><td>Node.js WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-python</code></td><td>Python WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+                <tr><td><code>30-ws-ruby</code></td><td>Ruby WS</td><td>2</td><td>✅ Yes</td><td>9292</td></tr>
+                <tr><td><code>30-ws-rust</code></td><td>Tokio/axum WS</td><td>2</td><td>✅ Yes</td><td>8080</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
       </div>
     </details>
   </div>
 </div>
 
-<!-- AXIS 2: PKG_MANAGER -->
+<!-- ═══ SECTION 3: THE 8 AXES EXPLAINED ═══ -->
+<h2 id="axes-detail">The 8 axes — what each one does</h2>
+<p class="section-sub">Each axis is a <code>--build-arg KEY=value</code> flag. Click any axis to expand its values table and example command.</p>
+
+<!-- AXIS 1: BUILD_IMAGE -->
+<div class="axis-card">
+  <div class="axis-card-head">
+    <span class="ac-num">1</span>
+    <span class="ac-name">Build Stage Image</span>
+    <span class="ac-arg">BUILD_IMAGE</span>
+    <span class="s-impl">Implemented</span>
+  </div>
+  <div class="axis-card-body">
+    <p class="ac-what">Swaps the base image used in the compilation stage of the Dockerfile. The build stage runs the compiler, SDK, and package manager — then is discarded. Only the runtime stage ships to production. This axis controls the supply chain trust boundary at build time.</p>
+    <p class="ac-what"><strong>Why it matters:</strong> A compromised build image can inject malicious code into your binary before the runtime stage strips everything else. All other axes plus health endpoints protect the running container — this axis protects what creates it.</p>
+    <p class="ac-what"><strong>Scope:</strong> Applies to all 99 services that have a Dockerfile. Does not apply to group 06 (Cloudflare Workers — no Dockerfile) and groups 09–12 (mobile/native — no Docker).</p>
+    <div class="ac-why">
+      <strong>Why you'd use this</strong><br>
+      Use <code>sdk</code> when your security team requires using the official language maintainer's image (not Ubuntu + apt install).<br>
+      Use <code>sdk-alpine</code> to reduce the build stage size — faster CI, smaller layer cache.<br>
+      Use <code>custom</code> to pull from your internal registry instead of Docker Hub (air-gapped environments, vetted internal images).
+    </div>
+    <div class="ac-terms">
+      <strong>Supply chain attack</strong> = injecting malicious code into software during the build process, before the final image is assembled.<br>
+      <strong>Internal registry</strong> = your organization's private image store — images scanned, approved, and hosted internally.<br>
+      <strong>SBOM</strong> (Software Bill of Materials) = signed list of every dependency in the image — generated automatically by some base images.
+    </div>
+    <details class="axis-details" open>
+      <summary><span class="axis-num">What existed before — hardcoded build stage images (now replaced by BUILD_IMAGE ARG)</span></summary>
+      <div class="expand-content">
+        <p><strong>Status:</strong> BUILD_IMAGE ARG is now implemented in all 92 Docker services. The table below shows what was hardcoded before this axis was added.</p>
+        <table class="gen-table" style="font-size:11.5px">
+          <thead><tr><th>Service group(s)</th><th>Previous hardcoded build stage image</th><th>Why this image was chosen</th></tr></thead>
+          <tbody>
+            <tr><td>All groups 01–05, 07–08, 13–27 (non-gRPC, non-GraphQL, non-WebSocket)</td><td><code>ubuntu:24.04</code></td><td>Universal base — installs any SDK via apt. One Dockerfile pattern covers all languages.</td></tr>
+            <tr><td>28-node-grpc · 29-apollo · 29-graphql-yoga · 30-ws-node</td><td><code>node:22-bookworm-slim</code></td><td>Node.js SDK pre-baked in gRPC/GraphQL/WebSocket services.</td></tr>
+            <tr><td>28-python-grpc · 29-strawberry · 30-ws-python</td><td><code>python:3.12-slim-bookworm</code></td><td>Python SDK pre-baked.</td></tr>
+            <tr><td>28-go-grpc · 29-gqlgen · 30-ws-go</td><td><code>golang:1.22-bookworm</code></td><td>Go SDK pre-baked.</td></tr>
+            <tr><td>28-java-grpc · 29-spring-graphql · 30-ws-java</td><td><code>eclipse-temurin:21-jdk-jammy</code></td><td>JDK pre-baked (Maven installed separately).</td></tr>
+            <tr><td>28-kotlin-grpc</td><td><code>gradle:8.7-jdk21</code></td><td>Gradle + JDK pre-baked.</td></tr>
+            <tr><td>28-dotnet-grpc · 29-hot-chocolate · 30-ws-dotnet</td><td><code>mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim</code></td><td>.NET 8 SDK pre-baked.</td></tr>
+            <tr><td>28-rust-grpc · 29-async-graphql · 30-ws-rust</td><td><code>rust:1.78-bookworm</code></td><td>Rust SDK pre-baked.</td></tr>
+            <tr><td>28-ruby-grpc · 29-graphql-ruby · 30-ws-ruby</td><td><code>ruby:3.3-bookworm</code></td><td>Ruby SDK pre-baked.</td></tr>
+            <tr><td>28-php-grpc</td><td><code>php:8.3-fpm-bookworm</code></td><td>PHP-FPM SDK pre-baked.</td></tr>
+            <tr><td>28-swift-grpc</td><td><code>swift:5.10-bookworm</code></td><td>Swift SDK pre-baked.</td></tr>
+            <tr><td>30-ws-elixir</td><td><code>hexpm/elixir:1.17-erlang-27.3.4.12-debian-bookworm-20260518-slim</code></td><td>Elixir + Erlang/OTP SDK pre-baked.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <details class="axis-details" open>
+      <summary><span class="axis-num">Designed values — by service group</span></summary>
+      <div class="expand-content">
+        <table class="gen-table" style="font-size:11px">
+          <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>Image when value = <code>sdk</code></th><th>Image when value = <code>sdk-alpine</code></th></tr></thead>
+          <tbody>
+            <tr><td>Node.js (01, 04, 05, 07, 14, 28-node-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code></td><td><code>node:22-alpine</code></td></tr>
+            <tr><td>Python (15, 28-python-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>python:3.12-slim-bookworm</code></td><td><code>python:3.12-alpine</code></td></tr>
+            <tr><td>Go (16, 28-go-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>golang:1.23-bookworm</code></td><td><code>golang:1.23-alpine</code></td></tr>
+            <tr><td>Java (17, 28-java-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-jammy</code></td><td><code>eclipse-temurin:21-jdk-alpine</code></td></tr>
+            <tr><td>Kotlin (18, 28-kotlin-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>eclipse-temurin:21-jdk-jammy</code></td><td><code>eclipse-temurin:21-jdk-alpine</code></td></tr>
+            <tr><td>.NET / C# (19, 28-dotnet-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0</code></td><td><code>mcr.microsoft.com/dotnet/sdk:9.0-alpine</code></td></tr>
+            <tr><td>Rust (20, 28-rust-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>rust:1.83-bookworm</code></td><td><code>rust:1.83-alpine</code></td></tr>
+            <tr><td>Elixir (21, 30-ws-elixir)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>hexpm/elixir:1.17-erlang-27.3.4.12-debian-bookworm-20260518-slim</code></td><td style="color:var(--text-dim)">❌ N/A — NIFs (C extensions used by many Hex packages) fail to compile on musl</td></tr>
+            <tr><td>Ruby (22, 28-ruby-grpc, 29-graphql-ruby, 30-ws-ruby)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>ruby:3.3-bookworm</code></td><td><code>ruby:3.3-alpine</code></td></tr>
+            <tr><td>PHP (23, 28-php-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>sdk-alpine</code> · <code>custom</code></td><td><code>php:8.3-cli-bookworm</code></td><td><code>php:8.3-cli-alpine</code></td></tr>
+            <tr><td>Swift (24, 28-swift-grpc)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>swift:6.0-bookworm</code></td><td style="color:var(--text-dim)">❌ N/A — Apple does not publish an official Alpine Swift image</td></tr>
+            <tr><td>Scala (25)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>sbtscala/scala-sbt:eclipse-temurin-21.0.8_9_1.12.11_3.8.3</code></td><td style="color:var(--text-dim)">❌ N/A — sbtscala publishes no Alpine image</td></tr>
+            <tr><td>Clojure (26)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>clojure:tools-deps-bookworm</code></td><td style="color:var(--text-dim)">❌ N/A — no official Clojure Alpine image on Docker Hub</td></tr>
+            <tr><td>C++ (27)</td><td><code>ubuntu</code></td><td><code>sdk</code> · <code>custom</code></td><td><code>debian:bookworm</code> (GCC via apt)</td><td style="color:var(--text-dim)">❌ N/A — Alpine uses musl libc; glibc C++ binaries are incompatible</td></tr>
+            <tr><td>nginx static (02, 03, 08, 13)</td><td><code>ubuntu</code></td><td><code>node-sdk</code> · <code>custom</code></td><td><code>node:22-bookworm-slim</code> (JS bundling)</td><td><code>node:22-alpine</code> (JS bundling)</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px">
+          <code>ubuntu</code> = <code>ubuntu:24.04</code> — installs any SDK via apt/rustup/curl. One Dockerfile pattern for all languages.<br>
+          <code>sdk</code> = official language image on Debian bookworm. Compiler pre-baked. No apt-get or curl needed in build stage.<br>
+          <code>sdk-alpine</code> = official language image on Alpine. Smaller layer cache. ❌ Not available for: Elixir · Swift · Scala · Clojure · C++.<br>
+          <code>custom</code> = your own image. Pass <code>BUILD_BASE=your-registry/your-image:tag</code> alongside <code>BUILD_IMAGE=custom</code>.<br>
+          <strong>Groups 29 (GraphQL) and 30 (WebSocket):</strong> same BUILD_IMAGE values as the primary language group. 29-graphql-go → same as group 16. 30-ws-ruby → same as group 22. Etc.<br>
+          <strong>Version rule:</strong> BUILD_IMAGE version tag must match RUNTIME version tag. See <a href="#axes-detail" onclick="document.querySelector('#axis-runtime-version')?.setAttribute('open','')">RUNTIME axis — Version relationship table</a> for the full version-to-code-repo mapping.
+        </p>
+        <pre># Example — use official Go SDK image for build (instead of ubuntu)
+docker build --target runtime \
+  --build-arg BUILD_IMAGE=sdk \
+  -t my-service services/16-gin
+
+# Example — use internal registry image for build (air-gapped environment)
+docker build --target runtime \
+  --build-arg BUILD_IMAGE=custom \
+  --build-arg BUILD_BASE=registry.internal.corp/go-builder:1.23 \
+  -t my-service services/16-gin</pre>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- AXIS 2: RUNTIME -->
 <div class="axis-card">
   <div class="axis-card-head">
     <span class="ac-num">2</span>
+    <span class="ac-name">Runtime Variant</span>
+    <span class="ac-arg">RUNTIME</span>
+    <span class="s-impl">Implemented</span>
+  </div>
+  <div class="axis-card-body">
+    <p class="ac-what">Swaps the base Linux image your service container runs on. Every Docker container starts from a base image — this axis lets you choose which one, trading off image size, security posture, and compliance eligibility. <strong>This is the only axis implemented today.</strong></p>
+    <p class="ac-what">Applies to <strong>28 of the 34 Tier 1 services</strong> — the 28 that build to Docker containers.<br>
+    The other 6 Tier 1 services have no Docker container: <code>06-hono-edge</code> (Cloudflare Workers), <code>09-react-native</code>, <code>09-expo</code>, <code>10-flutter</code>, <code>11-swift-swiftui</code>, <code>12-kotlin-jetpack</code> (mobile/native apps).<br>
+    <code>--build-arg RUNTIME=</code> is a Docker-only argument. When there is no Dockerfile: this arg does not exist.</p>
+    <div class="ac-why">
+      <strong>Why you'd use this</strong><br>
+      Use <code>fips</code> when your industry legally requires FIPS-validated cryptography (US federal government, defense contractors, healthcare).<br>
+      Use <code>slim</code> or <code>distroless</code> to reduce the attack surface — no shell, no package manager in the running image.<br>
+      Use <code>alpine</code> for the smallest standard image with broad ecosystem support.<br>
+      Use <code>scratch</code> for Go and Rust static binaries — the absolute minimum: zero OS, only your binary.
+    </div>
+    <div class="ac-terms">
+      <strong>CVE</strong> (Common Vulnerability and Exposure) = a publicly documented security flaw in software.<br>
+      <strong>FIPS-140-2</strong> = US government standard for cryptographic modules. Required for federal IT systems.<br>
+      <strong>Distroless</strong> = image with no shell and no package manager. Minimal attack surface. Default for Java and Kotlin.<br>
+      <strong>Scratch</strong> = completely empty image — only what you COPY into it. Default for Go and Rust static binaries.<br>
+      <strong>SBOM</strong> (Software Bill of Materials) = a signed list of every dependency in the image, generated automatically by some base images.
+    </div>
+
+    <details class="axis-details" open>
+      <summary><span class="axis-num">How it works inside every Dockerfile (3 steps)</span></summary>
+      <div class="expand-content">
+        <p><strong>Step 1 — Build stage creates a minimal user file.</strong></p>
+
+        <p><strong>Background: why does USER 1001 need a file?</strong></p>
+        <p>Every Linux system has a file at <code>/etc/passwd</code>.<br>
+        That file maps usernames to user IDs (UIDs).<br>
+        When a container starts and hits <code>USER 1001</code>, Docker looks up UID 1001 in <code>/etc/passwd</code>.</p>
+
+        <p>When <code>/etc/passwd</code> has the entry for UID 1001: container starts, app runs as that user.<br>
+        When <code>/etc/passwd</code> is missing the entry: container refuses to start.</p>
+
+        <p><strong>The problem: four image types, four incompatible tools</strong></p>
+        <table class="gen-table" style="font-size:11.5px">
+          <thead><tr><th>Base image type</th><th>How to add a user</th><th>Has a shell?</th><th>Can run RUN commands?</th></tr></thead>
+          <tbody>
+            <tr><td>Alpine</td><td><code>adduser -S -G app app</code></td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Debian / slim</td><td><code>useradd -u 1001 -r -g app app</code></td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td><strong>scratch</strong> (empty image)</td><td>No command exists</td><td>❌ No shell</td><td>❌ No</td></tr>
+            <tr><td><strong>distroless</strong> (no shell)</td><td>No command exists</td><td>❌ No shell</td><td>❌ No</td></tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:10px"><code>scratch</code> = a completely empty image. Zero OS. Zero tools. Only what you <code>COPY</code> into it.<br>
+        <code>distroless</code> = an image with no shell and no package manager — only the language runtime.<br>
+        Both accept <code>COPY</code>. Neither accepts <code>RUN</code>. <code>RUN</code> requires a shell to execute.</p>
+
+        <p><strong>The solution: make the file in the build stage, COPY it everywhere</strong></p>
+        <p>The build stage runs on <code>ubuntu:24.04</code>, which has a full shell.<br>
+        The <code>printf</code> command writes a three-line text file to <code>/tmp/app-passwd</code>.<br>
+        Each line is one user entry in the standard Unix passwd format.</p>
+
+        <pre>RUN printf 'root:x:0:0:root:/root:/bin/sh\n\
+nobody:x:65534:65534:nobody:/nonexistent:/bin/false\n\
+app:x:1001:1001::/home/app:/sbin/nologin\n' &gt; /tmp/app-passwd \
+ &amp;&amp; printf 'root:x:0:\nnobody:x:65534:\napp:x:1001:\n' &gt; /tmp/app-group</pre>
+
+        <p><strong>What each field in an <code>/etc/passwd</code> line means:</strong></p>
+        <table class="gen-table" style="font-size:11.5px">
+          <thead><tr><th>Line</th><th>name</th><th>password</th><th>UID</th><th>GID</th><th>comment</th><th>home</th><th>shell</th></tr></thead>
+          <tbody>
+            <tr><td><code>root:x:0:0:root:/root:/bin/sh</code></td><td>root</td><td>x (in shadow)</td><td>0</td><td>0</td><td>root</td><td>/root</td><td>/bin/sh</td></tr>
+            <tr><td><code>nobody:x:65534:65534:nobody:/nonexistent:/bin/false</code></td><td>nobody</td><td>x</td><td>65534</td><td>65534</td><td>nobody</td><td>/nonexistent</td><td>/bin/false</td></tr>
+            <tr><td><code>app:x:1001:1001::/home/app:/sbin/nologin</code></td><td>app</td><td>x</td><td>1001</td><td>1001</td><td>—</td><td>/home/app</td><td>/sbin/nologin</td></tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:8px"><code>/sbin/nologin</code> as the shell = this user cannot log in interactively.<br>
+        This is intentional — a service user must not be loginable.<br>
+        The container process runs as UID 1001 but no human can SSH in as that user.</p>
+
+        <p>Later, in the runtime stage:<br>
+        <code>COPY --from=build /tmp/app-passwd /etc/passwd</code> writes the file directly into the image layer.<br>
+        No shell needed. No <code>adduser</code> needed. Works in scratch. Works in distroless.</p>
+
+        <p>The <code>/etc/group</code> file does the same thing for group IDs.<br>
+        <code>app:x:1001:</code> = group named <code>app</code>, GID 1001, no extra members.<br>
+        Some tools (nginx, Java) log warnings if the group entry is missing.</p>
+
+        <p><strong>Step 2 — All base image options defined as named stages.</strong></p>
+        <pre># Node.js example — each language has its own set
+FROM node:22-alpine AS base-alpine
+FROM node:22-slim   AS base-slim
+FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS base-fips</pre>
+        <p>Docker BuildKit (the modern Docker build engine) only pulls the stage that is selected. The other two are skipped entirely — no extra pull time.</p>
+
+        <p><strong>Step 3 — ARG selects which base image becomes the runtime stage.</strong></p>
+        <pre>ARG RUNTIME=alpine
+FROM base-${RUNTIME} AS runtime
+WORKDIR /app
+COPY --from=build /tmp/app-passwd /etc/passwd
+COPY --from=build /tmp/app-group  /etc/group
+COPY --from=build --chown=1001:1001 /app/dist ./dist
+USER 1001</pre>
+        <p>The <code>/etc/passwd</code> copy is what makes <code>USER 1001</code> work in scratch and distroless images — they have no <code>adduser</code> command, but COPY creates the file directly. A separate <code>runtime-fips</code> named stage is kept for backward compatibility with <code>--target runtime-fips</code>.</p>
+      </div>
+    </details>
+
+    <details class="axis-details" open>
+      <summary><span class="axis-num">Values — by service group</span></summary>
+      <div class="expand-content">
+        <p>Values differ per language group. Each group uses the base image ecosystem for that language.</p>
+        <p><strong>Scope: 28 of 34 Tier 1 services — Docker services only.</strong></p>
+        <table class="gen-table" style="font-size:11.5px;margin-bottom:10px">
+          <thead><tr><th>Service(s)</th><th>In this table?</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td>01, 02, 03, 07, 14–23, 28 (28 services)</td><td>✅ Yes</td><td>These build to Docker containers. RUNTIME applies.</td></tr>
+            <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers (V8 isolate — not a container). No Dockerfile. RUNTIME does not exist for this service.</td></tr>
+            <tr><td>09-react-native, 09-expo</td><td>❌ No</td><td>React Native builds to .apk / .ipa mobile apps. No container.</td></tr>
+            <tr><td>10-flutter</td><td>❌ No</td><td>Builds to mobile app. No container.</td></tr>
+            <tr><td>11-swift-swiftui</td><td>❌ No</td><td>iOS native — Xcode builds, no Docker.</td></tr>
+            <tr><td>12-kotlin-jetpack</td><td>❌ No</td><td>Android native — Android Studio/Gradle builds, no Docker.</td></tr>
+          </tbody>
+        </table>
+        <div class="tbl-wrap">
+        <table class="gen-table">
+          <thead><tr><th>Service group(s)</th><th>Default</th><th>Other values</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Node.js SSR + API (01, 04, 05, 07, 14)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td>slim = node:22-slim · 04 = SvelteKit · 05 = Nuxt (both Node.js SSR)</td></tr>
+            <tr><td>nginx static sites (02, 03, 08, 13)</td><td><code>alpine</code></td><td><code>stable</code> · <code>fips</code></td><td>stable = nginx:1.27-stable · 08 = Angular · 13 = nginx-only static</td></tr>
+            <tr><td>Python (15)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = python:3.12-slim</td></tr>
+            <tr><td>Go (16)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>scratch = empty image, static binary only · CGO_ENABLED=0 required</td></tr>
+            <tr><td>Java · Kotlin · Scala · Clojure (17, 18, 25, 26)</td><td><code>distroless</code></td><td><code>temurin</code> · <code>fips</code></td><td>JVM languages — same runtime family. distroless = gcr.io/distroless/java21 · temurin = eclipse-temurin:21-jre · fips = ubi9/openjdk-21-runtime</td></tr>
+            <tr><td>.NET / C# (19)</td><td><code>alpine</code></td><td><code>debian</code> · <code>fips</code></td><td>alpine = aspnet:9.0-alpine · debian = aspnet:9.0-noble · fips = aspnet:9.0-cbl-mariner2.0-fips (CBL-Mariner, not UBI9)</td></tr>
+            <tr><td>Rust (20)</td><td><code>scratch</code></td><td><code>distroless</code> · <code>alpine</code> · <code>fips</code></td><td>static binary via musl target (<code>x86_64-unknown-linux-musl</code>)</td></tr>
+            <tr><td>Elixir (21)</td><td><code>debian</code></td><td><code>alpine</code> · <code>fips</code></td><td>debian = hexpm/elixir:1.17-erlang-27.3.4.12-debian-bookworm-20260518-slim · alpine = hexpm/elixir:1.17-erlang-27.3.4.12-alpine-3.21.7</td></tr>
+            <tr><td>Ruby (22)</td><td><code>alpine</code></td><td><code>slim</code> · <code>fips</code></td><td>alpine = ruby:3.3-alpine · slim = ruby:3.3-slim · fips = ubi9/ruby-32</td></tr>
+            <tr><td>PHP (23)</td><td><code>alpine</code></td><td><code>debian</code></td><td>No <code>fips</code> — no FIPS-validated PHP base image exists</td></tr>
+            <tr><td>Swift / Vapor (24)</td><td><code>slim</code></td><td><code>scratch</code></td><td>slim = swift:6.0-slim · scratch = fully static binary · No <code>fips</code> — Apple publishes no FIPS Swift container</td></tr>
+            <tr><td>C++ (27)</td><td><code>debian</code></td><td><code>alpine</code> · <code>scratch</code></td><td>debian = debian:bookworm-slim · scratch = fully static binary · No <code>fips</code> — no FIPS C++ base image exists</td></tr>
+            <tr><td>gRPC — Node.js (28-node-grpc)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = node:22-bookworm-slim · alpine = node:22-alpine · fips = ubi9/nodejs-22-minimal</td></tr>
+            <tr><td>gRPC — Python (28-python-grpc)</td><td><code>slim</code></td><td><code>alpine</code> · <code>fips</code></td><td>slim = python:3.12-slim · alpine = python:3.12-alpine · fips = ubi9/python-311</td></tr>
+            <tr><td>gRPC — other languages (28-go · 28-java · 28-kotlin · 28-dotnet · 28-rust · 28-elixir · 28-ruby · 28-php · 28-swift)</td><td colspan="3" style="color:var(--text-dim);font-size:11px">Same RUNTIME values as the primary language group above. Example: 28-go-grpc → same as group 16 (scratch default). 28-java-grpc → same as group 17 (distroless default). Etc.</td></tr>
+            <tr><td>GraphQL (29) · WebSocket (30) — all languages</td><td colspan="3" style="color:var(--text-dim);font-size:11px">Same RUNTIME values as the primary language group above. Example: 29-graphql-node → same as groups 01/14 (alpine default). 30-ws-go → same as group 16 (scratch default). Etc.</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:11.5px;color:var(--text-dim);margin-top:6px"><strong>fips base images by language:</strong> Node.js / Python / Go / Java / Kotlin / Scala / Clojure / Elixir / Ruby / Rust → UBI9 (Red Hat Universal Base Image 9). .NET (19) → CBL-Mariner (<code>aspnet:9.0-cbl-mariner2.0-fips</code>) — Microsoft's FIPS-validated Linux, not UBI9. <strong>No fips:</strong> PHP (no FIPS PHP image exists anywhere) · Swift (Apple publishes no FIPS container) · C++ (no FIPS C++ base image exists).</p>
+
+        <p><strong>Example commands:</strong></p>
+        <pre># Node.js — default (alpine)
+docker build --target runtime -t my-service services/14-express
+
+# Node.js — FIPS
+docker build --target runtime --build-arg RUNTIME=fips -t my-service:fips services/14-express
+
+# Go — distroless (instead of default scratch)
+docker build --target runtime --build-arg RUNTIME=distroless -t my-service services/16-gin
+
+# Java — temurin (JRE with shell — useful for debugging)
+docker build --target runtime --build-arg RUNTIME=temurin -t my-service services/17-spring-boot
+
+# Backward compat — --target runtime-fips still works
+docker build --target runtime-fips -t my-service:fips services/14-express</pre>
+      </div>
+    </details>
+
+    <details class="axis-details" open id="axis-runtime-version">
+      <summary><span class="axis-num">Version relationship — build image, runtime image, and code repo</span></summary>
+      <div class="expand-content">
+        <p><strong>Rule:</strong> The SDK version in the build image must equal the SDK version in the runtime image. A mismatch = compiled for one version, runs on another — undefined behavior.</p>
+        <table class="gen-table" style="font-size:11px">
+          <thead><tr><th>Language</th><th>Code repo pins version via</th><th>Build image version</th><th>Runtime image version</th><th>Must match?</th></tr></thead>
+          <tbody>
+            <tr><td>Node.js</td><td><code>engines.node</code> in package.json</td><td>node:<strong>22</strong>-bookworm-slim</td><td>node:<strong>22</strong>-alpine</td><td>✅ Both = 22</td></tr>
+            <tr><td>Python</td><td><code>.python-version</code> or pyproject.toml</td><td>python:<strong>3.12</strong>-slim-bookworm</td><td>python:<strong>3.12</strong>-slim</td><td>✅ Both = 3.12</td></tr>
+            <tr><td>Go</td><td><code>go</code> directive in go.mod</td><td>golang:<strong>1.23</strong>-bookworm</td><td>scratch / distroless (no Go at runtime)</td><td>✅ Compiler only in build</td></tr>
+            <tr><td>Java</td><td><code>&lt;java.version&gt;</code> in pom.xml or <code>sourceCompatibility</code> in build.gradle</td><td>eclipse-temurin:<strong>21</strong>-jdk-jammy</td><td>eclipse-temurin:<strong>21</strong>-jre-jammy / gcr.io/distroless/java<strong>21</strong></td><td>✅ Both = 21</td></tr>
+            <tr><td>Kotlin</td><td><code>jvmTarget</code> in build.gradle.kts</td><td>eclipse-temurin:<strong>21</strong>-jdk-jammy</td><td>eclipse-temurin:<strong>21</strong>-jre-jammy</td><td>✅ Both = 21</td></tr>
+            <tr><td>Scala</td><td><code>scalaVersion</code> in build.sbt</td><td>sbtscala/scala-sbt:eclipse-temurin-<strong>21</strong>_…</td><td>eclipse-temurin:<strong>21</strong>-jre</td><td>✅ JDK/JRE both = 21</td></tr>
+            <tr><td>Clojure</td><td><code>clojure</code> version in deps.edn</td><td>clojure:tools-deps-bookworm (JDK <strong>21</strong>)</td><td>eclipse-temurin:<strong>21</strong>-jre</td><td>✅ Both = JVM 21</td></tr>
+            <tr><td>.NET / C#</td><td><code>&lt;TargetFramework&gt;net9.0&lt;/TargetFramework&gt;</code> in .csproj</td><td>mcr.microsoft.com/dotnet/sdk:<strong>9.0</strong></td><td>mcr.microsoft.com/dotnet/aspnet:<strong>9.0</strong></td><td>✅ Both = 9.0</td></tr>
+            <tr><td>Rust</td><td><code>edition</code> + rust-toolchain.toml</td><td>rust:<strong>1.83</strong>-bookworm</td><td>scratch / distroless (no Rust at runtime)</td><td>✅ Compiler only in build</td></tr>
+            <tr><td>Elixir</td><td><code>elixir</code> + <code>erlang</code> in .tool-versions</td><td>hexpm/elixir:<strong>1.17</strong>-erlang-<strong>27.3.4.12</strong>-debian-bookworm-20260518-slim</td><td>hexpm/elixir:<strong>1.17</strong>-erlang-<strong>27.3.4.12</strong>-debian-bookworm-20260518-slim</td><td>✅ Both = Elixir 1.17, Erlang 27</td></tr>
+            <tr><td>Ruby</td><td><code>.ruby-version</code> in repo root</td><td>ruby:<strong>3.3</strong>-bookworm</td><td>ruby:<strong>3.3</strong>-alpine</td><td>✅ Both = 3.3</td></tr>
+            <tr><td>PHP</td><td><code>require.php</code> in composer.json</td><td>php:<strong>8.3</strong>-cli-bookworm</td><td>php:<strong>8.3</strong>-fpm-alpine</td><td>✅ Both = 8.3</td></tr>
+            <tr><td>Swift</td><td><code>swift-version</code> in Package.swift</td><td>swift:<strong>6.0</strong>-bookworm</td><td>swift:<strong>6.0</strong>-slim</td><td>✅ Both = 6.0</td></tr>
+            <tr><td>C++</td><td>CMakeLists.txt / Makefile (GCC version via Debian base)</td><td>debian:bookworm (GCC 12)</td><td>debian:bookworm-slim (same glibc)</td><td>✅ Same Debian = same glibc</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:11px;color:var(--text-dim);margin-top:8px">
+          <strong>Compiled languages (Go, Rust):</strong> Runtime image has no SDK. Only build stage carries the compiler. Version only matters in build stage. Runtime image version = OS version, not language version.<br>
+          <strong>Interpreted languages (Node.js, Python, Ruby, PHP, Elixir):</strong> Runtime image provides the interpreter. Both build and runtime stages must carry the same interpreter version.<br>
+          <strong>Bytecode languages (Java, Kotlin, Scala, Clojure, .NET):</strong> Build stage = SDK (compiler + JDK). Runtime stage = JRE only (no compiler). JDK version must match JRE/aspnet version.<br>
+          <strong>Version upgrade workflow:</strong> 1) Update version in code repo file → 2) Update build image tag → 3) Update runtime image tag → 4) Both Dockerfile stages in one PR.
+        </p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- AXIS 3: PKG_MANAGER -->
+<div class="axis-card">
+  <div class="axis-card-head">
+    <span class="ac-num">3</span>
     <span class="ac-name">Package Manager Swap</span>
     <span class="ac-arg">PKG_MANAGER</span>
     <span class="s-des">Designed</span>
@@ -527,6 +1046,21 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   <div class="axis-card-body">
     <p class="ac-what">Swaps npm for a different JS/TS package manager inside the Dockerfile.</p>
     <p class="ac-what"><strong>Why JS/TS can swap:</strong> npm, pnpm, yarn, and bun all read the same <code>package.json</code> file. The input file does not change — only which tool reads it changes. This is why all four are interchangeable with one <code>--build-arg</code>.</p>
+    <p class="ac-what"><strong>Scope: applies to 14 of the 34 Tier 1 services.</strong> Only JS/TS services with a <code>package.json</code> can swap the package manager.</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service(s)</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>01-nextjs, 01-nuxt, 01-sveltekit, 07-nextjs-app-router</td><td>✅ Yes</td><td>JS/TS, use package.json</td></tr>
+        <tr><td>02-react, 02-vue, 02-angular, 02-svelte, 03-astro</td><td>✅ Yes</td><td>JS/TS, use package.json</td></tr>
+        <tr><td>14-express, 14-fastify, 14-nestjs, 14-hono</td><td>✅ Yes</td><td>JS/TS, use package.json</td></tr>
+        <tr><td>28-node-grpc</td><td>✅ Yes</td><td>JS/TS, uses package.json</td></tr>
+        <tr><td>03-hugo</td><td>❌ No</td><td>Go binary — no package.json exists</td></tr>
+        <tr><td>06-hono-edge</td><td>⭐ Different mechanism</td><td>Uses wrangler.toml — not a Dockerfile ARG. See matrix (⭐ cell).</td></tr>
+        <tr><td>09-react-native, 09-expo</td><td>❌ No</td><td>No Dockerfile. Mobile build — no Docker container.</td></tr>
+        <tr><td>10-flutter, 11-swift-swiftui, 12-kotlin-jetpack</td><td>❌ No</td><td>No Docker. Different language — no package.json.</td></tr>
+        <tr><td>15-27 (non-JS server services), 28-go-grpc, 28-java-grpc, 28-python-grpc</td><td>❌ No</td><td>Each non-JS language has exactly one package manager — nothing to swap.</td></tr>
+      </tbody>
+    </table>
     <div class="ac-terms">
       <strong>Package manager</strong> = tool that downloads and installs code libraries your project depends on.<br>
       <strong>Lock file</strong> = a file that records the exact version of every library installed, so the build is identical every time.
@@ -580,16 +1114,31 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </div>
 
-<!-- AXIS 3: BUILD_TOOL -->
+<!-- AXIS 4: BUILD_TOOL -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">3</span>
+    <span class="ac-num">4</span>
     <span class="ac-name">Build Tool Swap</span>
     <span class="ac-arg">BUILD_TOOL</span>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Swaps Vite for a different JS/TS bundler inside the Dockerfile. Applies to JS/TS groups only (01–08, 13, 14).</p>
+    <p class="ac-what">Swaps Vite for a different JS/TS bundler inside the Dockerfile. Applies to JS/TS services with Docker.</p>
+    <p class="ac-what"><strong>Does not apply to group 06 (hono-edge):</strong> Cloudflare Workers uses wrangler which mandates esbuild internally. The bundler is fixed by the platform — it cannot be swapped via <code>--build-arg</code>.</p>
+    <p class="ac-what"><strong>Scope: applies to 13 of the 34 Tier 1 services.</strong></p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service(s)</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>01-nextjs, 01-nuxt, 01-sveltekit, 07-nextjs-app-router</td><td>✅ Yes</td><td>JS/TS SSR — code bundled for browser delivery</td></tr>
+        <tr><td>02-react, 02-vue, 02-angular, 02-svelte, 03-astro</td><td>✅ Yes</td><td>JS/TS SPA/static — code bundled for browser</td></tr>
+        <tr><td>14-express, 14-fastify, 14-nestjs, 14-hono</td><td>✅ Yes</td><td>Node.js API — TypeScript compilation step uses bundler</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Wrangler mandates esbuild internally — platform-fixed, cannot swap via build-arg</td></tr>
+        <tr><td>03-hugo</td><td>❌ No</td><td>Hugo is a Go binary — no JS bundling step</td></tr>
+        <tr><td>28-node-grpc</td><td>❌ No</td><td>gRPC protocol layer — compiled TypeScript, not browser-bundled</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No Docker. Mobile build tools (Metro, Xcode, Gradle) are not swappable via this arg.</td></tr>
+        <tr><td>15-23, 28-go-grpc, 28-java-grpc, 28-python-grpc</td><td>❌ No</td><td>Server binaries — no browser bundling concept exists for these languages.</td></tr>
+      </tbody>
+    </table>
     <p class="ac-what"><strong>Why only JS/TS:</strong> Bundling exists because JS/TS code runs in browsers. A browser loads files over the internet — 500 separate file requests is too slow. A bundler combines those 500 files into 2–3 optimized files before deployment.</p>
     <p class="ac-what">Go, Python, Java, Rust, Ruby, PHP, Elixir, Swift, C# — these run on servers, not browsers. They compile to one binary or run source files directly. There are no separate files to bundle. The concept does not exist for these languages.</p>
     <div class="ac-terms">
@@ -634,16 +1183,30 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </div>
 
-<!-- AXIS 4: COMPLIANCE -->
+<!-- AXIS 5: COMPLIANCE -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">4</span>
+    <span class="ac-num">5</span>
     <span class="ac-name">Compliance Preset</span>
     <span class="ac-arg">COMPLIANCE</span>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Adds the security code your industry's regulations require — automatically, without you writing it. This includes middleware that runs on every request, response headers, startup checks, and log masking. Applies to all server groups.</p>
+    <p class="ac-what">Adds the security code your industry's regulations require — automatically, without you writing it. This includes middleware that runs on every request, response headers, startup checks, and log masking.</p>
+    <p class="ac-what"><strong>Scope: applies to 20 of the 34 Tier 1 services</strong> — all server services that process HTTP requests.</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service(s)</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>01-nextjs, 01-nuxt, 01-sveltekit, 07-nextjs-app-router</td><td>⭐ Partial</td><td>SSR services have server-side request handlers — compliance middleware can run there. Static assets are not affected.</td></tr>
+        <tr><td>14-express, 14-fastify, 14-nestjs, 14-hono</td><td>✅ Yes</td><td>Pure HTTP API — all requests pass through compliance middleware</td></tr>
+        <tr><td>15-fastapi, 15-django, 16-gin, 17-spring-boot, 18-ktor, 19-aspnet-core, 20-axum</td><td>✅ Yes</td><td>Pure HTTP API server — full middleware stack available</td></tr>
+        <tr><td>21-phoenix, 22-rails, 23-laravel</td><td>✅ Yes</td><td>Full-stack server frameworks — compliance middleware wires into request pipeline</td></tr>
+        <tr><td>28-go-grpc, 28-java-grpc, 28-python-grpc, 28-node-grpc</td><td>✅ Yes</td><td>gRPC interceptors serve the same role as HTTP middleware</td></tr>
+        <tr><td>02-react, 02-vue, 02-angular, 02-svelte, 03-astro, 03-hugo</td><td>❌ No</td><td>nginx serves pre-built static files — no request handler, no place to run middleware</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers — compliance is platform-managed, not added via Dockerfile args</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No server process. No Docker.</td></tr>
+      </tbody>
+    </table>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Your healthcare app must mask patient data in logs (HIPAA). Your payment app must enforce TLS and remove debug endpoints (PCI). Your Canadian app must consent-check every user request (PIPEDA). One arg handles all of this.
@@ -654,7 +1217,9 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
       <strong>PHI</strong> (Protected Health Information) = patient data covered by HIPAA law in the US.<br>
       <strong>PCI DSS</strong> = Payment Card Industry Data Security Standard — required for any service that handles card data.
     </div>
-    <div class="ac-constraint">⚠ Rule: <code>COMPLIANCE=fips</code> requires <code>RUNTIME=ubi9</code>. The FIPS crypto module only ships in the UBI9 image. Building with fips + any other RUNTIME will fail with an error message.</div>
+    <div class="ac-constraint">⚠ Rule: <code>COMPLIANCE=fips</code> requires <code>RUNTIME=fips</code>.<br>
+    <code>RUNTIME=fips</code> selects the UBI9 (Red Hat Universal Base Image 9) which includes FIPS-validated OpenSSL.<br>
+    Building with <code>COMPLIANCE=fips</code> + any other <code>RUNTIME</code> value will fail at container startup — the FIPS module is absent in non-UBI9 images.</div>
     <details class="axis-details" open>
       <summary><span class="axis-num">Values</span></summary>
       <div class="expand-content">
@@ -664,7 +1229,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
           <tbody>
             <tr><td><code>standard</code> (default)</td><td>Nothing extra — base service only</td><td>Commercial, SaaS, general use</td></tr>
             <tr><td><code>pci</code></td><td>TLS enforced on all routes, PCI audit headers added, debug endpoints removed, plaintext-secrets startup check</td><td>Payments, financial services handling card data</td></tr>
-            <tr><td><code>fips</code></td><td>FIPS-140-2 OpenSSL module active, non-FIPS cipher suites disabled</td><td>US federal government, defense, regulated finance — requires <code>RUNTIME=ubi9</code></td></tr>
+            <tr><td><code>fips</code></td><td>FIPS-140-2 OpenSSL module active, non-FIPS cipher suites disabled</td><td>US federal government, defense, regulated finance — requires <code>RUNTIME=fips</code></td></tr>
             <tr><td><code>hipaa</code></td><td>PHI field masking in all log output, audit trail middleware, verbose error messages disabled</td><td>Healthcare, life sciences, medical devices</td></tr>
             <tr><td><code>cmmc</code></td><td>Full audit log on every request, debug routes removed, no outbound internet at runtime, CUI data handling</td><td>Defense contractors, intelligence-adjacent services</td></tr>
             <tr><td><code>pipeda</code></td><td>Consent check middleware, data residency header (X-Data-Residency: CA), PII masking in logs</td><td>Any Canadian consumer-facing service</td></tr>
@@ -673,22 +1238,32 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
           </tbody>
         </table>
         </div>
-        <pre>docker build --target runtime --build-arg RUNTIME=ubi9 --build-arg COMPLIANCE=fips -t my-service services/16-gin</pre>
+        <pre>docker build --target runtime --build-arg RUNTIME=fips --build-arg COMPLIANCE=fips -t my-service services/16-gin</pre>
       </div>
     </details>
   </div>
 </div>
 
-<!-- AXIS 5: OBSERVABILITY -->
+<!-- AXIS 6: OBSERVABILITY -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">5</span>
+    <span class="ac-num">6</span>
     <span class="ac-name">Observability Stack</span>
     <span class="ac-arg">OBSERVABILITY</span>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Adds code that reports what your service is doing in production — how fast requests are, how many errors occur, where time is being spent, and what path each request took through your system. Applies to all server groups.</p>
+    <p class="ac-what">Adds code that reports what your service is doing in production — how fast requests are, how many errors occur, where time is being spent, and what path each request took through your system.</p>
+    <p class="ac-what"><strong>Scope: applies to 20 of the 34 Tier 1 services</strong> — all server services with HTTP request handlers. Same exclusion set as COMPLIANCE.</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service group</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>01, 07 (SSR) + 14–23 (API servers) + 28 (gRPC)</td><td>✅ Yes / ⭐ Partial for SSR</td><td>Server has a request pipeline — instrumentation hooks into it</td></tr>
+        <tr><td>02, 03 (nginx static sites)</td><td>❌ No</td><td>nginx serves static files — no application code to instrument</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers — observability via Cloudflare's platform, not via this arg</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No server. No Docker. Mobile apps use platform-specific observability (Firebase, Datadog mobile SDK).</td></tr>
+      </tbody>
+    </table>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Without observability, when something breaks in production you are blind. You cannot tell if it is slow, erroring, or completely down without external monitoring. With <code>otel</code>, a dashboard like Grafana shows you request rates, latencies, and error traces in real time.
@@ -719,16 +1294,28 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </div>
 
-<!-- AXIS 6: AUTH -->
+<!-- AXIS 7: AUTH -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">6</span>
+    <span class="ac-num">7</span>
     <span class="ac-name">Auth Strategy</span>
     <span class="ac-arg">AUTH</span>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Adds a verification gate at the entry point of your API. Every HTTP request must prove who it is before it reaches your route handler. Unauthenticated requests are rejected with 401 Unauthorized before any business logic runs. Applies to all server groups.</p>
+    <p class="ac-what">Adds a verification gate at the entry point of your API. Every HTTP request must prove who it is before it reaches your route handler. Unauthenticated requests are rejected with 401 Unauthorized before any business logic runs.</p>
+    <p class="ac-what"><strong>Scope: applies to 20 of the 34 Tier 1 services</strong> — all server services with a request entry point. Same exclusion set as COMPLIANCE.</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service group</th><th>Applies?</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>14–23 (pure API servers)</td><td>✅ Yes</td><td>Auth middleware gates all routes</td></tr>
+        <tr><td>28-go-grpc, 28-java-grpc, 28-python-grpc, 28-node-grpc</td><td>✅ Yes</td><td>gRPC interceptors handle auth on every RPC call</td></tr>
+        <tr><td>01, 07 (SSR — Next.js, Nuxt, SvelteKit)</td><td>⭐ Partial</td><td>Auth applies to API routes and server actions. Static page renders and assets are not auth-gated by default.</td></tr>
+        <tr><td>02, 03 (nginx static sites)</td><td>❌ No</td><td>nginx serves static files — no auth layer can run at the application level</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers — auth is wired differently (Cloudflare Access or JWT in worker code). Not a Dockerfile arg.</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No server. No Docker. Mobile apps call authenticated APIs — they don't serve them.</td></tr>
+      </tbody>
+    </table>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Without auth, anyone who knows your URL can call your API — read data, trigger actions, cause damage.
@@ -741,7 +1328,9 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
       <strong>OIDC</strong> (OpenID Connect) = identity layer on top of OAuth2. Returns a verified user identity, not just an access token.<br>
       <strong>mTLS</strong> (Mutual TLS) = both the client and server present certificates. Client must have a specific cert issued by your CA. Used in defense and zero-trust architectures.
     </div>
-    <div class="ac-constraint">⚠ Rule: <code>AUTH=mtls</code> requires <code>RUNTIME=ubi9</code> or <code>RUNTIME=chainguard</code>. mTLS requires FIPS-grade TLS libraries that only ship in those base images.</div>
+    <div class="ac-constraint">⚠ Rule: <code>AUTH=mtls</code> requires <code>RUNTIME=fips</code>.<br>
+    mTLS requires FIPS-grade TLS libraries. <code>RUNTIME=fips</code> selects the UBI9 (Red Hat) base image which includes them.<br>
+    Using <code>AUTH=mtls</code> with any other RUNTIME value will fail — the required TLS libraries are absent.</div>
     <details class="axis-details" open>
       <summary><span class="axis-num">Values</span></summary>
       <div class="expand-content">
@@ -754,7 +1343,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
             <tr><td><code>oauth2</code></td><td>OAuth2 client credentials flow — machine-to-machine API access</td><td>RFC 6749</td></tr>
             <tr><td><code>oidc</code></td><td>OpenID Connect — SSO with external identity provider (Okta, Auth0, Keycloak, Azure AD)</td><td>OpenID Core 1.0</td></tr>
             <tr><td><code>apikey</code></td><td>API key header validation — checks <code>X-API-Key</code> header on every request</td><td>Custom</td></tr>
-            <tr><td><code>mtls</code></td><td>Mutual TLS — client certificate required on every request. Requires ubi9 or chainguard base.</td><td>RFC 8705</td></tr>
+            <tr><td><code>mtls</code></td><td>Mutual TLS — client certificate required on every request. Requires <code>RUNTIME=fips</code> (UBI9 base).</td><td>RFC 8705</td></tr>
           </tbody>
         </table>
         </div>
@@ -764,16 +1353,30 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </div>
 
-<!-- AXIS 7: ORM -->
+<!-- AXIS 8: ORM -->
 <div class="axis-card">
   <div class="axis-card-head">
-    <span class="ac-num">7</span>
+    <span class="ac-num">8</span>
     <span class="ac-name">ORM / Database Layer</span>
     <span class="ac-arg">ORM</span>
     <span class="s-des">Designed</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Adds a database connection library and a starter schema to your service so it can read and write to a database. Each language group gets the idiomatic database library for that language. Applies to pure API server groups 14–27 only.</p>
+    <p class="ac-what">Adds a database connection library and a starter schema to your service so it can read and write to a database. Each language group gets the idiomatic database library for that language.</p>
+    <p class="ac-what"><strong>Scope: applies to 14 of the 34 Tier 1 services</strong> — pure API server services only (groups 14–23).</p>
+    <table class="gen-table" style="font-size:11.5px;margin:8px 0 12px">
+      <thead><tr><th>Service(s)</th><th>Applies?</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>14-express, 14-fastify, 14-nestjs, 14-hono</td><td>✅ Yes</td><td>Pure API — data ownership lives here</td></tr>
+        <tr><td>15-fastapi, 15-django, 16-gin, 17-spring-boot, 18-ktor, 19-aspnet-core, 20-axum</td><td>✅ Yes</td><td>Pure API — data ownership lives here</td></tr>
+        <tr><td>21-phoenix, 22-rails, 23-laravel</td><td>✅ Yes</td><td>Full-stack servers — data layer is central to all three frameworks</td></tr>
+        <tr><td>01, 07 (SSR)</td><td>❌ No</td><td>SSR is a rendering layer — it calls APIs rather than owning data. Add ORM to the API service behind it.</td></tr>
+        <tr><td>02, 03 (nginx static sites)</td><td>❌ No</td><td>Static files — no server process, no database connection possible</td></tr>
+        <tr><td>06-hono-edge</td><td>❌ No</td><td>Cloudflare Workers — edge runtime. Connects to D1/KV/R2 via Cloudflare bindings, not via ORM</td></tr>
+        <tr><td>28-grpc, 29-graphql, 30-websocket</td><td>❌ No</td><td>Protocol/transport layer — these pass messages. The data-owning API service behind them gets the ORM.</td></tr>
+        <tr><td>09-12 (mobile/native)</td><td>❌ No</td><td>No server. No Docker.</td></tr>
+      </tbody>
+    </table>
     <div class="ac-why">
       <strong>Why you'd use this</strong>
       Without this axis, your service has no database. You would manually install the right library, write the connection config, and create a starter schema.
@@ -812,6 +1415,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   </div>
 </div>
 
+
 <!-- ═══ SECTION 4: GROUP ELIGIBILITY MATRIX ═══ -->
 <h2 id="matrix">Which axes apply to which groups</h2>
 <p class="section-sub">Now that you know what each axis does — this table shows at a glance which <code>--build-arg</code> values have any effect on each group. Pass a <span class="cell-y">Y</span> arg and it works. Pass a <span class="cell-n">—</span> arg and it is ignored.</p>
@@ -827,6 +1431,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
   <thead>
     <tr>
       <th style="text-align:left">Group</th>
+      <th title="Swap the base image used in the build/compilation stage (supply chain trust)">BUILD_IMAGE</th>
       <th title="Swap the base image — security posture and compliance eligibility">RUNTIME</th>
       <th title="Replace npm with pnpm / yarn / bun (JS/TS only)">PKG_MGR</th>
       <th title="Replace Vite with webpack / rspack / esbuild (JS/TS only)">BUILD_TOOL</th>
@@ -840,10 +1445,11 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 
     <!-- FRONTEND / STATIC -->
     <tr class="cat-row frontend">
-      <td colspan="8">Frontend &amp; Static — groups 01–08, 13 <span class="cat-badge">static groups: no COMPLIANCE/AUTH/ORM · SSR groups (01/04/05/07): partial (*)</span></td>
+      <td colspan="9">Frontend &amp; Static — groups 01–08, 13 <span class="cat-badge">static groups: no COMPLIANCE/AUTH/ORM · SSR groups (01/04/05/07): partial (*)</span></td>
     </tr>
     <tr>
       <td>01 — SSR / Full-stack <small style="color:var(--text-dim)">(Next.js, Nuxt, Remix, SvelteKit)</small></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
@@ -857,6 +1463,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
@@ -864,6 +1471,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     </tr>
     <tr>
       <td>03 — Static Site Gen <small style="color:var(--text-dim)">(Astro, Eleventy, Gatsby, Hugo)</small></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
@@ -877,6 +1485,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-p">*</span></td>
       <td><span class="cell-p">*</span></td>
       <td><span class="cell-p">*</span></td>
@@ -887,6 +1496,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-p">*</span></td>
       <td><span class="cell-p">*</span></td>
       <td><span class="cell-p">*</span></td>
@@ -894,6 +1504,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     </tr>
     <tr>
       <td>06 — Edge Runtime <small style="color:var(--text-dim)">(Cloudflare Workers — no Docker)</small></td>
+      <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-p">*</span></td>
       <td><span class="cell-n">—</span></td>
@@ -907,6 +1518,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-p">*</span></td>
       <td><span class="cell-p">*</span></td>
       <td><span class="cell-p">*</span></td>
@@ -914,6 +1526,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     </tr>
     <tr>
       <td>08 — Module Federation <small style="color:var(--text-dim)">(Webpack MF, Rspack MF, single-spa)</small></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
@@ -927,6 +1540,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
@@ -935,10 +1549,11 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 
     <!-- SERVER API TIER -->
     <tr class="cat-row server-api">
-      <td colspan="8">Server — API Tier (primary implementation target) — groups 14–20 <span class="cat-badge">all 7 axes apply · pure HTTP API servers</span></td>
+      <td colspan="9">Server — API Tier (primary implementation target) — groups 14–20 <span class="cat-badge">all 8 axes apply · pure HTTP API servers</span></td>
     </tr>
     <tr>
       <td>14 — JS/TS Servers <small style="color:var(--text-dim)">(Express, Fastify, Hono, NestJS, Elysia, Deno, Bun)</small></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
@@ -950,6 +1565,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     <tr>
       <td>15 — Python Servers <small style="color:var(--text-dim)">(FastAPI, Django, Flask, Starlette)</small></td>
       <td><span class="cell-y">Y</span></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td>
@@ -959,6 +1575,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     </tr>
     <tr>
       <td>16 — Go Servers <small style="color:var(--text-dim)">(Gin, Echo, Fiber, chi)</small></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
@@ -970,6 +1587,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     <tr>
       <td>17 — Java Servers <small style="color:var(--text-dim)">(Spring Boot, Quarkus, Micronaut)</small></td>
       <td><span class="cell-y">Y</span></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td>
@@ -979,6 +1597,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     </tr>
     <tr>
       <td>18 — Kotlin Servers <small style="color:var(--text-dim)">(Ktor, Spring Boot Kotlin)</small></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
@@ -990,6 +1609,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     <tr>
       <td>19 — .NET Servers <small style="color:var(--text-dim)">(ASP.NET Core MVC, Minimal APIs)</small></td>
       <td><span class="cell-y">Y</span></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td>
@@ -999,6 +1619,7 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
     </tr>
     <tr>
       <td>20 — Rust Servers <small style="color:var(--text-dim)">(Axum, Actix-web)</small></td>
+      <td><span class="cell-y">Y</span></td>
       <td><span class="cell-y">Y</span></td>
       <td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td>
@@ -1010,67 +1631,67 @@ pre{background:var(--bg3);border:1px solid var(--border);border-radius:5px;paddi
 
     <!-- SERVER EXTENDED -->
     <tr class="cat-row server-ext">
-      <td colspan="8">Server — Extended — groups 21–27 <span class="cat-badge">all 7 axes apply · second implementation priority</span></td>
+      <td colspan="9">Server — Extended — groups 21–27 <span class="cat-badge">all 8 axes apply · second implementation priority</span></td>
     </tr>
     <tr>
       <td>21 — Elixir Servers <small style="color:var(--text-dim)">(Phoenix)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td>
     </tr>
     <tr>
       <td>22 — Ruby Servers <small style="color:var(--text-dim)">(Rails, Sinatra)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td>
     </tr>
     <tr>
       <td>23 — PHP Servers <small style="color:var(--text-dim)">(Laravel, Slim, Symfony)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td>
     </tr>
     <tr>
       <td>24 — Swift Servers <small style="color:var(--text-dim)">(Vapor, Hummingbird)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td>
     </tr>
     <tr>
       <td>25 — Scala Servers <small style="color:var(--text-dim)">(http4s, Play Framework)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td>
     </tr>
     <tr>
       <td>26 — Clojure Servers <small style="color:var(--text-dim)">(Pedestal, Ring)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td>
     </tr>
     <tr>
       <td>27 — C++ Servers <small style="color:var(--text-dim)">(Crow, Drogon)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td>
     </tr>
 
     <!-- PROTOCOL SERVERS -->
     <tr class="cat-row protocol">
-      <td colspan="8">Protocol Servers — groups 28–30 <span class="cat-badge">ORM does not apply — protocol layer, not data layer</span></td>
+      <td colspan="9">Protocol Servers — groups 28–30 <span class="cat-badge">ORM does not apply — protocol layer, not data layer</span></td>
     </tr>
     <tr>
       <td>28 — gRPC Servers <small style="color:var(--text-dim)">(Go, Node, Python, Java, Kotlin, .NET, Rust, Ruby, PHP, Swift)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td>
     </tr>
     <tr>
       <td>29 — GraphQL Servers <small style="color:var(--text-dim)">(Apollo, Yoga, Strawberry, gqlgen, Spring, Hot Chocolate, Ruby, Rust)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td>
     </tr>
     <tr>
       <td>30 — WebSocket Servers <small style="color:var(--text-dim)">(Node, Go, Python, Java, Elixir, Rust, .NET, Ruby)</small></td>
-      <td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-y">Y</span></td><td><span class="cell-n">—</span></td>
     </tr>
 
     <!-- CI-ONLY / NATIVE -->
     <tr class="cat-row cionly">
-      <td colspan="8">CI-only / Native — groups 09–12 <span class="cat-badge">no Docker · no server process · build args have no effect · platform-native CI only</span></td>
+      <td colspan="9">CI-only / Native — groups 09–12 <span class="cat-badge">no Docker · no server process · build args have no effect · platform-native CI only</span></td>
     </tr>
     <tr>
       <td>09 — Mobile / React Native <small style="color:var(--text-dim)">(Expo, Ionic, React Native)</small></td>
@@ -1146,19 +1767,19 @@ docker run --rm -p 8080:8080 my-service</pre>
 <div class="example-block">
   <div class="example-head">
     <span class="ex-num">3</span>
-    <span class="ex-scenario">Hardened production Node.js API — zero CVEs + SOC 2 + JWT + OTel + Prisma</span>
+    <span class="ex-scenario">Hardened production Node.js API — slim base + SOC 2 + JWT + OTel + Prisma</span>
   </div>
   <div class="example-body">
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Scenario: SaaS platform deploying to production. Security team requires zero CVEs. SOC 2 audit required. Full observability and database needed.</p>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Scenario: SaaS platform deploying to production. Reduced attack surface required. SOC 2 audit required. Full observability and database needed.</p>
 <pre>docker build --target runtime \
-  --build-arg RUNTIME=chainguard \
+  --build-arg RUNTIME=slim \
   --build-arg COMPLIANCE=soc2 \
   --build-arg AUTH=jwt \
   --build-arg OBSERVABILITY=otel \
   --build-arg ORM=prisma \
   -t prod-api services/14-express</pre>
     <ul class="ex-arg-list">
-      <li><code>RUNTIME=chainguard</code> <span class="ex-what">→ zero CVEs in base image · supply-chain signed · SBOM generated automatically</span></li>
+      <li><code>RUNTIME=slim</code> <span class="ex-what">→ node:22-slim base · no shell in running container · smaller attack surface</span></li>
       <li><code>COMPLIANCE=soc2</code> <span class="ex-what">→ immutable audit log · access control middleware · debug mode disabled</span></li>
       <li><code>AUTH=jwt</code> <span class="ex-what">→ Bearer token validation on all routes</span></li>
       <li><code>OBSERVABILITY=otel</code> <span class="ex-what">→ full traces, metrics, and logs via OpenTelemetry</span></li>
@@ -1166,7 +1787,7 @@ docker run --rm -p 8080:8080 my-service</pre>
     </ul>
     <div class="ex-result">
       <strong>What the running service has</strong>
-      Chainguard zero-CVE base · SOC 2 audit log · JWT auth · OpenTelemetry instrumentation · Prisma + database
+      slim no-shell base · SOC 2 audit log · JWT auth · OpenTelemetry instrumentation · Prisma + database
     </div>
   </div>
 </div>
@@ -1177,16 +1798,16 @@ docker run --rm -p 8080:8080 my-service</pre>
     <span class="ex-scenario">Federal/defense Java API — FIPS crypto + mTLS client certificates</span>
   </div>
   <div class="example-body">
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Scenario: Building a service for a US defense contractor. FIPS-validated cryptography required. Client certificate authentication required for every call. Note: FIPS and ubi9 must be used together.</p>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Scenario: Building a service for a US defense contractor. FIPS-validated cryptography required. Client certificate authentication required for every call. Note: <code>RUNTIME=fips</code> is mandatory when using <code>COMPLIANCE=fips</code> or <code>AUTH=mtls</code>.</p>
 <pre>docker build --target runtime \
-  --build-arg RUNTIME=ubi9 \
+  --build-arg RUNTIME=fips \
   --build-arg COMPLIANCE=fips \
   --build-arg AUTH=mtls \
-  -t defense-api services/17-spring</pre>
+  -t defense-api services/17-spring-boot</pre>
     <ul class="ex-arg-list">
-      <li><code>RUNTIME=ubi9</code> <span class="ex-what">→ Red Hat UBI9 base · required for FIPS — using <code>fips</code> without <code>ubi9</code> = build error</span></li>
+      <li><code>RUNTIME=fips</code> <span class="ex-what">→ Red Hat UBI9 base image · includes FIPS-140-2 validated OpenSSL · required for both COMPLIANCE=fips and AUTH=mtls</span></li>
       <li><code>COMPLIANCE=fips</code> <span class="ex-what">→ FIPS-140-2 OpenSSL module active · non-FIPS cipher suites disabled at startup</span></li>
-      <li><code>AUTH=mtls</code> <span class="ex-what">→ client certificate required on every request · requests without a valid cert → 401 · requires ubi9 or chainguard base</span></li>
+      <li><code>AUTH=mtls</code> <span class="ex-what">→ client certificate required on every request · requests without a valid cert → 401</span></li>
     </ul>
     <div class="ex-result">
       <strong>What the running service has</strong>
@@ -1197,14 +1818,28 @@ docker run --rm -p 8080:8080 my-service</pre>
 
 <!-- ═══ SECTION 6: IMPLEMENTATION STATUS ═══ -->
 <h2 id="status">Implementation status</h2>
-<p class="section-sub">Which axes are live today vs coming soon.</p>
+<p class="section-sub">What works today vs what is documented but not yet built.</p>
 
 <div class="status-grid">
   <div class="status-row-item">
     <div class="sr-chip-col"><span class="s-impl">Implemented</span></div>
     <div>
-      <div class="sr-axis">RUNTIME — Runtime variant</div>
-      <div class="sr-desc">Code exists in every applicable service today. You can use <code>--build-arg RUNTIME=chainguard</code> right now and it works.</div>
+      <div class="sr-axis">Health Endpoints — built-in feature (no <code>--build-arg</code> needed)</div>
+      <div class="sr-desc"><code>GET /health</code>, <code>GET /health/live</code>, <code>GET /health/ready</code> — present on every server service today. No configuration. See <a href="#builtins">Built-in features</a> for details.</div>
+    </div>
+  </div>
+  <div class="status-row-item">
+    <div class="sr-chip-col"><span class="s-impl">Implemented</span></div>
+    <div>
+      <div class="sr-axis">RUNTIME — Runtime variant (<code>--build-arg RUNTIME=</code>)</div>
+      <div class="sr-desc">Code exists in every applicable Tier 1 Docker service today. Use <code>--build-arg RUNTIME=alpine</code>, <code>RUNTIME=fips</code>, <code>RUNTIME=slim</code>, <code>RUNTIME=scratch</code>, <code>RUNTIME=distroless</code>, <code>RUNTIME=temurin</code>, or <code>RUNTIME=debian</code> right now.</div>
+    </div>
+  </div>
+  <div class="status-row-item">
+    <div class="sr-chip-col"><span class="s-impl">Implemented</span></div>
+    <div>
+      <div class="sr-axis">BUILD_IMAGE — Build stage base image (<code>--build-arg BUILD_IMAGE=</code>)</div>
+      <div class="sr-desc">Code exists in all 92 Docker services. Use <code>--build-arg BUILD_IMAGE=ubuntu</code> (default), <code>BUILD_IMAGE=sdk</code>, <code>BUILD_IMAGE=sdk-alpine</code>, or <code>BUILD_IMAGE=custom --build-arg BUILD_BASE=your-registry/image:tag</code> right now. Also fixes the ARG RUNTIME scoping bug — RUNTIME ARG is now declared globally in all 28 affected services.</div>
     </div>
   </div>
   <div class="status-row-item">
