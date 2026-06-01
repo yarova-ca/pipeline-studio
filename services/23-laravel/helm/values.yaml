@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ""   # set in CI: ghcr.io/yarova-ca/23-laravel
+  repository: "ghcr.io/yarova-ca/23-laravel"   # set in CI: ghcr.io/yarova-ca/23-laravel
   pullPolicy: IfNotPresent
   tag: "latest"
 
@@ -58,3 +58,6 @@ readinessProbe:
     port: 9000
   initialDelaySeconds: 5
   periodSeconds: 5
+
+networkPolicy:
+  enabled: false

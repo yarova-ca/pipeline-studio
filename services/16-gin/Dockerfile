@@ -57,4 +57,7 @@ COPY --from=build /tmp/app-group /etc/group
 COPY --from=build /app/bin/app /usr/local/bin/app
 USER 1001
 EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8080/health/live || exit 1
 ENTRYPOINT ["/usr/local/bin/app"]

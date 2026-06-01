@@ -297,7 +297,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <div class="counts-bar">
   <div class="count-chip axes-chip"><div class="chip-num">7</div><div class="chip-label">Ways to<br>customize</div></div>
   <div class="count-chip grp-chip"><div class="chip-num">30</div><div class="chip-label">Service<br>groups</div></div>
-  <div class="count-chip cat-chip"><div class="chip-num">1</div><div class="chip-label">Axis works<br>today</div></div>
+  <div class="count-chip cat-chip" title="2 axes implemented today: RUNTIME and BUILD_IMAGE. Both work now — pass --build-arg and it changes the output. All other 6 axes are designed but not yet built."><div class="chip-num">2</div><div class="chip-label">Axes work<br>today</div></div>
   <div class="count-chip tier-chip"><div class="chip-num">6</div><div class="chip-label">Axes coming<br>soon</div></div>
 </div>
 
@@ -549,7 +549,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <strong>Important: which axes work today vs which are coming soon</strong><br>
   <code>BUILD_IMAGE</code> — <span class="s-impl">Implemented</span> — <code>--build-arg BUILD_IMAGE=ubuntu|sdk|sdk-alpine|custom</code> works in all 92 Docker services right now.<br>
   <code>RUNTIME</code> — <span class="s-impl">Implemented</span> — <code>--build-arg RUNTIME=alpine|slim|scratch|distroless|fips</code> works in all applicable services right now.<br>
-  All other 6 axes — <span class="s-des">Designed</span> — fully documented and planned, but not yet built into service source code. See <a href="#status">Implementation status</a> for details.
+  All other 6 axes (PKG_MGR, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM) — <span class="s-des">Designed</span> — fully documented and planned, but not yet built into service source code. See <a href="#status">Implementation status</a> for details.
 </div>
 
 <div class="why-block"><strong>Why axes are configurable at build time instead of at runtime:</strong> Build-time configuration means the final image contains only what it needs. A service built with <code>COMPLIANCE=hipaa</code> has the HIPAA audit code compiled in — there is no way to accidentally run the service without it. Runtime configuration via environment variables can be bypassed if an env var is missing or misconfigured.</div>
@@ -938,7 +938,7 @@ docker build --target runtime \
     <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
-    <p class="ac-what">Swaps the base Linux image your service container runs on. Every Docker container starts from a base image — this axis lets you choose which one, trading off image size, security posture, and compliance eligibility. <strong>This is the only axis implemented today.</strong></p>
+    <p class="ac-what">Swaps the base Linux image your service container runs on. Every Docker container starts from a base image — this axis lets you choose which one, trading off image size, security posture, and compliance eligibility. <strong>RUNTIME and BUILD_IMAGE are both implemented today.</strong> All other 5 axes are designed but not yet built.</p>
     <p class="ac-what">Applies to <strong>28 of the 34 Tier 1 services</strong> — the 28 that build to Docker containers.<br>
     The other 6 Tier 1 services have no Docker container: <code>06-hono-edge</code> (Cloudflare Workers), <code>09-react-native</code>, <code>09-expo</code>, <code>10-flutter</code>, <code>11-swift-swiftui</code>, <code>12-kotlin-jetpack</code> (mobile/native apps).<br>
     <code>--build-arg RUNTIME=</code> is a Docker-only argument. When there is no Dockerfile: this arg does not exist.</p>

@@ -6,7 +6,15 @@ from typing import Optional
 
 from jose import JWTError, jwt
 
-JWT_SECRET: str = os.getenv("JWT_SECRET", "change-me-in-production-use-at-least-32-chars")
+# Fix 2: Require JWT_SECRET at startup — no insecure fallback allowed.
+# Why: a hardcoded fallback secret means any dev token is valid in prod.
+_raw_secret = os.getenv("JWT_SECRET")
+if not _raw_secret or len(_raw_secret) < 32:
+    raise RuntimeError(
+        "JWT_SECRET environment variable must be set and be at least 32 characters long"
+    )
+JWT_SECRET: str = _raw_secret
+
 JWT_ALGORITHM: str = "HS256"
 JWT_EXPIRY_HOURS: int = 8
 
@@ -37,8 +45,12 @@ def verify_token(token: str) -> Optional[dict]:
 
     Returns the decoded payload dict when valid.
     Returns None when the token is expired, malformed, or has a bad signature.
+
+    Fix 1: algorithms= list is already set to [JWT_ALGORITHM] ("HS256") —
+    this prevents algorithm-confusion attacks (e.g. alg:none or RS256 downgrade).
     """
     try:
+        # Fix 1: Lock algorithm to HS256 explicitly.
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         return payload
     except JWTError:

@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ""   # set in CI: ghcr.io/yarova-ca/14-express
+  repository: "ghcr.io/yarova-ca/14-express"
   pullPolicy: IfNotPresent
   tag: "latest"
 
@@ -44,6 +44,9 @@ autoscaling:
 env: {}
 
 envFrom: []
+
+networkPolicy:
+  enabled: false  # Enable in prod
 
 livenessProbe:
   httpGet:

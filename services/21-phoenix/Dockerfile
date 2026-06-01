@@ -47,6 +47,9 @@ COPY --from=build --chown=1001:1001 /app/_build/prod/rel/myapp ./
 USER 1001
 EXPOSE 4000
 # REPLACE: myapp with your OTP release name (from mix.exs :app key)
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:4000/health/live || exit 1
+
 CMD ["bin/app", "start"]
 
 # ── Runtime — FIPS ────────────────────────────────────────────────────────

@@ -1,0 +1,13 @@
+{{- if ge (int .Values.replicaCount) 2 }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "30-ws-python.fullname" . }}
+  labels:
+    {{- include "30-ws-python.labels" . | nindent 4 }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      {{- include "30-ws-python.selectorLabels" . | nindent 6 }}
+{{- end }}

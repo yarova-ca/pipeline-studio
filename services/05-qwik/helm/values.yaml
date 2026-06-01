@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ""   # set in CI: ghcr.io/yarova-ca/05-qwik
+  repository: "ghcr.io/yarova-ca/05-qwik"   # set in CI: ghcr.io/yarova-ca/05-qwik
   pullPolicy: IfNotPresent
   tag: "latest"
 
@@ -58,3 +58,6 @@ readinessProbe:
     port: 3000
   initialDelaySeconds: 5
   periodSeconds: 5
+
+networkPolicy:
+  enabled: false

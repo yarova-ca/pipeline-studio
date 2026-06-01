@@ -1,4 +1,6 @@
 replicaCount: 3
+networkPolicy:
+  enabled: true
 image:
   tag: "latest"
 resources:

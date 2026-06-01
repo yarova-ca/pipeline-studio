@@ -4,7 +4,8 @@
 //   GET /auth/login      → redirect to GitHub OAuth
 //   GET /auth/callback   → exchange code for JWT → set cookie
 //   GET /auth/me         → return current user (requires auth)
-//   POST /auth/logout    → clear session cookie
+//   POST /auth/logout    → clear session cookie + revoke JWT
+//   POST /auth/refresh   → issue a new JWT from a still-valid or recently-expired token
 //
 // API key routes:
 //   POST /auth/api-key   → generate API key for current user (requires auth)
@@ -15,8 +16,9 @@
 
 import { Router, type Request, type Response } from 'express'
 import crypto from 'node:crypto'
+import jwt from 'jsonwebtoken'
 import { prisma } from '../db/client.js'
-import { requireAuth, signToken } from '../middleware/auth.js'
+import { requireAuth, signToken, revokeToken, type AuthUser } from '../middleware/auth.js'
 
 const router = Router()
 
@@ -26,20 +28,36 @@ const OAUTH_CALLBACK = process.env.AUTH_CALLBACK_URL ?? 'http://localhost:3000/a
 const GITHUB_AUTH_URL = 'https://github.com/login/oauth/authorize'
 const GITHUB_TOKEN_URL = 'https://github.com/login/oauth/access_token'
 
+// JWT_SECRET is already validated in middleware/auth.ts at module load time.
+// Re-read here for the refresh endpoint.
+const JWT_SECRET = process.env.JWT_SECRET as string
+
 // ── OAuth2 login ───────────────────────────────────────────────────────────
+// Fix 9: Generate state param, store in httpOnly cookie for CSRF protection.
 router.get('/login', (_req: Request, res: Response) => {
+  const state = crypto.randomBytes(16).toString('hex')
+  res.cookie('oauth_state', state, { httpOnly: true, sameSite: 'lax', maxAge: 600_000 })
   const params = new URLSearchParams({
     client_id: OAUTH_CLIENT_ID,
     redirect_uri: OAUTH_CALLBACK,
     scope: 'user:email',
-    state: crypto.randomBytes(16).toString('hex'),
+    state,
   })
   res.redirect(`${GITHUB_AUTH_URL}?${params}`)
 })
 
 // ── OAuth2 callback ────────────────────────────────────────────────────────
+// Fix 9: Validate the state param against the cookie before processing the code.
 router.get('/callback', async (req: Request, res: Response) => {
-  const { code } = req.query as { code?: string }
+  const { code, state } = req.query as { code?: string; state?: string }
+
+  // Validate OAuth state to prevent CSRF.
+  if (!state || state !== req.cookies?.oauth_state) {
+    res.status(400).json({ error: 'Invalid OAuth state — possible CSRF attack' })
+    return
+  }
+  res.clearCookie('oauth_state')
+
   if (!code) {
     res.status(400).json({ error: 'Missing OAuth code' })
     return
@@ -95,9 +113,41 @@ router.get('/me', requireAuth, (req: Request, res: Response) => {
 })
 
 // ── Logout ─────────────────────────────────────────────────────────────────
-router.post('/logout', (_req: Request, res: Response) => {
+// Fix 12: Revoke the Bearer token on logout so it can't be replayed.
+router.post('/logout', requireAuth, (req: Request, res: Response) => {
+  const token = req.headers.authorization?.slice(7)
+  if (token) revokeToken(token)
   res.clearCookie('token')
   res.json({ message: 'Logged out' })
+})
+
+// ── Token refresh ──────────────────────────────────────────────────────────
+// Fix 13: Allow clients to exchange a recently-expired token for a new one
+// without forcing a full re-login. Tokens older than 24h cannot be refreshed.
+router.post('/refresh', (req: Request, res: Response) => {
+  const authHeader = req.headers.authorization
+  if (!authHeader?.startsWith('Bearer ')) {
+    res.status(401).json({ error: 'Bearer token required' })
+    return
+  }
+  const oldToken = authHeader.slice(7)
+  try {
+    // ignoreExpiration: true allows refreshing recently-expired tokens.
+    const payload = jwt.verify(oldToken, JWT_SECRET, {
+      algorithms: ['HS256'],
+      ignoreExpiration: true,
+    }) as AuthUser
+    const decoded = jwt.decode(oldToken) as { exp?: number }
+    const now = Math.floor(Date.now() / 1000)
+    if (decoded.exp && now - decoded.exp > 86400) {
+      res.status(401).json({ error: 'Token too old to refresh — please log in again' })
+      return
+    }
+    const newToken = signToken({ id: payload.id, email: payload.email, name: payload.name })
+    res.json({ token: newToken })
+  } catch {
+    res.status(401).json({ error: 'Invalid token' })
+  }
 })
 
 // ── Generate API key ───────────────────────────────────────────────────────

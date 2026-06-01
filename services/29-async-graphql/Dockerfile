@@ -27,4 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libssl3 ca-cert
 COPY --from=build /app/target/release/29-async-graphql ./server
 ENV PORT=8080
 EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8080/health/live || exit 1
+
 CMD ["./server"]

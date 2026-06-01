@@ -14,7 +14,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: "50051"
-      DATABASE_URL=postgresql://app:devpassword@db:5432/28-kotlin-grpc_dev
+      DATABASE_URL: "postgresql://app:devpassword@db:5432/28-kotlin-grpc_dev"
       REDIS_URL: redis://redis:6379
     depends_on:
       db:

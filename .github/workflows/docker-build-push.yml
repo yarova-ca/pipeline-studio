@@ -35,6 +35,7 @@ jobs:
   # ── Step 1: Discover which services have Dockerfiles ─────────────────────
   setup:
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
     outputs:
       all-services: ${{ steps.discover.outputs.all }}
       tier1-services: ${{ steps.discover.outputs.tier1 }}
@@ -85,6 +86,7 @@ jobs:
   build-all:
     needs: setup
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -103,8 +105,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: services/${{ matrix.service }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: false
+          load: true
           tags: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:pr-${{ github.sha }}
           build-args: RUNTIME=alpine
           cache-from: type=gha,scope=${{ matrix.service }}-alpine
@@ -112,14 +115,15 @@ jobs:
 
       - name: Smoke test — health endpoint
         run: |
-          docker run -d --name smoke-${{ matrix.service }} \
-            -p 3000:$(cat services/${{ matrix.service }}/Dockerfile | grep EXPOSE | awk '{print $2}' | head -1) \
-            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:pr-${{ github.sha }} 2>/dev/null || \
-          docker run -d --name smoke-${{ matrix.service }} \
+          PORT=$(grep -m1 '^EXPOSE ' services/${{ matrix.service }}/Dockerfile | awk '{print $2}')
+          PORT=${PORT:-3000}
+          docker run -d --name smoke-${{ matrix.service }} -p ${PORT}:${PORT} \
             ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:pr-${{ github.sha }}
-          sleep 8
-          PORT=$(cat services/${{ matrix.service }}/Dockerfile | grep EXPOSE | awk '{print $2}' | head -1)
-          curl -sf http://localhost:${PORT:-3000}/health/live || curl -sf http://localhost:${PORT:-3000}/health
+          # Retry until health endpoint responds (up to 30 seconds)
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:${PORT}/health/live && break
+            sleep 1
+          done || (docker logs smoke-${{ matrix.service }} && exit 1)
           docker stop smoke-${{ matrix.service }} || true
 
   # ── Step 3: Build + push Tier 1 to GHCR (main branch only) ───────────────
@@ -127,6 +131,7 @@ jobs:
     needs: [setup, build-all]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:

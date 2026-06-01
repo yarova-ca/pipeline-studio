@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ""   # set in CI: ghcr.io/yarova-ca/28-ruby-grpc
+  repository: "ghcr.io/yarova-ca/28-ruby-grpc"   # set in CI: ghcr.io/yarova-ca/28-ruby-grpc
   pullPolicy: IfNotPresent
   tag: "latest"
 
@@ -58,3 +58,6 @@ readinessProbe:
     port: 50051
   initialDelaySeconds: 5
   periodSeconds: 5
+
+networkPolicy:
+  enabled: false

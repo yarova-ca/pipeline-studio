@@ -33,6 +33,9 @@ RUN adduser -D -u 1001 app
 COPY --from=build --chown=app:app /app ./
 USER app
 EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:3000/health/live || exit 1
+
 CMD ["bundle", "exec", "rackup", "--host", "0.0.0.0", "--port", "3000"]
 
 # ── Alternative runtime images ─────────────────────────────────────────────

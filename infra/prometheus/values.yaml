@@ -15,8 +15,17 @@
 
 grafana:
   enabled: true
-  # WARNING: Change this password before deploying to staging or prod.
-  adminPassword: "CHANGE_ME_IN_PRODUCTION"
+  # adminPassword removed — use a Kubernetes Secret instead.
+  # Why: plaintext passwords in YAML get committed to git and leak to anyone with repo access.
+  # Create the secret before deploying:
+  #   kubectl create secret generic grafana-admin-secret \
+  #     --from-literal=admin-user=admin \
+  #     --from-literal=admin-password=$(openssl rand -base64 32) \
+  #     -n monitoring
+  admin:
+    existingSecret: grafana-admin-secret
+    userKey: admin-user
+    passwordKey: admin-password
   ingress:
     enabled: false
   dashboardProviders:

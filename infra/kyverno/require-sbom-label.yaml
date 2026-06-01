@@ -10,7 +10,7 @@ metadata:
       back to a specific commit and SBOM artifact.
       Mode: audit (warn only) — enforced after all services ship the label.
 spec:
-  validationFailureAction: audit
+  validationFailureAction: enforce  # CHANGED from audit — images without SBOM label blocked in staging+prod.
   background: true
   rules:
     - name: check-sbom-label
@@ -18,7 +18,7 @@ spec:
         any:
           - resources:
               kinds: [Pod]
-              namespaces: [prod]
+              namespaces: [staging, prod]
       validate:
         message: "Production images must have org.opencontainers.image.revision label"
         pattern:

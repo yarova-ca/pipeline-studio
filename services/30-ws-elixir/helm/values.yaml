@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ""   # set in CI: ghcr.io/yarova-ca/30-ws-elixir
+  repository: "ghcr.io/yarova-ca/30-ws-elixir"   # set in CI: ghcr.io/yarova-ca/30-ws-elixir
   pullPolicy: IfNotPresent
   tag: "latest"
 
@@ -58,3 +58,6 @@ readinessProbe:
     port: 4000
   initialDelaySeconds: 5
   periodSeconds: 5
+
+networkPolicy:
+  enabled: false

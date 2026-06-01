@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ""   # set in CI: ghcr.io/yarova-ca/30-ws-go
+  repository: "ghcr.io/yarova-ca/30-ws-go"   # set in CI: ghcr.io/yarova-ca/30-ws-go
   pullPolicy: IfNotPresent
   tag: "latest"
 
@@ -58,3 +58,6 @@ readinessProbe:
     port: 8080
   initialDelaySeconds: 5
   periodSeconds: 5
+
+networkPolicy:
+  enabled: false

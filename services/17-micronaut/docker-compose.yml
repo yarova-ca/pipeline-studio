@@ -14,7 +14,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: "8080"
-      DATABASE_URL=postgresql://app:devpassword@db:5432/17-micronaut_dev
+      DATABASE_URL: "postgresql://app:devpassword@db:5432/17-micronaut_dev"
       REDIS_URL: redis://redis:6379
     depends_on:
       db:

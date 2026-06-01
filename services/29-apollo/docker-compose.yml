@@ -14,7 +14,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: "4000"
-      DATABASE_URL=postgresql://app:devpassword@db:5432/29-apollo_dev
+      DATABASE_URL: "postgresql://app:devpassword@db:5432/29-apollo_dev"
       REDIS_URL: redis://redis:6379
     depends_on:
       db:

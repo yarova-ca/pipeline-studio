@@ -25,4 +25,7 @@ WORKDIR /app
 COPY --from=build /publish .
 ENV PORT=8080 ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8080/health/live || exit 1
 ENTRYPOINT ["dotnet", "30-ws-dotnet.dll"]

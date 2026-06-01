@@ -55,20 +55,39 @@ jobs:
           publishDeployment: ${{ github.ref == 'refs/heads/main' }}
         continue-on-error: true   # Semgrep token optional — scan still runs
 
-  trivy-scan:
+  setup:
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      tier1: ${{ steps.list.outputs.tier1 }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: list
+        run: |
+          TIER1=$(python3 -c "
+          import json
+          tier1 = ['14-express','15-fastapi','16-gin','17-spring-boot','18-ktor',
+                   '19-aspnet-core','20-axum','21-phoenix','22-rails','23-laravel',
+                   '28-node-grpc','28-python-grpc','28-go-grpc','29-apollo',
+                   '30-ws-node','30-ws-elixir','01-nextjs','02-react']
+          print(json.dumps(tier1))
+          ")
+          echo "tier1=$TIER1" >> $GITHUB_OUTPUT
+
+  trivy-scan:
+    needs: setup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        service: [14-express, 15-fastapi, 16-gin, 17-spring-boot, 19-aspnet-core, 20-axum]
+        service: ${{ fromJson(needs.setup.outputs.tier1) }}
     name: Trivy ${{ matrix.service }}
     steps:
       - uses: actions/checkout@v4
       - name: Build image for scan
         run: |
-          docker build \
-            --build-arg RUNTIME=alpine \
-            -t scan-target:${{ matrix.service }} \
+          docker build --build-arg RUNTIME=alpine -t scan-target:${{ matrix.service }} \
             services/${{ matrix.service }}
       - name: Trivy container scan
         uses: aquasecurity/trivy-action@master
@@ -76,10 +95,10 @@ jobs:
           image-ref: scan-target:${{ matrix.service }}
           format: sarif
           output: trivy-${{ matrix.service }}.sarif
-          severity: CRITICAL
+          severity: HIGH,CRITICAL
           exit-code: '1'
-          trivyignores: .trivyignore
           ignore-unfixed: true
+          trivyignores: .trivyignore
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v3
         if: always()

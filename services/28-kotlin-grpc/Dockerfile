@@ -22,4 +22,7 @@ WORKDIR /app
 COPY --from=build /app/build/install/28-kotlin-grpc .
 ENV GRPC_PORT=50051
 EXPOSE 50051
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:50051/health/live || exit 1
+
 CMD ["bin/28-kotlin-grpc"]

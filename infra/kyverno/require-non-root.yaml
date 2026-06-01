@@ -18,12 +18,16 @@ spec:
               kinds: [Pod]
               namespaces: [dev, staging, prod]
       validate:
-        message: "Container must run as non-root (runAsNonRoot: true, runAsUser >= 1000)"
+        message: "Containers must set securityContext.runAsNonRoot: true and runAsUser >= 1000"
+        # Why unconditional: the =(field) syntax means 'if this field exists, validate it'.
+        # A pod without securityContext at all would PASS the old check — bypassing the policy entirely.
+        # The fix: require securityContext to be present and correct, not optional.
         pattern:
           spec:
-            =(securityContext):
-              =(runAsNonRoot): true
+            securityContext:
+              runAsNonRoot: true
             containers:
               - securityContext:
                   runAsNonRoot: true
                   runAsUser: ">=1000"
+                  allowPrivilegeEscalation: false

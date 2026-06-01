@@ -27,6 +27,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends libssl3 ca-cert
 COPY --from=build /app/target/release/28-rust-grpc ./server
 ENV GRPC_PORT=50051
 EXPOSE 50051
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:50051/health/live || exit 1
+
 CMD ["./server"]
 
 # slim

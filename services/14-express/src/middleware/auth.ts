@@ -28,17 +28,37 @@ declare global {
   }
 }
 
-const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-secret-change-in-production'
+// Fix 2: Require JWT_SECRET at startup — no fallback allowed.
+// Why: a hardcoded fallback secret means any dev/staging token is valid in prod.
+const JWT_SECRET = process.env.JWT_SECRET
+if (!JWT_SECRET || JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET must be set and be at least 32 characters long')
+}
 
-export function requireAuth(req: Request, res: Response, next: NextFunction): void {
+// In-memory token blacklist for revoked JWTs.
+// Fix 12: revokeToken + isTokenRevoked exported for use in the logout route.
+// Note: this is process-local. In a multi-instance deployment, use Redis instead.
+const tokenBlacklist = new Set<string>()
+export const revokeToken = (token: string): void => { tokenBlacklist.add(token) }
+export const isTokenRevoked = (token: string): boolean => tokenBlacklist.has(token)
+
+export async function requireAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
   const authHeader = req.headers.authorization
   const apiKey = req.headers['x-api-key'] as string | undefined
 
   // ── Try JWT first ─────────────────────────────────────────────────────────
   if (authHeader?.startsWith('Bearer ')) {
     const token = authHeader.slice(7)
+
+    // Fix 12: Reject revoked tokens before verification.
+    if (isTokenRevoked(token)) {
+      res.status(401).json({ error: 'Token has been revoked' })
+      return
+    }
+
     try {
-      const payload = jwt.verify(token, JWT_SECRET) as AuthUser
+      // Fix 1: Lock algorithm to HS256 — prevents algorithm-confusion attacks.
+      const payload = jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] }) as AuthUser
       req.user = { id: payload.id, email: payload.email, name: payload.name }
       next()
       return
@@ -49,19 +69,24 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
 
   // ── Try API key ────────────────────────────────────────────────────────────
   if (apiKey) {
-    prisma.user
-      .findUnique({ where: { apiKey } })
-      .then((user) => {
-        if (!user) {
-          res.status(401).json({ error: 'Invalid API key' })
-          return
-        }
-        req.user = { id: user.id, email: user.email, name: user.name }
-        next()
-      })
-      .catch(() => {
-        res.status(500).json({ error: 'Auth check failed' })
-      })
+    // Fix 3: Reject empty strings, whitespace, or keys without the expected prefix.
+    if (!apiKey.trim() || !apiKey.startsWith('yar_')) {
+      res.status(401).json({ error: 'Invalid API key format' })
+      return
+    }
+
+    // Fix 4: Proper async/await instead of .then().catch() chain.
+    try {
+      const user = await prisma.user.findUnique({ where: { apiKey } })
+      if (!user) {
+        res.status(401).json({ error: 'Invalid API key' })
+        return
+      }
+      req.user = { id: user.id, email: user.email, name: user.name }
+      next()
+    } catch {
+      res.status(500).json({ error: 'Auth check failed' })
+    }
     return
   }
 
@@ -69,9 +94,10 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
 }
 
 export function signToken(user: AuthUser): string {
+  // Fix 1: Explicitly set algorithm on sign to match the verify constraint.
   return jwt.sign(
     { id: user.id, email: user.email, name: user.name },
     JWT_SECRET,
-    { expiresIn: '8h' }
+    { expiresIn: '8h', algorithm: 'HS256' }
   )
 }

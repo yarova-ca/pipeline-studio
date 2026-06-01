@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	ginauth "github.com/yarova-ca/16-gin/internal/auth"
@@ -21,7 +22,8 @@ func RegisterUsers(r *gin.Engine) {
 	}
 }
 
-// handleListItems returns all items belonging to the authenticated user.
+// handleListItems returns paginated items belonging to the authenticated user.
+// Query params: limit (1–100, default 20), offset (≥0, default 0).
 func handleListItems(c *gin.Context) {
 	claims := ginauth.GetClaims(c)
 	if claims == nil {
@@ -29,14 +31,35 @@ func handleListItems(c *gin.Context) {
 		return
 	}
 
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
+	if err != nil || limit < 1 || limit > 100 {
+		limit = 20
+	}
+	offset, err := strconv.Atoi(c.DefaultQuery("offset", "0"))
+	if err != nil || offset < 0 {
+		offset = 0
+	}
+
 	database := db.GetDB()
 	var items []db.Item
-	if err := database.Where("user_id = ?", claims.UserID).Find(&items).Error; err != nil {
+	var total int64
+
+	database.Model(&db.Item{}).Where("user_id = ?", claims.UserID).Count(&total)
+	if err := database.Where("user_id = ?", claims.UserID).
+		Order("created_at DESC").
+		Limit(limit).
+		Offset(offset).
+		Find(&items).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "database error"})
 		return
 	}
 
-	c.JSON(http.StatusOK, items)
+	c.JSON(http.StatusOK, gin.H{
+		"items":  items,
+		"total":  total,
+		"limit":  limit,
+		"offset": offset,
+	})
 }
 
 // handleCreateItem creates a new item for the authenticated user.
@@ -49,17 +72,21 @@ func handleCreateItem(c *gin.Context) {
 	}
 
 	var body struct {
-		Title       string `json:"title" binding:"required"`
-		Description string `json:"description"`
+		Title       string  `json:"title" binding:"required,min=1,max=500"`
+		Description *string `json:"description" binding:"omitempty,max=2000"`
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "title is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "title is required and must be 1–500 characters"})
 		return
 	}
 
+	description := ""
+	if body.Description != nil {
+		description = *body.Description
+	}
 	item := db.Item{
 		Title:       body.Title,
-		Description: body.Description,
+		Description: description,
 		UserID:      claims.UserID,
 	}
 
@@ -108,8 +135,8 @@ func handleUpdateItem(c *gin.Context) {
 	}
 
 	var body struct {
-		Title       *string `json:"title"`
-		Description *string `json:"description"`
+		Title       *string `json:"title" binding:"omitempty,min=1,max=500"`
+		Description *string `json:"description" binding:"omitempty,max=2000"`
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})

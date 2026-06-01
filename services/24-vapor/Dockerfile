@@ -63,4 +63,7 @@ ENTRYPOINT ["/app/app", "--hostname", "0.0.0.0", "--port", "8080"]
 #COPY --from=build --chown=app:app /app/.build/release/App /app/app
 #USER app
 #EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
 #ENTRYPOINT ["/app/app", "--hostname", "0.0.0.0", "--port", "8080"]

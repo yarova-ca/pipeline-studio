@@ -1,7 +1,7 @@
 {
   "name": "14-express",
   "version": "1.0.0",
-  "description": "Express 5.0 service starter \u2014 health endpoints, OAuth2 auth, Prisma ORM, CRUD",
+  "description": "Express 5.0 service starter — health endpoints, OAuth2 auth, Prisma ORM, CRUD",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
@@ -19,21 +19,28 @@
     "@opentelemetry/exporter-trace-otlp-http": "^0.52.0",
     "@opentelemetry/sdk-node": "^0.52.0",
     "@prisma/client": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^5.0.0",
     "express-rate-limit": "^7.0.0",
+    "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.0",
     "pino": "^9.0.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.0",
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.7",
     "@types/node": "^22.0.0",
     "@types/supertest": "^6.0.2",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.7",
     "jest": "^29.7.0",
     "pino-pretty": "^11.0.0",
     "prisma": "^6.0.0",
@@ -48,6 +55,15 @@
     "extensionsToTreatAsEsm": [
       ".ts"
     ],
+    "setupFiles": [
+      "./tests/setup.js"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "./tsconfig.test.json",
+        "diagnostics": false
+      }
+    },
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"
     }

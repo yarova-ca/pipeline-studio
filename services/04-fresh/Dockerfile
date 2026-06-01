@@ -34,6 +34,9 @@ USER 1001
 COPY --from=build --chown=1001:0 /app ./
 EXPOSE 8000
 # Deno permissions: add --allow-net --allow-read etc. as needed
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
+
 CMD ["deno", "task", "start"]
 
 # ── Alternative runtime images ─────────────────────────────────────────────
