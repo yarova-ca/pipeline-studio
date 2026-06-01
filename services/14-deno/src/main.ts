@@ -1,5 +1,7 @@
 import { Application, Router } from '@oak/oak'
 import '@std/dotenv/load'
+import authRouter from './routes/auth.ts'
+import usersRouter from './routes/users.ts'
 
 const app = new Application()
 const router = new Router()
@@ -21,6 +23,12 @@ router
 
 app.use(router.routes())
 app.use(router.allowedMethods())
+
+// ── Feature routes ─────────────────────────────────────────────────────────
+app.use(authRouter.routes())
+app.use(authRouter.allowedMethods())
+app.use(usersRouter.routes())
+app.use(usersRouter.allowedMethods())
 
 console.log(`Deno running on port ${PORT}`)
 await app.listen({ port: PORT })

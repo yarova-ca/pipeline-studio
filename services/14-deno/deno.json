@@ -8,6 +8,8 @@
   },
   "imports": {
     "@oak/oak": "jsr:@oak/oak@^17.0.0",
-    "@std/dotenv": "jsr:@std/dotenv@^0.225.0"
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.0",
+    "npm:@prisma/client": "npm:@prisma/client@^6.0.0",
+    "npm:jose": "npm:jose@^5.0.0"
   }
 }

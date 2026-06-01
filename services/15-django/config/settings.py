@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'health',
+    'api',
 ]
 
 MIDDLEWARE = ['django.middleware.common.CommonMiddleware']

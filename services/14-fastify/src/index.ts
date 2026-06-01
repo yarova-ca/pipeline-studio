@@ -1,8 +1,13 @@
 import Fastify from 'fastify'
+import fastifyCookie from '@fastify/cookie'
 import 'dotenv/config'
+import { authRoutes } from './routes/auth.js'
+import { usersRoutes } from './routes/users.js'
 
 export const app = Fastify({ logger: true })
 const PORT = Number(process.env.PORT ?? '3000')
+
+await app.register(fastifyCookie)
 
 app.get('/', async () => {
   return { message: 'Hello from Fastify 5.2', framework: '14-fastify', version: '1.0.0' }
@@ -19,6 +24,10 @@ app.get('/health/live', async () => {
 app.get('/health/ready', async () => {
   return { status: 'ok' }
 })
+
+// ── Feature routes ─────────────────────────────────────────────────────────
+await app.register(authRoutes)
+await app.register(usersRoutes)
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen({ port: PORT, host: '0.0.0.0' })
