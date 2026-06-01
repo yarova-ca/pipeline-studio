@@ -162,6 +162,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -216,6 +224,55 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </div>
 <div class="page-title">Canada Industry Schema</div>
 <div class="page-meta">73 industries · 13 provinces/territories · 14 major hubs · 10 columns per row &nbsp;·&nbsp; verified 2026-05-26</div>
+
+<h2 id="canada-vs-us">Canada-specific regulations — why they differ from US</h2>
+<div class="section-sub">Canadian compliance is not a subset of US compliance. Three structural differences drive the divergence.</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: Canada uses PIPEDA for privacy — not GDPR, not CCPA.</div>
+  <div class="decision-rejected">US uses state-level laws (CCPA in California) with no single federal privacy law for most sectors.</div>
+  <div class="decision-rejected">EU uses GDPR — broader data subject rights, stricter breach timelines.</div>
+  <div class="decision-tradeoff">PIPEDA applies federally. Three provinces (AB, BC, QC) have own substantially similar laws (PIPA AB, PIPA BC, Law 25 QC). When operating in those provinces: use the provincial law, not PIPEDA.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: Canada uses OSFI B-10 for banking — not OCC (US), not PRA (UK).</div>
+  <div class="decision-rejected">OCC governs US nationally chartered banks only. No Canadian applicability.</div>
+  <div class="decision-tradeoff">OSFI B-10 governs technology and cyber risk for federally regulated financial institutions (FRFIs). Federally regulated = banks, insurance, trust companies under federal charter.</div>
+</div>
+
+<div class="why-block">
+  <strong>Federal-provincial split — why you must check both levels:</strong><br>
+  Federal law sets the floor. Provincial law sets additional requirements.<br>
+  Alberta: PIPA AB — substantially similar to PIPEDA. Use PIPA AB when operating in AB.<br>
+  British Columbia: PIPA BC — same logic as AB.<br>
+  Quebec: Law 25 (formerly Bill 64) — most stringent provincial privacy law in Canada. Applies to any business handling Quebec residents' data.
+</div>
+
+<h2 id="protected-b">Protected B classification</h2>
+<div class="section-sub">A Canadian government data classification. Not a compliance framework — a classification level that triggers a framework.</div>
+
+<div class="why-block">
+  <strong>Protected B defined:</strong><br>
+  Protected B: Canadian government classification for sensitive but not secret data.<br>
+  Examples: personal financial information, employment records, law enforcement files, medical records held by federal agencies.<br>
+  Does not include classified (secret / top secret) information — that is a separate stream.
+</div>
+
+<div class="why-block">
+  <strong>When Protected B applies:</strong><br>
+  Applies to: most federal IT systems, Crown corporations handling personal data, GC-contracted vendors storing federal data.<br>
+  Trigger framework: ITSG-33 (IT Security Risk Management) — the GC baseline control set for Protected B systems.
+</div>
+
+<div class="failure-block">
+  <div><strong>If service processes Protected B data without ITSG-33 compliance:</strong></div>
+  <div><strong>Trigger:</strong> Security Assessment and Authorization (SA&amp;A) review finds missing ITSG-33 controls.</div>
+  <div><strong>System:</strong> Security assessment fails. Deployment blocked pending remediation.</div>
+  <div><strong>User sees:</strong> Authorization to Operate (ATO) withheld. System cannot go live.</div>
+  <div><strong>User can:</strong> Remediate missing controls and resubmit for SA&amp;A review.</div>
+  <div><strong>To restore:</strong> CIO signoff required before relaunch. Timeline: 4–12 weeks depending on control gaps.</div>
+</div>
 
 <div class="counts-bar">
   <div class="count-chip ind-chip"><div class="chip-num">73</div><div class="chip-label">Industries<br>mapped to Canada</div></div>

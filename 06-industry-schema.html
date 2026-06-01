@@ -152,6 +152,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -206,6 +214,38 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </div>
 <div class="page-title">Industry Schema</div>
 <div class="page-meta">74 industries · 16 verticals · 10 columns per row &nbsp;·&nbsp; verified 2026-05-26</div>
+
+<h2 id="how-to-use">How to use this schema</h2>
+<div class="section-sub">Two common entry points — find your scenario below.</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Scenario A — "I am building for healthcare"</div>
+  <div>Step 1: Find the Healthcare vertical in the table below.</div>
+  <div>Step 2: Copy every standard listed in the Mandatory Compliance column.</div>
+  <div>Step 3: Open <a href="12-compliance-variations.html">12-compliance-variations.html</a> and apply each standard to your pipeline.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Scenario B — "I am audited under HIPAA"</div>
+  <div>Step 1: Search the Mandatory Compliance column for "HIPAA".</div>
+  <div>Step 2: Every row containing HIPAA is an industry subject to that audit.</div>
+  <div>Step 3: Use those rows to scope a multi-industry engagement.</div>
+</div>
+
+<div class="why-block">
+  <strong>Binary rule — regulated vs commercial verticals:</strong><br>
+  When your industry is in REGULATED_VERTICAL (Finance, Healthcare, Government, Defense): all mandatory standards apply from day 1. No exceptions.<br>
+  When your industry is in COMMERCIAL_VERTICAL (Retail, Media, Agriculture, Non-profit): apply standards based on data sensitivity level only.
+</div>
+
+<div class="why-block">
+  <strong>Why compliance varies by industry — not one standard for all:</strong><br>
+  HIPAA protects health data (PHI) — applies only where patient data exists.<br>
+  PCI DSS protects cardholder data — applies only where payment card data is stored or transmitted.<br>
+  NERC CIP protects power grid control systems — applies only to bulk electric system operators.<br>
+  Applying all three standards to a media company adds audit overhead with zero protection benefit.<br>
+  The schema maps exactly which standards apply to which industries so you apply only what is required.
+</div>
 
 <div class="counts-bar">
   <div class="count-chip ind-chip"><div class="chip-num">74</div><div class="chip-label">Industries<br>total</div></div>

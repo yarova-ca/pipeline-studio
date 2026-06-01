@@ -117,6 +117,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -169,6 +177,86 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </div>
 <h1>Maintainability Runbook</h1>
 <div class="page-meta">4 task types · 8 checklists · last updated 2026-05-28</div>
+
+<h2 id="when-to-update">When to update vs when to skip</h2>
+<div class="section-sub">Binary rules — apply them in order. First match wins.</div>
+
+<div class="why-block">
+  <strong>Base image CVE patches:</strong><br>
+  When a base image receives a CVE patch rated HIGH severity: update within 7 days.<br>
+  When a base image receives a CVE patch rated MEDIUM severity: update within 30 days.<br>
+  When a base image has no new CVE patches: skip. Review at 30-day cadence regardless.
+</div>
+
+<div class="why-block">
+  <strong>Framework major version releases:</strong><br>
+  When a framework releases a major version containing a security fix: update immediately.<br>
+  When a framework releases a major version with no security fix: update within 90 days.<br>
+  When a framework releases a minor or patch version: update at next scheduled 30-day review.
+</div>
+
+<div class="failure-block">
+  <div><strong>If version registry is not updated within cadence:</strong></div>
+  <div><strong>Trigger:</strong> Base image has 30+ days since last review in <a href="15-version-registry.html">15-version-registry.html</a>.</div>
+  <div><strong>System:</strong> Trivy scan finds CVE in base image. PR gate blocks all open pull requests using that image.</div>
+  <div><strong>User sees:</strong> CI failure — "HIGH CVE in node:22-alpine (CVE-2024-XXXX) — update base image before merge."</div>
+  <div><strong>User can:</strong> Run <code class="ic">python3 scripts/generate_full_bundles.py --only env</code> to regenerate .env.example. Update the version pin in <a href="15-version-registry.html">15-version-registry.html</a>. Re-push to unblock the PR gate.</div>
+</div>
+
+<h2 id="add-service">Adding a new service — step by step</h2>
+<div class="section-sub">Follow in order. Each step has a defined output. Do not skip steps.</div>
+
+<ol class="checklist">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      Add entry to <code class="ic">SERVICES_META</code> in <code class="ic">scripts/generate_full_bundles.py</code>.
+      <span class="step-why">Input: service name, port, tier, stack. Output: script knows the service exists.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      Create <code class="ic">services/XX-name/</code> with Dockerfile, app code, and tests.
+      <span class="step-why">Input: service directory. Output: buildable image. CI runs Docker build on push.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      Run: <code class="step-cmd">python3 scripts/generate_full_bundles.py --service XX-name</code>
+      <span class="step-why">Output: .env.example, docker-compose snippet, and bundle manifest for this service.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">4</div>
+    <div class="step-body">
+      Add workflow template to <code class="ic">workflow-templates/XX-name/</code> if this service introduces a new pipeline pattern.
+      <span class="step-why">Skip this step if the service reuses an existing pattern exactly.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">5</div>
+    <div class="step-body">
+      Add row to <a href="01-framework-catalog.html">01-framework-catalog.html</a> framework table.
+      <span class="step-why">Output: service is discoverable from the hub. Missing row = service is invisible to users of the catalog.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">6</div>
+    <div class="step-body">
+      Add row to <a href="17-feature-matrix.html">17-feature-matrix.html</a> with tier and status.
+      <span class="step-why">Output: feature matrix is accurate. Status = Draft / Beta / Stable. Tier = 1 / 2 / 3.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">7</div>
+    <div class="step-body">
+      Commit and push. Docker build CI validates the new service immediately on push.
+      <span class="step-why">CI result = binary pass/fail. Fail = service directory or Dockerfile has an error. Fix before merging.</span>
+    </div>
+  </li>
+</ol>
 
 <div class="counts-bar">
   <div class="count-chip c1"><div class="chip-num">16</div><div class="chip-label">Docs in this<br>project</div></div>

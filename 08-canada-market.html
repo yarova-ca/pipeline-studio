@@ -185,6 +185,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -239,6 +247,49 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </div>
 <div class="page-title">Canada Market Navigation</div>
 <div class="page-meta">73 industries · 16 verticals · 14 hubs · 5 market dimensions · data verified May 2026</div>
+
+<h2 id="how-to-use">How to use the market data</h2>
+<div class="section-sub">Two common goals — find your scenario and follow the steps.</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Scenario A — Targeting a Canadian city for a consulting practice</div>
+  <div>Step 1: Filter the industry table by Demand = HIGH.</div>
+  <div>Step 2: Filter by your target vertical.</div>
+  <div>Step 3: Pick the city with the highest employer density for that vertical.</div>
+  <div>Why employer density matters: more employers = more concurrent engagements possible = lower client concentration risk.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Scenario B — Express Entry points (CRS) for a specific role</div>
+  <div>Step 1: Find your NOC code in the immigration section below.</div>
+  <div>Step 2: Read the CRS cut-off for the most recent draw in that NOC category.</div>
+  <div>Step 3: Identify the PNP stream in your target province that gives a nomination (= 600 CRS points guaranteed).</div>
+</div>
+
+<div class="why-block">
+  <strong>Why NOC codes matter for immigration:</strong><br>
+  IRCC (Immigration, Refugees and Citizenship Canada) uses NOC codes to assess job offers.<br>
+  A job offer in a NOC TEER 0 or 1 occupation adds 50–200 CRS points depending on your profile.<br>
+  Without the correct NOC code on the offer letter: the CRS boost does not apply.<br>
+  Your employer must use the exact NOC code matching your duties — not a close match.
+</div>
+
+<div class="why-block">
+  <strong>Why some provinces have higher PNP cut-offs:</strong><br>
+  Provincial Nominee Programs (PNPs) respond to regional labor shortages.<br>
+  Ontario Tech stream cut-offs are higher because Ontario receives more applicants per opening.<br>
+  Saskatchewan and Manitoba have lower cut-offs — fewer applicants, genuine labor shortages in tech.<br>
+  Targeting a province with a lower cut-off and genuine need is a faster path than waiting for a high-demand province draw.
+</div>
+
+<div class="failure-block">
+  <div><strong>If you accept a job offer without checking CRS cut-off first:</strong></div>
+  <div><strong>Trigger:</strong> Job offer accepted. NOC code not verified. CRS cut-off not checked against current profile score.</div>
+  <div><strong>System:</strong> Offer submitted with incorrect NOC or below-cut-off CRS score.</div>
+  <div><strong>User sees:</strong> Express Entry draw invitation not issued. Profile ages in pool without selection.</div>
+  <div><strong>User can:</strong> Request employer update NOC code on offer letter. Wait for next draw. Explore PNP stream nomination as alternative.</div>
+  <div><strong>Cost:</strong> Immigration timeline extends by 6–24 months. Work permit may expire before ITA issued.</div>
+</div>
 
 <div class="counts-bar">
   <div class="count-chip ind-chip"><div class="chip-num">73</div><div class="chip-label">Industries<br>covered</div></div>
