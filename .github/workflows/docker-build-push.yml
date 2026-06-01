@@ -1,0 +1,212 @@
+# ──────────────────────────────────────────────────────────────────────────
+# Docker Build + GHCR Push — all services
+#
+# On pull_request → build only (no push). Validates Dockerfile compiles.
+# On push to main  → build + push Tier 1 services to GHCR.
+#
+# GHCR (GitHub Container Registry): ghcr.io/<org>/<service>
+# Auth: GITHUB_TOKEN — automatic, no secrets to configure.
+#
+# Images pushed as:
+#   ghcr.io/yarova-ca/<service>:latest        (RUNTIME=alpine)
+#   ghcr.io/yarova-ca/<service>:slim          (RUNTIME=slim)
+#   ghcr.io/yarova-ca/<service>:fips          (RUNTIME=fips)
+#   ghcr.io/yarova-ca/<service>:<sha>         (immutable tag for rollback)
+# ──────────────────────────────────────────────────────────────────────────
+
+name: Docker Build + GHCR Push
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write       # required for GHCR push
+  id-token: write       # required for cosign OIDC signing
+
+env:
+  REGISTRY: ghcr.io
+  ORG: yarova-ca
+
+jobs:
+  # ── Step 1: Discover which services have Dockerfiles ─────────────────────
+  setup:
+    runs-on: ubuntu-24.04
+    outputs:
+      all-services: ${{ steps.discover.outputs.all }}
+      tier1-services: ${{ steps.discover.outputs.tier1 }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Discover services
+        id: discover
+        run: |
+          # All services with a Dockerfile
+          ALL=$(python3 -c "
+          import os, json
+          svcs = sorted([
+            d for d in os.listdir('services')
+            if os.path.isfile(f'services/{d}/Dockerfile')
+          ])
+          print(json.dumps(svcs))
+          ")
+
+          # Tier 1 services (subset of all)
+          TIER1=$(python3 -c "
+          import json
+          tier1 = [
+            '01-nextjs','01-nuxt','01-sveltekit',
+            '02-angular','02-react','02-vue',
+            '07-nextjs-app-router',
+            '14-bun','14-express','14-fastify','14-hono','14-nestjs',
+            '15-django','15-fastapi',
+            '16-echo','16-gin',
+            '17-spring-boot',
+            '18-ktor',
+            '19-aspnet-core','19-minimal-apis',
+            '20-actix-web','20-axum',
+            '21-phoenix',
+            '22-rails',
+            '23-laravel','23-symfony',
+            '28-dotnet-grpc','28-go-grpc','28-java-grpc','28-node-grpc','28-python-grpc','28-rust-grpc',
+            '29-apollo','29-gqlgen','29-graphql-yoga',
+            '30-ws-elixir','30-ws-node'
+          ]
+          print(json.dumps(tier1))
+          ")
+
+          echo "all=$ALL" >> $GITHUB_OUTPUT
+          echo "tier1=$TIER1" >> $GITHUB_OUTPUT
+
+  # ── Step 2: Build all services (PR + main) ────────────────────────────────
+  build-all:
+    needs: setup
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        service: ${{ fromJson(needs.setup.outputs.all-services) }}
+    name: Build ${{ matrix.service }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build (alpine runtime)
+        uses: docker/build-push-action@v6
+        with:
+          context: services/${{ matrix.service }}
+          push: false
+          tags: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:pr-${{ github.sha }}
+          build-args: RUNTIME=alpine
+          cache-from: type=gha,scope=${{ matrix.service }}-alpine
+          cache-to: type=gha,scope=${{ matrix.service }}-alpine,mode=max
+
+      - name: Smoke test — health endpoint
+        run: |
+          docker run -d --name smoke-${{ matrix.service }} \
+            -p 3000:$(cat services/${{ matrix.service }}/Dockerfile | grep EXPOSE | awk '{print $2}' | head -1) \
+            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:pr-${{ github.sha }} 2>/dev/null || \
+          docker run -d --name smoke-${{ matrix.service }} \
+            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:pr-${{ github.sha }}
+          sleep 8
+          PORT=$(cat services/${{ matrix.service }}/Dockerfile | grep EXPOSE | awk '{print $2}' | head -1)
+          curl -sf http://localhost:${PORT:-3000}/health/live || curl -sf http://localhost:${PORT:-3000}/health
+          docker stop smoke-${{ matrix.service }} || true
+
+  # ── Step 3: Build + push Tier 1 to GHCR (main branch only) ───────────────
+  push-tier1:
+    needs: [setup, build-all]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        service: ${{ fromJson(needs.setup.outputs.tier1-services) }}
+    name: Push ${{ matrix.service }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}
+          tags: |
+            type=raw,value=latest
+            type=sha,format=short
+
+      - name: Build + push (alpine — default)
+        uses: docker/build-push-action@v6
+        with:
+          context: services/${{ matrix.service }}
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:latest
+            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:${{ github.sha }}
+          build-args: RUNTIME=alpine
+          cache-from: type=gha,scope=${{ matrix.service }}-alpine
+          cache-to: type=gha,scope=${{ matrix.service }}-alpine,mode=max
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build + push (slim)
+        uses: docker/build-push-action@v6
+        with:
+          context: services/${{ matrix.service }}
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:slim
+          build-args: RUNTIME=slim
+          cache-from: type=gha,scope=${{ matrix.service }}-slim
+          cache-to: type=gha,scope=${{ matrix.service }}-slim,mode=max
+
+      - name: Build + push (fips)
+        uses: docker/build-push-action@v6
+        with:
+          context: services/${{ matrix.service }}
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:fips
+          build-args: RUNTIME=fips
+          cache-from: type=gha,scope=${{ matrix.service }}-fips
+          cache-to: type=gha,scope=${{ matrix.service }}-fips,mode=max
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign image (OIDC keyless)
+        env:
+          COSIGN_EXPERIMENTAL: 1
+        run: |
+          cosign sign --yes \
+            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:latest@$(
+              docker buildx imagetools inspect \
+                ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:latest \
+                --format '{{index .Manifest "digest"}}'
+            )
+
+      - name: Generate SBOM
+        uses: anchore/syft-action@v1
+        with:
+          image: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:latest
+          output-file: sbom-${{ matrix.service }}.spdx.json
+          format: spdx-json
+
+      - name: Attest SBOM
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}
+          subject-digest: latest
+          push-to-registry: true

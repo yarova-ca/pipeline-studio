@@ -1,0 +1,85 @@
+# ──────────────────────────────────────────────────────────────────────────
+# Security Scan — runs on all PRs and main branch pushes.
+#
+# Scans:
+#   1. Secret scan (Gitleaks) — catches secrets committed to the repo
+#   2. SAST (Semgrep) — static code analysis for security patterns
+#   3. Container scan (Trivy) — scans built images for CVEs
+#
+# Semgrep: a static analysis tool (checks code for known vulnerability patterns).
+# CVE: Common Vulnerabilities and Exposures — catalogued security flaws.
+# SAST: Static Application Security Testing — analyzes code without running it.
+# ──────────────────────────────────────────────────────────────────────────
+
+name: Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write   # required to upload SARIF results to GitHub Security tab
+
+jobs:
+  secret-scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history for secret scan
+      - name: Gitleaks secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sast:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Semgrep SAST
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/default
+            p/nodejs
+            p/python
+            p/golang
+            p/java
+            p/csharp
+            p/rust
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
+          publishDeployment: ${{ github.ref == 'refs/heads/main' }}
+        continue-on-error: true   # Semgrep token optional — scan still runs
+
+  trivy-scan:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [14-express, 15-fastapi, 16-gin, 17-spring-boot, 19-aspnet-core, 20-axum]
+    name: Trivy ${{ matrix.service }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image for scan
+        run: |
+          docker build \
+            --build-arg RUNTIME=alpine \
+            -t scan-target:${{ matrix.service }} \
+            services/${{ matrix.service }}
+      - name: Trivy container scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: scan-target:${{ matrix.service }}
+          format: sarif
+          output: trivy-${{ matrix.service }}.sarif
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-${{ matrix.service }}.sarif
+          category: trivy-${{ matrix.service }}
