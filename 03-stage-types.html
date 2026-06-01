@@ -144,6 +144,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -197,6 +205,22 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-when"><strong>When to read:</strong> A stage failed and you need to know who owns it. Understanding the difference between a workflow error and a security gate.</div>
   <div class="page-pillar">Pillar 4 — Pipeline &amp; Tools &nbsp;·&nbsp; Related: <a href="02-pipeline-schema.html">02 Pipeline schema</a> &nbsp;·&nbsp; <a href="04-tool-catalog.html">04 Tool catalog</a></div>
 </div>
+
+<div class="decision-block">
+  <div style="font-weight:600;color:var(--text-head);margin-bottom:8px">Why the DevOps vs DevSecOps classification matters</div>
+  <div style="margin-bottom:8px;font-size:12px">
+    <strong>DevOps failure:</strong> Engineering owns it. Can be retried, skipped with justification, or bypassed by a senior engineer.<br>
+    The artifact is not blocked from shipping — the pipeline can proceed after the issue is resolved or documented.
+  </div>
+  <div style="margin-bottom:8px;font-size:12px">
+    <strong>DevSecOps failure:</strong> Security owns it. Cannot be bypassed without security team sign-off.<br>
+    The artifact does not ship. Period. The pipeline stops and stays stopped until the finding is resolved.
+  </div>
+  <div class="decision-chosen">Decision: two-class model (DevOps / DevSecOps) — not a finer-grained taxonomy</div>
+  <div class="decision-rejected">Rejected: 4-class model (DevOps / Security / Compliance / Process) — teams argue about classification instead of fixing the failure. The question "who owns this" must have a binary answer at 2am.</div>
+  <div class="decision-tradeoff">Accepted tradeoff: some stages are borderline (e.g. license scanning — legal risk but not a CVE). These are classified DevSecOps conservatively — the cost of a false-block is lower than the cost of a false-pass.</div>
+</div>
+
 <div class="page-meta">44 stages &nbsp;·&nbsp; 16 DevOps &nbsp;·&nbsp; 28 DevSecOps &nbsp;·&nbsp; verified 2026-05-26</div>
 
 <div class="section-legend">

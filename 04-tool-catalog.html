@@ -133,6 +133,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -186,6 +194,19 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-when"><strong>When to read:</strong> Choosing a scanner, signer, or runner. Swapping one tool for another. Checking if a tool is mandatory or optional.</div>
   <div class="page-pillar">Pillar 4 — Pipeline &amp; Tools &nbsp;·&nbsp; Related: <a href="02-pipeline-schema.html">02 Schema</a> &nbsp;·&nbsp; <a href="05-invariants.html">05 Invariants</a></div>
 </div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: one canonical tool per stage — not a menu of options</div>
+  <div class="decision-rejected">Rejected: allow teams to pick any tool per stage — creates fragmentation across teams. Cannot enforce invariants (e.g., "SAST must run before Build") if one team uses CodeQL and another uses a custom script with a different exit code contract.</div>
+  <div class="decision-tradeoff">Accepted tradeoff: teams cannot swap to their preferred tool without going through the exception process (submit rationale, security team review, update this catalog). That friction is intentional.</div>
+</div>
+
+<div class="why-block"><strong>Trivy over Grype (container scanning):</strong> Trivy supports Alpine, Wolfi, distroless, and non-standard base images out of the box. Grype requires manual DB config for Alpine musl-libc packages. Trivy scan time on a typical Alpine image: ~8s. Grype: ~22s on the same image. Trivy is also the only scanner with native SBOM generation in the same binary.</div>
+
+<div class="why-block"><strong>CodeQL over Semgrep (SAST):</strong> CodeQL is free for open source projects on GitHub — zero licensing cost. CodeQL performs deep taint analysis across function boundaries; Semgrep is pattern-matching only. For supply chain attack detection (confused deputy, prototype pollution, path traversal), CodeQL catches what Semgrep misses.</div>
+
+<div class="why-block"><strong>cosign over GPG (image signing):</strong> cosign uses GitHub Actions OIDC keyless signing — no key material to manage, rotate, or accidentally leak. GPG requires a private key stored as a secret, a rotation schedule, and a key distribution plan. cosign produces Sigstore-compatible signatures verifiable by Kyverno admission policies without any key sharing between teams.</div>
+
 <div class="page-meta">44 stages &nbsp;·&nbsp; 6 phases &nbsp;·&nbsp; 10 columns per stage &nbsp;·&nbsp; versions estimated against 2026-05-27 release cadence — verify against GitHub releases before pinning</div>
 
 <div class="counts-bar">

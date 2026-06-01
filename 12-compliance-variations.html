@@ -128,6 +128,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -179,6 +187,23 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-when"><strong>When to read:</strong> Applying compliance requirements to a container image. Read after Doc 11 (Dockerfile catalog).</div>
   <div class="page-pillar">Pillar 5 — Compliance &amp; Security &nbsp;·&nbsp; Related: <a href="11-dockerfile-catalog.html">11 Dockerfiles</a> &nbsp;·&nbsp; <a href="10-linux-compliance.html">10 Distro compliance</a></div>
 </div>
+
+<div style="margin-bottom:4px">
+  <div style="font-size:13px;font-weight:600;color:var(--text-head);margin-bottom:8px">What the additive delta model means</div>
+  <div class="why-block">
+    <strong>Base Dockerfile</strong> (from <a href="11-dockerfile-catalog.html">doc 11</a>) is your starting point — no compliance requirements assumed.<br>
+    Each compliance standard adds a delta layer on top of that base.<br>
+    Layers are cumulative: FIPS + HIPAA means both deltas are applied, in order.<br>
+    You do not need a separate Dockerfile per standard.
+  </div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: additive delta model — one base Dockerfile + per-standard layer</div>
+  <div class="decision-rejected">Rejected: separate Dockerfiles per framework × compliance standard combination. 106 frameworks × 11 standards = 1,166 Dockerfiles to maintain. A single base image update (e.g., CVE patch) requires 1,166 manual edits. That maintenance burden is not tractable.</div>
+  <div class="decision-tradeoff">Accepted tradeoff: the build step is slightly more complex — a script applies deltas in order before building. The output image is identical to what a hand-maintained Dockerfile would produce. 1,166× fewer files to maintain.</div>
+</div>
+
 <div class="page-title">Compliance Variations</div>
 <div class="page-meta">11 standards &nbsp;·&nbsp; 10 industry profiles &nbsp;·&nbsp; Dockerfile catalog: <a href="11-dockerfile-catalog.html">doc 11</a> &nbsp;·&nbsp; Linux compliance: <a href="10-linux-compliance.html">doc 10</a></div>
 

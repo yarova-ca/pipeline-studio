@@ -167,6 +167,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -220,6 +228,22 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-when"><strong>When to read:</strong> First doc to read. Before adding any stage or changing stage order.</div>
   <div class="page-pillar">Pillar 4 — Pipeline &amp; Tools &nbsp;·&nbsp; Related: <a href="03-stage-types.html">03 Stage types</a> &nbsp;·&nbsp; <a href="04-tool-catalog.html">04 Tool catalog</a> &nbsp;·&nbsp; <a href="05-invariants.html">05 Invariants</a></div>
 </div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: 6 phases (not 4, not 8)</div>
+  <div class="decision-rejected">Rejected: 4 phases — too coarse. Cannot isolate a security gate failure from a build failure. A failed Phase 2 and a failed Phase 3 look the same.</div>
+  <div class="decision-rejected">Rejected: 8 phases — too granular. Adds cognitive overhead and more YAML per pipeline without adding security enforcement value.</div>
+  <div class="decision-tradeoff">Accepted tradeoff: 6 phases adds ~3 min to total pipeline runtime vs a 4-phase baseline. That cost is accepted because security gate isolation is non-negotiable.</div>
+</div>
+
+<div class="failure-block">
+  <div><strong>If Phase 2 PR Gate fails:</strong></div>
+  <div><strong>Trigger:</strong> SAST or SCA scanner returns a HIGH or CRITICAL severity finding.</div>
+  <div><strong>System:</strong> PR is blocked. No merge is allowed until the finding is resolved or suppressed with a written justification.</div>
+  <div><strong>User sees:</strong> GitHub check status "failed" — shows scanner name (CodeQL / Trivy) and finding count.</div>
+  <div><strong>User can:</strong> Fix the vulnerability in the branch and re-push, or add the finding to the suppression list with justification and security team sign-off.</div>
+</div>
+
 <div class="page-meta">6 phases &nbsp;·&nbsp; 44 stages &nbsp;·&nbsp; Phase 0 through Promotions &nbsp;·&nbsp; verified 2026-05-26</div>
 
 <div class="counts-bar">
@@ -461,6 +485,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 ════════════════════════════════════════════════════════════ -->
 <h2 id="p0">Phase 0 — Bootstrap</h2>
 <div class="phase-sub">Runs once, not per PR. Sets the constraints every other phase depends on.</div>
+<div class="why-block"><strong>Why once, not per PR:</strong> Bootstrap configures repo-level and cluster-level controls — branch protection, OIDC trust, admission policies. These are not per-commit artifacts. Running them per PR would add ~4 min of idempotent setup work with no security gain.</div>
 
 <div class="diagram-legend">
   <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>
@@ -479,6 +504,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 
 <h2 id="p1">Phase 1 — Local Dev</h2>
 <div class="phase-sub">Runs on developer machine. Triggered on git commit.</div>
+<div class="why-block"><strong>Why pre-commit hooks, not CI-only:</strong> CI feedback takes 3–8 minutes round-trip (push → GitHub Actions runner → result). Pre-commit hooks return in under 2 seconds. Secret leaks caught in CI have already been pushed to the remote. Pre-commit catches them before the network hop.</div>
 
 <div class="diagram-legend">
   <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>
@@ -494,6 +520,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 
 <h2 id="p2">Phase 2 — PR Gate</h2>
 <div class="phase-sub">Triggers on every PR push. No merge until all 10 stages green and human approves.</div>
+<div class="why-block"><strong>Why no image push on PR:</strong> An image pushed from a PR branch has not been reviewed or approved. It cannot be signed with a main-branch OIDC identity. Pushing it would produce an unsigned, unattested artifact that looks like a production image but is not. The build step on PR produces a tarball only — discarded after scanning.</div>
 
 <div class="diagram-legend">
   <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>
@@ -515,6 +542,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 
 <h2 id="p3">Phase 3 — Main Build</h2>
 <div class="phase-sub">Triggers on merge to main. Produces the signed, attested, promotion-ready image.</div>
+<div class="why-block"><strong>Why image signing happens here, not in Phase 2:</strong> cosign keyless signing uses the GitHub Actions OIDC token issued to the <code>refs/heads/main</code> branch identity. PR branches produce a different OIDC subject (<code>refs/pull/N/merge</code>). Signing a PR image would produce an attestation with the wrong subject — Kyverno admission policies would reject it at deploy time anyway.</div>
 
 <div class="diagram-legend">
   <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>

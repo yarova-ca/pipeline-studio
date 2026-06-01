@@ -131,6 +131,16 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.hint-card{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;font-size:12px;line-height:1.6;color:var(--text-dim);margin-bottom:16px}
+.hint-card strong{color:var(--text-head)}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -184,6 +194,19 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-when"><strong>When to read:</strong> Implementing or reviewing the full pipeline for any framework. Read after Docs 02, 09, and 11.</div>
   <div class="page-pillar">Pillar 4 — Pipeline &amp; Tools &nbsp;·&nbsp; Related: <a href="02-pipeline-schema.html">02 Schema</a> &nbsp;·&nbsp; <a href="11-dockerfile-catalog.html">11 Dockerfiles</a> &nbsp;·&nbsp; <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services">services/</a></div>
 </div>
+
+<div class="hint-card" style="margin-bottom:16px">
+  <strong>How to use this catalog:</strong> Find your framework. Copy the phase that matches your CI/CD stage.
+  Replace <code>YOUR_ORG/YOUR_REPO</code> with your GitHub org and repo name.
+  Each phase is self-contained — you can implement phases independently.
+  <br><br>
+  <strong>Compliance deltas:</strong> Each framework entry ends with a "Compliance Deltas" section.
+  Apply those deltas on top of the base phase YAML for each compliance standard you need.
+  <br><br>
+  <strong>Registry config:</strong> The "Registry" section at the bottom of each entry shows OIDC auth
+  and push format for all 6 supported registries (GHCR, ECR, GAR, Harbor, Docker Hub, ACR).
+</div>
+
 <div class="page-meta">75 frameworks &nbsp;·&nbsp; 27 categories &nbsp;·&nbsp; 6 pipeline phases &nbsp;·&nbsp; 11 compliance standards &nbsp;·&nbsp; 6 registries &nbsp;·&nbsp; verified 2026-05-27</div>
 
 <div class="counts-bar">

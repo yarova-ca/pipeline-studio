@@ -154,6 +154,14 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -207,6 +215,29 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-when"><strong>When to read:</strong> Adding a new pipeline stage. Changing stage order. Verifying a tool does not break ordering rules.</div>
   <div class="page-pillar">Pillar 5 — Compliance &amp; Security &nbsp;·&nbsp; Related: <a href="04-tool-catalog.html">04 Tool catalog</a> &nbsp;·&nbsp; <a href="02-pipeline-schema.html">02 Pipeline schema</a></div>
 </div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: invariants are hardcoded rules — violation stops the pipeline</div>
+  <div class="decision-rejected">Rejected: guidelines — teams read them, agree with them, then skip them at 4pm on a Friday when a release is blocked. Every "guideline" becomes optional under deadline pressure. Every "optional" eventually becomes ignored.</div>
+  <div class="decision-tradeoff">Accepted tradeoff: slower initial setup. Teams must configure scanners and signing before their first pipeline run. Zero drift over time — the pipeline cannot silently degrade.</div>
+</div>
+
+<div class="failure-block">
+  <div><strong>If Invariant INV-SEC-01 is violated (SAST runs after Build):</strong></div>
+  <div><strong>Trigger:</strong> Pipeline YAML places the CodeQL step after the docker build step in the same job or later job.</div>
+  <div><strong>System:</strong> Pipeline linter (checkov on the workflow file) fails at Phase 0 Bootstrap. The pipeline cannot start.</div>
+  <div><strong>User sees:</strong> Bootstrap check "Pipeline ordering" fails — "SAST must precede Build. Found: Build at step 3, SAST at step 5."</div>
+  <div><strong>User can:</strong> Reorder the steps so SAST runs before the docker build command and re-push the workflow file.</div>
+</div>
+
+<div class="failure-block">
+  <div><strong>If Invariant INV-SEC-03 is violated (unsigned image reaches registry):</strong></div>
+  <div><strong>Trigger:</strong> An image is pushed to the registry without a cosign signature attached (sign step missing or failed silently).</div>
+  <div><strong>System:</strong> Kyverno admission policy blocks deployment. The pod spec is rejected at the Kubernetes API server. No container starts.</div>
+  <div><strong>User sees:</strong> kubectl apply returns — "admission webhook denied the request: image signature verification failed."</div>
+  <div><strong>User can:</strong> Re-run Phase 3 with the sign step present and successful, then re-push the image and re-apply the manifest.</div>
+</div>
+
 <div class="page-title">Pipeline Invariants</div>
 <div class="page-meta">25 conditions that must always hold. Violation = pipeline broken — build must stop or never reach the next stage. &nbsp;·&nbsp; verified 2026-05-26</div>
 

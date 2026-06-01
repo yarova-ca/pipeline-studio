@@ -171,6 +171,20 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
 .page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
 .page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.picker-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}
+.picker-table th{text-align:left;padding:7px 12px;background:var(--bg2);font-weight:600;color:var(--text-dim);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border)}
+.picker-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.picker-table tbody tr:hover{background:var(--bg2)}
+.picker-use{color:var(--green);font-weight:600}
+.picker-avoid{color:var(--red);font-weight:600}
 </style>
 </head>
 <body>
@@ -224,6 +238,49 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-when"><strong>When to read:</strong> Picking the right distro for a compliance requirement. Read after Doc 09 (distro catalog).</div>
   <div class="page-pillar">Pillar 5 — Compliance &amp; Security &nbsp;·&nbsp; Related: <a href="09-linux-distros.html">09 Distros</a> &nbsp;·&nbsp; <a href="12-compliance-variations.html">12 Compliance layers</a></div>
 </div>
+
+<div style="margin-bottom:12px">
+  <div style="font-size:13px;font-weight:600;color:var(--text-head);margin-bottom:8px">Quick compliance picker</div>
+  <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Find your regulation. Use the runtime shown in green. Avoid the runtime shown in red. Full matrix in Matrix 1 below.</div>
+  <table class="picker-table">
+    <thead>
+      <tr><th>Regulation</th><th>Use this runtime</th><th>Avoid this runtime</th><th>Why</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>FIPS 140-2</strong></td>
+        <td class="picker-use">RHEL UBI 9 / CentOS Stream 9</td>
+        <td class="picker-avoid">Alpine (musl), Wolfi, Distroless</td>
+        <td>FIPS requires validated OpenSSL (FIPS object module). Alpine uses musl libc — no FIPS-validated crypto. RHEL ships OpenSSL 3.x with FIPS validation certificate.</td>
+      </tr>
+      <tr>
+        <td><strong>FedRAMP High</strong></td>
+        <td class="picker-use">RHEL UBI 9</td>
+        <td class="picker-avoid">Alpine, Debian slim, Ubuntu minimal</td>
+        <td>FedRAMP High requires FIPS 140-2 + STIG hardening + auditd. Only RHEL UBI ships all three in a supported configuration. Ubuntu requires manual FIPS enablement with a paid Ubuntu Pro subscription.</td>
+      </tr>
+      <tr>
+        <td><strong>HIPAA</strong></td>
+        <td class="picker-use">Debian 12, Ubuntu 22.04 LTS, RHEL UBI 9</td>
+        <td class="picker-avoid">Alpine (for production patient data workloads)</td>
+        <td>HIPAA requires audit logging (auditd) and access controls. Alpine lacks auditd in base. Debian/Ubuntu ship auditd and have long LTS cycles for patch compliance evidence.</td>
+      </tr>
+      <tr>
+        <td><strong>PCI DSS</strong></td>
+        <td class="picker-use">Distroless, Wolfi (minimal attack surface)</td>
+        <td class="picker-avoid">Ubuntu full, Debian full (too many unnecessary packages)</td>
+        <td>PCI DSS v4.0 requires removing all unnecessary software components. Distroless and Wolfi have near-zero package footprint — easier to pass PCI 6.3.3 (no unnecessary software).</td>
+      </tr>
+      <tr>
+        <td><strong>PIPEDA (Canada)</strong></td>
+        <td class="picker-use">Debian 12, Ubuntu 22.04 LTS</td>
+        <td class="picker-avoid">No hard technical restriction</td>
+        <td>PIPEDA is primarily a data-handling regulation, not a cryptography standard. Any distro with current security patches satisfies the technical baseline. Debian/Ubuntu preferred for long LTS support windows matching data retention periods.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <div class="page-title">Linux Compliance Cross-Reference</div>
 <div class="page-meta">22 distros &nbsp;·&nbsp; 5 matrices &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; industry schema: <a href="06-industry-schema.html">doc 06</a> / <a href="07-canada-schema.html">doc 07</a> &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a></div>
 
