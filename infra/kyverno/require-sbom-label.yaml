@@ -1,0 +1,27 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-sbom-label
+  annotations:
+    policies.kyverno.io/title: Require SBOM Label on Production Images
+    policies.kyverno.io/description: >-
+      Production images from ghcr.io/yarova-ca must carry the
+      org.opencontainers.image.revision label so the image can be traced
+      back to a specific commit and SBOM artifact.
+      Mode: audit (warn only) — enforced after all services ship the label.
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+    - name: check-sbom-label
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+              namespaces: [prod]
+      validate:
+        message: "Production images must have org.opencontainers.image.revision label"
+        pattern:
+          spec:
+            containers:
+              - (image): "ghcr.io/yarova-ca/*"

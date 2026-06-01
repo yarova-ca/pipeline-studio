@@ -1,0 +1,62 @@
+# Helm values for kube-prometheus-stack
+#
+# Chart: prometheus-community/kube-prometheus-stack
+# Install:
+#   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+#   helm repo update
+#   helm install monitoring prometheus-community/kube-prometheus-stack \
+#     -n monitoring \
+#     -f infra/prometheus/values.yaml
+#
+# Upgrade:
+#   helm upgrade monitoring prometheus-community/kube-prometheus-stack \
+#     -n monitoring \
+#     -f infra/prometheus/values.yaml
+
+grafana:
+  enabled: true
+  # WARNING: Change this password before deploying to staging or prod.
+  adminPassword: "CHANGE_ME_IN_PRODUCTION"
+  ingress:
+    enabled: false
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: pipeline-platform
+          orgId: 1
+          folder: Pipeline Platform
+          type: file
+          disableDeletion: false
+          options:
+            path: /var/lib/grafana/dashboards/pipeline-platform
+
+prometheus:
+  prometheusSpec:
+    # Retention: 30 days keeps ~6 weeks of data for incident retrospectives.
+    # Storage: 50Gi supports ~30d at typical pipeline-studio scrape volume.
+    retention: 30d
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 50Gi
+    # Discover ServiceMonitors and PodMonitors in all namespaces.
+    # When false: only discovers monitors with matching Helm release labels.
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+
+alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ['alertname', 'namespace']
+      group_wait: 10s
+      group_interval: 10m
+      # Default receiver: null (silences all alerts until real receivers are configured).
+      # To enable alerts: add a Slack or PagerDuty receiver and update the route.
+      receiver: 'null'
+    receivers:
+      - name: 'null'

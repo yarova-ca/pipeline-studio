@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pipeline-platform
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # What: root application that manages all child Applications in infra/argocd/apps/.
+    # Why: one sync operation brings the entire platform into the desired state.
+spec:
+  project: pipeline-platform
+  source:
+    repoURL: https://github.com/yarova-ca/pipeline-studio
+    targetRevision: main
+    path: infra/argocd/apps
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
