@@ -1,0 +1,17 @@
+replicaCount: 1
+image:
+  tag: "dev"
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+ingress:
+  enabled: true
+  hosts:
+    - host: 01-nextjs.dev.local
+      paths:
+        - path: /
+          pathType: Prefix

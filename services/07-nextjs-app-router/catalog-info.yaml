@@ -1,0 +1,70 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 07-nextjs-app-router
+  title: "Next.js App Router"
+  description: |
+    Runnable service starter for Next.js App Router.
+    Includes: health endpoints, Dockerfile (all RUNTIME axes), tests,
+    GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
+  tags:
+    - javascript
+  - typescript
+  - node
+  - ssr
+  - tier-2
+  - ssr
+  - tier-1
+  - ssr
+  - tier-1
+  - ssr
+  - tier-2
+  - ssr
+  - tier-2
+  - ssr
+  - tier-1
+  - spa
+  - tier-1
+  - spa
+  - tier-1
+  - spa
+  - tier-2
+  - spa
+  - tier-2
+  - spa
+  - tier-1
+  - spa
+  - tier-2
+  - ssr
+  - tier-2
+  - ssr
+  - tier-2
+  - ssr
+  - tier-2
+  - edge
+  - tier-2
+  - edge
+  - tier-2
+  - edge
+  - tier-2
+  - ssr
+  - tier-1
+  annotations:
+    github.com/project-slug: yarova-ca/pipeline-studio
+    backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/07-nextjs-app-router
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: pipeline-platform
+  providesApis: []
+  dependsOn: []
+  profile:
+    displayName: "Next.js App Router"
+  metadata:
+    tier: 1
+    tierStatus: maintained
+    language: typescript
+    pattern: ssr
+    port: 3000

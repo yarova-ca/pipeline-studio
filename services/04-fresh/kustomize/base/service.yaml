@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 04-fresh
+spec:
+  selector:
+    app: 04-fresh
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP

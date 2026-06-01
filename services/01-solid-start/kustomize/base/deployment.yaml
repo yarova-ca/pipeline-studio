@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 01-solid-start
+  labels:
+    app: 01-solid-start
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 01-solid-start
+  template:
+    metadata:
+      labels:
+        app: 01-solid-start
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: 01-solid-start
+          image: ghcr.io/yarova-ca/01-solid-start:latest
+          ports:
+            - containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 3000
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 3000
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

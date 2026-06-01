@@ -1,0 +1,6 @@
+apiVersion: v2
+name: 29-hot-chocolate
+description: Hot Chocolate (.NET) service — platform-studio
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

@@ -1,0 +1,25 @@
+replicaCount: 3
+image:
+  tag: "latest"
+resources:
+  limits:
+    cpu: 1000m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+ingress:
+  enabled: true
+  hosts:
+    - host: 02-svelte.yarova.ca
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: 02-svelte-tls
+      hosts:
+        - 02-svelte.yarova.ca

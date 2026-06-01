@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 18-spring-boot-kotlin
+spec:
+  selector:
+    app: 18-spring-boot-kotlin
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP

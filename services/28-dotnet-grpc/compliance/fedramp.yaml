@@ -1,0 +1,34 @@
+# FedRAMP compliance config for 28-dotnet-grpc
+#
+# FedRAMP: Federal Risk and Authorization Management Program (US).
+# Applies to: cloud services sold to US federal agencies.
+# Authorization levels: Low / Moderate / High (based on data sensitivity).
+#
+# FedRAMP Moderate: most federal agency cloud services.
+# FedRAMP High: law enforcement, national security systems.
+
+required_controls:
+  - fips_140_validated: true      # all cryptography must use FIPS 140-2/3 validated modules
+  - continuous_monitoring: true   # monthly vulnerability scans, annual penetration tests
+  - incident_response: defined    # documented IR plan, 1-hour notification to agency
+  - data_residency: us_only       # all data must remain in US regions
+  - mfa_required: true            # PIV/CAC or software MFA for all privileged access
+  - authorization_level: moderate # default — upgrade to High for law enforcement
+
+build_args:
+  RUNTIME: fips                   # forces UBI9 runtime with FIPS-validated OpenSSL
+
+pipeline_additions:
+  # Phase 1 — Local Dev
+  - step: ato-checklist
+    action: verify Authorization to Operate checklist is current
+  # Phase 2 — PR Gate
+  - step: fedramp-sast
+    tool: codeql
+    ruleset: security-and-quality
+    action: block on HIGH or CRITICAL findings
+  # Phase 3 — Main Build
+  - step: fedramp-sbom
+    tool: syft
+    format: spdx-json
+    action: upload SBOM to agency compliance portal

@@ -1,0 +1,34 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 01-angular-ssr
+  title: "Angular SSR"
+  description: |
+    Runnable service starter for Angular SSR.
+    Includes: health endpoints, Dockerfile (all RUNTIME axes), tests,
+    GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
+  tags:
+    - javascript
+  - typescript
+  - node
+  - ssr
+  - tier-2
+  annotations:
+    github.com/project-slug: yarova-ca/pipeline-studio
+    backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-angular-ssr
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: pipeline-platform
+  providesApis: []
+  dependsOn: []
+  profile:
+    displayName: "Angular SSR"
+  metadata:
+    tier: 2
+    tierStatus: stable
+    language: typescript
+    pattern: ssr
+    port: 4000

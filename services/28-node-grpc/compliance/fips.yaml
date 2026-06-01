@@ -1,0 +1,28 @@
+# FIPS 140-2 / FIPS 140-3 compliance config for 28-node-grpc
+#
+# Apply: docker build --build-arg RUNTIME=fips -t 28-node-grpc:fips .
+# Result: runtime image switches from alpine/slim to UBI9 (ubi9/nodejs-22-minimal
+#         or equivalent), which uses OpenSSL with FIPS-validated modules.
+#
+# FIPS 140-2: US government standard for cryptographic modules.
+# ubi9: Red Hat Universal Base Image v9 — ships with FIPS-validated OpenSSL.
+
+build_args:
+  RUNTIME: fips
+
+runtime_images:
+  node:       registry.access.redhat.com/ubi9/nodejs-22-minimal
+  python:     registry.access.redhat.com/ubi9/python-312
+  java:       registry.access.redhat.com/ubi9/openjdk-21-runtime
+  go:         registry.access.redhat.com/ubi9/go-toolset
+  dotnet:     mcr.microsoft.com/dotnet/aspnet:9.0-ubi9
+  default:    registry.access.redhat.com/ubi9-minimal
+
+pipeline_additions:
+  # Phase 2 — PR Gate
+  - step: fips-scan
+    tool: openscap
+    command: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_stig ubi9.xml
+  # Phase 3 — Main Build
+  - step: fips-sbom-tag
+    action: add label to SBOM indicating FIPS-validated runtime

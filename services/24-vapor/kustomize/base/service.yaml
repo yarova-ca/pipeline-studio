@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 24-vapor
+spec:
+  selector:
+    app: 24-vapor
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP

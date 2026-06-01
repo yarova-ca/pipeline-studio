@@ -1,0 +1,41 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 05 — Test  |  23 PHP — Laravel 12
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Laravel repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "05 Test — Laravel 12"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: vendor/bin/phpunit --coverage-clover coverage.xml
+
+      # ── OPTIONAL: Codecov coverage upload ─────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+
+      # ── OPTIONAL: SonarCloud (requires SONAR_TOKEN secret) ────────
+      # - name: SonarCloud analysis
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

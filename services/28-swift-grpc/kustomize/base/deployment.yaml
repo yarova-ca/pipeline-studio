@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 28-swift-grpc
+  labels:
+    app: 28-swift-grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 28-swift-grpc
+  template:
+    metadata:
+      labels:
+        app: 28-swift-grpc
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: 28-swift-grpc
+          image: ghcr.io/yarova-ca/28-swift-grpc:latest
+          ports:
+            - containerPort: 50051
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 50051
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 50051
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

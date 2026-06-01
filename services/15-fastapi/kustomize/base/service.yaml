@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 15-fastapi
+spec:
+  selector:
+    app: 15-fastapi
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP

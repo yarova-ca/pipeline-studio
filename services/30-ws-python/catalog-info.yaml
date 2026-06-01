@@ -1,0 +1,44 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 30-ws-python
+  title: "FastAPI WS"
+  description: |
+    Runnable service starter for FastAPI WS.
+    Includes: health endpoints, Dockerfile (all RUNTIME axes), tests,
+    GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
+  tags:
+    - python
+  - backend
+  - tier-1
+  - backend
+  - tier-1
+  - backend
+  - tier-2
+  - backend
+  - tier-2
+  - grpc
+  - tier-1
+  - graphql
+  - tier-2
+  - websocket
+  - tier-2
+  annotations:
+    github.com/project-slug: yarova-ca/pipeline-studio
+    backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-python
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: pipeline-platform
+  providesApis: []
+  dependsOn: []
+  profile:
+    displayName: "FastAPI WS"
+  metadata:
+    tier: 2
+    tierStatus: stable
+    language: python
+    pattern: websocket
+    port: 8080

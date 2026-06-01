@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 23-symfony
+spec:
+  selector:
+    app: 23-symfony
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 14-deno
+  labels:
+    app: 14-deno
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 14-deno
+  template:
+    metadata:
+      labels:
+        app: 14-deno
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: 14-deno
+          image: ghcr.io/yarova-ca/14-deno:latest
+          ports:
+            - containerPort: 8000
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8000
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8000
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

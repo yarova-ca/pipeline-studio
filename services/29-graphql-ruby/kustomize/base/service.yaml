@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 29-graphql-ruby
+spec:
+  selector:
+    app: 29-graphql-ruby
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP

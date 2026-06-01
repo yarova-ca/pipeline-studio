@@ -1,0 +1,6 @@
+apiVersion: v2
+name: 25-play
+description: Play Framework service — platform-studio
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

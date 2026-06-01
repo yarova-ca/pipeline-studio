@@ -1,0 +1,54 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 02-vue
+  title: "Vue 3"
+  description: |
+    Runnable service starter for Vue 3.
+    Includes: health endpoints, Dockerfile (all RUNTIME axes), tests,
+    GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
+  tags:
+    - javascript
+  - typescript
+  - node
+  - ssr
+  - tier-2
+  - ssr
+  - tier-1
+  - ssr
+  - tier-1
+  - ssr
+  - tier-2
+  - ssr
+  - tier-2
+  - ssr
+  - tier-1
+  - spa
+  - tier-1
+  - spa
+  - tier-1
+  - spa
+  - tier-2
+  - spa
+  - tier-2
+  - spa
+  - tier-1
+  annotations:
+    github.com/project-slug: yarova-ca/pipeline-studio
+    backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-vue
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: pipeline-platform
+  providesApis: []
+  dependsOn: []
+  profile:
+    displayName: "Vue 3"
+  metadata:
+    tier: 1
+    tierStatus: maintained
+    language: typescript
+    pattern: spa
+    port: 80

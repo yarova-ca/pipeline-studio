@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 29-spring-graphql
+  labels:
+    app: 29-spring-graphql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 29-spring-graphql
+  template:
+    metadata:
+      labels:
+        app: 29-spring-graphql
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: 29-spring-graphql
+          image: ghcr.io/yarova-ca/29-spring-graphql:latest
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

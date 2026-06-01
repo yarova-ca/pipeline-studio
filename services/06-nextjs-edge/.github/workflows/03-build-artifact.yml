@@ -1,0 +1,57 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 03 — Build Artifact  |  06 Edge Rendering — Next.js Edge 16
+# Output: edge bundle
+# No Docker image is built — this framework targets mobile/edge platforms.
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Next.js Edge repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "03 Build Artifact — Next.js Edge 16"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - uses: actions/checkout@v4
+      # ── DEFAULT: npm build ──────────────────────
+      - name: Build — npm
+        run: npm run build
+      #
+      # ── ALTERNATIVE: yarn ────────────────────────────────────────
+      # - name: Build — yarn
+      #   run: yarn install --frozen-lockfile && yarn build
+      #
+      # ── ALTERNATIVE: pnpm ────────────────────────────────────────
+      # - name: Build — pnpm
+      #   run: pnpm install --frozen-lockfile && pnpm build
+      #
+      # ── ALTERNATIVE: bun ─────────────────────────────────────────
+      # - name: Build — bun
+      #   run: bun install --frozen-lockfile && bun run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: edge-bundle
+          path: |
+            build/
+            dist/
+            *.apk
+            *.ipa
+            *.aab
+            *.msix
+          retention-days: 30

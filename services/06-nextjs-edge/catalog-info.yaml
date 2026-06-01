@@ -1,0 +1,66 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 06-nextjs-edge
+  title: "Next.js Edge"
+  description: |
+    Runnable service starter for Next.js Edge.
+    Includes: health endpoints, Dockerfile (all RUNTIME axes), tests,
+    GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
+  tags:
+    - javascript
+  - typescript
+  - node
+  - ssr
+  - tier-2
+  - ssr
+  - tier-1
+  - ssr
+  - tier-1
+  - ssr
+  - tier-2
+  - ssr
+  - tier-2
+  - ssr
+  - tier-1
+  - spa
+  - tier-1
+  - spa
+  - tier-1
+  - spa
+  - tier-2
+  - spa
+  - tier-2
+  - spa
+  - tier-1
+  - spa
+  - tier-2
+  - ssr
+  - tier-2
+  - ssr
+  - tier-2
+  - ssr
+  - tier-2
+  - edge
+  - tier-2
+  - edge
+  - tier-2
+  annotations:
+    github.com/project-slug: yarova-ca/pipeline-studio
+    backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/06-nextjs-edge
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: pipeline-platform
+  providesApis: []
+  dependsOn: []
+  profile:
+    displayName: "Next.js Edge"
+  metadata:
+    tier: 2
+    tierStatus: stable
+    language: typescript
+    pattern: edge
+    port: 3000

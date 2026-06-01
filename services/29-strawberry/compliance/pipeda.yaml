@@ -1,0 +1,29 @@
+# PIPEDA compliance config for 29-strawberry
+#
+# PIPEDA: Personal Information Protection and Electronic Documents Act (Canada).
+# Applies to: any service collecting personal data from Canadian residents.
+#
+# Personal data under PIPEDA: name, email, IP address, location, device ID.
+
+required_controls:
+  - data_residency: canada        # personal data must remain in Canada
+  - consent_required: true        # explicit consent before collecting personal data
+  - breach_notification: 72h      # notify OPC within 72 hours of a breach
+  - retention_policy: defined     # define and enforce data retention periods
+  - privacy_by_design: true       # privacy controls built in, not bolted on
+
+kubernetes_labels:
+  # Kustomize overlays add these labels to all deployments in Canadian regions
+  pipeda.ca/data-residency: "canada"
+  pipeda.ca/personal-data: "yes"
+  pipeda.ca/retention-days: "365"
+
+pipeline_additions:
+  # Phase 2 — PR Gate
+  - step: pipeda-scan
+    tool: semgrep
+    ruleset: p/privacy
+    action: block on unprotected PII handling
+  # Phase 3 — Main Build
+  - step: residency-label
+    action: add pipeda.ca/* labels to container image

@@ -1,0 +1,33 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 11-objc-uikit
+  title: "ObjC UIKit"
+  description: |
+    Runnable service starter for ObjC UIKit.
+    Includes: health endpoints, Dockerfile (all RUNTIME axes), tests,
+    GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
+  tags:
+    - objc
+  - ios
+  - mobile-ios
+  - tier-2
+  annotations:
+    github.com/project-slug: yarova-ca/pipeline-studio
+    backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/11-objc-uikit
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: pipeline-platform
+  providesApis: []
+  dependsOn: []
+  profile:
+    displayName: "ObjC UIKit"
+  metadata:
+    tier: 2
+    tierStatus: stable
+    language: objc
+    pattern: mobile-ios
+    port: N/A

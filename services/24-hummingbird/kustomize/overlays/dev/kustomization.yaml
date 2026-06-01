@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: dev
+bases:
+  - ../../base
+images:
+  - name: ghcr.io/yarova-ca/24-hummingbird
+    newTag: "dev"
+patches:
+  - target:
+      kind: Deployment
+      name: 24-hummingbird
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1

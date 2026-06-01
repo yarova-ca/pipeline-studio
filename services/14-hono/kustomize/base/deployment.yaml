@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 14-hono
+  labels:
+    app: 14-hono
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 14-hono
+  template:
+    metadata:
+      labels:
+        app: 14-hono
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: 14-hono
+          image: ghcr.io/yarova-ca/14-hono:latest
+          ports:
+            - containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 3000
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 3000
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

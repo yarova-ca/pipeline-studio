@@ -1,0 +1,33 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 04 — Test  |  09 Cross-platform JS — Expo 52
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Expo repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "04 Test — Expo 52"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: npm test -- --coverage
+      # ── OPTIONAL: Codecov ─────────────────────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}

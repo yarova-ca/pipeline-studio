@@ -1,0 +1,17 @@
+replicaCount: 2
+image:
+  tag: "staging"
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+ingress:
+  enabled: true
+  hosts:
+    - host: 03-eleventy.staging.yarova.ca
+      paths:
+        - path: /
+          pathType: Prefix

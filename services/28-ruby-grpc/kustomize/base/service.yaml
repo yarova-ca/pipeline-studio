@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 28-ruby-grpc
+spec:
+  selector:
+    app: 28-ruby-grpc
+  ports:
+    - port: 50051
+      targetPort: 50051
+      protocol: TCP

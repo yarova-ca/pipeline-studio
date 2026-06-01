@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 28-python-grpc
+spec:
+  selector:
+    app: 28-python-grpc
+  ports:
+    - port: 50051
+      targetPort: 50051
+      protocol: TCP

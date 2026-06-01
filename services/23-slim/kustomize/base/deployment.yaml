@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 23-slim
+  labels:
+    app: 23-slim
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 23-slim
+  template:
+    metadata:
+      labels:
+        app: 23-slim
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: 23-slim
+          image: ghcr.io/yarova-ca/23-slim:latest
+          ports:
+            - containerPort: 9000
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 9000
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 9000
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
