@@ -19,7 +19,9 @@ spec:
     namespace: argocd
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: false    # CHANGED: was true — auto-deletion of running services is too destructive.
+                      # When a service manifest is removed from Git, ArgoCD will warn but NOT delete it.
+                      # To actually remove a service, run: argocd app delete <name> manually.
+      selfHeal: true  # Self-heal: if someone manually edits a resource, ArgoCD restores the Git state.
     syncOptions:
       - CreateNamespace=true
