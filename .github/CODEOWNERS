@@ -1,0 +1,7 @@
+# Default owner for everything
+* @rohithvarmayadla
+
+# Platform team owns services and infra
+/services/ @rohithvarmayadla
+/infra/ @rohithvarmayadla
+/.github/ @rohithvarmayadla

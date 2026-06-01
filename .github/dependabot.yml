@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  - package-ecosystem: "docker"
+    directory: "/services/14-express"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "docker"
+
+  - package-ecosystem: "npm"
+    directory: "/services/14-express"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "npm"
+
+  - package-ecosystem: "pip"
+    directory: "/services/15-fastapi"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "pip"
+
+  - package-ecosystem: "gomod"
+    directory: "/services/16-gin"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "gomod"
