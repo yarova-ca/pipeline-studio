@@ -91,6 +91,23 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;paddi
 .vfy-cmd{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:2px 8px;color:var(--text);user-select:all;white-space:nowrap}
 .vfy-note{font-size:10px;color:var(--text-dim);padding:0 12px 8px;font-style:italic}
 .vfy-ci{font-size:11px;color:var(--text-dim);padding:8px 12px;font-style:italic}
+nav details{border-bottom:1px solid var(--border)}
+nav details:last-of-type{border-bottom:none}
+nav details summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;user-select:none}
+nav details summary::-webkit-details-marker{display:none}
+nav details summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+nav details[open] summary::before{transform:rotate(90deg)}
+nav details summary:hover{background:var(--bg3);color:var(--text-head)}
+nav details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
 @media(prefers-color-scheme:dark){
   .vfy-block{border-color:#30363d}
   .vfy-label{background:#21262d;border-color:#30363d}
@@ -132,66 +149,54 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <body>
 
 <a href="#main-content" class="skip-link">Skip to content</a>
-<nav>
-  <div class="nav-logo"><h1>Dockerfile Catalog</h1><p>Pipeline Studio Design Doc</p></div>
-  <div class="nav-section">Frontend Web</div>
-  <a href="#cat-ssr-hybrid">1 SSR / Hybrid</a>
-  <a href="#cat-csr-spa">2 CSR / SPA</a>
-  <a href="#cat-ssg">3 SSG</a>
-  <a href="#cat-islands">4 Islands</a>
-  <a href="#cat-resumability">5 Resumability</a>
-  <a href="#cat-edge-rendering">6 Edge Rendering</a>
-  <a href="#cat-streaming-ssr">7 Streaming SSR</a>
-  <a href="#cat-microfrontends">8 Micro-frontends</a>
-  <div class="nav-section">Mobile</div>
-  <a href="#cat-cross-platform-js">9 Cross-platform JS</a>
-  <a href="#cat-cross-platform-native">10 Cross-platform native</a>
-  <a href="#cat-native-ios">11 Native iOS</a>
-  <a href="#cat-native-android">12 Native Android</a>
-  <a href="#cat-pwa">13 PWA</a>
-  <div class="nav-section">Backend</div>
-  <a href="#cat-node-deno-bun">14 Node / Deno / Bun</a>
-  <a href="#cat-python">15 Python</a>
-  <a href="#cat-go">16 Go</a>
-  <a href="#cat-java">17 Java</a>
-  <a href="#cat-kotlin">18 Kotlin</a>
-  <a href="#cat-dotnet">19 .NET</a>
-  <a href="#cat-rust">20 Rust</a>
-  <a href="#cat-elixir">21 Elixir / BEAM</a>
-  <a href="#cat-ruby">22 Ruby</a>
-  <a href="#cat-php">23 PHP</a>
-  <a href="#cat-swift-server">24 Swift</a>
-  <a href="#cat-scala">25 Scala</a>
-  <a href="#cat-clojure">26 Clojure</a>
-  <a href="#cat-cpp">27 C / C++</a>
-  <div class="nav-section">Protocols</div>
-  <a href="#cat-grpc">28 gRPC</a>
-  <a href="#cat-graphql">29 GraphQL</a>
-  <a href="#cat-websocket">30 WebSocket</a>
-  <div class="nav-section">All docs</div>
-  <a href="index.html">⌂ Hub</a>
-  <a href="01-framework-catalog.html">01 Frameworks</a>
-  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
-  <a href="03-stage-types.html">03 Stage types</a>
-  <a href="04-tool-catalog.html">04 Tool catalog</a>
-  <a href="05-invariants.html">05 Invariants</a>
-  <a href="06-industry-schema.html">06 US industries</a>
-  <a href="07-canada-schema.html">07 CA industries</a>
-  <a href="08-canada-market.html">08 CA market</a>
-  <a href="09-linux-distros.html">09 Linux distros</a>
-  <a href="10-linux-compliance.html">10 Linux compliance</a>
-  <a href="11-dockerfile-catalog.html" aria-current="page">11 Dockerfiles</a>
-  <a href="12-compliance-variations.html">12 Compliance</a>
-  <a href="13-pipeline-build-catalog.html">13 Pipeline catalog</a>
-  <a href="14-canada-industry-catalog.html">14 CA industries</a>
-<a href="15-version-registry.html">15 Version registry</a>
-<a href="16-maintainability-runbook.html">16 Runbook</a>
-<a href="17-feature-matrix.html">17 Feature matrix</a>
-<a href="#main-content" class="nav-top">↑ Back to top</a>
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">⌂ Hub</a>
+  <details>
+    <summary>Frameworks &amp; Services<span class="pillar-badge">2</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+  </details>
+  <details open>
+    <summary>Build &amp; Runtime<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link" aria-current="page">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details>
+    <summary>Pipeline &amp; Tools<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industry Verticals<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details>
+    <summary>Operations<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+  </details>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
-<div class="page-title">Dockerfile Catalog</div>
+<div class="page-header">
+  <div class="page-title">Dockerfile Catalog</div>
+  <div class="page-covers"><strong>What this covers:</strong> Dockerfile patterns for all 106 frameworks — multi-stage builds, all RUNTIME axes (alpine/slim/fips), exact base image tags, and links to runnable service code.</div>
+  <div class="page-when"><strong>When to read:</strong> Writing or copying a Dockerfile for any framework. Read after 09 (distro selection) and 10 (compliance matrices).</div>
+  <div class="page-pillar">Pillar 3 — Build &amp; Runtime &nbsp;·&nbsp; Related: <a href="09-linux-distros.html">09 Distros</a> &nbsp;·&nbsp; <a href="12-compliance-variations.html">12 Compliance layers</a> &nbsp;·&nbsp; <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services">services/</a></div>
+</div>
 <div class="page-meta">75 framework records &nbsp;·&nbsp; 27 categories &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a> &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; Dockerfile pairings overview: <a href="10-linux-compliance.html#dockerfile-matrix">doc 10 Matrix 5</a></div>
 
 <div class="counts-bar">
@@ -304,7 +309,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   </details>
 </div>
 
-<h2 id="cat-ssr-hybrid">SSR / Hybrid</h2>
+<h2 id="cat-ssr-hybrid">SSR / Hybrid<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Server-side rendering: Node.js serves HTML on every request. Use when SEO, first-load performance, or auth-gated pages are priorities.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -750,7 +755,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     </div>
   </div>
 </details>
-<h2 id="cat-csr-spa">CSR / SPA</h2>
+<h2 id="cat-csr-spa">CSR / SPA<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Client-side rendering: Vite builds static files; nginx serves them. The runtime container has no Node.js — pure nginx.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -1203,7 +1208,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     </div>
   </div>
 </details>
-<h2 id="cat-ssg">SSG — Static Site Generation</h2>
+<h2 id="cat-ssg">SSG — Static Site Generation<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Build-time rendering: HTML files are generated at build time and served by nginx. Zero server-side compute at runtime.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -1458,7 +1463,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     </div>
   </div>
 </details>
-<h2 id="cat-islands">Islands Architecture</h2>
+<h2 id="cat-islands">Islands Architecture<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Selective hydration: static HTML with interactive "islands". Astro uses nginx for static mode; Fresh uses Deno runtime.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -1574,7 +1579,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     </div>
   </div>
 </details>
-<h2 id="cat-resumability">Resumability</h2>
+<h2 id="cat-resumability">Resumability<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Qwik serializes component state to HTML — JS is only downloaded on interaction. Node.js required at runtime for SSR mode.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -1664,7 +1669,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     </div>
   </div>
 </details>
-<h2 id="cat-edge-rendering">Edge Rendering</h2>
+<h2 id="cat-edge-rendering">Edge Rendering<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Code runs on CDN edge nodes (Cloudflare Workers / Vercel Edge). No OCI container at runtime — deploy via wrangler or vercel CLI.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -1791,7 +1796,7 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
     <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
-<h2 id="cat-streaming-ssr">Streaming SSR</h2>
+<h2 id="cat-streaming-ssr">Streaming SSR<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Server streams HTML progressively via React Suspense / SvelteKit streaming. Same Node.js runtime pattern as SSR/Hybrid.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -2026,7 +2031,7 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
     </div>
   </div>
 </details>
-<h2 id="cat-microfrontends">Micro-frontends</h2>
+<h2 id="cat-microfrontends">Micro-frontends<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Module Federation splits the app into independently deployable chunks. Each chunk is a static bundle served by nginx.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -2227,7 +2232,7 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
     </div>
   </div>
 </details>
-<h2 id="cat-cross-platform-js">Cross-platform JS (Mobile)</h2>
+<h2 id="cat-cross-platform-js">Cross-platform JS (Mobile)<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Outputs are APK/IPA installed on devices — not OCI containers. CI pipeline builds the native app; no runtime Docker image.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -2352,7 +2357,7 @@ jobs:
     <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
-<h2 id="cat-cross-platform-native">Cross-platform Non-JS (Mobile)</h2>
+<h2 id="cat-cross-platform-native">Cross-platform Non-JS (Mobile)<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Flutter, .NET MAUI, and Kotlin Multiplatform all output native binaries — not OCI containers. CI builds APK/IPA.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -2489,7 +2494,7 @@ jobs:
     <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
-<h2 id="cat-native-ios">Native iOS</h2>
+<h2 id="cat-native-ios">Native iOS<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Xcode is macOS-only. Linux runners cannot build iOS apps. Output is an IPA — no OCI container at runtime.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -2593,7 +2598,7 @@ jobs:
     <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
-<h2 id="cat-native-android">Native Android</h2>
+<h2 id="cat-native-android">Native Android<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Android builds run on ubuntu-latest via Gradle. Output is APK/AAB deployed to Google Play — no OCI container.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -2687,7 +2692,7 @@ jobs:
     <div class="vfy-block"><p class="vfy-label">Verify</p><p class="vfy-ci">No container at runtime — use the GitHub Actions workflow above. Build artifact is APK / IPA / edge bundle, not a Docker image.</p></div>
   </div>
 </details>
-<h2 id="cat-pwa">PWA — Progressive Web App</h2>
+<h2 id="cat-pwa">PWA — Progressive Web App<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Service workers + web app manifest. Built as static files by Vite; served by nginx. No runtime JavaScript server.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -2827,7 +2832,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-node-deno-bun">Node / Deno / Bun — Backend Servers</h2>
+<h2 id="cat-node-deno-bun">Node / Deno / Bun — Backend Servers<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">API servers and backend frameworks. Node.js: ubuntu:24.04 → node:22-alpine. Deno: denoland/deno. Bun: oven/bun.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -3246,7 +3251,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-python">Python — Web Frameworks</h2>
+<h2 id="cat-python">Python — Web Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">ASGI (FastAPI, Starlette) and WSGI (Django, Flask) frameworks. Builder installs to /install prefix, runtime copies only installed packages.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -3548,7 +3553,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-go">Go — HTTP Frameworks</h2>
+<h2 id="cat-go">Go — HTTP Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">CGO_ENABLED=0 produces a fully static binary. Runtime is scratch — zero attack surface, zero shell, zero OS utilities.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -3778,7 +3783,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-java">Java — Backend Frameworks</h2>
+<h2 id="cat-java">Java — Backend Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Fat JAR (uber-jar) built with Maven or Gradle. Runtime is Distroless Java 21 — no shell, JRE only, ~85MB final image.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -3976,7 +3981,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-kotlin">Kotlin — Backend Frameworks</h2>
+<h2 id="cat-kotlin">Kotlin — Backend Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Kotlin compiles to JVM bytecode. Fat JAR via Gradle shadow plugin. Same Distroless Java 21 runtime as Java.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -4114,7 +4119,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-dotnet">.NET — ASP.NET Core</h2>
+<h2 id="cat-dotnet">.NET — ASP.NET Core<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub"><code>dotnet publish</code> produces a self-contained output directory. Runtime is mcr.microsoft.com/dotnet/aspnet:9.0-alpine (standard) or cbl-mariner2.0-fips (FIPS).</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -4253,7 +4258,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-rust">Rust — Web Frameworks</h2>
+<h2 id="cat-rust">Rust — Web Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Statically linked musl binary → scratch runtime. Zero dependencies, zero shell, smallest possible attack surface.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -4383,7 +4388,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-elixir">Elixir / BEAM</h2>
+<h2 id="cat-elixir">Elixir / BEAM<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub"><code>MIX_ENV=prod mix release</code> produces a self-contained BEAM release with the Erlang runtime bundled. Runtime image only needs libssl.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -4470,7 +4475,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-ruby">Ruby — Web Frameworks</h2>
+<h2 id="cat-ruby">Ruby — Web Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Bundler installs gems to <code>/vendor/bundle</code> in the build stage. Runtime copies the vendor directory and sets BUNDLE_PATH.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -4613,7 +4618,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-php">PHP — Web Frameworks</h2>
+<h2 id="cat-php">PHP — Web Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Multi-stage: ubuntu:24.04 builder (Composer) → php:8.3-fpm-alpine runtime with nginx. FIPS variant targets ubi9/php-83.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -4812,7 +4817,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-swift-server">Swift Server Frameworks</h2>
+<h2 id="cat-swift-server">Swift Server Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Swift 6 server frameworks. Builder downloads Swift from swift.org. Runtime is the official swift:6.0-noble-slim image.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -4956,7 +4961,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-scala">Scala — Backend Frameworks</h2>
+<h2 id="cat-scala">Scala — Backend Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">sbt assembly produces a fat JAR. Runtime is Distroless Java 21 — same pattern as Java and Kotlin.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -5088,7 +5093,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-clojure">Clojure — Backend Frameworks</h2>
+<h2 id="cat-clojure">Clojure — Backend Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Leiningen uberjar bundles app + dependencies. Runtime is Distroless Java 21 — same pattern as Java, Kotlin, Scala.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -5220,7 +5225,7 @@ jobs:
     </div>
   </div>
 </details>
-<h2 id="cat-cpp">C / C++ — HTTP Frameworks</h2>
+<h2 id="cat-cpp">C / C++ — HTTP Frameworks<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">cmake + make build. Static binary → scratch. Dynamic binary (with libssl, libpq) → debian:12-slim. ARG LINK=static|dynamic selects the runtime target.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -5375,7 +5380,7 @@ jobs:
   </div>
 </details>
 
-<h2 id="cat-grpc">gRPC</h2>
+<h2 id="cat-grpc">gRPC<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">HTTP/2 + Protocol Buffers. gRPC server on port 50051. HTTP health sidecar on port 8080 for Kubernetes liveness/readiness probes.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -5957,7 +5962,7 @@ jobs:
   </div>
 </details>
 
-<h2 id="cat-graphql">GraphQL</h2>
+<h2 id="cat-graphql">GraphQL<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Single endpoint POST /graphql. Schema-first SDL or code-first. DataLoader for N+1 batching. Disable introspection in production.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">
@@ -6441,7 +6446,7 @@ jobs:
   </div>
 </details>
 
-<h2 id="cat-websocket">WebSocket</h2>
+<h2 id="cat-websocket">WebSocket<a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services" style="font-size:11px;margin-left:8px;font-weight:400">[service code →]</a></h2>
 <p class="section-sub">Full-duplex persistent TCP. HTTP Upgrade to ws:// protocol. Port 3000 default. wss:// for TLS. Horizontal scaling needs sticky sessions + message broker.</p>
 <div class="tbl-wrap dockerfile-tbl" style="margin-bottom:16px">
   <div class="tbl-scroll">

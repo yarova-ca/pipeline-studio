@@ -59,6 +59,28 @@ code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;backgroun
 .cadence-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
 .cadence-table th,.cadence-table td{padding:5px 10px;border:1px solid var(--border);text-align:left}
 .cadence-table th{background:var(--bg3);font-size:11px;font-weight:600}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+nav details{border-bottom:1px solid var(--border)}
+nav details:last-of-type{border-bottom:none}
+nav details summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;user-select:none}
+nav details summary::-webkit-details-marker{display:none}
+nav details summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+nav details[open] summary::before{transform:rotate(90deg)}
+nav details summary:hover{background:var(--bg3);color:var(--text-head)}
+nav details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.page-header{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);margin-bottom:6px}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
 @media(prefers-color-scheme:dark){
   :root{
     --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
@@ -76,35 +98,53 @@ code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;backgroun
 </style>
 </head>
 <body>
-<nav>
-  <a href="#base-images">Base Images</a>
-  <a href="#frameworks">Frameworks</a>
-  <a href="#ci-tools">CI/CD Tools</a>
-  <a href="#linux-distros">Linux Distros</a>
-  <a href="#compliance">Compliance Standards</a>
-  <a href="#data">Market & Industry Data</a>
-  <hr style="border:none;border-top:1px solid var(--border);margin:6px 0">
-  <a href="index.html">⌂ Hub</a>
-  <a href="01-framework-catalog.html">01 Frameworks</a>
-  <a href="02-pipeline-schema.html">02 Pipeline schema</a>
-  <a href="03-stage-types.html">03 Stage types</a>
-  <a href="04-tool-catalog.html">04 Tool catalog</a>
-  <a href="05-invariants.html">05 Invariants</a>
-  <a href="06-industry-schema.html">06 US industries</a>
-  <a href="07-canada-schema.html">07 CA industries</a>
-  <a href="08-canada-market.html">08 CA market</a>
-  <a href="09-linux-distros.html">09 Linux distros</a>
-  <a href="10-linux-compliance.html">10 Linux compliance</a>
-  <a href="11-dockerfile-catalog.html">11 Dockerfiles</a>
-  <a href="12-compliance-variations.html">12 Compliance</a>
-  <a href="13-pipeline-build-catalog.html">13 Pipeline catalog</a>
-  <a href="14-canada-industry-catalog.html">14 CA industries</a>
-  <a href="15-version-registry.html" aria-current="page">15 Version registry</a>
-  <a href="16-maintainability-runbook.html">16 Runbook</a>
-  <a href="17-feature-matrix.html">17 Feature matrix</a>
-<a href="#main-content" class="nav-top">↑ Back to top</a>
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">⌂ Hub</a>
+  <details>
+    <summary>Frameworks &amp; Services<span class="pillar-badge">2</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+  </details>
+  <details open>
+    <summary>Build &amp; Runtime<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link" aria-current="page">15 Version registry</a>
+  </details>
+  <details>
+    <summary>Pipeline &amp; Tools<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industry Verticals<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details>
+    <summary>Operations<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+  </details>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 <main id="main-content">
+<div class="page-header">
+  <div class="page-title">Version Registry</div>
+  <div class="page-covers"><strong>What this covers:</strong> Current pinned versions for every framework, base image, CI tool, and compliance standard across all 17 docs. Review cadence per item type.</div>
+  <div class="page-when"><strong>When to read:</strong> Verifying or updating any version. Run a version check every 30 days for base images, every 90 days for everything else.</div>
+  <div class="page-pillar">Pillar 3 — Build &amp; Runtime &nbsp;·&nbsp; Related: <a href="11-dockerfile-catalog.html">11 Dockerfiles</a> &nbsp;·&nbsp; <a href="16-maintainability-runbook.html">16 Runbook</a></div>
+</div>
 <h1>Version &amp; Source Registry</h1>
 <div class="page-meta">127 items tracked · 13 docs covered · 126 sources linked · last full verify 2026-05-28</div>
 
