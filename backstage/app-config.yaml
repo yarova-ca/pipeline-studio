@@ -37,6 +37,10 @@ catalog:
   rules:
     - allow: [Component, System, API, Resource, Location, User, Group, Domain]
   locations:
+    # For local development — reads from local file
+    - type: file
+      target: ../../pipeline-studio/backstage/catalog/all.yaml
+    # For GitHub — reads from remote
     - type: url
       target: https://github.com/yarova-ca/pipeline-studio/blob/main/backstage/catalog/all.yaml
       rules:

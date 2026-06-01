@@ -207,6 +207,32 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   and push format for all 6 supported registries (GHCR, ECR, GAR, Harbor, Docker Hub, ACR).
 </div>
 
+<div class="why-block">
+  <strong>Why the 6 phases run in this order:</strong><br>
+  Phase 0 (Bootstrap): runs once per repo — not per commit. Branch protection and OIDC trust, set once, protect all future commits.<br>
+  Phase 1 (Local Dev): runs before pushing — catch secrets and lint errors before any CI time is spent.<br>
+  Phase 2 (PR Gate): blocks merge — no untested code reaches main. All 10 stages must pass + human approval.<br>
+  Phase 3 (Main Build): signs the artifact — only signed images can deploy. Kyverno admission controller enforces this.<br>
+  Phase 4 (Registry): tags by commit SHA — every deployed image is traceable to an exact Git commit.<br>
+  Phase 5 (Promotions): gates on smoke test — staging must pass before prod receives the image. No silent promotions.
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> One pipeline + additive compliance delta layer for all 11 standards.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> Separate pipeline per compliance standard.<br>
+  Calculation: 75 frameworks × 11 compliance standards = 825 distinct pipelines to write, maintain, and keep in sync.<br>
+  With the delta approach: 75 base pipelines + 11 additive delta sets = 86 maintained artefacts. Maintenance cost drops by 90%.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Delta application adds a step — teams must understand base pipeline + delta composition rather than reading one self-contained pipeline. Mitigated by the compliance table showing exactly which stages each standard adds.</div>
+</div>
+
+<div class="failure-block" style="margin:0 0 10px">
+  <div><strong>If Phase 2 Security Gates fails on your PR:</strong></div>
+  <div><strong>Trigger:</strong> SAST scanner (Semgrep, CodeQL, or Trivy filesystem scan) finds a HIGH or CRITICAL severity finding in the PR diff.</div>
+  <div><strong>System:</strong> PR is blocked. The GitHub merge button is disabled. The "Security Gates" check status is <code>failure</code>. No bypass is available without a suppression PR.</div>
+  <div><strong>User sees:</strong> GitHub check "Security Gates" failed. Finding details appear in the check output — file, line number, severity, and rule ID.</div>
+  <div><strong>User can:</strong> Fix the finding in code and push a new commit — the check re-runs automatically. OR open a suppression PR with the finding's rule ID and a written justification, approved by the security team. Suppressions are tracked in <code>.semgrepignore</code> or inline comments — not in <code>.gitignore</code>.</div>
+</div>
+
 <div class="page-meta">75 frameworks &nbsp;·&nbsp; 27 categories &nbsp;·&nbsp; 6 pipeline phases &nbsp;·&nbsp; 11 compliance standards &nbsp;·&nbsp; 6 registries &nbsp;·&nbsp; verified 2026-05-27</div>
 
 <div class="counts-bar">

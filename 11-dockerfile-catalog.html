@@ -119,6 +119,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 .skip-link:focus{top:0}
 .nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
 .nav-top:hover{color:var(--blue);opacity:1}
+.section-callout{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:10px 0;font-size:12px;line-height:1.7}
+.section-callout strong{color:var(--text-head)}
 .why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
 .decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
 .decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
@@ -215,6 +217,30 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <div class="page-when"><strong>When to read:</strong> Writing or copying a Dockerfile for any framework. Read after 09 (distro selection) and 10 (compliance matrices).</div>
   <div class="page-pillar">Pillar 3 — Build &amp; Runtime &nbsp;·&nbsp; Related: <a href="09-linux-distros.html">09 Distros</a> &nbsp;·&nbsp; <a href="12-compliance-variations.html">12 Compliance layers</a> &nbsp;·&nbsp; <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services">services/</a></div>
 </div>
+<div class="section-callout">
+  <strong>The build + runtime split explained</strong><br>
+  1. Builder stage: installs compilers, dev tools, all packages. Image size: 800MB–2GB.<br>
+  2. Builder stage: runs <code>npm run build</code> / <code>go build</code> / <code>pip install</code> — compiles output into <code>/app/dist</code>.<br>
+  3. Runtime stage: starts fresh from a minimal base (Alpine, Slim, or UBI9).<br>
+  4. Runtime stage: copies only the compiled output from the builder — no source code, no dev tools.<br>
+  5. Final image: only what runs in production. Build tools never reach production.<br>
+  Why this matters: smaller runtime image = less attack surface + faster pulls + fewer CVEs to patch.
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>ubuntu:24.04</code> as the standard builder base image.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> <code>debian:12-slim</code> — Ubuntu's apt repos have fewer Node.js and Python package conflicts than Debian slim. Ubuntu provides <code>nodejs</code>, <code>npm</code>, <code>python3-pip</code>, and <code>build-essential</code> all from the same repo with matched versions.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> ubuntu:24.04 is ~50MB larger than debian:12-slim as the builder stage image. This cost is irrelevant — the builder stage is never shipped to production. Only the runtime stage is deployed.</div>
+</div>
+
+<div class="failure-block" style="margin:0 0 10px">
+  <div><strong>If you use alpine runtime and get "not found" or "illegal instruction" errors at runtime:</strong></div>
+  <div><strong>Trigger:</strong> Your app or one of its native modules (bcrypt, sharp, lxml, numpy, grpc) was compiled against glibc. Alpine uses musl libc — a different C standard library. Binaries compiled for glibc cannot run on musl.</div>
+  <div><strong>System:</strong> Container starts and immediately exits. <code>docker logs</code> shows <code>/bin/sh: ... not found</code> or <code>Illegal instruction (core dumped)</code>. The binary is present on disk but cannot execute.</div>
+  <div><strong>User sees:</strong> Container exits with code 1 or code 132. Kubernetes shows <code>CrashLoopBackOff</code>. Health probes never pass.</div>
+  <div><strong>User can:</strong> Switch to <code>RUNTIME=slim</code> — uses <code>node:22-slim</code> or <code>python:3.12-slim</code> (Debian slim with glibc). Rebuild with <code>docker build --build-arg RUNTIME=slim --target runtime .</code> All glibc-compiled binaries run correctly on slim images.</div>
+</div>
+
 <div class="page-meta">75 framework records &nbsp;·&nbsp; 27 categories &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a> &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; Dockerfile pairings overview: <a href="10-linux-compliance.html#dockerfile-matrix">doc 10 Matrix 5</a></div>
 
 <div class="counts-bar">
