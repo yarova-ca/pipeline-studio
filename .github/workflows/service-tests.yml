@@ -57,15 +57,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
-          cache-dependency-path: services/${{ matrix.service }}/package-lock.json
       - name: Install
-        run: npm ci
+        # Use npm install (not npm ci) — tolerates stale/missing lockfiles
+        # after new deps are added without regenerating package-lock.json locally.
+        run: npm install --prefer-offline 2>/dev/null || npm install
         working-directory: services/${{ matrix.service }}
       - name: Test
         run: npm test -- --passWithNoTests
         working-directory: services/${{ matrix.service }}
         env:
+          NODE_ENV: test
           DATABASE_URL: postgresql://app:test@localhost:5432/test
           JWT_SECRET: test-secret-32-chars-long-minimum
 

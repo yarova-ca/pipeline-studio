@@ -1,0 +1,15 @@
+# Trivy CVE ignore list — accepted risks with documented justification.
+#
+# Format: CVE-ID  # justification
+#
+# How to add: when Trivy blocks a build on a CVE that is:
+#   (a) a false positive, or
+#   (b) not exploitable in our runtime configuration, or
+#   (c) has no fix available and is tracked in the version registry
+# Add the CVE here with a justification comment.
+#
+# Review cadence: quarterly. Remove entries when the CVE is patched in the base image.
+
+# Example (uncomment and replace when needed):
+# CVE-2024-XXXXX  # Not exploitable: we use non-root containers and read-only root FS.
+#                 # No fix available as of 2025-06-01. Tracked in 15-version-registry.html.

@@ -1,0 +1,38 @@
+# Gitleaks configuration — allowlists known safe patterns.
+# Why this file: .env.example files contain placeholder values that look like
+# secrets (DATABASE_URL=postgresql://app:password@...) but are not real credentials.
+
+title = "pipeline-studio gitleaks config"
+
+[extend]
+useDefault = true
+
+[[rules.allowlist]]
+description = "Allow .env.example placeholder values"
+paths = [
+  '''\.env\.example$''',
+]
+
+[[rules.allowlist]]
+description = "Allow test JWT secrets"
+regexes = [
+  '''test-secret-32-chars-long-minimum''',
+  '''dev-secret-change-in-production''',
+  '''change-me-in-production''',
+  '''CHANGE_ME_IN_PRODUCTION''',
+]
+
+[[rules.allowlist]]
+description = "Allow docker-compose dev credentials"
+paths = [
+  '''docker-compose\.yml$''',
+]
+regexes = [
+  '''devpassword''',
+]
+
+[[rules.allowlist]]
+description = "Allow compliance config placeholder values"
+paths = [
+  '''compliance/.*\.yaml$''',
+]

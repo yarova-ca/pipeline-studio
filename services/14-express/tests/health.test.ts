@@ -1,4 +1,13 @@
 import request from 'supertest'
+
+// Mock Prisma before importing app — /health/ready calls prisma.$queryRaw
+jest.mock('@prisma/client', () => ({
+  PrismaClient: jest.fn().mockImplementation(() => ({
+    $queryRaw: jest.fn().mockResolvedValue([{ '?column?': 1 }]),
+    user: { findUnique: jest.fn().mockResolvedValue(null) },
+  })),
+}))
+
 import app from '../src/index.js'
 import { server } from '../src/index.js'
 
