@@ -11,8 +11,30 @@ FetchContent_Declare(Crow
 )
 FetchContent_MakeAvailable(Crow)
 
-add_executable(${PROJECT_NAME} main.cc)
-target_link_libraries(${PROJECT_NAME} PRIVATE Crow::Crow)
+# jwt-cpp: header-only JWT library (requires OpenSSL)
+FetchContent_Declare(jwt-cpp
+    GIT_REPOSITORY https://github.com/Thalhammer/jwt-cpp.git
+    GIT_TAG v0.7.0
+)
+FetchContent_MakeAvailable(jwt-cpp)
+
+# libpqxx: PostgreSQL C++ client
+find_package(libpqxx REQUIRED)
+find_package(OpenSSL REQUIRED)
+
+add_executable(${PROJECT_NAME}
+    main.cc
+    src/auth.cpp
+    src/db.cpp
+)
+target_include_directories(${PROJECT_NAME} PRIVATE src)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Crow::Crow
+    jwt-cpp::jwt-cpp
+    libpqxx::pqxx
+    OpenSSL::SSL
+    OpenSSL::Crypto
+)
 
 enable_testing()
 find_package(GTest REQUIRED)

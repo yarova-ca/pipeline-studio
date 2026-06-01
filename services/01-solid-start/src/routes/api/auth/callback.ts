@@ -1,0 +1,29 @@
+import { APIEvent } from '@solidjs/start/server'
+import { exchangeCode } from '../../../auth/oauth'
+
+export async function GET({ request }: APIEvent) {
+  const url = new URL(request.url)
+  const code = url.searchParams.get('code')
+  if (!code) return new Response('missing code', { status: 400 })
+
+  const cookieHeader = request.headers.get('Cookie') ?? ''
+  const verifier = cookieHeader
+    .split(';')
+    .map((c) => c.trim())
+    .find((c) => c.startsWith('pkce_verifier='))
+    ?.split('=')[1]
+
+  if (!verifier) return new Response('missing verifier', { status: 400 })
+
+  const redirectUri = `${url.origin}/api/auth/callback`
+  const tokens = await exchangeCode(code, verifier, redirectUri)
+
+  const headers = new Headers()
+  headers.append('Set-Cookie', 'pkce_verifier=; Max-Age=0; Path=/')
+  headers.append(
+    'Set-Cookie',
+    `access_token=${tokens.access_token}; HttpOnly; SameSite=Lax; Path=/`,
+  )
+  headers.set('Location', '/')
+  return new Response(null, { status: 302, headers })
+}

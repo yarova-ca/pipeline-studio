@@ -6,11 +6,17 @@ let package = Package(
     platforms: [.macOS(.v14)],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
+        .package(url: "https://github.com/vapor/jwt-kit.git", from: "5.0.0"),
+        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.0.0"),
     ],
     targets: [
         .executableTarget(
             name: "App",
-            dependencies: [.product(name: "Hummingbird", package: "hummingbird")],
+            dependencies: [
+                .product(name: "Hummingbird", package: "hummingbird"),
+                .product(name: "JWTKit", package: "jwt-kit"),
+                .product(name: "PostgresNIO", package: "postgres-nio"),
+            ],
             path: "Sources/App"
         ),
     ]
