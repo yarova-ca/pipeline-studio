@@ -10,14 +10,17 @@ defmodule App.MixProject do
     ]
   end
 
-  def application, do: [mod: {App.Application, []}, extra_applications: [:logger]]
+  def application, do: [mod: {App.Application, []}, extra_applications: [:logger, :inets, :ssl]]
 
   defp deps do
     [
       {:phoenix, "~> 1.7"},
       {:jason, "~> 1.4"},
       {:plug_cowboy, "~> 2.7"},
-      {:phoenix_html, "~> 4.0"}
+      {:phoenix_html, "~> 4.0"},
+      {:jose, "~> 1.11"},
+      {:ecto_sql, "~> 3.11"},
+      {:postgrex, "~> 0.17"}
     ]
   end
 end
