@@ -107,7 +107,9 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.23'
-          cache-dependency-path: services/${{ matrix.service }}/go.sum
+      - name: Download dependencies
+        run: go mod download
+        working-directory: services/${{ matrix.service }}
       - name: Test
         run: go test ./... -v -count=1
         working-directory: services/${{ matrix.service }}
@@ -143,7 +145,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service: [18-ktor, 18-spring-boot-kotlin, 28-kotlin-grpc, 12-kotlin-jetpack]
+        # 12-kotlin-jetpack is Android-only (no server, no gradlew) — excluded from test matrix
+        service: [18-ktor, 18-spring-boot-kotlin, 28-kotlin-grpc]
     name: Test ${{ matrix.service }}
     steps:
       - uses: actions/checkout@v4
@@ -153,7 +156,7 @@ jobs:
           distribution: temurin
       - uses: gradle/actions/setup-gradle@v3
       - name: Test
-        run: ./gradlew test
+        run: gradle test --no-daemon || ./gradlew test --no-daemon
         working-directory: services/${{ matrix.service }}
         env:
           KTOR_ENV: test
@@ -191,6 +194,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: services/${{ matrix.service }}
+      - name: Update Cargo.lock
+        run: cargo generate-lockfile
+        working-directory: services/${{ matrix.service }}
       - name: Test
         run: cargo test
         working-directory: services/${{ matrix.service }}
@@ -210,8 +216,11 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
-          bundler-cache: true
+          bundler-cache: false
           working-directory: services/${{ matrix.service }}
+      - name: Install gems
+        run: bundle install --jobs 4 --retry 3
+        working-directory: services/${{ matrix.service }}
       - name: Test
         run: bundle exec rspec --format progress || bundle exec rails test
         working-directory: services/${{ matrix.service }}
@@ -235,7 +244,7 @@ jobs:
           php-version: '8.3'
           extensions: pdo_pgsql
       - name: Install
-        run: composer install --no-interaction --no-progress
+        run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-reqs
         working-directory: services/${{ matrix.service }}
       - name: Test
         run: php artisan test || ./vendor/bin/phpunit
@@ -259,6 +268,11 @@ jobs:
         with:
           elixir-version: '1.17'
           otp-version: '27'
+      - name: Install Hex and Rebar
+        run: |
+          mix local.hex --force
+          mix local.rebar --force
+        working-directory: services/${{ matrix.service }}
       - name: Install
         run: mix deps.get
         working-directory: services/${{ matrix.service }}

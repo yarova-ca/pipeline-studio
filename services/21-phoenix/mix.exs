@@ -20,7 +20,8 @@ defmodule App.MixProject do
       {:phoenix_html, "~> 4.0"},
       {:jose, "~> 1.11"},
       {:ecto_sql, "~> 3.11"},
-      {:postgrex, "~> 0.17"}
+      {:postgrex, "~> 0.17"},
+      {:ecto_sqlite3, "~> 0.16", only: :test}
     ]
   end
 end
