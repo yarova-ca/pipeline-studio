@@ -175,6 +175,8 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
 .failure-block div{margin-bottom:4px}
 .failure-block div:last-child{margin-bottom:0}
+.why-inline{cursor:help;color:var(--amber);font-size:10px;font-weight:700;border:1px solid var(--amber);border-radius:3px;padding:0 4px;margin-left:3px;vertical-align:middle;opacity:.7}
+.why-inline:hover{opacity:1}
 </style>
 </head>
 <body>
@@ -244,12 +246,12 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div><strong>User can:</strong> Fix the vulnerability in the branch and re-push, or add the finding to the suppression list with justification and security team sign-off.</div>
 </div>
 
-<div class="page-meta">6 phases &nbsp;·&nbsp; 44 stages &nbsp;·&nbsp; Phase 0 through Promotions &nbsp;·&nbsp; verified 2026-05-26</div>
+<div class="page-meta">6 phases &nbsp;·&nbsp; 44 stages<span class="why-inline" title="Why 44: 16 DevOps stages (workflow management) + 28 DevSecOps stages (security gates). Each phase adds stages proportional to its security requirements.">?</span> &nbsp;·&nbsp; Phase 0 through Promotions &nbsp;·&nbsp; verified 2026-05-26</div>
 
 <div class="counts-bar">
   <div class="count-chip phase-chip"><div class="chip-num">6</div><div class="chip-label">Phases<br>total</div></div>
-  <div class="count-chip stage-chip"><div class="chip-num">44</div><div class="chip-label">Unique<br>stages</div></div>
-  <div class="count-chip"><div class="chip-num">4</div><div class="chip-label">Promotion<br>environments</div></div>
+  <div class="count-chip stage-chip" title="Why 44: 16 DevOps stages (workflow management) + 28 DevSecOps stages (security gates). Each phase adds stages proportional to its security requirements."><div class="chip-num">44</div><div class="chip-label">Unique<br>stages</div></div>
+  <div class="count-chip" title="4 environments: dev → staging → training → prod. Each environment requires an explicit approval gate — test pass alone does not open the gate."><div class="chip-num">4</div><div class="chip-label">Promotion<br>environments</div></div>
 </div>
 
 <div class="section-legend">
