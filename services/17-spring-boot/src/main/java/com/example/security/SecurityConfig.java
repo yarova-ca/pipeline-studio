@@ -32,7 +32,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     // Public endpoints
                     .requestMatchers("/health/**").permitAll()
+                    .requestMatchers("/actuator/**").permitAll()
                     .requestMatchers("/").permitAll()
+                    .requestMatchers("/docs/**", "/docs.json", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                     .requestMatchers("/auth/login").permitAll()
                     .requestMatchers("/auth/callback").permitAll()
                     .requestMatchers("/dev/token").permitAll()

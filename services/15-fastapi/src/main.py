@@ -13,6 +13,23 @@ from src.logger import logger
 
 load_dotenv()
 
+# ── OpenTelemetry — guarded by OTEL_ENABLED=true ─────────────────────────────
+# Set OTEL_ENABLED=true and OTEL_EXPORTER_OTLP_ENDPOINT in the environment to
+# enable trace export. Skipped silently when the env var is absent so the
+# service starts without an OTel collector in local/dev mode.
+if os.getenv("OTEL_ENABLED", "").lower() == "true":
+    from opentelemetry import trace
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+    from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+    from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
+    _provider = TracerProvider()
+    _provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+    trace.set_tracer_provider(_provider)
+    FastAPIInstrumentor().instrument()
+    logger.info("otel_enabled", endpoint=os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "default"))
+
 # ── Rate limiter ──────────────────────────────────────────────────────────────
 # 100 requests per minute per IP.
 # Health endpoints are not limited — k8s probes must always pass.

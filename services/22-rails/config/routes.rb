@@ -18,4 +18,8 @@ Rails.application.routes.draw do
   end
 
   resources :items, controller: 'user_items', except: %i[new edit]
+
+  # OpenAPI docs via rswag — spec at /api-docs/v1/swagger.json, UI at /api-docs
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
 end

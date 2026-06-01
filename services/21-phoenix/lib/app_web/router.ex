@@ -5,6 +5,9 @@ defmodule AppWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    # Rate limiting — 100 requests per minute per IP via Hammer.
+    # Health endpoints are exempt so k8s probes are never blocked.
+    plug AppWeb.Plugs.RateLimit
   end
 
   pipeline :authenticated do
@@ -44,5 +47,11 @@ defmodule AppWeb.Router do
     pipe_through :authenticated
 
     resources "/items", UserItemController, except: [:new, :edit]
+  end
+
+  # OpenAPI spec at /api/openapi.json — served by open_api_spex.
+  scope "/api" do
+    pipe_through :api
+    get "/openapi.json", OpenApiSpex.Plug.RenderSpec, []
   end
 end

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"log/slog"
 	"net/http"
@@ -12,6 +13,11 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/yarova-ca/16-gin/internal/db"
 	"github.com/yarova-ca/16-gin/internal/routes"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/sdk/resource"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	"golang.org/x/time/rate"
 )
 
@@ -20,11 +26,39 @@ import (
 // For per-IP limiting in production use a middleware like gin-contrib/ratelimit.
 var rateLimiter = rate.NewLimiter(rate.Every(time.Minute/100), 100)
 
+// initOTel initialises the OTLP trace exporter when OTEL_ENABLED=true.
+// Returns a no-op shutdown func when OTel is disabled so callers are uniform.
+func initOTel(ctx context.Context) func(context.Context) error {
+	if os.Getenv("OTEL_ENABLED") != "true" {
+		return func(context.Context) error { return nil }
+	}
+	exp, err := otlptracegrpc.New(ctx)
+	if err != nil {
+		log.Printf("otel exporter init failed (non-fatal): %v", err)
+		return func(context.Context) error { return nil }
+	}
+	res, _ := resource.New(ctx,
+		resource.WithAttributes(attribute.String("service.name", "16-gin")),
+	)
+	tp := sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(exp),
+		sdktrace.WithResource(res),
+	)
+	otel.SetTracerProvider(tp)
+	slog.Info("otel enabled", "endpoint", os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT"))
+	return tp.Shutdown
+}
+
 func main() {
 	// JSON structured logging — stdlib slog, Go 1.21+.
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		Level: slog.LevelInfo,
 	})))
+
+	// OpenTelemetry — guarded by OTEL_ENABLED=true.
+	ctx := context.Background()
+	shutdown := initOTel(ctx)
+	defer shutdown(ctx) //nolint:errcheck
 
 	// Connect to the database when DATABASE_URL is set.
 	// Skip silently in environments that have not configured a database
