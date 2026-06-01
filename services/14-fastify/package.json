@@ -13,7 +13,8 @@
     "@prisma/client": "^6.0.0",
     "fastify": "^5.2.0",
     "dotenv": "^16.4.5",
-    "jsonwebtoken": "^9.0.0"
+    "jsonwebtoken": "^9.0.0",
+    "pino": "^9.0.0"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.0",
@@ -24,12 +25,17 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.3.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "pino-pretty": "^11.0.0"
   },
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "extensionsToTreatAsEsm": [".ts"],
-    "moduleNameMapper": { "^(\\.{1,2}/.*)\\.js$": "$1" }
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    }
   }
 }
