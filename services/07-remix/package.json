@@ -1,0 +1,25 @@
+{
+  "name": "07-remix",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "remix vite:build",
+    "dev": "remix vite:dev --port 3000",
+    "start": "remix-serve ./build/server/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@remix-run/node": "^7.0.0",
+    "@remix-run/react": "^7.0.0",
+    "@remix-run/serve": "^7.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^7.0.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0"
+  }
+}

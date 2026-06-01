@@ -1,0 +1,47 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 07 — Notify  |  14 Node/Deno/Bun — NestJS 11.0
+# Triggers after: "04 Build Push Sign — NestJS 11.0"
+# Runs on: main branch only, on workflow_run completion
+# Copy to: .github/workflows/ in your NestJS repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "07 Notify — NestJS 11.0"
+
+on:
+  workflow_run:
+    # Must exactly match the 'name:' field in 04-build-push-sign.yml
+    workflows: ["04 Build Push Sign — NestJS 11.0"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+
+  notify:
+    if: github.event.workflow_run.conclusion != 'skipped'
+    runs-on: ubuntu-24.04
+    steps:
+      # ── DEFAULT: Slack ────────────────────────────────────────────
+      - uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {{
+              "text": "Pipeline ${{ github.event.workflow_run.conclusion }}: NestJS 11.0 — ${{ github.event.workflow_run.head_sha }}"
+            }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #
+      # ── ALTERNATIVE: Microsoft Teams ──────────────────────────────
+      # - uses: aliencube/microsoft-teams-actions@v0.8.0
+      #   with:
+      #     webhook_uri: ${{ secrets.TEAMS_WEBHOOK_URL }}
+      #     title: "Pipeline ${{ github.event.workflow_run.conclusion }}"
+      #     summary: "NestJS 11.0 — ${{ github.event.workflow_run.head_sha }}"
+      #
+      # ── ALTERNATIVE: PagerDuty (failures only) ────────────────────
+      # - if: github.event.workflow_run.conclusion == 'failure'
+      #   uses: PagerDuty/pagerduty-send-event@v2
+      #   with:
+      #     integration-key: ${{ secrets.PAGERDUTY_INTEGRATION_KEY }}
+      #     payload-summary: "CI failed: NestJS 11.0"

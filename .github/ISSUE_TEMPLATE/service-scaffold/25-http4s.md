@@ -1,0 +1,113 @@
+---
+name: "[25 Scala] http4s 0.23 — service scaffold"
+about: "Minimal runnable http4s 0.23 service with hello world, health/liveness/readiness endpoints, tests, and .env.example. Run alongside pipeline-studio/25-http4s issue for the full picture."
+labels: service-scaffold
+assignees: ''
+---
+
+**Framework:** http4s 0.23
+**Category:** 25 Scala
+**Slug:** `25-http4s`
+**Pattern:** Multi-stage Docker
+**Language / Runtime:** scala
+**Package manager:** sbt
+**Test runner:** sbt test
+**Runtime image:** `gcr.io/distroless/java21-debian12`
+**Port:** 8080
+
+---
+## Purpose
+
+This issue tracks creating the minimal runnable starter app for `http4s 0.23`.
+
+Companion issue in `pipeline-studio`: `[25 Scala] http4s 0.23 — pipeline setup`
+
+Both issues together = a complete project: running app + full CI/CD pipeline.
+
+---
+## File structure
+
+```
+services/25-http4s/
+├── .env.example
+├── build.sbt
+├── src/ (or equivalent source directory)
+│   ├── main entry point
+│   ├── GET / — hello world route
+│   ├── GET /health
+│   ├── GET /health/live
+│   └── GET /health/ready
+└── tests/ (or __tests__/ or spec/)
+    └── health tests — 4 assertions
+```
+
+---
+## Routes
+
+JVM HTTP handlers:
+
+| Route | Response |
+|---|---|
+| `GET /` | `{"message":"Hello from http4s 0.23","version":"1.0.0"}` |
+| `GET /health` | `{"status":"ok"}` |
+| `GET /health/live` | `{"status":"ok"}` |
+| `GET /health/ready` | `{"status":"ok"}` |
+
+Note: Spring Boot and Quarkus expose `/actuator/health` and `/q/health` — add `/health` alias route.
+
+---
+## Tests
+
+**Test runner:** built-in (`sbt test` / `lein test`)
+
+File: `src/test/.../HealthSpec` or `test/health_test.clj`
+
+| Test | Assertion |
+|---|---|
+| `GET /` | status 200 |
+| `GET /health` | status 200, body `status: ok` |
+| `GET /health/live` | status 200 |
+| `GET /health/ready` | status 200 |
+
+Run: `sbt test`
+
+---
+## Build
+
+**Command:** `sbt assembly`
+
+**Output path:** `target/scala-*/`
+
+**Docker CMD match:** `N/A (no server — static or CI-only)`
+
+**Extra setup:** Scala 3 LTS + Java 21 + Cats Effect 3; /health route in Router
+
+---
+## .env.example
+
+```bash
+APP_ENV=development
+PORT=8080
+```
+
+---
+## Local dev
+
+```bash
+sbt run
+# → http://localhost:8080
+```
+
+---
+## Checklist
+
+- [ ] Dependencies installed (`sbt install` or equivalent)
+- [ ] Hello world route `GET /` returns `200` with JSON body
+- [ ] Health route `GET /health` returns `{"status":"ok"}`
+- [ ] Liveness route `GET /health/live` returns `{"status":"ok"}`
+- [ ] Readiness route `GET /health/ready` returns `{"status":"ok"}`
+- [ ] All tests passing (`sbt test`)
+- [ ] `.env.example` present with all required variables
+- [ ] Build succeeds (`sbt assembly`)
+- [ ] Build output exists at `target/scala-*/`
+- [ ] Build output path matches Dockerfile `COPY --from=build` instruction

@@ -1,0 +1,4 @@
+export default defineEventHandler(() => ({
+  status: 'ok',
+  version: '1.0.0',
+}))

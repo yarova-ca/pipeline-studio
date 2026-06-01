@@ -1,0 +1,12 @@
+# .gitignore
+
+.env
+.env.local
+.env.*.local
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+dist/

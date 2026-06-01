@@ -1,0 +1,6 @@
+{
+  "name": "yarova/28-php-grpc",
+  "require": {
+    "grpc/grpc": "^1.63"
+  }
+}

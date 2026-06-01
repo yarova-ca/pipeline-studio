@@ -1,0 +1,23 @@
+{
+  "name": "05-qwik",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "qwik build",
+    "dev": "vite --port 3000",
+    "start": "node server/entry.express.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@builder.io/qwik": "^2.0.0",
+    "@builder.io/qwik-city": "^2.0.0",
+    "express": "^5.0.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0"
+  }
+}

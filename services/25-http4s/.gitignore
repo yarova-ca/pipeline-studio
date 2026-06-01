@@ -1,0 +1,9 @@
+# .gitignore
+
+.env
+.env.local
+.env.*.local
+target/
+.bloop/
+.metals/
+.bsp/

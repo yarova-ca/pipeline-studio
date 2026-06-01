@@ -1,0 +1,27 @@
+{
+  "name": "29-apollo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.10.0",
+    "express": "^4.19.0",
+    "cors": "^2.8.5",
+    "graphql": "^16.8.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0",
+    "@types/express": "^4.17.0",
+    "@types/cors": "^2.8.0",
+    "ts-node": "^10.9.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "ts-jest": "^29.0.0"
+  }
+}

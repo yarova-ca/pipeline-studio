@@ -1,0 +1,39 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 01 — Pre-Commit  |  15 Python — Flask 3.1
+# Runs on: every push and pull_request to main
+# Purpose: fast code-quality gates before all other stages
+# Copy to: .github/workflows/ in your Flask repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "01 Pre-Commit — Flask 3.1"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  pre-commit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # ── DEFAULT: pre-commit framework ────────────────────────────
+      - uses: pre-commit/action@v3.0.1
+      #
+      # ── ALTERNATIVE: commitlint (commit message format) ──────────
+      # - name: Lint commit messages
+      #   uses: wagoid/commitlint-github-action@v6
+      #
+      # ── ALTERNATIVE: super-linter ────────────────────────────────
+      # - name: Super-Linter
+      #   uses: super-linter/super-linter@v7
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
