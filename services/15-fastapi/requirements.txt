@@ -9,7 +9,7 @@ aiosqlite>=0.20
 # Auth
 python-jose[cryptography]>=3.3
 # OAuth HTTP calls
-httpx>=0.28.0
+httpx>=0.28.1
 # Structured logging
 structlog>=24.0.0
 # Rate limiting
