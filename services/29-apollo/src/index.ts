@@ -1,8 +1,12 @@
+import './tracing.js'
+import { logger } from './logger.js'
+import { prisma } from './db/client.js'
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import cors from "cors";
 import { createServer } from "http";
+import rateLimit from 'express-rate-limit'
 
 const typeDefs = `#graphql
   type Query {
@@ -24,6 +28,23 @@ async function start() {
   const app = express();
   app.use(cors());
   app.use(express.json());
+
+// ── Rate limiting ──────────────────────────────────────────────────────────
+app.use(
+  rateLimit({
+    windowMs: 60_000,   // 1-minute window
+    max: 100,           // 100 requests per IP per window
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests — try again in 60 seconds' },
+    skip: (req) => req.path.startsWith('/health'),
+  }),
+)
+// ── Request logging ────────────────────────────────────────────────────────
+app.use((req, _res, next) => {
+  logger.info({ method: req.method, url: req.url, ip: req.ip }, 'request')
+  next()
+})
 
   app.get("/health", (_req, res) => {
     res.json({ status: "ok", version: "1.0.0" });
