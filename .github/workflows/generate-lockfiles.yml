@@ -1,0 +1,53 @@
+# Generates package-lock.json for Node services and commits them.
+# Run manually: Actions → Generate Lockfiles → Run workflow
+# Why: npm install needs to run in a proper Node environment to generate lockfiles.
+# We can't generate them locally (no Node in WSL2), so CI does it.
+
+name: Generate Lockfiles
+
+on:
+  workflow_dispatch:
+    inputs:
+      services:
+        description: 'Comma-separated service slugs (empty = all Tier 1)'
+        required: false
+        default: '14-express,14-fastify,14-nestjs,14-hono,14-bun,14-deno,14-elysia,28-node-grpc,29-apollo,29-graphql-yoga,30-ws-node'
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate lockfiles
+        run: |
+          IFS=',' read -ra SERVICES <<< "${{ github.event.inputs.services }}"
+          for service in "${SERVICES[@]}"; do
+            service=$(echo "$service" | xargs)
+            pkg="services/${service}/package.json"
+            lock="services/${service}/package-lock.json"
+            if [ -f "$pkg" ] && [ ! -f "$lock" ]; then
+              echo "Generating lockfile for: ${service}"
+              npm install --package-lock-only --prefix "services/${service}" --ignore-scripts || true
+              echo "Done: ${service}"
+            else
+              echo "Skipping ${service} (lockfile exists or no package.json)"
+            fi
+          done
+
+      - name: Commit generated lockfiles
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Generate package-lock.json for Node services [skip ci]"
+          file_pattern: "services/*/package-lock.json"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"

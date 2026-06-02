@@ -10,6 +10,7 @@
     "dev": "tsx watch src/index.ts",
     "test": "jest --forceExit",
     "test:integration": "jest --testPathPattern=integration --forceExit",
+    "test:pact": "jest --testPathPattern=pact --forceExit",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx src/db/seed.ts"
@@ -35,6 +36,7 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@pact-foundation/pact": "^12.0.0",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",

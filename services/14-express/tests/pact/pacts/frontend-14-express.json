@@ -1,0 +1,49 @@
+{
+  "consumer": { "name": "frontend" },
+  "provider": { "name": "14-express" },
+  "interactions": [
+    {
+      "description": "a request for items",
+      "providerState": "user has items",
+      "request": {
+        "method": "GET",
+        "path": "/users/me/items",
+        "headers": { "Authorization": "Bearer valid-token" }
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "body": {
+          "items": [
+            {
+              "id": "item-1",
+              "title": "Test item",
+              "userId": "user-1"
+            }
+          ],
+          "total": 1,
+          "limit": 20,
+          "offset": 0
+        },
+        "matchingRules": {
+          "body": {
+            "$.items": { "matchers": [{ "match": "type" }] },
+            "$.total": { "matchers": [{ "match": "integer" }] }
+          }
+        }
+      }
+    },
+    {
+      "description": "a request without auth",
+      "request": {
+        "method": "GET",
+        "path": "/users/me/items"
+      },
+      "response": {
+        "status": 401,
+        "body": { "error": "Authentication required. Provide Bearer token or X-API-Key header." }
+      }
+    }
+  ],
+  "metadata": { "pactSpecification": { "version": "2.0.0" } }
+}
