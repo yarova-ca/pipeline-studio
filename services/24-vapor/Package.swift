@@ -9,6 +9,8 @@ let package = Package(
         .package(url: "https://github.com/vapor/jwt.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.5.0"),
+        .package(url: "https://github.com/swift-server/swift-metrics.git", from: "2.4.0"),
     ],
     targets: [
         .executableTarget(
@@ -18,6 +20,8 @@ let package = Package(
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
+                .product(name: "Logging", package: "swift-log"),
+                .product(name: "Metrics", package: "swift-metrics"),
             ],
             path: "Sources/App"
         ),

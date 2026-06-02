@@ -18,4 +18,9 @@ libraryDependencies ++= Seq(
   "org.mindrot"    % "jbcrypt"              % "0.4",
   "org.scalameta" %% "munit"               % "1.0.3"   % Test,
   "org.typelevel" %% "munit-cats-effect"   % "2.0.0"   % Test,
+  // Structured JSON logging
+  "net.logstash.logback" % "logstash-logback-encoder" % "7.4",
+  // Prometheus metrics
+  "io.prometheus" % "simpleclient"         % "0.16.0",
+  "io.prometheus" % "simpleclient_hotspot" % "0.16.0",
 )

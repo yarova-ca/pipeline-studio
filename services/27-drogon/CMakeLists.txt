@@ -32,6 +32,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     OpenSSL::Crypto
 )
 
+# prometheus-cpp for metrics
+# find_package(prometheus-cpp CONFIG REQUIRED)
+# target_link_libraries(${PROJECT_NAME} prometheus-cpp::pull)
+
 enable_testing()
 find_package(GTest REQUIRED)
 add_executable(health_test tests/health_test.cc)

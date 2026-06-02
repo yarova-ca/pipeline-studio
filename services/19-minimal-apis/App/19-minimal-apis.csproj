@@ -13,5 +13,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
     <!-- In-memory DB for dev/test -->
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
+    <!-- Prometheus metrics -->
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
   </ItemGroup>
 </Project>

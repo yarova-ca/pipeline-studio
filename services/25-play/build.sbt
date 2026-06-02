@@ -15,6 +15,11 @@ lazy val root = (project in file("."))
       "com.typesafe.play"    %% "play-slick"             % "6.1.0",
       "com.typesafe.play"    %% "play-slick-evolutions"  % "6.1.0",
       "org.postgresql"        % "postgresql"             % "42.7.3",
-      "org.scalatestplus.play" %% "scalatestplus-play"   % "7.0.1" % Test
+      "org.scalatestplus.play" %% "scalatestplus-play"   % "7.0.1" % Test,
+      // Structured JSON logging
+      "net.logstash.logback"    % "logstash-logback-encoder" % "7.4",
+      // Prometheus metrics
+      "io.prometheus"           % "simpleclient"             % "0.16.0",
+      "io.prometheus"           % "simpleclient_hotspot"     % "0.16.0",
     )
   )

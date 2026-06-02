@@ -7,5 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
     <PackageReference Include="Grpc.AspNetCore.HealthChecks" Version="2.62.0" />
+    <!-- Prometheus metrics -->
+    <PackageReference Include="prometheus-net.AspNetCore" Version="8.0.0" />
   </ItemGroup>
 </Project>

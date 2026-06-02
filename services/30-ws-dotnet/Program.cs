@@ -1,9 +1,21 @@
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.AddJsonConsole(options => {
+    options.IncludeScopes = true;
+    options.TimestampFormat = "O";
+    options.JsonWriterOptions = new System.Text.Json.JsonWriterOptions { Indented = false };
+});
+
 var app = builder.Build();
+
+app.UseRouting();
+app.UseMetricServer();
+app.UseHttpMetrics();
 
 app.UseWebSockets();
 

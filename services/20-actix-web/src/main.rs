@@ -3,6 +3,7 @@ mod db;
 mod routes;
 
 use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
+use prometheus::{Encoder, TextEncoder};
 use serde_json::json;
 use sqlx::PgPool;
 use std::env;
@@ -23,6 +24,16 @@ async fn liveness() -> impl Responder {
     HttpResponse::Ok().json(json!({"status": "ok"}))
 }
 
+async fn metrics() -> impl Responder {
+    let encoder = TextEncoder::new();
+    let metric_families = prometheus::gather();
+    let mut buffer = Vec::new();
+    encoder.encode(&metric_families, &mut buffer).unwrap();
+    HttpResponse::Ok()
+        .content_type("text/plain; version=0.0.4")
+        .body(buffer)
+}
+
 async fn readiness(pool: web::Data<PgPool>) -> impl Responder {
     match sqlx::query("SELECT 1").execute(pool.get_ref()).await {
         Ok(_) => HttpResponse::Ok().json(json!({"status": "ok", "db": "connected"})),
@@ -36,7 +47,11 @@ async fn readiness(pool: web::Data<PgPool>) -> impl Responder {
 async fn main() -> std::io::Result<()> {
     let _ = dotenvy::dotenv();
 
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+    tracing_subscriber::fmt()
+        .json()
+        .with_env_filter(tracing_subscriber::EnvFilter::from_default_env()
+            .add_directive(tracing::Level::INFO.into()))
+        .init();
 
     let pool = db::connect().await.expect("Failed to connect to database");
     let pool = web::Data::new(pool);
@@ -56,6 +71,7 @@ async fn main() -> std::io::Result<()> {
             .route("/health", web::get().to(health))
             .route("/health/live", web::get().to(liveness))
             .route("/health/ready", web::get().to(readiness))
+            .route("/metrics", web::get().to(metrics))
             .configure(routes::auth::configure)
             .configure(routes::users::configure)
     })

@@ -8,3 +8,7 @@ async-graphql = { version = "7.0", features = ["chrono"] }
 async-graphql-axum = "7.0"
 axum = "0.7"
 tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["json", "env-filter"] }
+prometheus = { version = "0.13", features = ["process"] }
+serde_json = "1"

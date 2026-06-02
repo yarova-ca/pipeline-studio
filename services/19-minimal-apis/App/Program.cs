@@ -9,7 +9,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
+using Prometheus;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// ── Logging ───────────────────────────────────────────────────────────────
+builder.Logging.AddJsonConsole(options => {
+    options.IncludeScopes = true;
+    options.TimestampFormat = "O";
+    options.JsonWriterOptions = new System.Text.Json.JsonWriterOptions { Indented = false };
+});
 
 // ── Database ──────────────────────────────────────────────────────────────
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -48,6 +57,9 @@ builder.Services.AddSingleton<JwtService>();
 var app = builder.Build();
 
 // ── Middleware ────────────────────────────────────────────────────────────
+app.UseRouting();
+app.UseMetricServer();
+app.UseHttpMetrics();
 app.UseAuthentication();
 app.UseApiKeyMiddleware();
 app.UseAuthorization();

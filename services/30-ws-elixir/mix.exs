@@ -12,7 +12,9 @@ defmodule WsElixir.MixProject do
       {:plug_cowboy, "~> 2.7"},
       {:jason, "~> 1.4"},
       {:ecto_sql, "~> 3.11"},
-      {:postgrex, "~> 0.17"}
+      {:postgrex, "~> 0.17"},
+      {:logger_json, "~> 5.0"},
+      {:prometheus_ex, "~> 3.0"},
     ]
   end
 end
