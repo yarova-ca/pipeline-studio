@@ -12,7 +12,10 @@
 
 import type { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
+import Redis from 'ioredis'
 import { prisma } from '../db/client.js'
+import { logger } from '../logger.js'
+import { auditLog } from './audit.js'
 
 export interface AuthUser {
   id: string
@@ -35,12 +38,54 @@ if (!JWT_SECRET || JWT_SECRET.length < 32) {
   throw new Error('JWT_SECRET must be set and be at least 32 characters long')
 }
 
-// In-memory token blacklist for revoked JWTs.
-// Fix 12: revokeToken + isTokenRevoked exported for use in the logout route.
-// Note: this is process-local. In a multi-instance deployment, use Redis instead.
-const tokenBlacklist = new Set<string>()
-export const revokeToken = (token: string): void => { tokenBlacklist.add(token) }
-export const isTokenRevoked = (token: string): boolean => tokenBlacklist.has(token)
+// Redis (in-memory database) for distributed token revocation.
+// Why Redis: the in-memory Set only revokes on the current pod.
+// In a 3-pod deployment, logout on pod A keeps the token valid on pods B+C.
+// Redis is shared across all pods — revocation is cluster-wide.
+// Fallback: if Redis is unavailable, fall back to in-memory Set with a warning.
+
+let redisClient: Redis | null = null
+const fallbackBlacklist = new Set<string>()
+
+function getRedis(): Redis | null {
+  if (redisClient) return redisClient
+  const url = process.env.REDIS_URL
+  if (!url) return null
+  try {
+    redisClient = new Redis(url, { lazyConnect: true, enableOfflineQueue: false })
+    redisClient.on('error', (err: Error) => {
+      logger.warn({ err: err.message }, 'redis_blacklist_error — falling back to in-memory')
+    })
+    return redisClient
+  } catch {
+    return null
+  }
+}
+
+export const revokeToken = async (token: string, ttlSeconds = 8 * 3600): Promise<void> => {
+  const redis = getRedis()
+  if (redis) {
+    await redis.setex(`revoked:${token}`, ttlSeconds, '1').catch(() => {
+      // Redis failed — fall back to in-memory
+      fallbackBlacklist.add(token)
+      logger.warn('token_revocation_redis_failed — using in-memory fallback')
+    })
+  } else {
+    fallbackBlacklist.add(token)
+  }
+}
+
+export const isTokenRevoked = async (token: string): Promise<boolean> => {
+  if (fallbackBlacklist.has(token)) return true
+  const redis = getRedis()
+  if (!redis) return false
+  try {
+    const result = await redis.get(`revoked:${token}`)
+    return result === '1'
+  } catch {
+    return fallbackBlacklist.has(token) // fall back to local Set
+  }
+}
 
 export async function requireAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
   const authHeader = req.headers.authorization
@@ -50,8 +95,8 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
   if (authHeader?.startsWith('Bearer ')) {
     const token = authHeader.slice(7)
 
-    // Fix 12: Reject revoked tokens before verification.
-    if (isTokenRevoked(token)) {
+    if (await isTokenRevoked(token)) {
+      auditLog('token_rejected', null, req, { reason: 'revoked' })
       res.status(401).json({ error: 'Token has been revoked' })
       return
     }
@@ -60,9 +105,11 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
       // Fix 1: Lock algorithm to HS256 — prevents algorithm-confusion attacks.
       const payload = jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] }) as AuthUser
       req.user = { id: payload.id, email: payload.email, name: payload.name }
+      auditLog('api_key_used', payload.id, req, { method: 'jwt' })
       next()
       return
     } catch {
+      auditLog('token_rejected', null, req, { reason: 'invalid_jwt' })
       // JWT invalid or expired — fall through to API key check
     }
   }
@@ -71,6 +118,7 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
   if (apiKey) {
     // Fix 3: Reject empty strings, whitespace, or keys without the expected prefix.
     if (!apiKey.trim() || !apiKey.startsWith('yar_')) {
+      auditLog('auth_failure', null, req, { reason: 'malformed_api_key' })
       res.status(401).json({ error: 'Invalid API key format' })
       return
     }
@@ -79,10 +127,12 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     try {
       const user = await prisma.user.findUnique({ where: { apiKey } })
       if (!user) {
+        auditLog('auth_failure', null, req, { reason: 'invalid_api_key' })
         res.status(401).json({ error: 'Invalid API key' })
         return
       }
       req.user = { id: user.id, email: user.email, name: user.name }
+      auditLog('api_key_used', user.id, req, { method: 'api_key' })
       next()
     } catch {
       res.status(500).json({ error: 'Auth check failed' })
@@ -90,14 +140,20 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     return
   }
 
+  auditLog('auth_failure', null, req, { reason: 'no_credentials' })
   res.status(401).json({ error: 'Authentication required. Provide Bearer token or X-API-Key header.' })
 }
 
 export function signToken(user: AuthUser): string {
   // Fix 1: Explicitly set algorithm on sign to match the verify constraint.
+  // kid: key ID header enables key rotation — clients can identify which secret signed the token.
   return jwt.sign(
     { id: user.id, email: user.email, name: user.name },
     JWT_SECRET,
-    { expiresIn: '8h', algorithm: 'HS256' }
+    {
+      expiresIn: '8h',
+      algorithm: 'HS256',
+      keyid: process.env.JWT_SECRET_KID ?? 'v1',
+    }
   )
 }

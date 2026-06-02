@@ -19,6 +19,7 @@ import crypto from 'node:crypto'
 import jwt from 'jsonwebtoken'
 import { prisma } from '../db/client.js'
 import { requireAuth, signToken, revokeToken, type AuthUser } from '../middleware/auth.js'
+import { auditLog } from '../middleware/audit.js'
 
 const router = Router()
 
@@ -34,7 +35,8 @@ const JWT_SECRET = process.env.JWT_SECRET as string
 
 // ── OAuth2 login ───────────────────────────────────────────────────────────
 // Fix 9: Generate state param, store in httpOnly cookie for CSRF protection.
-router.get('/login', (_req: Request, res: Response) => {
+router.get('/login', (req: Request, res: Response) => {
+  auditLog('login_initiated', null, req)
   const state = crypto.randomBytes(16).toString('hex')
   res.cookie('oauth_state', state, { httpOnly: true, sameSite: 'lax', maxAge: 600_000 })
   const params = new URLSearchParams({
@@ -53,12 +55,14 @@ router.get('/callback', async (req: Request, res: Response) => {
 
   // Validate OAuth state to prevent CSRF.
   if (!state || state !== req.cookies?.oauth_state) {
+    auditLog('login_failure', null, req, { reason: 'oauth_state_mismatch' })
     res.status(400).json({ error: 'Invalid OAuth state — possible CSRF attack' })
     return
   }
   res.clearCookie('oauth_state')
 
   if (!code) {
+    auditLog('login_failure', null, req, { reason: 'oauth_missing_code' })
     res.status(400).json({ error: 'Missing OAuth code' })
     return
   }
@@ -72,6 +76,7 @@ router.get('/callback', async (req: Request, res: Response) => {
     })
     const tokenData = (await tokenRes.json()) as { access_token?: string; error?: string }
     if (!tokenData.access_token) {
+      auditLog('login_failure', null, req, { reason: 'oauth_failed' })
       res.status(401).json({ error: 'OAuth token exchange failed' })
       return
     }
@@ -94,6 +99,9 @@ router.get('/callback', async (req: Request, res: Response) => {
 
     const token = signToken({ id: user.id, email: user.email, name: user.name })
 
+    auditLog('login_success', user.id, req)
+    auditLog('token_issued', user.id, req)
+
     // Return JWT as cookie + JSON
     res.cookie('token', token, {
       httpOnly: true,
@@ -103,6 +111,7 @@ router.get('/callback', async (req: Request, res: Response) => {
     })
     res.json({ token, user: { id: user.id, email: user.email, name: user.name } })
   } catch (err) {
+    auditLog('login_failure', null, req, { reason: 'oauth_failed' })
     res.status(500).json({ error: 'OAuth callback failed' })
   }
 })
@@ -114,9 +123,12 @@ router.get('/me', requireAuth, (req: Request, res: Response) => {
 
 // ── Logout ─────────────────────────────────────────────────────────────────
 // Fix 12: Revoke the Bearer token on logout so it can't be replayed.
-router.post('/logout', requireAuth, (req: Request, res: Response) => {
+// revokeToken is now async (Redis-backed).
+router.post('/logout', requireAuth, async (req: Request, res: Response) => {
   const token = req.headers.authorization?.slice(7)
-  if (token) revokeToken(token)
+  if (token) await revokeToken(token)
+  auditLog('logout', req.user!.id, req)
+  auditLog('token_revoked', req.user!.id, req)
   res.clearCookie('token')
   res.json({ message: 'Logged out' })
 })
@@ -144,6 +156,7 @@ router.post('/refresh', (req: Request, res: Response) => {
       return
     }
     const newToken = signToken({ id: payload.id, email: payload.email, name: payload.name })
+    auditLog('token_refreshed', payload.id, req)
     res.json({ token: newToken })
   } catch {
     res.status(401).json({ error: 'Invalid token' })
@@ -157,6 +170,7 @@ router.post('/api-key', requireAuth, async (req: Request, res: Response) => {
     where: { id: req.user!.id },
     data: { apiKey },
   })
+  auditLog('api_key_generated', req.user!.id, req)
   res.json({ apiKey })
 })
 
@@ -166,6 +180,7 @@ router.delete('/api-key', requireAuth, async (req: Request, res: Response) => {
     where: { id: req.user!.id },
     data: { apiKey: null },
   })
+  auditLog('api_key_revoked', req.user!.id, req)
   res.json({ message: 'API key revoked' })
 })
 
