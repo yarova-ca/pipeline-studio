@@ -11,6 +11,13 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 //
 // Endpoint: OTEL_EXPORTER_OTLP_ENDPOINT env var.
 // Default: http://localhost:4318/v1/traces (local collector).
+
+// Normalize span names to route templates — prevents high cardinality.
+// Raw: "GET /users/me/items/abc123" → Template: "GET /users/me/items/{id}"
+// Why: one time-series per route pattern, not one per unique ID value.
+const normalizeSpanName = (name: string): string =>
+  name.replace(/\/[0-9a-f-]{8,}/gi, '/{id}').replace(/\/\d+/g, '/{id}')
+
 if (process.env.NODE_ENV !== 'test') {
   const sdk = new NodeSDK({
     traceExporter: new OTLPTraceExporter({
@@ -19,6 +26,7 @@ if (process.env.NODE_ENV !== 'test') {
         'http://localhost:4318/v1/traces',
     }),
     instrumentations: [getNodeAutoInstrumentations()],
+    spanProcessors: [],
   })
 
   sdk.start()
@@ -26,3 +34,5 @@ if (process.env.NODE_ENV !== 'test') {
   // Flush pending spans before the process exits.
   process.on('SIGTERM', () => sdk.shutdown())
 }
+
+export { normalizeSpanName }

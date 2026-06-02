@@ -1,7 +1,7 @@
 // tracing.js must be the very first import — OTel patches modules at load time.
 import './tracing.js'
 import { setupSwagger } from './swagger.js'
-import express from 'express'
+import express, { type Request, type Response, type NextFunction } from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
@@ -12,6 +12,8 @@ import { logger } from './logger.js'
 import { prisma } from './db/client.js'
 import authRouter from './routes/auth.js'
 import usersRouter from './routes/users.js'
+import { httpRequestsTotal, httpRequestDurationSeconds, activeRequests, register } from './metrics.js'
+import { trace } from '@opentelemetry/api'
 
 // Fix 14: Validate required environment variables at startup.
 // JWT_SECRET validation also runs inside middleware/auth.ts on module load.
@@ -32,14 +34,6 @@ const PORT = Number(process.env.PORT ?? '3000')
 // Must be first middleware so headers apply to every response.
 app.use(helmet())
 
-// Fix 10: Attach a unique request ID to every request for traceability.
-app.use((req, res, next) => {
-  const id = (req.headers['x-request-id'] as string) || randomUUID()
-  req.headers['x-request-id'] = id
-  res.setHeader('x-request-id', id)
-  next()
-})
-
 // Fix 5: CORS — restrict origins to the configured allowlist.
 app.use(cors({
   origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000'],
@@ -55,9 +49,33 @@ app.use(cookieParser())
 app.use(express.json({ limit: '10KB' }))
 app.use(express.urlencoded({ extended: true, limit: '10KB' }))
 
-// ── Request logging ────────────────────────────────────────────────────────
+// ── Request ID + structured request logging with trace correlation ─────────
+// Fix 10: Attach a unique request ID to every request for traceability.
+// Injects traceId from active OTel span so logs correlate to traces.
 app.use((req, _res, next) => {
-  logger.info({ method: req.method, url: req.url, ip: req.ip }, 'request')
+  const requestId = (req.headers['x-request-id'] as string) || randomUUID()
+  const span = trace.getActiveSpan()
+  const traceId = span?.spanContext().traceId
+  req.headers['x-request-id'] = requestId
+  _res.setHeader('x-request-id', requestId)
+  // Attach child logger with request context to req object
+  ;(req as any).log = logger.child({ requestId, traceId: traceId ?? undefined })
+  ;(req as any).log.info({ method: req.method, url: req.url }, 'request')
+  next()
+})
+
+// ── Prometheus metrics middleware ──────────────────────────────────────────
+// Records request count, duration, and active connection count per route template.
+// Path normalization: replaces UUID/numeric segments with {id} to avoid high cardinality.
+app.use((req, _res, next) => {
+  const path = req.route?.path ?? req.path.replace(/\/[0-9a-f-]{8,}/gi, '/{id}')
+  activeRequests.inc()
+  const end = httpRequestDurationSeconds.startTimer({ method: req.method, path })
+  _res.on('finish', () => {
+    httpRequestsTotal.inc({ method: req.method, path, status: String(_res.statusCode) })
+    end({ method: req.method, path, status: String(_res.statusCode) })
+    activeRequests.dec()
+  })
   next()
 })
 
@@ -99,6 +117,13 @@ app.get('/health/ready', async (_req, res) => {
   }
 })
 
+// ── Prometheus scrape endpoint ─────────────────────────────────────────────
+// Secured by IP allowlist in production (configured at the ingress/network layer).
+app.get('/metrics', async (_req, res) => {
+  res.set('Content-Type', register.contentType)
+  res.end(await register.metrics())
+})
+
 // ── OpenAPI docs ───────────────────────────────────────────────────────────
 setupSwagger(app)
 
@@ -106,8 +131,19 @@ setupSwagger(app)
 app.use('/auth', authRouter)
 app.use('/users', usersRouter)
 
+// ── Global error handler ───────────────────────────────────────────────────
+// Must be last — Express identifies error handlers by their 4-argument signature.
+app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
+  const requestId = req.headers['x-request-id'] as string
+  logger.error({ err: { message: err.message, stack: err.stack }, requestId }, 'unhandled_error')
+  res.status(500).json({ error: 'Internal server error', requestId })
+})
+
 export const server = app.listen(PORT, () => {
   logger.info({ port: PORT }, 'Express server started')
 })
+
+// 30s max request duration — protects against slowloris and hung connections.
+server.setTimeout(30_000)
 
 export default app
