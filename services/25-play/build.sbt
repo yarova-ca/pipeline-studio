@@ -13,6 +13,7 @@ lazy val root = (project in file("."))
       "org.mindrot"           % "jbcrypt"                % "0.4",
       // Slick ORM + PostgreSQL driver
       "com.typesafe.play"    %% "play-slick"             % "6.1.0",
+      "com.typesafe.play"    %% "play-slick-evolutions"  % "6.1.0",
       "org.postgresql"        % "postgresql"             % "42.7.3",
       "org.scalatestplus.play" %% "scalatestplus-play"   % "7.0.1" % Test
     )

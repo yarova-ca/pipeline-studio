@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   // Doobie: async PostgreSQL ORM for Cats Effect
   "org.tpolecat"  %% "doobie-core"          % "1.0.0-RC6",
   "org.tpolecat"  %% "doobie-postgres"      % "1.0.0-RC6",
+  "org.tpolecat"  %% "doobie-hikari"        % "1.0.0-RC6",
   // Password hashing
   "org.mindrot"    % "jbcrypt"              % "0.4",
   "org.scalameta" %% "munit"               % "1.0.3"   % Test,
