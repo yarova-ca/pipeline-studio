@@ -177,6 +177,31 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .failure-block div:last-child{margin-bottom:0}
 .why-inline{cursor:help;color:var(--amber);font-size:10px;font-weight:700;border:1px solid var(--amber);border-radius:3px;padding:0 4px;margin-left:3px;vertical-align:middle;opacity:.7}
 .why-inline:hover{opacity:1}
+/* ── Dual-audience sections ── */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.audience-card{border-radius:8px;padding:16px;font-size:12px}
+.audience-new{background:#e8f4fd;border:1px solid #90caf9}
+.audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.audience-maintainer{background:#f1f8e9;border:1px solid #a5d6a7}
+.audience-maintainer .audience-label{font-weight:700;color:#2e7d32;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.qr-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.qr-table td{padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.08);vertical-align:top}
+.qr-table tr:last-child td{border-bottom:none}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
+.checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
+.checklist-item input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+.checklist-cmd{font-family:monospace;background:var(--bg3);padding:4px 8px;border-radius:4px;font-size:11px;margin:4px 0}
+.checklist-pass{font-size:11px;color:var(--green);margin-top:2px}
+.checklist-fail{font-size:11px;color:var(--red);margin-top:2px}
+@media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){
+  .audience-new{background:#0d2744;border-color:#1565c0}
+  .audience-new .audience-label{color:#90caf9}
+  .audience-maintainer{background:#1b2e1b;border-color:#2e7d32}
+  .audience-maintainer .audience-label{color:#a5d6a7}
+  .qr-table td{border-bottom-color:rgba(255,255,255,.08)}
+}
 </style>
 </head>
 <body>
@@ -229,6 +254,29 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-covers"><strong>What this covers:</strong> The 6-phase CI/CD pipeline — every phase, every stage, trigger conditions, outputs, and why each phase boundary exists.</div>
   <div class="page-when"><strong>When to read:</strong> First doc to read. Before adding any stage or changing stage order.</div>
   <div class="page-pillar">Pillar 4 — Pipeline &amp; Tools &nbsp;·&nbsp; Related: <a href="03-stage-types.html">03 Stage types</a> &nbsp;·&nbsp; <a href="04-tool-catalog.html">04 Tool catalog</a> &nbsp;·&nbsp; <a href="05-invariants.html">05 Invariants</a></div>
+</div>
+
+<!-- ── Dual-audience intro ─────────────────────────────────────────── -->
+<div class="audience-grid">
+  <div class="audience-card audience-new">
+    <div class="audience-label">New to CI/CD? Start here.</div>
+    <p><strong>CI/CD</strong> (Continuous Integration / Continuous Delivery): automated system that tests and deploys code every time a developer pushes a change.</p>
+    <p>Without CI/CD: developers manually run tests, manually build Docker images, manually deploy. Takes hours. Prone to human error.</p>
+    <p>With CI/CD: all of that happens automatically in minutes. This page explains exactly what runs and in what order.</p>
+    <p style="margin-top:8px"><strong>Before you read further:</strong> you do not need to know what each stage does — just follow the left-to-right flow. Each block is one phase. Phases run in order.</p>
+    <p><strong>After reading this page you will be able to:</strong> describe the 6 phases, explain why PRs get blocked by security scans, and know where to add a new stage.</p>
+  </div>
+  <div class="audience-card audience-maintainer">
+    <div class="audience-label">Platform Maintainer — Quick Reference</div>
+    <table class="qr-table">
+      <tr><td>Add a new stage</td><td>Read phase boundary rules first → add to correct phase → update <a href="05-invariants.html">05-invariants.html</a></td></tr>
+      <tr><td>Stage failing in CI</td><td>Check stage type (<a href="03-stage-types.html">03-stage-types.html</a>) → DevOps: engineering owns it → DevSecOps: security team owns it</td></tr>
+      <tr><td>Pipeline is slow</td><td>Check which phase is slowest → Phase 3 (scanning) is usually the bottleneck → see <a href="04-tool-catalog.html">tool catalog</a> for swap options</td></tr>
+      <tr><td>Add compliance standard</td><td>Add to <a href="12-compliance-variations.html">12-compliance-variations.html</a> as additive delta on top of base pipeline</td></tr>
+      <tr><td>Phase 2 PR gate stuck</td><td>HIGH/CRITICAL CVE in scanner output → fix or add to suppression list with security sign-off → re-push to unblock</td></tr>
+      <tr><td>Verify pipeline is healthy</td><td><code style="font-family:monospace;font-size:10px">gh run list --repo yarova-ca/pipeline-studio --limit 10</code></td></tr>
+    </table>
+  </div>
 </div>
 
 <div class="decision-block">

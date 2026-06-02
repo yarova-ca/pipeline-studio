@@ -224,6 +224,31 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   .cat-row td,.count-chip{background:none!important;border-color:#ccc!important;color:#000!important}
   .intro-box,.axis-card,.example-block{border:1px solid #ccc}
 }
+/* ── Dual-audience sections ── */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.audience-card{border-radius:8px;padding:16px;font-size:12px}
+.audience-new{background:#e8f4fd;border:1px solid #90caf9}
+.audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.audience-maintainer{background:#f1f8e9;border:1px solid #a5d6a7}
+.audience-maintainer .audience-label{font-weight:700;color:#2e7d32;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.qr-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.qr-table td{padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.08);vertical-align:top}
+.qr-table tr:last-child td{border-bottom:none}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
+.checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
+.checklist-item input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+.checklist-cmd{font-family:monospace;background:var(--bg3);padding:4px 8px;border-radius:4px;font-size:11px;margin:4px 0}
+.checklist-pass{font-size:11px;color:var(--green);margin-top:2px}
+.checklist-fail{font-size:11px;color:var(--red);margin-top:2px}
+@media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){
+  .audience-new{background:#0d2744;border-color:#1565c0}
+  .audience-new .audience-label{color:#90caf9}
+  .audience-maintainer{background:#1b2e1b;border-color:#2e7d32}
+  .audience-maintainer .audience-label{color:#a5d6a7}
+  .qr-table td{border-bottom-color:rgba(255,255,255,.08)}
+}
 </style>
 </head>
 <body>
@@ -276,6 +301,34 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-when"><strong>When to read:</strong> Customizing a service starter with compliance, auth, observability, or ORM — or checking which <code>--build-arg</code> values actually work today vs are designed only.</div>
   <div class="page-pillar">Pillar 2 — Frameworks &amp; Services &nbsp;·&nbsp; Related: <a href="01-framework-catalog.html">01 Framework catalog</a> &nbsp;·&nbsp; <a href="services/">[services/]</a></div>
 </div>
+<!-- ── Dual-audience intro ─────────────────────────────────────────── -->
+<div class="audience-grid">
+  <div class="audience-card audience-new">
+    <div class="audience-label">New to build axes? Start here.</div>
+    <p><strong>Build axis</strong>: a configurable dimension of a service starter — a knob you turn to activate a feature. Each axis is one <code style="font-family:monospace;font-size:10px">--build-arg</code> flag in Docker.</p>
+    <p><strong>How to read this matrix:</strong> rows are services, columns are axes. A filled cell means that axis works for that service.</p>
+    <p><strong>Worked example — Python healthcare backend:</strong></p>
+    <ol style="margin:4px 0 0 14px;font-size:11px;line-height:2">
+      <li>Find your service row → e.g. <code style="font-family:monospace;font-size:10px">15-fastapi</code></li>
+      <li>Find the COMPLIANCE column</li>
+      <li>Cell shows <span class="cell-y" style="display:inline-block;font-size:10px;font-weight:700;background:#d4f4dd;border:1px solid #aadebc;border-radius:3px;padding:1px 7px;color:#1a7f37">HIPAA</span> → HIPAA is supported</li>
+      <li>Build with: <code style="font-family:monospace;font-size:10px">--build-arg COMPLIANCE=hipaa</code></li>
+    </ol>
+    <p style="margin-top:8px"><strong>After reading this page you will be able to:</strong> pick the right build args for any service, understand which axes are live today vs designed-only, and know where config files live.</p>
+  </div>
+  <div class="audience-card audience-maintainer">
+    <div class="audience-label">Platform Maintainer — Quick Reference</div>
+    <table class="qr-table">
+      <tr><td>Add new service to matrix</td><td>1. Add row to <code style="font-family:monospace;font-size:10px">SERVICES_META</code> in <code style="font-family:monospace;font-size:10px">generate_full_bundles.py</code> → 2. Add matrix row here → 3. Add catalog row in <a href="01-framework-catalog.html">doc 01</a></td></tr>
+      <tr><td>Mark service as Tier 1</td><td>Tier 1 criteria: fully implemented axes (RUNTIME + BUILD_IMAGE), green CI, ≥1 real-world user. Add <code style="font-family:monospace;font-size:10px">tier="1"</code> in SERVICES_META</td></tr>
+      <tr><td>Mark service as Tier 2</td><td>Tier 2 criteria: at least RUNTIME axis working, CI passing, no production users yet</td></tr>
+      <tr><td>Axis shows DESIGNED not IMPL</td><td>Wire the <code style="font-family:monospace;font-size:10px">--build-arg</code> in the Dockerfile → test → update status chip here to IMPL</td></tr>
+      <tr><td>Add new axis</td><td>Add column here → add <code style="font-family:monospace;font-size:10px">ARG</code> line to all applicable Dockerfiles → update <code style="font-family:monospace;font-size:10px">generate_full_bundles.py</code></td></tr>
+      <tr><td>Verify matrix is accurate</td><td><code style="font-family:monospace;font-size:10px">docker build --build-arg RUNTIME=alpine services/XX-name/</code> → must succeed</td></tr>
+    </table>
+  </div>
+</div>
+
 <div class="page-meta">7 build axes · 30 service groups · beginner guide · what each axis does · why you'd use it · real examples</div>
 
 <div style="background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:14px 18px;margin:0 0 20px;font-size:12px;line-height:1.75">
