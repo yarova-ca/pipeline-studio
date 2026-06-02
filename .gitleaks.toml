@@ -23,7 +23,7 @@ regexes = [
 ]
 
 [[rules.allowlist]]
-description = "Allow docker-compose dev credentials"
+description = "Allow docker-compose dev credentials — specific strings only"
 paths = [
   '''docker-compose\.yml$''',
 ]
@@ -32,7 +32,7 @@ regexes = [
 ]
 
 [[rules.allowlist]]
-description = "Allow compliance config placeholder values"
-paths = [
-  '''compliance/.*\.yaml$''',
+description = "Allow documented placeholder values — only specific strings, not entire files"
+regexes = [
+  '''(?i)(PLACEHOLDER|CHANGE_ME|CHANGE_ME_IN_PRODUCTION|example_value|test_secret|dev-secret-change-in-production)''',
 ]

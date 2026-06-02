@@ -1,0 +1,17 @@
+autoDiscovery:
+  clusterName: pipeline-studio-prod
+
+awsRegion: us-east-1
+
+rbac:
+  serviceAccount:
+    name: cluster-autoscaler
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_ID:role/cluster-autoscaler
+
+extraArgs:
+  scale-down-utilization-threshold: 0.5
+  scale-down-delay-after-add: 5m
+  scale-down-unneeded-time: 5m
+  balance-similar-node-groups: true
+  skip-nodes-with-system-pods: false
