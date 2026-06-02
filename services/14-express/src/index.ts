@@ -7,6 +7,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import rateLimit from 'express-rate-limit'
 import { randomUUID } from 'node:crypto'
+import { setTimeout as nodeSetTimeout } from 'node:timers'
 import 'dotenv/config'
 import { logger } from './logger.js'
 import { prisma } from './db/client.js'
@@ -92,6 +93,22 @@ app.use(
   }),
 )
 
+// ── Route-level request timeout ────────────────────────────────────────────
+// Fix H6: 30s per-request timeout at the route layer.
+// Why: server.setTimeout covers socket inactivity.
+// This covers routes that hold a socket open but are genuinely stuck (e.g. DB hang).
+// When timeout fires: 408 is returned if headers haven't been sent yet.
+app.use((req, res, next) => {
+  const timer = nodeSetTimeout(() => {
+    if (!res.headersSent) {
+      logger.warn({ url: req.url, method: req.method }, 'request_timeout')
+      res.status(408).json({ error: 'Request timeout — try again', requestId: req.headers['x-request-id'] })
+    }
+  }, 30_000)
+  res.on('finish', () => clearTimeout(timer))
+  next()
+})
+
 // ── Base routes ────────────────────────────────────────────────────────────
 app.get('/', (_req, res) => {
   res.json({ message: 'Hello from Express 5.0', framework: '14-express', version: '1.0.0' })
@@ -145,5 +162,32 @@ export const server = app.listen(PORT, () => {
 
 // 30s max request duration — protects against slowloris and hung connections.
 server.setTimeout(30_000)
+
+// Graceful shutdown — allows in-flight requests to complete before exiting.
+// Why: Kubernetes sends SIGTERM before killing the pod during rolling deploys.
+// Without this: active requests drop with connection reset errors (user-visible 503s).
+// With this: new connections rejected, existing requests finish, then process exits.
+const shutdown = async (signal: string): Promise<void> => {
+  logger.info({ signal }, 'shutdown_initiated')
+  server.close(async () => {
+    logger.info('http_server_closed')
+    try {
+      await prisma.$disconnect()
+      logger.info('db_disconnected')
+    } catch (err) {
+      logger.error({ err }, 'db_disconnect_error')
+    }
+    logger.info('shutdown_complete')
+    process.exit(0)
+  })
+  // Force exit after 30s if graceful shutdown stalls
+  setTimeout(() => {
+    logger.error('forced_shutdown — graceful shutdown timed out after 30s')
+    process.exit(1)
+  }, 30_000).unref()
+}
+
+process.on('SIGTERM', () => shutdown('SIGTERM'))
+process.on('SIGINT', () => shutdown('SIGINT'))
 
 export default app

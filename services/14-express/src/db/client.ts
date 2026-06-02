@@ -43,3 +43,31 @@ prisma.$on('query', (e) => {
     })
   }
 })
+
+// Prisma error codes for transient failures (retryable)
+// P1001: connection error
+// P1002: connection timeout
+// P1008: operation timed out
+// P1017: server closed connection
+const RETRYABLE_CODES = new Set(['P1001', 'P1002', 'P1008', 'P1017'])
+
+export async function withRetry<T>(
+  fn: () => Promise<T>,
+  retries = 3,
+  delayMs = 100,
+): Promise<T> {
+  let lastError: unknown
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      return await fn()
+    } catch (err: any) {
+      lastError = err
+      const code = err?.code ?? err?.meta?.code
+      if (!RETRYABLE_CODES.has(code)) throw err    // Non-retryable: re-throw immediately
+      if (attempt === retries) break
+      const jitter = Math.random() * delayMs       // Jitter prevents thundering herd
+      await new Promise(r => setTimeout(r, delayMs * attempt + jitter))
+    }
+  }
+  throw lastError
+}
