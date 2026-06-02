@@ -1,0 +1,77 @@
+# Argo Rollout for 14-express — replaces the native Kubernetes Deployment.
+# AnalysisTemplate defines the metrics that determine canary success/failure.
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: 14-express
+  namespace: prod
+  labels:
+    app: 14-express
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: 14-express
+  template:
+    # Same pod spec as Helm deployment.yaml — refer to Helm for full spec
+    metadata:
+      labels:
+        app: 14-express
+    spec:
+      containers:
+        - name: 14-express
+          image: ghcr.io/yarova-ca/14-express:latest
+          ports:
+            - containerPort: 3000
+  strategy:
+    canary:
+      canaryService: 14-express-canary     # Service routing to new version
+      stableService: 14-express-stable     # Service routing to old version
+      trafficRouting:
+        nginx:
+          stableIngress: 14-express-ingress
+      steps:
+        - setWeight: 10      # 10% traffic to canary
+        - pause: { duration: 5m }
+        - analysis:
+            templates:
+              - templateName: 14-express-canary-analysis
+        - setWeight: 50      # 50% traffic to canary
+        - pause: { duration: 5m }
+        - analysis:
+            templates:
+              - templateName: 14-express-canary-analysis
+        - setWeight: 100     # Full promotion
+---
+# AnalysisTemplate — defines success/failure criteria for canary.
+# Queries Prometheus every 30s. Fails if error rate > 5%.
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: 14-express-canary-analysis
+  namespace: prod
+spec:
+  metrics:
+    - name: error-rate
+      interval: 30s
+      failureLimit: 2       # Allow 2 failures before marking rollout failed
+      successfulLimit: 5    # Require 5 consecutive successes to pass
+      provider:
+        prometheus:
+          address: http://prometheus-operated.monitoring:9090
+          query: |
+            sum(rate(http_requests_total{app="14-express",status=~"5.."}[1m]))
+            /
+            sum(rate(http_requests_total{app="14-express"}[1m]))
+      failureCondition: result[0] > 0.05   # Fail if error rate > 5%
+    - name: p99-latency
+      interval: 30s
+      failureLimit: 2
+      provider:
+        prometheus:
+          address: http://prometheus-operated.monitoring:9090
+          query: |
+            histogram_quantile(0.99,
+              sum(rate(http_request_duration_seconds_bucket{app="14-express"}[1m])) by (le)
+            )
+      failureCondition: result[0] > 1.0    # Fail if p99 latency > 1s
