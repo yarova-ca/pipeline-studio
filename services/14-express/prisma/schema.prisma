@@ -44,5 +44,12 @@ model Item {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Indexes for common query patterns:
+  // - List items by user (WHERE user_id = ?)
+  // - Paginated listing (ORDER BY created_at DESC)
+  // - Combined filter + sort (WHERE user_id = ? ORDER BY created_at DESC)
+  @@index([userId])
+  @@index([createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
   @@map("items")
 }

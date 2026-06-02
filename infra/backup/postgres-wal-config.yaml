@@ -1,0 +1,47 @@
+# PostgreSQL WAL archival configuration for Point-in-Time Recovery (PITR).
+#
+# WAL (Write-Ahead Log): PostgreSQL's transaction log — records every change.
+# PITR: restore the database to any point in time within the WAL retention window.
+#
+# Why PITR matters: a full backup every 24h means data loss of up to 24h.
+# With WAL archival: restore to any minute — data loss measured in seconds.
+#
+# This ConfigMap is mounted into the PostgreSQL StatefulSet as configuration.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-wal-config
+  namespace: prod
+  annotations:
+    description: "PostgreSQL WAL archival settings for PITR. Apply to postgres StatefulSet."
+data:
+  postgresql.conf: |
+    # WAL level must be 'replica' or 'logical' for archival
+    wal_level = replica
+
+    # Enable WAL archiving
+    archive_mode = on
+
+    # Archive command: copy WAL segment to S3
+    # Replace BACKUP_BUCKET with actual bucket name
+    archive_command = 'aws s3 cp %p s3://yarova-pipeline-studio-wal-archive/%f || exit 1'
+
+    # Keep WAL files for 7 days (matches PITR window)
+    wal_keep_size = 1024          # 1GB of WAL segments retained locally
+    archive_cleanup_command = 'pg_archivecleanup /var/lib/postgresql/data/pg_wal %r'
+
+    # Checkpoint settings for write performance
+    checkpoint_completion_target = 0.9
+    max_wal_size = 4GB
+
+  recovery.conf.template: |
+    # Restore command for PITR recovery
+    # To restore to a specific time:
+    # 1. Stop PostgreSQL
+    # 2. Restore latest base backup
+    # 3. Create recovery.conf with target time
+    # 4. Start PostgreSQL
+    restore_command = 'aws s3 cp s3://yarova-pipeline-studio-wal-archive/%f %p'
+    recovery_target_time = '2026-01-01 12:00:00'    # REPLACE with target time
+    recovery_target_action = 'promote'

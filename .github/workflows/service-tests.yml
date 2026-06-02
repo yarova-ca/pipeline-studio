@@ -35,6 +35,52 @@ permissions:
   contents: read
 
 jobs:
+  # ── Database migration validation ─────────────────────────────────────────
+  # Validates that Prisma migrations apply cleanly from an empty database.
+  # Why: if a migration references a column that doesn't exist or has a syntax
+  # error, it fails in production — this catches it in CI first.
+  test-migrations:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: migration_test
+          POSTGRES_USER: testuser
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Prisma
+        run: npm install --prefix services/14-express --ignore-scripts
+      - name: Run migrations from scratch
+        run: npx prisma migrate deploy
+        working-directory: services/14-express
+        env:
+          DATABASE_URL: postgresql://testuser:testpass@localhost:5432/migration_test
+      - name: Verify tables exist
+        run: |
+          PGPASSWORD=testpass psql -h localhost -U testuser migration_test \
+            -c "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;" \
+            | grep -E "items|users" && echo "PASS: Required tables exist"
+        env:
+          DATABASE_URL: postgresql://testuser:testpass@localhost:5432/migration_test
+      - name: Verify indexes exist
+        run: |
+          PGPASSWORD=testpass psql -h localhost -U testuser migration_test \
+            -c "SELECT indexname FROM pg_indexes WHERE tablename = 'items';" \
+            | grep "idx_items_user_id" && echo "PASS: FK index exists"
+
   # ── Node services ─────────────────────────────────────────────────────────
   test-node:
     runs-on: ubuntu-24.04
