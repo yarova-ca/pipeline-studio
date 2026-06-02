@@ -15,6 +15,10 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+    // JSON logging
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+    // Prometheus metrics
+    implementation("io.micrometer:micrometer-registry-prometheus")
     // PostgreSQL
     runtimeOnly("org.postgresql:postgresql:42.7.3")
     // H2 for tests
