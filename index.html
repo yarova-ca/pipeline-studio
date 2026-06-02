@@ -127,6 +127,19 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
   main{padding:20px;max-width:none}
   .doc-card{border:1px solid #ccc;break-inside:avoid}
 }
+/* Hero section */
+.hero-section{padding:24px 0 8px;border-bottom:2px solid var(--border);margin-bottom:24px}
+.hero-title{font-size:28px;font-weight:800;color:var(--text-head);margin-bottom:6px}
+.hero-tagline{font-size:14px;font-weight:600;color:var(--text-head);margin-bottom:6px}
+.hero-sub{font-size:12.5px;color:var(--text-dim);margin-bottom:20px;line-height:1.65}
+.reader-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px}
+.reader-card{background:var(--bg2);border:2px solid var(--border);border-radius:10px;padding:16px;text-decoration:none;color:var(--text);transition:all .15s;display:block}
+.reader-card:hover{border-color:var(--blue);box-shadow:0 3px 12px rgba(9,105,218,.15);text-decoration:none}
+.reader-card strong{font-size:13px;display:block;margin-bottom:4px;color:var(--text-head)}
+.rc-emoji{font-size:24px;margin-bottom:8px}
+.rc-desc{font-size:11.5px;color:var(--text-dim);line-height:1.5}
+.reading-path{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:20px}
+@media(max-width:700px){.reader-cards{grid-template-columns:1fr}}
 
 /* ── Dual-audience sections ── */
 .audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
@@ -169,20 +182,20 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
   <a href="index.html" class="nav-hub" aria-current="page">⌂ Hub</a>
 
   <details open>
-    <summary>Frameworks &amp; Services<span class="pillar-badge">2</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
   </details>
 
   <details open>
-    <summary>Build &amp; Runtime<span class="pillar-badge">3</span></summary>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
     <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
     <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
     <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
   </details>
 
   <details open>
-    <summary>Pipeline &amp; Tools<span class="pillar-badge">4</span></summary>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
     <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
     <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
     <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
@@ -197,7 +210,7 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
   </details>
 
   <details open>
-    <summary>Industry Verticals<span class="pillar-badge">6</span></summary>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
     <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
     <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
     <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
@@ -205,7 +218,7 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
   </details>
 
   <details open>
-    <summary>Operations<span class="pillar-badge">7</span></summary>
+    <summary>Maintaining<span class="pillar-badge">7</span></summary>
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
   </details>
 
@@ -215,19 +228,125 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
 <!-- ═══ MAIN CONTENT ═══ -->
 <main id="main-content">
 
-<div class="page-header">
-  <div class="page-title">Pipeline Studio</div>
-  <div class="page-covers"><strong>What this covers:</strong> Platform engineering reference and runnable service starters for all 106 frameworks, every industry vertical, and all compliance standards.</div>
-  <div class="page-when"><strong>When to read:</strong> Start of every session. Every doc in this repo links back here for orientation.</div>
+<!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+<div class="hero-section">
+  <h1 class="hero-title">Pipeline Studio</h1>
+  <p class="hero-tagline">
+    Every service, every language, every compliance standard — documented and ready to deploy.
+  </p>
+  <p class="hero-sub">
+    106 runnable service starters across 30 framework groups.
+    17 reference docs. Full CI/CD, Helm charts, Backstage catalog, and compliance configs included.
+  </p>
+  <div class="reader-cards">
+    <a href="#path-new" class="reader-card" onclick="selectPath('new')">
+      <div class="rc-emoji">👋</div>
+      <strong>New here?</strong>
+      <div class="rc-desc">Learn what this platform is and what it gives you</div>
+    </a>
+    <a href="#path-build" class="reader-card" onclick="selectPath('build')">
+      <div class="rc-emoji">🔨</div>
+      <strong>Building a service?</strong>
+      <div class="rc-desc">Pick your language and start in 5 minutes</div>
+    </a>
+    <a href="#path-maintain" class="reader-card" onclick="selectPath('maintain')">
+      <div class="rc-emoji">⚙️</div>
+      <strong>Maintaining the platform?</strong>
+      <div class="rc-desc">Weekly checklist, audit guide, and architecture decisions</div>
+    </a>
+  </div>
 </div>
 
-<!-- ═══ PLATFORM OVERVIEW ═══ -->
-<div class="platform-overview">
-  <h3>What this platform is</h3>
-  <p>Pipeline Studio is a complete platform engineering catalog. It covers every framework from hello world through production-grade deployment — with Dockerfiles for all runtime axes, GitHub Actions for all 6 CI/CD phases, Helm charts, Kustomize overlays, compliance configs, and observability wiring.</p>
-  <p>The HTML pages are the knowledge layer. They document everything — all 106 frameworks, 22 Linux distros, 15 compliance standards, 74 US industries, 73 Canadian industries — with full WHY explanations and implementation details.</p>
-  <p>The <code>services/</code> directory is the implementation layer. Each folder is a complete, runnable service with health endpoints, tests, and a Dockerfile that works today.</p>
-  <p><strong>End goal:</strong> Every service bundle is a Backstage scaffolder template. A team picks framework + industry + compliance → gets a complete GitHub repo ready to push.</p>
+<!-- ── Reading paths (shown on click) ────────────────────────────────────── -->
+<div id="path-new" class="reading-path" style="display:none">
+  <h2 style="margin-top:0">What is Pipeline Studio?</h2>
+  <p style="font-size:13px;line-height:1.7;color:var(--text-dim);margin-bottom:12px">
+    Pipeline Studio is a platform engineering platform. A team picks a framework (e.g. Express, FastAPI, Spring Boot),
+    an industry (e.g. Healthcare), and a compliance standard (e.g. HIPAA) — and gets a complete, deployable service
+    with health endpoints, CI/CD pipelines, Helm charts, auth, ORM, logging, and compliance configs already wired.
+  </p>
+  <p style="font-size:13px;line-height:1.7;color:var(--text-dim);margin-bottom:16px">
+    The HTML pages document every decision. The <code>services/</code> directory contains the runnable code.
+    The <code>infra/</code> directory contains the Kubernetes manifests. Backstage connects it all as a developer portal.
+  </p>
+  <div class="hint-card">
+    <strong>Start with:</strong> <a href="02-pipeline-schema.html">02 — Pipeline Schema</a> to understand the 6-phase CI/CD flow.
+    Then <a href="01-framework-catalog.html">01 — Framework Catalog</a> to pick your language.
+    Then <a href="18-service-status.html">18 — Service Status</a> to see what's implemented for your language.
+  </div>
+</div>
+
+<div id="path-build" class="reading-path" style="display:none">
+  <h2 style="margin-top:0">Building a service — start here</h2>
+  <div class="sp-list">
+    <div class="sp-block">
+      <div class="sp-label">Step 1 — Pick your framework</div>
+      <div class="sp-chain">
+        <a href="01-framework-catalog.html" class="sp-node">01 Framework Catalog</a>
+      </div>
+      <div class="sp-hint">Find your language group. Compare maturity, performance, and tradeoffs.</div>
+    </div>
+    <div class="sp-block">
+      <div class="sp-label">Step 2 — Pick your base image</div>
+      <div class="sp-chain">
+        <a href="09-linux-distros.html" class="sp-node">09 Linux Distros</a>
+        <span class="sp-arr">→</span>
+        <a href="11-dockerfile-catalog.html" class="sp-node">11 Dockerfiles</a>
+      </div>
+      <div class="sp-hint">Alpine for default. Slim for glibc compatibility. UBI9 for FIPS.</div>
+    </div>
+    <div class="sp-block">
+      <div class="sp-label">Step 3 — Add compliance (if needed)</div>
+      <div class="sp-chain">
+        <a href="12-compliance-variations.html" class="sp-node">12 Compliance</a>
+      </div>
+      <div class="sp-hint">Each standard adds a delta on top of the base Dockerfile.</div>
+    </div>
+    <div class="sp-block">
+      <div class="sp-label">Step 4 — Clone the service starter</div>
+      <div class="sp-chain">
+        <a href="18-service-status.html" class="sp-node">18 Service Status</a>
+        <span class="sp-arr">→</span>
+        <span class="sp-node" style="background:#d1fae5;color:#065f46;border-color:#86efac">Clone services/XX/</span>
+      </div>
+      <div class="sp-hint">Every starter has health endpoints, Dockerfile, CI, Helm, auth, ORM, logging, and compliance configs.</div>
+    </div>
+  </div>
+</div>
+
+<div id="path-maintain" class="reading-path" style="display:none">
+  <h2 style="margin-top:0">Maintaining the platform — start here</h2>
+  <div class="cards-grid" style="margin-bottom:16px">
+    <a href="16-maintainability-runbook.html" class="doc-card">
+      <div class="doc-card-title">Weekly health checklist</div>
+      <div class="doc-card-covers">7 commands that verify the platform is healthy. Takes 5 minutes.</div>
+    </a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/blob/main/AUDIT_PROCESS.md" class="doc-card" target="_blank">
+      <div class="doc-card-title">Quarterly Google-level audit</div>
+      <div class="doc-card-covers">5 audit prompts covering auth, reliability, observability, infra, and data.</div>
+    </a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/blob/main/DECISIONS.md" class="doc-card" target="_blank">
+      <div class="doc-card-title">Architecture decisions</div>
+      <div class="doc-card-covers">Every major choice documented with WHY and what was rejected.</div>
+    </a>
+    <a href="18-service-status.html" class="doc-card">
+      <div class="doc-card-title">Service implementation status</div>
+      <div class="doc-card-covers">105-service table showing what's complete and what's missing per layer.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ── Service status banner ──────────────────────────────────────────────── -->
+<div class="services-card" style="margin-top:8px">
+  <h3>Service starters — <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services">services/</a></h3>
+  <p style="font-size:12px;color:var(--text-dim);margin:6px 0 10px">106 runnable services. Each has: health endpoints + Dockerfile + CI/CD + Helm + auth + ORM + logging + compliance configs.</p>
+  <div class="services-stats">
+    <div class="services-stat"><strong>106</strong> services</div>
+    <div class="services-stat"><strong>30</strong> framework groups</div>
+    <div class="services-stat"><strong>10</strong> language groups</div>
+    <div class="services-stat"><strong>3</strong> Docker RUNTIME axes per service</div>
+  </div>
+  <a href="18-service-status.html" style="font-size:12px;font-weight:600">View full implementation status →</a>
 </div>
 
 <!-- ═══ THREE LAYERS ═══ -->
@@ -607,5 +726,16 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
 </table>
 
 </main>
+<script>
+function selectPath(type) {
+  document.querySelectorAll('.reading-path').forEach(el => { el.style.display = 'none' });
+  document.querySelectorAll('.reader-card').forEach(el => { el.style.borderColor = '' });
+  var el = document.getElementById('path-' + type);
+  if (el) {
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+</script>
 </body>
 </html>
