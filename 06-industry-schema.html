@@ -160,6 +160,32 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
 .failure-block div{margin-bottom:4px}
 .failure-block div:last-child{margin-bottom:0}
+
+/* ── Dual-audience sections ── */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.audience-card{border-radius:8px;padding:16px;font-size:12px}
+.audience-new{background:#e8f4fd;border:1px solid #90caf9}
+.audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.audience-maintainer{background:#f1f8e9;border:1px solid #a5d6a7}
+.audience-maintainer .audience-label{font-weight:700;color:#2e7d32;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.qr-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.qr-table td{padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.08);vertical-align:top}
+.qr-table tr:last-child td{border-bottom:none}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
+.checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
+.checklist-item input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+.checklist-cmd{font-family:monospace;background:var(--bg3);padding:4px 8px;border-radius:4px;font-size:11px;margin:4px 0}
+.checklist-pass{font-size:11px;color:var(--green);margin-top:2px}
+.checklist-fail{font-size:11px;color:var(--red);margin-top:2px}
+@media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){
+  .audience-new{background:#0d2744;border-color:#1565c0}
+  .audience-new .audience-label{color:#90caf9}
+  .audience-maintainer{background:#1b2e1b;border-color:#2e7d32}
+  .audience-maintainer .audience-label{color:#a5d6a7}
+  .qr-table td{border-bottom-color:rgba(255,255,255,.08)}
+}
 </style>
 </head>
 <body>

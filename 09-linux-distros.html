@@ -159,6 +159,31 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   h2{margin-top:24px}
   .tbl-wrap{break-inside:avoid}
 }
+/* ── Dual-audience sections ── */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.audience-card{border-radius:8px;padding:16px;font-size:12px}
+.audience-new{background:#e8f4fd;border:1px solid #90caf9}
+.audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.audience-maintainer{background:#f1f8e9;border:1px solid #a5d6a7}
+.audience-maintainer .audience-label{font-weight:700;color:#2e7d32;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.qr-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.qr-table td{padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.08);vertical-align:top}
+.qr-table tr:last-child td{border-bottom:none}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
+.checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
+.checklist-item input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+.checklist-cmd{font-family:monospace;background:var(--bg3);padding:4px 8px;border-radius:4px;font-size:11px;margin:4px 0}
+.checklist-pass{font-size:11px;color:var(--green);margin-top:2px}
+.checklist-fail{font-size:11px;color:var(--red);margin-top:2px}
+@media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){
+  .audience-new{background:#0d2744;border-color:#1565c0}
+  .audience-new .audience-label{color:#90caf9}
+  .audience-maintainer{background:#1b2e1b;border-color:#2e7d32}
+  .audience-maintainer .audience-label{color:#a5d6a7}
+  .qr-table td{border-bottom-color:rgba(255,255,255,.08)}
+}
 </style>
 </head>
 <body>
@@ -212,6 +237,35 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="page-when"><strong>When to read:</strong> Writing a FROM line in any Dockerfile. Selecting a build image or runtime image.</div>
   <div class="page-pillar">Pillar 3 — Build &amp; Runtime &nbsp;·&nbsp; Related: <a href="10-linux-compliance.html">10 Compliance matrices</a> &nbsp;·&nbsp; <a href="11-dockerfile-catalog.html">11 Dockerfiles</a></div>
 </div>
+<!-- ── Dual-audience intro ─────────────────────────────────────────── -->
+<div class="audience-grid">
+  <div class="audience-card audience-new">
+    <div class="audience-label">New to base images? Start here.</div>
+    <p><strong>Base image</strong>: the starting layer every Docker container is built from. Like a pre-installed OS — your app code runs on top of it.</p>
+    <p><strong>Why it matters:</strong> smaller image = faster pulls = less attack surface = fewer CVEs to patch.</p>
+    <p><strong>The three you'll use most:</strong></p>
+    <ul style="margin:4px 0 0 14px;font-size:11px;line-height:2">
+      <li><strong>Alpine</strong> — 5 MB, minimal. Use for Go, Rust, or pure-Python apps.</li>
+      <li><strong>Debian slim</strong> — 80 MB, glibc. Use when Python/Node native modules break on Alpine.</li>
+      <li><strong>UBI9 (Red Hat)</strong> — 200 MB+, enterprise. Use when FIPS 140-2 compliance is required.</li>
+    </ul>
+    <p style="margin-top:8px"><strong>Rule of thumb:</strong> start with Alpine. If the build fails because of missing libraries, switch to <code style="font-family:monospace;font-size:10px">debian:12-slim</code>.</p>
+    <p><strong>After reading this page you will be able to:</strong> choose the right base image for any service, explain why Alpine breaks some Python packages, and know when FIPS requires UBI9.</p>
+  </div>
+  <div class="audience-card audience-maintainer">
+    <div class="audience-label">Platform Maintainer — Quick Reference</div>
+    <table class="qr-table">
+      <tr><td>Build fails — missing library</td><td>Switch runtime from <code style="font-family:monospace;font-size:10px">alpine</code> to <code style="font-family:monospace;font-size:10px">debian:12-slim</code> — musl/glibc incompatibility</td></tr>
+      <tr><td>FIPS compliance required</td><td>Use <code style="font-family:monospace;font-size:10px">ubi9/ubi-micro</code> or <code style="font-family:monospace;font-size:10px">ubi9/nodejs-22-minimal</code> — only UBI9 has validated FIPS module</td></tr>
+      <tr><td>Verify FIPS mode active</td><td><code style="font-family:monospace;font-size:10px">cat /proc/sys/crypto/fips_enabled</code> → must output <code style="font-family:monospace;font-size:10px">1</code></td></tr>
+      <tr><td>Check image size before push</td><td><code style="font-family:monospace;font-size:10px">docker image inspect &lt;image&gt; --format='{{.Size}}'</code></td></tr>
+      <tr><td>Trivy scan before push</td><td><code style="font-family:monospace;font-size:10px">trivy image --exit-code 1 --severity HIGH,CRITICAL &lt;image&gt;</code></td></tr>
+      <tr><td>Base image has new CVE</td><td>HIGH: update within 7 days. MEDIUM: update within 30 days. See <a href="15-version-registry.html">15-version-registry.html</a></td></tr>
+      <tr><td>Update FROM tag</td><td>Change tag in <a href="11-dockerfile-catalog.html">11-dockerfile-catalog.html</a> + update verified date in <a href="15-version-registry.html">doc 15</a></td></tr>
+    </table>
+  </div>
+</div>
+
 <div class="page-meta">22 distros &nbsp;·&nbsp; 4 families &nbsp;·&nbsp; container base images to enterprise OS &nbsp;·&nbsp; compliance matrix: <a href="10-linux-compliance.html">doc 10</a></div>
 
 <!-- Counts bar -->
