@@ -21,3 +21,10 @@ export default app
 if (process.env.NODE_ENV !== 'test') {
   serve({ fetch: app.fetch, port: PORT }, () => console.log(`Hono running on port ${PORT}`))
 }
+
+// Graceful shutdown — drains in-flight requests before exiting.
+process.on('SIGTERM', () => {
+  const srv = (global as any).__server
+  if (srv) srv.close(() => process.exit(0))
+  else process.exit(0)
+})

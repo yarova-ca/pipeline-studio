@@ -10,3 +10,4 @@ require (
 	gorm.io/driver/sqlite v1.5.6
 	gorm.io/gorm v1.25.12
 )
+require github.com/prometheus/client_golang v1.20.0

@@ -32,6 +32,8 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo})))
+
 	port := os.Getenv("PORT")
 	if port == "" { port = "8080" }
 

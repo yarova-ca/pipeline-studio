@@ -10,6 +10,8 @@ import (
 )
 
 func main() {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo})))
+
 	if os.Getenv("DATABASE_URL") != "" {
 		if err := db.InitDB(); err != nil {
 			log.Fatalf("db init: %v", err)

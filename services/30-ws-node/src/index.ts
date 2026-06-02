@@ -27,3 +27,10 @@ server.listen(port, () => {
   console.log(`WebSocket server on ws://localhost:${port}/ws`);
   console.log(`Health on http://localhost:${port}/health`);
 });
+
+// Graceful shutdown — drains in-flight requests before exiting.
+process.on('SIGTERM', () => {
+  const srv = (global as any).__server
+  if (srv) srv.close(() => process.exit(0))
+  else process.exit(0)
+})

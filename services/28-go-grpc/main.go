@@ -19,6 +19,8 @@ func (s *healthServer) Check(ctx context.Context, req *grpc_health_v1.HealthChec
 }
 
 func main() {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo})))
+
 	grpcPort := os.Getenv("GRPC_PORT")
 	if grpcPort == "" { grpcPort = "50051" }
 	httpPort := os.Getenv("HTTP_PORT")

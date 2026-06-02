@@ -32,3 +32,10 @@ await app.register(usersRoutes)
 if (process.env.NODE_ENV !== 'test') {
   app.listen({ port: PORT, host: '0.0.0.0' })
 }
+
+// Graceful shutdown — drains in-flight requests before exiting.
+process.on('SIGTERM', () => {
+  const srv = (global as any).__server
+  if (srv) srv.close(() => process.exit(0))
+  else process.exit(0)
+})

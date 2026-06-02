@@ -81,3 +81,4 @@ require (
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+require github.com/prometheus/client_golang v1.20.0

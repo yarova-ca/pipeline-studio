@@ -31,3 +31,10 @@ http.createServer((req, res) => {
     res.end();
   }
 }).listen(httpPort, () => console.log(`HTTP health sidecar on :${httpPort}`));
+
+// Graceful shutdown — drains in-flight requests before exiting.
+process.on('SIGTERM', () => {
+  const srv = (global as any).__server
+  if (srv) srv.close(() => process.exit(0))
+  else process.exit(0)
+})

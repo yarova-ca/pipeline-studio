@@ -28,3 +28,10 @@ createServer(handler).listen(port, () => {
   console.log(`GraphQL Yoga ready at http://localhost:${port}/graphql`);
   console.log(`Health: GET http://localhost:${port}/health`);
 });
+
+// Graceful shutdown — drains in-flight requests before exiting.
+process.on('SIGTERM', () => {
+  const srv = (global as any).__server
+  if (srv) srv.close(() => process.exit(0))
+  else process.exit(0)
+})
