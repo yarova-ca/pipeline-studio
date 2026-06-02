@@ -1,4 +1,7 @@
-{{- if ge (int .Values.replicaCount) 2 }}
+# PodDisruptionBudget: ensures at least 1 pod stays running during voluntary disruptions.
+# Voluntary disruption: node drain for maintenance, cluster upgrade, etc.
+# Why apply even for 1 replica: prevents node drain from taking the service fully down.
+# When replicaCount=1 and PDB minAvailable=1: drain is blocked until pod is rescheduled.
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -10,4 +13,3 @@ spec:
   selector:
     matchLabels:
       {{- include "14-express.selectorLabels" . | nindent 6 }}
-{{- end }}

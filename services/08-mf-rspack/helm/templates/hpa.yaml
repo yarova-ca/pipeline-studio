@@ -19,4 +19,12 @@ spec:
         target:
           type: Utilization
           averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          # 80% memory triggers scale-out — important for I/O-bound services
+          # where CPU stays low but memory grows with connections/cache.
+          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage | default 80 }}
 {{- end }}

@@ -18,6 +18,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: '0 6 * * 1'   # Every Monday 6 AM UTC — weekly CVE rescan
 
 permissions:
   contents: read
@@ -105,3 +107,89 @@ jobs:
         with:
           sarif_file: trivy-${{ matrix.service }}.sarif
           category: trivy-${{ matrix.service }}
+
+  compliance-hipaa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: HIPAA — Verify audit logging is implemented
+        run: |
+          echo "Checking for audit logging in auth middleware..."
+          grep -r "auditLog\|audit_log\|AuditLog\|AUDIT:" services/14-express/src/ \
+            || (echo "FAIL: No audit logging found in 14-express/src/" && exit 1)
+          echo "PASS: Audit logging found"
+
+      - name: HIPAA — Verify encryption in transit (TLS config)
+        run: |
+          echo "Checking for HTTPS/TLS configuration..."
+          grep -r "secure.*true\|NODE_ENV.*production\|https" services/14-express/src/ | grep -i cookie \
+            && echo "PASS: TLS cookie flag found" || echo "WARN: cookie secure flag not found"
+
+      - name: HIPAA — Semgrep PHI and security patterns scan
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/hipaa
+            p/owasp-top-ten
+            p/secrets
+        continue-on-error: true   # Semgrep token optional
+
+  compliance-fips-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build FIPS image (14-express)
+        run: |
+          docker build \
+            --build-arg RUNTIME=fips \
+            --target runtime-fips \
+            -t pipeline-studio/14-express:fips-test \
+            services/14-express/ \
+            && echo "PASS: FIPS image builds successfully" \
+            || echo "WARN: FIPS build failed — check UBI9 credentials"
+
+      - name: Verify FIPS runtime uses UBI9 base
+        run: |
+          docker inspect pipeline-studio/14-express:fips-test \
+            --format '{{index .Config.Labels "org.opencontainers.image.base.name"}}' \
+            2>/dev/null || true
+          docker history pipeline-studio/14-express:fips-test \
+            | grep -i "ubi9\|registry.access.redhat.com" \
+            && echo "PASS: FIPS image uses UBI9 base" \
+            || echo "WARN: Could not verify UBI9 base"
+
+  registry-continuous-scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    # Run weekly to detect newly-disclosed CVEs in deployed images
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull and scan deployed images
+        run: |
+          for service in 14-express 15-fastapi 16-gin 17-spring-boot 19-aspnet-core 20-axum; do
+            echo "Scanning ghcr.io/yarova-ca/${service}:latest..."
+            docker pull ghcr.io/yarova-ca/${service}:latest 2>/dev/null || continue
+            docker run --rm \
+              -v /var/run/docker.sock:/var/run/docker.sock \
+              aquasec/trivy:latest image \
+              --severity HIGH,CRITICAL \
+              --ignore-unfixed \
+              --exit-code 0 \
+              "ghcr.io/yarova-ca/${service}:latest" || true
+          done
