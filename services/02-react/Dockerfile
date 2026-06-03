@@ -39,7 +39,7 @@ FROM base-${RUNTIME} AS runtime
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:80/health/live',(r)=>r.statusCode===200?process.exit(0):process.exit(1))" || exit 1
+  CMD curl -sf http://localhost:80/ > /dev/null || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
 
@@ -47,4 +47,6 @@ CMD ["nginx", "-g", "daemon off;"]
 FROM base-fips AS runtime-fips
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -sf http://localhost:80/ > /dev/null || exit 1
 CMD ["nginx", "-g", "daemon off;"]

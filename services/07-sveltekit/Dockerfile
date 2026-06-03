@@ -75,4 +75,6 @@ COPY --from=build --chown=app:app /app/node_modules ./node_modules
 COPY --from=build --chown=app:app /app/package.json ./
 USER 1001
 EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/health/live',(r)=>r.statusCode===200?process.exit(0):process.exit(1))" || exit 1
 CMD ["node", "build/index.js"]

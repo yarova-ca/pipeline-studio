@@ -45,4 +45,6 @@ COPY --from=build --chown=1001:1001 /app/target/*.jar app.jar
 ENV GRPC_PORT=50051 HTTP_PORT=8080
 USER 1001
 EXPOSE 50051 8080
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:50051/health/live || exit 1
 CMD ["java", "-jar", "app.jar"]

@@ -59,4 +59,6 @@ COPY --chown=1001:1001 . .
 ENV PATH="/venv/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 USER 1001
 EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/live')" || exit 1
 CMD ["/venv/bin/gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080"]

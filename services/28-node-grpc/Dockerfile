@@ -51,4 +51,6 @@ COPY --from=build --chown=1001:1001 /app/node_modules ./node_modules
 ENV GRPC_PORT=50051 HTTP_PORT=8080 NODE_ENV=production
 USER 1001
 EXPOSE 50051 8080
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:50051/health/live',(r)=>r.statusCode===200?process.exit(0):process.exit(1))" || exit 1
 CMD ["node", "dist/index.js"]
