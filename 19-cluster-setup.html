@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>19 — Cluster Setup | Pipeline Studio</title>
+<meta name="description" content="How to create and configure the 4-cluster platform (hub + dev + test + prod) on any cloud using Terraform and ArgoCD.">
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d0d7de;--text:#1f2328;--text-dim:#656d76;--text-head:#1f2328;
+  --blue:#0969da;--green:#1a7f37;--amber:#7a4f00;--purple:#6f42c1;--red:#b91c1c;
+  --sidebar-w:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;
+  background:var(--bg);color:var(--text);line-height:1.5;display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);
+  border-right:1px solid var(--border);padding:16px 0;position:sticky;top:0;height:100vh;
+  overflow-y:auto;flex-shrink:0}
+nav a{display:block;padding:5px 16px;font-size:12px;color:var(--text-dim);text-decoration:none;
+  transition:color .12s,background .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text);background:var(--bg3)}
+nav a[aria-current]{color:var(--blue);font-weight:600;background:var(--bg3)}
+.nav-top{color:var(--text-dim)!important;margin-top:8px;border-top:1px solid var(--border)}
+main{flex:1;padding:24px 32px;max-width:1100px;overflow-x:auto}
+h1{font-size:20px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+.page-meta{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+h2{font-size:15px;font-weight:700;color:var(--text-head);margin:32px 0 6px;
+  padding-top:10px;border-top:2px solid var(--border)}
+h3{font-size:13px;font-weight:700;color:var(--text-head);margin:18px 0 6px}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:12px}
+p{margin-bottom:8px;font-size:13px;line-height:1.6}
+
+/* Warn / note blocks */
+.warn-block{background:#fff8c5;border:1px solid #e8d064;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.warn-block strong{color:var(--amber)}
+.note-block{background:#dbeeff;border:1px solid #b6d7f5;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.note-block strong{color:var(--blue)}
+
+/* Code blocks */
+pre.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  padding:12px 16px;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  overflow-x:auto;line-height:1.7;margin:8px 0}
+code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+
+/* Table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:12px}
+.xref-table{width:100%;border-collapse:collapse;font-size:12px}
+.xref-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
+  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap}
+.xref-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.xref-table tr:last-child td{border-bottom:none}
+.xref-table tr:hover td{background:var(--bg2)}
+
+/* Diagram */
+.diagram-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:20px 24px;margin:12px 0;font-family:"SFMono-Regular",Consolas,monospace;
+  font-size:12px;line-height:2;color:var(--text-dim)}
+.diagram-box .d-highlight{color:var(--blue);font-weight:600}
+.diagram-box .d-arrow{color:var(--text-dim)}
+
+/* Step list */
+.steps-list{list-style:none;padding:0;margin:0 0 12px}
+.steps-list li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}
+.steps-list li:last-child{border-bottom:none}
+.step-num{min-width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px}
+.step-body{flex:1}
+.step-cmd{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:3px 8px;margin-top:3px;white-space:pre-wrap;word-break:break-all}
+.step-why{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}
+
+/* Decision block */
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+
+/* Failure block */
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.failure-label{font-weight:700;color:var(--red);margin-bottom:6px}
+
+/* Gotcha block */
+.gotcha-block{background:#fffbeb;border-left:3px solid #d97706;padding:10px 14px;margin:8px 0;font-size:12px;border-radius:0 4px 4px 0}
+.gotcha-block strong{color:var(--amber)}
+
+/* Section accent */
+.section-accent-blue{border-top-color:var(--blue)}
+.section-accent-green{border-top-color:var(--green)}
+.section-accent-amber{border-top-color:var(--amber)}
+.section-accent-purple{border-top-color:var(--purple)}
+
+/* Pillar badge / nav */
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;
+  color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;
+  display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);
+  background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.nav-logo{padding:0 16px 14px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.page-title{font-size:24px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+
+/* Why block */
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#e6edf3;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--purple:#bc8cff;--red:#f85149;
+  }
+  .warn-block{background:#2d2100;border-color:#4a3800}
+  .note-block{background:#0d2744;border-color:#2d4a6a}
+  .decision-block{background:#0d2b15;border-color:#238636}
+  .failure-block{background:#2d0a0a;border-color:#8b1a1a}
+  .gotcha-block{background:#2d1f00;border-color:#d97706}
+  .why-block{background:#2d1f00;border-color:#d97706}
+  .diagram-box{background:#161b22;border-color:#30363d}
+}
+@media print{
+  nav{display:none}
+  main{max-width:100%;padding:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR NAV ═══ -->
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">⌂ Hub</a>
+  <details>
+    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+  </details>
+  <details>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details open>
+    <summary>Maintaining<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Runbook</a>
+    <a href="19-cluster-setup.html" class="nav-link" aria-current="page">19 Cluster setup</a>
+  </details>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main id="main-content">
+
+<div class="page-header">
+  <div class="page-title">Cluster Setup</div>
+  <div class="page-covers"><strong>What this covers:</strong> How to create and configure the 4-cluster platform (hub + dev + test + prod) on any cloud using Terraform and ArgoCD.</div>
+  <div class="page-when"><strong>When to read:</strong> Before provisioning any cluster. Before registering a new cloud provider. When the platform needs a new environment.</div>
+  <div class="page-pillar">Pillar 7 — Maintaining · Related: <a href="16-maintainability-runbook.html">16 Runbook</a> · <a href="https://github.com/yarova-ca/pipeline-studio/blob/main/DECISIONS.md">DECISIONS.md</a></div>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────────────── -->
+<h2 class="section-accent-blue">1. What a cluster is — plain English</h2>
+
+<p>A cluster is a group of servers that run containers.</p>
+<p>Your 105 services run as containers inside the cluster.</p>
+<p>Kubernetes manages which server each container runs on.</p>
+<p>You do not manually decide which server — Kubernetes does that automatically.</p>
+
+<h3>How your code gets from laptop to running service</h3>
+
+<div class="diagram-box">
+  <div><span class="d-highlight">Your laptop</span> → <span class="d-highlight">GitHub</span> → <span class="d-highlight">GitHub Actions</span> → <span class="d-highlight">Container image in GHCR</span></div>
+  <div><span class="d-arrow" style="padding-left:60px">↓</span></div>
+  <div><span class="d-arrow" style="padding-left:30px">ArgoCD sees new image in GHCR</span></div>
+  <div><span class="d-arrow" style="padding-left:60px">↓</span></div>
+  <div><span class="d-arrow" style="padding-left:20px">Kubernetes pulls image into the cluster</span></div>
+  <div><span class="d-arrow" style="padding-left:60px">↓</span></div>
+  <div><span class="d-highlight">14-express is running at https://14-express.yarova.ca</span></div>
+</div>
+
+<p>Each step is automated. A git push to <code class="ic">main</code> triggers the full chain.</p>
+<p>No manual <code class="ic">kubectl apply</code> needed after initial setup.</p>
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────── -->
+<h2 class="section-accent-blue">2. The 4-cluster architecture</h2>
+
+<h3>Hub and spoke — plain English</h3>
+
+<p>The platform uses one hub cluster and three spoke clusters.</p>
+
+<ul style="margin:8px 0 12px 18px;font-size:13px;line-height:2">
+  <li><strong>Hub cluster:</strong> runs ArgoCD only. No user services live here.</li>
+  <li><strong>Dev cluster:</strong> all 105 services, 1 replica each, debug logging on.</li>
+  <li><strong>Test cluster:</strong> all 105 services, 2 replicas, staging config.</li>
+  <li><strong>Prod cluster:</strong> all 105 services, 3+ replicas, autoscaling, strict security.</li>
+</ul>
+
+<h3>Why separate clusters</h3>
+
+<p><strong>Dev can be broken without affecting prod.</strong></p>
+<p><strong>Test uses the same config as prod</strong> — this catches config bugs before they hit prod.</p>
+<p><strong>Hub runs management tools</strong> — if prod crashes, hub is unaffected and can redeploy.</p>
+
+<h3>Per-cluster configuration comparison</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Config</th>
+        <th>Hub</th>
+        <th>Dev</th>
+        <th>Test</th>
+        <th>Prod</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Runs services</strong></td>
+        <td>No</td>
+        <td>Yes (1 replica)</td>
+        <td>Yes (2 replicas)</td>
+        <td>Yes (3+ replicas)</td>
+      </tr>
+      <tr>
+        <td><strong>Autoscaling</strong></td>
+        <td>Off</td>
+        <td>Off</td>
+        <td>Off</td>
+        <td>On</td>
+      </tr>
+      <tr>
+        <td><strong>Kyverno mode</strong></td>
+        <td>Audit</td>
+        <td>Audit</td>
+        <td>Audit</td>
+        <td>Enforce</td>
+      </tr>
+      <tr>
+        <td><strong>TLS cert</strong></td>
+        <td>Self-signed</td>
+        <td>Let's Encrypt staging</td>
+        <td>Let's Encrypt staging</td>
+        <td>Let's Encrypt prod</td>
+      </tr>
+      <tr>
+        <td><strong>Node size</strong></td>
+        <td>Small</td>
+        <td>Small</td>
+        <td>Medium</td>
+        <td>Large</td>
+      </tr>
+      <tr>
+        <td><strong>Debug logging</strong></td>
+        <td>Off</td>
+        <td>On</td>
+        <td>Off</td>
+        <td>Off</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────── -->
+<h2 class="section-accent-green">3. Terraform — what it does and why</h2>
+
+<p>Terraform is a tool that creates cloud infrastructure from code files.</p>
+<p>You write what you want (e.g. a cluster with 3 nodes on EKS) in a <code class="ic">.tf</code> file.</p>
+<p>Terraform creates it.</p>
+<p>Run Terraform again: it checks what already exists, and only changes what's different.</p>
+
+<p><strong>State file:</strong> Terraform keeps a record of what it created.</p>
+<p>The state file is stored remotely in S3 (AWS), GCS (GCP), or Azure Blob (Azure).</p>
+<p>Without the state file, Terraform does not know what it already created.</p>
+
+<div class="why-block">
+  <strong>Why Terraform instead of clicking in the cloud console:</strong>
+  Clicking in the console creates infrastructure that cannot be reproduced exactly.
+  Terraform creates identical clusters across dev, test, and prod from the same code.
+  A new developer can clone the repo and recreate the entire platform from scratch.
+</div>
+
+<h3>Cloud selection decision</h3>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: Start with GKE for the hub cluster.</div>
+  <div class="decision-rejected">Rejected: Starting with EKS for the hub cluster.</div>
+  <div class="decision-tradeoff">Why rejected: GKE Autopilot handles node management automatically, reducing operational burden for the management cluster. EKS requires explicit node pool configuration and Karpenter setup.</div>
+  <div class="decision-tradeoff" style="margin-top:4px">Tradeoff accepted: GKE vendor lock-in for the hub cluster. Spoke clusters can still use any cloud — EKS, AKS, OpenShift, or another GKE project.</div>
+</div>
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────── -->
+<h2 class="section-accent-green">4. Bootstrap sequence — exact commands</h2>
+
+<div class="note-block"><strong>Note:</strong> Run these steps in order. Each step depends on the previous one completing successfully. Steps 3–5 repeat for each spoke (dev, test, prod).</div>
+
+<h3>Step 1 — Create hub cluster (GKE)</h3>
+
+<pre class="code-block">cd infra/clusters/terraform/hub
+cp terraform.tfvars.example terraform.tfvars
+# Edit terraform.tfvars: set project_id, region
+terraform init
+terraform apply
+# Output: hub-kubeconfig.yaml</pre>
+
+<h3>Step 1 alternative — EKS hub</h3>
+
+<pre class="code-block">cd infra/clusters/terraform/hub
+cp terraform.tfvars.eks.example terraform.tfvars
+# Edit: set aws_account_id, region
+terraform init
+terraform apply</pre>
+
+<h3>Step 2 — Install platform tools on hub</h3>
+
+<pre class="code-block">export KUBECONFIG=hub-kubeconfig.yaml
+bash infra/clusters/platform/install.sh --env hub
+# Installs in order:
+#   cert-manager → ingress-nginx → Kyverno → ArgoCD → ESO → Prometheus
+# Takes ~8 minutes</pre>
+
+<div class="why-block">
+  <strong>Why this install order:</strong>
+  cert-manager must exist before ingress-nginx requests TLS certs.
+  Kyverno must exist before ArgoCD, because ArgoCD deploys workloads that Kyverno validates.
+  ESO must exist before ArgoCD deploys services that read secrets.
+</div>
+
+<h3>Step 3 — Create dev cluster</h3>
+
+<pre class="code-block">cd infra/clusters/terraform/dev
+cp terraform.tfvars.gke.example terraform.tfvars
+terraform apply
+# Output: dev-kubeconfig.yaml</pre>
+
+<h3>Step 4 — Register dev cluster with hub ArgoCD</h3>
+
+<pre class="code-block">bash infra/clusters/platform/register-spoke.sh \
+  --hub-kubeconfig hub-kubeconfig.yaml \
+  --spoke-kubeconfig dev-kubeconfig.yaml \
+  --spoke-name dev \
+  --environment dev
+# ArgoCD on hub now manages dev cluster
+# All 105 services deploy automatically within 5 minutes</pre>
+
+<h3>Step 5 — Verify dev cluster</h3>
+
+<pre class="code-block">bash infra/clusters/platform/verify.sh --kubeconfig dev-kubeconfig.yaml
+# Runs 10 health checks
+# Expected output: all 10 pass</pre>
+
+<div class="note-block"><strong>Repeat steps 3–5 for test and prod clusters.</strong> Use the matching <code class="ic">terraform.tfvars</code> example file for each environment.</div>
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────── -->
+<h2 class="section-accent-amber">5. Cloud-specific gotchas</h2>
+
+<h3>EKS (Amazon)</h3>
+
+<div class="gotcha-block">
+  <strong>IRSA (AWS identity federation for pods)</strong><br>
+  IRSA must be enabled before ESO can pull secrets from AWS Secrets Manager.<br>
+  Without IRSA, the ESO pod has no AWS identity and all secret reads fail.
+</div>
+
+<div class="gotcha-block">
+  <strong>Karpenter</strong><br>
+  Karpenter requires its own IAM role with EC2 permissions.<br>
+  Create the role before installing Karpenter, or the autoscaler will not start.
+</div>
+
+<div class="gotcha-block">
+  <strong>Load balancer</strong><br>
+  The AWS Load Balancer Controller is needed for AWS-native load balancers.<br>
+  Alternative: use <code class="ic">ingress-nginx</code> with a classic NLB — simpler, less AWS-specific.
+</div>
+
+<div class="gotcha-block">
+  <strong>Cluster creation</strong><br>
+  <code class="ic">eksctl</code> creates the EKS cluster.<br>
+  Terraform manages everything else after the cluster exists (node groups, IAM, add-ons).
+</div>
+
+<h3>GKE (Google)</h3>
+
+<div class="gotcha-block">
+  <strong>GKE Autopilot</strong><br>
+  Node management is automatic — no node pool configuration needed.<br>
+  Autopilot provisions and scales nodes based on pending pod resource requests.
+</div>
+
+<div class="gotcha-block">
+  <strong>Workload Identity</strong><br>
+  Enables pods to call GCP APIs without static service account key files.<br>
+  Enable at cluster creation — it cannot be added to an existing cluster without node pool recreation.
+</div>
+
+<div class="gotcha-block">
+  <strong>Container registry</strong><br>
+  Artifact Registry is an optional alternative to GHCR for storing images.<br>
+  GHCR works fine — no migration required unless you have a compliance reason to use GCP-only storage.
+</div>
+
+<h3>AKS (Azure)</h3>
+
+<div class="gotcha-block">
+  <strong>Managed Identity</strong><br>
+  Azure's equivalent of IRSA.<br>
+  Auto-configured when the cluster is created with <code class="ic">--enable-managed-identity</code>.<br>
+  Without it, pods cannot call Azure APIs.
+</div>
+
+<div class="gotcha-block">
+  <strong>Secret store</strong><br>
+  Azure Key Vault Provider for Secrets Store CSI Driver is an alternative to ESO.<br>
+  ESO is simpler — it uses the same interface across all clouds.<br>
+  Use the CSI driver only if your org mandates it.
+</div>
+
+<div class="gotcha-block">
+  <strong>VMSS (Virtual Machine Scale Sets)</strong><br>
+  AKS uses VMSS for node autoscaling.<br>
+  Terraform's <code class="ic">azurerm_kubernetes_cluster</code> manages VMSS automatically.<br>
+  Do not manage VMSS directly — AKS owns that resource.
+</div>
+
+<h3>OpenShift</h3>
+
+<div class="gotcha-block">
+  <strong>SCC (SecurityContextConstraints)</strong><br>
+  OpenShift's pod security system conflicts with Kyverno's non-root enforcement policy.<br>
+  Fix: apply <code class="ic">infra/clusters/openshift/scc-patch.yaml</code> before installing Kyverno.<br>
+  Without this patch, all pods are blocked on first deployment.
+</div>
+
+<div class="gotcha-block">
+  <strong>Routes</strong><br>
+  OpenShift uses Routes for native load balancing instead of Ingress objects.<br>
+  The platform supports both — Routes work as a replacement for Ingress on OpenShift.
+</div>
+
+<div class="gotcha-block">
+  <strong>Pull secret</strong><br>
+  Required to access the Red Hat registry for OpenShift base images.<br>
+  Download from <a href="https://console.redhat.com" target="_blank" rel="noopener">console.redhat.com</a> and store as a cluster secret before the first deployment.
+</div>
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────── -->
+<h2 class="section-accent-blue">6. Adding a new cloud later</h2>
+
+<p>When you want a 5th cluster on a new cloud provider:</p>
+
+<ol class="steps-list">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      Add a Terraform module for the new cloud.
+      <span class="step-cmd">infra/clusters/terraform/modules/NEW-CLOUD/</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      Create an environment config that uses the module.
+      <span class="step-cmd">infra/clusters/terraform/ENV/</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      Create the cluster.
+      <span class="step-cmd">terraform apply</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">4</div>
+    <div class="step-body">
+      Register the cluster with hub ArgoCD.
+      <span class="step-cmd">bash infra/clusters/platform/register-spoke.sh ...</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">5</div>
+    <div class="step-body">
+      ArgoCD deploys all 105 services automatically to the new cluster.
+      <span class="step-why">No manual kubectl apply needed. ArgoCD reads the same ApplicationSet definitions.</span>
+    </div>
+  </li>
+</ol>
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────── -->
+<h2 class="section-accent-red" style="border-top-color:var(--red)">7. Disaster recovery</h2>
+
+<h3>When a spoke cluster fails</h3>
+
+<div class="failure-block">
+  <div class="failure-label">Spoke cluster failure</div>
+  <div><strong>Trigger:</strong> A dev, test, or prod cluster becomes unreachable or all nodes fail.</div>
+  <div><strong>System:</strong> Services on that cluster are unavailable. Hub cluster is unaffected. Other spokes continue running.</div>
+  <div><strong>Recovery:</strong> Run <code class="ic">terraform apply</code> in the cluster's Terraform directory. Recreates the cluster with the same config.</div>
+  <div><strong>Then:</strong> Run <code class="ic">register-spoke.sh</code> to reconnect to hub. ArgoCD redeploys all services.</div>
+  <div><strong>Recovery time:</strong> ~15 minutes.</div>
+</div>
+
+<h3>When hub cluster fails</h3>
+
+<div class="failure-block">
+  <div class="failure-label">Hub cluster failure</div>
+  <div><strong>Trigger:</strong> The hub cluster becomes unreachable or all hub nodes fail.</div>
+  <div><strong>System:</strong> Existing services on all spoke clusters continue running. ArgoCD is not in the request path — user traffic is unaffected.</div>
+  <div><strong>Impact:</strong> New deployments are paused until hub recovers. No new images can be rolled out.</div>
+  <div><strong>Recovery:</strong> Run <code class="ic">terraform apply</code> in <code class="ic">infra/clusters/terraform/hub</code>, then run <code class="ic">install.sh --env hub</code>.</div>
+  <div><strong>Recovery time:</strong> ~20 minutes.</div>
+</div>
+
+<div class="note-block"><strong>Why hub failure doesn't take down prod:</strong> ArgoCD on the hub deploys changes to spokes, but running pods on spokes do not communicate with hub on every request. Hub failure = no new deploys. Hub failure ≠ prod outage.</div>
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────── -->
+<h2 class="section-accent-purple">8. GitHub Actions for Terraform</h2>
+
+<p>All Terraform operations run through CI after initial bootstrap.</p>
+<p>No manual <code class="ic">terraform apply</code> from a laptop is needed after setup.</p>
+
+<h3>On a pull request touching <code class="ic">infra/clusters/terraform/</code></h3>
+
+<ol class="steps-list">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">GitHub Actions runs <code class="ic">terraform plan</code>.</div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">Plan output is posted as a PR comment.</div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">Reviewer sees exactly what will change before approving the merge.</div>
+  </li>
+</ol>
+
+<h3>On merge to main</h3>
+
+<ol class="steps-list">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">GitHub Actions runs <code class="ic">terraform apply</code>.</div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">The cluster is created or updated automatically.</div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">ArgoCD detects the updated cluster registration and syncs all services.</div>
+  </li>
+</ol>
+
+<div class="warn-block"><strong>Warning:</strong> Merging to main triggers a real <code class="ic">terraform apply</code>. Always review the plan comment in the PR before approving a merge that changes cluster node counts, machine types, or network config.</div>
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────── -->
+<h2 class="section-accent-blue">9. Maintainer quick reference</h2>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Command</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Create a new cluster</strong></td>
+        <td><code class="ic">cd infra/clusters/terraform/ENV &amp;&amp; terraform apply</code></td>
+      </tr>
+      <tr>
+        <td><strong>Register cluster with hub</strong></td>
+        <td><code class="ic">bash infra/clusters/platform/register-spoke.sh ...</code></td>
+      </tr>
+      <tr>
+        <td><strong>Check cluster health</strong></td>
+        <td><code class="ic">bash infra/clusters/platform/verify.sh --kubeconfig FILE</code></td>
+      </tr>
+      <tr>
+        <td><strong>Redeploy all services on a spoke</strong></td>
+        <td><code class="ic">argocd app sync --selector environment=dev</code></td>
+      </tr>
+      <tr>
+        <td><strong>Scale prod replicas up</strong></td>
+        <td>Edit <code class="ic">infra/clusters/terraform/prod/terraform.tfvars</code> → commit → CI applies</td>
+      </tr>
+      <tr>
+        <td><strong>Destroy dev cluster (save cost)</strong></td>
+        <td><code class="ic">cd infra/clusters/terraform/dev &amp;&amp; terraform destroy</code></td>
+      </tr>
+      <tr>
+        <td><strong>View ArgoCD UI</strong></td>
+        <td><code class="ic">kubectl port-forward svc/argocd-server -n argocd 8080:443</code></td>
+      </tr>
+      <tr>
+        <td><strong>Check what ArgoCD would change</strong></td>
+        <td><code class="ic">argocd app diff 14-express</code></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+</body>
+</html>
