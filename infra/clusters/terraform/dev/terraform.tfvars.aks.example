@@ -1,0 +1,6 @@
+# Dev cluster on AKS (Azure Kubernetes Service)
+
+cloud        = "aks"
+cluster_name = "pipeline-dev"
+region       = "eastus"
+environment  = "dev"

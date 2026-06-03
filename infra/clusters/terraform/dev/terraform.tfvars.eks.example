@@ -1,0 +1,7 @@
+# Dev cluster on EKS (Amazon Elastic Kubernetes Service)
+# Uses t3.large nodes: 2 vCPU, 8GB RAM — sufficient for all 105 services at 1 replica.
+
+cloud        = "eks"
+cluster_name = "pipeline-dev"
+region       = "us-east-1"
+environment  = "dev"

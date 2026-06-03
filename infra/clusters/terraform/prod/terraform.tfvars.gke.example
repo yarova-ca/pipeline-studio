@@ -1,0 +1,6 @@
+cloud          = "gke"
+cluster_name   = "pipeline-prod"
+region         = "us-central1"
+gke_project_id = "YOUR_GCP_PROJECT_ID"
+environment    = "prod"
+# Prod: GKE Autopilot scales to handle full load automatically

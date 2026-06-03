@@ -1,0 +1,5 @@
+cloud        = "eks"
+cluster_name = "pipeline-prod"
+region       = "us-east-1"
+environment  = "prod"
+# Prod: m5.2xlarge nodes (8 vCPU, 32GB), min 5 nodes, max 50 via Karpenter

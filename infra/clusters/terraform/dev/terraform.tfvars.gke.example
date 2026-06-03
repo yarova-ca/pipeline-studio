@@ -1,0 +1,9 @@
+# Dev cluster on GKE (Google Kubernetes Engine)
+# GKE Autopilot: zero node management — Google scales nodes automatically.
+# Copy to terraform.tfvars and set your values.
+
+cloud          = "gke"
+cluster_name   = "pipeline-dev"
+region         = "us-central1"
+gke_project_id = "YOUR_GCP_PROJECT_ID"  # gcloud config get-value project
+environment    = "dev"

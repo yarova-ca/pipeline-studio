@@ -185,9 +185,10 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
   <a href="index.html" class="nav-hub">⌂ Hub</a>
   <details>
-    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -285,6 +286,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <tr><td>27</td><td>Terraform (cluster)</td><td>Infra</td><td>Creates the Kubernetes cluster on EKS/GKE/AKS/OpenShift</td><td>Manual cloud console clicking — not reproducible</td></tr>
     <tr><td>28</td><td>Terraform state backend</td><td>Infra</td><td>Stores Terraform state in S3/GCS so all team members see the same state</td><td>Two people run terraform = duplicate resources</td></tr>
     <tr><td>29</td><td>Grafana datasources (Loki+Tempo)</td><td>Observability</td><td>Wires Loki and Tempo into Grafana — enables log+trace browsing</td><td>Loki and Tempo run but are not accessible from Grafana</td></tr>
+    <tr><td>—</td><td>Run quarterly platform audit</td><td>Maintaining</td><td><a href="https://github.com/yarova-ca/pipeline-studio/blob/main/AUDIT_PROCESS.md" target="_blank">AUDIT_PROCESS.md</a> — 10-command check (30 min) or full 5-prompt audit (2 hours)</td><td>Platform drifts from Google Fellow-level standards undetected</td></tr>
   </tbody>
 </table>
 </div>
