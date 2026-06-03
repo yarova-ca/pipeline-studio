@@ -15,7 +15,7 @@ structlog==24.4.0
 # Rate limiting
 slowapi==0.1.9
 # OpenTelemetry — guarded by OTEL_ENABLED=true in main.py
-opentelemetry-sdk==1.27.0
+opentelemetry-sdk==1.42.1
 opentelemetry-exporter-otlp-proto-grpc==1.27.0
 opentelemetry-instrumentation-fastapi==0.48b0
 # Testing
