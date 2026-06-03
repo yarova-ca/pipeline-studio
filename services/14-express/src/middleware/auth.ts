@@ -16,11 +16,13 @@ import Redis from 'ioredis'
 import { prisma } from '../db/client.js'
 import { logger } from '../logger.js'
 import { auditLog } from './audit.js'
+import { dbCircuitBreaker } from './circuit-breaker.js'
 
 export interface AuthUser {
   id: string
   email: string
   name: string
+  role: 'USER' | 'ADMIN' | 'SERVICE'
 }
 
 declare global {
@@ -104,7 +106,7 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     try {
       // Fix 1: Lock algorithm to HS256 — prevents algorithm-confusion attacks.
       const payload = jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] }) as AuthUser
-      req.user = { id: payload.id, email: payload.email, name: payload.name }
+      req.user = { id: payload.id, email: payload.email, name: payload.name, role: payload.role ?? 'USER' }
       auditLog('api_key_used', payload.id, req, { method: 'jwt' })
       next()
       return
@@ -123,19 +125,25 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
       return
     }
 
-    // Fix 4: Proper async/await instead of .then().catch() chain.
+    // Fix 4: Wrap DB lookup in circuit breaker — fast-fail when DB is recovering.
     try {
-      const user = await prisma.user.findUnique({ where: { apiKey } })
+      const user = await dbCircuitBreaker.execute(
+        () => prisma.user.findUnique({ where: { apiKey } })
+      )
       if (!user) {
         auditLog('auth_failure', null, req, { reason: 'invalid_api_key' })
         res.status(401).json({ error: 'Invalid API key' })
         return
       }
-      req.user = { id: user.id, email: user.email, name: user.name }
+      req.user = { id: user.id, email: user.email, name: user.name, role: (user.role as any) ?? 'USER' }
       auditLog('api_key_used', user.id, req, { method: 'api_key' })
       next()
-    } catch {
-      res.status(500).json({ error: 'Auth check failed' })
+    } catch (err: any) {
+      if (err.message?.includes('Circuit breaker OPEN')) {
+        res.status(503).json({ error: 'Service temporarily unavailable — database is recovering. Try again in 30 seconds.' })
+      } else {
+        res.status(500).json({ error: 'Auth check failed' })
+      }
     }
     return
   }
@@ -148,7 +156,7 @@ export function signToken(user: AuthUser): string {
   // Fix 1: Explicitly set algorithm on sign to match the verify constraint.
   // kid: key ID header enables key rotation — clients can identify which secret signed the token.
   return jwt.sign(
-    { id: user.id, email: user.email, name: user.name },
+    { id: user.id, email: user.email, name: user.name, role: user.role ?? 'USER' },
     JWT_SECRET,
     {
       expiresIn: '8h',

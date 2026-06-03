@@ -16,7 +16,7 @@ metadata:
   labels:
     app: backstage
 spec:
-  replicas: 1
+  replicas: 2  # HA: 2 replicas prevent single point of failure for developer portal
   selector:
     matchLabels:
       app: backstage

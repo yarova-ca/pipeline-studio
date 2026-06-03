@@ -47,7 +47,14 @@ env: {}
 envFrom: []
 
 networkPolicy:
-  enabled: false  # Enable in prod
+  enabled: false  # Override to true in values.prod.yaml — required for production
+  # List of external HTTPS endpoints this service needs to reach.
+  # Format: CIDR notation (use https://ipinfo.io/AS36459 for GitHub IP ranges)
+  allowedExternalHTTPS: []
+  # Example for GitHub OAuth:
+  # allowedExternalHTTPS:
+  #   - cidr: 140.82.112.0/20   # GitHub
+  #   - cidr: 192.30.252.0/22   # GitHub
 
 livenessProbe:
   httpGet:

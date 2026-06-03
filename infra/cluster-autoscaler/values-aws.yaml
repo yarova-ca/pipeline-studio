@@ -7,7 +7,9 @@ rbac:
   serviceAccount:
     name: cluster-autoscaler
     annotations:
-      eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_ID:role/cluster-autoscaler
+      # Replace YOUR_AWS_ACCOUNT_ID below with your AWS account ID
+      # Find it: aws sts get-caller-identity --query Account --output text
+      eks.amazonaws.com/role-arn: arn:aws:iam::YOUR_AWS_ACCOUNT_ID:role/cluster-autoscaler
 
 extraArgs:
   scale-down-utilization-threshold: 0.5

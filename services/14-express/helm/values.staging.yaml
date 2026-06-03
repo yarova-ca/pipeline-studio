@@ -1,6 +1,9 @@
 replicaCount: 2
 image:
   tag: "staging"
+
+networkPolicy:
+  enabled: true   # Staging mirrors prod — must test network isolation before prod
 resources:
   limits:
     cpu: 500m

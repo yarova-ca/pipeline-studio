@@ -11,6 +11,7 @@ import { setTimeout as nodeSetTimeout } from 'node:timers'
 import 'dotenv/config'
 import { logger } from './logger.js'
 import { prisma } from './db/client.js'
+import { dbCircuitBreaker } from './middleware/circuit-breaker.js'
 import authRouter from './routes/auth.js'
 import usersRouter from './routes/users.js'
 import { httpRequestsTotal, httpRequestDurationSeconds, activeRequests, register } from './metrics.js'
@@ -125,12 +126,16 @@ app.get('/health/live', (_req, res) => {
 // DB-checking readiness probe.
 // Returns 503 when the database is unreachable so k8s removes the pod
 // from the load balancer until the connection recovers.
+// Circuit breaker: fast-fail with 'circuit-open' status when DB is recovering.
 app.get('/health/ready', async (_req, res) => {
   try {
-    await prisma.$queryRaw`SELECT 1`
+    await dbCircuitBreaker.execute(() => prisma.$queryRaw`SELECT 1`)
     res.json({ status: 'ok', db: 'connected' })
-  } catch {
-    res.status(503).json({ status: 'error', db: 'disconnected' })
+  } catch (err: any) {
+    res.status(503).json({
+      status: 'error',
+      db: err.message?.includes('Circuit breaker') ? 'circuit-open' : 'disconnected',
+    })
   }
 })
 

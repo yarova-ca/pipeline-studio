@@ -50,9 +50,17 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
-    # HTTPS to GitHub OAuth (needed for OAuth callback token exchange)
-    # Restrict to specific IPs in production via Cilium or Istio egress gateway
-    - ports:
+    # HTTPS outbound — restricted to known external endpoints only
+    # Why: open port 443 allows compromised pods to exfiltrate data to any HTTPS server
+    # Add specific IPs/CIDRs for services your pods need (e.g., GitHub OAuth, payment gateways)
+    {{- if .Values.networkPolicy.allowedExternalHTTPS }}
+    - to:
+        {{- range .Values.networkPolicy.allowedExternalHTTPS }}
+        - ipBlock:
+            cidr: {{ .cidr }}
+        {{- end }}
+      ports:
         - protocol: TCP
           port: 443
+    {{- end }}
 {{- end }}

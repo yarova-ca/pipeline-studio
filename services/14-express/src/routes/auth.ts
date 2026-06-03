@@ -19,6 +19,7 @@ import crypto from 'node:crypto'
 import jwt from 'jsonwebtoken'
 import { prisma } from '../db/client.js'
 import { requireAuth, signToken, revokeToken, type AuthUser } from '../middleware/auth.js'
+import { requireRole } from '../middleware/require-role.js'
 import { auditLog } from '../middleware/audit.js'
 
 const router = Router()
@@ -97,7 +98,7 @@ router.get('/callback', async (req: Request, res: Response) => {
       create: { email, name, provider: 'github' },
     })
 
-    const token = signToken({ id: user.id, email: user.email, name: user.name })
+    const token = signToken({ id: user.id, email: user.email, name: user.name, role: (user.role as any) ?? 'USER' })
 
     auditLog('login_success', user.id, req)
     auditLog('token_issued', user.id, req)
@@ -109,7 +110,7 @@ router.get('/callback', async (req: Request, res: Response) => {
       sameSite: 'lax',
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
     })
-    res.json({ token, user: { id: user.id, email: user.email, name: user.name } })
+    res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: (user.role as any) ?? 'USER' } })
   } catch (err) {
     auditLog('login_failure', null, req, { reason: 'oauth_failed' })
     res.status(500).json({ error: 'OAuth callback failed' })
@@ -155,7 +156,7 @@ router.post('/refresh', (req: Request, res: Response) => {
       res.status(401).json({ error: 'Token too old to refresh — please log in again' })
       return
     }
-    const newToken = signToken({ id: payload.id, email: payload.email, name: payload.name })
+    const newToken = signToken({ id: payload.id, email: payload.email, name: payload.name, role: payload.role ?? 'USER' })
     auditLog('token_refreshed', payload.id, req)
     res.json({ token: newToken })
   } catch {
@@ -164,7 +165,8 @@ router.post('/refresh', (req: Request, res: Response) => {
 })
 
 // ── Generate API key ───────────────────────────────────────────────────────
-router.post('/api-key', requireAuth, async (req: Request, res: Response) => {
+// SERVICE accounts are machine identities — they cannot self-issue API keys.
+router.post('/api-key', requireAuth, requireRole('USER'), async (req: Request, res: Response) => {
   const apiKey = `yar_${crypto.randomBytes(32).toString('hex')}`
   await prisma.user.update({
     where: { id: req.user!.id },
@@ -175,7 +177,8 @@ router.post('/api-key', requireAuth, async (req: Request, res: Response) => {
 })
 
 // ── Revoke API key ─────────────────────────────────────────────────────────
-router.delete('/api-key', requireAuth, async (req: Request, res: Response) => {
+// SERVICE accounts cannot revoke API keys — same restriction as generation.
+router.delete('/api-key', requireAuth, requireRole('USER'), async (req: Request, res: Response) => {
   await prisma.user.update({
     where: { id: req.user!.id },
     data: { apiKey: null },
@@ -196,8 +199,8 @@ if (process.env.NODE_ENV === 'development') {
       update: { name },
       create: { email, name, provider: 'local' },
     })
-    const token = signToken({ id: user.id, email: user.email, name: user.name })
-    res.json({ token, user: { id: user.id, email: user.email, name: user.name } })
+    const token = signToken({ id: user.id, email: user.email, name: user.name, role: (user.role as any) ?? 'USER' })
+    res.json({ token, user: { id: user.id, email: user.email, name: user.name, role: (user.role as any) ?? 'USER' } })
   })
 }
 

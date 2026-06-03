@@ -138,9 +138,21 @@ import { Router, type Request, type Response } from 'express'
 import { z } from 'zod'
 import { prisma } from '../db/client.js'
 import { requireAuth } from '../middleware/auth.js'
+import { requireRole } from '../middleware/require-role.js'
 
 const router = Router()
 router.use(requireAuth) // all routes in this file require auth
+
+// ── Admin: list all users ──────────────────────────────────────────────────
+// requireRole('ADMIN') is placed before the /me/* routes so the path
+// /admin/all does not conflict with /me/:id patterns.
+router.get('/admin/all', requireRole('ADMIN'), async (req: Request, res: Response) => {
+  const users = await prisma.user.findMany({
+    select: { id: true, email: true, name: true, role: true, createdAt: true },
+    orderBy: { createdAt: 'desc' },
+  })
+  res.json({ users })
+})
 
 // Fix 8: Zod schemas for input validation — prevent unbounded strings.
 const CreateItemSchema = z.object({

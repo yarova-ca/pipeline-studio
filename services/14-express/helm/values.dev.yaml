@@ -1,6 +1,9 @@
 replicaCount: 1
 image:
   tag: "dev"
+
+networkPolicy:
+  enabled: false  # Dev: NetworkPolicy optional, depends on cluster CNI support
 resources:
   limits:
     cpu: 200m

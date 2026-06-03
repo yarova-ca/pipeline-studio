@@ -13,9 +13,10 @@ spec:
 
   postgresql:
     parameters:
-      max_connections: "200"
-      shared_buffers: "256MB"
-      effective_cache_size: "768MB"
+      max_connections: "400"  # Increased from 200 — 105 services × ~3 connections = ~315 needed
+      # PgBouncer default_pool_size=25 caps actual Postgres connections from application side
+      shared_buffers: "512MB"  # Increased from 256MB — proportional to max_connections increase
+      effective_cache_size: "1536MB"  # 3× shared_buffers
       maintenance_work_mem: "64MB"
       checkpoint_completion_target: "0.9"
       wal_buffers: "16MB"

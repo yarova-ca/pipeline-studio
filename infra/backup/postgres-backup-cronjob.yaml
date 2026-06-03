@@ -59,14 +59,19 @@ spec:
                     | gzip \
                     > "/tmp/${FILENAME}"
 
-                  # Upload to S3 (requires aws-cli or use gsutil for GCS)
-                  # For GCS: gsutil cp "/tmp/${FILENAME}" "gs://${BACKUP_BUCKET}/${FILENAME}"
-                  # For S3:  aws s3 cp "/tmp/${FILENAME}" "s3://${BACKUP_BUCKET}/${FILENAME}"
-                  echo "Backup complete: ${FILENAME}"
+                  # Upload to S3
+                  aws s3 cp "/tmp/${FILENAME}" "s3://${BACKUP_BUCKET}/${FILENAME}" \
+                    && echo "Backup uploaded: s3://${BACKUP_BUCKET}/${FILENAME}" \
+                    || (echo "ERROR: Upload failed" && exit 1)
 
-                  # Cleanup old backups (keep last 30 days)
-                  # aws s3 ls "s3://${BACKUP_BUCKET}/" | sort | head -n -30 | awk '{print $4}' | \
-                  #   xargs -I{} aws s3 rm "s3://${BACKUP_BUCKET}/{}"
+                  # Cleanup old backups (keep last 30)
+                  aws s3 ls "s3://${BACKUP_BUCKET}/" \
+                    | sort \
+                    | head -n -30 \
+                    | awk '{print $4}' \
+                    | xargs -I{} aws s3 rm "s3://${BACKUP_BUCKET}/{}" \
+                    || true
+                  echo "Backup complete: ${FILENAME}"
               resources:
                 requests:
                   cpu: 100m
@@ -91,4 +96,6 @@ metadata:
   namespace: prod
   annotations:
     # IAM role with s3:PutObject permission on the backup bucket
-    eks.amazonaws.com/role-arn: "arn:aws:iam::ACCOUNT_ID:role/postgres-backup"
+    # Replace ACCOUNT_ID below with your AWS account ID
+    # Find it: aws sts get-caller-identity --query Account --output text
+    eks.amazonaws.com/role-arn: "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:role/postgres-backup"

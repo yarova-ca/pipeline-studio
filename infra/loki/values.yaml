@@ -5,7 +5,9 @@
 
 loki:
   enabled: true
-  auth_enabled: false
+  auth_enabled: true  # CHANGED from false — logs are private within cluster
+  # Access via Grafana datasource — Grafana uses internal service URL (no external auth needed)
+  # Direct API access requires tenant ID header: X-Scope-OrgID: pipeline-studio
   storage:
     type: s3
     s3:

@@ -73,8 +73,11 @@ alertmanager:
       group_by: ['alertname', 'namespace']
       group_wait: 10s
       group_interval: 10m
-      # Default receiver: null (silences all alerts until real receivers are configured).
-      # To enable alerts: add a Slack or PagerDuty receiver and update the route.
-      receiver: 'null'
+      receiver: slack-platform  # CHANGED from 'null' — alerts now route to Slack
+      # REQUIRED: set prod/pipeline-studio/alertmanager.slack_url in AWS Secrets Manager
     receivers:
-      - name: 'null'
+      - name: slack-platform
+        slack_configs:
+          - api_url: ""  # Set via External Secret: prod/pipeline-studio/alertmanager.slack_url
+            channel: "#platform-alerts"
+            send_resolved: true

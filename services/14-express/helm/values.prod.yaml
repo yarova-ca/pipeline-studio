@@ -1,6 +1,9 @@
 replicaCount: 3
 networkPolicy:
-  enabled: true
+  enabled: true   # REQUIRED in prod — enables pod-to-pod network isolation
+  allowedExternalHTTPS:
+    - cidr: 140.82.112.0/20   # GitHub (for OAuth callbacks)
+    - cidr: 192.30.252.0/22   # GitHub (for OAuth callbacks)
 image:
   tag: "latest"
 resources:
