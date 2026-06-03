@@ -1,0 +1,57 @@
+# RBAC: fine-grained access control — each team/service gets minimum permissions.
+# Google principle: no one gets more access than they need.
+# Apply: kubectl apply -f infra/rbac/roles.yaml
+
+---
+# Platform engineers: read everything, write deployments in infra namespaces
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: platform-engineer
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps", "batch"]
+    resources: ["deployments", "statefulsets", "daemonsets", "jobs", "cronjobs"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec", "pods/log", "services", "configmaps"]
+    verbs: ["*"]
+---
+# Developers: read pods + logs in dev namespace only
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: developer
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "events", "services", "endpoints"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets", "statefulsets"]
+    verbs: ["get", "list", "watch"]
+---
+# Service account role: each service reads only its own secret
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: service-secret-reader
+  namespace: prod
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+---
+# ArgoCD: read all, write rollouts + deployments
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: argocd-application-manager
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]

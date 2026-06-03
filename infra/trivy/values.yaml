@@ -1,0 +1,17 @@
+# Trivy Operator: continuously scans running container images for CVEs.
+# When a new CVE is published: Trivy rescans affected pods and creates VulnerabilityReport objects.
+# Without it: a HIGH CVE can exist in prod for months without triggering any alert.
+# Deploy: helm upgrade --install trivy-operator aquasecurity/trivy-operator -n trivy-system --create-namespace -f infra/trivy/values.yaml
+
+trivy:
+  ignoreUnfixed: true       # don't report CVEs where no patch exists yet
+  severity: HIGH,CRITICAL   # only HIGH and CRITICAL CVEs
+
+operator:
+  scanJobTTL: 1h
+  vulnerabilityReportsPlugin: Trivy
+  configAuditReportsPlugin: Trivy
+  clusterComplianceEnabled: true
+
+serviceMonitor:
+  enabled: true             # Prometheus scrapes CVE metrics

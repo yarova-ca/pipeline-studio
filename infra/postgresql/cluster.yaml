@@ -1,0 +1,63 @@
+# CloudNativePG Cluster: production PostgreSQL with 1 primary + 2 replicas.
+# Streaming replication: replicas receive WAL in real-time — 0 data loss on failover.
+# PITR: Point-in-Time Recovery — restore to any second in the last 7 days.
+# PgBouncer: connection pooler — prevents 105 services × 10 connections = 1050 connections exhausting Postgres.
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pipeline-postgres
+  namespace: prod
+spec:
+  instances: 3
+
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: "256MB"
+      effective_cache_size: "768MB"
+      maintenance_work_mem: "64MB"
+      checkpoint_completion_target: "0.9"
+      wal_buffers: "16MB"
+      wal_level: replica           # required for streaming replication
+      max_wal_senders: "5"
+      max_replication_slots: "5"
+
+  storage:
+    size: 50Gi
+    storageClass: fast
+
+  backup:
+    retentionPolicy: "30d"
+    barmanObjectStore:
+      destinationPath: s3://pipeline-studio-db-backups/cnpg
+      s3Credentials:
+        inheritFromIAMRole: true    # uses IRSA — no static AWS credentials
+
+  monitoring:
+    enablePodMonitor: true          # Prometheus scrapes pg_stat metrics
+
+  superuserSecret:
+    name: postgres-superuser        # from External Secrets Operator
+
+  enableSuperuserAccess: false      # app uses dedicated app user only
+---
+# PgBouncer connection pooler: multiplexes connections, prevents connection exhaustion.
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: pipeline-postgres-rw
+  namespace: prod
+spec:
+  cluster:
+    name: pipeline-postgres
+  instances: 2
+  type: rw
+  pgbouncer:
+    poolMode: transaction
+    parameters:
+      max_client_conn: "1000"
+      default_pool_size: "25"
+      reserve_pool_size: "5"
+      log_connections: "0"
+      log_disconnections: "0"
