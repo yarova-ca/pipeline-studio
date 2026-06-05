@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backstage-app-config
+  namespace: backstage
+data:
+  # app-config.yaml is mounted from this ConfigMap into the Backstage pod
+  # To update: kubectl create configmap backstage-app-config --from-file=app-config.yaml=backstage/app-config.yaml -n backstage --dry-run=client -o yaml | kubectl apply -f -
+  app-config.yaml: |
+    # Contents managed in backstage/app-config.yaml - apply via kubectl command above

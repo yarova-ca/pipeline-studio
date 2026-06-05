@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>15 — Version Registry | Pipeline Studio</title>
-<meta name="description" content="Master version registry for all 14 pipeline-studio docs — frameworks, CI tools, base images, Linux distros, compliance standards, and market data. Single source for version maintenance.">
+<meta name="description" content="Master version registry for all 13 pipeline-studio docs — frameworks, CI tools, base images, Linux distros, compliance standards, and market data. Single source for version maintenance.">
 <style>
 :root{
   --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;
@@ -148,6 +148,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details open>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -180,20 +181,30 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+<summary>GUIDES <span class="pillar-badge">6</span></summary>
+<a class="nav-link" href="00-getting-started.html">00 — Getting Started</a>
+<a class="nav-link" href="20-local-dev.html">20 — Local Dev</a>
+<a class="nav-link" href="21-build-axes.html">21 — Build Axes</a>
+<a class="nav-link" href="22-add-a-service.html">22 — Add a Service</a>
+<a class="nav-link" href="23-deployment.html">23 — Deployment</a>
+<a class="nav-link" href="24-debugging.html">24 — Debugging</a>
+</details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 <main id="main-content">
 <div class="page-header">
   <div class="page-title">Version Registry</div>
-  <div class="page-covers"><strong>What this covers:</strong> Current pinned versions for every framework, base image, CI tool, and compliance standard across all 17 docs. Review cadence per item type.</div>
+  <div class="page-covers"><strong>What this covers:</strong> Current pinned versions for every framework, base image, CI tool, and compliance standard across 13 docs. Review cadence per item type.</div>
   <div class="page-when"><strong>When to read:</strong> Verifying or updating any version. Run a version check every 30 days for base images, every 90 days for everything else.</div>
   <div class="page-pillar">Pillar 3 — Build &amp; Runtime &nbsp;·&nbsp; Related: <a href="11-dockerfile-catalog.html">11 Dockerfiles</a> &nbsp;·&nbsp; <a href="16-maintainability-runbook.html">16 Runbook</a></div>
 </div>
 <h1>Version &amp; Source Registry</h1>
-<div class="page-meta">127 items tracked · 13 docs covered · 126 sources linked · last full verify 2026-05-28</div>
+<div class="page-meta">154 items tracked · 13 docs covered · 154 sources linked · last full verify 2026-05-28</div>
 
 <div class="counts-bar">
   <div class="count-chip c1"><div class="chip-num">45</div><div class="chip-label">Frameworks<br>tracked</div></div>
+  <div class="count-chip c1"><div class="chip-num">27</div><div class="chip-label">Protocols<br>tracked</div></div>
   <div class="count-chip c2"><div class="chip-num">21</div><div class="chip-label">CI/CD tools<br>tracked</div></div>
   <div class="count-chip c3"><div class="chip-num">21</div><div class="chip-label">Base images<br>tracked</div></div>
   <div class="count-chip c4"><div class="chip-num">16</div><div class="chip-label">Linux distros<br>tracked</div></div>
@@ -358,7 +369,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <tr><td style="font-weight:600;white-space:nowrap">Solid Start</td><td><code class="ic">1.0</code></td><td style="white-space:nowrap"><a href="01-framework-catalog.html" class="doc-badge">01</a> <a href="11-dockerfile-catalog.html" class="doc-badge">11</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/solidjs/solid-start/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">SSR — SolidJS meta-framework (Vinxi/Nitro)</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-29</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">Preact</td><td><code class="ic">10.25</code></td><td style="white-space:nowrap"><a href="01-framework-catalog.html" class="doc-badge">01</a> <a href="11-dockerfile-catalog.html" class="doc-badge">11</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/preactjs/preact/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">CSR/SPA — 3 kB React-compatible virtual DOM</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-29</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">Lit</td><td><code class="ic">3.2</code></td><td style="white-space:nowrap"><a href="01-framework-catalog.html" class="doc-badge">01</a> <a href="11-dockerfile-catalog.html" class="doc-badge">11</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/lit/lit/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">CSR — Google Web Components library (6 kB)</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-29</td></tr>
-<h3 id="protocols" style="font-size:12px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 6px 0;padding-top:10px;border-top:1px solid var(--border)">Protocols — gRPC · GraphQL · WebSocket</h3>
+<tr><td colspan="6" style="font-size:12px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;padding:12px 10px 6px;border-top:2px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2)">Protocols — gRPC · GraphQL · WebSocket</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">grpc-go</td><td><code class="ic">1.63</code></td><td style="white-space:nowrap"><a href="01-framework-catalog.html#c28" class="doc-badge">01</a> <a href="11-dockerfile-catalog.html#cat-grpc" class="doc-badge">11</a> <a href="13-pipeline-build-catalog.html#grpc" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/grpc/grpc-go/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">Protocol — gRPC Go (google.golang.org/grpc)</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-29</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">grpc-java</td><td><code class="ic">1.63</code></td><td style="white-space:nowrap"><a href="01-framework-catalog.html#c28" class="doc-badge">01</a> <a href="11-dockerfile-catalog.html#cat-grpc" class="doc-badge">11</a> <a href="13-pipeline-build-catalog.html#grpc" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/grpc/grpc-java/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">Protocol — gRPC Java (Maven Central)</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-29</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">grpcio</td><td><code class="ic">1.63</code></td><td style="white-space:nowrap"><a href="01-framework-catalog.html#c28" class="doc-badge">01</a> <a href="11-dockerfile-catalog.html#cat-grpc" class="doc-badge">11</a> <a href="13-pipeline-build-catalog.html#grpc" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://pypi.org/project/grpcio/#history" style="color:var(--blue)" target="_blank">PyPI</a></td><td style="font-size:11px;color:var(--text-dim)">Protocol — gRPC Python (C-core + asyncio)</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-29</td></tr>
@@ -414,9 +425,9 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <tr><td style="font-weight:600;white-space:nowrap">Trivy</td><td><code class="ic">v0.58</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/aquasecurity/trivy/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">Image + SCA scan. License: Apache 2.0.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">Snyk</td><td><code class="ic">v1.1280</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/snyk/cli/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">SCA + container scan. License: Apache 2.0.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">FOSSA</td><td><code class="ic">v3</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a></td><td style="font-size:11px"><a href="https://github.com/fossas/fossa-cli/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">License compliance SCA. Commercial.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
-<tr><td style="font-weight:600;white-space:nowrap">grype</td><td><code class="ic">latest</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/anchore/grype/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">Container image CVE scan. License: Apache 2.0.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
-<tr><td style="font-weight:600;white-space:nowrap">syft</td><td><code class="ic">latest</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/anchore/syft/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">SBOM generator (SPDX + CycloneDX). License: Apache 2.0.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
-<tr><td style="font-weight:600;white-space:nowrap">cosign</td><td><code class="ic">latest</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/sigstore/cosign/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">Keyless image signing via Sigstore. License: Apache 2.0.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
+<tr><td style="font-weight:600;white-space:nowrap">grype</td><td><code class="ic">v0.87</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/anchore/grype/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">Container image CVE scan. License: Apache 2.0. Pin version — reproducible only if CI runner image is also locked.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-06-05</td></tr>
+<tr><td style="font-weight:600;white-space:nowrap">syft</td><td><code class="ic">v1.21</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/anchore/syft/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">SBOM generator (SPDX + CycloneDX). License: Apache 2.0. Pin version — reproducible only if CI runner image is also locked.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-06-05</td></tr>
+<tr><td style="font-weight:600;white-space:nowrap">cosign</td><td><code class="ic">v2.4</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/sigstore/cosign/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">Keyless image signing via Sigstore. License: Apache 2.0. Pin version — reproducible only if CI runner image is also locked.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-06-05</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">slsa-github-generator</td><td><code class="ic">v2</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/slsa-framework/slsa-github-generator/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">SLSA L3 provenance. License: Apache 2.0.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">k6</td><td><code class="ic">v0.53</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/grafana/k6/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">Load testing. License: AGPL-3.0.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">Kyverno</td><td><code class="ic">v1.13</code></td><td style="white-space:nowrap"><a href="04-tool-catalog.html" class="doc-badge">04</a> <a href="13-pipeline-build-catalog.html" class="doc-badge">13</a></td><td style="font-size:11px"><a href="https://github.com/kyverno/kyverno/releases" style="color:var(--blue)" target="_blank">github.com</a></td><td style="font-size:11px;color:var(--text-dim)">K8s policy engine. License: Apache 2.0.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
@@ -506,14 +517,70 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   </tr>
 </thead>
 <tbody>
-<tr><td style="font-weight:600;white-space:nowrap">Canada Market Data (73 industries)</td><td><code class="ic">May 2026</code></td><td style="white-space:nowrap"><a href="08-canada-market.html" class="doc-badge">08</a></td><td style="font-size:11px"><a href="https://ca.indeed.com / https://ca.linkedin.com/jobs" style="color:var(--blue)" target="_blank">ca.indeed.com </a></td><td style="font-size:11px;color:var(--text-dim)">Tier, demand, wage, entry difficulty. Annual re-verify.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
-<tr><td style="font-weight:600;white-space:nowrap">Canada Industry Deep-dives (73)</td><td><code class="ic">May 2026</code></td><td style="white-space:nowrap"><a href="14-canada-industry-catalog.html" class="doc-badge">14</a></td><td style="font-size:11px"><a href="https://ca.indeed.com / https://ca.linkedin.com/jobs" style="color:var(--blue)" target="_blank">ca.indeed.com </a></td><td style="font-size:11px;color:var(--text-dim)">Systems, employers, tech stack, compliance, entry notes.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
+<tr><td style="font-weight:600;white-space:nowrap">Canada Market Data (73 industries)</td><td><code class="ic">May 2026</code></td><td style="white-space:nowrap"><a href="08-canada-market.html" class="doc-badge">08</a></td><td style="font-size:11px"><a href="https://ca.indeed.com" style="color:var(--blue)" target="_blank">ca.indeed.com</a> / <a href="https://ca.linkedin.com/jobs" style="color:var(--blue)" target="_blank">ca.linkedin.com</a></td><td style="font-size:11px;color:var(--text-dim)">Tier, demand, wage, entry difficulty. Annual re-verify.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
+<tr><td style="font-weight:600;white-space:nowrap">Canada Industry Deep-dives (73)</td><td><code class="ic">May 2026</code></td><td style="white-space:nowrap"><a href="14-canada-industry-catalog.html" class="doc-badge">14</a></td><td style="font-size:11px"><a href="https://ca.indeed.com" style="color:var(--blue)" target="_blank">ca.indeed.com</a> / <a href="https://ca.linkedin.com/jobs" style="color:var(--blue)" target="_blank">ca.linkedin.com</a></td><td style="font-size:11px;color:var(--text-dim)">Systems, employers, tech stack, compliance, entry notes.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">Canada Industry Schema (73)</td><td><code class="ic">May 2026</code></td><td style="white-space:nowrap"><a href="07-canada-schema.html" class="doc-badge">07</a></td><td style="font-size:11px"><a href="https://www.statcan.gc.ca" style="color:var(--blue)" target="_blank">www.statcan.gc.ca</a></td><td style="font-size:11px;color:var(--text-dim)">NAICS codes, compliance frameworks, hub mapping.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">US Industry Schema (74)</td><td><code class="ic">May 2026</code></td><td style="white-space:nowrap"><a href="06-industry-schema.html" class="doc-badge">06</a></td><td style="font-size:11px"><a href="https://www.bls.gov" style="color:var(--blue)" target="_blank">www.bls.gov</a></td><td style="font-size:11px;color:var(--text-dim)">NAICS codes, compliance frameworks.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
 <tr><td style="font-weight:600;white-space:nowrap">Linux distro data (22)</td><td><code class="ic">May 2026</code></td><td style="white-space:nowrap"><a href="09-linux-distros.html" class="doc-badge">09</a> <a href="10-linux-compliance.html" class="doc-badge">10</a></td><td style="font-size:11px"><a href="https://repology.org" style="color:var(--blue)" target="_blank">repology.org</a></td><td style="font-size:11px;color:var(--text-dim)">Family, FIPS, STIG, CIS, base image data.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
-<tr><td style="font-weight:600;white-space:nowrap">Pipeline schema (6 phases, 44 stages)</td><td><code class="ic">May 2026</code></td><td style="white-space:nowrap"><a href="02-pipeline-schema.html" class="doc-badge">02</a> <a href="03-stage-types.html" class="doc-badge">03</a></td><td style="font-size:11px"><a href="Derived from: OWASP DevSecOps, SLSA, NIST SSDF" style="color:var(--blue)" target="_blank">Derived from: OWASP DevSecOps, SLSA, N…</a></td><td style="font-size:11px;color:var(--text-dim)">Phase triggers, stage types, parallel groups.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
+<tr><td style="font-weight:600;white-space:nowrap">Pipeline schema (6 phases, 44 stages)</td><td><code class="ic">May 2026</code></td><td style="white-space:nowrap"><a href="02-pipeline-schema.html" class="doc-badge">02</a> <a href="03-stage-types.html" class="doc-badge">03</a></td><td style="font-size:11px"><a href="https://owasp.org/www-project-devsecops-guideline/" style="color:var(--blue)" target="_blank">OWASP DevSecOps</a> · <a href="https://slsa.dev/" style="color:var(--blue)" target="_blank">SLSA</a> · <a href="https://csrc.nist.gov/Projects/ssdf" style="color:var(--blue)" target="_blank">NIST SSDF</a></td><td style="font-size:11px;color:var(--text-dim)">Phase triggers, stage types, parallel groups.</td><td style="font-size:11px;color:var(--text-dim);white-space:nowrap">2026-05-28</td></tr>
 </tbody></table></div>
 
+<div class="why-block" style="margin-top:20px;margin-bottom:8px"><strong>Staleness indicators:</strong> Green dot = within cadence. Amber dot = within 7 days of deadline. Red dot = overdue. Computed from Last verified date + category cadence. Refresh the page to recompute against today's date.</div>
+
+<script>
+(function(){
+  var cadence = {
+    'base-images': 30,
+    'frameworks': 90,
+    'ci-tools': 90,
+    'linux-distros': 90,
+    'compliance': 365,
+    'data': 365
+  };
+  var sectionMap = {
+    'base-images': 'base-images',
+    'frameworks': 'frameworks',
+    'ci-tools': 'ci-tools',
+    'linux-distros': 'linux-distros',
+    'compliance': 'compliance',
+    'data': 'data'
+  };
+  var today = new Date();
+  today.setHours(0,0,0,0);
+
+  var sections = document.querySelectorAll('h2[id]');
+  sections.forEach(function(h2){
+    var sectionId = h2.id;
+    var days = cadence[sectionId];
+    if(!days) return;
+    var tbl = h2.nextElementSibling;
+    while(tbl && tbl.tagName !== 'DIV') tbl = tbl.nextElementSibling;
+    if(!tbl) return;
+    var rows = tbl.querySelectorAll('tbody tr');
+    rows.forEach(function(row){
+      var cells = row.querySelectorAll('td');
+      if(cells.length < 6) return;
+      var dateCell = cells[5];
+      var dateText = dateCell.textContent.trim();
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(dateText)) return;
+      var verified = new Date(dateText);
+      verified.setHours(0,0,0,0);
+      var deadline = new Date(verified.getTime() + days * 86400000);
+      var msLeft = deadline.getTime() - today.getTime();
+      var daysLeft = Math.ceil(msLeft / 86400000);
+      var dot, title;
+      if(daysLeft < 0){
+        dot = '<span title="Overdue — ' + Math.abs(daysLeft) + ' days past ' + days + '-day cadence" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#b91c1c;margin-right:4px;vertical-align:middle"></span>';
+      } else if(daysLeft <= 7){
+        dot = '<span title="Due in ' + daysLeft + ' days — within 7-day warning window" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d97706;margin-right:4px;vertical-align:middle"></span>';
+      } else {
+        dot = '<span title="Within cadence — ' + daysLeft + ' days remaining" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#1a7f37;margin-right:4px;vertical-align:middle"></span>';
+      }
+      dateCell.innerHTML = dot + dateText;
+    });
+  });
+})();
+</script>
 </main>
 </body>
 </html>

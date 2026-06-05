@@ -5,14 +5,19 @@
 # Prerequisites:
 #   1. Create secret in AWS Secrets Manager: prod/pipeline-studio/backstage
 #      with keys: github_token, auth_client_id, auth_client_secret
-#   2. Deploy ExternalSecret (infra/external-secrets/external-secret-backstage.yaml)
-#   3. Apply this deployment
+#   2. Create secret in AWS Secrets Manager: prod/pipeline-studio/backstage-postgres
+#      with keys: host, username, password
+#   3. Deploy ExternalSecret (infra/external-secrets/external-secret-backstage.yaml)
+#   4. Apply ConfigMap: kubectl create configmap backstage-app-config \
+#        --from-file=app-config.yaml=backstage/app-config.yaml \
+#        -n backstage --dry-run=client -o yaml | kubectl apply -f -
+#   5. Apply this deployment
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backstage
-  namespace: prod
+  namespace: backstage
   labels:
     app: backstage
 spec:
@@ -29,21 +34,50 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
+      volumes:
+        - name: app-config
+          configMap:
+            name: backstage-app-config
       containers:
         - name: backstage
           image: ghcr.io/yarova-ca/backstage:latest
           imagePullPolicy: Always
+          args: ["--config", "/app/app-config.yaml"]
           ports:
             - containerPort: 7007
               name: http
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/app-config.yaml
+              subPath: app-config.yaml
+              readOnly: true
           envFrom:
             - secretRef:
                 name: backstage-secrets    # From ExternalSecret
           env:
             - name: APP_CONFIG_app_baseUrl
-              value: "http://backstage.yarova.ca"
+              value: "https://backstage.yarova.ca"
             - name: APP_CONFIG_backend_baseUrl
-              value: "http://backstage.yarova.ca"
+              value: "https://backstage.yarova.ca"
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: backstage-postgres-secret
+                  key: host
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: backstage-postgres-secret
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backstage-postgres-secret
+                  key: password
+            - name: POSTGRES_DB
+              value: backstage
           resources:
             requests:
               cpu: 250m
@@ -68,7 +102,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backstage
-  namespace: prod
+  namespace: backstage
 spec:
   selector:
     app: backstage
@@ -80,7 +114,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: backstage
-  namespace: prod
+  namespace: backstage
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
@@ -104,4 +138,4 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: backstage
-  namespace: prod
+  namespace: backstage

@@ -35,11 +35,13 @@ FROM php:8.3-fpm AS base-debian
 # ── Runtime stage (ARG-selectable) ────────────────────────────────────────
 FROM base-${RUNTIME} AS runtime
 WORKDIR /app
-RUN apk add --no-cache php83-pdo php83-pdo_mysql php83-opcache 2>/dev/null || docker-php-ext-install pdo pdo_mysql opcache 2>/dev/null || true
+RUN apk add --no-cache php83-pdo php83-pdo_mysql php83-opcache curl 2>/dev/null || apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/* && docker-php-ext-install pdo pdo_mysql opcache 2>/dev/null || true
 COPY --from=build --chown=www-data:www-data /app ./
 USER www-data
 EXPOSE 9000
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:9000/health/live || exit 1
-
+HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=3 \
+  CMD nc -z localhost 9000 || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 CMD ["php-fpm", "-F"]

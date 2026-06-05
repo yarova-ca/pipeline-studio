@@ -19,6 +19,7 @@ name: Docker Build + GHCR Push
 on:
   push:
     branches: [main]
+    paths: ['services/**', 'dockerfiles/**', '.github/workflows/docker-build-push.yml']
   pull_request:
     branches: [main]
 
@@ -26,6 +27,10 @@ permissions:
   contents: read
   packages: write       # required for GHCR push
   id-token: write       # required for cosign OIDC signing
+
+concurrency:
+  group: docker-build-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   REGISTRY: ghcr.io
@@ -163,6 +168,7 @@ jobs:
             type=sha,format=short
 
       - name: Build + push (alpine — default)
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: services/${{ matrix.service }}
@@ -206,11 +212,7 @@ jobs:
           COSIGN_EXPERIMENTAL: 1
         run: |
           cosign sign --yes \
-            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:latest@$(
-              docker buildx imagetools inspect \
-                ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:latest \
-                --format '{{index .Manifest "digest"}}'
-            )
+            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}@${{ steps.build.outputs.digest }}
 
       - name: Generate SBOM
         uses: anchore/syft-action@v1
@@ -223,5 +225,5 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}
-          subject-digest: latest
+          subject-digest: ${{ steps.build.outputs.digest }}
           push-to-registry: true

@@ -18,29 +18,29 @@ spec:
     - name: slo.availability
       interval: 30s
       rules:
-        # SLO: 99.9% availability (max 0.1% error rate over 5 minutes)
+        # SLO: 99.9% availability (max 0.5% error rate over 5 minutes triggers critical)
         - alert: HighErrorRate
           expr: |
             sum(rate(http_requests_total{status=~"5.."}[5m]))
             /
             sum(rate(http_requests_total[5m]))
-            > 0.001
+            > 0.005
           for: 5m
           labels:
             severity: critical
             team: platform
           annotations:
-            summary: "SLO BREACH: Error rate {{ $value | humanizePercentage }} > 0.1%"
+            summary: "SLO BREACH: Error rate {{ $value | humanizePercentage }} > 0.5%"
             description: "Service {{ $labels.app }} has error rate above SLO threshold. Error budget burning."
             runbook: "https://github.com/yarova-ca/pipeline-studio/blob/main/16-maintainability-runbook.html"
 
-        # Warning fires earlier (0.5% — budget burning fast)
+        # Warning fires earlier (0.1% — budget burning fast)
         - alert: ElevatedErrorRate
           expr: |
             sum(rate(http_requests_total{status=~"5.."}[5m]))
             /
             sum(rate(http_requests_total[5m]))
-            > 0.005
+            > 0.001
           for: 2m
           labels:
             severity: warning

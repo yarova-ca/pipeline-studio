@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Dockerfile Catalog — 75 framework records across 27 categories. Every framework has a multi-stage Dockerfile with ARG-driven package manager selection, named runtime and runtime-fips targets, and syntax-highlighted Dockerfile content.">
+<meta name="description" content="Dockerfile Catalog — 105 framework records across 30 categories. Every framework has a multi-stage Dockerfile with ARG-driven package manager selection, named runtime and runtime-fips targets, and syntax-highlighted Dockerfile content.">
 <title>Dockerfile Catalog — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -199,9 +199,10 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
   <a href="index.html" class="nav-hub">⌂ Hub</a>
   <details>
-    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details open>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -234,13 +235,22 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+<summary>GUIDES <span class="pillar-badge">6</span></summary>
+<a class="nav-link" href="00-getting-started.html">00 — Getting Started</a>
+<a class="nav-link" href="20-local-dev.html">20 — Local Dev</a>
+<a class="nav-link" href="21-build-axes.html">21 — Build Axes</a>
+<a class="nav-link" href="22-add-a-service.html">22 — Add a Service</a>
+<a class="nav-link" href="23-deployment.html">23 — Deployment</a>
+<a class="nav-link" href="24-debugging.html">24 — Debugging</a>
+</details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-header">
   <div class="page-title">Dockerfile Catalog</div>
-  <div class="page-covers"><strong>What this covers:</strong> Dockerfile patterns for all 106 frameworks — multi-stage builds, all RUNTIME axes (alpine/slim/fips), exact base image tags, and links to runnable service code.</div>
+  <div class="page-covers"><strong>What this covers:</strong> Dockerfile patterns for all 105 frameworks — multi-stage builds, all RUNTIME axes (alpine/slim/fips), exact base image tags, and links to runnable service code.</div>
   <div class="page-when"><strong>When to read:</strong> Writing or copying a Dockerfile for any framework. Read after 09 (distro selection) and 10 (compliance matrices).</div>
   <div class="page-pillar">Pillar 3 — Build &amp; Runtime &nbsp;·&nbsp; Related: <a href="09-linux-distros.html">09 Distros</a> &nbsp;·&nbsp; <a href="12-compliance-variations.html">12 Compliance layers</a> &nbsp;·&nbsp; <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services">services/</a></div>
 </div>
@@ -268,15 +278,15 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
   <div><strong>User can:</strong> Switch to <code>RUNTIME=slim</code> — uses <code>node:22-slim</code> or <code>python:3.12-slim</code> (Debian slim with glibc). Rebuild with <code>docker build --build-arg RUNTIME=slim --target runtime .</code> All glibc-compiled binaries run correctly on slim images.</div>
 </div>
 
-<div class="page-meta">75 framework records &nbsp;·&nbsp; 27 categories &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a> &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; Dockerfile pairings overview: <a href="10-linux-compliance.html#dockerfile-matrix">doc 10 Matrix 5</a></div>
+<div class="page-meta">105 framework records &nbsp;·&nbsp; 30 categories &nbsp;·&nbsp; framework catalog: <a href="01-framework-catalog.html">doc 01</a> &nbsp;·&nbsp; distro catalog: <a href="09-linux-distros.html">doc 09</a> &nbsp;·&nbsp; Dockerfile pairings overview: <a href="10-linux-compliance.html#dockerfile-matrix">doc 10 Matrix 5</a></div>
 
 <div class="counts-bar">
   <div class="count-chip" style="border-left:3px solid var(--purple)">
-    <div class="chip-num" style="color:var(--purple)">75</div>
+    <div class="chip-num" style="color:var(--purple)">105</div>
     <div class="chip-label">Framework<br>records</div>
   </div>
   <div class="count-chip" style="border-left:3px solid var(--blue)">
-    <div class="chip-num" style="color:var(--blue)">27</div>
+    <div class="chip-num" style="color:var(--blue)">30</div>
     <div class="chip-label">Categories<br>(Frontend/Mobile/Backend)</div>
   </div>
   <div class="count-chip" style="border-left:3px solid var(--green)">
@@ -291,6 +301,13 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 
 <!-- WHY multi-stage + decision blocks -->
 <div class="why-block"><strong>Why multi-stage builds instead of single-stage:</strong> A single-stage Dockerfile leaves compilers, package managers, source code, and build caches in the final image. This produces images 3–10× larger and exposes build tools to attackers if the container is compromised. Multi-stage builds copy only the compiled output — build tools never reach production.</div>
+
+<div class="df-note note-warn" style="margin:0 0 16px">
+  <strong>Catalog Dockerfiles are simplified patterns.</strong> Each entry shows a single-PM <code>ARG PM=npm</code> pattern with <code>if/elif/else</code> chains for npm / yarn / pnpm.
+  The production service Dockerfiles at <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/">services/</a> use a multi-axis <code>ARG BUILD_IMAGE</code> / <code>ARG RUNTIME</code> pattern with corepack, bun, and compliance/observability/auth ARG layers.
+  When to use the catalog pattern: learning, quick prototypes, or frameworks not yet in <code>services/</code>.
+  When to use the services Dockerfile: any production deployment — copy from <code>services/NN-framework/Dockerfile</code> directly.
+</div>
 
 <div class="decision-block">
   <div class="decision-chosen"><strong>Decision:</strong> Separate <code>ARG BUILD_IMAGE</code> and <code>ARG RUNTIME</code> instead of a single image ARG.</div>
@@ -490,9 +507,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/public ./public
 <span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
-  CMD wget -qO- http://localhost:3000/health || exit 1
+  CMD node -e &quot;require('http').get('http://localhost:3000/health/live',(r)=&gt;r.statusCode===200?process.exit(0):process.exit(1))&quot; || exit 1
 <span class="df-kw">EXPOSE</span> 3000
-<span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]
+<span class="df-kw">CMD</span> [&quot;node_modules/.bin/next&quot;, &quot;start&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
@@ -506,10 +523,11 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/public ./public
 <span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
-  CMD curl -f http://localhost:3000/health || exit 1
+  CMD node -e &quot;require('http').get('http://localhost:3000/health/live',(r)=&gt;r.statusCode===200?process.exit(0):process.exit(1))&quot; || exit 1
 <span class="df-kw">EXPOSE</span> 3000
-<span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]</div>
+<span class="df-kw">CMD</span> [&quot;node_modules/.bin/next&quot;, &quot;start&quot;]</div>
     <p class="df-note note-info">Requires <code>output: 'standalone'</code> in next.config.js. Without it, the standalone/ directory is not created and the runtime COPY commands will fail.</p>
+    <p class="df-note note-warn"><strong>Simplified catalog pattern.</strong> The production service Dockerfile at <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-nextjs/">services/01-nextjs/</a> includes <code>BUILD_IMAGE</code> axis, corepack support, and compliance/observability/auth ARG layers.</p>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
       <div class="vfy-steps">
@@ -932,7 +950,7 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
       org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
-  CMD wget -qO- http://localhost/ || exit 1
+  CMD curl -sf http://localhost:80/health/live &gt; /dev/null || exit 1
 <span class="df-kw">EXPOSE</span> 80
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
@@ -943,8 +961,9 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
       org.opencontainers.image.created=&quot;$BUILD_DATE&quot;
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
-  CMD curl -f http://localhost:8080/ || exit 1
-<span class="df-kw">EXPOSE</span> 8080</div>
+  CMD curl -sf http://localhost:80/health/live &gt; /dev/null || exit 1
+<span class="df-kw">EXPOSE</span> 8080
+<span class="df-kw">CMD</span> [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
       <div class="vfy-steps">
@@ -1004,7 +1023,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
   CMD curl -f http://localhost:8080/ || exit 1
-<span class="df-kw">EXPOSE</span> 8080</div>
+<span class="df-kw">EXPOSE</span> 8080
+<span class="df-kw">CMD</span> [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
       <div class="vfy-steps">
@@ -1064,7 +1084,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/dist/app/browser /usr/share/nginx/html
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
   CMD curl -f http://localhost:8080/ || exit 1
-<span class="df-kw">EXPOSE</span> 8080</div>
+<span class="df-kw">EXPOSE</span> 8080
+<span class="df-kw">CMD</span> [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</div>
     <p class="df-note note-info">Replace <code>app/browser</code> with your Angular project name. The correct path is in the <code>outputPath</code> field of <code>angular.json</code>.</p>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -1125,7 +1146,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/build /usr/share/nginx/html
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
   CMD curl -f http://localhost:8080/ || exit 1
-<span class="df-kw">EXPOSE</span> 8080</div>
+<span class="df-kw">EXPOSE</span> 8080
+<span class="df-kw">CMD</span> [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</div>
     <p class="df-note note-info">This pattern requires <code>@sveltejs/adapter-static</code>. For SSR, see the SvelteKit entry in category 1.</p>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -1186,7 +1208,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
   CMD curl -f http://localhost:8080/ || exit 1
-<span class="df-kw">EXPOSE</span> 8080</div>
+<span class="df-kw">EXPOSE</span> 8080
+<span class="df-kw">CMD</span> [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</div>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
       <div class="vfy-steps">
@@ -1249,7 +1272,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
   CMD curl -f http://localhost:8080/ || exit 1
-<span class="df-kw">EXPOSE</span> 8080</div>
+<span class="df-kw">EXPOSE</span> 8080
+<span class="df-kw">CMD</span> [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</div>
     <p class="df-note note-info">Preact with Vite outputs to <code>dist/</code>. Provide <code>nginx.conf</code> with <code>try_files $uri $uri/ /index.html</code> for SPA routing.</p>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -1312,7 +1336,8 @@ code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-
 <span class="df-kw">COPY</span> --from=builder /app/dist /usr/share/nginx/html
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=3s --retries=3 \
   CMD curl -f http://localhost:8080/ || exit 1
-<span class="df-kw">EXPOSE</span> 8080</div>
+<span class="df-kw">EXPOSE</span> 8080
+<span class="df-kw">CMD</span> [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</div>
     <p class="df-note note-info">Lit components are compiled to standard Web Components. No framework runtime needed at serve time — native browser custom element APIs handle lifecycle.</p>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>
@@ -1974,9 +1999,9 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 <span class="df-kw">COPY</span> --from=builder /app/public ./public
 <span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
-  CMD wget -qO- http://localhost:3000/health || exit 1
+  CMD node -e &quot;require('http').get('http://localhost:3000/health/live',(r)=&gt;r.statusCode===200?process.exit(0):process.exit(1))&quot; || exit 1
 <span class="df-kw">EXPOSE</span> 3000
-<span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]
+<span class="df-kw">CMD</span> [&quot;node_modules/.bin/next&quot;, &quot;start&quot;]
 
 <span class="df-comment"># ── runtime-fips ────────────────────────────────────────────────────────────</span>
 <span class="df-stage">FROM registry.access.redhat.com/ubi9/nodejs-22-minimal AS runtime-fips</span>
@@ -1990,9 +2015,9 @@ route = { pattern = &quot;api.example.com/*&quot;, zone_name = &quot;example.com
 <span class="df-kw">COPY</span> --from=builder /app/public ./public
 <span class="df-kw">USER</span> 1001:1001
 <span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
-  CMD curl -f http://localhost:3000/health || exit 1
+  CMD node -e &quot;require('http').get('http://localhost:3000/health/live',(r)=&gt;r.statusCode===200?process.exit(0):process.exit(1))&quot; || exit 1
 <span class="df-kw">EXPOSE</span> 3000
-<span class="df-kw">CMD</span> [&quot;node&quot;, &quot;server.js&quot;]</div>
+<span class="df-kw">CMD</span> [&quot;node_modules/.bin/next&quot;, &quot;start&quot;]</div>
     <p class="df-note note-info">Enable streaming with React Suspense in your Server Components. Standalone output mode required: <code>output: 'standalone'</code>.</p>
     <div class="vfy-block">
       <p class="vfy-label">Verify</p>

@@ -13,3 +13,7 @@ htmlcov/
 .mypy_cache/
 dist/
 build/
+.env.example
+tests/
+conftest.py
+requirements-dev.txt

@@ -30,7 +30,7 @@ COPY . .
 RUN npm run build
 
 # ── Base image stages (no RUN — selection only) ───────────────────────────
-FROM nginx:alpine AS base-alpine
+FROM nginx:1.27-alpine AS base-alpine
 FROM nginx:1.27-stable-alpine3.21-slim AS base-stable
 FROM registry.access.redhat.com/ubi9/nginx-122 AS base-fips
 
@@ -39,8 +39,10 @@ FROM base-${RUNTIME} AS runtime
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD curl -sf http://localhost:80/ > /dev/null || exit 1
-
+  CMD curl -sf http://localhost:80/health/live > /dev/null || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 CMD ["nginx", "-g", "daemon off;"]
 
 # ── Runtime — FIPS ────────────────────────────────────────────────────────
@@ -48,5 +50,8 @@ FROM base-fips AS runtime-fips
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD curl -sf http://localhost:80/ > /dev/null || exit 1
+  CMD curl -sf http://localhost:80/health/live > /dev/null || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,10 +1,10 @@
-# Master catalog — points to all 106 service catalog-info.yaml files
+# Master catalog — points to all 105 service catalog-info.yaml files
 # Backstage reads this file and fetches each target to populate the catalog.
 apiVersion: backstage.io/v1alpha1
 kind: Location
 metadata:
   name: pipeline-platform-services
-  description: All 106 pipeline-platform service starters
+  description: All 105 pipeline-platform service starters
   annotations:
     backstage.io/managed-by-location: url:https://github.com/yarova-ca/pipeline-studio/blob/main/backstage/catalog/all.yaml
 spec:

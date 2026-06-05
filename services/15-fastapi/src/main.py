@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,12 +11,21 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request as StarletteRequest
 from dotenv import load_dotenv
 import os
+import sys
 import uuid
 
-from src.db.session import get_db
+from src.db.active import get_db
 from src.logger import logger
+from src.compliance.active import apply_compliance
+from src.observability.active import init_observability
 
 load_dotenv()
+
+# ── JWT_SECRET startup validation ─────────────────────────────────────────────
+_jwt_secret = os.getenv("JWT_SECRET", "")
+if len(_jwt_secret) < 32:
+    print("FATAL: JWT_SECRET missing or shorter than 32 chars", flush=True)
+    sys.exit(1)
 
 # ── OpenTelemetry — guarded by OTEL_ENABLED=true ─────────────────────────────
 # Set OTEL_ENABLED=true and OTEL_EXPORTER_OTLP_ENDPOINT in the environment to
@@ -50,6 +60,7 @@ app = FastAPI(
 )
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
 app.add_middleware(
@@ -69,6 +80,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        if os.getenv("IS_PRODUCTION", "false").lower() == "true":
+            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         return response
 
 
@@ -85,6 +98,10 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
 
 
 app.add_middleware(RequestIDMiddleware)
+
+# ── Compliance / Observability axis ──────────────────────────────────────────
+init_observability(app)
+apply_compliance(app)
 
 # ── Routers ───────────────────────────────────────────────────────────────────
 from src.routers.auth import router as auth_router  # noqa: E402

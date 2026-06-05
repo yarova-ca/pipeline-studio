@@ -8,6 +8,11 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
       {{- include "14-express.selectorLabels" . | nindent 6 }}
@@ -16,6 +21,7 @@ spec:
       labels:
         {{- include "14-express.selectorLabels" . | nindent 8 }}
     spec:
+      automountServiceAccountToken: false
       serviceAccountName: {{ include "14-express.serviceAccountName" . }}
       securityContext:
         runAsNonRoot: true

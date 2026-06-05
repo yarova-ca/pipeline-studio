@@ -122,6 +122,17 @@ hr{border:none;border-top:1px solid var(--border);margin:40px 0}
 .full-diagram .dsec{color:var(--blue)}
 .full-diagram .dops{color:var(--green)}
 .full-diagram .connector{color:var(--text-dim)}
+/* Phase jump strip */
+.phase-jump{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;position:sticky;top:0;z-index:100}
+.phase-jump a{display:inline-flex;align-items:center;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600;text-decoration:none;border:1px solid var(--border);background:var(--bg);color:var(--text-dim);white-space:nowrap}
+.phase-jump a:hover{background:var(--bg3);color:var(--text-head);border-color:var(--blue)}
+.phase-jump a.pj-p0{border-left:3px solid var(--p0-color);color:var(--p0-color)}
+.phase-jump a.pj-p1{border-left:3px solid var(--p1-color);color:var(--p1-color)}
+.phase-jump a.pj-p2{border-left:3px solid var(--p2-color);color:var(--p2-color)}
+.phase-jump a.pj-p3{border-left:3px solid var(--p3-color);color:var(--p3-color)}
+.phase-jump a.pj-reg{border-left:3px solid var(--reg-color);color:var(--reg-color)}
+.phase-jump a.pj-promo{border-left:3px solid var(--promo-color);color:var(--promo-color)}
+.phase-jump a.pj-flow{border-left:3px solid var(--text-dim)}
 /* Per-diagram legend strip */
 .diagram-legend{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:10px;margin-bottom:4px;font-size:11px;color:var(--text-dim)}
 .dl-item{display:flex;align-items:center;gap:5px}
@@ -214,6 +225,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -242,9 +254,19 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
   </details>
   <details>
-    <summary>Maintaining<span class="pillar-badge">7</span></summary>
+    <summary>Maintaining<span class="pillar-badge">8</span></summary>
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
   </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
@@ -300,7 +322,17 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <div class="counts-bar">
   <div class="count-chip phase-chip"><div class="chip-num">6</div><div class="chip-label">Phases<br>total</div></div>
   <div class="count-chip stage-chip" title="Why 44: 16 DevOps stages (workflow management) + 28 DevSecOps stages (security gates). Each phase adds stages proportional to its security requirements."><div class="chip-num">44</div><div class="chip-label">Unique<br>stages</div></div>
-  <div class="count-chip" title="4 environments: dev → staging → training → prod. Each environment requires an explicit approval gate — test pass alone does not open the gate."><div class="chip-num">4</div><div class="chip-label">Promotion<br>environments</div></div>
+  <div class="count-chip" title="4 environments: dev → test → staging → prod. Each environment requires an explicit approval gate — test pass alone does not open the gate."><div class="chip-num">4</div><div class="chip-label">Promotion<br>environments</div></div>
+</div>
+
+<div class="phase-jump" aria-label="Jump to phase">
+  <a href="#full-flow" class="pj-flow">Full flow</a>
+  <a href="#p0" class="pj-p0">P0 Bootstrap</a>
+  <a href="#p1" class="pj-p1">P1 Local Dev</a>
+  <a href="#p2" class="pj-p2">P2 PR Gate</a>
+  <a href="#p3" class="pj-p3">P3 Main Build</a>
+  <a href="#reg" class="pj-reg">Registry</a>
+  <a href="#promo" class="pj-promo">Promotions</a>
 </div>
 
 <div class="section-legend">

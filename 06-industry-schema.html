@@ -160,6 +160,17 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
 .failure-block div{margin-bottom:4px}
 .failure-block div:last-child{margin-bottom:0}
+/* ── Filter bar ── */
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.filter-bar label{font-size:11px;font-weight:600;color:var(--text-dim);white-space:nowrap}
+.filter-bar input[type="text"]{flex:1;min-width:180px;padding:5px 9px;font-size:12px;border:1px solid var(--border);border-radius:5px;background:var(--bg);color:var(--text);font-family:inherit}
+.filter-bar input[type="text"]:focus{outline:2px solid var(--blue);outline-offset:1px}
+.filter-bar select{padding:5px 8px;font-size:12px;border:1px solid var(--border);border-radius:5px;background:var(--bg);color:var(--text);font-family:inherit;cursor:pointer}
+.filter-bar select:focus{outline:2px solid var(--blue);outline-offset:1px}
+.filter-btn-clear{padding:5px 10px;font-size:11px;font-weight:600;background:var(--bg3);border:1px solid var(--border);border-radius:5px;color:var(--text-dim);cursor:pointer}
+.filter-btn-clear:hover{color:var(--text-head);border-color:var(--blue)}
+.filter-count{font-size:11px;color:var(--text-dim);white-space:nowrap}
+@media(prefers-color-scheme:dark){.filter-bar input[type="text"],.filter-bar select{background:var(--bg2);color:var(--text)}}
 
 /* ── Dual-audience sections ── */
 .audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
@@ -197,6 +208,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -229,18 +241,26 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
+  </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-header">
-  <div class="page-title">US Industry Schema</div>
+  <h1 class="page-title">US Industry Schema</h1>
   <div class="page-covers"><strong>What this covers:</strong> 74 US industries across 16 verticals — mandatory compliance standards, regulatory body, data sensitivity, pipeline stages affected, and security requirements per industry.</div>
   <div class="page-when"><strong>When to read:</strong> Adapting a pipeline for a US regulated industry. Picking the right compliance standards for a US client.</div>
   <div class="page-pillar">Pillar 6 — Industry Verticals &nbsp;·&nbsp; Related: <a href="12-compliance-variations.html">12 Compliance variations</a> &nbsp;·&nbsp; <a href="10-linux-compliance.html">10 Distro compliance</a></div>
 </div>
-<div class="page-title">Industry Schema</div>
-<div class="page-meta">74 industries · 16 verticals · 10 columns per row &nbsp;·&nbsp; verified 2026-05-26</div>
+<div class="page-meta">74 industries · 16 verticals · 10 columns per row &nbsp;·&nbsp; verified 2026-05-26 &nbsp;·&nbsp; Sources: HIPAA 45 CFR, NERC CIP v7, FDA 21 CFR Part 11, PCI DSS v4.0, NIST 800-53 Rev 5, FedRAMP Rev 5, CJIS Security Policy v5.9</div>
 
 <h2 id="how-to-use">How to use this schema</h2>
 <div class="section-sub">Two common entry points — find your scenario below.</div>
@@ -261,8 +281,9 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 
 <div class="why-block">
   <strong>Binary rule — regulated vs commercial verticals:</strong><br>
-  When your industry is in REGULATED_VERTICAL (Finance, Healthcare, Government, Defense): all mandatory standards apply from day 1. No exceptions.<br>
-  When your industry is in COMMERCIAL_VERTICAL (Retail, Media, Agriculture, Non-profit): apply standards based on data sensitivity level only.
+  When your industry is in <code>REGULATED_VERTICAL</code> (Finance, Healthcare, Government, Defense): all mandatory standards apply from day 1. No exceptions.<br>
+  When your industry is in <code>COMMERCIAL_VERTICAL</code> (Retail, Media, Agriculture, Non-profit): apply standards based on data sensitivity level only.<br>
+  <em style="font-size:11px;color:var(--text-dim)">Note: <code>REGULATED_VERTICAL</code> and <code>COMMERCIAL_VERTICAL</code> are documentation shorthand for the two groups above — they are not code constants or config values in any file.</em>
 </div>
 
 <div class="why-block">
@@ -344,6 +365,37 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <!-- Full industry table -->
 <h2 id="industries">All 74 industries — all 10 columns</h2>
 <div class="section-sub">Scroll horizontally to see all columns. Each row has all 10 columns populated.</div>
+
+<div class="filter-bar" id="filter-bar">
+  <label for="filter-keyword">Filter:</label>
+  <input type="text" id="filter-keyword" placeholder="e.g. FIPS, HIPAA, 7-year, PHI…" autocomplete="off">
+  <label for="filter-vertical" style="margin-left:4px">Vertical:</label>
+  <select id="filter-vertical">
+    <option value="">All verticals</option>
+    <option>Financial Services</option>
+    <option>Healthcare &amp; Life Sciences</option>
+    <option>Government &amp; Public Sector</option>
+    <option>Defense &amp; Intelligence</option>
+    <option>Energy &amp; Environment</option>
+    <option>Technology</option>
+    <option>Telecommunications</option>
+    <option>Retail &amp; Commerce</option>
+    <option>Manufacturing &amp; Industrial</option>
+    <option>Media &amp; Entertainment</option>
+    <option>Education</option>
+    <option>Transportation &amp; Logistics</option>
+    <option>Real Estate &amp; Construction</option>
+    <option>Agriculture</option>
+    <option>Legal &amp; Professional Services</option>
+    <option>Non-profit &amp; Social</option>
+  </select>
+  <label style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text-dim);cursor:pointer">
+    <input type="checkbox" id="filter-fips" style="cursor:pointer"> FIPS only
+  </label>
+  <button class="filter-btn-clear" id="filter-clear">Clear</button>
+  <span class="filter-count" id="filter-count"></span>
+</div>
+
 <div class="tbl-wrap">
   <div class="tbl-scroll">
     <table class="ind-table">
@@ -1233,5 +1285,63 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </div>
 
 </main>
+<script>
+(function(){
+  var kwInput = document.getElementById('filter-keyword');
+  var vertSelect = document.getElementById('filter-vertical');
+  var fipsCheck = document.getElementById('filter-fips');
+  var clearBtn = document.getElementById('filter-clear');
+  var countEl = document.getElementById('filter-count');
+  var table = document.querySelector('.ind-table tbody');
+  var total = 74;
+
+  function applyFilter(){
+    var kw = kwInput.value.trim().toLowerCase();
+    var vert = vertSelect.value.trim().toLowerCase();
+    var fipsOnly = fipsCheck.checked;
+    var rows = table.querySelectorAll('tr');
+    var visible = 0;
+    rows.forEach(function(row){
+      if(row.classList.contains('vert-row')){
+        // vertical header rows — show/hide based on whether any child industry rows are visible
+        row.style.display = '';
+        return;
+      }
+      var text = row.textContent.toLowerCase();
+      var vertCell = row.querySelector('.c2');
+      var vertText = vertCell ? vertCell.textContent.trim().toLowerCase() : '';
+      var hasFips = row.querySelector('.tag-fips') !== null;
+      var kwMatch = kw === '' || text.indexOf(kw) !== -1;
+      var vertMatch = vert === '' || vertText.indexOf(vert.replace(/&amp;/g,'&').replace(/&/g,'and').replace(/ and /g,' & ')) !== -1 || vertText.indexOf(vert) !== -1;
+      var fipsMatch = !fipsOnly || hasFips;
+      var show = kwMatch && vertMatch && fipsMatch;
+      row.style.display = show ? '' : 'none';
+      if(show) visible++;
+    });
+    // hide vertical header rows when all their industry rows are hidden
+    rows.forEach(function(row){
+      if(!row.classList.contains('vert-row')) return;
+      var next = row.nextElementSibling;
+      var anyVisible = false;
+      while(next && !next.classList.contains('vert-row')){
+        if(next.style.display !== 'none') anyVisible = true;
+        next = next.nextElementSibling;
+      }
+      row.style.display = anyVisible ? '' : 'none';
+    });
+    countEl.textContent = (kw || vert || fipsOnly) ? (visible + ' of ' + total + ' shown') : '';
+  }
+
+  kwInput.addEventListener('input', applyFilter);
+  vertSelect.addEventListener('change', applyFilter);
+  fipsCheck.addEventListener('change', applyFilter);
+  clearBtn.addEventListener('click', function(){
+    kwInput.value = '';
+    vertSelect.value = '';
+    fipsCheck.checked = false;
+    applyFilter();
+  });
+})();
+</script>
 </body>
 </html>

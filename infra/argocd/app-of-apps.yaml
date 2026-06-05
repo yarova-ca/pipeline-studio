@@ -19,6 +19,8 @@ spec:
     namespace: argocd
   syncPolicy:
     automated:
+      # prune: false - manual cleanup required: argocd app delete <name> --cascade
+      # Enable prune: true for non-prod after verifying all services are registered
       prune: false    # CHANGED: was true — auto-deletion of running services is too destructive.
                       # When a service manifest is removed from Git, ArgoCD will warn but NOT delete it.
                       # To actually remove a service, run: argocd app delete <name> manually.

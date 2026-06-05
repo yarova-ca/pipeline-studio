@@ -5,8 +5,8 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: smoke-test-{{ .Release.Revision }}
-  namespace: {{ .Release.Namespace }}
+  name: smoke-test-1
+  namespace: pipeline-platform
   annotations:
     argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded

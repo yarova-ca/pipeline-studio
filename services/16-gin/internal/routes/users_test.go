@@ -9,19 +9,19 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yarova-ca/16-gin/internal/db"
+	dbActive "github.com/yarova-ca/16-gin/internal/db/active"
 	"github.com/yarova-ca/16-gin/internal/routes"
 )
 
 // newUsersRouter creates a fresh test DB and registers only the users routes.
-func newUsersRouter(t *testing.T) (*gin.Engine, *db.User) {
+func newUsersRouter(t *testing.T) (*gin.Engine, *dbActive.User) {
 	t.Helper()
 	database := newTestDB(t)
 	r := gin.New()
 	routes.RegisterAuth(r)
 	routes.RegisterUsers(r)
 
-	user := seedUser(t, database, db.User{
+	user := seedUser(t, database, dbActive.User{
 		ID:       "items-user-1",
 		Email:    "items@example.com",
 		Name:     "Items User",
@@ -31,7 +31,7 @@ func newUsersRouter(t *testing.T) (*gin.Engine, *db.User) {
 }
 
 // authHeader returns an Authorization header value for the given user.
-func authHeader(t *testing.T, user *db.User) string {
+func authHeader(t *testing.T, user *dbActive.User) string {
 	t.Helper()
 	return "Bearer " + signedToken(t, user.ID, user.Email, user.Name)
 }
@@ -145,14 +145,14 @@ func TestGetItem_ValidJWT_Returns200(t *testing.T) {
 	r := gin.New()
 	routes.RegisterUsers(r)
 
-	user := seedUser(t, database, db.User{
+	user := seedUser(t, database, dbActive.User{
 		ID:       "getitem-user",
 		Email:    "getitem@example.com",
 		Name:     "GetItem User",
 		Provider: "github",
 	})
 
-	item := db.Item{Title: "Seeded Item", UserID: user.ID}
+	item := dbActive.Item{Title: "Seeded Item", UserID: user.ID}
 	if err := database.Create(&item).Error; err != nil {
 		t.Fatalf("seed item: %v", err)
 	}
@@ -172,20 +172,20 @@ func TestGetItem_WrongUser_Returns404(t *testing.T) {
 	r := gin.New()
 	routes.RegisterUsers(r)
 
-	owner := seedUser(t, database, db.User{
+	owner := seedUser(t, database, dbActive.User{
 		ID:       "owner-user",
 		Email:    "owner@example.com",
 		Name:     "Owner",
 		Provider: "github",
 	})
-	other := seedUser(t, database, db.User{
+	other := seedUser(t, database, dbActive.User{
 		ID:       "other-user",
 		Email:    "other@example.com",
 		Name:     "Other",
 		Provider: "github",
 	})
 
-	item := db.Item{Title: "Owner Item", UserID: owner.ID}
+	item := dbActive.Item{Title: "Owner Item", UserID: owner.ID}
 	if err := database.Create(&item).Error; err != nil {
 		t.Fatalf("seed item: %v", err)
 	}
@@ -209,14 +209,14 @@ func TestUpdateItem_ValidJWT_Returns200(t *testing.T) {
 	r := gin.New()
 	routes.RegisterUsers(r)
 
-	user := seedUser(t, database, db.User{
+	user := seedUser(t, database, dbActive.User{
 		ID:       "update-user",
 		Email:    "update@example.com",
 		Name:     "Update User",
 		Provider: "github",
 	})
 
-	item := db.Item{Title: "Before", UserID: user.ID}
+	item := dbActive.Item{Title: "Before", UserID: user.ID}
 	if err := database.Create(&item).Error; err != nil {
 		t.Fatalf("seed item: %v", err)
 	}
@@ -254,14 +254,14 @@ func TestDeleteItem_ValidJWT_Returns204(t *testing.T) {
 	r := gin.New()
 	routes.RegisterUsers(r)
 
-	user := seedUser(t, database, db.User{
+	user := seedUser(t, database, dbActive.User{
 		ID:       "delete-user",
 		Email:    "delete@example.com",
 		Name:     "Delete User",
 		Provider: "github",
 	})
 
-	item := db.Item{Title: "To Delete", UserID: user.ID}
+	item := dbActive.Item{Title: "To Delete", UserID: user.ID}
 	if err := database.Create(&item).Error; err != nil {
 		t.Fatalf("seed item: %v", err)
 	}
@@ -307,7 +307,7 @@ func TestListItems_ValidAPIKey_Returns200(t *testing.T) {
 	routes.RegisterUsers(r)
 
 	apiKey := "items-api-key-xyz"
-	user := seedUser(t, database, db.User{
+	user := seedUser(t, database, dbActive.User{
 		ID:       "apikey-items-user",
 		Email:    "apikeyitems@example.com",
 		Name:     "API Key Items",

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Feature Axis Matrix — beginner guide to 7 build axes for the service-starters repo. What each axis does, why you'd use it, which groups it applies to, and real-world examples.">
+<meta name="description" content="Feature Axis Matrix — beginner guide to 8 build axes for the service-starters repo. What each axis does, why you'd use it, which groups it applies to, and real-world examples.">
 <title>Feature Axis Matrix — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -288,10 +288,20 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
   </details>
   <details>
-    <summary>Maintaining<span class="pillar-badge">7</span></summary>
+    <summary>Maintaining<span class="pillar-badge">8</span></summary>
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+<summary>GUIDES <span class="pillar-badge">6</span></summary>
+<a class="nav-link" href="00-getting-started.html">00 — Getting Started</a>
+<a class="nav-link" href="20-local-dev.html">20 — Local Dev</a>
+<a class="nav-link" href="21-build-axes.html">21 — Build Axes</a>
+<a class="nav-link" href="22-add-a-service.html">22 — Add a Service</a>
+<a class="nav-link" href="23-deployment.html">23 — Deployment</a>
+<a class="nav-link" href="24-debugging.html">24 — Debugging</a>
+</details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
@@ -330,7 +340,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   </div>
 </div>
 
-<div class="page-meta">7 build axes · 30 service groups · beginner guide · what each axis does · why you'd use it · real examples</div>
+<div class="page-meta">8 build axes · 30 service groups · beginner guide · what each axis does · why you'd use it · real examples</div>
 
 <div style="background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:14px 18px;margin:0 0 20px;font-size:12px;line-height:1.75">
   <strong>What each axis means — quick reference</strong>
@@ -351,8 +361,8 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <div class="counts-bar">
   <div class="count-chip axes-chip"><div class="chip-num">7</div><div class="chip-label">Ways to<br>customize</div></div>
   <div class="count-chip grp-chip"><div class="chip-num">30</div><div class="chip-label">Service<br>groups</div></div>
-  <div class="count-chip cat-chip" title="2 axes implemented today: RUNTIME and BUILD_IMAGE. Both work now — pass --build-arg and it changes the output. All other 6 axes are designed but not yet built."><div class="chip-num">2</div><div class="chip-label">Axes work<br>today</div></div>
-  <div class="count-chip tier-chip"><div class="chip-num">6</div><div class="chip-label">Axes coming<br>soon</div></div>
+  <div class="count-chip cat-chip" title="All 8 axes implemented: RUNTIME, BUILD_IMAGE, PKG_MGR, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM. All work now — pass --build-arg and it changes the output."><div class="chip-num">8</div><div class="chip-label">Axes work<br>today</div></div>
+  <div class="count-chip tier-chip"><div class="chip-num">0</div><div class="chip-label">Axes coming<br>soon</div></div>
 </div>
 
 <!-- ═══ SECTION 0: WHAT IS THIS PAGE ═══ -->
@@ -512,7 +522,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 
 <div class="tbl-wrap" style="margin-bottom:24px">
 <table class="gen-table">
-  <thead><tr><th colspan="4" class="tier-skip-head">Skip — Legacy, niche, or redundant (~38 services)</th></tr>
+  <thead><tr><th colspan="4" class="tier-skip-head">Skip — Legacy, niche, or redundant (44 services)</th></tr>
   <tr><th>Service</th><th>Category</th><th>Why</th><th>Code →</th></tr></thead>
   <tbody>
     <tr><td><code>02-preact</code></td><td>Frontend SPA</td><td>Niche — minimal community</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-preact">02-preact/</a></td></tr>
@@ -603,7 +613,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <strong>Important: which axes work today vs which are coming soon</strong><br>
   <code>BUILD_IMAGE</code> — <span class="s-impl">Implemented</span> — <code>--build-arg BUILD_IMAGE=ubuntu|sdk|sdk-alpine|custom</code> works in all 92 Docker services right now.<br>
   <code>RUNTIME</code> — <span class="s-impl">Implemented</span> — <code>--build-arg RUNTIME=alpine|slim|scratch|distroless|fips</code> works in all applicable services right now.<br>
-  All other 6 axes (PKG_MGR, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM) — <span class="s-des">Designed</span> — fully documented and planned, but not yet built into service source code. See <a href="#status">Implementation status</a> for details.
+  All other 6 axes (PKG_MGR, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM) — <span class="s-impl">Implemented</span> — built into service source code. See <a href="#status">Implementation status</a> for details.
 </div>
 
 <div class="why-block"><strong>Why axes are configurable at build time instead of at runtime:</strong> Build-time configuration means the final image contains only what it needs. A service built with <code>COMPLIANCE=hipaa</code> has the HIPAA audit code compiled in — there is no way to accidentally run the service without it. Runtime configuration via environment variables can be bypassed if an env var is missing or misconfigured.</div>
@@ -1183,13 +1193,13 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
   </div>
 </div>
 
-<!-- AXIS 3: PKG_MANAGER -->
+<!-- AXIS 3: PKG_MGR -->
 <div class="axis-card">
   <div class="axis-card-head">
     <span class="ac-num">3</span>
     <span class="ac-name">Package Manager Swap</span>
-    <span class="ac-arg">PKG_MANAGER</span>
-    <span class="s-des">Designed</span>
+    <span class="ac-arg">PKG_MGR</span>
+    <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
     <p class="ac-what">Swaps npm for a different JS/TS package manager inside the Dockerfile.</p>
@@ -1256,7 +1266,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
         </table>
         </div>
         <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px">Note: 14-elysia already uses bun (Bun-native framework). 22-rails and 22-sinatra already use bun for JS asset compilation.</p>
-        <pre>docker build --target runtime --build-arg PKG_MANAGER=pnpm -t my-service services/14-express</pre>
+        <pre>docker build --target runtime --build-arg PKG_MGR=pnpm -t my-service services/14-express</pre>
       </div>
     </details>
   </div>
@@ -1268,7 +1278,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="ac-num">4</span>
     <span class="ac-name">Build Tool Swap</span>
     <span class="ac-arg">BUILD_TOOL</span>
-    <span class="s-des">Designed</span>
+    <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
     <p class="ac-what">Swaps Vite for a different JS/TS bundler inside the Dockerfile. Applies to JS/TS services with Docker.</p>
@@ -1337,7 +1347,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="ac-num">5</span>
     <span class="ac-name">Compliance Preset</span>
     <span class="ac-arg">COMPLIANCE</span>
-    <span class="s-des">Designed</span>
+    <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
     <p class="ac-what">Adds the security code your industry's regulations require — automatically, without you writing it. This includes middleware that runs on every request, response headers, startup checks, and log masking.</p>
@@ -1398,7 +1408,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="ac-num">6</span>
     <span class="ac-name">Observability Stack</span>
     <span class="ac-arg">OBSERVABILITY</span>
-    <span class="s-des">Designed</span>
+    <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
     <p class="ac-what">Adds code that reports what your service is doing in production — how fast requests are, how many errors occur, where time is being spent, and what path each request took through your system.</p>
@@ -1448,7 +1458,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="ac-num">7</span>
     <span class="ac-name">Auth Strategy</span>
     <span class="ac-arg">AUTH</span>
-    <span class="s-des">Designed</span>
+    <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
     <p class="ac-what">Adds a verification gate at the entry point of your API. Every HTTP request must prove who it is before it reaches your route handler. Unauthenticated requests are rejected with 401 Unauthorized before any business logic runs.</p>
@@ -1507,7 +1517,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     <span class="ac-num">8</span>
     <span class="ac-name">ORM / Database Layer</span>
     <span class="ac-arg">ORM</span>
-    <span class="s-des">Designed</span>
+    <span class="s-impl">Implemented</span>
   </div>
   <div class="axis-card-body">
     <p class="ac-what">Adds a database connection library and a starter schema to your service so it can read and write to a database. Each language group gets the idiomatic database library for that language.</p>
@@ -1779,7 +1789,7 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
 
     <!-- SERVER EXTENDED -->
     <tr class="cat-row server-ext">
-      <td colspan="9">Server — Extended — groups 21–27 <span class="cat-badge">all 8 axes apply · second implementation priority</span></td>
+      <td colspan="9">Server — Extended — groups 21–27 <span class="cat-badge">6 of 8 axes apply (no PKG_MGR / BUILD_TOOL) · second implementation priority</span></td>
     </tr>
     <tr>
       <td>21 — Elixir Servers <small style="color:var(--text-dim)">(Phoenix)</small></td>
@@ -1843,22 +1853,22 @@ docker build --target runtime-fips -t my-service:fips services/14-express</pre>
     </tr>
     <tr>
       <td>09 — Mobile / React Native <small style="color:var(--text-dim)">(Expo, Ionic, React Native)</small></td>
-      <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
     </tr>
     <tr>
       <td>10 — Cross-platform Mobile <small style="color:var(--text-dim)">(Flutter, .NET MAUI, Kotlin MP)</small></td>
-      <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
     </tr>
     <tr>
       <td>11 — Native iOS <small style="color:var(--text-dim)">(Swift SwiftUI, Obj-C UIKit)</small></td>
-      <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
     </tr>
     <tr>
       <td>12 — Native Android <small style="color:var(--text-dim)">(Kotlin Jetpack, Java Android)</small></td>
-      <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
+      <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
       <td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td><td><span class="cell-n">—</span></td>
     </tr>
 
@@ -1991,19 +2001,19 @@ docker run --rm -p 8080:8080 my-service</pre>
     </div>
   </div>
   <div class="status-row-item">
-    <div class="sr-chip-col"><span class="s-des">Designed</span></div>
+    <div class="sr-chip-col"><span class="s-impl">Implemented</span></div>
     <div>
-      <div class="sr-axis">PKG_MANAGER, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM</div>
-      <div class="sr-desc">All 6 are fully documented — what they do, which values they accept, which groups they apply to, how they compose. The Dockerfile changes and service-level code do not yet exist. Passing these args to the current services has no effect.</div>
+      <div class="sr-axis">PKG_MGR, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM</div>
+      <div class="sr-desc">All 6 are implemented — Dockerfile ARG instructions wired, middleware and library additions in place for all applicable service groups. Pass these args to the current services and they take effect.</div>
     </div>
   </div>
 </div>
 
 <div class="designed-explainer">
-  <strong>What "Designed" means in practice</strong>
-  The interface is fixed: the arg names, valid values, and constraints on this page are final.<br>
-  The implementation does not exist yet: no Dockerfile ARG instructions, no middleware wiring, no library additions.<br>
-  When an axis is implemented, the status chip on this page changes from <span class="s-des">Designed</span> to <span class="s-impl">Implemented</span>.
+  <strong>All 8 axes are now Implemented</strong>
+  The arg names, valid values, and constraints on this page are final.<br>
+  All Dockerfile ARG instructions, middleware wiring, and library additions are in place.<br>
+  Pass any <code>--build-arg</code> listed on this page and it takes effect immediately.
 </div>
 
 <!-- ═══ SECTION 7: NOTES ═══ -->
@@ -2026,7 +2036,7 @@ docker run --rm -p 8080:8080 my-service</pre>
   <strong>Remix page routes:</strong> use Remix sessions for page auth. JWT Bearer for resource routes only.
 </div>
 
-<h3>Group 06 — PKG_MANAGER <span class="cell-p">*</span></h3>
+<h3>Group 06 — PKG_MGR <span class="cell-p">*</span></h3>
 <div class="note-block">
   <strong>Applies via:</strong> lock file used by <code>wrangler deploy</code> — not a <code>docker build --build-arg</code>.<br>
   <strong>Does not apply:</strong> RUNTIME, BUILD_TOOL — group 06 (Cloudflare Workers) has no Dockerfile.<br>

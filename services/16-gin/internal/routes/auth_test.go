@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	ginauth "github.com/yarova-ca/16-gin/internal/auth"
-	"github.com/yarova-ca/16-gin/internal/db"
+	ginauth "github.com/yarova-ca/16-gin/internal/auth/active"
+	dbActive "github.com/yarova-ca/16-gin/internal/db/active"
 	"github.com/yarova-ca/16-gin/internal/routes"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -28,10 +28,10 @@ func newTestDB(t *testing.T) *gorm.DB {
 	if err != nil {
 		t.Fatalf("open test db: %v", err)
 	}
-	if err := database.AutoMigrate(&db.User{}, &db.Item{}); err != nil {
+	if err := database.AutoMigrate(&dbActive.User{}, &dbActive.Item{}); err != nil {
 		t.Fatalf("migrate test db: %v", err)
 	}
-	db.SetDB(database)
+	dbActive.SetDB(database)
 	return database
 }
 
@@ -56,7 +56,7 @@ func signedToken(t *testing.T, userID, email, name string) string {
 }
 
 // seedUser inserts a user into the test DB and returns it.
-func seedUser(t *testing.T, database *gorm.DB, u db.User) db.User {
+func seedUser(t *testing.T, database *gorm.DB, u dbActive.User) dbActive.User {
 	t.Helper()
 	if err := database.Create(&u).Error; err != nil {
 		t.Fatalf("seed user: %v", err)
@@ -100,7 +100,7 @@ func TestAuthMe_ValidJWT_Returns200(t *testing.T) {
 	r := gin.New()
 	routes.RegisterAuth(r)
 
-	user := seedUser(t, database, db.User{
+	user := seedUser(t, database, dbActive.User{
 		ID:       "user-1",
 		Email:    "test@example.com",
 		Name:     "Test User",
@@ -132,7 +132,7 @@ func TestAuthMe_ValidAPIKey_Returns200(t *testing.T) {
 	routes.RegisterAuth(r)
 
 	apiKey := "test-api-key-abc123"
-	user := seedUser(t, database, db.User{
+	user := seedUser(t, database, dbActive.User{
 		ID:       "user-2",
 		Email:    "apikey@example.com",
 		Name:     "API Key User",
@@ -232,7 +232,7 @@ func TestGenerateAPIKey_ValidJWT_Returns200WithKey(t *testing.T) {
 	r := gin.New()
 	routes.RegisterAuth(r)
 
-	user := seedUser(t, database, db.User{
+	user := seedUser(t, database, dbActive.User{
 		ID:       "user-3",
 		Email:    "genkey@example.com",
 		Name:     "Gen Key User",
@@ -264,7 +264,7 @@ func TestRevokeAPIKey_ValidJWT_Returns200(t *testing.T) {
 	routes.RegisterAuth(r)
 
 	apiKey := "to-revoke-key"
-	user := seedUser(t, database, db.User{
+	user := seedUser(t, database, dbActive.User{
 		ID:       "user-4",
 		Email:    "revoke@example.com",
 		Name:     "Revoke User",

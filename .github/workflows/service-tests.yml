@@ -34,6 +34,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: service-tests-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # ── Database migration validation ─────────────────────────────────────────
   # Validates that Prisma migrations apply cleanly from an empty database.
@@ -384,3 +388,16 @@ jobs:
         env:
           MIX_ENV: test
           DATABASE_URL: ecto://app:test@localhost/test
+
+  # ── Deno services ─────────────────────────────────────────────────────────
+  test-deno:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Test
+        run: deno test --allow-net --allow-env
+        working-directory: services/14-deno

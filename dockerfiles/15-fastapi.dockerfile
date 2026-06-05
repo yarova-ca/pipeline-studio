@@ -27,7 +27,12 @@ COPY --chown=1001:0 . .
 ENV PATH="/venv/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 USER 1001
 EXPOSE 8080
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/live')" || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080"]
 
 # ── Alternative runtime images ─────────────────────────────────────────────
 # Uncomment ONE block below instead of the standard runtime above.
@@ -56,10 +61,14 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 # ── Runtime — FIPS ────────────────────────────────────────────────────────
 FROM registry.access.redhat.com/ubi9/python-39 AS runtime-fips
 WORKDIR /app
-USER 1001
 COPY --from=build --chown=1001:0 /venv /venv
 COPY --chown=1001:0 . .
 ENV PATH="/venv/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 USER 1001
 EXPOSE 8080
-CMD ["/venv/bin/uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/live')" || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
+CMD ["/venv/bin/uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080"]

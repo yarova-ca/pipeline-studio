@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Tool Catalog — tool selection for every pipeline stage across 6 phases. 10 columns per stage: tool, license, applies to, changes when, output, CI integration, mandatory, when to use, when not, tradeoff.">
+<meta name="description" content="Tool Catalog — tool selection for every pipeline stage across 4 phases + Registry + Promotions. 10 columns per stage: tool, license, applies to, changes when, output, CI integration, mandatory, when to use, when not, tradeoff.">
 <title>Tool Catalog — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -179,6 +179,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -209,7 +210,17 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <details>
     <summary>Maintaining<span class="pillar-badge">7</span></summary>
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
   </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
@@ -234,12 +245,76 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 
 <div class="why-block"><strong>cosign over GPG (image signing):</strong> cosign uses GitHub Actions OIDC keyless signing — no key material to manage, rotate, or accidentally leak. GPG requires a private key stored as a secret, a rotation schedule, and a key distribution plan. cosign produces Sigstore-compatible signatures verifiable by Kyverno admission policies without any key sharing between teams.</div>
 
-<div class="page-meta">44 stages &nbsp;·&nbsp; 6 phases &nbsp;·&nbsp; 10 columns per stage &nbsp;·&nbsp; versions estimated against 2026-05-27 release cadence — verify against GitHub releases before pinning</div>
+<div class="page-meta">46 stages &nbsp;·&nbsp; 4 phases + Registry + Promotions &nbsp;·&nbsp; 10 columns per stage &nbsp;·&nbsp; versions estimated against 2026-05-27 release cadence — verify against GitHub releases before pinning</div>
 
 <div class="counts-bar">
-  <div class="count-chip stage-chip"><div class="chip-num">44</div><div class="chip-label">Stages<br>covered</div></div>
-  <div class="count-chip"><div class="chip-num">6</div><div class="chip-label">Phases<br>total</div></div>
+  <div class="count-chip stage-chip"><div class="chip-num">46</div><div class="chip-label">Stages<br>covered</div></div>
+  <div class="count-chip"><div class="chip-num">6</div><div class="chip-label">Sections<br>total</div></div>
   <div class="count-chip"><div class="chip-num">10</div><div class="chip-label">Columns<br>per stage</div></div>
+</div>
+
+<div class="section-legend">
+  <strong>Mandatory-tools quick-reference</strong>
+  <div class="leg-row">Every stage listed below — canonical tool and mandatory status. Scan this before reading the full tables.</div>
+  <details>
+    <summary><span class="sum-label">46 stages — tool + mandatory status</span></summary>
+    <div class="expand-content">
+      <table class="col-def-table">
+        <tr><td style="font-weight:700;color:var(--p0-color);padding-top:8px" colspan="3">Phase 0 — Bootstrap</td></tr>
+        <tr><td>Branch protection</td><td>GitHub branch protection (built-in)</td><td class="must-yes">Yes</td></tr>
+        <tr><td>CODEOWNERS</td><td>GitHub CODEOWNERS (built-in)</td><td class="must-yes">Yes</td></tr>
+        <tr><td>OIDC trust</td><td>GitHub Actions OIDC (built-in)</td><td class="must-yes">Yes</td></tr>
+        <tr><td>Registry access</td><td>GHCR (default) / ECR (AWS)</td><td class="must-yes">Yes (GHCR) / No (ECR)</td></tr>
+        <tr><td>Kyverno admission policy</td><td>Kyverno v1.13</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>Dependency update automation</td><td>Renovate v43 (default) / Dependabot</td><td class="must-yes">Yes (Renovate) / No (Dependabot)</td></tr>
+        <tr><td style="font-weight:700;color:var(--p1-color);padding-top:8px" colspan="3">Phase 1 — Local Dev</td></tr>
+        <tr><td>IDE plugins</td><td>SonarLint / hadolint IDE extension</td><td class="must-no">No</td></tr>
+        <tr><td>Pre-commit hooks</td><td>pre-commit v3.8 + gitleaks v8.21</td><td class="must-yes">Yes</td></tr>
+        <tr><td>Local secret scan</td><td>gitleaks v8.21</td><td class="must-yes">Yes</td></tr>
+        <tr><td style="font-weight:700;color:var(--p2-color);padding-top:8px" colspan="3">Phase 2 — PR Gate</td></tr>
+        <tr><td>Pre-commit (CI)</td><td>pre-commit v3.8</td><td class="must-yes">Yes</td></tr>
+        <tr><td>SCA</td><td>Trivy v0.58 (fs mode)</td><td class="must-yes">Yes</td></tr>
+        <tr><td>SAST</td><td>CodeQL v2.19</td><td class="must-yes">Yes</td></tr>
+        <tr><td>License scan</td><td>FOSSA v3</td><td class="must-yes">Yes</td></tr>
+        <tr><td>IaC scan</td><td>checkov v3</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>Secrets scan</td><td>gitleaks v8.21</td><td class="must-yes">Yes</td></tr>
+        <tr><td>Build (no push)</td><td>Docker buildx v0.15</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>SBOM generate</td><td>Syft v1.6</td><td class="must-yes">Yes</td></tr>
+        <tr><td>Container scan</td><td>Trivy v0.58 (image mode)</td><td class="must-yes">Yes</td></tr>
+        <tr><td>PR review</td><td>GitHub required reviewers + CODEOWNERS</td><td class="must-yes">Yes</td></tr>
+        <tr><td style="font-weight:700;color:var(--p3-color);padding-top:8px" colspan="3">Phase 3 — Main Build</td></tr>
+        <tr><td>Pre-commit (CI)</td><td>pre-commit v3.8</td><td class="must-yes">Yes</td></tr>
+        <tr><td>SCA</td><td>Trivy v0.58 (fs mode)</td><td class="must-yes">Yes</td></tr>
+        <tr><td>SAST</td><td>CodeQL v2.19</td><td class="must-yes">Yes</td></tr>
+        <tr><td>License scan</td><td>FOSSA v3</td><td class="must-yes">Yes</td></tr>
+        <tr><td>IaC scan</td><td>checkov v3</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>Secrets scan</td><td>gitleaks v8.21</td><td class="must-yes">Yes</td></tr>
+        <tr><td>Build + Push</td><td>Docker buildx v0.15 + GHCR</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>Release tag</td><td>semantic-release v24</td><td class="must-yes">Yes</td></tr>
+        <tr><td>Container scan (registry image)</td><td>Trivy v0.58 (image mode — registry pull)</td><td class="must-yes">Yes</td></tr>
+        <tr><td>Sign</td><td>cosign v2.4 (keyless OIDC)</td><td class="must-yes">Yes</td></tr>
+        <tr><td>SBOM generate + attest</td><td>Syft v1.6 + cosign v2.4 attest</td><td class="must-yes">Yes</td></tr>
+        <tr><td>SLSA provenance</td><td>slsa-github-generator v2.1</td><td class="must-yes">Yes</td></tr>
+        <tr><td>Tests + Codecov</td><td>Language test runner + Codecov</td><td class="must-yes">Yes</td></tr>
+        <tr><td>DAST</td><td>OWASP ZAP v2.15</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>Perf test</td><td>k6 v0.53</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>Notify</td><td>slackapi/slack-github-action v2</td><td class="must-yes">Yes</td></tr>
+        <tr><td style="font-weight:700;color:var(--reg-color);padding-top:8px" colspan="3">Registry</td></tr>
+        <tr><td>Image store</td><td>GHCR (default) / ECR / GAR / Harbor</td><td class="must-yes">Yes (GHCR) / No (others)</td></tr>
+        <tr><td>Sign verify</td><td>cosign v2.4 verify</td><td class="must-yes">Yes</td></tr>
+        <tr><td>SBOM attach</td><td>cosign v2.4 attach sbom</td><td class="must-yes">Yes</td></tr>
+        <tr><td>SLSA attach</td><td>slsa-verifier v2.5 + cosign v2.4</td><td class="must-yes">Yes</td></tr>
+        <tr><td style="font-weight:700;color:var(--promo-color);padding-top:8px" colspan="3">Promotions</td></tr>
+        <tr><td>GitOps PR</td><td>GitHub Actions + yq v4 + create-pull-request</td><td class="must-yes">Yes</td></tr>
+        <tr><td>ArgoCD / Flux deploy</td><td>ArgoCD v2.12 (default) / Flux v2.4</td><td class="must-yes">Yes</td></tr>
+        <tr><td>cosign verify</td><td>cosign v2.4 verify</td><td class="must-yes">Yes</td></tr>
+        <tr><td>Env tests (DEV / TEST / STAGING)</td><td>pytest / Newman / k6</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>Gate (DEV / TEST / STAGING)</td><td>GitHub Environments with protection rules</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>Argo Rollouts — PROD only</td><td>Argo Rollouts v1.8</td><td class="must-cond">Conditional</td></tr>
+        <tr><td>Monitor — PROD only</td><td>Argo Rollouts AnalysisTemplate + Prometheus v3.0</td><td class="must-cond">Conditional</td></tr>
+      </table>
+    </div>
+  </details>
 </div>
 
 <div class="section-legend">

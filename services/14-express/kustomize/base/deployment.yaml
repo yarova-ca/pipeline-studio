@@ -6,6 +6,11 @@ metadata:
     app: 14-express
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
       app: 14-express
@@ -19,7 +24,7 @@ spec:
         runAsUser: 1001
       containers:
         - name: 14-express
-          image: ghcr.io/yarova-ca/14-express:latest
+          image: ghcr.io/yarova-ca/14-express:base-DO-NOT-USE-DIRECTLY
           ports:
             - containerPort: 3000
           livenessProbe:
