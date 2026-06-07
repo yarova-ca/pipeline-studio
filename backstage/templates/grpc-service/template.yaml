@@ -191,8 +191,6 @@ spec:
       name: Publish repository to GitHub
       action: publish:github
       input:
-        allowedHosts:
-          - github.com
         description: ${{ parameters.description }}
         repoUrl: github.com?owner=yarova-ca&repo=${{ parameters.name }}
         defaultBranch: main
