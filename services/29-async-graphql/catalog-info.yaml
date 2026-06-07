@@ -9,14 +9,11 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - rust
-  - backend
-  - tier-1
-  - backend
-  - tier-1
-  - grpc
-  - tier-1
-  - graphql
-  - tier-2
+    - backend
+    - tier-1
+    - grpc
+    - graphql
+    - tier-2
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-async-graphql

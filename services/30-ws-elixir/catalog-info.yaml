@@ -9,10 +9,9 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - elixir
-  - backend
-  - tier-1
-  - websocket
-  - tier-1
+    - backend
+    - tier-1
+    - websocket
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/30-ws-elixir

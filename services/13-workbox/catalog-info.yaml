@@ -9,17 +9,10 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - javascript
-  - node
-  - spa
-  - tier-2
-  - spa
-  - tier-2
-  - spa
-  - tier-2
-  - spa
-  - tier-2
-  - pwa
-  - tier-2
+    - node
+    - spa
+    - tier-2
+    - pwa
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/13-workbox

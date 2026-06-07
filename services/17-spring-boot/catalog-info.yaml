@@ -9,15 +9,11 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - java
-  - jvm
-  - mobile-android
-  - tier-2
-  - backend
-  - tier-2
-  - backend
-  - tier-2
-  - backend
-  - tier-1
+    - jvm
+    - mobile-android
+    - tier-2
+    - backend
+    - tier-1
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/17-spring-boot
