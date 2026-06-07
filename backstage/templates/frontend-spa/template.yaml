@@ -163,7 +163,7 @@ spec:
       name: Fetch base framework template
       action: fetch:template
       input:
-        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/${{ parameters.framework }}
+        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/${{ {"react":"02-react","vue":"02-vue","angular":"02-angular","svelte":"02-svelte","solidjs":"02-solidjs","preact":"02-preact","lit":"02-lit","nextjs":"01-nextjs","nuxt":"01-nuxt","sveltekit":"01-sveltekit","remix":"01-remix","solid-start":"01-solid-start","angular-ssr":"01-angular-ssr","astro":"04-astro","gatsby":"03-gatsby","hugo":"03-hugo","eleventy":"03-eleventy","qwik":"05-qwik","fresh":"04-fresh","hono-edge":"06-hono-edge","nextjs-edge":"06-nextjs-edge","remix-cloudflare":"06-remix-cloudflare","vite-pwa":"13-vite-pwa"}[parameters.framework] }}
         values:
           name: ${{ parameters.name }}
           description: ${{ parameters.description }}
@@ -189,8 +189,6 @@ spec:
       name: Publish repository to GitHub
       action: publish:github
       input:
-        allowedHosts:
-          - github.com
         description: ${{ parameters.description }}
         repoUrl: github.com?owner=yarova-ca&repo=${{ parameters.name }}
         defaultBranch: main

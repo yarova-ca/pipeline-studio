@@ -283,7 +283,7 @@ spec:
       name: Fetch framework starter
       action: fetch:template
       input:
-        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/${{ parameters.framework }}
+        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/${{ {"express":"14-express","fastify":"14-fastify","nestjs":"14-nestjs","hono":"14-hono","bun":"14-bun","deno":"14-deno","elysia":"14-elysia","fastapi":"15-fastapi","django":"15-django","flask":"15-flask","starlette":"15-starlette","gin":"16-gin","chi":"16-chi","echo":"16-echo","fiber":"16-fiber","spring-boot":"17-spring-boot","micronaut":"17-micronaut","quarkus":"17-quarkus","ktor":"18-ktor","spring-boot-kotlin":"18-spring-boot-kotlin","aspnet-core":"19-aspnet-core","minimal-apis":"19-minimal-apis","axum":"20-axum","actix-web":"20-actix-web","phoenix":"21-phoenix","rails":"22-rails","sinatra":"22-sinatra","laravel":"23-laravel","symfony":"23-symfony","slim":"23-slim","vapor":"24-vapor","hummingbird":"24-hummingbird","http4s":"25-http4s","play":"25-play","pedestal":"26-pedestal","ring":"26-ring","crow":"27-crow","drogon":"27-drogon"}[parameters.framework] }}
         values:
           name: ${{ parameters.name }}
           description: ${{ parameters.description }}
@@ -323,8 +323,6 @@ spec:
       name: Publish repository to GitHub
       action: publish:github
       input:
-        allowedHosts:
-          - github.com
         description: ${{ parameters.description }}
         repoUrl: github.com?owner=yarova-ca&repo=${{ parameters.name }}
         defaultBranch: main
