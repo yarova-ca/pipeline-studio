@@ -41,13 +41,13 @@ spec:
   parent: yarova
   children: []
   members:
-    - rohith
+    - rohithvarmayadla
 
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: rohith
+  name: rohithvarmayadla
   title: Rohith Yadla
   namespace: default
   tags:
