@@ -1,0 +1,8 @@
+site_name: .NET MAUI
+site_description: Runnable service starter for .NET MAUI.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

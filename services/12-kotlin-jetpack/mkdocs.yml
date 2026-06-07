@@ -1,0 +1,8 @@
+site_name: Kotlin Jetpack
+site_description: Runnable service starter for Kotlin Jetpack.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

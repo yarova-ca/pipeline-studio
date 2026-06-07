@@ -1,0 +1,8 @@
+site_name: Next.js App Router
+site_description: Runnable service starter for Next.js App Router.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

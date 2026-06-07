@@ -1,0 +1,8 @@
+site_name: gqlgen (Go)
+site_description: Runnable service starter for gqlgen (Go).
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

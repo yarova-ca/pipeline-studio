@@ -1,0 +1,8 @@
+site_name: Phoenix
+site_description: Runnable service starter for Phoenix.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

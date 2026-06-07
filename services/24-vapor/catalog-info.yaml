@@ -16,7 +16,7 @@ metadata:
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/24-vapor
-    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+    backstage.io/techdocs-ref: dir:.
 spec:
   type: service
   lifecycle: production

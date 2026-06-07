@@ -1,0 +1,8 @@
+site_name: Fastify
+site_description: Runnable service starter for Fastify.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

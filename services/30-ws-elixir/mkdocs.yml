@@ -1,0 +1,8 @@
+site_name: Phoenix Channels
+site_description: Runnable service starter for Phoenix Channels.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

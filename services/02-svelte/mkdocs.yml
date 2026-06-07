@@ -1,0 +1,8 @@
+site_name: Svelte
+site_description: Runnable service starter for Svelte.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

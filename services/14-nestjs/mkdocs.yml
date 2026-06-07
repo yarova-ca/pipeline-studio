@@ -1,0 +1,8 @@
+site_name: NestJS
+site_description: Runnable service starter for NestJS.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

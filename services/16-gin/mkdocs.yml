@@ -1,0 +1,8 @@
+site_name: Gin
+site_description: Runnable service starter for Gin.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

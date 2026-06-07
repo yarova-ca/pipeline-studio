@@ -1,0 +1,8 @@
+site_name: SolidJS
+site_description: Runnable service starter for SolidJS.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

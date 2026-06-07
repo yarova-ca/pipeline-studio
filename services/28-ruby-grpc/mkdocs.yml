@@ -1,0 +1,8 @@
+site_name: Ruby gRPC
+site_description: Runnable service starter for Ruby gRPC.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

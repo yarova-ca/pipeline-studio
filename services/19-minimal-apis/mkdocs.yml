@@ -1,0 +1,8 @@
+site_name: .NET Minimal APIs
+site_description: Runnable service starter for .NET Minimal APIs.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

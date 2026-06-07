@@ -1,0 +1,8 @@
+site_name: tokio-tungstenite
+site_description: Runnable service starter for tokio-tungstenite.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

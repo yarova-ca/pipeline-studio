@@ -1,0 +1,8 @@
+site_name: Node gRPC
+site_description: Runnable service starter for Node gRPC.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

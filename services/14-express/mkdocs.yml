@@ -1,0 +1,8 @@
+site_name: Express 5
+site_description: Runnable service starter for Express 5.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

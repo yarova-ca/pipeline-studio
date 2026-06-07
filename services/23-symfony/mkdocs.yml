@@ -1,0 +1,8 @@
+site_name: Symfony
+site_description: Runnable service starter for Symfony.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

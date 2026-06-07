@@ -1,0 +1,8 @@
+site_name: Async-GraphQL (Rust)
+site_description: Runnable service starter for Async-GraphQL (Rust).
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

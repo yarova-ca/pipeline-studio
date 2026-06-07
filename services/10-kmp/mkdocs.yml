@@ -1,0 +1,8 @@
+site_name: Kotlin Multiplatform
+site_description: Runnable service starter for Kotlin Multiplatform.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md
