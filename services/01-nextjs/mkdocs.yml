@@ -1,0 +1,8 @@
+site_name: Next.js
+site_description: Runnable service starter for Next.js.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

@@ -1,0 +1,8 @@
+site_name: Hot Chocolate (.NET)
+site_description: Runnable service starter for Hot Chocolate (.NET).
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

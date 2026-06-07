@@ -1,0 +1,8 @@
+site_name: Django
+site_description: Runnable service starter for Django.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

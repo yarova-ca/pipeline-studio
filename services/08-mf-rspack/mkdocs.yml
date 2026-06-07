@@ -1,0 +1,8 @@
+site_name: MF RSpack
+site_description: Runnable service starter for MF RSpack.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

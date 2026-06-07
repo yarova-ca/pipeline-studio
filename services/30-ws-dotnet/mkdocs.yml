@@ -1,0 +1,8 @@
+site_name: SignalR (.NET)
+site_description: Runnable service starter for SignalR (.NET).
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

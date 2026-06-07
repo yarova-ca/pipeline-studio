@@ -1,0 +1,8 @@
+site_name: Hugo
+site_description: Runnable service starter for Hugo.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

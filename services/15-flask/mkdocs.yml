@@ -1,0 +1,8 @@
+site_name: Flask
+site_description: Runnable service starter for Flask.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

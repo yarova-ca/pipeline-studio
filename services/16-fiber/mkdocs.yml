@@ -1,0 +1,8 @@
+site_name: Fiber
+site_description: Runnable service starter for Fiber.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

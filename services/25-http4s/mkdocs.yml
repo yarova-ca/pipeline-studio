@@ -1,0 +1,8 @@
+site_name: http4s
+site_description: Runnable service starter for http4s.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

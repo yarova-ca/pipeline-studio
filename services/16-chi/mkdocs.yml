@@ -1,0 +1,8 @@
+site_name: Chi
+site_description: Runnable service starter for Chi.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

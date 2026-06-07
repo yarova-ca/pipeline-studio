@@ -1,0 +1,8 @@
+site_name: Astro (islands)
+site_description: Runnable service starter for Astro (islands).
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

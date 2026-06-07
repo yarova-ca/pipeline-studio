@@ -1,0 +1,8 @@
+site_name: Go gRPC
+site_description: Runnable service starter for Go gRPC.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

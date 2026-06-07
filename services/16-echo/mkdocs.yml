@@ -1,0 +1,8 @@
+site_name: Echo
+site_description: Runnable service starter for Echo.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

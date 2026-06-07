@@ -1,0 +1,8 @@
+site_name: MF Webpack
+site_description: Runnable service starter for MF Webpack.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md

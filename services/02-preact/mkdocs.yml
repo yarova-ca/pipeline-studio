@@ -1,0 +1,8 @@
+site_name: Preact
+site_description: Runnable service starter for Preact.
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md
