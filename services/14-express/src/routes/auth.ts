@@ -18,7 +18,7 @@ import { Router, type Request, type Response } from 'express'
 import crypto from 'node:crypto'
 import jwt from 'jsonwebtoken'
 import { prisma } from '../db/client.js'
-import { requireAuth, signToken, revokeToken, type AuthUser } from '../middleware/auth.js'
+import { requireAuth, signToken, revokeToken, type AuthUser } from '../auth/active/index.js'
 import { requireRole } from '../middleware/require-role.js'
 import { auditLog } from '../middleware/audit.js'
 

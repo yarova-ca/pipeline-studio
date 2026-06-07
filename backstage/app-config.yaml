@@ -16,8 +16,13 @@ backend:
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
   database:
-    client: better-sqlite3
-    connection: ':memory:'
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+      database: ${POSTGRES_DB}
 
 integrations:
   github:
@@ -38,6 +43,8 @@ catalog:
     - allow: [Component, System, API, Resource, Location, User, Group, Domain]
   locations:
     # For local development — reads from local file
+    # Move this to app-config.local.yaml for local development only
+    # In production, only the url: type location should be active
     - type: file
       target: ../../pipeline-studio/backstage/catalog/all.yaml
     # For GitHub — reads from remote
@@ -101,13 +108,4 @@ kubernetes:
   clusterLocatorMethods:
     - type: localKubectlProxy
 
-search:
-  pg:
-    highlightOptions:
-      useHighlight: true
-      maxWord: 35
-      minWord: 15
-      shortWord: 3
-      highlightAll: false
-      maxFragments: 10
-      fragmentDelimiter: ' ... '
+# search.pg enabled automatically when backend.database.client is pg

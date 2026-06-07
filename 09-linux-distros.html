@@ -193,9 +193,10 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
   <a href="index.html" class="nav-hub">⌂ Hub</a>
   <details>
-    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details open>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -228,6 +229,15 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+<summary>GUIDES <span class="pillar-badge">6</span></summary>
+<a class="nav-link" href="00-getting-started.html">00 — Getting Started</a>
+<a class="nav-link" href="20-local-dev.html">20 — Local Dev</a>
+<a class="nav-link" href="21-build-axes.html">21 — Build Axes</a>
+<a class="nav-link" href="22-add-a-service.html">22 — Add a Service</a>
+<a class="nav-link" href="23-deployment.html">23 — Deployment</a>
+<a class="nav-link" href="24-debugging.html">24 — Debugging</a>
+</details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
@@ -301,7 +311,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
       <tr><td>FIPS 140-2/3 validated crypto (US federal, FedRAMP, DoD)</td><td><code>ubi9/ubi-micro</code> or <code>ubi9/nodejs-22-minimal</code></td><td><code>alpine</code> — no FIPS-validated module available</td></tr>
       <tr><td>Zero shell, minimal CVE surface, glibc-linked binary</td><td><code>gcr.io/distroless/base-debian12</code></td><td><code>scratch</code> — scratch has no CA certs or glibc</td></tr>
       <tr><td>CI runner with full toolchain (compilers, make, git)</td><td><code>ubuntu:24.04</code></td><td><code>alpine</code> — musl breaks many CI tool binaries (e.g., Trivy, some JVM tools)</td></tr>
-      <tr><td>SBOM-native supply chain compliance (EO 14028, SSDF)</td><td><code>cgr.dev/chainguard/wolfi-base</code></td><td><code>debian</code> — no per-package SBOM or SLSA provenance</td></tr>
+      <tr><td>SBOM-native supply chain compliance (EO 14028, SSDF)</td><td><code>cgr.dev/chainguard/wolfi-base:latest</code></td><td><code>debian</code> — no per-package SBOM or SLSA provenance</td></tr>
     </tbody>
   </table>
 </div>
@@ -397,7 +407,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <details>
     <summary><span class="sum-label">Multi-arch and docker buildx — ARM64 vs x86_64</span></summary>
     <div class="expand-content">
-      <p>All 22 distros in this catalog publish official images for both <strong>x86_64</strong> (Intel/AMD) and <strong>ARM64</strong> (Apple Silicon, AWS Graviton). As of 2026, this is standard practice.</p>
+      <p>The 18 container base images in this catalog publish official OCI images for both <strong>x86_64</strong> (Intel/AMD) and <strong>ARM64</strong> (Apple Silicon, AWS Graviton). The 4 VM/node OS entries (Google COS, Flatcar, Talos, Bottlerocket) are not OCI images — their architecture support applies to VM images, not Docker FROM tags.</p>
       <h4>x86_64 (amd64)</h4>
       <p>Intel and AMD processors. Universal default for GitHub Actions runners, GitLab CI, and most CI providers. Always available.</p>
       <h4>ARM64 (aarch64)</h4>
@@ -414,7 +424,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 
 <!-- ═══ SECTION 1: CONTAINER-OPTIMIZED ═══ -->
 <h2 id="container-opt">Container-optimized base images</h2>
-<p class="section-sub">8 images — designed for use as the <code>FROM</code> line in a Dockerfile. Primary goal: minimal size and minimal attack surface.</p>
+<p class="section-sub">7 images — designed for use as the <code>FROM</code> line in a Dockerfile. Primary goal: minimal size and minimal attack surface.</p>
 
 <div class="decision-block">
   <div class="decision-chosen"><strong>Decision:</strong> <code>alpine:3.21</code> as the default runtime base for all non-FIPS services.</div>
@@ -614,7 +624,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
           <td class="c3">apk</td>
           <td class="c4">~5 MB (wolfi-base)</td>
           <td class="carch">x86_64 + ARM64</td>
-          <td class="cfrom"><code style="font-size:9px">cgr.dev/chainguard/wolfi-base:latest</code></td>
+          <td class="cfrom"><code style="font-size:9px">cgr.dev/chainguard/wolfi-base:latest</code><br><small style="font-family:sans-serif;font-size:9px;color:var(--text-dim)">Note: Wolfi's :latest is a rolling release — pin to a date-stamped digest for reproducible builds (e.g. <code style="font-size:9px">cgr.dev/chainguard/wolfi-base:latest@sha256:...</code>).</small></td>
           <td class="ccerts"><span class="cert-yes">Yes</span></td>
           <td class="cuser"><span class="cert-no" title="wolfi-base runs as root. Chainguard application images (e.g. cgr.dev/chainguard/node) have non-root variants.">root</span></td>
           <td class="c5"><span class="cert-partial">Partial</span></td>
@@ -647,33 +657,13 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
           <td class="c12">Non-Azure environments. RHEL ecosystem required. DISA STIG officially required.</td>
           <td class="c13">FIPS + Azure-native + tdnf package manager vs Microsoft-locked, small community, 2-year release cycle.</td>
         </tr>
-        <tr>
-          <td class="c0">Google COS</td>
-          <td class="c1">Chromium OS-derived</td>
-          <td class="c2">glibc</td>
-          <td class="c3">none (read-only OS)</td>
-          <td class="c4">~2.5 GB (GKE node OS — not a Dockerfile FROM image)</td>
-          <td class="carch">x86_64 + ARM64</td>
-          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
-          <td class="ccerts"><span class="cert-no">N/A</span></td>
-          <td class="cuser"><span class="cert-no">N/A</span></td>
-          <td class="c5"><span class="cert-partial">Partial</span></td>
-          <td class="c6"><span class="cert-no">No</span></td>
-          <td class="c7"><span class="cert-partial">Partial</span></td>
-          <td class="c8">Google</td>
-          <td class="c9">~1 year per milestone</td>
-          <td class="c10">GKE node OS only</td>
-          <td class="c11">GKE node OS. Automatic security patching required. No node-level customization needed.</td>
-          <td class="c12">Non-GKE Kubernetes. Need custom kernel modules. Need host-level packages. DISA STIG required.</td>
-          <td class="c13">Auto-patched + container-optimized kernel vs immutable (cannot apt-get on the node), 1-year release cycle, GKE-locked.</td>
-        </tr>
       </tbody>
     </table>
   </div>
   <div class="tbl-foot">
-    <span>Container-optimized: 8 images</span>
-    <span>FIPS: UBI-micro, UBI-minimal, Azure Linux 3, Google COS (partial), Wolfi (paid tier)</span>
-    <span>No shell: scratch, Distroless, Google COS, UBI-micro</span>
+    <span>Container-optimized: 7 images</span>
+    <span>FIPS: UBI-micro, UBI-minimal, Azure Linux 3, Wolfi (paid tier)</span>
+    <span>No shell: scratch, Distroless, UBI-micro</span>
   </div>
 </div>
 
@@ -1044,12 +1034,12 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 
 <!-- ═══ SECTION 4: IMMUTABLE / K8S-NATIVE ═══ -->
 <h2 id="immutable">Immutable / Kubernetes-native node OS</h2>
-<p class="section-sub">3 distros — designed as Kubernetes node operating systems. Not container base images. Not general-purpose servers.</p>
+<p class="section-sub">4 distros — designed as Kubernetes node operating systems. Not container base images. Not general-purpose servers.</p>
 
 <div class="section-legend">
   <strong>These are not used as Dockerfile FROM images.</strong> They are the OS running on the Kubernetes worker node itself.<br>
   <span class="leg-row"><strong>Talos Linux</strong> has no shell and no SSH — the most locked-down option. All management is via API.</span>
-  <span class="leg-insight">Choose by cloud: EKS → Bottlerocket. GKE → Google COS (Section 1). AKS → Azure Linux or Flatcar. Self-managed → Flatcar or Talos.</span>
+  <span class="leg-insight">Choose by cloud: EKS → Bottlerocket. GKE → Google COS (see below). AKS → Azure Linux or Flatcar. Self-managed → Flatcar or Talos.</span>
 
   <details>
     <summary><span class="sum-label">Immutable OS — what it means for a K8s node</span></summary>
@@ -1156,14 +1146,34 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
           <td class="c12">Non-EKS Kubernetes. On-premises. DISA STIG officially required. Non-AWS environments.</td>
           <td class="c13">FIPS + immutable + AWS-managed patching vs AWS-locked, no DISA STIG, no SSH (admin container required for debug).</td>
         </tr>
+        <tr>
+          <td class="c0">Google COS</td>
+          <td class="c1">Chromium OS-derived</td>
+          <td class="c2">glibc</td>
+          <td class="c3">none (read-only OS)</td>
+          <td class="c4">~2.5 GB (GKE node OS — not a Dockerfile FROM image)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
+          <td class="ccerts"><span class="cert-no">N/A</span></td>
+          <td class="cuser"><span class="cert-no">N/A</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-partial">Partial</span></td>
+          <td class="c8">Google</td>
+          <td class="c9">~1 year per milestone</td>
+          <td class="c10">GKE node OS only</td>
+          <td class="c11">GKE node OS. Automatic security patching required. No node-level customization needed.</td>
+          <td class="c12">Non-GKE Kubernetes. Need custom kernel modules. Need host-level packages. DISA STIG required.</td>
+          <td class="c13">Auto-patched + container-optimized kernel vs immutable (cannot apt-get on the node), 1-year release cycle, GKE-locked.</td>
+        </tr>
       </tbody>
     </table>
   </div>
   <div class="tbl-foot">
-    <span>Immutable / K8s-native: 3 distros</span>
+    <span>Immutable / K8s-native: 4 distros</span>
     <span>These are VM/node images — not container base images</span>
-    <span>FIPS: Bottlerocket (AWS GovCloud) · Talos (partial, not independently certified)</span>
-    <span>No shell: Talos Linux · Bottlerocket (admin container required)</span>
+    <span>FIPS: Bottlerocket (AWS GovCloud) · Google COS (partial) · Talos (partial, not independently certified)</span>
+    <span>No shell: Talos Linux · Bottlerocket (admin container required) · Google COS</span>
   </div>
 </div>
 

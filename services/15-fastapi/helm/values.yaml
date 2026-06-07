@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: "ghcr.io/yarova-ca/15-fastapi"   # set in CI: ghcr.io/yarova-ca/15-fastapi
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "" # Injected at deploy time
 
 nameOverride: ""
 fullnameOverride: "15-fastapi"
@@ -62,3 +62,4 @@ readinessProbe:
 
 networkPolicy:
   enabled: false
+  allowedExternalHTTPS: []

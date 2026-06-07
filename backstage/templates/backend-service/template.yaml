@@ -188,7 +188,7 @@ spec:
       name: Fetch base service template
       action: fetch:template
       input:
-        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-express
+        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/${{ parameters.framework }}
         values:
           name: ${{ parameters.name }}
           framework: ${{ parameters.framework }}

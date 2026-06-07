@@ -1,7 +1,8 @@
-# PodDisruptionBudget: ensures at least 1 pod stays running during voluntary disruptions.
+# PodDisruptionBudget: limits voluntary disruptions to at most 1 pod at a time.
 # Voluntary disruption: node drain for maintenance, cluster upgrade, etc.
-# Why apply even for 1 replica: prevents node drain from taking the service fully down.
-# When replicaCount=1 and PDB minAvailable=1: drain is blocked until pod is rescheduled.
+# Why maxUnavailable over minAvailable: maxUnavailable=1 allows drains to proceed
+# without deadlocking when replicaCount equals minAvailable.
+# When replicaCount=1 and maxUnavailable=1: one pod can be disrupted at a time.
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -9,7 +10,7 @@ metadata:
   labels:
     {{- include "14-express.labels" . | nindent 4 }}
 spec:
-  minAvailable: 1
+  maxUnavailable: 1
   selector:
     matchLabels:
       {{- include "14-express.selectorLabels" . | nindent 6 }}

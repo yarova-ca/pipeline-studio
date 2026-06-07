@@ -21,10 +21,10 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.auth.dependencies import get_current_user
+from src.auth.active import get_current_user
 from src.auth.jwt import create_access_token
 from src.db.models import User
-from src.db.session import get_db
+from src.db.active import get_db
 
 router = APIRouter()
 
@@ -90,23 +90,37 @@ async def login() -> RedirectResponse:
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="AUTH_CLIENT_ID is not configured",
         )
-    url = (
+    state = secrets.token_urlsafe(32)
+    github_auth_url = (
         f"{_GITHUB_AUTHORIZE_URL}"
         f"?client_id={_CLIENT_ID}"
         f"&redirect_uri={_CALLBACK_URL}"
         f"&scope=read:user%20user:email"
     )
-    return RedirectResponse(url=url)
+    response = RedirectResponse(url=github_auth_url + "&state=" + state)
+    response.set_cookie("oauth_state", state, httponly=True, samesite="lax", max_age=600)
+    return response
 
 
 @router.get("/auth/callback", response_model=TokenResponse)
-async def callback(code: str, db: AsyncSession = Depends(get_db)) -> TokenResponse:
+async def callback(
+    request: Request,
+    response: Response,
+    code: str,
+    state: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+) -> TokenResponse:
     """Exchange OAuth code for a GitHub token, upsert user, return JWT."""
     if not _CLIENT_ID or not _CLIENT_SECRET:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="OAuth is not configured",
         )
+
+    # CSRF protection — validate OAuth state against the cookie.
+    cookie_state = request.cookies.get("oauth_state")
+    if not cookie_state or cookie_state != state:
+        raise HTTPException(status_code=400, detail="Invalid OAuth state")
 
     async with httpx.AsyncClient() as client:
         # Exchange code for access token.
@@ -146,6 +160,7 @@ async def callback(code: str, db: AsyncSession = Depends(get_db)) -> TokenRespon
 
     user = await _upsert_user(db, email=email, name=name, provider="github")
     token = create_access_token(user_id=user.id, email=user.email, name=user.name)
+    response.delete_cookie("oauth_state")
     return TokenResponse(access_token=token)
 
 

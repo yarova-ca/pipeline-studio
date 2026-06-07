@@ -9,88 +9,23 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - javascript
-  - typescript
-  - node
-  - ssr
-  - tier-2
-  - ssr
-  - tier-1
-  - ssr
-  - tier-1
-  - ssr
-  - tier-2
-  - ssr
-  - tier-2
-  - ssr
-  - tier-1
-  - spa
-  - tier-1
-  - spa
-  - tier-1
-  - spa
-  - tier-2
-  - spa
-  - tier-2
-  - spa
-  - tier-1
-  - spa
-  - tier-2
-  - ssr
-  - tier-2
-  - ssr
-  - tier-2
-  - ssr
-  - tier-2
-  - edge
-  - tier-2
-  - edge
-  - tier-2
-  - edge
-  - tier-2
-  - ssr
-  - tier-1
-  - ssr
-  - tier-2
-  - ssr
-  - tier-2
-  - mf
-  - tier-2
-  - mf
-  - tier-2
-  - mf
-  - tier-2
-  - mobile-rn
-  - tier-1
-  - mobile-rn
-  - tier-2
-  - mobile-rn
-  - tier-1
-  - pwa
-  - tier-2
-  - backend
-  - tier-1
-  - backend
-  - tier-2
-  - backend
-  - tier-2
-  - backend
-  - tier-1
+    - typescript
+    - nodejs
+    - express
+    - backend
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-express
     backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+    pipeline-studio/tier: "1"
+    pipeline-studio/tier-status: maintained
+    pipeline-studio/language: typescript
+    pipeline-studio/pattern: backend
+    pipeline-studio/port: "3000"
 spec:
   type: service
-  lifecycle: production
-  owner: platform-team
+  lifecycle: experimental
+  owner: group:platform-team
   system: pipeline-platform
   providesApis: []
   dependsOn: []
-  profile:
-    displayName: "Express 5"
-  metadata:
-    tier: 1
-    tierStatus: maintained
-    language: typescript
-    pattern: backend
-    port: 3000

@@ -29,6 +29,16 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
+ARG COMPLIANCE=standard
+COPY internal/compliance/${COMPLIANCE}/ ./internal/compliance/active/
+ARG OBSERVABILITY=none
+COPY internal/observability/${OBSERVABILITY}/ ./internal/observability/active/
+ARG AUTH=all
+COPY internal/auth/${AUTH}/ ./internal/auth/active/
+ARG ORM=gorm
+COPY internal/db/${ORM}/ ./internal/db/active/
+RUN if [ "${COMPLIANCE}" = "fips" ] && [ "${RUNTIME}" != "fips" ]; then \
+      echo "ERROR: COMPLIANCE=fips requires RUNTIME=fips"; exit 1; fi
 RUN go build -a -installsuffix cgo -ldflags="-s -w" -o /app/bin/app ./...
 RUN printf 'root:x:0:0:root:/root:/bin/sh\nnobody:x:65534:65534:nobody:/nonexistent:/bin/false\napp:x:1001:1001::/home/app:/sbin/nologin\n' > /tmp/app-passwd \
  && printf 'root:x:0:\nnobody:x:65534:\napp:x:1001:\n' > /tmp/app-group
@@ -47,6 +57,11 @@ COPY --from=build /tmp/app-group /etc/group
 COPY --from=build /app/bin/app /app
 USER 1001
 EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD ["/app", "-health-check"]
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 ENTRYPOINT ["/app"]
 
 # ── Runtime — FIPS ────────────────────────────────────────────────────────
@@ -55,9 +70,12 @@ COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /tmp/app-passwd /etc/passwd
 COPY --from=build /tmp/app-group /etc/group
 COPY --from=build /app/bin/app /usr/local/bin/app
+RUN microdnf install -y curl && microdnf clean all
 USER 1001
 EXPOSE 8080
-
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD curl -f http://localhost:8080/health/live || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 ENTRYPOINT ["/usr/local/bin/app"]

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Canada Market Navigation — 73 industries · 5 market dimensions · hubs, tier, demand, wage, entry difficulty · data verified May 2026">
+<meta name="description" content="Canada Market Navigation — 73 industries · 5 market dimensions + city heatmap · hubs, tier, demand, wage, entry difficulty · data verified May 2026">
 <title>Canada Market Navigation — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -230,6 +230,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -260,20 +261,29 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <details>
     <summary>Maintaining<span class="pillar-badge">7</span></summary>
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
   </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-header">
-  <div class="page-title">Canada Market Navigation</div>
+  <h1 class="page-title">Canada Market Navigation</h1>
   <div class="page-covers"><strong>What this covers:</strong> 73 Canadian industries with market data — employer tier, demand direction, wage band, entry difficulty, city × vertical heatmap, NOC codes, Express Entry CRS cut-offs, PNP streams.</div>
   <div class="page-when"><strong>When to read:</strong> Choosing a target industry, city, or immigration route in Canada.</div>
   <div class="page-pillar">Pillar 6 — Industry Verticals &nbsp;·&nbsp; Related: <a href="07-canada-schema.html">07 Canada schema</a> &nbsp;·&nbsp; <a href="14-canada-industry-catalog.html">14 Canada catalog</a></div>
 </div>
-<div class="page-title">Canada Market Navigation</div>
-<div class="page-meta">73 industries · 16 verticals · 14 hubs · 5 market dimensions · data verified May 2026</div>
+<div class="page-meta">73 industries · 16 verticals · 14 hubs · 5 market dimensions + city heatmap · data verified May 2026</div>
 
 <h2 id="how-to-use">How to use the market data</h2>
 <div class="section-sub">Two common goals — find your scenario and follow the steps.</div>
@@ -324,6 +334,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="count-chip"><div class="chip-num">16</div><div class="chip-label">Verticals<br>in table</div></div>
   <div class="count-chip cert-chip"><div class="chip-num">8</div><div class="chip-label">Certs with<br>ROI estimate</div></div>
   <div class="count-chip noc-chip"><div class="chip-num">2</div><div class="chip-label">NOC codes<br>for DevSecOps</div></div>
+  <div class="count-chip"><div class="chip-num">1</div><div class="chip-label">City × vertical<br>heatmap</div></div>
 </div>
 
 <div class="section-legend">
@@ -341,6 +352,58 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
       <p><strong>Sources:</strong> Robert Half Canada 2026 · Job Bank Canada (NOC 21220, 21231) · CBRE Tech Talent Canada 2025 · Canadian Cybersecurity Network. Last verified: May 2026.</p>
     </div>
   </details>
+</div>
+
+<!-- ─── TOP PICKS BY HUB ──────────────────────────────────────────────────── -->
+<h2 id="top-picks">Top picks by hub</h2>
+<div class="section-sub">Pre-computed answer for Scenario A — Hot-demand, T1-tier industries for the 5 largest hubs. No scrolling required.</div>
+
+<div class="tbl-wrap">
+<table class="gen-table">
+<thead><tr>
+  <th title="Canadian city hub.">Hub</th>
+  <th title="Top 3 industries with Hot demand and T1 employer concentration in this hub.">#1 Industry</th>
+  <th title="Second top industry.">#2 Industry</th>
+  <th title="Third top industry.">#3 Industry</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>Toronto</strong></td>
+  <td>Retail Banking (T1 · Hot · CA$90k–CA$125k)</td>
+  <td>Software &amp; SaaS (T1 · Hot · CA$95k–CA$145k)</td>
+  <td>Payments Processing (T1 · Hot · CA$90k–CA$130k)</td>
+</tr>
+<tr>
+  <td><strong>Vancouver</strong></td>
+  <td>Biotech &amp; Life Sciences Research (T2 · Hot · CA$85k–CA$125k)</td>
+  <td>Software &amp; SaaS (T1 · Hot · CA$95k–CA$145k)</td>
+  <td>Telehealth &amp; Digital Health (T2 · Hot · CA$90k–CA$130k)</td>
+</tr>
+<tr>
+  <td><strong>Ottawa</strong></td>
+  <td>Cybersecurity (T1 · Hot · CA$90k–CA$140k)</td>
+  <td>Cloud Services (T1 · Hot · CA$95k–CA$145k)</td>
+  <td>CSE / Signals Intelligence (T4 · Hot · CA$95k–CA$140k)</td>
+</tr>
+<tr>
+  <td><strong>Calgary</strong></td>
+  <td>Renewables &amp; Cleantech (T2 · Hot · CA$85k–CA$125k)</td>
+  <td>AgriTech &amp; Precision Ag (T2 · Hot · CA$80k–CA$115k)</td>
+  <td>E-Commerce &amp; Marketplace (T1 · Hot · CA$85k–CA$125k)</td>
+</tr>
+<tr>
+  <td><strong>Montréal</strong></td>
+  <td>AI &amp; ML Platforms (T1 · Hot · CA$100k–CA$155k)</td>
+  <td>Software &amp; SaaS (T1 · Hot · CA$95k–CA$145k)</td>
+  <td>Investment Banking (T1 · Hot · CA$110k–CA$160k)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section-legend">
+  <div class="leg-row"><strong>How this was derived:</strong> Industries filtered to Hot demand + T1 tier (or T2 where no T1 exists in that hub) for each hub. Wage band shown for mid-level DevSecOps-adjacent role (3–7 years experience).</div>
+  <div class="leg-row"><strong>When to use this table:</strong> Scenario A — you know your target city and want the highest-density, highest-demand industries without scanning all 73 rows.</div>
+  <div class="leg-row"><strong>When to use the full table below:</strong> Scenario A with a specific vertical already chosen, or any scenario outside the 5 largest hubs.</div>
 </div>
 
 <!-- ─── ALL 73 INDUSTRIES — MARKET VIEW ──────────────────────────────────── -->

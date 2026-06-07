@@ -16,9 +16,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certifi
  && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 COPY . .
 RUN npm run build
+RUN npm prune --omit=dev
 
 # ── Runtime stage (standard) ──────────────────────────────────────────────
 FROM node:22-alpine AS runtime
@@ -29,6 +30,11 @@ COPY --from=build --chown=app:app /app/node_modules ./node_modules
 COPY --from=build --chown=app:app /app/package.json ./
 USER app
 EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/health/live', (r)=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 CMD ["node", "dist/index.js"]
 
 # ── Alternative runtime images ─────────────────────────────────────────────
@@ -64,4 +70,7 @@ COPY --from=build --chown=app:app /app/node_modules ./node_modules
 COPY --from=build --chown=app:app /app/package.json ./
 USER 1001
 EXPOSE 3000
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 CMD ["node", "dist/index.js"]

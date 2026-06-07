@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Compliance Variations — how FIPS, PCI DSS, HIPAA, FedRAMP, CMMC, SOC 2, SOX, GDPR, PIPEDA, NERC CIP, and ISO 27001 change Dockerfile contents. 11 standards, 10 industry profiles, 5 concrete additions.">
-<title>Compliance Variations — Pipeline Studio</title>
+<meta name="description" content="Compliance Variations — how 8 compliance values change runtime middleware behaviour. Each value is a named variant shipped in src/compliance/active/index.ts. Covers standard, hipaa, pci, pipeda, fips, soc2, cmmc, nerc.">
+<title>12 — Compliance Variations | Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -170,9 +170,10 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
   <a href="index.html" class="nav-hub">⌂ Hub</a>
   <details>
-    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -205,264 +206,490 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+    <summary>Guides<span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 Getting started</a>
+    <a href="20-concepts.html" class="nav-link">20 Concepts</a>
+    <a href="21-build-axes.html" class="nav-link">21 Build axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 Add a service</a>
+    <a href="23-deployment.html" class="nav-link">23 Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 Debugging</a>
+  </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 <main id="main-content">
 <div class="page-header">
   <div class="page-title">Compliance Variations</div>
-  <div class="page-covers"><strong>What this covers:</strong> How 11 compliance standards change a Dockerfile — additive delta model. Base Dockerfile + compliance layer. 10 industry profiles mapped to applicable standards. Canada-specific: OSFI B-10, FINTRAC, PHIPA, ITSG-33.</div>
-  <div class="page-when"><strong>When to read:</strong> Applying compliance requirements to a container image. Read after Doc 11 (Dockerfile catalog).</div>
+  <div class="page-covers"><strong>What this covers:</strong> How 8 compliance values change runtime middleware behaviour. Each value is a named variant shipped in <code>src/compliance/active/index.ts</code>. Covers standard, hipaa, pci, pipeda, fips, soc2, cmmc, nerc.</div>
+  <div class="page-when"><strong>When to read:</strong> Choosing a compliance value for a service. Debugging middleware behaviour. Read after <a href="11-dockerfile-catalog.html">doc 11</a> (Dockerfile catalog) and <a href="05-invariants.html">doc 05</a> (Invariants).</div>
   <div class="page-pillar">Pillar 5 — Compliance &amp; Security &nbsp;·&nbsp; Related: <a href="11-dockerfile-catalog.html">11 Dockerfiles</a> &nbsp;·&nbsp; <a href="10-linux-compliance.html">10 Distro compliance</a></div>
 </div>
 
-<div style="margin-bottom:4px">
-  <div style="font-size:13px;font-weight:600;color:var(--text-head);margin-bottom:8px">What the additive delta model means</div>
-  <div class="why-block">
-    <strong>Base Dockerfile</strong> (from <a href="11-dockerfile-catalog.html">doc 11</a>) is your starting point — no compliance requirements assumed.<br>
-    Each compliance standard adds a delta layer on top of that base.<br>
-    Layers are cumulative: FIPS + HIPAA means both deltas are applied, in order.<br>
-    You do not need a separate Dockerfile per standard.
-  </div>
-</div>
-
 <div class="decision-block">
-  <div class="decision-chosen">Decision: additive delta model — one base Dockerfile + per-standard layer</div>
-  <div class="decision-rejected">Rejected: separate Dockerfiles per framework × compliance standard combination. 106 frameworks × 11 standards = 1,166 Dockerfiles to maintain. A single base image update (e.g., CVE patch) requires 1,166 manual edits. That maintenance burden is not tractable.</div>
-  <div class="decision-tradeoff">Accepted tradeoff: the build step is slightly more complex — a script applies deltas in order before building. The output image is identical to what a hand-maintained Dockerfile would produce. 1,166× fewer files to maintain.</div>
+  <div class="decision-chosen">Decision: runtime middleware variants — one module per compliance value, loaded at startup</div>
+  <div class="decision-rejected">Rejected: Dockerfile-only compliance. Dockerfile controls the image layer. It cannot enforce request-level rules (e.g., block HTTP, mask PHI in logs, check consent headers). Runtime middleware is required for those guarantees.</div>
+  <div class="decision-tradeoff">Accepted tradeoff: middleware adds ~0.2ms per request for audit-log variants. Measured acceptable. The guarantee — that no PHI or PCI data escapes in logs or responses — is not achievable at the Dockerfile layer.</div>
 </div>
-
-<div class="page-title">Compliance Variations</div>
-<div class="page-meta">11 standards &nbsp;·&nbsp; 10 industry profiles &nbsp;·&nbsp; Dockerfile catalog: <a href="11-dockerfile-catalog.html">doc 11</a> &nbsp;·&nbsp; Linux compliance: <a href="10-linux-compliance.html">doc 10</a></div>
 
 <div class="counts-bar">
   <div class="count-chip" style="border-left:3px solid var(--purple)">
-    <div class="chip-num" style="color:var(--purple)">11</div>
-    <div class="chip-label">Compliance<br>standards</div>
-  </div>
-  <div class="count-chip" style="border-left:3px solid var(--green)">
-    <div class="chip-num" style="color:var(--green)">10</div>
-    <div class="chip-label">Industry<br>profiles</div>
+    <div class="chip-num" style="color:var(--purple)">8</div>
+    <div class="chip-label">Compliance<br>values</div>
   </div>
   <div class="count-chip" style="border-left:3px solid var(--blue)">
-    <div class="chip-num" style="color:var(--blue)">5</div>
-    <div class="chip-label">Concrete<br>Dockerfile additions</div>
+    <div class="chip-num" style="color:var(--blue)">3</div>
+    <div class="chip-label">Runtime<br>languages</div>
+  </div>
+  <div class="count-chip" style="border-left:3px solid var(--green)">
+    <div class="chip-num" style="color:var(--green)">1</div>
+    <div class="chip-label">No-op<br>value (standard)</div>
   </div>
   <div class="count-chip" style="border-left:3px solid var(--red)">
     <div class="chip-num" style="color:var(--red)">1</div>
-    <div class="chip-label">Gaps in<br>doc 11</div>
+    <div class="chip-label">Startup-only<br>check (fips)</div>
   </div>
 </div>
-<h2 id="concept">How compliance affects Dockerfiles</h2>
-<p class="section-sub">Read this first. It explains the model — why compliance changes specific Dockerfile lines, and how to apply it.</p>
+
+<h2 id="model">How the middleware model works</h2>
+<p class="section-sub">The compliance value is set at deploy time. The service loads one module. That module installs all required middleware.</p>
 <div class="explain-block">
-  <h3>The additive compliance model</h3>
-  <div class="explain-row"><div class="explain-num">1</div><div class="explain-text"><strong>A Dockerfile is the blueprint for what is inside the container.</strong> The container image is part of the system. Compliance standards govern the whole system — including the container image.</div></div>
-  <div class="explain-row"><div class="explain-num">2</div><div class="explain-text"><strong>You do not rewrite the Dockerfile per compliance standard.</strong> You start from the base Dockerfile in doc 11. Then you apply a compliance layer on top. The layer adds or replaces specific instructions.</div></div>
-  <div class="explain-row"><div class="explain-num">3</div><div class="explain-text"><strong>Doc 11 already handles FIPS</strong> via the <code>--target runtime-fips</code> named target. That is one example of the compliance layer model. The base Dockerfile is unchanged. The FIPS layer swaps the runtime base image to UBI9.</div></div>
-  <div class="explain-row"><div class="explain-num">4</div><div class="explain-text"><strong>The 5 compliance additions in section 5 are the remaining layers.</strong> Apply whichever your industry requires. Each addition is independent — you can apply one, several, or all five to the same Dockerfile.</div></div>
-  <div class="explain-row"><div class="explain-num">5</div><div class="explain-text"><strong>Compliance enforcement that does NOT change the Dockerfile</strong> — data residency (GDPR, PIPEDA), image signing (FedRAMP), and registry air-gapping (NERC CIP) — is enforced at the CI/CD pipeline and infrastructure layer, not the Dockerfile itself.</div></div>
+  <h3>The module contract</h3>
+  <div class="explain-row"><div class="explain-num">1</div><div class="explain-text"><strong>Every service imports <code>src/compliance/active/index.ts</code>.</strong> That file exports one function: <code>applyCompliance(app)</code>. The function installs middleware appropriate for the active compliance value.</div></div>
+  <div class="explain-row"><div class="explain-num">2</div><div class="explain-text"><strong>The active compliance value is selected at build time.</strong> The <code>active/</code> symlink (or conditional import) points to the correct variant. One service image = one compliance value. No branching at runtime.</div></div>
+  <div class="explain-row"><div class="explain-num">3</div><div class="explain-text"><strong>standard is the default.</strong> <code>applyCompliance</code> is a no-op. No middleware installed. No overhead. Every new service starts here.</div></div>
+  <div class="explain-row"><div class="explain-num">4</div><div class="explain-text"><strong>fips is the only startup-check-only variant.</strong> It runs one check at startup and throws if FIPS mode is not active. It installs no request middleware. The Dockerfile <code>RUNTIME=fips</code> build guard enforces the correct base image.</div></div>
+  <div class="explain-row"><div class="explain-num">5</div><div class="explain-text"><strong>All other values install request middleware.</strong> The middleware runs on every incoming request. Audit log, PII masking, header enforcement, and network isolation are all expressed as middleware.</div></div>
 </div>
-<h2 id="standards">The 11 compliance standards</h2>
-<p class="section-sub">Each standard that affects container images. "Container requirement" is the minimum the standard demands from the image itself.</p>
+
+<h2 id="overview">The 8 compliance values — overview</h2>
+<p class="section-sub">What each value does and when to use it.</p>
 <div class="tbl-wrap comp-tbl"><div class="tbl-scroll">
 <table class="xref-table">
   <thead><tr>
-    <th class="row-hd">Standard</th>
-    <th>Full name</th>
-    <th>Who it applies to</th>
-    <th>Container requirement</th>
+    <th class="row-hd">Value</th>
+    <th>Middleware installed</th>
+    <th>Startup check</th>
+    <th>Use when</th>
   </tr></thead>
   <tbody>
-<tr><td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FIPS 140-2/3</span></td><td style="font-size:11px;color:var(--text-dim)">Federal Information Processing Standard — cryptographic module validation</td><td style="font-size:11px">US federal agencies, defense contractors, regulated financial institutions</td><td style="font-size:11px">Base image must be FIPS-validated. All crypto must use FIPS-approved modules.</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#dbeeff;color:#0550ae" data-dark="background:#0d2744;color:#79c0ff">PCI DSS</span></td><td style="font-size:11px;color:var(--text-dim)">Payment Card Industry Data Security Standard</td><td style="font-size:11px">Any organisation that processes, stores, or transmits credit/debit card data</td><td style="font-size:11px">CIS-hardened or distroless base. No unnecessary tools in runtime image. Non-root user. Read-only filesystem.</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#d4f4dd;color:#1a7f37" data-dark="background:#0d2d1a;color:#3fb950">HIPAA</span></td><td style="font-size:11px;color:var(--text-dim)">Health Insurance Portability and Accountability Act</td><td style="font-size:11px">US healthcare providers, health insurers, business associates handling PHI</td><td style="font-size:11px">CIS-hardened base. PHI (protected health info) must never appear in image layers, ENV, or logs.</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FedRAMP</span></td><td style="font-size:11px;color:var(--text-dim)">Federal Risk and Authorization Management Program</td><td style="font-size:11px">Cloud services sold to US federal agencies</td><td style="font-size:11px">FIPS + STIG-hardened base. Signed images. Immutable audit log. HEALTHCHECK required.</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">CMMC</span></td><td style="font-size:11px;color:var(--text-dim)">Cybersecurity Maturity Model Certification</td><td style="font-size:11px">US Department of Defense contractors handling CUI</td><td style="font-size:11px">FIPS mandatory. Geo-restricted image registry. Signed images. CUI must never be in image layers.</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span></td><td style="font-size:11px;color:var(--text-dim)">System and Organisation Controls 2</td><td style="font-size:11px">SaaS companies and service providers that store customer data</td><td style="font-size:11px">HEALTHCHECK required for availability evidence. Logging required for security evidence.</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOX</span></td><td style="font-size:11px;color:var(--text-dim)">Sarbanes-Oxley Act</td><td style="font-size:11px">US publicly traded companies and their subsidiaries</td><td style="font-size:11px">Change management: every image build must be traceable to a commit, ticket, and approver.</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c" data-dark="background:#2a0a09;color:#f85149">GDPR</span></td><td style="font-size:11px;color:var(--text-dim)">General Data Protection Regulation</td><td style="font-size:11px">Any organisation processing personal data of EU residents</td><td style="font-size:11px">PII must never appear in image layers, ENV, or container logs. Data residency enforced at the orchestration layer, not Dockerfile.</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c" data-dark="background:#2a0a09;color:#f85149">PIPEDA</span></td><td style="font-size:11px;color:var(--text-dim)">Personal Information Protection and Electronic Documents Act</td><td style="font-size:11px">Canadian organisations that collect personal information in commercial activity</td><td style="font-size:11px">Data must remain in Canada. Enforced at registry and orchestration level, not Dockerfile.</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#f0f0f5;color:#57606a" data-dark="background:#21262d;color:#8b949e">NERC CIP</span></td><td style="font-size:11px;color:var(--text-dim)">North American Electric Reliability Corporation Critical Infrastructure Protection</td><td style="font-size:11px">Electric utilities, power grid operators, bulk electric system owners</td><td style="font-size:11px">Air-gapped registry. No internet pulls at build or runtime. Strict patch cadence (35-day cycle).</td></tr>
-<tr><td class="row-label"><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px;color:var(--text-dim)">International Standard for Information Security Management Systems</td><td style="font-size:11px">Any organisation seeking formal information security certification</td><td style="font-size:11px">Vulnerability scanning of images at build time. Access control. Logging. Change management.</td></tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#f0f0f5;color:#57606a">standard</span></td>
+  <td style="font-size:11px">None — <code>applyCompliance</code> is a no-op</td>
+  <td class="center"><span class="tick-no">✗ None</span></td>
+  <td style="font-size:11px">Default. No regulated data. No compliance requirement.</td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#d4f4dd;color:#1a7f37">hipaa</span></td>
+  <td style="font-size:11px">Audit log (every request) + PHI masking in logger + verbose errors disabled</td>
+  <td class="center"><span class="tick-no">✗ None</span></td>
+  <td style="font-size:11px">US healthcare. Service handles PHI (patient data).</td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#dbeeff;color:#0550ae">pci</span></td>
+  <td style="font-size:11px">HTTP→403, debug/metrics→404, response headers (X-PCI-DSS, HSTS)</td>
+  <td class="center"><span class="tick-yes">✓ Weak secrets check</span></td>
+  <td style="font-size:11px">Cardholder data environment. Service processes card data.</td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c">pipeda</span></td>
+  <td style="font-size:11px">Consent gate (POST/PUT/PATCH), X-Data-Residency: CA header, PII masking</td>
+  <td class="center"><span class="tick-no">✗ None</span></td>
+  <td style="font-size:11px">Canadian orgs. Service collects personal information.</td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1">fips</span></td>
+  <td style="font-size:11px">None — startup-check only</td>
+  <td class="center"><span class="tick-yes">✓ OpenSSL FIPS mode check</span></td>
+  <td style="font-size:11px">US federal / defense. All crypto must be FIPS-validated.</td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#fff3cd;color:#7a4f00">soc2</span></td>
+  <td style="font-size:11px">Immutable audit log (soc2_audit event) + verbose errors disabled</td>
+  <td class="center"><span class="tick-no">✗ None</span></td>
+  <td style="font-size:11px">SaaS. Service stores customer data. SOC 2 audit required.</td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1">cmmc</span></td>
+  <td style="font-size:11px">Audit log (cmmc_audit), debug→404, NO_EGRESS=true, verbose errors disabled</td>
+  <td class="center"><span class="tick-no">✗ None</span></td>
+  <td style="font-size:11px">DoD contractors. Service handles CUI.</td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#f0f0f5;color:#57606a">nerc</span></td>
+  <td style="font-size:11px">OT/IT boundary headers, NO_EGRESS=true</td>
+  <td class="center"><span class="tick-no">✗ None</span></td>
+  <td style="font-size:11px">Electric utilities. Service operates in OT/IT boundary.</td>
+</tr>
   </tbody>
 </table>
 </div></div>
-<h2 id="industry-map">Industry → compliance map</h2>
-<p class="section-sub">Which standards apply to which industries, and the net Dockerfile change that results.</p>
-<div class="tbl-wrap industry-tbl"><div class="tbl-scroll">
-<table class="xref-table">
-  <thead><tr>
-    <th class="row-hd">Industry</th>
-    <th>Primary standard</th>
-    <th>Secondary</th>
-    <th>Key Dockerfile delta</th>
-  </tr></thead>
-  <tbody>
-<tr><td class="row-label">US Healthcare</td><td><span class="comp-chip" style="background:#d4f4dd;color:#1a7f37" data-dark="background:#0d2d1a;color:#3fb950">HIPAA</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span> <span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">HITRUST</span></td><td style="font-size:11px">CIS-hardened base, non-root UID, HEALTHCHECK, immutable audit log (6 yr)</td></tr>
-<tr><td class="row-label">US Finance / Banking</td><td><span class="comp-chip" style="background:#dbeeff;color:#0550ae" data-dark="background:#0d2744;color:#79c0ff">PCI DSS</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOX</span> <span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">FIPS 140-2</span></td><td style="font-size:11px">Distroless/CIS base, TLS 1.2+, no weak crypto, FIPS certs, read-only FS</td></tr>
-<tr><td class="row-label">US Federal / Gov</td><td><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FedRAMP</span> <span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FISMA</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">FIPS 140-3</span> <span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">CMMC</span></td><td style="font-size:11px">UBI9 only, STIG-hardened, signed images, HEALTHCHECK, FedRAMP SIEM</td></tr>
-<tr><td class="row-label">Defense / Aerospace</td><td><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">CMMC</span> <span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">ITAR</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">FIPS 140-3</span></td><td style="font-size:11px">FIPS-only base, geo-restricted registry, CUI never in image</td></tr>
-<tr><td class="row-label">Energy / Utilities</td><td><span class="comp-chip" style="background:#f0f0f5;color:#57606a" data-dark="background:#21262d;color:#8b949e">NERC CIP</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">FIPS 140-2</span></td><td style="font-size:11px">Air-gapped registry, no public pulls, read-only FS, 35-day patch cycle</td></tr>
-<tr><td class="row-label">Public Companies</td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOX</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px">Signed images, Git SHA + approver LABEL, immutable deploy audit log</td></tr>
-<tr><td class="row-label">SaaS / Tech</td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px">HEALTHCHECK, LABEL build date, audit log shipped to immutable store</td></tr>
-<tr><td class="row-label">Retail / E-commerce</td><td><span class="comp-chip" style="background:#dbeeff;color:#0550ae" data-dark="background:#0d2744;color:#79c0ff">PCI DSS</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span></td><td style="font-size:11px">Distroless/CIS base, non-root, TLS 1.2+, card data never in image</td></tr>
-<tr><td class="row-label">EU / European orgs</td><td><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c" data-dark="background:#2a0a09;color:#f85149">GDPR</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px">PII never in image/ENV/logs, TLS 1.2+, access log with erasure mechanism</td></tr>
-<tr><td class="row-label">Canadian orgs</td><td><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c" data-dark="background:#2a0a09;color:#f85149">PIPEDA</span></td><td><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">ISO 27001</span></td><td style="font-size:11px">Personal data never in image, Canadian data residency enforced at infra</td></tr>
-  </tbody>
-</table>
-</div></div>
-<h2 id="dockerfile-delta">Dockerfile element delta per standard</h2>
-<p class="section-sub">What each standard requires for each Dockerfile element. Five most impactful standards shown. For CMMC, SOX, GDPR, PIPEDA, NERC CIP, and ISO 27001: see the standards table above.</p>
+
+<h2 id="standard">standard — no-op</h2>
+<p class="section-sub">The default compliance value. No middleware installed. No overhead.</p>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">standard</div>
+    <div class="add-applies">File: src/compliance/active/index.ts (default export)</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why"><code>applyCompliance</code> is exported and is a no-op. No middleware is installed. No request overhead. This is the starting point for every new service.</div>
+    <div class="dockerfile-block"><span class="df-comment">// src/compliance/active/index.ts — standard variant</span>
+<span class="df-kw">export function</span> applyCompliance(<span class="df-arg">app: Express | FastAPI | GinRouter</span>): <span class="df-kw">void</span> {
+  <span class="df-comment">// no-op — no compliance middleware required for standard tier</span>
+}</div>
+    <div class="add-note">All services import this function. Standard services get a no-op. Switching to a regulated variant replaces only this module — no service code changes required.</div>
+  </div>
+</div>
+
+<h2 id="hipaa">hipaa — PHI protection</h2>
+<p class="section-sub">Middleware runs on every request. PHI fields are masked in all logs. Verbose errors are disabled.</p>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">hipaa</div>
+    <div class="add-applies">File: src/compliance/hipaa/index.ts</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">HIPAA requires an audit log for every access to PHI and requires that PHI does not appear in system logs. The logger patch ensures no PHI field escapes — even if application code logs a full object.</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Audit log — every request</div>
+    <div class="dockerfile-block"><span class="df-comment">// Fields logged on every request</span>
+{
+  event:      <span class="df-arg">"hipaa_access"</span>,
+  actor:      <span class="df-arg">req.user?.id ?? "anonymous"</span>,
+  action:     <span class="df-arg">req.method</span>,
+  resource:   <span class="df-arg">req.path</span>,
+  requestId:  <span class="df-arg">req.headers["x-request-id"]</span>,
+  timestamp:  <span class="df-arg">new Date().toISOString()</span>
+}</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">PHI masking — logger patch</div>
+    <div class="dockerfile-block"><span class="df-comment">// Fields masked in every log call — value replaced with ***REDACTED***</span>
+<span class="df-kw">const</span> PHI_FIELDS = [
+  <span class="df-arg">"ssn"</span>, <span class="df-arg">"dob"</span>, <span class="df-arg">"mrn"</span>, <span class="df-arg">"diagnosis"</span>,
+  <span class="df-arg">"patientName"</span>, <span class="df-arg">"address"</span>, <span class="df-arg">"phone"</span>
+]
+
+<span class="df-comment">// Node: logger.info is patched at startup</span>
+<span class="df-comment">// Python: BaseHTTPMiddleware patches the logging handler</span>
+<span class="df-comment">// Go: slog handler wraps each log call</span></div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Verbose errors — disabled</div>
+    <div class="dockerfile-block"><span class="df-comment">// Node (Express)</span>
+app.set(<span class="df-arg">"env"</span>, <span class="df-arg">"production"</span>)   <span class="df-comment">// disables stack traces in error responses</span>
+
+<span class="df-comment">// Python (FastAPI / Starlette)</span>
+app.debug = <span class="df-kw">False</span>
+
+<span class="df-comment">// Go (Gin)</span>
+gin.SetMode(gin.ReleaseMode)</div>
+
+    <div class="add-note">The audit log and PHI masking are both active on every request — not just requests that touch PHI fields. This is intentional: HIPAA auditors require that every access attempt is logged, not just successful ones.</div>
+  </div>
+</div>
+
+<h2 id="pci">pci — cardholder data environment</h2>
+<p class="section-sub">Startup check blocks weak secrets. Request middleware enforces TLS and blocks debug endpoints.</p>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">pci</div>
+    <div class="add-applies">File: src/compliance/pci/index.ts</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">PCI DSS requires TLS on all cardholder data traffic, prohibits debug/diagnostic endpoints in production, and requires that secrets meet minimum length requirements.</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Startup check — weak secrets</div>
+    <div class="dockerfile-block"><span class="df-comment">// Runs once at process startup — before any requests are served</span>
+<span class="df-kw">for</span> (<span class="df-kw">const</span> [key, value] of Object.entries(process.env)) {
+  <span class="df-kw">if</span> (/<span class="df-arg">SECRET|KEY|TOKEN|PASS</span>/i.test(key) && (value?.length ?? 0) < 16) {
+    <span class="df-comment">// fatal — process exits, service does not start</span>
+    process.exit(1)
+  }
+}</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Request middleware</div>
+    <div class="dockerfile-block"><span class="df-comment">// Rule 1: Block plain HTTP</span>
+<span class="df-kw">if</span> (req.headers[<span class="df-arg">"x-forwarded-proto"</span>] === <span class="df-arg">"http"</span>) {
+  res.status(403).json({ error: <span class="df-arg">"TLS required"</span> })
+  return
+}
+
+<span class="df-comment">// Rule 2: Block debug and metrics endpoints</span>
+<span class="df-kw">if</span> (/^\/debug\/|^\/metrics/.test(req.path)) {
+  res.status(404).end()
+  return
+}
+
+<span class="df-comment">// Rule 3: Add required response headers</span>
+res.setHeader(<span class="df-arg">"X-PCI-DSS"</span>, <span class="df-arg">"enforced"</span>)
+res.setHeader(<span class="df-arg">"Strict-Transport-Security"</span>, <span class="df-arg">"max-age=31536000; includeSubDomains"</span>)</div>
+
+    <div class="add-note">The startup check is fatal. When a secret is shorter than 16 characters, the service refuses to start. This is intentional — a service that starts with a weak secret in a PCI environment is itself a compliance violation.</div>
+  </div>
+</div>
+
+<h2 id="pipeda">pipeda — Canadian personal information</h2>
+<p class="section-sub">Consent gate on all write methods. Canadian data-residency header on all responses. PII fields masked.</p>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">pipeda</div>
+    <div class="add-applies">File: src/compliance/pipeda/index.ts</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">PIPEDA requires informed consent before collecting personal information. The consent gate enforces this at the API layer. The data-residency header signals to downstream systems that data must not leave Canada.</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Consent gate — POST, PUT, PATCH</div>
+    <div class="dockerfile-block"><span class="df-comment">// Applies to POST, PUT, PATCH only — read-only methods are not gated</span>
+<span class="df-kw">if</span> ([<span class="df-arg">"POST"</span>, <span class="df-arg">"PUT"</span>, <span class="df-arg">"PATCH"</span>].includes(req.method)) {
+  <span class="df-kw">if</span> (req.headers[<span class="df-arg">"x-consent"</span>] !== <span class="df-arg">"granted"</span>) {
+    <span class="df-comment">// 451 Unavailable For Legal Reasons — IETF RFC 7725</span>
+    res.status(451).json({ error: <span class="df-arg">"Consent required (PIPEDA)"</span> })
+    return
+  }
+}</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Data-residency header — all responses</div>
+    <div class="dockerfile-block">res.setHeader(<span class="df-arg">"X-Data-Residency"</span>, <span class="df-arg">"CA"</span>)</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">PII masking — logger patch</div>
+    <div class="dockerfile-block"><span class="df-comment">// Fields masked in every log call — value replaced with ***</span>
+<span class="df-kw">const</span> PII_FIELDS = [
+  <span class="df-arg">"email"</span>, <span class="df-arg">"name"</span>, <span class="df-arg">"phone"</span>, <span class="df-arg">"address"</span>, <span class="df-arg">"sin"</span>
+]</div>
+
+    <div class="add-note">The X-Data-Residency header is advisory — it signals intent to downstream services and gateways. Actual data residency is enforced at the infrastructure layer (ca-central-1 AWS or Canada Central Azure). The header alone is not sufficient for PIPEDA compliance.</div>
+  </div>
+</div>
+
+<h2 id="fips">fips — FIPS 140 cryptographic validation</h2>
+<p class="section-sub">Startup check only. No request middleware. Fails hard when OpenSSL FIPS mode is not active.</p>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">fips</div>
+    <div class="add-applies">File: src/compliance/fips/index.ts · Requires: RUNTIME=fips Dockerfile build guard</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">FIPS 140 requires that all cryptographic operations use validated modules. If the OS is not in FIPS mode, all crypto — including TLS — is non-compliant. The startup check catches this before any traffic is served.</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Startup check — Node</div>
+    <div class="dockerfile-block"><span class="df-comment">// Node — checks OpenSSL FIPS flag</span>
+<span class="df-kw">import</span> crypto <span class="df-kw">from</span> <span class="df-arg">"node:crypto"</span>
+<span class="df-kw">if</span> (!crypto.getFips()) {
+  <span class="df-kw">throw new</span> Error(<span class="df-arg">"FIPS mode is not active. Service cannot start."</span>)
+}</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Startup check — Python</div>
+    <div class="dockerfile-block"><span class="df-comment"># Python — checks OpenSSL FIPS flag via ssl module</span>
+<span class="df-kw">import</span> ssl
+<span class="df-kw">if not</span> ssl.OPENSSL_VERSION.startswith(<span class="df-arg">"OpenSSL"</span>) <span class="df-kw">or</span> \
+   <span class="df-arg">"fips"</span> <span class="df-kw">not in</span> ssl.OPENSSL_VERSION.lower():
+    <span class="df-kw">raise</span> RuntimeError(<span class="df-arg">"FIPS mode is not active. Service cannot start."</span>)</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Startup check — Go</div>
+    <div class="dockerfile-block"><span class="df-comment">// Go — checks FIPS build tag and OpenSSL binding</span>
+<span class="df-kw">if</span> !fipsEnabled() {
+    log.Fatal(<span class="df-arg">"FIPS mode is not active. Service cannot start."</span>)
+}</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Dockerfile build guard</div>
+    <div class="dockerfile-block"><span class="df-comment"># The Dockerfile enforces RUNTIME=fips at build time.</span>
+<span class="df-comment"># Services built without --build-arg RUNTIME=fips will not have the UBI9 FIPS base.</span>
+<span class="df-comment"># The startup check catches the case where the wrong image is deployed.</span>
+<span class="df-arg">ARG RUNTIME=standard</span>
+<span class="df-comment"># When RUNTIME=fips: base image is ubi9/nodejs (FIPS-validated OpenSSL)</span>
+<span class="df-comment"># When RUNTIME=standard: base image is node:22-alpine (non-FIPS)</span></div>
+
+    <div class="add-note">fips installs no request middleware. The compliance guarantee is at the crypto layer, not the HTTP layer. Every TLS connection, every hash, every signature uses the validated OpenSSL FIPS module automatically — no per-request code required.</div>
+  </div>
+</div>
+
+<h2 id="soc2">soc2 — SOC 2 audit trail</h2>
+<p class="section-sub">Immutable audit log on every request. Verbose errors disabled.</p>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">soc2</div>
+    <div class="add-applies">File: src/compliance/soc2/index.ts</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">SOC 2 Type II requires evidence of continuous monitoring and an immutable audit trail. The soc2_audit event provides that trail. Verbose errors are disabled to prevent sensitive system information from appearing in API responses.</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Audit log — every request</div>
+    <div class="dockerfile-block"><span class="df-comment">// Fields logged on every request</span>
+{
+  event:     <span class="df-arg">"soc2_audit"</span>,
+  actor:     <span class="df-arg">req.user?.id ?? "anonymous"</span>,
+  action:    <span class="df-arg">req.method</span>,
+  resource:  <span class="df-arg">req.path</span>,
+  timestamp: <span class="df-arg">new Date().toISOString()</span>
+}</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Verbose errors — disabled</div>
+    <div class="dockerfile-block"><span class="df-comment">// Same pattern as hipaa — production mode in all three runtimes</span>
+app.set(<span class="df-arg">"env"</span>, <span class="df-arg">"production"</span>)  <span class="df-comment">// Node</span>
+app.debug = <span class="df-kw">False</span>             <span class="df-comment">// Python</span>
+gin.SetMode(gin.ReleaseMode)   <span class="df-comment">// Go</span></div>
+
+    <div class="add-note">The soc2_audit log must be shipped to an immutable log store (e.g., CloudWatch Logs with object lock, S3 with WORM). The middleware emits the event — shipping is configured at the infrastructure layer via the service's log driver.</div>
+  </div>
+</div>
+
+<h2 id="cmmc">cmmc — CUI network isolation</h2>
+<p class="section-sub">Audit log on every request. Debug endpoints blocked. Network egress marker set.</p>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">cmmc</div>
+    <div class="add-applies">File: src/compliance/cmmc/index.ts</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">CMMC requires an audit log for every access to CUI, prohibition of debug interfaces in production, and network isolation to prevent CUI exfiltration. NO_EGRESS=true signals the network policy to block all outbound connections.</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Audit log — every request</div>
+    <div class="dockerfile-block">{
+  event:     <span class="df-arg">"cmmc_audit"</span>,
+  actor:     <span class="df-arg">req.user?.id ?? "anonymous"</span>,
+  action:    <span class="df-arg">req.method</span>,
+  resource:  <span class="df-arg">req.path</span>,
+  timestamp: <span class="df-arg">new Date().toISOString()</span>
+}</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Request rules</div>
+    <div class="dockerfile-block"><span class="df-comment">// Block debug endpoints</span>
+<span class="df-kw">if</span> (/^\/debug\//.test(req.path)) {
+  res.status(404).end()
+  return
+}
+
+<span class="df-comment">// Set network isolation marker</span>
+process.env.NO_EGRESS = <span class="df-arg">"true"</span>
+
+<span class="df-comment">// Disable verbose errors</span>
+app.set(<span class="df-arg">"env"</span>, <span class="df-arg">"production"</span>)  <span class="df-comment">// Node</span>
+app.debug = <span class="df-kw">False</span>             <span class="df-comment">// Python</span>
+gin.SetMode(gin.ReleaseMode)   <span class="df-comment">// Go</span></div>
+
+    <div class="add-note">NO_EGRESS=true is a process-level marker. The actual network policy (blocking outbound connections) is enforced by the Kubernetes NetworkPolicy or firewall. The marker tells the application layer to skip any outbound calls it would otherwise make (webhooks, telemetry).</div>
+  </div>
+</div>
+
+<h2 id="nerc">nerc — OT/IT boundary enforcement</h2>
+<p class="section-sub">OT/IT boundary headers on all responses. Network egress marker set.</p>
+<div class="addition-card">
+  <div class="add-head">
+    <div class="add-title">nerc</div>
+    <div class="add-applies">File: src/compliance/nerc/index.ts</div>
+  </div>
+  <div class="add-body">
+    <div class="add-why">NERC CIP requires strict separation between OT (operational technology) and IT networks. The response headers signal to gateways and proxies that traffic has crossed the OT/IT boundary and must be handled accordingly.</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Response headers — all responses</div>
+    <div class="dockerfile-block">res.setHeader(<span class="df-arg">"X-OT-IT-Boundary"</span>, <span class="df-arg">"enforced"</span>)
+res.setHeader(<span class="df-arg">"X-Network-Isolation"</span>, <span class="df-arg">"on"</span>)</div>
+
+    <div style="font-size:12px;font-weight:600;color:var(--text-head);margin:12px 0 6px">Network isolation marker</div>
+    <div class="dockerfile-block"><span class="df-comment">// Set on startup — same marker as cmmc</span>
+process.env.NO_EGRESS = <span class="df-arg">"true"</span></div>
+
+    <div class="add-note">NERC CIP compliance also requires an air-gapped image registry (no public pulls) and a 35-day patch cycle. Both are enforced at the Dockerfile and CI/CD layer — see <a href="11-dockerfile-catalog.html">doc 11</a>. The middleware enforces only the runtime-observable requirements.</div>
+  </div>
+</div>
+
+<h2 id="matrix">Runtime behaviour matrix</h2>
+<p class="section-sub">What each compliance value does at startup and on every request. All 8 values.</p>
 <div class="tbl-wrap delta-tbl"><div class="tbl-scroll">
 <table class="xref-table">
   <thead><tr>
-    <th class="row-hd">Dockerfile element</th>
-    <th><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FIPS 140-2/3</span></th><th><span class="comp-chip" style="background:#dbeeff;color:#0550ae" data-dark="background:#0d2744;color:#79c0ff">PCI DSS</span></th><th><span class="comp-chip" style="background:#d4f4dd;color:#1a7f37" data-dark="background:#0d2d1a;color:#3fb950">HIPAA</span></th><th><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1" data-dark="background:#1a0a2e;color:#c5a7f5">FedRAMP</span></th><th><span class="comp-chip" style="background:#fff3cd;color:#7a4f00" data-dark="background:#2a1f00;color:#d29922">SOC 2</span></th>
+    <th class="row-hd">Value</th>
+    <th>Startup</th>
+    <th>Request: blocked paths</th>
+    <th>Request: audit log</th>
+    <th>Request: PII/PHI masking</th>
+    <th>Request: headers added</th>
+    <th>Process: NO_EGRESS</th>
+    <th>Verbose errors</th>
   </tr></thead>
   <tbody>
-<tr><td class="row-label">Base image</td><td style="font-size:10px">ubi9 / ubi9/nodejs / ubi9/python-311 / dotnet FIPS</td><td style="font-size:10px">cgr.dev/chainguard/* or distroless</td><td style="font-size:10px">CIS-hardened alpine or distroless</td><td style="font-size:10px">ubi9 (STIG-hardened) — no other base allowed</td><td style="font-size:10px">Any minimal base (alpine, distroless)</td></tr>
-<tr><td class="row-label">USER</td><td style="font-size:10px">Non-root + specific UID (1001)</td><td style="font-size:10px">Non-root mandatory</td><td style="font-size:10px">Non-root + specific UID</td><td style="font-size:10px">Non-root UID 1001:1001</td><td style="font-size:10px">Non-root</td></tr>
-<tr><td class="row-label">HEALTHCHECK</td><td class="center"><span class="tick-no">✗ No</span></td><td class="center"><span class="tick-rec">Recommended</span></td><td class="center"><span class="tick-req">Required</span></td><td class="center"><span class="tick-req">Required</span></td><td class="center"><span class="tick-req">Required</span></td></tr>
-<tr><td class="row-label">LABEL</td><td class="center"><span class="tick-no">✗ No</span></td><td style="font-size:10px">Image ID + build date</td><td class="center"><span class="tick-no">✗ No</span></td><td style="font-size:10px">Image provenance + STIG version + build date</td><td style="font-size:10px">Build date + image ID</td></tr>
-<tr><td class="row-label">Read-only FS</td><td class="center"><span class="tick-no">✗ No</span></td><td class="center"><span class="tick-req">Required</span></td><td class="center"><span class="tick-no">✗ No</span></td><td class="center"><span class="tick-req">Required</span></td><td class="center"><span class="tick-rec">Recommended</span></td></tr>
-<tr><td class="row-label">TLS / crypto</td><td style="font-size:10px">FIPS-validated certs only</td><td style="font-size:10px">TLS 1.2+ only, no RC4/3DES/export ciphers</td><td style="font-size:10px">TLS 1.2+</td><td style="font-size:10px">FIPS-validated TLS 1.2+ only</td><td style="font-size:10px">TLS 1.2+</td></tr>
-<tr><td class="row-label">Secrets</td><td style="font-size:10px">Approved KMS (AWS GovCloud KMS, Azure Gov KeyVault)</td><td style="font-size:10px">Vault required — no ENV secrets, no ARG secrets</td><td style="font-size:10px">PHI never in image — use external secret store</td><td style="font-size:10px">AWS GovCloud KMS or Azure Gov KeyVault only</td><td style="font-size:10px">No ENV secrets</td></tr>
-<tr><td class="row-label">Logging</td><td style="font-size:10px">Audit log mandatory</td><td style="font-size:10px">Log all access attempts — ship to SIEM</td><td style="font-size:10px">Immutable audit log, 6-year retention</td><td style="font-size:10px">Immutable audit log — ship to FedRAMP-authorised SIEM</td><td style="font-size:10px">Audit log shipped to immutable store</td></tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#f0f0f5;color:#57606a">standard</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#d4f4dd;color:#1a7f37">hipaa</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td style="font-size:10px">hipaa_access · actor, action, resource, request-id, timestamp</td>
+  <td style="font-size:10px">ssn, dob, mrn, diagnosis, patientName, address, phone → ***REDACTED***</td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-yes">Disabled</span></td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#dbeeff;color:#0550ae">pci</span></td>
+  <td style="font-size:10px">SECRET/KEY/TOKEN/PASS &lt;16 chars → fatal exit</td>
+  <td style="font-size:10px">/debug/* → 404 · /metrics → 404</td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td style="font-size:10px">X-PCI-DSS: enforced · Strict-Transport-Security</td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#ffd7d5;color:#b91c1c">pipeda</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td style="font-size:10px">POST/PUT/PATCH without X-Consent: granted → 451</td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td style="font-size:10px">email, name, phone, address, sin → ***</td>
+  <td style="font-size:10px">X-Data-Residency: CA</td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1">fips</span></td>
+  <td style="font-size:10px">OpenSSL FIPS not active → throws / Fatal</td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#fff3cd;color:#7a4f00">soc2</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td style="font-size:10px">soc2_audit · actor, action, resource, timestamp</td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-yes">Disabled</span></td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#e8d8ff;color:#6f42c1">cmmc</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td style="font-size:10px">/debug/* → 404</td>
+  <td style="font-size:10px">cmmc_audit · actor, action, resource, timestamp</td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-yes">Set</span></td>
+  <td class="center"><span class="tick-yes">Disabled</span></td>
+</tr>
+<tr>
+  <td class="row-label"><span class="comp-chip" style="background:#f0f0f5;color:#57606a">nerc</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+  <td style="font-size:10px">X-OT-IT-Boundary: enforced · X-Network-Isolation: on</td>
+  <td class="center"><span class="tick-yes">Set</span></td>
+  <td class="center"><span class="tick-no">—</span></td>
+</tr>
   </tbody>
 </table>
 </div></div>
-<h2 id="additions">The 5 concrete Dockerfile additions</h2>
-<p class="section-sub">Copy-paste additions for the most common compliance requirements. Apply on top of any doc 11 Dockerfile. Each is independent.</p>
-<div class="addition-card">
-  <div class="add-head">
-    <div class="add-title">1. HEALTHCHECK instruction</div>
-    <div class="add-applies">Applies to: FedRAMP (required) · HIPAA (required) · SOC 2 (required) · NERC CIP (required)</div>
-  </div>
-  <div class="add-body">
-    <div class="add-why">Orchestrators (Kubernetes, ECS) use HEALTHCHECK to determine liveness. Compliance auditors require proof the container self-reports health status.</div>
-    <div class="dockerfile-block"><span class="df-comment"># Add inside the runtime stage, before CMD</span>
-<span class="df-kw">HEALTHCHECK</span> --interval=30s --timeout=5s --start-period=15s --retries=3 \
-  CMD curl -f http://localhost:$PORT/health || exit 1</div>
-    <div class="add-note">Replace $PORT with your framework port. For scratch/distroless runtimes: copy a static health-check binary instead of curl.</div>
-  </div>
-</div>
-<div class="addition-card">
-  <div class="add-head">
-    <div class="add-title">2. LABEL provenance</div>
-    <div class="add-applies">Applies to: FedRAMP (required) · CMMC (required) · SOX (required) · PCI DSS (recommended) · NERC CIP (recommended)</div>
-  </div>
-  <div class="add-body">
-    <div class="add-why">Every deployed image must be traceable to a commit, a build pipeline run, and an approver. Labels are the standard mechanism.</div>
-    <div class="dockerfile-block"><span class="df-comment"># Add inside the runtime stage</span>
-<span class="df-arg">ARG GIT_SHA=unknown</span>
-<span class="df-arg">ARG BUILD_DATE=unknown</span>
-<span class="df-arg">ARG COMPLIANCE=none</span>
-<span class="df-kw">LABEL</span> org.opencontainers.image.created=&quot;$BUILD_DATE&quot; \
-      org.opencontainers.image.revision=&quot;$GIT_SHA&quot; \
-      org.opencontainers.image.title=&quot;myapp&quot; \
-      org.compliance.standard=&quot;$COMPLIANCE&quot; \
-      org.compliance.stig-version=&quot;V1R3&quot;
-
-<span class="df-comment"># Build with:</span>
-<span class="df-comment"># docker build --build-arg GIT_SHA=$(git rev-parse HEAD) \</span>
-<span class="df-comment">#              --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \</span>
-<span class="df-comment">#              --build-arg COMPLIANCE=fedramp \</span>
-<span class="df-comment">#              --target runtime .</span></div>
-    <div class="add-note">ARG values do not persist in the final image ENV — they only set LABEL values at build time. No secret exposure risk.</div>
-  </div>
-</div>
-<div class="addition-card">
-  <div class="add-head">
-    <div class="add-title">3. Non-root user with specific UID</div>
-    <div class="add-applies">Applies to: PCI DSS (mandatory) · HIPAA (mandatory) · FedRAMP (mandatory UID 1001) · CMMC (mandatory)</div>
-  </div>
-  <div class="add-body">
-    <div class="add-why">If a process running as root escapes the container, it has root on the host. A specific UID (not just &quot;a non-root user&quot;) allows Kubernetes PodSecurityPolicy to enforce runAsNonRoot.</div>
-    <div class="dockerfile-block"><span class="df-comment"># Add inside the runtime stage before EXPOSE</span>
-<span class="df-comment"># Alpine / scratch pattern:</span>
-<span class="df-kw">RUN</span> addgroup -g 1001 -S appgroup &amp;&amp; adduser -u 1001 -S appuser -G appgroup
-<span class="df-kw">USER</span> 1001:1001
-
-<span class="df-comment"># Debian / Ubuntu pattern:</span>
-<span class="df-kw">RUN</span> groupadd -g 1001 appgroup &amp;&amp; \
-    useradd -u 1001 -g 1001 -s /sbin/nologin -M appuser
-<span class="df-kw">USER</span> 1001:1001</div>
-    <div class="add-note">Doc 11 already sets USER. This addition makes the UID explicit (1001) for FedRAMP and CMMC auditors who check UID values, not just &quot;non-root&quot;.</div>
-  </div>
-</div>
-<div class="addition-card">
-  <div class="add-head">
-    <div class="add-title">4. Base image swap for compliance tier</div>
-    <div class="add-applies">Applies to: FIPS/FedRAMP (UBI9 required) · PCI DSS (CIS/distroless required) · NERC CIP (air-gapped registry required)</div>
-  </div>
-  <div class="add-body">
-    <div class="add-why">The runtime base image determines which crypto libraries are available at runtime. FIPS requires the OS to use only FIPS-validated crypto — the base image controls this.</div>
-    <div class="dockerfile-block"><span class="df-comment"># Doc 11 already has --target runtime and --target runtime-fips.</span>
-<span class="df-comment"># Additional targets for other compliance tiers:</span>
-
-<span class="df-comment"># ── runtime-pci (PCI DSS: distroless, minimal attack surface) ──────────────</span>
-<span class="df-stage">FROM cgr.dev/chainguard/node:latest AS runtime-pci</span>
-<span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">COPY</span> --from=builder /app/dist ./dist
-<span class="df-kw">USER</span> 65532
-<span class="df-kw">EXPOSE</span> 3000
-<span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/server.js&quot;]
-
-<span class="df-comment"># ── runtime-nerc (NERC CIP: air-gapped — replace registry.internal with yours)</span>
-<span class="df-stage">FROM registry.internal.yourco.com/base/node:22-alpine AS runtime-nerc</span>
-<span class="df-kw">WORKDIR</span> /app
-<span class="df-kw">COPY</span> --from=builder /app/dist ./dist
-<span class="df-kw">USER</span> 1001:1001
-<span class="df-kw">EXPOSE</span> 3000
-<span class="df-kw">CMD</span> [&quot;node&quot;, &quot;dist/server.js&quot;]</div>
-    <div class="add-note">For NERC CIP: all FROM references must point to your internal air-gapped registry. Never pull from docker.io, gcr.io, or quay.io in a CIP environment.</div>
-  </div>
-</div>
-<div class="addition-card">
-  <div class="add-head">
-    <div class="add-title">5. Tool removal in builder stage</div>
-    <div class="add-applies">Applies to: PCI DSS (required) · CIS Benchmark Level 2 (required) · ISO 27001 (recommended)</div>
-  </div>
-  <div class="add-body">
-    <div class="add-why">Tools left in an image layer are accessible if the container is compromised. curl, wget, and package managers are attack vectors. Removing them from the runtime stage eliminates them.</div>
-    <div class="dockerfile-block"><span class="df-comment"># Builder stage: install tools, use them, then remove in same RUN layer</span>
-<span class="df-stage">FROM ubuntu:24.04 AS builder</span>
-<span class="df-kw">RUN</span> apt-get update &amp;&amp; \
-    apt-get install -y curl build-essential ca-certificates &amp;&amp; \
-<span class="df-comment">    # ... your build steps here ... \</span>
-    apt-get remove -y curl build-essential &amp;&amp; \
-    apt-get autoremove -y &amp;&amp; \
-    rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
-
-<span class="df-comment"># Runtime stage has none of these tools because it starts from a clean base</span>
-<span class="df-stage">FROM node:22-alpine AS runtime</span>
-<span class="df-comment"># curl is not present in this stage at all</span></div>
-    <div class="add-note">Multi-stage builds (doc 11 pattern) already achieve this for the runtime stage. This addition applies to cases where a single-stage is unavoidable or the builder stage itself is audited.</div>
-  </div>
-</div>
-<h2 id="gap-analysis">Gap analysis — doc 11 vs compliance requirements</h2>
-<p class="section-sub">What doc 11 already handles, and what must be added for full compliance coverage.</p>
-<div class="gap-grid">
-  <div class="gap-card gc-ok">
-    <div class="gc-head">✓ Already covered in doc 11</div>
-    <ul class="gc-list"><li>✓ FIPS base image via <code>--target runtime-fips</code> (all 75 frameworks)</li>
-<li>✓ Non-root USER in every runtime stage</li>
-<li>✓ CA certificates copied for scratch/distroless runtimes</li>
-<li>✓ FIPS note in every verify block</li>
-<li>✓ HEALTHCHECK in all 75 runtime stages (--interval=30s --timeout=5s --retries=3)</li>
-<li>✓ LABEL provenance — <code>org.opencontainers.image.revision</code> and <code>org.opencontainers.image.created</code> in all runtime stages</li>
-<li>✓ Explicit numeric UID — <code>USER 1001:1001</code> in all non-Deno frameworks</li></ul>
-  </div>
-  <div class="gap-card gc-miss">
-    <div class="gc-head">✗ One edge case remaining in doc 11</div>
-    <ul class="gc-list"><li>✗ Fresh (Deno) uses <code>USER deno</code> — not a numeric UID (required: FedRAMP, CMMC). Fix: replace with <code>USER 65532:65532</code> (Deno's system UID) when FedRAMP or CMMC compliance is required.</li></ul>
-  </div>
-</div>
-<p style="font-size:11px;color:var(--text-dim);margin-top:12px">
-  Data residency (GDPR, PIPEDA), image signing (FedRAMP, CMMC), registry air-gapping (NERC CIP),
-  and SIEM log shipping (all standards) are enforced at the CI/CD and infrastructure layer —
-  they cannot be expressed in a Dockerfile.
-</p>
 
 </main>
 </body>

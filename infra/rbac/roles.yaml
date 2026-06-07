@@ -3,7 +3,8 @@
 # Apply: kubectl apply -f infra/rbac/roles.yaml
 
 ---
-# Platform engineers: read everything, write deployments in infra namespaces
+# Platform engineers: read everything, write deployments in infra namespaces — no delete.
+# Delete requires the break-glass role (platform-engineer-break-glass) bound separately.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -14,10 +15,24 @@ rules:
     verbs: ["get", "list", "watch"]
   - apiGroups: ["apps", "batch"]
     resources: ["deployments", "statefulsets", "daemonsets", "jobs", "cronjobs"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
   - apiGroups: [""]
     resources: ["pods", "pods/exec", "pods/log", "services", "configmaps"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+# Break-glass: grants delete on workloads — bind only for incident response.
+# Separate role so delete is an intentional escalation, not a daily permission.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: platform-engineer-break-glass
+rules:
+  - apiGroups: ["apps", "batch"]
+    resources: ["deployments", "statefulsets", "daemonsets", "jobs", "cronjobs"]
+    verbs: ["delete"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec", "pods/log", "services", "configmaps"]
+    verbs: ["delete"]
 ---
 # Developers: read pods + logs in dev namespace only
 apiVersion: rbac.authorization.k8s.io/v1
@@ -52,6 +67,6 @@ kind: ClusterRole
 metadata:
   name: argocd-application-manager
 rules:
-  - apiGroups: ["*"]
-    resources: ["*"]
+  - apiGroups: ["argoproj.io", "apps", "batch", "", "extensions"]
+    resources: ["applications", "applicationsets", "deployments", "services", "pods", "jobs", "configmaps"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]

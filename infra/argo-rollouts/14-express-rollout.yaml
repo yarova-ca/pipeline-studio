@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: 14-express
-          image: ghcr.io/yarova-ca/14-express:latest
+          image: ghcr.io/yarova-ca/14-express:stable # Injected at deploy time
           ports:
             - containerPort: 3000
   strategy:
@@ -67,6 +67,7 @@ spec:
     - name: p99-latency
       interval: 30s
       failureLimit: 2
+      successfulLimit: 5
       provider:
         prometheus:
           address: http://prometheus-operated.monitoring:9090

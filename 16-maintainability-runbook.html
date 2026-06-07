@@ -100,6 +100,15 @@ code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;backgroun
   nav{display:none}
   main{max-width:100%;padding:12px}
 }
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.doc-card{display:block;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;text-decoration:none;color:var(--text);transition:border-color .12s,background .12s}
+.doc-card:hover{border-color:var(--blue);background:var(--bg3)}
+.doc-card-title{font-size:13px;font-weight:700;color:var(--text-head);margin-bottom:6px}
+.doc-card-covers{font-size:11.5px;color:var(--text-dim);line-height:1.5;margin-bottom:6px}
+.doc-card-when{font-size:11px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:7px;margin-top:4px}
+.doc-card-when strong{color:var(--text)}
 details{border-bottom:1px solid var(--border)}
 details:last-of-type{border-bottom:none}
 summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;user-select:none}
@@ -153,11 +162,12 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to content</a>
 <nav aria-label="Platform navigation">
-  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <div class="nav-logo"><p style="font-size:14px;font-weight:700;color:var(--text-head);margin-bottom:2px">Pipeline Studio</p><p>Platform engineering hub</p></div>
   <a href="index.html" class="nav-hub">⌂ Hub</a>
   <details>
-    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
     <a href="18-service-status.html" class="nav-link">18 Service status</a>
@@ -193,12 +203,21 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="16-maintainability-runbook.html" class="nav-link" aria-current="page">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+<summary>GUIDES <span class="pillar-badge">6</span></summary>
+<a class="nav-link" href="00-getting-started.html">00 — Getting Started</a>
+<a class="nav-link" href="20-local-dev.html">20 — Local Dev</a>
+<a class="nav-link" href="21-build-axes.html">21 — Build Axes</a>
+<a class="nav-link" href="22-add-a-service.html">22 — Add a Service</a>
+<a class="nav-link" href="23-deployment.html">23 — Deployment</a>
+<a class="nav-link" href="24-debugging.html">24 — Debugging</a>
+</details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 <main id="main-content">
 <div class="page-header">
   <div class="page-title">Maintainability Runbook</div>
-  <div class="page-covers"><strong>What this covers:</strong> Step-by-step checklists for every maintenance task — adding a new doc, updating versions, updating market data, keeping nav in sync. File map for all 17 docs.</div>
+  <div class="page-covers"><strong>What this covers:</strong> Step-by-step checklists for every maintenance task — adding a new doc, updating versions, updating market data, keeping nav in sync. File map for all 19 docs.</div>
   <div class="page-when"><strong>When to read:</strong> Before adding a new doc, running a version update batch, or re-verifying any data in any doc.</div>
   <div class="page-pillar">Pillar 7 — Operations &nbsp;·&nbsp; Related: <a href="15-version-registry.html">15 Version registry</a> &nbsp;·&nbsp; <a href="index.html">Hub</a></div>
 </div>
@@ -207,7 +226,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="audience-card audience-new">
     <div class="audience-label">New to the platform? Start here.</div>
     <p><strong>This page is the maintenance manual.</strong> Every task that keeps the platform healthy has a numbered checklist here.</p>
-    <p><strong>You do not need to understand all 17 docs</strong> before using this page. Each checklist tells you exactly which file to open and what to change.</p>
+    <p><strong>You do not need to understand all 19 docs</strong> before using this page. Each checklist tells you exactly which file to open and what to change.</p>
     <p><strong>The four task types covered:</strong></p>
     <ul style="margin:4px 0 0 14px;font-size:11px;line-height:2">
       <li>Adding a new service to the catalog</li>
@@ -234,7 +253,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </div>
 
 <h1>Maintainability Runbook</h1>
-<div class="page-meta">4 task types · 8 checklists · last updated 2026-05-28</div>
+<div class="page-meta">4 task types · 8 checklists · last updated 2026-06-05</div>
 
 <h2 id="when-to-update">When to update vs when to skip</h2>
 <div class="section-sub">Binary rules — apply them in order. First match wins.</div>
@@ -317,7 +336,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </ol>
 
 <div class="counts-bar">
-  <div class="count-chip c1"><div class="chip-num">16</div><div class="chip-label">Docs in this<br>project</div></div>
+  <div class="count-chip c1"><div class="chip-num">19</div><div class="chip-label">Docs in this<br>project</div></div>
   <div class="count-chip c2"><div class="chip-num">4</div><div class="chip-label">Task types<br>covered</div></div>
   <div class="count-chip c3"><div class="chip-num">8</div><div class="chip-label">Step-by-step<br>checklists</div></div>
   <div class="count-chip c4"><div class="chip-num">5</div><div class="chip-label">Generation<br>scripts</div></div>
@@ -356,7 +375,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <li>
     <span class="step-num">3</span>
     <span class="step-body">
-      Add all 16 existing doc links to the new doc's nav sidebar.
+      Add all 19 existing doc links to the new doc's nav sidebar.
       <span class="step-why">Why: every doc must link to every other doc — this is the only navigation mechanism.</span>
       <span class="step-cmd">grep -A2 'nav-top' 08-canada-market.html  # copy the nav block pattern</span>
     </span>
@@ -473,7 +492,7 @@ EOF</span>
   <li>
     <span class="step-num">15</span>
     <span class="step-body">
-      Update the counts bar at the top of this page: <code class="ic">16 Docs</code> → <code class="ic">17 Docs</code>.
+      Update the counts bar chip from <code class="ic">N Docs</code> to <code class="ic">N+1 Docs</code>, where N is the current value shown in the chip.
     </span>
   </li>
 </ol>
@@ -482,8 +501,8 @@ EOF</span>
 <pre class="code-block">&lt;a href="NN-doc-name.html" class="doc-card"&gt;
   &lt;div class="doc-card-num"&gt;Doc NN&lt;/div&gt;
   &lt;div class="doc-card-title"&gt;[Title]&lt;/div&gt;
-  &lt;div class="doc-card-desc"&gt;[One paragraph — what it is, what it covers, key counts.]&lt;/div&gt;
-  &lt;div class="doc-card-meta"&gt;&lt;strong&gt;Records:&lt;/strong&gt; [key counts] &amp;nbsp;·&amp;nbsp; &lt;strong&gt;Use when:&lt;/strong&gt; [specific trigger]&lt;/div&gt;
+  &lt;div class="doc-card-covers"&gt;[One paragraph — what it is, what it covers, key counts.]&lt;/div&gt;
+  &lt;div class="doc-card-when"&gt;&lt;strong&gt;When to read:&lt;/strong&gt; [specific trigger]&lt;/div&gt;
 &lt;/a&gt;</pre>
 
 <h3>Dependency map entry template for index.html</h3>
@@ -632,22 +651,25 @@ EOF</span>
 <table class="xref-table">
 <thead><tr><th>Doc</th><th>Exact nav label</th></tr></thead>
 <tbody>
-<tr><td>01</td><td>01 Frameworks</td></tr>
+<tr><td>01</td><td>01 Framework catalog</td></tr>
 <tr><td>02</td><td>02 Pipeline schema</td></tr>
 <tr><td>03</td><td>03 Stage types</td></tr>
 <tr><td>04</td><td>04 Tool catalog</td></tr>
 <tr><td>05</td><td>05 Invariants</td></tr>
 <tr><td>06</td><td>06 US industries</td></tr>
-<tr><td>07</td><td>07 CA industries</td></tr>
+<tr><td>07</td><td>07 Canada schema</td></tr>
 <tr><td>08</td><td>08 CA market</td></tr>
 <tr><td>09</td><td>09 Linux distros</td></tr>
 <tr><td>10</td><td>10 Linux compliance</td></tr>
-<tr><td>11</td><td>11 Dockerfiles</td></tr>
-<tr><td>12</td><td>12 Compliance</td></tr>
-<tr><td>13</td><td>13 Pipeline catalog</td></tr>
-<tr><td>14</td><td>14 CA industries</td></tr>
+<tr><td>11</td><td>11 Dockerfile catalog</td></tr>
+<tr><td>12</td><td>12 Compliance variations</td></tr>
+<tr><td>13</td><td>13 Pipeline build catalog</td></tr>
+<tr><td>14</td><td>14 Canada industry catalog</td></tr>
 <tr><td>15</td><td>15 Version registry</td></tr>
 <tr><td>16</td><td>16 Runbook</td></tr>
+<tr><td>17</td><td>17 Feature matrix</td></tr>
+<tr><td>18</td><td>18 Service status</td></tr>
+<tr><td>19</td><td>19 Cluster setup</td></tr>
 </tbody>
 </table>
 </div>
@@ -664,7 +686,7 @@ EOF</span>
 <tr><td>1</td><td>page-meta line</td><td><code class="ic">N design docs</code> → <code class="ic">N+1 design docs</code></td><td><code class="ic">grep -n "design docs" index.html</code></td></tr>
 <tr><td>2</td><td>"All N docs" h2 heading</td><td><code class="ic">All N docs</code> → <code class="ic">All N+1 docs</code></td><td><code class="ic">grep -n "All [0-9]* docs" index.html</code></td></tr>
 <tr><td>3</td><td>Doc cards grid</td><td>Add new <code class="ic">&lt;a class="doc-card"&gt;</code> block after the last card</td><td><code class="ic">grep -n "doc-card-num" index.html | tail -1</code></td></tr>
-<tr><td>4</td><td>Recommended reading order</td><td>Add <code class="ic">&lt;div class="order-item"&gt;</code> block in correct position</td><td><code class="ic">grep -n "order-item" index.html | tail -1</code></td></tr>
+<tr><td>4</td><td>Recommended reading order</td><td>Add <code class="ic">&lt;div class="sp-block"&gt;</code> with a <code class="ic">&lt;div class="sp-chain"&gt;</code> inside it. Use <code class="ic">&lt;a class="sp-node"&gt;</code> for each doc in the chain.</td><td><code class="ic">grep -c "sp-block" index.html</code></td></tr>
 <tr><td>5</td><td>Cross-doc dependencies</td><td>Add <code class="ic">&lt;div class="dep-row"&gt;</code> block</td><td><code class="ic">grep -n "dep-row" index.html | tail -1</code></td></tr>
 </tbody>
 </table>
@@ -673,7 +695,7 @@ EOF</span>
 <div class="note-block">
   <strong>Verify all 5 updated:</strong>
   <span class="step-cmd" style="display:block;margin-top:4px">grep -c "doc-card-num" index.html  # must equal total doc count
-grep -c "order-item" index.html  # must equal total doc count
+grep -c "sp-block" index.html    # must equal total reading-order block count
 grep -c "dep-row" index.html     # must equal total doc count</span>
 </div>
 
@@ -760,6 +782,9 @@ gh pr create --title "..." --body "..."</span>
 <tr><td><a href="14-canada-industry-catalog.html">14-canada-industry-catalog.html</a></td><td>14</td><td>Industry deep-dive accordion</td><td><code class="ic">scripts/generate_14.py</code></td><td>07, 08</td><td>All docs</td></tr>
 <tr><td><a href="15-version-registry.html">15-version-registry.html</a></td><td>15</td><td>Version tracking table</td><td><code class="ic">scripts/generate_15.py</code></td><td>All docs (aggregates)</td><td>All docs</td></tr>
 <tr><td><a href="16-maintainability-runbook.html">16-maintainability-runbook.html</a></td><td>16</td><td>Maintenance runbook</td><td><code class="ic">scripts/generate_16.py</code></td><td>All docs (describes)</td><td>All docs</td></tr>
+<tr><td><a href="17-feature-matrix.html">17-feature-matrix.html</a></td><td>17</td><td>Feature matrix table</td><td>Hand-authored</td><td>01 (framework list)</td><td>All docs</td></tr>
+<tr><td><a href="18-service-status.html">18-service-status.html</a></td><td>18</td><td>Service status dashboard</td><td>Hand-authored</td><td>01, 17</td><td>All docs</td></tr>
+<tr><td><a href="19-cluster-setup.html">19-cluster-setup.html</a></td><td>19</td><td>Cluster setup guide</td><td>Hand-authored</td><td>11, 13</td><td>All docs</td></tr>
 </tbody>
 </table>
 </div>
@@ -800,7 +825,7 @@ gh pr create --title "..." --body "..."</span>
   <div class="checklist-item">
     <input type="checkbox">
     <div>
-      <strong>All 17 HTML docs updated if code changed this week</strong>
+      <strong>All 19 HTML docs updated if code changed this week</strong>
       <div class="checklist-cmd">git log --since="7 days ago" --oneline -- '*.html' | wc -l</div>
       <div class="checklist-pass">Pass: HTML commit count matches code commit count for the week</div>
       <div class="checklist-fail">Fail: identify which code change lacks a matching doc update → update the relevant HTML page before this week's review</div>

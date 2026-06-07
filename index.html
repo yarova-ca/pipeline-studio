@@ -182,9 +182,10 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
   <a href="index.html" class="nav-hub" aria-current="page">⌂ Hub</a>
 
   <details open>
-    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
 
   <details open>
@@ -221,6 +222,16 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
     <summary>Maintaining<span class="pillar-badge">7</span></summary>
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
   </details>
 
   <a href="#main-content" class="nav-top">↑ Back to top</a>
@@ -570,6 +581,53 @@ h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
       <div class="doc-card-title">Maintainability Runbook</div>
       <div class="doc-card-covers">Step-by-step checklists for every maintenance task: adding a new doc, updating a version, updating market data, keeping nav in sync. File map for all 17 docs. Commit style guide. Generation script reference.</div>
       <div class="doc-card-when"><strong>When to read:</strong> Before adding a new doc, running a version update batch, or re-verifying any data.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ GUIDES: KNOWLEDGE TO PRODUCTION ═══ -->
+<div class="pillar-section">
+  <div class="pillar-header">
+    <span class="pillar-num">Guides</span>
+    <span class="pillar-title">Knowledge to Production</span>
+    <span class="pillar-desc">From zero to full platform maintainability. Run, build, deploy, and debug.</span>
+  </div>
+  <div class="cards-grid">
+    <a href="00-getting-started.html" class="doc-card">
+      <div class="doc-card-num">00 GUIDE</div>
+      <div class="doc-card-title">Getting Started</div>
+      <div class="doc-card-covers">First-run orientation: what this platform is, what each pillar covers, and the fastest path to a working local environment.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> First time opening this platform or onboarding a new team member.</div>
+    </a>
+    <a href="20-local-dev.html" class="doc-card">
+      <div class="doc-card-num">20 GUIDE</div>
+      <div class="doc-card-title">Local Dev</div>
+      <div class="doc-card-covers">Everything needed to run the platform on a local machine: prerequisites, env setup, running services, and verifying they work.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Setting up a dev environment or diagnosing a local run failure.</div>
+    </a>
+    <a href="21-build-axes.html" class="doc-card">
+      <div class="doc-card-num">21 GUIDE</div>
+      <div class="doc-card-title">Build Axes</div>
+      <div class="doc-card-covers">How each service is built: language, framework, build tool, output artifact. The dimensions that determine how a service gets packaged and shipped.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Adding a service, changing a build tool, or tracing a build failure.</div>
+    </a>
+    <a href="22-add-a-service.html" class="doc-card">
+      <div class="doc-card-num">22 GUIDE</div>
+      <div class="doc-card-title">Add a Service</div>
+      <div class="doc-card-covers">Step-by-step checklist for introducing a new service: repo structure, pipeline registration, schema entry, nav update, and verification.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Before creating any new service in this platform.</div>
+    </a>
+    <a href="23-deployment.html" class="doc-card">
+      <div class="doc-card-num">23 GUIDE</div>
+      <div class="doc-card-title">Deployment</div>
+      <div class="doc-card-covers">How services move from build to running: image promotion, environment gates, rollout commands, and rollback procedure.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Releasing a change, promoting an image, or recovering from a failed rollout.</div>
+    </a>
+    <a href="24-debugging.html" class="doc-card">
+      <div class="doc-card-num">24 GUIDE</div>
+      <div class="doc-card-title">Debugging</div>
+      <div class="doc-card-covers">Systematic diagnosis playbook: pipeline failures, pod crashes, config drift, and network errors. Includes log commands and known failure patterns.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Something is broken and you need a starting point.</div>
     </a>
   </div>
 </div>

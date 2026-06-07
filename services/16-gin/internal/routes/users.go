@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	ginauth "github.com/yarova-ca/16-gin/internal/auth"
-	"github.com/yarova-ca/16-gin/internal/db"
+	ginauth "github.com/yarova-ca/16-gin/internal/auth/active"
+	dbActive "github.com/yarova-ca/16-gin/internal/db/active"
 )
 
 // RegisterUsers mounts all /users routes on the provided engine.
@@ -40,11 +40,11 @@ func handleListItems(c *gin.Context) {
 		offset = 0
 	}
 
-	database := db.GetDB()
-	var items []db.Item
+	database := dbActive.GetDB()
+	var items []dbActive.Item
 	var total int64
 
-	database.Model(&db.Item{}).Where("user_id = ?", claims.UserID).Count(&total)
+	database.Model(&dbActive.Item{}).Where("user_id = ?", claims.UserID).Count(&total)
 	if err := database.Where("user_id = ?", claims.UserID).
 		Order("created_at DESC").
 		Limit(limit).
@@ -84,13 +84,13 @@ func handleCreateItem(c *gin.Context) {
 	if body.Description != nil {
 		description = *body.Description
 	}
-	item := db.Item{
+	item := dbActive.Item{
 		Title:       body.Title,
 		Description: description,
 		UserID:      claims.UserID,
 	}
 
-	database := db.GetDB()
+	database := dbActive.GetDB()
 	if err := database.Create(&item).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "database error"})
 		return
@@ -108,8 +108,8 @@ func handleGetItem(c *gin.Context) {
 	}
 
 	id := c.Param("id")
-	database := db.GetDB()
-	var item db.Item
+	database := dbActive.GetDB()
+	var item dbActive.Item
 	if err := database.Where("id = ? AND user_id = ?", id, claims.UserID).First(&item).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "item not found"})
 		return
@@ -127,8 +127,8 @@ func handleUpdateItem(c *gin.Context) {
 	}
 
 	id := c.Param("id")
-	database := db.GetDB()
-	var item db.Item
+	database := dbActive.GetDB()
+	var item dbActive.Item
 	if err := database.Where("id = ? AND user_id = ?", id, claims.UserID).First(&item).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "item not found"})
 		return
@@ -170,8 +170,8 @@ func handleDeleteItem(c *gin.Context) {
 	}
 
 	id := c.Param("id")
-	database := db.GetDB()
-	result := database.Where("id = ? AND user_id = ?", id, claims.UserID).Delete(&db.Item{})
+	database := dbActive.GetDB()
+	result := database.Where("id = ? AND user_id = ?", id, claims.UserID).Delete(&dbActive.Item{})
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "database error"})
 		return

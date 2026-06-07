@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Service Implementation Status — every service across all 14 implementation layers. What's done, what's missing, what's not applicable.">
+<meta name="description" content="Service Implementation Status — every service across all 13 implementation layers. What's done, what's missing, what's not applicable.">
 <title>Service Implementation Status — Pipeline Studio</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -166,13 +166,22 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:36px 0 12px;padd
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+    <summary>Guides<span class="pillar-badge">6</span></summary>
+    <a href="20-pkg-mgr-guide.html" class="nav-link">20 Package managers</a>
+    <a href="21-build-tool-guide.html" class="nav-link">21 Build tools</a>
+    <a href="22-compliance-guide.html" class="nav-link">22 Compliance</a>
+    <a href="23-observability-guide.html" class="nav-link">23 Observability</a>
+    <a href="24-auth-guide.html" class="nav-link">24 Auth</a>
+    <a href="25-orm-guide.html" class="nav-link">25 ORM</a>
+  </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 
 <div class="page-title">Service Implementation Status</div>
-<div class="page-covers"><strong>What this covers:</strong> Every service across all 14 implementation layers — what's done, what's missing, what's not applicable.</div>
+<div class="page-covers"><strong>What this covers:</strong> Every service across all 13 implementation layers — what's done, what's missing, what's not applicable.</div>
 <div class="page-when"><strong>When to read:</strong> Before deploying a service. Before running the quarterly audit. To understand what layers your language group still needs.</div>
 <div class="page-pillar">Pillar 2 — Frameworks &amp; Services &nbsp;·&nbsp; Related: <a href="01-framework-catalog.html">01 Framework catalog</a> &nbsp;·&nbsp; <a href="17-feature-matrix.html">17 Feature matrix</a></div>
 
@@ -214,6 +223,10 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:36px 0 12px;padd
     <button class="filter-btn" data-filter-lang="Scala">Scala</button>
     <button class="filter-btn" data-filter-lang="Clojure">Clojure</button>
     <button class="filter-btn" data-filter-lang="C++">C++</button>
+    <button class="filter-btn" data-filter-lang="Dart">Dart</button>
+    <button class="filter-btn" data-filter-lang="Java">Java</button>
+    <button class="filter-btn" data-filter-lang="Kotlin">Kotlin</button>
+    <button class="filter-btn" data-filter-lang="ObjC">ObjC</button>
   </div>
   <div class="filter-group">
     <span class="filter-label">Pattern:</span>
@@ -238,9 +251,9 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:36px 0 12px;padd
 
 <div class="status-summary">
   <div class="stat-card"><strong>105</strong> services total</div>
-  <div class="stat-card stat-green"><strong>105</strong> fully complete</div>
-  <div class="stat-card stat-orange"><strong>0</strong> have gaps</div>
-  <div class="stat-card"><strong>32</strong> mobile services (Docker N/A)</div>
+  <div class="stat-card stat-green"><strong>104</strong> fully complete</div>
+  <div class="stat-card stat-orange"><strong>1</strong> has gaps</div>
+  <div class="stat-card"><strong>14</strong> services (Docker N/A) — 10 Mobile + 3 Edge + 05-qwik</div>
 </div>
 
 <div class="tbl-scroll">
@@ -613,13 +626,13 @@ h2{font-size:15px;font-weight:600;color:var(--text-head);margin:36px 0 12px;padd
       <td><span class="s-y">✅</span></td>
     </tr>
     <!-- ── Group 05: Qwik ── -->
-    <tr data-lang="Node" data-pat="SPA" data-status="complete">
+    <tr data-lang="Node" data-pat="SPA" data-status="gaps">
       <td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/05-qwik">05-qwik</a></td>
       <td><span class="lang-badge lang-node">Node</span></td>
       <td><span class="pat-badge">SPA</span></td>
       <td><span class="s-na" title="Not applicable for this service type">—</span></td>
       <td><span class="s-na" title="Not applicable for this service type">—</span></td>
-      <td><span class="s-y">✅</span></td>
+      <td><span class="s-na" title="Not applicable where DOCK is N/A">—</span></td>
       <td><span class="s-y">✅</span></td>
       <td><span class="s-y">✅</span></td>
       <td><span class="s-y">✅</span></td>

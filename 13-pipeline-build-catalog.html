@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Pipeline Build Catalog — full CI/CD pipeline for all 75 frameworks, all 11 compliance standards, all 6 registries. Ticket-ready stage definitions for every phase.">
+<meta name="description" content="Pipeline Build Catalog — full CI/CD pipeline for all 75 frameworks across 30 groups covering Node.js, Python, Go, Java, Rust, gRPC, GraphQL, WebSocket, and 21 more. All 11 compliance standards, all 6 registries. Ticket-ready stage definitions for every phase.">
 <title>Pipeline Build Catalog — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -176,9 +176,10 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
   <a href="index.html" class="nav-hub">⌂ Hub</a>
   <details>
-    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -211,13 +212,22 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+<summary>GUIDES <span class="pillar-badge">6</span></summary>
+<a class="nav-link" href="00-getting-started.html">00 — Getting Started</a>
+<a class="nav-link" href="20-local-dev.html">20 — Local Dev</a>
+<a class="nav-link" href="21-build-axes.html">21 — Build Axes</a>
+<a class="nav-link" href="22-add-a-service.html">22 — Add a Service</a>
+<a class="nav-link" href="23-deployment.html">23 — Deployment</a>
+<a class="nav-link" href="24-debugging.html">24 — Debugging</a>
+</details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-header">
   <div class="page-title">Pipeline Build Catalog</div>
-  <div class="page-covers"><strong>What this covers:</strong> Full CI/CD pipeline for all 106 frameworks — every stage across all 6 phases, language-specific commands, compliance deltas for all 11 standards, and links to runnable service code.</div>
+  <div class="page-covers"><strong>What this covers:</strong> Full CI/CD pipeline for all 75 frameworks — every stage across all 6 phases, language-specific commands, compliance deltas for all 11 standards, and links to runnable service code.</div>
   <div class="page-when"><strong>When to read:</strong> Implementing or reviewing the full pipeline for any framework. Read after Docs 02, 09, and 11.</div>
   <div class="page-pillar">Pillar 4 — Pipeline &amp; Tools &nbsp;·&nbsp; Related: <a href="02-pipeline-schema.html">02 Schema</a> &nbsp;·&nbsp; <a href="11-dockerfile-catalog.html">11 Dockerfiles</a> &nbsp;·&nbsp; <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services">services/</a></div>
 </div>
@@ -231,7 +241,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   Apply those deltas on top of the base phase YAML for each compliance standard you need.
   <br><br>
   <strong>Registry config:</strong> The "Registry" section at the bottom of each entry shows OIDC auth
-  and push format for all 6 supported registries (GHCR, ECR, GAR, Harbor, Docker Hub, ACR).
+  and push format for all 6 supported registries (GHCR, ECR, GAR, Quay.io, Docker Hub, ACR).
 </div>
 
 <div class="why-block">
@@ -247,7 +257,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <div class="decision-block">
   <div class="decision-chosen"><strong>Decision:</strong> One pipeline + additive compliance delta layer for all 11 standards.</div>
   <div class="decision-rejected"><strong>Rejected:</strong> Separate pipeline per compliance standard.<br>
-  Calculation: 75 frameworks × 11 compliance standards = 825 distinct pipelines to write, maintain, and keep in sync.<br>
+  Calculation: 75 frameworks × 30 categories × 11 compliance standards = 825 distinct pipelines to write, maintain, and keep in sync.<br>
   With the delta approach: 75 base pipelines + 11 additive delta sets = 86 maintained artefacts. Maintenance cost drops by 90%.</div>
   <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Delta application adds a step — teams must understand base pipeline + delta composition rather than reading one self-contained pipeline. Mitigated by the compliance table showing exactly which stages each standard adds.</div>
 </div>
@@ -260,11 +270,11 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div><strong>User can:</strong> Fix the finding in code and push a new commit — the check re-runs automatically. OR open a suppression PR with the finding's rule ID and a written justification, approved by the security team. Suppressions are tracked in <code>.semgrepignore</code> or inline comments — not in <code>.gitignore</code>.</div>
 </div>
 
-<div class="page-meta">75 frameworks &nbsp;·&nbsp; 27 categories &nbsp;·&nbsp; 6 pipeline phases &nbsp;·&nbsp; 11 compliance standards &nbsp;·&nbsp; 6 registries &nbsp;·&nbsp; verified 2026-05-27</div>
+<div class="page-meta">75 frameworks &nbsp;·&nbsp; 30 categories &nbsp;·&nbsp; 6 pipeline phases &nbsp;·&nbsp; 11 compliance standards &nbsp;·&nbsp; 6 registries &nbsp;·&nbsp; verified 2026-05-27</div>
 
 <div class="counts-bar">
   <div class="count-chip cc-blue"><div class="chip-num">75</div><div class="chip-label">Framework<br>pipelines</div></div>
-  <div class="count-chip cc-green"><div class="chip-num">27</div><div class="chip-label">Categories</div></div>
+  <div class="count-chip cc-green"><div class="chip-num">30</div><div class="chip-label">Categories</div></div>
   <div class="count-chip cc-purple"><div class="chip-num">6</div><div class="chip-label">Pipeline<br>phases</div></div>
   <div class="count-chip cc-amber"><div class="chip-num">11</div><div class="chip-label">Compliance<br>standards</div></div>
   <div class="count-chip cc-red"><div class="chip-num">6</div><div class="chip-label">Container<br>registries</div></div>
@@ -637,7 +647,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
       <th>Promotions</th>
     </tr></thead>
     <tbody>
-<tr><td class="row-label" style="white-space:nowrap"><a href="12-compliance-variations.html#standards" style="color:var(--blue);text-decoration:none">FIPS 140-2/3</a></td><td style="font-size:10px;color:var(--text-dim)">US federal / DoD / FedRAMP</td><td style="font-size:11px">Confirm registry supports signed FIPS images</td><td style="font-size:11px">Build with --target runtime-fips in FIPS-capable builder</td><td style="font-size:11px">Push both runtime and runtime-fips tags; sign both with cosign</td><td style="font-size:11px">Store both :latest and :fips tags; sign-verify both</td><td style="font-size:11px">Deploy runtime-fips image to all environments; enforce in Kyverno policy</td></tr>
+<tr><td class="row-label" style="white-space:nowrap"><a href="12-compliance-variations.html#standards" style="color:var(--blue);text-decoration:none">FIPS 140-2/3</a></td><td style="font-size:10px;color:var(--text-dim)">US federal / DoD / FedRAMP</td><td style="font-size:11px">Confirm registry supports signed FIPS images</td><td style="font-size:11px">Build with --target runtime-fips in FIPS-capable builder</td><td style="font-size:11px">Push both runtime and runtime-fips tags; sign both with cosign</td><td style="font-size:11px">Store both :$SHA and :$SHA-fips tags; sign-verify both</td><td style="font-size:11px">Deploy runtime-fips image to all environments; enforce in Kyverno policy</td></tr>
 <tr><td class="row-label" style="white-space:nowrap"><a href="12-compliance-variations.html#standards" style="color:var(--blue);text-decoration:none">PCI DSS 4.0</a></td><td style="font-size:10px;color:var(--text-dim)">Payment card processors</td><td style="font-size:11px">Restrict registry write to release branch only; enable audit logging</td><td style="font-size:11px">Fail on any CRITICAL CVE (Trivy --exit-code 1 --severity CRITICAL); fail on hardcoded secrets</td><td style="font-size:11px">Require zero CRITICAL CVEs before sign; add payment-specific SAST rules</td><td style="font-size:11px">Enable immutable tags; log all pull events; restrict pull to production namespaces</td><td style="font-size:11px">Network segmentation policy in Kyverno; no internet egress from payment containers</td></tr>
 <tr><td class="row-label" style="white-space:nowrap"><a href="12-compliance-variations.html#standards" style="color:var(--blue);text-decoration:none">HIPAA</a></td><td style="font-size:10px;color:var(--text-dim)">US healthcare (covered entities + BAs)</td><td style="font-size:11px">Enable audit logging on registry; document BAA with cloud provider</td><td style="font-size:11px">Fail on HIGH+CRITICAL CVEs; scan for PHI patterns in source code</td><td style="font-size:11px">Enforce TLS 1.2+ in app config; non-root USER; read-only filesystem where possible</td><td style="font-size:11px">Enable access logging; restrict pull to HIPAA-scoped namespaces</td><td style="font-size:11px">Enforce Pod Security Standards (restricted); seccompProfile RuntimeDefault</td></tr>
 <tr><td class="row-label" style="white-space:nowrap"><a href="12-compliance-variations.html#standards" style="color:var(--blue);text-decoration:none">FedRAMP Moderate/High</a></td><td style="font-size:10px;color:var(--text-dim)">US federal agencies and SaaS providers</td><td style="font-size:11px">OIDC trust to FedRAMP-authorized cloud region; FIPS registry access only</td><td style="font-size:11px">FIPS build target required; SBOM in SPDX 2.3 format; SLSA Level 3 attestation</td><td style="font-size:11px">Container must use FIPS-certified runtime; cosign sign with hardware key or Fulcio</td><td style="font-size:11px">Deploy to GovCloud (AWS us-gov-* / Azure USGov); immutable tags enforced</td><td style="font-size:11px">Continuous monitoring via AWS Config / Azure Policy; runtime image scanned daily</td></tr>

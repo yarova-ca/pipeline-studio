@@ -44,6 +44,11 @@ COPY --from=build /tmp/app-group /etc/group
 COPY --from=build --chown=1001:1001 /app/target/*.jar app.jar
 USER 1001
 EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/health/live || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 # ── Runtime — FIPS ────────────────────────────────────────────────────────
@@ -54,7 +59,9 @@ COPY --from=build /tmp/app-group /etc/group
 COPY --from=build --chown=1001:1001 /app/target/*.jar app.jar
 USER 1001
 EXPOSE 8080
-
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:8080/health/live || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

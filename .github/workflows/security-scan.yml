@@ -28,6 +28,7 @@ permissions:
 jobs:
   secret-scan:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,6 +41,7 @@ jobs:
 
   sast:
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - name: Semgrep SAST
@@ -53,6 +55,9 @@ jobs:
             p/java
             p/csharp
             p/rust
+            p/ruby
+            p/php
+            p/kotlin
           publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
           publishDeployment: ${{ github.ref == 'refs/heads/main' }}
         continue-on-error: true   # Semgrep token optional — scan still runs
@@ -92,7 +97,7 @@ jobs:
           docker build --build-arg RUNTIME=alpine -t scan-target:${{ matrix.service }} \
             services/${{ matrix.service }}
       - name: Trivy container scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: scan-target:${{ matrix.service }}
           format: sarif

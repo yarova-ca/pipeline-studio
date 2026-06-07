@@ -9,33 +9,22 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - go
-  - golang
-  - spa
-  - tier-2
-  - backend
-  - tier-2
-  - backend
-  - tier-1
-  - backend
-  - tier-2
-  - backend
-  - tier-1
+    - golang
+    - gin
+    - backend
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-gin
     backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+    pipeline-studio/tier: "1"
+    pipeline-studio/tier-status: maintained
+    pipeline-studio/language: go
+    pipeline-studio/pattern: backend
+    pipeline-studio/port: "8080"
 spec:
   type: service
-  lifecycle: production
-  owner: platform-team
+  lifecycle: experimental
+  owner: group:platform-team
   system: pipeline-platform
   providesApis: []
   dependsOn: []
-  profile:
-    displayName: "Gin"
-  metadata:
-    tier: 1
-    tierStatus: maintained
-    language: go
-    pattern: backend
-    port: 8080

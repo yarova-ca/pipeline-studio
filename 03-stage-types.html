@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Stage Types — DevOps vs DevSecOps classification for all 44 pipeline stages across 6 phases.">
+<meta name="description" content="Stage Types — DevOps vs DevSecOps classification for all 44 pipeline stages across 6 pipeline segments.">
 <title>Stage Types — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -187,9 +187,11 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
   <a href="index.html" class="nav-hub">⌂ Hub</a>
   <details>
-    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -222,13 +224,22 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
+  </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
 <main id="main-content">
 <div class="page-header">
   <div class="page-title">Stage Types</div>
-  <div class="page-covers"><strong>What this covers:</strong> All 44 pipeline stages classified as DevOps or DevSecOps — who owns a failure, what the system does, what the team must do next.</div>
+  <div class="page-covers"><strong>What this covers:</strong> All 44 pipeline stages classified as DevOps or DevSecOps — who owns a failure when a stage fails.</div>
   <div class="page-when"><strong>When to read:</strong> A stage failed and you need to know who owns it. Understanding the difference between a workflow error and a security gate.</div>
   <div class="page-pillar">Pillar 4 — Pipeline &amp; Tools &nbsp;·&nbsp; Related: <a href="02-pipeline-schema.html">02 Pipeline schema</a> &nbsp;·&nbsp; <a href="04-tool-catalog.html">04 Tool catalog</a></div>
 </div>
@@ -428,7 +439,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
      REGISTRY
 ════════════════════════════════════════════════════════════ -->
 <h2 id="reg">Registry</h2>
-<div class="phase-sub">After Phase 3. Before any promotion. All three artifacts must be attached before promotion is allowed.</div>
+<div class="phase-sub">After Phase 3. Before any promotion. All three security artifacts (signature, SBOM, SLSA) must be attached before promotion is allowed.</div>
 
 <div class="tbl-wrap reg">
   <table class="stage-table">

@@ -42,6 +42,7 @@ jobs:
     needs: detect-changes
     if: github.event_name == 'pull_request' && needs.detect-changes.outputs.clusters != '[]'
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     strategy:
       matrix:
         cluster: ${{ fromJson(needs.detect-changes.outputs.clusters) }}
@@ -58,10 +59,19 @@ jobs:
       - name: Terraform init
         run: terraform init
         working-directory: infra/clusters/terraform/${{ matrix.cluster }}
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: infra/clusters/terraform/${{ matrix.cluster }}
       - name: Terraform plan
         id: plan
         run: terraform plan -no-color -out=tfplan 2>&1 | tee plan.txt
         working-directory: infra/clusters/terraform/${{ matrix.cluster }}
+      - name: Upload plan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-${{ matrix.cluster }}
+          path: infra/clusters/terraform/${{ matrix.cluster }}/tfplan
+          retention-days: 1
       - name: Post plan as PR comment
         uses: actions/github-script@v7
         with:
@@ -84,6 +94,7 @@ jobs:
     needs: detect-changes
     if: github.event_name == 'push' && needs.detect-changes.outputs.clusters != '[]'
     runs-on: ubuntu-24.04
+    timeout-minutes: 60
     strategy:
       matrix:
         cluster: ${{ fromJson(needs.detect-changes.outputs.clusters) }}
@@ -101,6 +112,14 @@ jobs:
       - name: Terraform init
         run: terraform init
         working-directory: infra/clusters/terraform/${{ matrix.cluster }}
+      - name: Terraform validate
+        run: terraform validate
+        working-directory: infra/clusters/terraform/${{ matrix.cluster }}
+      - name: Download plan artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan-${{ matrix.cluster }}
+          path: infra/clusters/terraform/${{ matrix.cluster }}
       - name: Terraform apply
-        run: terraform apply -auto-approve
+        run: terraform apply -input=false tfplan
         working-directory: infra/clusters/terraform/${{ matrix.cluster }}

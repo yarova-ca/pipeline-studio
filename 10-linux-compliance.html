@@ -223,6 +223,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -253,8 +254,18 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <details>
     <summary>Maintaining<span class="pillar-badge">7</span></summary>
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+<summary>GUIDES <span class="pillar-badge">6</span></summary>
+<a class="nav-link" href="00-getting-started.html">00 — Getting Started</a>
+<a class="nav-link" href="20-local-dev.html">20 — Local Dev</a>
+<a class="nav-link" href="21-build-axes.html">21 — Build Axes</a>
+<a class="nav-link" href="22-add-a-service.html">22 — Add a Service</a>
+<a class="nav-link" href="23-deployment.html">23 — Deployment</a>
+<a class="nav-link" href="24-debugging.html">24 — Debugging</a>
+</details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
@@ -276,9 +287,9 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <tbody>
       <tr>
         <td><strong>FIPS 140-2</strong></td>
-        <td class="picker-use">RHEL UBI 9 / CentOS Stream 9</td>
+        <td class="picker-use">RHEL UBI 9, Oracle Linux 9, Amazon Linux 2023</td>
         <td class="picker-avoid">Alpine (musl), Wolfi, Distroless</td>
-        <td>FIPS requires validated OpenSSL (FIPS object module). Alpine uses musl libc — no FIPS-validated crypto. RHEL ships OpenSSL 3.x with FIPS validation certificate.</td>
+        <td>FIPS requires validated OpenSSL (FIPS object module). Alpine uses musl libc — no FIPS-validated crypto. RHEL, Oracle Linux 9, and Amazon Linux 2023 ship OpenSSL 3.x with FIPS validation certificates. CentOS Stream 9 has no independent FIPS certificate.</td>
       </tr>
       <tr>
         <td><strong>FedRAMP High</strong></td>
@@ -771,6 +782,57 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   </div>
 </div>
 
+<div class="section-legend" style="border-color:#1a7f37;border-top:3px solid #1a7f37">
+  <strong>FIPS activation quick-reference</strong> — three distros rated <span class="c-yes">Yes</span> in Matrix 1
+  <details>
+    <summary><span class="sum-label">RHEL 9 / UBI 9 — enable FIPS mode</span></summary>
+    <div class="expand-content">
+      <p><strong>Step 1:</strong> Install the FIPS crypto policy package (if not already present).</p>
+      <div class="checklist-cmd">dnf install -y crypto-policies-scripts</div>
+      <p><strong>Step 2:</strong> Switch the system crypto policy to FIPS.</p>
+      <div class="checklist-cmd">fips-mode-setup --enable</div>
+      <p><strong>Step 3:</strong> Reboot to apply the kernel FIPS enforcing flag.</p>
+      <div class="checklist-cmd">reboot</div>
+      <p><strong>Verify after reboot:</strong></p>
+      <div class="checklist-cmd">fips-mode-setup --check</div>
+      <p><span class="checklist-pass">Pass: outputs "FIPS mode is enabled."</span></p>
+      <p><span class="checklist-fail">Fail: outputs "FIPS mode is disabled." — repeat Step 2 and reboot again.</span></p>
+      <p>Note: UBI 9 containers inherit FIPS mode from the host kernel. Run the above on the host, not inside the container.</p>
+    </div>
+  </details>
+  <details>
+    <summary><span class="sum-label">Ubuntu 22.04 / 24.04 LTS — enable FIPS mode (Ubuntu Pro required)</span></summary>
+    <div class="expand-content">
+      <p><strong>Prerequisite:</strong> Ubuntu Pro subscription required. Free tier available at ubuntu.com/pro.</p>
+      <p><strong>Step 1:</strong> Attach Ubuntu Pro to the instance.</p>
+      <div class="checklist-cmd">pro attach &lt;your-token&gt;</div>
+      <p><strong>Step 2:</strong> Enable the FIPS module.</p>
+      <div class="checklist-cmd">pro enable fips</div>
+      <p><strong>Step 3:</strong> Reboot to load the FIPS kernel and OpenSSL module.</p>
+      <div class="checklist-cmd">reboot</div>
+      <p><strong>Verify after reboot:</strong></p>
+      <div class="checklist-cmd">pro status</div>
+      <p><span class="checklist-pass">Pass: FIPS row shows "enabled".</span></p>
+      <p><span class="checklist-fail">Fail: FIPS row shows "disabled" — check that pro attach succeeded and token is valid.</span></p>
+    </div>
+  </details>
+  <details>
+    <summary><span class="sum-label">Amazon Linux 2023 — enable FIPS mode</span></summary>
+    <div class="expand-content">
+      <p><strong>Step 1:</strong> Enable FIPS via the kernel boot parameter.</p>
+      <div class="checklist-cmd">sudo grubby --update-kernel=ALL --args="fips=1"</div>
+      <p><strong>Step 2:</strong> If <code>/boot</code> is a separate partition, set the boot device UUID.</p>
+      <div class="checklist-cmd">sudo grubby --update-kernel=ALL --args="fips=1 boot=/dev/$(findmnt -n -o SOURCE /boot)"</div>
+      <p><strong>Step 3:</strong> Reboot to apply.</p>
+      <div class="checklist-cmd">reboot</div>
+      <p><strong>Verify after reboot:</strong></p>
+      <div class="checklist-cmd">cat /proc/sys/crypto/fips_enabled</div>
+      <p><span class="checklist-pass">Pass: outputs <code>1</code>.</span></p>
+      <p><span class="checklist-fail">Fail: outputs <code>0</code> — verify grubby command ran without error and reboot completed cleanly.</span></p>
+    </div>
+  </details>
+</div>
+
 <!-- ═══ MATRIX 2: INDUSTRY ═══ -->
 <h2 id="industry-matrix">Matrix 2 — Distro × Industry vertical</h2>
 <p class="section-sub">Which distros are primary or acceptable choices per vertical. Industry details: <a href="06-industry-schema.html">doc 06</a> (US) and <a href="07-canada-schema.html">doc 07</a> (Canada).</p>
@@ -949,39 +1011,39 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <table class="xref-table">
       <thead>
         <tr>
-          <th class="row-hd group-hd" rowspan="2">Distro</th>
-          <th class="group-hd" colspan="8">Frontend Web (all need Node.js build tools on CI runner)</th>
-          <th class="group-hd" colspan="5">Mobile</th>
-          <th class="group-hd" colspan="14">Backend</th>
+          <th class="row-hd group-hd" rowspan="2" scope="col">Distro</th>
+          <th class="group-hd" colspan="8" scope="colgroup">Frontend Web (all need Node.js build tools on CI runner)</th>
+          <th class="group-hd" colspan="5" scope="colgroup">Mobile</th>
+          <th class="group-hd" colspan="14" scope="colgroup">Backend</th>
         </tr>
         <tr>
-          <th title="SSR / Hybrid — Next.js, Nuxt, SvelteKit, Remix, Astro. Requires Node.js on CI runner for build. See 01-framework-catalog.html#ssr.">SSR</th>
-          <th title="CSR / SPA — React, Vue, Angular. Webpack or Vite build. Requires Node.js. See 01-framework-catalog.html.">CSR/SPA</th>
-          <th title="SSG — Gatsby, Eleventy, Hugo (Go). Node.js for JS-based; Go for Hugo. See 01-framework-catalog.html.">SSG</th>
-          <th title="Islands Architecture — Astro, Fresh. Node.js build. See 01-framework-catalog.html.">Islands</th>
-          <th title="Resumability — Qwik. Node.js build. See 01-framework-catalog.html.">Resumable</th>
-          <th title="Edge Rendering — Deno Deploy, Cloudflare Workers builds. Node.js or Deno on CI runner.">Edge</th>
-          <th title="Streaming SSR — React 18 Server Components, Next.js App Router. Node.js build.">Stream</th>
-          <th title="Micro-frontends — Module Federation (Webpack 5), Single-spa. Node.js build.">μFrontend</th>
-          <th title="Cross-platform JS — React Native, Expo. Node.js + Expo CLI on CI runner. iOS output still requires macOS for signing.">RN (JS)</th>
-          <th title="Cross-platform non-JS — Flutter/Dart. Dart SDK required on CI runner. Available on glibc distros; musl (Alpine) is not officially supported.">Flutter</th>
-          <th title="Native iOS — Swift/Objective-C + Xcode. REQUIRES macOS. No Linux distro can build or sign native iOS apps. All cells are N/A.">iOS</th>
-          <th title="Native Android — Kotlin/Java + Gradle + Android SDK. Runs on any distro that supports JVM. Same as JVM column.">Android</th>
-          <th title="Progressive Web App — Workbox, Vite PWA plugin. Node.js build. Same as SSG/CSR column.">PWA</th>
-          <th title="Node.js / Deno / Bun backend. Needs Node.js/Deno/Bun on CI runner.">Node</th>
-          <th title="Python — Django, Flask, FastAPI. pip + build tools on CI runner.">Python</th>
-          <th title="Go — statically linked by default. Minimal CI runner requirements.">Go</th>
-          <th title="Java — Maven or Gradle build. Requires JDK on CI runner.">Java</th>
-          <th title="Kotlin — Gradle build. Requires JDK on CI runner. Same as Java column.">Kotlin</th>
-          <th title=".NET / C# / ASP.NET Core. dotnet SDK on CI runner. Official Alpine support since .NET 8.">.NET</th>
-          <th title="Rust — cargo build. rustup install on all glibc distros. musl target available on Alpine.">Rust</th>
-          <th title="Elixir / Phoenix — mix build. Needs Erlang/OTP. Not in standard RHEL repos (requires EPEL or manual install).">Elixir</th>
-          <th title="Ruby — Bundler, rake. Available in package managers on all distros. Gems with C extensions need musl rebuild on Alpine.">Ruby</th>
-          <th title="PHP — Composer, phpunit. Available on all distros. PHP C extensions may need musl rebuild on Alpine.">PHP</th>
-          <th title="Swift — swift build. Official swift.org packages for Ubuntu 22.04 and 24.04. Manual install on other glibc distros. Not supported on musl (Alpine).">Swift</th>
-          <th title="Scala — sbt or Maven. Requires JDK. Same compat as Java column.">Scala</th>
-          <th title="Clojure — Leiningen or deps.edn. Requires JDK. Same compat as Java column.">Clojure</th>
-          <th title="C / C++ — gcc, g++, clang, cmake, make. Available on all distros except immutable OS and scratch. Alpine uses musl-based gcc.">C/C++</th>
+          <th title="SSR / Hybrid — Next.js, Nuxt, SvelteKit, Remix, Astro. Requires Node.js on CI runner for build. See 01-framework-catalog.html#ssr." scope="col">SSR</th>
+          <th title="CSR / SPA — React, Vue, Angular. Webpack or Vite build. Requires Node.js. See 01-framework-catalog.html." scope="col">CSR/SPA</th>
+          <th title="SSG — Gatsby, Eleventy, Hugo (Go). Node.js for JS-based; Go for Hugo. See 01-framework-catalog.html." scope="col">SSG</th>
+          <th title="Islands Architecture — Astro, Fresh. Node.js build. See 01-framework-catalog.html." scope="col">Islands</th>
+          <th title="Resumability — Qwik. Node.js build. See 01-framework-catalog.html." scope="col">Resumable</th>
+          <th title="Edge Rendering — Deno Deploy, Cloudflare Workers builds. Node.js or Deno on CI runner." scope="col">Edge</th>
+          <th title="Streaming SSR — React 18 Server Components, Next.js App Router. Node.js build." scope="col">Stream</th>
+          <th title="Micro-frontends — Module Federation (Webpack 5), Single-spa. Node.js build." scope="col">μFrontend</th>
+          <th title="Cross-platform JS — React Native, Expo. Node.js + Expo CLI on CI runner. iOS output still requires macOS for signing." scope="col">RN (JS)</th>
+          <th title="Cross-platform non-JS — Flutter/Dart. Dart SDK required on CI runner. Available on glibc distros; musl (Alpine) is not officially supported." scope="col">Flutter</th>
+          <th title="Native iOS — Swift/Objective-C + Xcode. REQUIRES macOS. No Linux distro can build or sign native iOS apps. All cells are N/A." scope="col">iOS</th>
+          <th title="Native Android — Kotlin/Java + Gradle + Android SDK. Runs on any distro that supports JVM. Same as JVM column." scope="col">Android</th>
+          <th title="Progressive Web App — Workbox, Vite PWA plugin. Node.js build. Same as SSG/CSR column." scope="col">PWA</th>
+          <th title="Node.js / Deno / Bun backend. Needs Node.js/Deno/Bun on CI runner." scope="col">Node</th>
+          <th title="Python — Django, Flask, FastAPI. pip + build tools on CI runner." scope="col">Python</th>
+          <th title="Go — statically linked by default. Minimal CI runner requirements." scope="col">Go</th>
+          <th title="Java — Maven or Gradle build. Requires JDK on CI runner." scope="col">Java</th>
+          <th title="Kotlin — Gradle build. Requires JDK on CI runner. Same as Java column." scope="col">Kotlin</th>
+          <th title=".NET / C# / ASP.NET Core. dotnet SDK on CI runner. Official Alpine support since .NET 8." scope="col">.NET</th>
+          <th title="Rust — cargo build. rustup install on all glibc distros. musl target available on Alpine." scope="col">Rust</th>
+          <th title="Elixir / Phoenix — mix build. Needs Erlang/OTP. Not in standard RHEL repos (requires EPEL or manual install)." scope="col">Elixir</th>
+          <th title="Ruby — Bundler, rake. Available in package managers on all distros. Gems with C extensions need musl rebuild on Alpine." scope="col">Ruby</th>
+          <th title="PHP — Composer, phpunit. Available on all distros. PHP C extensions may need musl rebuild on Alpine." scope="col">PHP</th>
+          <th title="Swift — swift build. Official swift.org packages for Ubuntu 22.04 and 24.04. Manual install on other glibc distros. Not supported on musl (Alpine)." scope="col">Swift</th>
+          <th title="Scala — sbt or Maven. Requires JDK. Same compat as Java column." scope="col">Scala</th>
+          <th title="Clojure — Leiningen or deps.edn. Requires JDK. Same compat as Java column." scope="col">Clojure</th>
+          <th title="C / C++ — gcc, g++, clang, cmake, make. Available on all distros except immutable OS and scratch. Alpine uses musl-based gcc." scope="col">C/C++</th>
         </tr>
       </thead>
       <tbody>
@@ -1098,7 +1160,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
           <td><span class="b-install">Install</span></td>
           <td><span class="b-install">Install</span></td>
           <td><span class="b-install">Install</span></td>
-          <td><span class="b-na">—</span></td>
+          <td><span class="b-install">Install</span></td>
           <td><span class="b-install">Install</span></td>
           <td><span class="b-install">Install</span></td>
           <td><span class="b-install">Install</span></td>
@@ -1687,19 +1749,19 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <table class="xref-table">
       <thead>
         <tr>
-          <th class="row-hd" title="Distro — same order as Matrix 1, 2, and 3">Distro</th>
-          <th title="Static HTML/CSS/JS files served by Nginx or Caddy. Output of SSG and CSR/SPA builds. Any distro with Nginx available is optimal.">Static web</th>
-          <th title="Node.js server-side rendering — Next.js, Nuxt, Remix, SvelteKit in SSR mode. Requires Node.js runtime in the container.">Node SSR</th>
-          <th title="Node.js / Deno / Bun API server. Requires Node.js runtime in the container.">Node API</th>
-          <th title="Python web servers — Gunicorn (WSGI), Uvicorn/Hypercorn (ASGI). Django, Flask, FastAPI, Starlette output.">Python WSGI/ASGI</th>
-          <th title="Single Go binary (CGO_ENABLED=0). Statically linked — no libc needed. Optimal on scratch or distroless/static.">Go binary</th>
-          <th title="JVM application — Spring Boot, Quarkus, Ktor, Play. Requires JRE in the container. Java, Kotlin, Scala, Clojure.">JVM app</th>
-          <th title=".NET / ASP.NET Core runtime. mcr.microsoft.com/dotnet/runtime official images for Alpine, Debian, Ubuntu, RHEL UBI.">.NET app</th>
-          <th title="Rust binary. Static musl build = runs on scratch. Dynamic glibc build = requires glibc distro.">Rust binary</th>
-          <th title="Elixir Phoenix or Erlang application. Requires Erlang VM runtime in the container.">Elixir/BEAM</th>
-          <th title="Ruby on Rails, Sinatra, Hanami. Requires Ruby runtime. Official ruby:alpine and ruby:slim images.">Ruby/Rails</th>
-          <th title="PHP-FPM + Nginx. Laravel, Symfony, WordPress. Official php:alpine and php:fpm-alpine images.">PHP-FPM</th>
-          <th title="Python + NVIDIA CUDA or AMD ROCm GPU runtime. PyTorch, TensorFlow model serving. CUDA requires glibc — Alpine (musl) is not supported by NVIDIA CUDA container images. Ubuntu is optimal for CUDA.">ML inference</th>
+          <th class="row-hd" title="Distro — same order as Matrix 1, 2, and 3" scope="col">Distro</th>
+          <th title="Static HTML/CSS/JS files served by Nginx or Caddy. Output of SSG and CSR/SPA builds. Any distro with Nginx available is optimal." scope="col">Static web</th>
+          <th title="Node.js server-side rendering — Next.js, Nuxt, Remix, SvelteKit in SSR mode. Requires Node.js runtime in the container." scope="col">Node SSR</th>
+          <th title="Node.js / Deno / Bun API server. Requires Node.js runtime in the container." scope="col">Node API</th>
+          <th title="Python web servers — Gunicorn (WSGI), Uvicorn/Hypercorn (ASGI). Django, Flask, FastAPI, Starlette output." scope="col">Python WSGI/ASGI</th>
+          <th title="Single Go binary (CGO_ENABLED=0). Statically linked — no libc needed. Optimal on scratch or distroless/static." scope="col">Go binary</th>
+          <th title="JVM application — Spring Boot, Quarkus, Ktor, Play. Requires JRE in the container. Java, Kotlin, Scala, Clojure." scope="col">JVM app</th>
+          <th title=".NET / ASP.NET Core runtime. mcr.microsoft.com/dotnet/runtime official images for Alpine, Debian, Ubuntu, RHEL UBI." scope="col">.NET app</th>
+          <th title="Rust binary. Static musl build = runs on scratch. Dynamic glibc build = requires glibc distro." scope="col">Rust binary</th>
+          <th title="Elixir Phoenix or Erlang application. Requires Erlang VM runtime in the container." scope="col">Elixir/BEAM</th>
+          <th title="Ruby on Rails, Sinatra, Hanami. Requires Ruby runtime. Official ruby:alpine and ruby:slim images." scope="col">Ruby/Rails</th>
+          <th title="PHP-FPM + Nginx. Laravel, Symfony, WordPress. Official php:alpine and php:fpm-alpine images." scope="col">PHP-FPM</th>
+          <th title="Python + NVIDIA CUDA or AMD ROCm GPU runtime. PyTorch, TensorFlow model serving. CUDA requires glibc — Alpine (musl) is not supported by NVIDIA CUDA container images. Ubuntu is optimal for CUDA." scope="col">ML inference</th>
         </tr>
       </thead>
       <tbody>
@@ -2042,7 +2104,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   </div>
   <div class="tbl-foot">
     <span>scratch: Go (CGO_ENABLED=0) and Rust static binary only — no libc, no shell, zero packages</span>
-    <span>Distroless: language-specific variants available — use gcr.io/distroless/nodejs, /python3, /java17, /static</span>
+    <span>Distroless: language-specific variants available — use gcr.io/distroless/nodejs, /python3, /java21-debian12, /static</span>
     <span>ML inference: Ubuntu 22.04 and 24.04 are optimal — official NVIDIA CUDA container images are glibc / Ubuntu-based; Alpine (musl) is not supported</span>
     <span>K8s node OS (Flatcar, Talos, Bottlerocket, Google COS): deploy containers on these nodes, not as them</span>
   </div>
@@ -2206,7 +2268,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
           <td style="font-size:11px"><code>ubuntu:24.04</code></td>
           <td style="font-size:11px"><code style="font-size:9px">mcr.microsoft.com/dotnet/aspnet:8.0-alpine</code></td>
           <td style="text-align:center"><span class="p-multi">Multi-stage</span></td>
-          <td style="font-size:11px;text-align:left;padding-left:8px"><code>dotnet publish -c Release</code>. Alpine .NET runtime = small image. FIPS required: use <code style="font-size:9px">mcr.microsoft.com/dotnet/aspnet:8.0-cbl-mariner2.0-fips</code>.</td>
+          <td style="font-size:11px;text-align:left;padding-left:8px"><code>dotnet publish -c Release</code>. Alpine .NET runtime = small image. FIPS required: use <code style="font-size:9px">mcr.microsoft.com/dotnet/aspnet:8.0-azurelinux3.0-fips</code>.</td>
         </tr>
         <tr>
           <td class="row-label"><a href="01-framework-catalog.html">Rust</a><br><small>Actix-web, Axum, Rocket</small></td>

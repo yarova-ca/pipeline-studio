@@ -14,7 +14,9 @@ import (
 	"github.com/google/uuid"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/yarova-ca/16-gin/internal/db"
+	complianceActive "github.com/yarova-ca/16-gin/internal/compliance/active"
+	obsActive "github.com/yarova-ca/16-gin/internal/observability/active"
+	dbActive "github.com/yarova-ca/16-gin/internal/db/active"
 	"github.com/yarova-ca/16-gin/internal/routes"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -39,6 +41,9 @@ func SecurityHeaders() gin.HandlerFunc {
 		c.Header("X-Content-Type-Options", "nosniff")
 		c.Header("X-XSS-Protection", "1; mode=block")
 		c.Header("Referrer-Policy", "strict-origin-when-cross-origin")
+		if os.Getenv("IS_PRODUCTION") == "true" {
+			c.Header("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+		}
 		c.Next()
 	}
 }
@@ -92,19 +97,29 @@ func main() {
 
 	// OpenTelemetry — guarded by OTEL_ENABLED=true.
 	ctx := context.Background()
-	shutdown := initOTel(ctx)
-	defer shutdown(ctx) //nolint:errcheck
+	initOTel(ctx)
+
+	// Observability axis — initialised after engine is created below.
+	// shutdown is assigned after buildRouter() so obsActive.Init receives r.
+
+	// JWT_SECRET startup validation — fail fast before accepting requests.
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if len(jwtSecret) < 32 {
+		log.Fatalf("FATAL: JWT_SECRET missing or shorter than 32 chars")
+	}
 
 	// Connect to the database when DATABASE_URL is set.
 	// Skip silently in environments that have not configured a database
 	// (e.g. the health-only dev mode).
 	if os.Getenv("DATABASE_URL") != "" {
-		if err := db.InitDB(); err != nil {
+		if err := dbActive.InitDB(); err != nil {
 			log.Fatalf("db init: %v", err)
 		}
 	}
 
 	r := buildRouter()
+	shutdown := obsActive.Init(r)
+	defer shutdown(ctx) //nolint:errcheck
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -189,12 +204,12 @@ func buildRouter() *gin.Engine {
 	// Returns 503 when the database is unreachable so k8s removes the pod
 	// from the load balancer until the connection recovers.
 	r.GET("/health/ready", func(c *gin.Context) {
-		if db.GetDBOrNil() == nil {
+		if dbActive.GetDBOrNil() == nil {
 			// No database configured — treat as ready (dev mode).
 			c.JSON(http.StatusOK, gin.H{"status": "ok", "db": "not configured"})
 			return
 		}
-		if err := db.GetDB().Exec("SELECT 1").Error; err != nil {
+		if err := dbActive.Ping(); err != nil {
 			slog.Error("health/ready db check failed", "err", err)
 			c.JSON(http.StatusServiceUnavailable, gin.H{"status": "error", "db": "disconnected"})
 			return
@@ -208,6 +223,9 @@ func buildRouter() *gin.Engine {
 
 	// OpenAPI docs — served from docs/swagger.json.
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// Compliance axis — applies any compliance-variant middleware/routes.
+	complianceActive.Apply(r)
 
 	return r
 }

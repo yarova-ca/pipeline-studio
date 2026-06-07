@@ -5,7 +5,7 @@ resources:
   - ../../base
 images:
   - name: ghcr.io/yarova-ca/14-express
-    newTag: "latest"
+    newTag: "" # Injected by CI: kustomize edit set image ghcr.io/yarova-ca/14-express=ghcr.io/yarova-ca/14-express:$GIT_SHA
 patches:
   - target:
       kind: Deployment

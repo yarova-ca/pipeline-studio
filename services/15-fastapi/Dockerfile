@@ -22,10 +22,27 @@ FROM ${BUILD_BASE} AS base-custom
 
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
-COPY requirements.txt ./
-RUN python3 -m venv /venv \
- && /venv/bin/pip install --no-cache-dir --upgrade pip \
- && /venv/bin/pip install --no-cache-dir -r requirements.txt
+ARG PKG_MGR=pip
+COPY requirements.txt* pyproject.toml* poetry.lock* uv.lock* ./
+COPY . .
+ARG COMPLIANCE=standard
+COPY src/compliance/${COMPLIANCE}/ ./src/compliance/active/
+ARG OBSERVABILITY=none
+COPY src/observability/${OBSERVABILITY}/ ./src/observability/active/
+ARG AUTH=all
+COPY src/auth/${AUTH}/ ./src/auth/active/
+ARG ORM=sqlalchemy
+COPY src/db/${ORM}/ ./src/db/active/
+RUN if [ "${COMPLIANCE}" = "fips" ] && [ "${RUNTIME}" != "fips" ]; then \
+      echo "ERROR: COMPLIANCE=fips requires RUNTIME=fips"; exit 1; fi
+ARG PKG_MGR
+RUN set -eux; python3 -m venv /venv; /venv/bin/pip install --no-cache-dir --upgrade pip; \
+  case "${PKG_MGR}" in \
+    pip)    /venv/bin/pip install --no-cache-dir -r requirements.txt ;; \
+    poetry) /venv/bin/pip install --no-cache-dir poetry && VIRTUAL_ENV=/venv /venv/bin/poetry install --no-root --only main ;; \
+    uv)     /venv/bin/pip install --no-cache-dir uv && VIRTUAL_ENV=/venv /venv/bin/uv sync --no-dev --frozen ;; \
+    *)      echo "Unknown PKG_MGR: ${PKG_MGR}" && exit 1 ;; \
+  esac
 RUN printf 'root:x:0:0:root:/root:/bin/sh\nnobody:x:65534:65534:nobody:/nonexistent:/bin/false\napp:x:1001:1001::/home/app:/sbin/nologin\n' > /tmp/app-passwd \
  && printf 'root:x:0:\nnobody:x:65534:\napp:x:1001:\n' > /tmp/app-group
 
@@ -46,7 +63,9 @@ USER 1001
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/live')" || exit 1
-
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080"]
 
 # ── Runtime — FIPS ────────────────────────────────────────────────────────
@@ -61,4 +80,7 @@ USER 1001
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/live')" || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 CMD ["/venv/bin/uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080"]

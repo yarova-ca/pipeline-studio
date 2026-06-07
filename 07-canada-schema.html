@@ -207,6 +207,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -237,7 +238,17 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <details>
     <summary>Maintaining<span class="pillar-badge">7</span></summary>
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
   </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
@@ -245,11 +256,10 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 <main id="main-content">
 <div class="page-header">
   <div class="page-title">Canada Industry Schema</div>
-  <div class="page-covers"><strong>What this covers:</strong> 73 Canadian industries — provincial regulators, PIPEDA/OSFI/FINTRAC compliance, OCAP® data sovereignty, Protected B classification, GC PBMM notes. 13 provinces/territories. 14 major tech hubs.</div>
+  <div class="page-covers"><strong>What this covers:</strong> 73 Canadian industries — provincial regulators, PIPEDA/OSFI/FINTRAC compliance, OCAP® data sovereignty, Protected B classification, GC PBMM tags. 13 provinces/territories. 14 major tech hubs.</div>
   <div class="page-when"><strong>When to read:</strong> Adapting a pipeline for a Canadian regulated industry. Picking the right compliance standards for a Canadian client.</div>
   <div class="page-pillar">Pillar 6 — Industry Verticals &nbsp;·&nbsp; Related: <a href="08-canada-market.html">08 Canada market</a> &nbsp;·&nbsp; <a href="14-canada-industry-catalog.html">14 Canada catalog</a></div>
 </div>
-<div class="page-title">Canada Industry Schema</div>
 <div class="page-meta">73 industries · 13 provinces/territories · 14 major hubs · 10 columns per row &nbsp;·&nbsp; verified 2026-05-26</div>
 
 <h2 id="canada-vs-us">Canada-specific regulations — why they differ from US</h2>
@@ -299,6 +309,40 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div><strong>User sees:</strong> Authorization to Operate (ATO) withheld. System cannot go live.</div>
   <div><strong>User can:</strong> Remediate missing controls and resubmit for SA&amp;A review.</div>
   <div><strong>To restore:</strong> CIO signoff required before relaunch. Timeline: 4–12 weeks depending on control gaps.</div>
+</div>
+
+<h2 id="ocap">OCAP® — First Nations data sovereignty</h2>
+<div class="section-sub">OCAP® is a set of principles governing how First Nations data is collected, protected, used, and shared. It is not a compliance framework — it is a self-determination principle with legal weight in funding agreements and policy.</div>
+
+<div class="why-block">
+  <strong>What OCAP® stands for:</strong><br>
+  Ownership — a community or group owns information collectively in the same way an individual owns their personal information.<br>
+  Control — First Nations people, their communities, and their governing bodies must retain control over all aspects of research and information management.<br>
+  Access — First Nations must have access to information and data about themselves and their communities.<br>
+  Possession — the physical control of data is the mechanism through which Ownership and Control can be asserted.
+</div>
+
+<div class="why-block">
+  <strong>Source and authority:</strong><br>
+  Principles developed and maintained by FNIGC (First Nations Information Governance Centre).<br>
+  Not enacted as federal statute — applies through: ISC funding agreement conditions, institutional research ethics boards, and TCPS 2 guidance for research involving First Nations.
+</div>
+
+<div class="why-block">
+  <strong>Which pipeline stages OCAP® affects:</strong><br>
+  Data collection stage: consent must come from the community governing body, not only from individuals.<br>
+  Storage stage: data must reside on community-controlled infrastructure or in storage the community has expressly authorized.<br>
+  Access controls stage: access must be restricted to authorized community members and approved external researchers.<br>
+  Deletion/retention stage: data lifecycle decisions require community governance approval, not just system-operator discretion.
+</div>
+
+<div class="failure-block">
+  <div><strong>If service deploys without OCAP® compliance for Indigenous community data:</strong></div>
+  <div><strong>Trigger:</strong> System stores, processes, or shares First Nations data without community-level consent or control mechanisms.</div>
+  <div><strong>System:</strong> FNIGC or band council identifies the non-compliant data handling. ISC funding agreement breach possible.</div>
+  <div><strong>User sees:</strong> Community may withdraw consent for data use. ISC may require remediation before continued funding.</div>
+  <div><strong>User can:</strong> Engage FNIGC and the affected band council to establish a Data Governance Agreement before continuing.</div>
+  <div><strong>To restore:</strong> Data Governance Agreement signed. Community-controlled access controls implemented. Community approves revised data architecture.</div>
 </div>
 
 <div class="counts-bar">

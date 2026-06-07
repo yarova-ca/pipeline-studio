@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Pipeline Invariants — 25 conditions that must always hold across all 6 phases. Security, Compliance, and Process controls.">
+<meta name="description" content="Pipeline Invariants — 25 conditions across Phase 0 through Phase 3, Registry, and Promotions. 12 Security, 5 Compliance, 8 Process controls.">
 <title>Pipeline Invariants — Pipeline Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -164,7 +164,6 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .failure-block div:last-child{margin-bottom:0}
 
 /* ── Dual-audience sections ── */
-.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
 .audience-card{border-radius:8px;padding:16px;font-size:12px}
 .audience-new{background:#e8f4fd;border:1px solid #90caf9}
 .audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
@@ -175,12 +174,6 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 .qr-table tr:last-child td{border-bottom:none}
 .qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
 .checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
-.checklist-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
-.checklist-item input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
-.checklist-cmd{font-family:monospace;background:var(--bg3);padding:4px 8px;border-radius:4px;font-size:11px;margin:4px 0}
-.checklist-pass{font-size:11px;color:var(--green);margin-top:2px}
-.checklist-fail{font-size:11px;color:var(--red);margin-top:2px}
-@media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
 @media(prefers-color-scheme:dark){
   .audience-new{background:#0d2744;border-color:#1565c0}
   .audience-new .audience-label{color:#90caf9}
@@ -197,9 +190,11 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
   <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
   <a href="index.html" class="nav-hub">⌂ Hub</a>
   <details>
-    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
     <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
     <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
   </details>
   <details>
     <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
@@ -232,6 +227,15 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
     <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
     <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
   </details>
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
+  </details>
   <a href="#main-content" class="nav-top">↑ Back to top</a>
 </nav>
 
@@ -250,7 +254,7 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </div>
 
 <div class="failure-block">
-  <div><strong>If Invariant INV-SEC-01 is violated (SAST runs after Build):</strong></div>
+  <div><strong>If Invariant <a href="#I-P2-2">I-P2-2</a> is violated (SAST runs after Build):</strong></div>
   <div><strong>Trigger:</strong> Pipeline YAML places the CodeQL step after the docker build step in the same job or later job.</div>
   <div><strong>System:</strong> Pipeline linter (checkov on the workflow file) fails at Phase 0 Bootstrap. The pipeline cannot start.</div>
   <div><strong>User sees:</strong> Bootstrap check "Pipeline ordering" fails — "SAST must precede Build. Found: Build at step 3, SAST at step 5."</div>
@@ -258,14 +262,13 @@ nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-col
 </div>
 
 <div class="failure-block">
-  <div><strong>If Invariant INV-SEC-03 is violated (unsigned image reaches registry):</strong></div>
+  <div><strong>If Invariant <a href="#I-P0-4">I-P0-4</a> is violated (unsigned image reaches registry):</strong></div>
   <div><strong>Trigger:</strong> An image is pushed to the registry without a cosign signature attached (sign step missing or failed silently).</div>
   <div><strong>System:</strong> Kyverno admission policy blocks deployment. The pod spec is rejected at the Kubernetes API server. No container starts.</div>
   <div><strong>User sees:</strong> kubectl apply returns — "admission webhook denied the request: image signature verification failed."</div>
   <div><strong>User can:</strong> Re-run Phase 3 with the sign step present and successful, then re-push the image and re-apply the manifest.</div>
 </div>
 
-<div class="page-title">Pipeline Invariants</div>
 <div class="page-meta">25 conditions that must always hold. Violation = pipeline broken — build must stop or never reach the next stage. &nbsp;·&nbsp; verified 2026-05-26</div>
 
 <!-- Summary counts bar -->

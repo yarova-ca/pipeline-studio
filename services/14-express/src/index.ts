@@ -1,5 +1,7 @@
 // tracing.js must be the very first import — OTel patches modules at load time.
 import './tracing.js'
+import './observability/active/index.js'
+import { applyCompliance } from './compliance/active/index.js'
 import { setupSwagger } from './swagger.js'
 import express, { type Request, type Response, type NextFunction } from 'express'
 import helmet from 'helmet'
@@ -10,7 +12,7 @@ import { randomUUID } from 'node:crypto'
 import { setTimeout as nodeSetTimeout } from 'node:timers'
 import 'dotenv/config'
 import { logger } from './logger.js'
-import { prisma } from './db/client.js'
+import { db } from './db/active/index.js'
 import { dbCircuitBreaker } from './middleware/circuit-breaker.js'
 import authRouter from './routes/auth.js'
 import usersRouter from './routes/users.js'
@@ -110,6 +112,9 @@ app.use((req, res, next) => {
   next()
 })
 
+// ── Compliance axis ────────────────────────────────────────────────────────
+applyCompliance(app)
+
 // ── Base routes ────────────────────────────────────────────────────────────
 app.get('/', (_req, res) => {
   res.json({ message: 'Hello from Express 5.0', framework: '14-express', version: '1.0.0' })
@@ -129,7 +134,7 @@ app.get('/health/live', (_req, res) => {
 // Circuit breaker: fast-fail with 'circuit-open' status when DB is recovering.
 app.get('/health/ready', async (_req, res) => {
   try {
-    await dbCircuitBreaker.execute(() => prisma.$queryRaw`SELECT 1`)
+    await dbCircuitBreaker.execute(() => db.ping())
     res.json({ status: 'ok', db: 'connected' })
   } catch (err: any) {
     res.status(503).json({
@@ -177,7 +182,7 @@ const shutdown = async (signal: string): Promise<void> => {
   server.close(async () => {
     logger.info('http_server_closed')
     try {
-      await prisma.$disconnect()
+      await db.disconnect()
       logger.info('db_disconnected')
     } catch (err) {
       logger.error({ err }, 'db_disconnect_error')
@@ -194,5 +199,14 @@ const shutdown = async (signal: string): Promise<void> => {
 
 process.on('SIGTERM', () => shutdown('SIGTERM'))
 process.on('SIGINT', () => shutdown('SIGINT'))
+
+process.on("uncaughtException", (err) => {
+  logger.fatal({ err }, "uncaughtException");
+  process.exit(1);
+});
+process.on("unhandledRejection", (reason) => {
+  logger.fatal({ reason }, "unhandledRejection");
+  process.exit(1);
+});
 
 export default app

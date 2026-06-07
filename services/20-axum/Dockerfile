@@ -48,6 +48,11 @@ COPY --from=build /tmp/app-group /etc/group
 COPY --from=build /app/target/x86_64-unknown-linux-musl/release/20-axum /app
 USER 1001
 EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD ["/app", "-health-check"]
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 ENTRYPOINT ["/app"]
 
 # ── Runtime — FIPS ────────────────────────────────────────────────────────
@@ -56,9 +61,12 @@ COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /tmp/app-passwd /etc/passwd
 COPY --from=build /tmp/app-group /etc/group
 COPY --from=build /app/target/x86_64-unknown-linux-musl/release/20-axum /usr/local/bin/app
+RUN microdnf install -y curl && microdnf clean all
 USER 1001
 EXPOSE 8080
-
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD curl -f http://localhost:8080/health/live || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 ENTRYPOINT ["/usr/local/bin/app"]

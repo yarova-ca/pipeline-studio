@@ -1,0 +1,2744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>21 — Build Axes | Pipeline Studio</title>
+<meta name="description" content="Complete reference for all 8 Docker build args. What each arg does, every valid value, example commands, and what changes in the built image.">
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d0d7de;--text:#1f2328;--text-dim:#656d76;--text-head:#1f2328;
+  --blue:#0969da;--green:#1a7f37;--amber:#7a4f00;--purple:#6f42c1;--red:#b91c1c;
+  --sidebar-w:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;
+  background:var(--bg);color:var(--text);line-height:1.5;display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);
+  border-right:1px solid var(--border);padding:16px 0;position:sticky;top:0;height:100vh;
+  overflow-y:auto;flex-shrink:0}
+nav a{display:block;padding:5px 16px;font-size:12px;color:var(--text-dim);text-decoration:none;
+  transition:color .12s,background .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text);background:var(--bg3)}
+nav a[aria-current]{color:var(--blue);font-weight:600;background:var(--bg3)}
+.nav-top{color:var(--text-dim)!important;margin-top:8px;border-top:1px solid var(--border)}
+main{flex:1;padding:24px 32px;max-width:1100px;overflow-x:auto}
+h1{font-size:20px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+.page-meta{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+h2{font-size:15px;font-weight:700;color:var(--text-head);margin:32px 0 6px;
+  padding-top:10px;border-top:2px solid var(--border)}
+h3{font-size:13px;font-weight:700;color:var(--text-head);margin:18px 0 6px}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:12px}
+p{margin-bottom:8px;font-size:13px;line-height:1.6}
+
+/* Warn / note blocks */
+.warn-block{background:#fff8c5;border:1px solid #e8d064;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.warn-block strong{color:var(--amber)}
+.note-block{background:#dbeeff;border:1px solid #b6d7f5;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.note-block strong{color:var(--blue)}
+
+/* Code blocks */
+pre.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  padding:12px 16px;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  overflow-x:auto;line-height:1.7;margin:8px 0}
+code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+
+/* Table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:12px}
+.xref-table,.qr-table{width:100%;border-collapse:collapse;font-size:12px}
+.xref-table th,.qr-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
+  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap}
+.xref-table td,.qr-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.xref-table tr:last-child td,.qr-table tr:last-child td{border-bottom:none}
+.xref-table tr:hover td,.qr-table tr:hover td{background:var(--bg2)}
+
+/* Diagram */
+.diagram-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:20px 24px;margin:12px 0;font-family:"SFMono-Regular",Consolas,monospace;
+  font-size:12px;line-height:2;color:var(--text-dim)}
+.diagram-box .d-highlight{color:var(--blue);font-weight:600}
+.diagram-box .d-arrow{color:var(--text-dim)}
+
+/* Step list */
+.steps-list{list-style:none;padding:0;margin:0 0 12px}
+.steps-list li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}
+.steps-list li:last-child{border-bottom:none}
+.step-num{min-width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px}
+.step-body{flex:1}
+.step-cmd{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:3px 8px;margin-top:3px;white-space:pre-wrap;word-break:break-all}
+.step-why{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}
+
+/* Decision block */
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+
+/* Failure block */
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.failure-label{font-weight:700;color:var(--red);margin-bottom:6px}
+
+/* Gotcha block */
+.gotcha-block{background:#fffbeb;border-left:3px solid #d97706;padding:10px 14px;margin:8px 0;font-size:12px;border-radius:0 4px 4px 0}
+.gotcha-block strong{color:var(--amber)}
+
+/* Section accent */
+.section-accent-blue{border-top-color:var(--blue)}
+.section-accent-green{border-top-color:var(--green)}
+.section-accent-amber{border-top-color:var(--amber)}
+.section-accent-purple{border-top-color:var(--purple)}
+
+/* Pillar badge / nav */
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;
+  color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;
+  display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);
+  background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.nav-logo{padding:0 16px 14px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.page-title{font-size:24px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+
+/* Why block */
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+
+/* Checklist */
+.checklist{list-style:none;padding:0;margin:0 0 12px}
+.checklist li{display:flex;gap:8px;align-items:flex-start;padding:5px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}
+.checklist li:last-child{border-bottom:none}
+
+/* Axis detail card */
+.axis-card{border:1px solid var(--border);border-radius:8px;margin-bottom:16px;overflow:hidden}
+.axis-card-header{background:var(--bg2);padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.axis-tag{font-size:10px;font-weight:700;background:var(--blue);color:#fff;border-radius:3px;padding:2px 8px;font-family:"SFMono-Regular",Consolas,monospace;letter-spacing:.04em}
+.axis-name{font-weight:700;font-size:13px;flex:1}
+.axis-default{font-size:11px;color:var(--text-dim);background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 8px}
+.axis-applies{font-size:10.5px;color:var(--text-dim)}
+.axis-card-body{padding:16px}
+
+/* Value row */
+.value-row{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.value-row:last-child{border-bottom:none}
+.value-name{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;font-weight:600;color:var(--blue);min-width:90px;padding-top:1px}
+.value-desc{flex:1;color:var(--text-dim);line-height:1.6}
+
+/* Middleware spec card */
+.mw-card{border:1px solid var(--border);border-radius:6px;margin-bottom:12px;overflow:hidden}
+.mw-card-header{background:var(--bg2);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.mw-badge{font-size:10px;font-weight:700;border-radius:3px;padding:2px 8px;font-family:"SFMono-Regular",Consolas,monospace}
+.mw-badge-standard{background:#e8f5e9;color:#1a7f37;border:1px solid #86efac}
+.mw-badge-hipaa{background:#fff3e0;color:#e65100;border:1px solid #ffcc80}
+.mw-badge-pci{background:#fce4ec;color:#b71c1c;border:1px solid #ef9a9a}
+.mw-badge-pipeda{background:#e3f2fd;color:#0d47a1;border:1px solid #90caf9}
+.mw-badge-fips{background:#f3e5f5;color:#6a1b9a;border:1px solid #ce93d8}
+.mw-badge-soc2{background:#e8eaf6;color:#283593;border:1px solid #9fa8da}
+.mw-badge-cmmc{background:#efebe9;color:#3e2723;border:1px solid #bcaaa4}
+.mw-badge-nerc{background:#e0f7fa;color:#006064;border:1px solid #80deea}
+.mw-badge-none{background:var(--bg3);color:var(--text-dim);border:1px solid var(--border)}
+.mw-badge-otel{background:#e8f5e9;color:#1a7f37;border:1px solid #86efac}
+.mw-badge-prometheus{background:#fff3e0;color:#e65100;border:1px solid #ffcc80}
+.mw-badge-datadog{background:#f3e5f5;color:#6a1b9a;border:1px solid #ce93d8}
+.mw-card-body{padding:14px 16px}
+.mw-card-body p{font-size:12px;color:var(--text-dim);margin-bottom:6px}
+.mw-step{display:flex;gap:8px;align-items:flex-start;padding:4px 0;font-size:12px}
+.mw-step-num{min-width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.mw-step-body{flex:1;color:var(--text-dim);line-height:1.6}
+
+/* Lang tabs */
+.lang-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:0}
+.lang-tab{padding:6px 14px;font-size:11px;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;user-select:none}
+.lang-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* Image contents list */
+.image-contents{border:1px solid var(--green);border-radius:6px;background:#f0fdf4;padding:12px 16px;margin:10px 0;font-size:12px}
+.image-contents strong{color:var(--green)}
+.image-row{display:flex;align-items:flex-start;gap:8px;padding:3px 0;font-size:12px}
+.image-path{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;color:var(--blue);min-width:220px}
+.image-what{color:var(--text-dim)}
+
+/* Axis index quick-jump */
+.axis-index{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.axis-index a{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;font-weight:600;
+  background:var(--bg2);border:1px solid var(--border);border-radius:4px;
+  padding:4px 10px;text-decoration:none;color:var(--blue)}
+.axis-index a:hover{background:var(--bg3)}
+
+/* Counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.c1{border-left:3px solid var(--blue)}.c1 .chip-num{color:var(--blue)}
+.c2{border-left:3px solid var(--green)}.c2 .chip-num{color:var(--green)}
+.c3{border-left:3px solid var(--amber)}.c3 .chip-num{color:var(--amber)}
+.c4{border-left:3px solid var(--purple)}.c4 .chip-num{color:var(--purple)}
+
+/* Component group heading */
+.comp-group-heading{font-size:14px;font-weight:700;color:var(--text-head);margin:28px 0 10px;
+  padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  border-left:3px solid var(--blue)}
+
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#e6edf3;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--purple:#bc8cff;--red:#f85149;
+  }
+  .warn-block{background:#2d2100;border-color:#4a3800}
+  .note-block{background:#0d2744;border-color:#2d4a6a}
+  .decision-block{background:#0d2b15;border-color:#238636}
+  .failure-block{background:#2d0a0a;border-color:#8b1a1a}
+  .gotcha-block{background:#2d1f00;border-color:#d97706}
+  .why-block{background:#2d1f00;border-color:#d97706}
+  .diagram-box{background:#161b22;border-color:#30363d}
+  .image-contents{background:#0d2b15;border-color:#238636}
+  .mw-badge-standard{background:#052e16;color:#86efac;border-color:#166534}
+  .mw-badge-hipaa{background:#2d1400;color:#fb923c;border-color:#92400e}
+  .mw-badge-pci{background:#2d0a0a;color:#fca5a5;border-color:#7f1d1d}
+  .mw-badge-pipeda{background:#0d2744;color:#93c5fd;border-color:#1d4ed8}
+  .mw-badge-fips{background:#2d0a2d;color:#d8b4fe;border-color:#7e22ce}
+  .mw-badge-soc2{background:#1a1a2e;color:#a5b4fc;border-color:#3730a3}
+  .mw-badge-cmmc{background:#1c1a18;color:#d6d3d1;border-color:#57534e}
+  .mw-badge-nerc{background:#002b2d;color:#67e8f9;border-color:#155e75}
+  .mw-badge-none{background:var(--bg3);color:var(--text-dim);border-color:var(--border)}
+  .mw-badge-otel{background:#052e16;color:#86efac;border-color:#166534}
+  .mw-badge-prometheus{background:#2d1400;color:#fb923c;border-color:#92400e}
+  .mw-badge-datadog{background:#2d0a2d;color:#d8b4fe;border-color:#7e22ce}
+}
+@media print{
+  nav{display:none}
+  main{max-width:100%;padding:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR NAV ═══ -->
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">⌂ Hub</a>
+  <details>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+  </details>
+  <details>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details>
+    <summary>Maintaining<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Runbook</a>
+    <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details open>
+    <summary>Guides<span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 Getting started</a>
+    <a href="20-local-dev.html" class="nav-link">20 Local dev</a>
+    <a href="21-build-axes.html" class="nav-link" aria-current="page">21 Build axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 Add a service</a>
+    <a href="23-deployment.html" class="nav-link">23 Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 Debugging</a>
+  </details>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main id="main-content">
+
+<div class="page-header">
+  <div class="page-title">21 — Build Axes</div>
+  <div class="page-covers"><strong>What this covers:</strong> Complete reference for all 8 Docker build args. What each arg does, every valid value, example commands, and what changes in the built image.</div>
+  <div class="page-when"><strong>When to read:</strong> When building a service with non-default settings. When auditing what a service includes. When adding compliance or observability to a new service.</div>
+  <div class="page-pillar">Guide · Related: <a href="11-dockerfile-catalog.html">11 Dockerfile catalog</a> · <a href="12-compliance-variations.html">12 Compliance variations</a> · <a href="17-feature-matrix.html">17 Feature matrix</a></div>
+</div>
+
+<!-- ═══ QUICK-JUMP INDEX ═══ -->
+<div class="axis-index">
+  <a href="#axis-build-image">BUILD_IMAGE</a>
+  <a href="#axis-runtime">RUNTIME</a>
+  <a href="#axis-pkg-mgr">PKG_MGR</a>
+  <a href="#axis-build-tool">BUILD_TOOL</a>
+  <a href="#axis-compliance">COMPLIANCE</a>
+  <a href="#axis-observability">OBSERVABILITY</a>
+  <a href="#axis-auth">AUTH</a>
+  <a href="#axis-orm">ORM</a>
+</div>
+
+<!-- ═══ STAT CHIPS ═══ -->
+<div class="counts-bar">
+  <div class="count-chip c1"><span class="chip-num">8</span><span class="chip-label">Build axes<br>total</span></div>
+  <div class="count-chip c2"><span class="chip-num">9</span><span class="chip-label">Languages<br>BUILD_IMAGE</span></div>
+  <div class="count-chip c3"><span class="chip-num">8</span><span class="chip-label">Compliance<br>values</span></div>
+  <div class="count-chip c4"><span class="chip-num">4</span><span class="chip-label">Observability<br>values</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 1 — HOW BUILD AXES WORK
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-blue" id="how-they-work">1. How build axes work</h2>
+<p>Every service Dockerfile declares 8 <code class="ic">ARG</code> directives near the top of the file.</p>
+<p>Each <code class="ic">ARG</code> has a default value — a plain <code class="ic">docker build .</code> uses all defaults.</p>
+<p>Passing <code class="ic">--build-arg AXIS=VALUE</code> overrides that axis only. All other axes keep their defaults.</p>
+
+<div class="note-block">
+  <strong>Note:</strong> Axes are independent. Combine any values. <code class="ic">COMPLIANCE=hipaa OBSERVABILITY=prometheus AUTH=jwt</code> is valid. No axis constrains another, with one exception: <code class="ic">COMPLIANCE=fips</code> requires <code class="ic">RUNTIME=fips</code> — the build guard enforces this and exits with an error if they mismatch.
+</div>
+
+<h3>What happens during a build</h3>
+<ol class="steps-list">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      <strong>Docker resolves all 8 ARG values</strong> — either from <code class="ic">--build-arg</code> flags or from the defaults declared in the Dockerfile.
+      <span class="step-why">This happens before any COPY or RUN instruction executes.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      <strong>The builder stage selects the base image</strong> using <code class="ic">BUILD_IMAGE</code> and <code class="ic">RUNTIME</code> to pick the correct tagged image from the base image registry.
+      <span class="step-why">Example: <code class="ic">BUILD_IMAGE=node RUNTIME=alpine</code> → <code class="ic">node:22-alpine</code> as the build base.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      <strong>Variant-specific source files are COPY'd</strong> into <code class="ic">src/&lt;axis&gt;/active/</code> for each axis.
+      <span class="step-why">The correct variant directory replaces the <code class="ic">active/</code> placeholder. Only one variant per axis exists in the final image.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      <strong>Dependencies are installed</strong> using the package manager selected by <code class="ic">PKG_MGR</code>.
+      <span class="step-why">The Dockerfile uses the ARG value to invoke the correct install command: <code class="ic">npm ci</code>, <code class="ic">pnpm install --frozen-lockfile</code>, <code class="ic">poetry install</code>, etc.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      <strong>The build tool compiles the source</strong> using the tool selected by <code class="ic">BUILD_TOOL</code> (Node backends only).
+      <span class="step-why">Python, Go, and others use their own fixed compile or bundle steps and do not use this axis.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">6</span>
+    <span class="step-body">
+      <strong>The final runtime image is assembled</strong> — only compiled output and runtime dependencies are copied from the builder stage.
+      <span class="step-why">Dev dependencies, build tools, and source maps are excluded. The runtime image is lean.</span>
+    </span>
+  </li>
+</ol>
+
+<div class="why-block">
+  <strong>Why conditional COPY instead of runtime branching:</strong> The variant code is selected once at build time, not at runtime. The compiled image contains exactly one compliance middleware, one auth handler, one ORM wrapper. There is no <code class="ic">if (process.env.COMPLIANCE === 'hipaa')</code> check at runtime. Zero runtime overhead. Zero chance of loading the wrong variant under load.
+</div>
+
+<h3>Directory layout — where variants live</h3>
+<pre class="code-block">src/
+  compliance/
+    standard/     ← COMPLIANCE=standard variant files
+    hipaa/        ← COMPLIANCE=hipaa variant files
+    pci/          ← COMPLIANCE=pci variant files
+    pipeda/       ← COMPLIANCE=pipeda variant files
+    fips/         ← COMPLIANCE=fips variant files
+    soc2/         ← COMPLIANCE=soc2 variant files
+    cmmc/         ← COMPLIANCE=cmmc variant files
+    nerc/         ← COMPLIANCE=nerc variant files
+    active/       ← EMPTY placeholder — replaced by COPY at build time
+  observability/
+    none/
+    otel/
+    prometheus/
+    datadog/
+    active/       ← EMPTY placeholder — replaced by COPY at build time
+  auth/
+    none/
+    jwt/
+    oauth2/
+    apikey/
+    all/
+    active/       ← EMPTY placeholder — replaced by COPY at build time
+  db/
+    prisma/
+    typeorm/
+    drizzle/
+    sqlalchemy/
+    tortoise/
+    gorm/
+    ent/
+    none/
+    active/       ← EMPTY placeholder — replaced by COPY at build time</pre>
+
+<h3>The Dockerfile ARG block (simplified)</h3>
+<pre class="code-block">ARG BUILD_IMAGE=node
+ARG RUNTIME=alpine
+ARG PKG_MGR=npm
+ARG BUILD_TOOL=tsc
+ARG COMPLIANCE=standard
+ARG OBSERVABILITY=none
+ARG AUTH=all
+ARG ORM=prisma
+
+# ...builder stage selects base image...
+FROM ${BUILD_IMAGE}:22-${RUNTIME} AS builder
+
+# ...variant COPY — runs once at build time...
+COPY src/compliance/${COMPLIANCE}/ src/compliance/active/
+COPY src/observability/${OBSERVABILITY}/ src/observability/active/
+COPY src/auth/${AUTH}/ src/auth/active/
+COPY src/db/${ORM}/ src/db/active/</pre>
+
+<div class="warn-block">
+  <strong>Warning:</strong> The <code class="ic">active/</code> directory is not committed to the repo. It is a build-time artifact only. Never import from <code class="ic">src/compliance/active/</code> in your own application code — import from the axis-specific path in development, or rely on the compiled output in production.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 2 — QUICK REFERENCE TABLE
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-blue" id="quick-reference">2. All 8 axes — quick reference</h2>
+<p class="section-sub">One row per axis. Default shown in the Default column. Valid values column lists every supported value.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Axis</th>
+        <th>Default</th>
+        <th>Valid values</th>
+        <th>Applies to</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">BUILD_IMAGE</code></td>
+        <td><code class="ic">node</code></td>
+        <td><code class="ic">node</code> <code class="ic">python</code> <code class="ic">golang</code> <code class="ic">java</code> <code class="ic">dotnet</code> <code class="ic">rust</code> <code class="ic">elixir</code> <code class="ic">ruby</code> <code class="ic">php</code></td>
+        <td>All services</td>
+      </tr>
+      <tr>
+        <td><code class="ic">RUNTIME</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td><code class="ic">alpine</code> <code class="ic">slim</code> <code class="ic">fips</code></td>
+        <td>All services</td>
+      </tr>
+      <tr>
+        <td><code class="ic">PKG_MGR</code></td>
+        <td><code class="ic">npm</code> (Node) / <code class="ic">pip</code> (Python)</td>
+        <td>Node: <code class="ic">npm</code> <code class="ic">pnpm</code> <code class="ic">yarn</code> <code class="ic">bun</code><br>Python: <code class="ic">pip</code> <code class="ic">poetry</code> <code class="ic">uv</code></td>
+        <td>Node, Python</td>
+      </tr>
+      <tr>
+        <td><code class="ic">BUILD_TOOL</code></td>
+        <td><code class="ic">tsc</code></td>
+        <td><code class="ic">tsc</code> <code class="ic">esbuild</code> <code class="ic">swc</code></td>
+        <td>Node backends only</td>
+      </tr>
+      <tr>
+        <td><code class="ic">COMPLIANCE</code></td>
+        <td><code class="ic">standard</code></td>
+        <td><code class="ic">standard</code> <code class="ic">hipaa</code> <code class="ic">pci</code> <code class="ic">pipeda</code> <code class="ic">fips</code> <code class="ic">soc2</code> <code class="ic">cmmc</code> <code class="ic">nerc</code></td>
+        <td>All API services</td>
+      </tr>
+      <tr>
+        <td><code class="ic">OBSERVABILITY</code></td>
+        <td><code class="ic">none</code></td>
+        <td><code class="ic">none</code> <code class="ic">otel</code> <code class="ic">prometheus</code> <code class="ic">datadog</code></td>
+        <td>All API services</td>
+      </tr>
+      <tr>
+        <td><code class="ic">AUTH</code></td>
+        <td><code class="ic">all</code></td>
+        <td><code class="ic">none</code> <code class="ic">jwt</code> <code class="ic">oauth2</code> <code class="ic">apikey</code> <code class="ic">all</code></td>
+        <td>All API services</td>
+      </tr>
+      <tr>
+        <td><code class="ic">ORM</code></td>
+        <td><code class="ic">prisma</code> (Node) / <code class="ic">sqlalchemy</code> (Python) / <code class="ic">gorm</code> (Go)</td>
+        <td>Node: <code class="ic">prisma</code> <code class="ic">typeorm</code> <code class="ic">drizzle</code> <code class="ic">none</code><br>Python: <code class="ic">sqlalchemy</code> <code class="ic">tortoise</code> <code class="ic">none</code><br>Go: <code class="ic">gorm</code> <code class="ic">ent</code> <code class="ic">none</code></td>
+        <td>Backend services</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 3 — EACH AXIS IN DETAIL
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-blue" id="axis-detail">3. Each axis — full detail</h2>
+
+<!-- BUILD_IMAGE -->
+<div class="axis-card" id="axis-build-image">
+  <div class="axis-card-header">
+    <span class="axis-tag">BUILD_IMAGE</span>
+    <span class="axis-name">Language / runtime family</span>
+    <span class="axis-default">default: node</span>
+    <span class="axis-applies">Applies to: all services</span>
+  </div>
+  <div class="axis-card-body">
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px">
+      Selects the base Docker image family used in both the builder stage and the runtime stage.
+      The value maps directly to the Docker Hub official image name.
+    </p>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px">
+      Combined with <code class="ic">RUNTIME</code> to form the full image tag.
+      Example: <code class="ic">BUILD_IMAGE=node RUNTIME=alpine</code> → <code class="ic">node:22-alpine</code>.
+    </p>
+
+    <div class="tbl-wrap" style="margin-top:10px">
+      <table class="xref-table">
+        <thead>
+          <tr>
+            <th>Value</th>
+            <th>Builder base</th>
+            <th>Runtime base</th>
+            <th>Version pinned</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code class="ic">node</code></td>
+            <td><code class="ic">node:22-alpine</code></td>
+            <td><code class="ic">node:22-alpine</code></td>
+            <td>22 LTS</td>
+            <td>Default. Used for all TypeScript/Express/Fastify backends.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">python</code></td>
+            <td><code class="ic">python:3.12-slim</code></td>
+            <td><code class="ic">python:3.12-slim</code></td>
+            <td>3.12</td>
+            <td>Used for FastAPI, Django, Flask services.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">golang</code></td>
+            <td><code class="ic">golang:1.22-alpine</code></td>
+            <td><code class="ic">gcr.io/distroless/static-debian12</code></td>
+            <td>1.22</td>
+            <td>Builder stage compiles binary. Runtime is distroless — no shell, minimal attack surface.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">java</code></td>
+            <td><code class="ic">eclipse-temurin:21-jdk-alpine</code></td>
+            <td><code class="ic">eclipse-temurin:21-jre-alpine</code></td>
+            <td>21 LTS</td>
+            <td>Builds JAR in builder, runs JRE-only in runtime.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">dotnet</code></td>
+            <td><code class="ic">mcr.microsoft.com/dotnet/sdk:8.0-alpine</code></td>
+            <td><code class="ic">mcr.microsoft.com/dotnet/aspnet:8.0-alpine</code></td>
+            <td>8.0 LTS</td>
+            <td>Publishes self-contained binary. Runtime is ASP.NET Core image.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">rust</code></td>
+            <td><code class="ic">rust:1.77-alpine</code></td>
+            <td><code class="ic">alpine:3.19</code></td>
+            <td>1.77 stable</td>
+            <td>Compiles release binary. Runtime is bare Alpine — binary is statically linked.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">elixir</code></td>
+            <td><code class="ic">elixir:1.16-alpine</code></td>
+            <td><code class="ic">alpine:3.19</code></td>
+            <td>1.16</td>
+            <td>Builds Mix release. Runtime runs the release tarball on bare Alpine.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">ruby</code></td>
+            <td><code class="ic">ruby:3.3-alpine</code></td>
+            <td><code class="ic">ruby:3.3-alpine</code></td>
+            <td>3.3</td>
+            <td>Used for Rails API services. Puma runs in runtime stage.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">php</code></td>
+            <td><code class="ic">php:8.3-fpm-alpine</code></td>
+            <td><code class="ic">php:8.3-fpm-alpine</code></td>
+            <td>8.3</td>
+            <td>PHP-FPM. Compose installs vendor in builder. Runtime runs FPM.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="gotcha-block">
+      <strong>Gotcha:</strong> When <code class="ic">BUILD_IMAGE=golang</code>, the runtime stage is distroless — there is no shell. <code class="ic">docker exec</code> and <code class="ic">kubectl exec</code> will fail. Use <code class="ic">--build-arg RUNTIME=slim</code> only during development to get a shell for debugging.
+    </div>
+  </div>
+</div>
+
+<!-- RUNTIME -->
+<div class="axis-card" id="axis-runtime">
+  <div class="axis-card-header">
+    <span class="axis-tag">RUNTIME</span>
+    <span class="axis-name">OS variant / compliance mode</span>
+    <span class="axis-default">default: alpine</span>
+    <span class="axis-applies">Applies to: all services</span>
+  </div>
+  <div class="axis-card-body">
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px">
+      Selects the OS variant appended to the base image tag.
+      Also gates FIPS compliance — <code class="ic">RUNTIME=fips</code> is required when <code class="ic">COMPLIANCE=fips</code>.
+    </p>
+
+    <div class="tbl-wrap" style="margin-top:10px">
+      <table class="xref-table">
+        <thead>
+          <tr>
+            <th>Value</th>
+            <th>OS</th>
+            <th>Image size</th>
+            <th>Shell available</th>
+            <th>FIPS OpenSSL</th>
+            <th>Use when</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code class="ic">alpine</code></td>
+            <td>Alpine Linux 3.19</td>
+            <td>Smallest (~5MB base)</td>
+            <td>Yes (<code class="ic">sh</code>)</td>
+            <td>No</td>
+            <td>Default for all services. Smallest attack surface with shell access.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">slim</code></td>
+            <td>Debian 12 Slim</td>
+            <td>Medium (~30MB base)</td>
+            <td>Yes (<code class="ic">bash</code>)</td>
+            <td>No</td>
+            <td>When a package requires glibc (native modules, some ML libs). Alpine uses musl.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">fips</code></td>
+            <td>Ubuntu 22.04 FIPS</td>
+            <td>Largest (~75MB base)</td>
+            <td>Yes (<code class="ic">bash</code>)</td>
+            <td>Yes — OpenSSL FIPS module active</td>
+            <td>Required when <code class="ic">COMPLIANCE=fips</code>. US federal workloads. NIST 140-2 cryptography.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="failure-block">
+      <div class="failure-label">If COMPLIANCE=fips but RUNTIME&ne;fips</div>
+      <div><strong>Trigger:</strong> Build runs with <code class="ic">--build-arg COMPLIANCE=fips</code> but <code class="ic">RUNTIME</code> is <code class="ic">alpine</code> or <code class="ic">slim</code>.</div>
+      <div><strong>System:</strong> The Dockerfile build guard runs a <code class="ic">RUN</code> check: if <code class="ic">COMPLIANCE=fips</code> and <code class="ic">RUNTIME!=fips</code>, it exits with code 1 and message: <code class="ic">ERROR: COMPLIANCE=fips requires RUNTIME=fips. Rebuild with --build-arg RUNTIME=fips</code></div>
+      <div><strong>User sees:</strong> Docker build fails with non-zero exit code. The error message is printed to stdout.</div>
+      <div><strong>User can:</strong> Add <code class="ic">--build-arg RUNTIME=fips</code> to the build command and retry.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PKG_MGR -->
+<div class="axis-card" id="axis-pkg-mgr">
+  <div class="axis-card-header">
+    <span class="axis-tag">PKG_MGR</span>
+    <span class="axis-name">Package manager</span>
+    <span class="axis-default">default: npm (Node) / pip (Python)</span>
+    <span class="axis-applies">Applies to: Node, Python services</span>
+  </div>
+  <div class="axis-card-body">
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px">
+      Selects which package manager installs dependencies in the builder stage.
+      The Dockerfile uses the value to call the correct install command and lockfile.
+    </p>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px">
+      Go, Rust, Java, and .NET use their own fixed package managers (<code class="ic">go mod</code>, <code class="ic">cargo</code>, <code class="ic">gradle</code>, <code class="ic">dotnet restore</code>). This axis has no effect on those languages.
+    </p>
+
+    <h3 style="margin-top:14px">Node — valid values</h3>
+    <div class="tbl-wrap">
+      <table class="xref-table">
+        <thead>
+          <tr>
+            <th>Value</th>
+            <th>Install command</th>
+            <th>Lockfile used</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code class="ic">npm</code></td>
+            <td><code class="ic">npm ci</code></td>
+            <td><code class="ic">package-lock.json</code></td>
+            <td>Default. <code class="ic">ci</code> enforces lockfile — no version drift in builds.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">pnpm</code></td>
+            <td><code class="ic">pnpm install --frozen-lockfile</code></td>
+            <td><code class="ic">pnpm-lock.yaml</code></td>
+            <td>Faster installs, hard-linked node_modules. Requires <code class="ic">corepack enable</code> in Dockerfile.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">yarn</code></td>
+            <td><code class="ic">yarn install --frozen-lockfile</code></td>
+            <td><code class="ic">yarn.lock</code></td>
+            <td>Yarn Classic (v1). Yarn Berry (v2+) not supported — PnP mode breaks the build.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">bun</code></td>
+            <td><code class="ic">bun install --frozen-lockfile</code></td>
+            <td><code class="ic">bun.lockb</code></td>
+            <td>Fastest installs. Use only if production runtime also uses Bun — <code class="ic">bun:latest</code> image required.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Python — valid values</h3>
+    <div class="tbl-wrap">
+      <table class="xref-table">
+        <thead>
+          <tr>
+            <th>Value</th>
+            <th>Install command</th>
+            <th>Lockfile used</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code class="ic">pip</code></td>
+            <td><code class="ic">pip install --no-cache-dir -r requirements.txt</code></td>
+            <td><code class="ic">requirements.txt</code></td>
+            <td>Default for Python. Simple and universal.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">poetry</code></td>
+            <td><code class="ic">poetry install --no-dev --no-interaction</code></td>
+            <td><code class="ic">poetry.lock</code></td>
+            <td>Strict dependency resolution. Requires <code class="ic">pyproject.toml</code> present.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">uv</code></td>
+            <td><code class="ic">uv pip install -r requirements.txt</code></td>
+            <td><code class="ic">requirements.txt</code></td>
+            <td>Rust-based pip replacement. 10-100x faster installs. Uses same requirements.txt format.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="warn-block">
+      <strong>Warning:</strong> The lockfile must match the package manager. Building with <code class="ic">PKG_MGR=pnpm</code> when only <code class="ic">package-lock.json</code> exists (no <code class="ic">pnpm-lock.yaml</code>) fails with a lockfile not found error. Generate the correct lockfile locally before changing this axis.
+    </div>
+  </div>
+</div>
+
+<!-- BUILD_TOOL -->
+<div class="axis-card" id="axis-build-tool">
+  <div class="axis-card-header">
+    <span class="axis-tag">BUILD_TOOL</span>
+    <span class="axis-name">TypeScript compiler / bundler</span>
+    <span class="axis-default">default: tsc</span>
+    <span class="axis-applies">Applies to: Node backends only</span>
+  </div>
+  <div class="axis-card-body">
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px">
+      Selects the TypeScript compilation or bundling tool for Node backend services.
+      Has no effect on Python, Go, Java, .NET, Rust, Elixir, Ruby, or PHP services.
+    </p>
+
+    <div class="tbl-wrap">
+      <table class="xref-table">
+        <thead>
+          <tr>
+            <th>Value</th>
+            <th>Tool</th>
+            <th>Build command</th>
+            <th>Output</th>
+            <th>Build time</th>
+            <th>Source maps</th>
+            <th>Use when</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code class="ic">tsc</code></td>
+            <td>TypeScript compiler</td>
+            <td><code class="ic">tsc -p tsconfig.json</code></td>
+            <td><code class="ic">dist/</code> — CommonJS <code class="ic">.js</code> files</td>
+            <td>Slowest (~10-40s)</td>
+            <td>Yes (configurable)</td>
+            <td>Default. Best type checking. Required for libraries that export types.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">esbuild</code></td>
+            <td>esbuild</td>
+            <td><code class="ic">esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js</code></td>
+            <td><code class="ic">dist/index.js</code> — single bundled file</td>
+            <td>Fast (&lt;1s)</td>
+            <td>Yes (inline)</td>
+            <td>When build speed matters. Lambda deployments. Does not type-check.</td>
+          </tr>
+          <tr>
+            <td><code class="ic">swc</code></td>
+            <td>SWC (Speedy Web Compiler)</td>
+            <td><code class="ic">swc src -d dist</code></td>
+            <td><code class="ic">dist/</code> — CommonJS <code class="ic">.js</code> files</td>
+            <td>Fast (~2-5s)</td>
+            <td>Yes</td>
+            <td>When tsc is too slow but per-file output is needed. Does not type-check.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-block">
+      <strong>Note:</strong> <code class="ic">esbuild</code> and <code class="ic">swc</code> do not run TypeScript type checking. They are transpilers only. If using either, run <code class="ic">tsc --noEmit</code> in a separate CI step to catch type errors before the Docker build.
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 4 — COMPLIANCE AXIS DETAIL
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-amber" id="axis-compliance">4. COMPLIANCE axis — what each value adds</h2>
+<p class="section-sub">Default: <code class="ic">standard</code> — no extra middleware. Each non-standard value adds middleware that runs on every HTTP request.</p>
+
+<div class="gotcha-block">
+  <strong>How compliance middleware is wired:</strong> Each value copies its source into <code class="ic">src/compliance/active/</code> at build time. The main application entry point imports from <code class="ic">src/compliance/active/index</code> and calls <code class="ic">applyCompliance(app)</code> (Node) or <code class="ic">apply_compliance(app)</code> (Python) once during startup. The middleware then runs on every request automatically.
+</div>
+
+<!-- standard -->
+<div class="mw-card" id="compliance-standard">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-standard">standard</span>
+    <strong style="font-size:12px;margin-left:4px">No extra middleware</strong>
+  </div>
+  <div class="mw-card-body">
+    <p>No compliance middleware is added. Commercial baseline — no regulated-industry requirements.</p>
+    <p><code class="ic">applyCompliance(app)</code> is a no-op. Zero overhead. Zero extra log fields.</p>
+    <p><strong>Use when:</strong> SaaS, internal tools, dev environments, any service without regulated-industry data.</p>
+  </div>
+</div>
+
+<!-- hipaa -->
+<div class="mw-card" id="compliance-hipaa">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-hipaa">hipaa</span>
+    <strong style="font-size:12px;margin-left:4px">HIPAA — Healthcare data</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Applies to:</strong> Any service handling Protected Health Information (PHI).</p>
+    <p><strong>Middleware runs on every HTTP request:</strong></p>
+
+    <div class="mw-step">
+      <span class="mw-step-num">1</span>
+      <span class="mw-step-body">
+        <strong>Audit logging:</strong> Every request logs <code class="ic">actor</code> (from JWT sub claim or API key ID), <code class="ic">action</code> (HTTP method + path), <code class="ic">resource</code> (extracted from path), <code class="ic">request-id</code> (UUID generated per request).
+        Log destination is stdout — append-only. Log stream must be collected by an immutable log aggregator (Loki, CloudWatch, Splunk) to satisfy HIPAA §164.312(b).
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">2</span>
+      <span class="mw-step-body">
+        <strong>PHI masking in logs:</strong> The following field names are redacted to <code class="ic">[REDACTED]</code> in all log output: <code class="ic">ssn</code>, <code class="ic">dob</code>, <code class="ic">mrn</code>, <code class="ic">diagnosis</code>, <code class="ic">patientName</code>, <code class="ic">address</code>, <code class="ic">phone</code>.
+        Masking is applied to request body, query params, and response body before logging. Field name matching is case-insensitive.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">3</span>
+      <span class="mw-step-body">
+        <strong>Verbose error suppression:</strong> Node: <code class="ic">app.set('env', 'production')</code> is called — Express suppresses stack traces in error responses. Python: FastAPI <code class="ic">debug=False</code> — detail field in HTTPException responses is suppressed for 5xx errors.
+      </span>
+    </div>
+
+    <div class="failure-block" style="margin-top:10px">
+      <div class="failure-label">If audit log write fails</div>
+      <div><strong>Trigger:</strong> stdout write fails (disk full, container log driver error).</div>
+      <div><strong>System:</strong> HIPAA middleware catches the write error and returns HTTP 500 to the caller. The request is not processed. No data is written without an audit trail.</div>
+      <div><strong>User sees:</strong> HTTP 500 — <code class="ic">{"error":"Audit logging unavailable. Request rejected."}</code></div>
+      <div><strong>User can:</strong> Retry. Operator must resolve the log collection issue before requests are accepted.</div>
+    </div>
+  </div>
+</div>
+
+<!-- pci -->
+<div class="mw-card" id="compliance-pci">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-pci">pci</span>
+    <strong style="font-size:12px;margin-left:4px">PCI DSS — Payment card data</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Applies to:</strong> Any service in the cardholder data environment (CDE) or that transmits/stores card data.</p>
+    <p><strong>Middleware runs on every HTTP request:</strong></p>
+
+    <div class="mw-step">
+      <span class="mw-step-num">1</span>
+      <span class="mw-step-body">
+        <strong>Startup secret strength check:</strong> Runs once at process start (not per-request). Iterates all environment variables. Any variable whose name matches <code class="ic">SECRET</code>, <code class="ic">KEY</code>, <code class="ic">TOKEN</code>, or <code class="ic">PASS</code> (case-insensitive) with a value shorter than 16 characters causes a fatal error and process exit. PCI DSS Req 8.3.6 requires minimum 12-character secrets; 16 is the enforced floor.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">2</span>
+      <span class="mw-step-body">
+        <strong>TLS enforcement:</strong> Any request where <code class="ic">X-Forwarded-Proto</code> header equals <code class="ic">http</code> (case-insensitive) is rejected with HTTP 403 Forbidden. Response body: <code class="ic">{"error":"HTTPS required (PCI DSS Req 4.2.1)"}</code>. Requests without the header are passed through — assumes TLS terminated upstream with header forwarded.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">3</span>
+      <span class="mw-step-body">
+        <strong>Debug endpoint blocking:</strong> Any request whose path starts with <code class="ic">/debug</code> returns HTTP 404 Not Found. PCI DSS Req 6.3.3 prohibits debug or test interfaces in production cardholder environments.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">4</span>
+      <span class="mw-step-body">
+        <strong>PCI response headers added to every response:</strong>
+        <code class="ic">X-PCI-DSS: enforced</code>,
+        <code class="ic">Strict-Transport-Security: max-age=63072000; includeSubDomains; preload</code>,
+        <code class="ic">X-Frame-Options: DENY</code>,
+        <code class="ic">X-Content-Type-Options: nosniff</code>.
+      </span>
+    </div>
+
+    <div class="warn-block" style="margin-top:8px">
+      <strong>Warning:</strong> The startup secret check runs before the HTTP server starts accepting connections. A misconfigured secret causes the container to crash-loop immediately. Check all environment variable values before deploying with <code class="ic">COMPLIANCE=pci</code>.
+    </div>
+  </div>
+</div>
+
+<!-- pipeda -->
+<div class="mw-card" id="compliance-pipeda">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-pipeda">pipeda</span>
+    <strong style="font-size:12px;margin-left:4px">PIPEDA — Canadian personal information</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Applies to:</strong> Any service collecting or processing personal information about Canadian residents.</p>
+    <p><strong>Middleware runs on every HTTP request:</strong></p>
+
+    <div class="mw-step">
+      <span class="mw-step-num">1</span>
+      <span class="mw-step-body">
+        <strong>Consent enforcement:</strong> Any <code class="ic">POST</code>, <code class="ic">PUT</code>, or <code class="ic">PATCH</code> request that does not include the header <code class="ic">X-Consent: granted</code> is rejected with HTTP 451 Unavailable For Legal Reasons. Response body: <code class="ic">{"error":"Consent required under PIPEDA Schedule 1 Principle 3"}</code>. GET and DELETE requests pass through without consent header check.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">2</span>
+      <span class="mw-step-body">
+        <strong>Data residency header:</strong> Every response includes <code class="ic">X-Data-Residency: CA</code>. This header signals to API consumers and auditors that data is processed in Canada. It does not enforce residency — infrastructure deployment location does. The header serves as an audit signal.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">3</span>
+      <span class="mw-step-body">
+        <strong>PII masking in logs:</strong> The following field names are redacted to <code class="ic">[REDACTED]</code> in all log output: <code class="ic">email</code>, <code class="ic">name</code>, <code class="ic">phone</code>, <code class="ic">address</code>, <code class="ic">sin</code> (Social Insurance Number). Applied to request body, query params, and response body before logging.
+      </span>
+    </div>
+
+    <div class="note-block" style="margin-top:8px">
+      <strong>Note:</strong> PIPEDA consent must be collected by your application UI before the API call is made. The middleware validates that consent was obtained and signaled — it does not collect consent itself.
+    </div>
+  </div>
+</div>
+
+<!-- fips -->
+<div class="mw-card" id="compliance-fips">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-fips">fips</span>
+    <strong style="font-size:12px;margin-left:4px">FIPS 140-2 — US federal cryptography</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Applies to:</strong> US federal agency workloads. Any service subject to FISMA, FedRAMP, or DoD requirements.</p>
+    <p><strong>Requires:</strong> <code class="ic">RUNTIME=fips</code> — the build guard blocks the build if this is not set.</p>
+    <p><strong>Middleware runs at startup only (not per-request):</strong></p>
+
+    <div class="mw-step">
+      <span class="mw-step-num">1</span>
+      <span class="mw-step-body">
+        <strong>OpenSSL FIPS mode check:</strong> On startup, the middleware calls the OpenSSL FIPS mode query.
+        Node: <code class="ic">crypto.getFips()</code> — returns 1 when FIPS mode is active.
+        Python: <code class="ic">ssl.OPENSSL_VERSION</code> is checked for <code class="ic">fips</code> substring.
+        Go: <code class="ic">go-fips</code> build tag enforces FIPS at compile time; runtime check confirms module is active.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">2</span>
+      <span class="mw-step-body">
+        <strong>When FIPS mode is not active:</strong> The middleware throws a fatal error and the process exits with code 1.
+        Node error message: <code class="ic">FATAL: OpenSSL FIPS mode not active. Verify RUNTIME=fips image is deployed and OPENSSL_FIPS=1 is set.</code>
+        The HTTP server never starts. The container crash-loops. Kubernetes marks the pod as CrashLoopBackOff.
+      </span>
+    </div>
+
+    <div class="failure-block" style="margin-top:10px">
+      <div class="failure-label">If FIPS mode check fails</div>
+      <div><strong>Trigger:</strong> Container starts but <code class="ic">RUNTIME=fips</code> image was not used, or FIPS kernel module is not loaded.</div>
+      <div><strong>System:</strong> Process exits with code 1 before HTTP server binds. Container restarts. Kubernetes marks pod CrashLoopBackOff after 3 restarts.</div>
+      <div><strong>User sees:</strong> Service unavailable. Pod status shows CrashLoopBackOff.</div>
+      <div><strong>User can:</strong> Check pod logs for FATAL message. Confirm <code class="ic">RUNTIME=fips</code> image was used. Confirm <code class="ic">OPENSSL_FIPS=1</code> environment variable is set.</div>
+    </div>
+  </div>
+</div>
+
+<!-- soc2 -->
+<div class="mw-card" id="compliance-soc2">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-soc2">soc2</span>
+    <strong style="font-size:12px;margin-left:4px">SOC 2 — Service organization controls</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Applies to:</strong> SaaS services undergoing SOC 2 Type I or Type II audit. B2B services where customers require SOC 2 report.</p>
+    <p><strong>Middleware runs on every HTTP request:</strong></p>
+
+    <div class="mw-step">
+      <span class="mw-step-num">1</span>
+      <span class="mw-step-body">
+        <strong>Immutable audit logging:</strong> Every request emits a structured log event with event type <code class="ic">soc2_audit</code> and fields: <code class="ic">actor</code> (user ID from auth context), <code class="ic">action</code> (HTTP method + normalized path), <code class="ic">resource</code> (entity type extracted from path), <code class="ic">timestamp</code> (ISO 8601 UTC), <code class="ic">request_id</code> (UUID v4). The log stream is stdout — must be collected by an append-only log aggregator for immutability.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">2</span>
+      <span class="mw-step-body">
+        <strong>Verbose error suppression:</strong> Same as HIPAA. Stack traces and internal error details are suppressed in HTTP responses. SOC 2 CC6.1 requires limiting disclosure of system information.
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- cmmc -->
+<div class="mw-card" id="compliance-cmmc">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-cmmc">cmmc</span>
+    <strong style="font-size:12px;margin-left:4px">CMMC — Defense supply chain</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Applies to:</strong> US DoD contractors. Any service handling Controlled Unclassified Information (CUI) or defense supply chain data.</p>
+    <p><strong>Middleware runs on every HTTP request:</strong></p>
+
+    <div class="mw-step">
+      <span class="mw-step-num">1</span>
+      <span class="mw-step-body">
+        <strong>CMMC audit logging:</strong> Every request emits a structured log event with event type <code class="ic">cmmc_audit</code> and fields: <code class="ic">actor</code>, <code class="ic">action</code>, <code class="ic">resource</code>, <code class="ic">timestamp</code>. CMMC Practice AU.L2-3.3.1 requires auditable events for all system access.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">2</span>
+      <span class="mw-step-body">
+        <strong>Debug endpoint blocking:</strong> Any path starting with <code class="ic">/debug</code> returns HTTP 404. CMMC Practice CM.L2-3.4.6 requires minimal functionality — no diagnostic interfaces in production.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">3</span>
+      <span class="mw-step-body">
+        <strong>Egress isolation flag:</strong> Sets <code class="ic">NO_EGRESS=true</code> in the process environment. Application code can read this flag to disable outbound network calls to non-approved destinations. CMMC Practice SC.L2-3.13.5 requires boundary protection. Note: the flag alone does not block egress — network policy in the cluster enforces the actual boundary.
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- nerc -->
+<div class="mw-card" id="compliance-nerc">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-nerc">nerc</span>
+    <strong style="font-size:12px;margin-left:4px">NERC CIP — Energy grid / OT-IT boundary</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Applies to:</strong> Electric utilities, energy grid operators, bulk electric system owners. Any service crossing the OT-IT boundary.</p>
+    <p><strong>Middleware runs on every HTTP request:</strong></p>
+
+    <div class="mw-step">
+      <span class="mw-step-num">1</span>
+      <span class="mw-step-body">
+        <strong>OT-IT boundary headers:</strong> Adds <code class="ic">X-OT-IT-Boundary: enforced</code> and <code class="ic">X-Network-Isolation: on</code> to every response. NERC CIP-005 requires electronic security perimeter documentation. These headers serve as audit trail markers for intermediate security controls.
+      </span>
+    </div>
+
+    <div class="mw-step">
+      <span class="mw-step-num">2</span>
+      <span class="mw-step-body">
+        <strong>Egress isolation flag:</strong> Sets <code class="ic">NO_EGRESS=true</code> in the process environment. Same mechanism as CMMC. NERC CIP-007 requires limiting open network access from BES cyber systems.
+      </span>
+    </div>
+
+    <div class="note-block" style="margin-top:8px">
+      <strong>Note:</strong> NERC CIP compliance requires far more than these middleware controls — physical security, personnel training, supply chain risk management. This middleware covers only the software-layer network boundary signals. Full NERC CIP compliance requires a complete CIP program.
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 5 — OBSERVABILITY AXIS
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-green" id="axis-observability">5. OBSERVABILITY axis — what each value instruments</h2>
+<p class="section-sub">Default: <code class="ic">none</code> — zero instrumentation, zero overhead. Each value adds instrumentation that initializes at service startup.</p>
+
+<!-- none -->
+<div class="mw-card" id="obs-none">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-none">none</span>
+    <strong style="font-size:12px;margin-left:4px">No instrumentation</strong>
+  </div>
+  <div class="mw-card-body">
+    <p>No observability code is included in the image.</p>
+    <p><code class="ic">initObservability()</code> is a no-op. Zero imported packages. Zero startup overhead. Zero memory overhead.</p>
+    <p><strong>Use when:</strong> Development, test environments, or services where observability is handled at the infrastructure layer (service mesh, eBPF).</p>
+  </div>
+</div>
+
+<!-- otel -->
+<div class="mw-card" id="obs-otel">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-otel">otel</span>
+    <strong style="font-size:12px;margin-left:4px">OpenTelemetry — vendor-neutral distributed tracing</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>What it adds:</strong> Distributed tracing via the OpenTelemetry SDK. Traces are exported to the OTLP endpoint.</p>
+    <p><strong>Required environment variable:</strong> <code class="ic">OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318/v1/traces</code></p>
+
+    <h3>Node implementation</h3>
+    <pre class="code-block">// src/observability/otel/index.ts (Node)
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+
+export function initObservability() {
+  const sdk = new NodeSDK({
+    traceExporter: new OTLPTraceExporter({
+      url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
+    }),
+    instrumentations: [getNodeAutoInstrumentations()],
+  });
+  sdk.start();
+}</pre>
+    <p style="font-size:12px;color:var(--text-dim)"><code class="ic">getNodeAutoInstrumentations()</code> auto-instruments: Express/Fastify HTTP, <code class="ic">http</code>/<code class="ic">https</code> modules, DNS, pg, mysql2, redis, gRPC.</p>
+
+    <h3>Python implementation</h3>
+    <pre class="code-block"># src/observability/otel/__init__.py (Python)
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
+def init_observability(app):
+    provider = TracerProvider()
+    exporter = OTLPSpanExporter(
+        endpoint=os.environ['OTEL_EXPORTER_OTLP_ENDPOINT']
+    )
+    provider.add_span_processor(BatchSpanProcessor(exporter))
+    trace.set_tracer_provider(provider)
+    FastAPIInstrumentor.instrument_app(app)</pre>
+    <p style="font-size:12px;color:var(--text-dim)"><code class="ic">FastAPIInstrumentor</code> auto-instruments every HTTP request — creates a span per request with route, method, and status code.</p>
+
+    <h3>Go implementation</h3>
+    <pre class="code-block">// src/observability/otel/otel.go (Go)
+func InitObservability(ctx context.Context) func(context.Context) error {
+    exporter, _ := otlptracehttp.New(ctx,
+        otlptracehttp.WithEndpoint(os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT")),
+    )
+    tp := sdktrace.NewTracerProvider(
+        sdktrace.WithBatcher(exporter),
+        sdktrace.WithResource(resource.NewWithAttributes(
+            semconv.SchemaURL,
+            semconv.ServiceName(os.Getenv("SERVICE_NAME")),
+        )),
+    )
+    otel.SetTracerProvider(tp)
+    return tp.Shutdown
+}</pre>
+
+    <div class="failure-block" style="margin-top:10px">
+      <div class="failure-label">If OTLP endpoint is unreachable</div>
+      <div><strong>Trigger:</strong> <code class="ic">OTEL_EXPORTER_OTLP_ENDPOINT</code> is not set, or the otel-collector pod is down.</div>
+      <div><strong>System:</strong> The OTLP exporter buffers spans in memory. After the buffer fills (default 2048 spans), new spans are dropped silently. The service continues to operate normally.</div>
+      <div><strong>User sees:</strong> No user-visible impact. Traces are missing from the collector.</div>
+      <div><strong>User can:</strong> Check otel-collector pod health. Restart the collector to resume trace export.</div>
+    </div>
+  </div>
+</div>
+
+<!-- prometheus -->
+<div class="mw-card" id="obs-prometheus">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-prometheus">prometheus</span>
+    <strong style="font-size:12px;margin-left:4px">Prometheus — metrics scrape endpoint</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>What it adds:</strong> A <code class="ic">/metrics</code> endpoint that Prometheus scrapes. Exposes default system metrics plus application-prefix custom metrics.</p>
+
+    <h3>Node implementation</h3>
+    <pre class="code-block">// src/observability/prometheus/index.ts (Node)
+import client from 'prom-client';
+
+export function initObservability(app: Express) {
+  client.collectDefaultMetrics({ prefix: 'app_' });
+
+  app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', client.register.contentType);
+    res.end(await client.register.metrics());
+  });
+}</pre>
+    <p style="font-size:12px;color:var(--text-dim)"><code class="ic">collectDefaultMetrics</code> exposes: process CPU, memory, event loop lag, garbage collection, active handles, file descriptors. All prefixed <code class="ic">app_</code>.</p>
+
+    <h3>Python implementation</h3>
+    <pre class="code-block"># src/observability/prometheus/__init__.py (Python)
+from prometheus_client import make_asgi_app, CollectorRegistry, multiprocess
+from prometheus_client import CONTENT_TYPE_LATEST
+
+def init_observability(app):
+    metrics_app = make_asgi_app()
+    app.mount('/metrics', metrics_app)</pre>
+    <p style="font-size:12px;color:var(--text-dim)">Mounts Prometheus ASGI app at <code class="ic">/metrics</code>. Use <code class="ic">prometheus-multiprocess-mode</code> env var when running multiple workers.</p>
+
+    <h3>Go implementation</h3>
+    <pre class="code-block">// src/observability/prometheus/prometheus.go (Go)
+import "github.com/prometheus/client_golang/prometheus/promhttp"
+
+func InitObservability(r *chi.Mux) {
+    r.Get("/metrics", promhttp.Handler().ServeHTTP)
+}</pre>
+
+    <div class="note-block" style="margin-top:10px">
+      <strong>Note:</strong> The <code class="ic">/metrics</code> endpoint is unauthenticated by default. Add your Kubernetes NetworkPolicy to restrict scrape access to the Prometheus namespace only. Do not expose <code class="ic">/metrics</code> on the public-facing ingress.
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:10px">
+      <table class="xref-table">
+        <thead>
+          <tr>
+            <th>Metric name</th>
+            <th>Type</th>
+            <th>What it measures</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code class="ic">app_process_cpu_seconds_total</code></td>
+            <td>Counter</td>
+            <td>Total CPU time used by the process</td>
+          </tr>
+          <tr>
+            <td><code class="ic">app_process_resident_memory_bytes</code></td>
+            <td>Gauge</td>
+            <td>Process RSS memory in bytes</td>
+          </tr>
+          <tr>
+            <td><code class="ic">app_nodejs_eventloop_lag_seconds</code></td>
+            <td>Gauge</td>
+            <td>Event loop lag in seconds (Node only)</td>
+          </tr>
+          <tr>
+            <td><code class="ic">app_nodejs_gc_duration_seconds</code></td>
+            <td>Histogram</td>
+            <td>GC duration bucketed by pause time (Node only)</td>
+          </tr>
+          <tr>
+            <td><code class="ic">app_process_open_fds</code></td>
+            <td>Gauge</td>
+            <td>Number of open file descriptors</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- datadog -->
+<div class="mw-card" id="obs-datadog">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-datadog">datadog</span>
+    <strong style="font-size:12px;margin-left:4px">Datadog — APM and distributed tracing</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>What it adds:</strong> Datadog APM tracing via the Datadog tracer. Traces sent to the Datadog Agent.</p>
+    <p><strong>Required environment variables:</strong></p>
+    <ul style="font-size:12px;color:var(--text-dim);padding-left:18px;margin-bottom:10px">
+      <li><code class="ic">DD_SERVICE</code> — service name shown in Datadog APM</li>
+      <li><code class="ic">DD_ENV</code> — environment tag (e.g., <code class="ic">production</code>, <code class="ic">staging</code>)</li>
+      <li><code class="ic">DD_AGENT_HOST</code> — hostname of the Datadog Agent (default: <code class="ic">localhost</code>)</li>
+    </ul>
+
+    <h3>Node implementation</h3>
+    <pre class="code-block">// src/observability/datadog/index.ts (Node)
+// Must be the FIRST import in the entry point — before any other require
+import tracer from 'dd-trace';
+
+export function initObservability() {
+  tracer.init({
+    service: process.env.DD_SERVICE,
+    env: process.env.DD_ENV,
+    logInjection: true,
+  });
+}</pre>
+    <p style="font-size:12px;color:var(--text-dim)"><code class="ic">logInjection: true</code> adds <code class="ic">dd.trace_id</code> and <code class="ic">dd.span_id</code> to every log line — enables log correlation in Datadog Log Management.</p>
+
+    <h3>Python implementation</h3>
+    <pre class="code-block"># src/observability/datadog/__init__.py (Python)
+import ddtrace
+
+def init_observability(app):
+    ddtrace.patch_all()
+    # ddtrace.patch_all() auto-instruments:
+    # requests, aiohttp, fastapi, sqlalchemy, redis, celery</pre>
+
+    <div class="failure-block" style="margin-top:10px">
+      <div class="failure-label">If Datadog Agent is unreachable</div>
+      <div><strong>Trigger:</strong> <code class="ic">DD_AGENT_HOST</code> is wrong, or the Datadog Agent daemonset pod is down on the node.</div>
+      <div><strong>System:</strong> <code class="ic">dd-trace</code> buffers spans in memory silently. No error is thrown. No crash. When the buffer fills, spans are dropped silently.</div>
+      <div><strong>User sees:</strong> No user-visible impact. APM traces stop appearing in Datadog.</div>
+      <div><strong>User can:</strong> Check <code class="ic">DD_AGENT_HOST</code> value. Verify Datadog Agent daemonset pod is running on the same node as the service pod.</div>
+    </div>
+
+    <div class="warn-block" style="margin-top:8px">
+      <strong>Warning:</strong> <code class="ic">dd-trace</code> must initialize before any other module is imported. If <code class="ic">initObservability()</code> is called after Express/Fastify imports, some instrumentation patches miss. The application entry point must import the observability module first.
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 6 — AUTH AXIS
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-purple" id="axis-auth">6. AUTH axis — what each value includes</h2>
+<p class="section-sub">Default: <code class="ic">all</code> — tries JWT first, then API key. Each value controls how the <code class="ic">requireAuth</code> middleware validates incoming requests.</p>
+
+<div class="note-block">
+  <strong>Shared contract:</strong> All auth values expose a <code class="ic">requireAuth</code> middleware function with the same signature. When auth succeeds, it sets <code class="ic">req.user</code> (Node) or <code class="ic">request.state.user</code> (Python/FastAPI) with fields: <code class="ic">id</code>, <code class="ic">email</code>, <code class="ic">name</code>, <code class="ic">role</code>. When auth fails, it returns HTTP 401.
+</div>
+
+<!-- none -->
+<div class="mw-card" id="auth-none">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-none">none</span>
+    <strong style="font-size:12px;margin-left:4px">No authentication — all requests pass</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><code class="ic">requireAuth</code> calls <code class="ic">next()</code> immediately. No headers are read. No tokens are validated.</p>
+    <p><code class="ic">req.user</code> is set to <code class="ic">null</code>. Application code must not depend on a user object being present.</p>
+    <p><strong>Use when:</strong> Internal microservice-to-microservice calls where the gateway handles auth. Health check endpoints. Development-only services.</p>
+    <div class="warn-block" style="margin-top:8px">
+      <strong>Warning:</strong> Do not deploy <code class="ic">AUTH=none</code> services on a public-facing port. Any caller can reach any endpoint with no credential check.
+    </div>
+  </div>
+</div>
+
+<!-- jwt -->
+<div class="mw-card" id="auth-jwt">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-soc2">jwt</span>
+    <strong style="font-size:12px;margin-left:4px">JWT — JSON Web Token validation</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Required environment variable:</strong> <code class="ic">JWT_SECRET</code> — the HMAC signing secret for HS256. Minimum 32 characters. Must match the secret used when issuing tokens.</p>
+
+    <h3>Request flow</h3>
+    <ol class="steps-list" style="margin-top:8px">
+      <li>
+        <span class="step-num">1</span>
+        <span class="step-body">Middleware reads <code class="ic">Authorization</code> header. Expects <code class="ic">Bearer &lt;token&gt;</code> format. When header is absent or does not start with <code class="ic">Bearer </code>: returns HTTP 401 <code class="ic">{"error":"Authorization header required"}</code>.</span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span class="step-body">Calls <code class="ic">jwt.verify(token, process.env.JWT_SECRET)</code> (Node) or <code class="ic">jwt.decode(token, JWT_SECRET, algorithms=['HS256'])</code> (Python). When token signature is invalid or expired: returns HTTP 401 <code class="ic">{"error":"Invalid or expired token"}</code>.</span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span class="step-body">Sets <code class="ic">req.user = { id: payload.sub, email: payload.email, name: payload.name, role: payload.role }</code>. Calls <code class="ic">next()</code>. Request proceeds to the route handler.</span>
+      </li>
+    </ol>
+
+    <div class="tbl-wrap" style="margin-top:10px">
+      <table class="xref-table">
+        <thead>
+          <tr>
+            <th>Condition</th>
+            <th>HTTP status</th>
+            <th>Response body</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Valid token</td>
+            <td>Pass through</td>
+            <td>req.user populated — route handler executes</td>
+          </tr>
+          <tr>
+            <td>Missing Authorization header</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"Authorization header required"}</code></td>
+          </tr>
+          <tr>
+            <td>Malformed header (not Bearer format)</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"Bearer token required"}</code></td>
+          </tr>
+          <tr>
+            <td>Invalid signature</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"Invalid or expired token"}</code></td>
+          </tr>
+          <tr>
+            <td>Expired token (exp claim past)</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"Invalid or expired token"}</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- oauth2 -->
+<div class="mw-card" id="auth-oauth2">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-pipeda">oauth2</span>
+    <strong style="font-size:12px;margin-left:4px">OAuth 2.0 — Bearer access token with issuer validation</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Required environment variable:</strong> <code class="ic">OAUTH_ISSUER</code> — the expected issuer claim in the access token (e.g., <code class="ic">https://auth.example.com</code>).</p>
+
+    <p style="font-size:12px;color:var(--text-dim)">The OAuth2 middleware validates the Bearer token's <code class="ic">iss</code> claim against <code class="ic">OAUTH_ISSUER</code>. It does not validate the signature cryptographically — it trusts the token was issued by the configured issuer and validates the claim string match only.</p>
+
+    <p style="font-size:12px;color:var(--text-dim)">For full JWKS-based signature validation (recommended for production), extend the variant to use <code class="ic">jwks-rsa</code> (Node) or <code class="ic">python-jose</code> (Python) to fetch and cache the public key from the issuer's JWKS endpoint.</p>
+
+    <p style="font-size:12px;color:var(--text-dim)">When validation passes: sets <code class="ic">req.user</code> with the same structure as the JWT variant — <code class="ic">id</code> from <code class="ic">sub</code> claim, <code class="ic">email</code>, <code class="ic">name</code>, <code class="ic">role</code>.</p>
+
+    <div class="tbl-wrap" style="margin-top:10px">
+      <table class="xref-table">
+        <thead>
+          <tr>
+            <th>Condition</th>
+            <th>HTTP status</th>
+            <th>Response body</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Valid token, issuer matches</td>
+            <td>Pass through</td>
+            <td>req.user populated</td>
+          </tr>
+          <tr>
+            <td>Missing Bearer token</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"Bearer token required"}</code></td>
+          </tr>
+          <tr>
+            <td>Issuer mismatch</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"Token issuer invalid"}</code></td>
+          </tr>
+          <tr>
+            <td>Expired token</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"Token expired"}</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- apikey -->
+<div class="mw-card" id="auth-apikey">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-cmmc">apikey</span>
+    <strong style="font-size:12px;margin-left:4px">API Key — database-validated key</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Reads:</strong> <code class="ic">X-API-Key</code> header.</p>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Looks up the key value in the database table <code class="ic">api_keys</code>. The table must have columns: <code class="ic">key</code> (string, indexed), <code class="ic">user_id</code>, <code class="ic">email</code>, <code class="ic">name</code>, <code class="ic">role</code>, <code class="ic">active</code> (boolean), <code class="ic">expires_at</code> (nullable timestamp).</p>
+
+    <div class="tbl-wrap">
+      <table class="xref-table">
+        <thead>
+          <tr>
+            <th>Condition</th>
+            <th>HTTP status</th>
+            <th>Response body</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Key found, active=true, not expired</td>
+            <td>Pass through</td>
+            <td>req.user populated from DB row</td>
+          </tr>
+          <tr>
+            <td>Missing X-API-Key header</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"X-API-Key header required"}</code></td>
+          </tr>
+          <tr>
+            <td>Key not found in database</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"Invalid API key"}</code></td>
+          </tr>
+          <tr>
+            <td>Key found but active=false</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"API key disabled"}</code></td>
+          </tr>
+          <tr>
+            <td>Key found but expires_at is past</td>
+            <td>401</td>
+            <td><code class="ic">{"error":"API key expired"}</code></td>
+          </tr>
+          <tr>
+            <td>Database unreachable during lookup</td>
+            <td>503</td>
+            <td><code class="ic">{"error":"Auth service temporarily unavailable"}</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- all -->
+<div class="mw-card" id="auth-all">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-hipaa">all</span>
+    <strong style="font-size:12px;margin-left:4px">All methods — JWT first, then API key (default)</strong>
+  </div>
+  <div class="mw-card-body">
+    <p><strong>Default value.</strong> Tries JWT validation first. When JWT fails, tries API key lookup. When both fail, returns 401.</p>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">This value supports both human users (who carry JWTs from login) and service accounts (which carry API keys for machine-to-machine calls) without requiring two separate deployments.</p>
+
+    <h3>Decision flow</h3>
+    <div class="diagram-box">
+      <span class="d-highlight">Request arrives</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="d-arrow">↓</span><br>
+      <span class="d-highlight">Has Authorization: Bearer header?</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="d-arrow">├── Yes →</span> Try JWT.verify()<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="d-arrow">├── Valid →</span> <span style="color:var(--green)">set req.user, call next()</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="d-arrow">└── Invalid →</span> Try X-API-Key header<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="d-arrow">└── No →</span> Try X-API-Key header<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="d-arrow">├── Key found + valid →</span> <span style="color:var(--green)">set req.user, call next()</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="d-arrow">└── No key or invalid →</span> <span style="color:var(--red)">401 Unauthorized</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 7 — ORM AXIS
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-purple" id="axis-orm">7. ORM axis — what each value includes</h2>
+<p class="section-sub">Selects the database access layer. Each value provides a consistent interface with three operations: <code class="ic">ping()</code> (health check), <code class="ic">findUserByApiKey(key)</code> (used by AUTH=apikey), and <code class="ic">disconnect()</code> (shutdown).</p>
+
+<div class="note-block">
+  <strong>Why a consistent interface:</strong> The auth middleware, health check endpoint, and graceful shutdown handler all use the ORM wrapper without knowing which ORM is active. Swapping ORM values does not require changing any application code outside <code class="ic">src/db/active/</code>.
+</div>
+
+<h3>Node ORM options</h3>
+
+<div class="mw-card" id="orm-prisma">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-standard">prisma</span>
+    <strong style="font-size:12px;margin-left:4px">Prisma — default for Node</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block">// src/db/prisma/index.ts
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+export async function ping(): Promise&lt;void&gt; {
+  await prisma.$queryRaw`SELECT 1`;
+}
+
+export async function findUserByApiKey(key: string) {
+  return prisma.apiKey.findUnique({
+    where: { key, active: true },
+    include: { user: true },
+  });
+}
+
+export async function disconnect(): Promise&lt;void&gt; {
+  await prisma.$disconnect();
+}</pre>
+    <p style="font-size:12px;color:var(--text-dim)">Requires <code class="ic">prisma/schema.prisma</code> in the project root. Run <code class="ic">npx prisma generate</code> to generate the client before building. The generated client is included in the build output.</p>
+  </div>
+</div>
+
+<div class="mw-card" id="orm-typeorm">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-soc2">typeorm</span>
+    <strong style="font-size:12px;margin-left:4px">TypeORM — decorator-based ORM</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block">// src/db/typeorm/index.ts
+import { DataSource } from 'typeorm';
+import { ApiKey } from '../entities/ApiKey';
+
+const dataSource = new DataSource({
+  type: 'postgres',
+  url: process.env.DATABASE_URL,
+  entities: [ApiKey],
+  synchronize: false, // never true in production
+});
+
+export async function ping(): Promise&lt;void&gt; {
+  await dataSource.query('SELECT 1');
+}
+
+export async function findUserByApiKey(key: string) {
+  return dataSource.getRepository(ApiKey).findOne({
+    where: { key, active: true },
+    relations: ['user'],
+  });
+}
+
+export async function disconnect(): Promise&lt;void&gt; {
+  await dataSource.destroy();
+}</pre>
+    <p style="font-size:12px;color:var(--text-dim)">Requires entity classes decorated with <code class="ic">@Entity()</code>. <code class="ic">synchronize: false</code> is enforced — do not set to <code class="ic">true</code> in any environment that has real data.</p>
+  </div>
+</div>
+
+<div class="mw-card" id="orm-drizzle">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-pipeda">drizzle</span>
+    <strong style="font-size:12px;margin-left:4px">Drizzle ORM — type-safe SQL builder</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block">// src/db/drizzle/index.ts
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
+import { sql } from 'drizzle-orm';
+import { apiKeys } from '../schema';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const db = drizzle(pool);
+
+export async function ping(): Promise&lt;void&gt; {
+  await db.execute(sql`SELECT 1`);
+}
+
+export async function findUserByApiKey(key: string) {
+  const result = await db
+    .select()
+    .from(apiKeys)
+    .where(eq(apiKeys.key, key))
+    .limit(1);
+  return result[0] ?? null;
+}
+
+export async function disconnect(): Promise&lt;void&gt; {
+  await pool.end();
+}</pre>
+    <p style="font-size:12px;color:var(--text-dim)">Requires schema file at <code class="ic">src/db/schema.ts</code> with Drizzle table definitions. No code generation step — schema is the source of truth.</p>
+  </div>
+</div>
+
+<div class="mw-card" id="orm-none-node">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-none">none</span>
+    <strong style="font-size:12px;margin-left:4px">No ORM — no-op stub (Node)</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block">// src/db/none/index.ts
+export async function ping(): Promise&lt;void&gt; {
+  // no-op — no database configured
+}
+
+export async function findUserByApiKey(_key: string) {
+  return null; // always returns null — AUTH=apikey will always fail
+}
+
+export async function disconnect(): Promise&lt;void&gt; {
+  // no-op
+}</pre>
+    <p style="font-size:12px;color:var(--text-dim)"><strong>Use when:</strong> The service does not use a database. <code class="ic">AUTH=apikey</code> will always reject requests when <code class="ic">ORM=none</code> because <code class="ic">findUserByApiKey</code> always returns null. Do not use <code class="ic">ORM=none</code> with <code class="ic">AUTH=apikey</code> or <code class="ic">AUTH=all</code>.</p>
+  </div>
+</div>
+
+<h3>Python ORM options</h3>
+
+<div class="mw-card" id="orm-sqlalchemy">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-standard">sqlalchemy</span>
+    <strong style="font-size:12px;margin-left:4px">SQLAlchemy — default for Python</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block"># src/db/sqlalchemy/__init__.py
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+import os
+
+engine = create_async_engine(os.environ['DATABASE_URL'])
+AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
+
+async def ping() -> None:
+    async with engine.connect() as conn:
+        await conn.execute(text('SELECT 1'))
+
+async def find_user_by_api_key(key: str):
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(
+            select(ApiKey).where(ApiKey.key == key, ApiKey.active == True)
+        )
+        return result.scalar_one_or_none()</pre>
+    <p style="font-size:12px;color:var(--text-dim)">Async SQLAlchemy with PostgreSQL. Requires <code class="ic">asyncpg</code> driver (<code class="ic">DATABASE_URL</code> must use <code class="ic">postgresql+asyncpg://</code> scheme).</p>
+  </div>
+</div>
+
+<div class="mw-card" id="orm-tortoise">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-soc2">tortoise</span>
+    <strong style="font-size:12px;margin-left:4px">Tortoise ORM — async-native Python ORM</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block"># src/db/tortoise/__init__.py
+from tortoise import Tortoise
+from tortoise.contrib.fastapi import register_tortoise
+import os
+
+async def init_db(app) -> None:
+    await Tortoise.init(
+        db_url=os.environ['DATABASE_URL'],
+        modules={'models': ['app.models']},
+    )
+    await Tortoise.generate_schemas(safe=True)
+
+async def ping() -> None:
+    await Tortoise.get_connection('default').execute_query('SELECT 1')
+
+async def find_user_by_api_key(key: str):
+    from app.models import ApiKey
+    return await ApiKey.get_or_none(key=key, active=True)
+
+async def close_db() -> None:
+    await Tortoise.close_connections()</pre>
+    <p style="font-size:12px;color:var(--text-dim)">Tortoise ORM is designed for async-first Python. Simpler query API than SQLAlchemy. Requires models defined with <code class="ic">class Model(tortoise.Model)</code>.</p>
+  </div>
+</div>
+
+<div class="mw-card" id="orm-none-python">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-none">none</span>
+    <strong style="font-size:12px;margin-left:4px">No ORM — stub async dependency (Python)</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block"># src/db/none/__init__.py
+async def get_db():
+    yield None  # yields None — routes must handle None session
+
+async def ping() -> None:
+    pass  # no-op
+
+async def find_user_by_api_key(key: str):
+    return None  # always None</pre>
+  </div>
+</div>
+
+<h3>Go ORM options</h3>
+
+<div class="mw-card" id="orm-gorm">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-standard">gorm</span>
+    <strong style="font-size:12px;margin-left:4px">GORM — default for Go</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block">// src/db/gorm/gorm.go
+package db
+
+import (
+    "gorm.io/driver/postgres"
+    "gorm.io/gorm"
+    "os"
+)
+
+var DB *gorm.DB
+
+func Init() error {
+    var err error
+    DB, err = gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
+    if err != nil {
+        return err
+    }
+    return DB.AutoMigrate(&ApiKey{})
+}
+
+func Ping() error {
+    sqlDB, err := DB.DB()
+    if err != nil {
+        return err
+    }
+    return sqlDB.Ping()
+}
+
+func FindUserByApiKey(key string) (*ApiKey, error) {
+    var apiKey ApiKey
+    result := DB.Where("key = ? AND active = ?", key, true).First(&apiKey)
+    if result.Error != nil {
+        return nil, result.Error
+    }
+    return &apiKey, nil
+}
+
+func Disconnect() error {
+    sqlDB, _ := DB.DB()
+    return sqlDB.Close()
+}</pre>
+    <p style="font-size:12px;color:var(--text-dim)"><code class="ic">AutoMigrate</code> only adds missing columns — it does not drop or rename. Safe to run on every startup.</p>
+  </div>
+</div>
+
+<div class="mw-card" id="orm-ent">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-soc2">ent</span>
+    <strong style="font-size:12px;margin-left:4px">ent — graph-based entity framework for Go</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block">// src/db/ent/ent.go
+package db
+
+import (
+    "context"
+    "entgo.io/ent/dialect/sql"
+    "myservice/ent"
+    _ "github.com/lib/pq"
+    "os"
+)
+
+var Client *ent.Client
+
+func Init(ctx context.Context) error {
+    drv, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+    if err != nil {
+        return err
+    }
+    Client = ent.NewClient(ent.Driver(drv))
+    return Client.Schema.Create(ctx)
+}
+
+func Ping() error {
+    _, err := Client.ApiKey.Query().Count(context.Background())
+    return err
+}
+
+func FindUserByApiKey(ctx context.Context, key string) (*ent.ApiKey, error) {
+    return Client.ApiKey.
+        Query().
+        Where(apikey.Key(key), apikey.Active(true)).
+        Only(ctx)
+}
+
+func Close() error {
+    return Client.Close()
+}</pre>
+    <p style="font-size:12px;color:var(--text-dim)">Requires ent schema generation: <code class="ic">go generate ./ent/...</code>. Run this before the Docker build or include it in the Dockerfile builder stage.</p>
+  </div>
+</div>
+
+<div class="mw-card" id="orm-none-go">
+  <div class="mw-card-header">
+    <span class="mw-badge mw-badge-none">none</span>
+    <strong style="font-size:12px;margin-left:4px">No ORM — nil-returning stubs (Go)</strong>
+  </div>
+  <div class="mw-card-body">
+    <pre class="code-block">// src/db/none/none.go
+package db
+
+func Init() error          { return nil }
+func Ping() error          { return nil }
+func FindUserByApiKey(key string) (*ApiKey, error) { return nil, nil }
+func Disconnect() error    { return nil }</pre>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 8 — EXAMPLE BUILDS
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-green" id="example-builds">8. Example builds</h2>
+
+<h3>Example 1 — HIPAA-compliant Node service with Prometheus and JWT</h3>
+<pre class="code-block">docker build \
+  --build-arg COMPLIANCE=hipaa \
+  --build-arg OBSERVABILITY=prometheus \
+  --build-arg AUTH=jwt \
+  --build-arg ORM=prisma \
+  -t myapp:hipaa .
+
+# Equivalent full command (all 8 axes explicit):
+docker build \
+  --build-arg BUILD_IMAGE=node \
+  --build-arg RUNTIME=alpine \
+  --build-arg PKG_MGR=npm \
+  --build-arg BUILD_TOOL=tsc \
+  --build-arg COMPLIANCE=hipaa \
+  --build-arg OBSERVABILITY=prometheus \
+  --build-arg AUTH=jwt \
+  --build-arg ORM=prisma \
+  -t myapp:hipaa .</pre>
+
+<p><strong>What gets COPY'd into the image at build time:</strong></p>
+<div class="image-contents">
+  <div class="image-row">
+    <span class="image-path">src/compliance/active/</span>
+    <span class="image-what">← HIPAA middleware: audit logger + PHI masking + verbose error suppression</span>
+  </div>
+  <div class="image-row">
+    <span class="image-path">src/observability/active/</span>
+    <span class="image-what">← prom-client: collectDefaultMetrics + /metrics endpoint</span>
+  </div>
+  <div class="image-row">
+    <span class="image-path">src/auth/active/</span>
+    <span class="image-what">← JWT-only validation: reads Authorization: Bearer, calls jwt.verify()</span>
+  </div>
+  <div class="image-row">
+    <span class="image-path">src/db/active/</span>
+    <span class="image-what">← PrismaClient wrapper: ping, findUserByApiKey, disconnect</span>
+  </div>
+</div>
+
+<p><strong>Runtime environment variables required:</strong></p>
+<pre class="code-block">JWT_SECRET=&lt;minimum-32-chars&gt;
+DATABASE_URL=postgresql://user:pass@host:5432/dbname</pre>
+
+
+<h3>Example 2 — PCI-compliant Python service with OpenTelemetry and API key auth</h3>
+<pre class="code-block">docker build \
+  --build-arg BUILD_IMAGE=python \
+  --build-arg RUNTIME=slim \
+  --build-arg PKG_MGR=poetry \
+  --build-arg COMPLIANCE=pci \
+  --build-arg OBSERVABILITY=otel \
+  --build-arg AUTH=apikey \
+  --build-arg ORM=sqlalchemy \
+  -t myapp:pci .</pre>
+
+<p><strong>What gets COPY'd into the image at build time:</strong></p>
+<div class="image-contents">
+  <div class="image-row">
+    <span class="image-path">src/compliance/active/</span>
+    <span class="image-what">← PCI middleware: startup secret check + TLS enforcement + debug block + security headers</span>
+  </div>
+  <div class="image-row">
+    <span class="image-path">src/observability/active/</span>
+    <span class="image-what">← OpenTelemetry: TracerProvider + FastAPIInstrumentor + OTLP exporter</span>
+  </div>
+  <div class="image-row">
+    <span class="image-path">src/auth/active/</span>
+    <span class="image-what">← API key validation: reads X-API-Key, queries api_keys table</span>
+  </div>
+  <div class="image-row">
+    <span class="image-path">src/db/active/</span>
+    <span class="image-what">← SQLAlchemy AsyncSession: async engine, get_db dependency, find_user_by_api_key</span>
+  </div>
+</div>
+
+<p><strong>Runtime environment variables required:</strong></p>
+<pre class="code-block">DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/dbname
+OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318/v1/traces
+# PCI secret check will verify all *_KEY, *_SECRET, *_TOKEN, *_PASS vars are ≥16 chars</pre>
+
+<p><strong>Why RUNTIME=slim (not alpine) for Python+PCI:</strong> The PCI middleware requires the <code class="ic">openssl</code> CLI for cryptographic operations during the startup check. Alpine's OpenSSL build sometimes lacks full PKCS#11 support needed for PCI-grade key operations. Debian slim provides the full OpenSSL feature set.</p>
+
+
+<h3>Example 3 — FIPS-compliant Go service for federal workload</h3>
+<pre class="code-block">docker build \
+  --build-arg BUILD_IMAGE=golang \
+  --build-arg RUNTIME=fips \
+  --build-arg COMPLIANCE=fips \
+  --build-arg OBSERVABILITY=otel \
+  --build-arg AUTH=oauth2 \
+  --build-arg ORM=gorm \
+  -t myapp:fips .</pre>
+
+<p><strong>What gets COPY'd into the image at build time:</strong></p>
+<div class="image-contents">
+  <div class="image-row">
+    <span class="image-path">src/compliance/active/</span>
+    <span class="image-what">← FIPS startup check: verifies OpenSSL FIPS mode active, fatal exit if not</span>
+  </div>
+  <div class="image-row">
+    <span class="image-path">src/observability/active/</span>
+    <span class="image-what">← OTLP trace provider: sends traces to OTEL_EXPORTER_OTLP_ENDPOINT</span>
+  </div>
+  <div class="image-row">
+    <span class="image-path">src/auth/active/</span>
+    <span class="image-what">← OAuth2 issuer validation: validates Bearer token iss claim against OAUTH_ISSUER</span>
+  </div>
+  <div class="image-row">
+    <span class="image-path">src/db/active/</span>
+    <span class="image-what">← GORM with postgres driver: AutoMigrate, Ping, FindUserByApiKey</span>
+  </div>
+</div>
+
+<div class="warn-block">
+  <strong>Warning:</strong> The Go runtime stage for <code class="ic">BUILD_IMAGE=golang</code> uses a distroless image. The FIPS check middleware in the Go variant uses a CGO build flag (<code class="ic">-tags=fips</code>) — this is set automatically by the Dockerfile when <code class="ic">RUNTIME=fips</code>. The CGO dependency means the binary is dynamically linked. Ensure the FIPS runtime image includes the required shared libraries.
+</div>
+
+
+<h3>Example 4 — SOC 2 + Datadog for enterprise SaaS</h3>
+<pre class="code-block">docker build \
+  --build-arg COMPLIANCE=soc2 \
+  --build-arg OBSERVABILITY=datadog \
+  --build-arg AUTH=all \
+  --build-arg ORM=prisma \
+  -t myapp:soc2 .</pre>
+
+<p><strong>Runtime environment variables required:</strong></p>
+<pre class="code-block">DD_SERVICE=my-api
+DD_ENV=production
+DD_AGENT_HOST=datadog-agent.monitoring.svc.cluster.local
+JWT_SECRET=&lt;minimum-32-chars&gt;
+DATABASE_URL=postgresql://user:pass@host:5432/dbname</pre>
+
+
+<h3>Example 5 — Minimal service, no auth, no DB, no compliance</h3>
+<pre class="code-block"># All defaults — fastest possible build
+docker build -t myapp:minimal .
+
+# Explicit equivalent:
+docker build \
+  --build-arg BUILD_IMAGE=node \
+  --build-arg RUNTIME=alpine \
+  --build-arg PKG_MGR=npm \
+  --build-arg BUILD_TOOL=tsc \
+  --build-arg COMPLIANCE=standard \
+  --build-arg OBSERVABILITY=none \
+  --build-arg AUTH=all \
+  --build-arg ORM=none \
+  -t myapp:minimal .</pre>
+
+<div class="note-block">
+  <strong>Note:</strong> When <code class="ic">ORM=none</code> and <code class="ic">AUTH=all</code>, the all-methods auth tries JWT first (which can succeed if <code class="ic">JWT_SECRET</code> is set), then falls back to API key lookup — which always returns null when <code class="ic">ORM=none</code>. If the service handles unauthenticated public routes, use <code class="ic">AUTH=none</code> instead.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 9 — COMBINING AXES: COMPATIBILITY MATRIX
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-amber" id="compatibility">9. Combining axes — compatibility matrix</h2>
+<p class="section-sub">Most combinations are valid. Three constraints exist. One combination requires special handling.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Combination</th>
+        <th>Valid?</th>
+        <th>Constraint / note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">COMPLIANCE=fips</code> + <code class="ic">RUNTIME=alpine</code></td>
+        <td style="color:var(--red);font-weight:600">No</td>
+        <td>Build guard exits with fatal error. Alpine does not have FIPS-validated OpenSSL. Must use <code class="ic">RUNTIME=fips</code>.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">COMPLIANCE=fips</code> + <code class="ic">RUNTIME=slim</code></td>
+        <td style="color:var(--red);font-weight:600">No</td>
+        <td>Same as above. Slim is Debian, not FIPS-validated. Must use <code class="ic">RUNTIME=fips</code>.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">AUTH=apikey</code> + <code class="ic">ORM=none</code></td>
+        <td style="color:var(--amber);font-weight:600">Builds</td>
+        <td>Build succeeds. At runtime, every API key lookup returns null. Every request fails with 401. Do not use in production.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">BUILD_IMAGE=golang</code> + <code class="ic">RUNTIME=alpine</code></td>
+        <td style="color:var(--green);font-weight:600">Yes</td>
+        <td>Builder uses <code class="ic">golang:1.22-alpine</code>. Runtime uses distroless (RUNTIME value ignored for Go runtime stage). No shell in the container.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">BUILD_IMAGE=node</code> + <code class="ic">BUILD_TOOL=esbuild</code> or <code class="ic">swc</code></td>
+        <td style="color:var(--green);font-weight:600">Yes</td>
+        <td>Valid. No type checking runs. Add <code class="ic">tsc --noEmit</code> to CI pipeline separately.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">COMPLIANCE=hipaa</code> + <code class="ic">OBSERVABILITY=prometheus</code></td>
+        <td style="color:var(--green);font-weight:600">Yes</td>
+        <td>Valid and common. HIPAA audit logs go to stdout. Prometheus metrics go to <code class="ic">/metrics</code>. No conflict.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">COMPLIANCE=pci</code> + <code class="ic">OBSERVABILITY=datadog</code></td>
+        <td style="color:var(--amber);font-weight:600">Yes — with note</td>
+        <td>Valid. Ensure Datadog Agent is deployed inside the CDE network boundary. Spans contain request metadata — verify no cardholder data leaks into span attributes.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">PKG_MGR=bun</code> + <code class="ic">BUILD_IMAGE=node</code></td>
+        <td style="color:var(--amber);font-weight:600">Yes — with note</td>
+        <td>Valid for install only. If the runtime also uses Bun (not Node), swap <code class="ic">BUILD_IMAGE=bun</code>. Using Bun to install but Node to run is valid but uncommon.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">BUILD_IMAGE=python</code> + <code class="ic">BUILD_TOOL=tsc</code></td>
+        <td style="color:var(--text-dim)">Ignored</td>
+        <td><code class="ic">BUILD_TOOL</code> has no effect on Python services. The axis is silently ignored. No error.</td>
+      </tr>
+      <tr>
+        <td>Any + <code class="ic">COMPLIANCE=nerc</code> or <code class="ic">cmmc</code></td>
+        <td style="color:var(--green);font-weight:600">Yes</td>
+        <td>Valid with all combinations. <code class="ic">NO_EGRESS=true</code> environment variable is set by the middleware. Cluster NetworkPolicy must independently enforce egress blocking.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 10 — BUILD ARG DEFAULTS BY LANGUAGE
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-blue" id="defaults-by-language">10. Default values by language</h2>
+<p class="section-sub">Defaults are set in the Dockerfile. Each language template has different defaults for PKG_MGR and ORM.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>BUILD_IMAGE</th>
+        <th>RUNTIME default</th>
+        <th>PKG_MGR default</th>
+        <th>BUILD_TOOL default</th>
+        <th>ORM default</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">node</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td><code class="ic">npm</code></td>
+        <td><code class="ic">tsc</code></td>
+        <td><code class="ic">prisma</code></td>
+      </tr>
+      <tr>
+        <td><code class="ic">python</code></td>
+        <td><code class="ic">slim</code></td>
+        <td><code class="ic">pip</code></td>
+        <td>N/A (ignored)</td>
+        <td><code class="ic">sqlalchemy</code></td>
+      </tr>
+      <tr>
+        <td><code class="ic">golang</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td>N/A (<code class="ic">go mod</code>)</td>
+        <td>N/A (ignored)</td>
+        <td><code class="ic">gorm</code></td>
+      </tr>
+      <tr>
+        <td><code class="ic">java</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td>N/A (<code class="ic">gradle</code>)</td>
+        <td>N/A (ignored)</td>
+        <td>N/A (<code class="ic">hibernate</code> bundled)</td>
+      </tr>
+      <tr>
+        <td><code class="ic">dotnet</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td>N/A (<code class="ic">dotnet restore</code>)</td>
+        <td>N/A (ignored)</td>
+        <td>N/A (EF Core bundled)</td>
+      </tr>
+      <tr>
+        <td><code class="ic">rust</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td>N/A (<code class="ic">cargo</code>)</td>
+        <td>N/A (ignored)</td>
+        <td>N/A (<code class="ic">diesel</code> bundled)</td>
+      </tr>
+      <tr>
+        <td><code class="ic">elixir</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td>N/A (<code class="ic">mix</code>)</td>
+        <td>N/A (ignored)</td>
+        <td>N/A (<code class="ic">ecto</code> bundled)</td>
+      </tr>
+      <tr>
+        <td><code class="ic">ruby</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td>N/A (<code class="ic">bundle</code>)</td>
+        <td>N/A (ignored)</td>
+        <td>N/A (<code class="ic">activerecord</code> bundled)</td>
+      </tr>
+      <tr>
+        <td><code class="ic">php</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td>N/A (<code class="ic">composer</code>)</td>
+        <td>N/A (ignored)</td>
+        <td>N/A (<code class="ic">doctrine</code> bundled)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note-block">
+  <strong>Note on Java, .NET, Rust, Elixir, Ruby, PHP:</strong> These languages bundle their ORM as a library dependency in the project file (<code class="ic">build.gradle</code>, <code class="ic">.csproj</code>, <code class="ic">Cargo.toml</code>, <code class="ic">mix.exs</code>, <code class="ic">Gemfile</code>, <code class="ic">composer.json</code>). The ORM build axis controls the Node, Python, and Go ORM selection only. For other languages, add the ORM library directly to the project dependency file.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 11 — ADDING A NEW COMPLIANCE VALUE
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-amber" id="adding-compliance">11. Adding a new compliance value — extensibility guide</h2>
+<p class="section-sub">The Dockerfile COPY picks up new values automatically. No Dockerfile change is needed. Five steps.</p>
+
+<ol class="steps-list">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      <strong>Create the source files for the new value.</strong>
+      <span class="step-cmd">mkdir -p src/compliance/&lt;new-value&gt;</span>
+      <span class="step-why">One directory per value. The Dockerfile's <code class="ic">COPY src/compliance/${COMPLIANCE}/</code> instruction resolves to this path.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      <strong>Implement the compliance function matching the existing signature.</strong>
+      <p style="margin-top:4px;font-size:12px;color:var(--text-dim)">Node (<code class="ic">src/compliance/&lt;new-value&gt;/index.ts</code>):</p>
+      <span class="step-cmd">export function applyCompliance(app: Express): void {
+  // add middleware using app.use()
+  // add startup checks here
+}</span>
+      <p style="margin-top:8px;font-size:12px;color:var(--text-dim)">Python (<code class="ic">src/compliance/&lt;new-value&gt;/__init__.py</code>):</p>
+      <span class="step-cmd">def apply_compliance(app) -> None:
+    # add FastAPI middleware using app.add_middleware()
+    # add startup event handlers using @app.on_event("startup")</span>
+      <p style="margin-top:8px;font-size:12px;color:var(--text-dim)">Go (<code class="ic">src/compliance/&lt;new-value&gt;/compliance.go</code>):</p>
+      <span class="step-cmd">func Apply(r *chi.Mux) {
+    r.Use(complianceMiddleware)
+}</span>
+      <span class="step-why">The function signature is the contract. Application code calls this function once at startup — it does not know which value is active.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      <strong>Test the new value locally.</strong>
+      <span class="step-cmd">docker build --build-arg COMPLIANCE=&lt;new-value&gt; -t test:compliance-new .</span>
+      <span class="step-why">Confirm the COPY succeeds, dependencies install, and the service starts. Check logs for startup events from the new middleware.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      <strong>Update the feature matrix.</strong>
+      <span class="step-why">Add the new value to the COMPLIANCE row in <a href="17-feature-matrix.html">17-feature-matrix.html</a>. Auditors and consultants use the matrix to understand available options.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      <strong>Document the middleware specification.</strong>
+      <span class="step-why">Add the new value's middleware spec to <a href="12-compliance-variations.html">12-compliance-variations.html</a>. Follow Template A (failure mode block) for every failure mode the middleware introduces.</span>
+    </span>
+  </li>
+</ol>
+
+<h3>Adding a new observability value</h3>
+<p style="font-size:12px;color:var(--text-dim)">Same 5-step process. Target directory: <code class="ic">src/observability/&lt;new-value&gt;/</code>. Function signature: <code class="ic">initObservability(app)</code> (Node/Python) or <code class="ic">InitObservability(ctx)</code> (Go).</p>
+
+<h3>Adding a new auth value</h3>
+<p style="font-size:12px;color:var(--text-dim)">Same 5-step process. Target directory: <code class="ic">src/auth/&lt;new-value&gt;/</code>. Must export a <code class="ic">requireAuth</code> middleware. Must set <code class="ic">req.user</code> with <code class="ic">{ id, email, name, role }</code> on success. Must return HTTP 401 on failure.</p>
+
+<h3>Adding a new ORM value</h3>
+<p style="font-size:12px;color:var(--text-dim)">Same 5-step process. Target directory: <code class="ic">src/db/&lt;new-value&gt;/</code>. Must export three functions: <code class="ic">ping()</code>, <code class="ic">findUserByApiKey(key)</code>, <code class="ic">disconnect()</code>. All three must match the existing async signatures.</p>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 12 — AUDITING A BUILT IMAGE
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-green" id="auditing">12. Auditing a built image — confirming which axes are active</h2>
+<p class="section-sub">Inspect a built image to confirm which variant was compiled in. Three methods.</p>
+
+<h3>Method 1 — Read build args from image labels</h3>
+<p style="font-size:12px;color:var(--text-dim)">The Dockerfile writes all 8 axis values as image labels during the build. Read them with:</p>
+<pre class="code-block">docker inspect myapp:hipaa --format '{{ json .Config.Labels }}' | jq .
+
+# Expected output (example):
+{
+  "build.axis.compliance": "hipaa",
+  "build.axis.observability": "prometheus",
+  "build.axis.auth": "jwt",
+  "build.axis.orm": "prisma",
+  "build.axis.build_image": "node",
+  "build.axis.runtime": "alpine",
+  "build.axis.pkg_mgr": "npm",
+  "build.axis.build_tool": "tsc"
+}</pre>
+
+<h3>Method 2 — List active variant files in a running container</h3>
+<pre class="code-block"># Check compliance variant
+docker run --rm --entrypoint ls myapp:hipaa src/compliance/active/
+
+# Check observability variant
+docker run --rm --entrypoint ls myapp:hipaa src/observability/active/
+
+# Check auth variant
+docker run --rm --entrypoint ls myapp:hipaa src/auth/active/
+
+# Check ORM variant
+docker run --rm --entrypoint ls myapp:hipaa src/db/active/</pre>
+<div class="note-block">
+  <strong>Note:</strong> This method requires a shell in the image. It will not work on Go distroless images. Use Method 1 (labels) for distroless images.
+</div>
+
+<h3>Method 3 — Grep for variant-specific identifiers in the compiled output</h3>
+<pre class="code-block"># Check that hipaa middleware is present in compiled JS
+docker run --rm --entrypoint grep myapp:hipaa -r "hipaa_audit" dist/
+
+# Check that prisma client is present
+docker run --rm --entrypoint ls myapp:hipaa node_modules/.prisma/
+
+# Check prometheus client is present
+docker run --rm --entrypoint ls myapp:hipaa node_modules/prom-client/</pre>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 13 — CI PIPELINE INTEGRATION
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-blue" id="ci-integration">13. CI pipeline integration</h2>
+<p class="section-sub">How to pass build axes through a CI system. GitHub Actions example and Kubernetes deployment pattern.</p>
+
+<h3>GitHub Actions — parameterized build</h3>
+<pre class="code-block">name: Build and push service image
+
+on:
+  push:
+    branches: [main]
+
+env:
+  COMPLIANCE: ${{ vars.COMPLIANCE || 'standard' }}
+  OBSERVABILITY: ${{ vars.OBSERVABILITY || 'none' }}
+  AUTH: ${{ vars.AUTH || 'all' }}
+  ORM: ${{ vars.ORM || 'prisma' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image with axes
+        run: |
+          docker build \
+            --build-arg COMPLIANCE=${{ env.COMPLIANCE }} \
+            --build-arg OBSERVABILITY=${{ env.OBSERVABILITY }} \
+            --build-arg AUTH=${{ env.AUTH }} \
+            --build-arg ORM=${{ env.ORM }} \
+            --label "git.sha=${{ github.sha }}" \
+            --label "git.ref=${{ github.ref }}" \
+            -t $IMAGE_NAME:${{ github.sha }} .
+
+      - name: Verify build axes in image labels
+        run: |
+          COMPLIANCE_ACTUAL=$(docker inspect $IMAGE_NAME:${{ github.sha }} \
+            --format '{{ index .Config.Labels "build.axis.compliance" }}')
+          echo "COMPLIANCE_ACTUAL=${COMPLIANCE_ACTUAL}"
+          if [ "${COMPLIANCE_ACTUAL}" != "${{ env.COMPLIANCE }}" ]; then
+            echo "ERROR: compliance axis mismatch"
+            exit 1
+          fi</pre>
+
+<p style="font-size:12px;color:var(--text-dim)">Set <code class="ic">COMPLIANCE</code>, <code class="ic">OBSERVABILITY</code>, <code class="ic">AUTH</code>, and <code class="ic">ORM</code> as GitHub Actions Variables (repository or environment level) — not secrets. Axis values are not sensitive.</p>
+
+<h3>Kubernetes — separate deployments per compliance tier</h3>
+<p style="font-size:12px;color:var(--text-dim)">Run separate images per compliance tier. Do not use a single image with a runtime env var to switch compliance modes — the variant code must be compiled in at build time.</p>
+<pre class="code-block"># Build three tier-specific images from the same source
+docker build --build-arg COMPLIANCE=standard -t myapi:standard .
+docker build --build-arg COMPLIANCE=hipaa    -t myapi:hipaa    .
+docker build --build-arg COMPLIANCE=pci      -t myapi:pci      .
+
+# Deploy each to its own namespace
+kubectl -n commercial  set image deployment/myapi myapi=myapi:standard
+kubectl -n healthcare  set image deployment/myapi myapi=myapi:hipaa
+kubectl -n payments    set image deployment/myapi myapi=myapi:pci</pre>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: one image per compliance tier, not runtime env switching.</div>
+  <div class="decision-rejected">Rejected: single image with COMPLIANCE env var read at runtime to load the right middleware.</div>
+  <div style="color:var(--text-dim);margin-bottom:4px">Why rejected: A single image would include all 8 compliance middleware variants. Any of them could be activated by changing an env var — compliance boundaries are only as strong as environment variable access controls. A misconfigured deployment could run HIPAA middleware in a standard environment or vice versa.</div>
+  <div class="decision-tradeoff">Tradeoff accepted: more images to build and push (~3-8x image count). CI time increases by image count × build time.</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 14 — FAILURE MODES — WRONG AXIS VALUES
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-amber" id="failure-modes">14. Failure modes — wrong axis values</h2>
+<p class="section-sub">What happens when an invalid or incompatible axis value is passed. Every failure mode resolved.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Failure condition</th>
+        <th>When it occurs</th>
+        <th>Error seen</th>
+        <th>Fix</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">COMPLIANCE=fips RUNTIME=alpine</code></td>
+        <td>Docker build</td>
+        <td><code class="ic">ERROR: COMPLIANCE=fips requires RUNTIME=fips</code> — build exits non-zero</td>
+        <td>Add <code class="ic">--build-arg RUNTIME=fips</code></td>
+      </tr>
+      <tr>
+        <td>Unknown compliance value (e.g. <code class="ic">COMPLIANCE=gdpr</code>)</td>
+        <td>Docker build COPY step</td>
+        <td><code class="ic">COPY failed: file not found in build context or excluded by .dockerignore: src/compliance/gdpr/</code></td>
+        <td>Use only listed values. Create the variant first if adding a new one.</td>
+      </tr>
+      <tr>
+        <td>Unknown observability value (e.g. <code class="ic">OBSERVABILITY=newrelic</code>)</td>
+        <td>Docker build COPY step</td>
+        <td><code class="ic">COPY failed: file not found: src/observability/newrelic/</code></td>
+        <td>Use only listed values. Create the variant first if adding a new one.</td>
+      </tr>
+      <tr>
+        <td>Wrong lockfile for PKG_MGR (e.g. <code class="ic">PKG_MGR=pnpm</code> but only <code class="ic">package-lock.json</code> exists)</td>
+        <td>Docker build install step</td>
+        <td><code class="ic">ERROR: Cannot find pnpm-lock.yaml. Run pnpm install locally first.</code></td>
+        <td>Run <code class="ic">pnpm install</code> locally, commit <code class="ic">pnpm-lock.yaml</code>, then rebuild.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">ORM=prisma</code> but no <code class="ic">prisma/schema.prisma</code></td>
+        <td>Docker build — <code class="ic">npx prisma generate</code> step</td>
+        <td><code class="ic">Error: Could not find a schema.prisma file</code></td>
+        <td>Create <code class="ic">prisma/schema.prisma</code> in the project root.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">AUTH=jwt</code> but <code class="ic">JWT_SECRET</code> env var not set at runtime</td>
+        <td>Runtime — first authenticated request</td>
+        <td><code class="ic">Error: secretOrPrivateKey must have a value</code> — Node process crashes on first auth call</td>
+        <td>Set <code class="ic">JWT_SECRET</code> in Kubernetes secret and mount as env var before deploying.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">OBSERVABILITY=otel</code> but <code class="ic">OTEL_EXPORTER_OTLP_ENDPOINT</code> not set</td>
+        <td>Runtime startup</td>
+        <td>OTLP exporter silently fails to connect. No crash. Traces are dropped. No error visible in logs.</td>
+        <td>Set <code class="ic">OTEL_EXPORTER_OTLP_ENDPOINT</code> env var. Verify otel-collector is reachable.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">COMPLIANCE=pci</code> + weak secret (e.g. <code class="ic">DB_PASS=secret</code>)</td>
+        <td>Runtime startup</td>
+        <td><code class="ic">FATAL: DB_PASS is less than 16 characters. PCI DSS Req 8.3.6 violation. Exiting.</code> — process exits, container crash-loops</td>
+        <td>Replace all short secrets. PCI middleware requires all *_PASS, *_KEY, *_SECRET, *_TOKEN env vars to be ≥16 characters.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">BUILD_IMAGE=python RUNTIME=alpine</code></td>
+        <td>Docker build install step</td>
+        <td>Some Python packages with C extensions fail to compile on musl (Alpine) libc. Error varies by package.</td>
+        <td>Switch to <code class="ic">RUNTIME=slim</code> (Debian glibc) for Python services with C extension dependencies.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 15 — ENVIRONMENT VARIABLES REQUIRED PER AXIS
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-green" id="env-vars">15. Environment variables required per axis value</h2>
+<p class="section-sub">Compile into your Kubernetes secrets checklist. Every required var listed per axis value.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Axis</th>
+        <th>Value</th>
+        <th>Required env var</th>
+        <th>Example value</th>
+        <th>When missing</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AUTH</td>
+        <td><code class="ic">jwt</code> / <code class="ic">all</code></td>
+        <td><code class="ic">JWT_SECRET</code></td>
+        <td><code class="ic">my-32-char-secret-abc123def456xyz</code></td>
+        <td>Process crashes on first auth call</td>
+      </tr>
+      <tr>
+        <td>AUTH</td>
+        <td><code class="ic">oauth2</code></td>
+        <td><code class="ic">OAUTH_ISSUER</code></td>
+        <td><code class="ic">https://auth.example.com</code></td>
+        <td>All tokens fail issuer check — 401 on every request</td>
+      </tr>
+      <tr>
+        <td>AUTH</td>
+        <td><code class="ic">apikey</code> / <code class="ic">all</code></td>
+        <td><code class="ic">DATABASE_URL</code></td>
+        <td><code class="ic">postgresql://user:pass@host:5432/db</code></td>
+        <td>DB connection fails on first auth call — 503</td>
+      </tr>
+      <tr>
+        <td>ORM</td>
+        <td>All except <code class="ic">none</code></td>
+        <td><code class="ic">DATABASE_URL</code></td>
+        <td><code class="ic">postgresql://user:pass@host:5432/db</code></td>
+        <td>ORM fails to initialize — process exits or first query fails</td>
+      </tr>
+      <tr>
+        <td>OBSERVABILITY</td>
+        <td><code class="ic">otel</code></td>
+        <td><code class="ic">OTEL_EXPORTER_OTLP_ENDPOINT</code></td>
+        <td><code class="ic">http://otel-collector:4318/v1/traces</code></td>
+        <td>Traces dropped silently — no crash</td>
+      </tr>
+      <tr>
+        <td>OBSERVABILITY</td>
+        <td><code class="ic">datadog</code></td>
+        <td><code class="ic">DD_SERVICE</code></td>
+        <td><code class="ic">my-api</code></td>
+        <td>Traces appear in Datadog with no service name — difficult to filter</td>
+      </tr>
+      <tr>
+        <td>OBSERVABILITY</td>
+        <td><code class="ic">datadog</code></td>
+        <td><code class="ic">DD_ENV</code></td>
+        <td><code class="ic">production</code></td>
+        <td>Traces appear with no environment tag — mixed with all envs in Datadog</td>
+      </tr>
+      <tr>
+        <td>OBSERVABILITY</td>
+        <td><code class="ic">datadog</code></td>
+        <td><code class="ic">DD_AGENT_HOST</code></td>
+        <td><code class="ic">datadog-agent.monitoring.svc.cluster.local</code></td>
+        <td>Spans buffered then dropped when buffer fills — no crash</td>
+      </tr>
+      <tr>
+        <td>COMPLIANCE</td>
+        <td><code class="ic">fips</code></td>
+        <td><code class="ic">OPENSSL_FIPS</code></td>
+        <td><code class="ic">1</code></td>
+        <td>FIPS check fails at startup — process exits, container crash-loops</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 16 — QUICK BUILD COMMAND REFERENCE
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-blue" id="quick-commands">16. Quick build command reference</h2>
+<p class="section-sub">Copy-paste commands for common build patterns. All use the short form (omit axes that stay at default).</p>
+
+<h3>Compliance-only builds (default language: Node, default obs/auth/orm)</h3>
+<pre class="code-block"># Standard (no compliance middleware)
+docker build -t svc:standard .
+
+# HIPAA
+docker build --build-arg COMPLIANCE=hipaa -t svc:hipaa .
+
+# PCI DSS
+docker build --build-arg COMPLIANCE=pci -t svc:pci .
+
+# PIPEDA (Canadian)
+docker build --build-arg COMPLIANCE=pipeda -t svc:pipeda .
+
+# FIPS (requires RUNTIME=fips)
+docker build --build-arg COMPLIANCE=fips --build-arg RUNTIME=fips -t svc:fips .
+
+# SOC 2
+docker build --build-arg COMPLIANCE=soc2 -t svc:soc2 .
+
+# CMMC
+docker build --build-arg COMPLIANCE=cmmc -t svc:cmmc .
+
+# NERC CIP
+docker build --build-arg COMPLIANCE=nerc -t svc:nerc .</pre>
+
+<h3>Observability builds</h3>
+<pre class="code-block"># OpenTelemetry
+docker build --build-arg OBSERVABILITY=otel -t svc:otel .
+
+# Prometheus
+docker build --build-arg OBSERVABILITY=prometheus -t svc:prom .
+
+# Datadog
+docker build --build-arg OBSERVABILITY=datadog -t svc:dd .
+
+# HIPAA + Prometheus + JWT (common healthcare API stack)
+docker build \
+  --build-arg COMPLIANCE=hipaa \
+  --build-arg OBSERVABILITY=prometheus \
+  --build-arg AUTH=jwt \
+  -t svc:hipaa-prom-jwt .</pre>
+
+<h3>Language + package manager builds</h3>
+<pre class="code-block"># Python with Poetry
+docker build \
+  --build-arg BUILD_IMAGE=python \
+  --build-arg PKG_MGR=poetry \
+  -t svc:py-poetry .
+
+# Node with pnpm and esbuild (fast build)
+docker build \
+  --build-arg PKG_MGR=pnpm \
+  --build-arg BUILD_TOOL=esbuild \
+  -t svc:pnpm-esbuild .
+
+# Go (distroless runtime — no shell)
+docker build \
+  --build-arg BUILD_IMAGE=golang \
+  -t svc:go .
+
+# Go + debug shell (for local dev only)
+docker build \
+  --build-arg BUILD_IMAGE=golang \
+  --build-arg RUNTIME=slim \
+  -t svc:go-dev .</pre>
+
+<h3>Verify a built image after build</h3>
+<pre class="code-block"># Check all axis labels
+docker inspect svc:hipaa --format '{{ json .Config.Labels }}' | jq .
+
+# Check which compliance variant is in the image
+docker run --rm --entrypoint sh svc:hipaa \
+  -c "ls src/compliance/active/ && cat src/compliance/active/index.js | head -20"
+
+# Run the service locally with required env vars
+docker run --rm \
+  -e JWT_SECRET=my-test-secret-at-least-32-chars \
+  -e DATABASE_URL=postgresql://localhost:5432/testdb \
+  -p 3000:3000 \
+  svc:hipaa</pre>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 17 — RELATED PAGES
+═══════════════════════════════════════════════════════════ -->
+<h2 class="section-accent-blue" id="related">17. Related pages</h2>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Page</th>
+        <th>Why related</th>
+        <th>When to read instead</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="11-dockerfile-catalog.html">11 — Dockerfile catalog</a></td>
+        <td>Shows all 9 language Dockerfiles with the full ARG block. Source of truth for exact build stages and COPY instructions.</td>
+        <td>When you need to understand the full Dockerfile structure, not just the axis values.</td>
+      </tr>
+      <tr>
+        <td><a href="12-compliance-variations.html">12 — Compliance variations</a></td>
+        <td>Detailed middleware specifications for each compliance value. Includes exact log schemas, header names, and SQL query formats.</td>
+        <td>When implementing the compliance middleware for a new value, or auditing the exact behavior of an existing value.</td>
+      </tr>
+      <tr>
+        <td><a href="17-feature-matrix.html">17 — Feature matrix</a></td>
+        <td>Shows which axes are supported per language. Not every axis applies to every language.</td>
+        <td>When checking whether a specific language + axis combination is supported before building.</td>
+      </tr>
+      <tr>
+        <td><a href="05-invariants.html">05 — Invariants</a></td>
+        <td>Security and compliance rules that apply regardless of axis values. Constraints that cannot be overridden by any axis combination.</td>
+        <td>When auditing a service's security posture at the platform level.</td>
+      </tr>
+      <tr>
+        <td><a href="09-linux-distros.html">09 — Linux distros</a></td>
+        <td>Detailed comparison of Alpine, Slim, and FIPS base images. Explains musl vs glibc and FIPS kernel module requirements.</td>
+        <td>When choosing RUNTIME value and need the full technical comparison of the OS variants.</td>
+      </tr>
+      <tr>
+        <td><a href="15-version-registry.html">15 — Version registry</a></td>
+        <td>Pinned versions for all base images. When a new language version is released, this page is updated and the Dockerfiles are rebuilt.</td>
+        <td>When checking which exact version of Node/Python/Go is in a built image.</td>
+      </tr>
+      <tr>
+        <td><a href="22-add-a-service.html">22 — Add a service</a></td>
+        <td>Step-by-step guide for scaffolding a new service with the right axis values for its compliance tier.</td>
+        <td>When creating a new service from scratch and need the full onboarding checklist.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+</body>
+</html>

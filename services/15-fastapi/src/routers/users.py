@@ -17,9 +17,9 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.auth.dependencies import get_current_user
+from src.auth.active import get_current_user
 from src.db.models import Item
-from src.db.session import get_db
+from src.db.active import get_db
 
 router = APIRouter()
 

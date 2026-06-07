@@ -39,3 +39,51 @@ updates:
     labels:
       - "dependencies"
       - "gomod"
+
+  - package-ecosystem: "maven"
+    directory: "/services/17-spring-boot"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "maven"
+
+  - package-ecosystem: "gradle"
+    directory: "/services/17-quarkus"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "gradle"
+
+  - package-ecosystem: "cargo"
+    directory: "/services/20-axum"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "cargo"
+
+  - package-ecosystem: "bundler"
+    directory: "/services/22-rails"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "bundler"
+
+  - package-ecosystem: "composer"
+    directory: "/services/23-laravel"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "composer"
+
+  - package-ecosystem: "terraform"
+    directory: "/infra/clusters/terraform"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "terraform"

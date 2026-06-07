@@ -5,7 +5,7 @@ networkPolicy:
     - cidr: 140.82.112.0/20   # GitHub (for OAuth callbacks)
     - cidr: 192.30.252.0/22   # GitHub (for OAuth callbacks)
 image:
-  tag: "latest"
+  tag: "" # Injected at deploy time via --set image.tag=$GIT_SHA
 resources:
   limits:
     cpu: 1000m

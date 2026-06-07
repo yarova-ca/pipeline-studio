@@ -2,6 +2,7 @@ package routes
 
 import (
 	"crypto/rand"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -9,8 +10,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	ginauth "github.com/yarova-ca/16-gin/internal/auth"
-	"github.com/yarova-ca/16-gin/internal/db"
+	ginauth "github.com/yarova-ca/16-gin/internal/auth/active"
+	dbActive "github.com/yarova-ca/16-gin/internal/db/active"
 )
 
 // RegisterAuth mounts all /auth and /dev routes on the provided engine.
@@ -39,15 +40,32 @@ func handleLogin(c *gin.Context) {
 		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "OAuth not configured"})
 		return
 	}
+	// CSRF protection — generate a random state token and store it in a cookie.
+	b := make([]byte, 32)
+	if _, err := rand.Read(b); err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	state := base64.URLEncoding.EncodeToString(b)
+	c.SetCookie("oauth_state", state, 600, "/", "", false, true)
 	redirectURL := fmt.Sprintf(
 		"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s&scope=user:email",
 		clientID, callbackURL,
 	)
+	redirectURL = redirectURL + "&state=" + state
 	c.Redirect(http.StatusFound, redirectURL)
 }
 
 // handleCallback exchanges the GitHub OAuth code for a user record and returns a JWT.
 func handleCallback(c *gin.Context) {
+	// CSRF protection — validate state parameter against the cookie.
+	cookieState, err := c.Cookie("oauth_state")
+	if err != nil || cookieState != c.Query("state") {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid oauth state"})
+		return
+	}
+	c.SetCookie("oauth_state", "", -1, "/", "", false, true)
+
 	code := c.Query("code")
 	if code == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "missing code parameter"})
@@ -66,13 +84,17 @@ func handleCallback(c *gin.Context) {
 		return
 	}
 
-	database := db.GetDB()
-	user := db.User{
+	database := dbActive.GetDB()
+	if database == nil {
+		c.AbortWithStatusJSON(http.StatusServiceUnavailable, gin.H{"error": "database unavailable"})
+		return
+	}
+	user := dbActive.User{
 		Email:    ghUser.Email,
 		Name:     ghUser.Name,
 		Provider: "github",
 	}
-	result := database.Where(db.User{Email: ghUser.Email}).FirstOrCreate(&user)
+	result := database.Where(dbActive.User{Email: ghUser.Email}).FirstOrCreate(&user)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "database error"})
 		return
@@ -95,8 +117,8 @@ func handleMe(c *gin.Context) {
 		return
 	}
 
-	database := db.GetDB()
-	var user db.User
+	database := dbActive.GetDB()
+	var user dbActive.User
 	if err := database.First(&user, "id = ?", claims.UserID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
 		return
@@ -125,8 +147,8 @@ func handleGenerateAPIKey(c *gin.Context) {
 		return
 	}
 
-	database := db.GetDB()
-	if err := database.Model(&db.User{}).Where("id = ?", claims.UserID).Update("api_key", key).Error; err != nil {
+	database := dbActive.GetDB()
+	if err := database.Model(&dbActive.User{}).Where("id = ?", claims.UserID).Update("api_key", key).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "database error"})
 		return
 	}
@@ -142,8 +164,8 @@ func handleRevokeAPIKey(c *gin.Context) {
 		return
 	}
 
-	database := db.GetDB()
-	if err := database.Model(&db.User{}).Where("id = ?", claims.UserID).Update("api_key", nil).Error; err != nil {
+	database := dbActive.GetDB()
+	if err := database.Model(&dbActive.User{}).Where("id = ?", claims.UserID).Update("api_key", nil).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "database error"})
 		return
 	}

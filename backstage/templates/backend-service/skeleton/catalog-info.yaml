@@ -9,7 +9,7 @@ metadata:
     - backend
   annotations:
     github.com/project-slug: yarova-ca/${{ values.name }}
-    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/${{ values.name }}
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/${{ values.name }}/tree/main
     backstage.io/kubernetes-label-selector: app=${{ values.name }}
 spec:
   type: service
