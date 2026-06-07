@@ -2,10 +2,9 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: frontend-spa
-  title: New Frontend SPA
+  title: New Frontend Application
   description: >
-    Create a new single-page application with a chosen frontend framework,
-    CI/CD pipeline, Docker multi-stage build, and Nginx serving.
+    Production-ready frontend app. Pick framework, compliance, and deploy target.
   tags:
     - frontend
     - spa
@@ -20,13 +19,15 @@ spec:
     - title: Application details
       required:
         - name
-        - framework
         - description
+        - framework
       properties:
         name:
           title: App name
           type: string
-          description: Slug for the application (lowercase, hyphens only).
+          description: >
+            Slug for the application (lowercase, hyphens only).
+            Example: my-dashboard
           pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
           ui:autofocus: true
         description:
@@ -36,7 +37,7 @@ spec:
         framework:
           title: Framework
           type: string
-          description: Frontend framework.
+          description: Frontend framework and rendering strategy.
           enum:
             - react
             - vue
@@ -57,6 +58,10 @@ spec:
             - eleventy
             - qwik
             - fresh
+            - hono-edge
+            - nextjs-edge
+            - remix-cloudflare
+            - vite-pwa
           enumNames:
             - React (SPA)
             - Vue 3 (SPA)
@@ -77,6 +82,40 @@ spec:
             - Eleventy (SSG)
             - Qwik (Resumable)
             - Fresh (Deno Islands)
+            - Hono Edge (Edge Runtime)
+            - Next.js Edge (Edge Runtime)
+            - Remix Cloudflare (Edge Runtime)
+            - Vite PWA (Progressive Web App)
+
+    - title: Compliance profile
+      description: Select all compliance standards this application must satisfy.
+      properties:
+        compliance:
+          title: Compliance standards
+          type: array
+          items:
+            type: string
+            enum:
+              - standard
+              - hipaa
+              - pci
+              - pipeda
+              - soc2
+              - fips
+              - cmmc
+              - nerc
+            enumNames:
+              - Standard
+              - HIPAA (US healthcare)
+              - PCI-DSS (payment card)
+              - PIPEDA (Canadian privacy)
+              - SOC 2 (general SaaS)
+              - FIPS 140-2 (US federal cryptography)
+              - CMMC (US defense contracting)
+              - NERC CIP (energy / critical infrastructure)
+          uniqueItems: true
+          default:
+            - standard
 
     - title: Deploy options
       properties:
@@ -91,11 +130,23 @@ spec:
             - netlify
             - s3
           enumNames:
-            - Nginx (self-hosted / Kubernetes)
+            - Nginx (Kubernetes / self-hosted)
             - Cloudflare Pages
             - Vercel
             - Netlify
             - S3 + CloudFront
+        registry:
+          title: Container registry
+          type: string
+          default: ghcr
+          enum:
+            - ghcr
+            - ecr
+            - gar
+          enumNames:
+            - GHCR (GitHub Container Registry)
+            - ECR (AWS Elastic Container Registry)
+            - GAR (Google Artifact Registry)
         repoVisibility:
           title: Repository visibility
           type: string
@@ -108,16 +159,31 @@ spec:
             - Public
 
   steps:
-    - id: fetch-template
-      name: Fetch base SPA template
+    - id: fetch-base
+      name: Fetch base framework template
       action: fetch:template
       input:
-        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-react
+        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/${{ parameters.framework }}
         values:
           name: ${{ parameters.name }}
-          framework: ${{ parameters.framework }}
           description: ${{ parameters.description }}
+          framework: ${{ parameters.framework }}
+          compliance: ${{ parameters.compliance }}
           target: ${{ parameters.target }}
+          registry: ${{ parameters.registry }}
+
+    - id: write-platform-config
+      name: Write platform config overlay
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          framework: ${{ parameters.framework }}
+          compliance: ${{ parameters.compliance }}
+          target: ${{ parameters.target }}
+          registry: ${{ parameters.registry }}
 
     - id: publish
       name: Publish repository to GitHub
@@ -130,6 +196,7 @@ spec:
         defaultBranch: main
         repoVisibility: ${{ parameters.repoVisibility }}
         protectDefaultBranch: true
+        requireCodeOwnerReviews: true
 
     - id: register
       name: Register entity in catalog

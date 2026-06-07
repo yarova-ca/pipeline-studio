@@ -26,6 +26,6 @@ spec:
   type: service
   lifecycle: experimental
   owner: group:platform-team
-  system: pipeline-platform
+  system: 14-nodejs
   providesApis: []
   dependsOn: []

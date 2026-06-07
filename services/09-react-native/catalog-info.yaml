@@ -73,7 +73,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: pipeline-platform
+  system: 09-mobile
   providesApis: []
   dependsOn: []
   profile:

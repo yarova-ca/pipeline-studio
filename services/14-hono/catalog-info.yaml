@@ -87,7 +87,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: pipeline-platform
+  system: 14-nodejs
   providesApis: []
   dependsOn: []
   profile:

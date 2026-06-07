@@ -65,7 +65,7 @@ spec:
   type: service
   lifecycle: experimental
   owner: platform-team
-  system: pipeline-platform
+  system: 08-micro-frontends
   providesApis: []
   dependsOn: []
   profile:

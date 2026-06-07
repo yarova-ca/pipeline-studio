@@ -20,7 +20,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: pipeline-platform
+  system: 12-native-android
   providesApis: []
   dependsOn: []
   profile:

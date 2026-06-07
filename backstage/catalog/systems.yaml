@@ -1,0 +1,329 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 01-ssr
+  title: "Full-stack SSR Frameworks"
+  description: "Next.js, Nuxt, SvelteKit, Remix, Angular SSR, Solid Start"
+  tags: [pipeline-studio, frontend, ssr]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 02-spa
+  title: "SPA Frameworks"
+  description: "React, Vue, Angular, Svelte, SolidJS, Preact, Lit"
+  tags: [pipeline-studio, frontend, spa]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 03-ssg
+  title: "Static Site Generators"
+  description: "Astro, Gatsby, Hugo, Eleventy"
+  tags: [pipeline-studio, frontend, ssg]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 04-islands
+  title: "Islands Architecture"
+  description: "Astro Islands, Fresh Deno"
+  tags: [pipeline-studio, frontend, islands]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 05-resumable
+  title: "Resumable Frameworks"
+  description: "Qwik"
+  tags: [pipeline-studio, frontend, resumable]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 06-edge
+  title: "Edge Runtimes"
+  description: "Hono Edge, Next.js Edge, Remix Cloudflare"
+  tags: [pipeline-studio, frontend, edge]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 07-react-patterns
+  title: "React Patterns"
+  description: "App Router, Server Components, SvelteKit patterns"
+  tags: [pipeline-studio, frontend, react]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 08-micro-frontends
+  title: "Micro-frontends"
+  description: "Module Federation Rspack and Webpack, Single-SPA"
+  tags: [pipeline-studio, frontend, microfrontend]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 09-mobile
+  title: "Mobile React Native and Ionic"
+  description: "Expo, React Native, Ionic"
+  tags: [pipeline-studio, mobile]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 10-cross-platform
+  title: "Cross-platform"
+  description: "Flutter, KMP, .NET MAUI"
+  tags: [pipeline-studio, mobile, cross-platform]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 11-native-ios
+  title: "Native iOS"
+  description: "Swift SwiftUI, ObjC UIKit"
+  tags: [pipeline-studio, mobile, ios]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 12-native-android
+  title: "Native Android"
+  description: "Kotlin Jetpack Compose, Java Android"
+  tags: [pipeline-studio, mobile, android]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 13-pwa
+  title: "Progressive Web Apps"
+  description: "Vite PWA, Workbox"
+  tags: [pipeline-studio, frontend, pwa]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 14-nodejs
+  title: "Node.js Backends"
+  description: "Express, Fastify, NestJS, Hono, Bun, Deno, Elysia"
+  tags: [pipeline-studio, backend, nodejs]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 15-python
+  title: "Python Backends"
+  description: "FastAPI, Django, Flask, Starlette"
+  tags: [pipeline-studio, backend, python]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 16-go
+  title: "Go Backends"
+  description: "Gin, Chi, Echo, Fiber"
+  tags: [pipeline-studio, backend, go]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 17-java
+  title: "Java Backends"
+  description: "Spring Boot, Micronaut, Quarkus"
+  tags: [pipeline-studio, backend, java]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 18-kotlin
+  title: "Kotlin Backends"
+  description: "Ktor, Spring Boot Kotlin"
+  tags: [pipeline-studio, backend, kotlin]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 19-dotnet
+  title: ".NET Backends"
+  description: "ASP.NET Core, Minimal APIs"
+  tags: [pipeline-studio, backend, dotnet]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 20-rust
+  title: "Rust Backends"
+  description: "Actix-web, Axum"
+  tags: [pipeline-studio, backend, rust]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 21-elixir
+  title: "Elixir Backends"
+  description: "Phoenix"
+  tags: [pipeline-studio, backend, elixir]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 22-ruby
+  title: "Ruby Backends"
+  description: "Rails, Sinatra"
+  tags: [pipeline-studio, backend, ruby]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 23-php
+  title: "PHP Backends"
+  description: "Laravel, Symfony, Slim"
+  tags: [pipeline-studio, backend, php]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 24-swift
+  title: "Swift Backends"
+  description: "Vapor, Hummingbird"
+  tags: [pipeline-studio, backend, swift]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 25-scala
+  title: "Scala Backends"
+  description: "http4s, Play Framework"
+  tags: [pipeline-studio, backend, scala]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 26-clojure
+  title: "Clojure Backends"
+  description: "Pedestal, Ring"
+  tags: [pipeline-studio, backend, clojure]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 27-cpp
+  title: "C++ Backends"
+  description: "Crow, Drogon"
+  tags: [pipeline-studio, backend, cpp]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 28-grpc
+  title: "gRPC Services"
+  description: "Go, Java, Kotlin, Python, Node, .NET, Rust, Ruby, PHP, Swift"
+  tags: [pipeline-studio, grpc, backend]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 29-graphql
+  title: "GraphQL Servers"
+  description: "Apollo, gqlgen, Strawberry, Hot Chocolate, GraphQL Yoga"
+  tags: [pipeline-studio, graphql, backend]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 30-websocket
+  title: "WebSocket Servers"
+  description: "Node, Go, Python, Java, Rust, Ruby, .NET, Elixir"
+  tags: [pipeline-studio, websocket, backend]
+spec:
+  owner: group:platform-team
+  domain: pipeline-platform

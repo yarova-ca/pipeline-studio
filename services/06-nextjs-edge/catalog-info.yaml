@@ -53,7 +53,7 @@ spec:
   type: service
   lifecycle: experimental
   owner: platform-team
-  system: pipeline-platform
+  system: 06-edge
   providesApis: []
   dependsOn: []
   profile:

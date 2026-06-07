@@ -3,9 +3,7 @@ kind: Template
 metadata:
   name: backend-service
   title: New Backend Service
-  description: >
-    Create a new backend service with health endpoints, auth middleware,
-    ORM integration, CI/CD pipeline, Helm chart, and Kustomize overlays.
+  description: Production-ready backend service. Pick framework, compliance, observability, auth, ORM, and deploy target.
   tags:
     - backend
     - recommended
@@ -20,8 +18,8 @@ spec:
     - title: Service details
       required:
         - name
-        - framework
         - description
+        - framework
       properties:
         name:
           title: Service name
@@ -38,7 +36,7 @@ spec:
         framework:
           title: Framework
           type: string
-          description: Runtime + framework for the service.
+          description: Runtime and framework for the service.
           enum:
             - express
             - fastify
@@ -118,7 +116,7 @@ spec:
             - Crow (C++)
             - Drogon (C++)
 
-    - title: Compliance profile
+    - title: Compliance and Security
       description: Select all compliance standards this service must satisfy.
       properties:
         compliance:
@@ -127,26 +125,123 @@ spec:
           items:
             type: string
             enum:
-              - none
-              - fips
+              - standard
               - hipaa
+              - pci
               - pipeda
-              - pci-dss
-              - fedramp
               - soc2
+              - fips
+              - cmmc
+              - nerc
             enumNames:
-              - None
-              - FIPS 140-2 (US federal cryptography)
-              - HIPAA (US healthcare)
-              - PIPEDA (Canadian privacy)
-              - PCI-DSS (payment card)
-              - FedRAMP (US cloud)
-              - SOC 2 (general SaaS)
+              - Standard
+              - HIPAA US Healthcare
+              - PCI-DSS Payment Card
+              - PIPEDA Canadian Privacy
+              - SOC 2 Type II
+              - FIPS 140-2 US Federal Crypto
+              - CMMC US Defense
+              - NERC CIP Critical Infrastructure
           uniqueItems: true
           default:
+            - standard
+          ui:widget: checkboxes
+        auth:
+          title: Authentication methods
+          type: string
+          description: Auth strategy to scaffold into the service.
+          default: all
+          enum:
             - none
+            - jwt
+            - oauth2
+            - apikey
+            - all
+          enumNames:
+            - None
+            - JWT only
+            - OAuth 2.0
+            - API Key
+            - All JWT+OAuth2+API Key
 
-    - title: Deploy options
+    - title: Observability
+      properties:
+        observability:
+          title: Observability backend
+          type: string
+          description: Metrics and tracing integration to include.
+          default: none
+          enum:
+            - none
+            - otel
+            - prometheus
+            - datadog
+          enumNames:
+            - None
+            - OpenTelemetry CNCF
+            - Prometheus metrics
+            - Datadog APM
+
+    - title: Data layer
+      properties:
+        orm:
+          title: ORM / database client
+          type: string
+          description: Object-relational mapper or database client to scaffold.
+          default: none
+          enum:
+            - none
+            - prisma
+            - sqlalchemy
+            - gorm
+          enumNames:
+            - None (no DB or raw SQL)
+            - Prisma (Node.js)
+            - SQLAlchemy (Python)
+            - GORM (Go)
+
+    - title: Runtime and build
+      properties:
+        runtime:
+          title: Runtime profile
+          type: string
+          default: standard
+          enum:
+            - standard
+            - fips
+          enumNames:
+            - Standard
+            - FIPS 140-2 US Federal
+        pkgMgr:
+          title: Package manager
+          type: string
+          description: Node.js frameworks only.
+          default: npm
+          enum:
+            - npm
+            - pnpm
+            - yarn
+            - bun
+          enumNames:
+            - npm
+            - pnpm
+            - yarn
+            - bun
+        buildTool:
+          title: Build tool
+          type: string
+          description: TypeScript Node.js only.
+          default: tsc
+          enum:
+            - tsc
+            - esbuild
+            - swc
+          enumNames:
+            - tsc (TypeScript compiler)
+            - esbuild (fast bundler)
+            - swc (Rust-based)
+
+    - title: Deploy
       properties:
         registry:
           title: Container registry
@@ -158,10 +253,10 @@ spec:
             - gar
             - harbor
           enumNames:
-            - GHCR (GitHub Container Registry)
-            - ECR (AWS Elastic Container Registry)
-            - GAR (Google Artifact Registry)
-            - Harbor (self-hosted)
+            - GHCR GitHub
+            - ECR AWS
+            - GAR Google
+            - Harbor self-hosted
         deployMethod:
           title: Deploy method
           type: string
@@ -184,18 +279,45 @@ spec:
             - Public
 
   steps:
-    - id: fetch-template
-      name: Fetch base service template
+    - id: fetch-base
+      name: Fetch framework starter
       action: fetch:template
       input:
         url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/${{ parameters.framework }}
         values:
           name: ${{ parameters.name }}
-          framework: ${{ parameters.framework }}
           description: ${{ parameters.description }}
+          framework: ${{ parameters.framework }}
+          compliance: ${{ parameters.compliance }}
+          auth: ${{ parameters.auth }}
+          observability: ${{ parameters.observability }}
+          orm: ${{ parameters.orm }}
+          runtime: ${{ parameters.runtime }}
+          pkgMgr: ${{ parameters.pkgMgr }}
+          buildTool: ${{ parameters.buildTool }}
           registry: ${{ parameters.registry }}
           deployMethod: ${{ parameters.deployMethod }}
+          repoVisibility: ${{ parameters.repoVisibility }}
+
+    - id: write-platform-config
+      name: Write platform config
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          framework: ${{ parameters.framework }}
           compliance: ${{ parameters.compliance }}
+          auth: ${{ parameters.auth }}
+          observability: ${{ parameters.observability }}
+          orm: ${{ parameters.orm }}
+          runtime: ${{ parameters.runtime }}
+          pkgMgr: ${{ parameters.pkgMgr }}
+          buildTool: ${{ parameters.buildTool }}
+          registry: ${{ parameters.registry }}
+          deployMethod: ${{ parameters.deployMethod }}
+          repoVisibility: ${{ parameters.repoVisibility }}
 
     - id: publish
       name: Publish repository to GitHub

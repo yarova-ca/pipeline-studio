@@ -23,7 +23,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: pipeline-platform
+  system: 24-swift
   providesApis: []
   dependsOn: []
   profile:

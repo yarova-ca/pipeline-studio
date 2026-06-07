@@ -41,7 +41,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: pipeline-platform
+  system: 02-spa
   providesApis: []
   dependsOn: []
   profile:

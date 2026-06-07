@@ -25,6 +25,6 @@ spec:
   type: service
   lifecycle: experimental
   owner: group:platform-team
-  system: pipeline-platform
+  system: 16-go
   providesApis: []
   dependsOn: []

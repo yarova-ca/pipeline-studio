@@ -47,7 +47,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: pipeline-platform
+  system: 04-islands
   providesApis: []
   dependsOn: []
   profile:
