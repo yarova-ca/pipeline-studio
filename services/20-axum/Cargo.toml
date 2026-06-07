@@ -33,7 +33,7 @@ opentelemetry_sdk   = { version = "0.24", features = ["rt-tokio"] }
 
 # OpenAPI docs via utoipa
 utoipa              = { version = "4", features = ["axum_extras"] }
-utoipa-swagger-ui   = { version = "7", features = ["axum"] }
+utoipa-swagger-ui   = { version = "9", features = ["axum"] }
 
 # ORM / DB
 sqlx = { version = "0.8", features = ["postgres", "uuid", "chrono", "runtime-tokio", "macros"] }
