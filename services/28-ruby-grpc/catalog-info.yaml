@@ -9,12 +9,10 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - ruby
-  - backend
-  - tier-1
-  - backend
-  - tier-2
-  - grpc
-  - tier-2
+    - backend
+    - tier-1
+    - tier-2
+    - grpc
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-ruby-grpc

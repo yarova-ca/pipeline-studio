@@ -9,13 +9,12 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - kotlin
-  - jvm
-  - mobile-cross
-  - tier-2
-  - mobile-android
-  - tier-1
-  - backend
-  - tier-1
+    - jvm
+    - mobile-cross
+    - tier-2
+    - mobile-android
+    - tier-1
+    - backend
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/18-ktor

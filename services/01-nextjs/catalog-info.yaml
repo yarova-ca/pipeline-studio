@@ -9,12 +9,11 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - javascript
-  - typescript
-  - node
-  - ssr
-  - tier-2
-  - ssr
-  - tier-1
+    - typescript
+    - node
+    - ssr
+    - tier-2
+    - tier-1
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-nextjs

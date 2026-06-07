@@ -9,58 +9,15 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - javascript
-  - typescript
-  - node
-  - ssr
-  - tier-2
-  - ssr
-  - tier-1
-  - ssr
-  - tier-1
-  - ssr
-  - tier-2
-  - ssr
-  - tier-2
-  - ssr
-  - tier-1
-  - spa
-  - tier-1
-  - spa
-  - tier-1
-  - spa
-  - tier-2
-  - spa
-  - tier-2
-  - spa
-  - tier-1
-  - spa
-  - tier-2
-  - ssr
-  - tier-2
-  - ssr
-  - tier-2
-  - ssr
-  - tier-2
-  - edge
-  - tier-2
-  - edge
-  - tier-2
-  - edge
-  - tier-2
-  - ssr
-  - tier-1
-  - ssr
-  - tier-2
-  - ssr
-  - tier-2
-  - mf
-  - tier-2
-  - mf
-  - tier-2
-  - mf
-  - tier-2
-  - mobile-rn
-  - tier-1
+    - typescript
+    - node
+    - ssr
+    - tier-2
+    - tier-1
+    - spa
+    - edge
+    - mf
+    - mobile-rn
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/09-expo

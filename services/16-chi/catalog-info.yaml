@@ -9,11 +9,10 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - go
-  - golang
-  - spa
-  - tier-2
-  - backend
-  - tier-2
+    - golang
+    - spa
+    - tier-2
+    - backend
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-chi

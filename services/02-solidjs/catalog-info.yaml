@@ -9,26 +9,12 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - javascript
-  - typescript
-  - node
-  - ssr
-  - tier-2
-  - ssr
-  - tier-1
-  - ssr
-  - tier-1
-  - ssr
-  - tier-2
-  - ssr
-  - tier-2
-  - ssr
-  - tier-1
-  - spa
-  - tier-1
-  - spa
-  - tier-1
-  - spa
-  - tier-2
+    - typescript
+    - node
+    - ssr
+    - tier-2
+    - tier-1
+    - spa
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/02-solidjs

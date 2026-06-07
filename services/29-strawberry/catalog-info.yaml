@@ -9,18 +9,11 @@ metadata:
     GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
   tags:
     - python
-  - backend
-  - tier-1
-  - backend
-  - tier-1
-  - backend
-  - tier-2
-  - backend
-  - tier-2
-  - grpc
-  - tier-1
-  - graphql
-  - tier-2
+    - backend
+    - tier-1
+    - tier-2
+    - grpc
+    - graphql
   annotations:
     github.com/project-slug: yarova-ca/pipeline-studio
     backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/29-strawberry
