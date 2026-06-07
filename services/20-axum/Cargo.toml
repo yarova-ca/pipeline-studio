@@ -43,7 +43,7 @@ jsonwebtoken = "9"
 uuid         = { version = "1",   features = ["v4", "serde"] }
 
 # GitHub OAuth — HTTP client used in auth/callback
-reqwest = { version = "0.12", features = ["json"] }
+reqwest = { version = "0.13", features = ["json"] }
 
 [dev-dependencies]
 http-body-util   = "0.1"
