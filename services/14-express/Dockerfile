@@ -12,7 +12,7 @@
 ARG BUILD_IMAGE=ubuntu
 ARG BUILD_BASE=ubuntu:24.04
 ARG RUNTIME=alpine
-FROM ubuntu:24.04 AS base-ubuntu
+FROM ubuntu:26.04 AS base-ubuntu
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
  && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
  && apt-get install -y nodejs \
