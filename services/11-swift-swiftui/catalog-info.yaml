@@ -19,7 +19,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: pipeline-platform
+  system: 11-native-ios
   providesApis: []
   dependsOn: []
   profile:

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Sets up Backstage portal for pipeline-studio.
 # Run once from the pipeline-studio repo root: bash scripts/setup-backstage.sh
-# Requires: Node 18.x or 20.x LTS, npm 8+, git
+# Requires: Node 18.x, 20.x, or 22.x LTS, npm 8+, git
 
 set -euo pipefail
 
@@ -15,13 +15,13 @@ NODE_VERSION="$(node --version 2>/dev/null | sed 's/v//' | cut -d. -f1)"
 
 if [[ -z "$NODE_VERSION" ]]; then
   echo "ERROR: Node.js is not installed."
-  echo "Install Node 18 or 20 from https://nodejs.org"
+  echo "Install Node 18, 20, or 22 from https://nodejs.org"
   exit 1
 fi
 
-if [[ "$NODE_VERSION" -ne 18 && "$NODE_VERSION" -ne 20 ]]; then
+if [[ "$NODE_VERSION" -ne 18 && "$NODE_VERSION" -ne 20 && "$NODE_VERSION" -ne 22 ]]; then
   echo "ERROR: Node.js version $NODE_VERSION is not supported."
-  echo "Backstage requires Node 18 or 20."
+  echo "Backstage requires Node 18, 20, or 22."
   echo "Current version: $(node --version)"
   echo "Install the correct version from https://nodejs.org"
   exit 1
@@ -46,7 +46,7 @@ fi
 
 echo "Installing dependencies (this takes 2-4 minutes)..."
 cd "$PORTAL_DIR"
-npm install
+yarn install
 echo "Dependencies installed."
 
 # ── Step 4: Copy app-config.yaml ───────────────────────────────────────────

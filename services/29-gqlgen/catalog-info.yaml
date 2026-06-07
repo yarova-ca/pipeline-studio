@@ -32,7 +32,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: pipeline-platform
+  system: 29-graphql
   providesApis: []
   dependsOn: []
   profile:

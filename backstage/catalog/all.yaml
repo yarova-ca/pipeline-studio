@@ -9,6 +9,8 @@ metadata:
     backstage.io/managed-by-location: url:https://github.com/yarova-ca/pipeline-studio/blob/main/backstage/catalog/all.yaml
 spec:
   targets:
+    - https://github.com/yarova-ca/pipeline-studio/blob/main/backstage/catalog/systems.yaml
+
     # --- 01: Full-stack SSR frameworks ---
     - https://github.com/yarova-ca/pipeline-studio/blob/main/services/01-angular-ssr/catalog-info.yaml
     - https://github.com/yarova-ca/pipeline-studio/blob/main/services/01-nextjs/catalog-info.yaml

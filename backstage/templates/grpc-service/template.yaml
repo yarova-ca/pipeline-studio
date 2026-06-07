@@ -3,9 +3,7 @@ kind: Template
 metadata:
   name: grpc-service
   title: New gRPC Service
-  description: >
-    Create a new gRPC service with proto definition, server stub,
-    health check (grpc_health_v1), reflection, CI/CD pipeline, and Helm chart.
+  description: Production-ready gRPC service. Pick language, compliance, auth, and observability.
   tags:
     - grpc
     - backend
@@ -20,13 +18,15 @@ spec:
     - title: Service details
       required:
         - name
-        - language
         - description
+        - language
       properties:
         name:
           title: Service name
           type: string
-          description: Slug for the service (lowercase, hyphens only).
+          description: >
+            Slug for the service (lowercase, hyphens only).
+            Example: payments-grpc
           pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
           ui:autofocus: true
         description:
@@ -36,13 +36,13 @@ spec:
         language:
           title: Implementation language
           type: string
-          description: Language + runtime for the gRPC server.
+          description: Language and runtime for the gRPC server.
           enum:
             - go
-            - java
-            - kotlin
             - python
             - node
+            - java
+            - kotlin
             - dotnet
             - rust
             - ruby
@@ -50,10 +50,10 @@ spec:
             - swift
           enumNames:
             - Go
-            - Java
-            - Kotlin
             - Python
             - Node.js
+            - Java
+            - Kotlin
             - .NET (C#)
             - Rust
             - Ruby
@@ -65,9 +65,71 @@ spec:
           description: >
             Package name for the .proto file.
             Example: com.yarova.payments.v1
-          default: com.yarova.${{ parameters.name }}.v1
+          default: ""
 
-    - title: Deploy options
+    - title: Compliance and Auth
+      description: Select all compliance standards this service must satisfy.
+      properties:
+        compliance:
+          title: Compliance standards
+          type: array
+          items:
+            type: string
+            enum:
+              - standard
+              - hipaa
+              - pci
+              - pipeda
+              - soc2
+              - fips
+              - cmmc
+              - nerc
+            enumNames:
+              - Standard
+              - HIPAA US Healthcare
+              - PCI-DSS Payment Card
+              - PIPEDA Canadian Privacy
+              - SOC 2 Type II
+              - FIPS 140-2 US Federal Crypto
+              - CMMC US Defense
+              - NERC CIP Critical Infrastructure
+          uniqueItems: true
+          default:
+            - standard
+          ui:widget: checkboxes
+        auth:
+          title: Authentication method
+          type: string
+          description: Auth strategy to scaffold into the gRPC service.
+          default: mtls
+          enum:
+            - none
+            - jwt
+            - oauth2
+            - mtls
+          enumNames:
+            - None
+            - JWT
+            - OAuth 2.0
+            - mTLS (mutual TLS — gRPC default)
+
+    - title: Observability
+      properties:
+        observability:
+          title: Observability backend
+          type: string
+          description: Metrics and tracing integration to include.
+          default: otel
+          enum:
+            - none
+            - otel
+            - prometheus
+          enumNames:
+            - None
+            - OpenTelemetry (CNCF recommended for gRPC)
+            - Prometheus metrics
+
+    - title: Deploy
       properties:
         registry:
           title: Container registry
@@ -95,16 +157,34 @@ spec:
             - Public
 
   steps:
-    - id: fetch-template
-      name: Fetch base gRPC template
+    - id: fetch-base
+      name: Fetch language gRPC starter
       action: fetch:template
       input:
-        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-go-grpc
+        url: https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-${{ parameters.language }}-grpc
         values:
           name: ${{ parameters.name }}
-          language: ${{ parameters.language }}
           description: ${{ parameters.description }}
+          language: ${{ parameters.language }}
           protoPackage: ${{ parameters.protoPackage }}
+          compliance: ${{ parameters.compliance }}
+          auth: ${{ parameters.auth }}
+          observability: ${{ parameters.observability }}
+          registry: ${{ parameters.registry }}
+
+    - id: write-platform-config
+      name: Write platform config
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          language: ${{ parameters.language }}
+          protoPackage: ${{ parameters.protoPackage }}
+          compliance: ${{ parameters.compliance }}
+          auth: ${{ parameters.auth }}
+          observability: ${{ parameters.observability }}
           registry: ${{ parameters.registry }}
 
     - id: publish
@@ -118,6 +198,7 @@ spec:
         defaultBranch: main
         repoVisibility: ${{ parameters.repoVisibility }}
         protectDefaultBranch: true
+        requireCodeOwnerReviews: true
 
     - id: register
       name: Register entity in catalog

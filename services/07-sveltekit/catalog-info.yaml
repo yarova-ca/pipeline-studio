@@ -61,7 +61,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: pipeline-platform
+  system: 07-react-patterns
   providesApis: []
   dependsOn: []
   profile:
