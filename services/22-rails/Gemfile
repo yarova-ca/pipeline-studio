@@ -24,7 +24,7 @@ gem 'rswag-api', '~> 2.14'
 gem 'rswag-ui', '~> 2.14'
 
 group :development, :test do
-  gem 'rspec-rails', '~> 7.0'
+  gem 'rspec-rails', '~> 8.0'
   gem 'rswag-specs', '~> 2.14'
   gem 'sqlite3', '~> 2.0'
 end
