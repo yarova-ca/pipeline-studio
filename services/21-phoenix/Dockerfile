@@ -49,7 +49,9 @@ EXPOSE 4000
 # REPLACE: myapp with your OTP release name (from mix.exs :app key)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD curl -f http://localhost:4000/health/live || exit 1
-
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 CMD ["bin/app", "start"]
 
 # ── Runtime — FIPS ────────────────────────────────────────────────────────
@@ -64,4 +66,7 @@ EXPOSE 4000
 # REPLACE: myapp with your OTP release name
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD curl -f http://localhost:4000/health/live || exit 1
+LABEL org.opencontainers.image.source="https://github.com/yarova-ca/pipeline-studio" \
+      org.opencontainers.image.vendor="Yarova Labs" \
+      org.opencontainers.image.licenses="MIT"
 CMD ["bin/app", "start"]
