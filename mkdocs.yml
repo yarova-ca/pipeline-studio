@@ -1,34 +1,10 @@
 site_name: Pipeline Studio
-site_description: Platform engineering reference — 106 framework starters, every compliance standard, all industry verticals
-site_author: Yarova Labs
+site_description: Service starters for every framework, compliance regime, and runtime axis.
 repo_url: https://github.com/yarova-ca/pipeline-studio
-docs_dir: .
-theme:
-  name: material
-  palette:
-    primary: indigo
-  features:
-    - navigation.tabs
-    - navigation.sections
-    - search.highlight
+repo_name: yarova-ca/pipeline-studio
+
 nav:
-  - Home: index.html
-  - Framework Catalog: 01-framework-catalog.html
-  - Pipeline Schema: 02-pipeline-schema.html
-  - Stage Types: 03-stage-types.html
-  - Tool Catalog: 04-tool-catalog.html
-  - Invariants: 05-invariants.html
-  - Industry Schema: 06-industry-schema.html
-  - Canada Schema: 07-canada-schema.html
-  - Canada Market: 08-canada-market.html
-  - Linux Distros: 09-linux-distros.html
-  - Linux Compliance: 10-linux-compliance.html
-  - Dockerfile Catalog: 11-dockerfile-catalog.html
-  - Compliance Variations: 12-compliance-variations.html
-  - Pipeline Build Catalog: 13-pipeline-build-catalog.html
-  - Canada Industry Catalog: 14-canada-industry-catalog.html
-  - Version Registry: 15-version-registry.html
-  - Maintainability Runbook: 16-maintainability-runbook.html
-  - Feature Matrix: 17-feature-matrix.html
-  - Service Status: 18-service-status.html
-  - Cluster Setup: 19-cluster-setup.html
+  - Home: index.md
+
+plugins:
+  - techdocs-core
