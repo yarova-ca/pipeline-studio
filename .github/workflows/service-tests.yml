@@ -217,7 +217,7 @@ jobs:
     name: Test ${{ matrix.service }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           java-version: '21'
           distribution: temurin
@@ -251,7 +251,7 @@ jobs:
     name: Test ${{ matrix.service }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           java-version: '21'
           distribution: temurin
