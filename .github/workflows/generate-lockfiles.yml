@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       # Requires GH_PAT secret with repo write scope - create in GitHub repo settings
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           token: ${{ secrets.GH_PAT }}
 
