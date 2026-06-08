@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>23 — Deployment | Pipeline Studio</title>
+<meta name="description" content="How to deploy any service from a git commit to a running pod. ArgoCD GitOps flow, Helm chart deployment, image promotion, and rollback procedure.">
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d0d7de;--text:#1f2328;--text-dim:#656d76;--text-head:#1f2328;
+  --blue:#0969da;--green:#1a7f37;--amber:#7a4f00;--purple:#6f42c1;--red:#b91c1c;
+  --sidebar-w:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;
+  background:var(--bg);color:var(--text);line-height:1.5;display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);
+  border-right:1px solid var(--border);padding:16px 0;position:sticky;top:0;height:100vh;
+  overflow-y:auto;flex-shrink:0}
+nav a{display:block;padding:5px 16px;font-size:12px;color:var(--text-dim);text-decoration:none;
+  transition:color .12s,background .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text);background:var(--bg3)}
+nav a[aria-current]{color:var(--blue);font-weight:600;background:var(--bg3)}
+.nav-top{color:var(--text-dim)!important;margin-top:8px;border-top:1px solid var(--border)}
+main{flex:1;padding:24px 32px;max-width:1100px;overflow-x:auto}
+h1{font-size:20px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+.page-meta{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+h2{font-size:15px;font-weight:700;color:var(--text-head);margin:32px 0 6px;
+  padding-top:10px;border-top:2px solid var(--border)}
+h3{font-size:13px;font-weight:700;color:var(--text-head);margin:18px 0 6px}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:12px}
+p{margin-bottom:8px;font-size:13px;line-height:1.6}
+
+/* Warn / note blocks */
+.warn-block{background:#fff8c5;border:1px solid #e8d064;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.warn-block strong{color:var(--amber)}
+.note-block{background:#dbeeff;border:1px solid #b6d7f5;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.note-block strong{color:var(--blue)}
+
+/* Code blocks */
+pre.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  padding:12px 16px;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  overflow-x:auto;line-height:1.7;margin:8px 0}
+code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+
+/* Table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:12px}
+.xref-table,.qr-table{width:100%;border-collapse:collapse;font-size:12px}
+.xref-table th,.qr-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
+  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap}
+.xref-table td,.qr-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.xref-table tr:last-child td,.qr-table tr:last-child td{border-bottom:none}
+.xref-table tr:hover td,.qr-table tr:hover td{background:var(--bg2)}
+
+/* Diagram */
+.diagram-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:20px 24px;margin:12px 0;font-family:"SFMono-Regular",Consolas,monospace;
+  font-size:12px;line-height:2;color:var(--text-dim)}
+.diagram-box .d-highlight{color:var(--blue);font-weight:600}
+.diagram-box .d-arrow{color:var(--text-dim)}
+
+/* Step list / checklist */
+.steps-list,.checklist{list-style:none;padding:0;margin:0 0 12px}
+.steps-list li,.checklist li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}
+.steps-list li:last-child,.checklist li:last-child{border-bottom:none}
+.step-num{min-width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px}
+.step-body{flex:1}
+.step-cmd{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:3px 8px;margin-top:3px;white-space:pre-wrap;word-break:break-all}
+.step-why{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}
+
+/* Decision block */
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+
+/* Failure block */
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.failure-label{font-weight:700;color:var(--red);margin-bottom:6px}
+
+/* Gotcha block */
+.gotcha-block{background:#fffbeb;border-left:3px solid #d97706;padding:10px 14px;margin:8px 0;font-size:12px;border-radius:0 4px 4px 0}
+.gotcha-block strong{color:var(--amber)}
+
+/* Section accent */
+.section-accent-blue{border-top-color:var(--blue)}
+.section-accent-green{border-top-color:var(--green)}
+.section-accent-amber{border-top-color:var(--amber)}
+.section-accent-purple{border-top-color:var(--purple)}
+
+/* Pillar badge / nav */
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;
+  color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;
+  display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);
+  background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.nav-logo{padding:0 16px 14px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.page-title{font-size:24px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+
+/* Why block */
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+
+/* Component detail blocks */
+.component-detail{border:1px solid var(--border);border-radius:6px;margin-bottom:8px;overflow:hidden}
+.component-detail[open]{border-color:var(--blue)}
+.component-summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;align-items:center;gap:10px;background:var(--bg2)}
+.component-summary:hover{background:var(--bg3)}
+.component-summary::-webkit-details-marker{display:none}
+.component-summary::before{display:none}
+.comp-num{font-size:10px;font-weight:700;background:var(--blue);color:#fff;border-radius:3px;padding:1px 6px;min-width:28px;text-align:center}
+.comp-name{font-weight:600;font-size:12.5px;flex:1}
+.comp-layer{font-size:10.5px;color:var(--text-dim);background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 6px}
+.comp-status{font-size:10px;font-weight:700;border-radius:3px;padding:1px 6px}
+.comp-ok{background:#d1fae5;color:#065f46;border:1px solid #86efac}
+.comp-missing{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.comp-body{padding:16px;border-top:1px solid var(--border)}
+.comp-what,.comp-why-p{font-size:12px;color:var(--text-dim);margin-bottom:8px;line-height:1.65}
+.comp-section{margin:10px 0;font-size:12px}
+.comp-cmd{display:block;font-family:monospace;background:var(--bg3);padding:6px 10px;border-radius:4px;font-size:11px;margin:4px 0;white-space:pre-wrap;word-break:break-all}
+.comp-expected{font-size:11px;color:var(--text-dim);font-style:italic;display:block;margin-top:2px}
+.hero-intro h2{padding:0;border:none;margin:0 0 10px}
+
+/* Group heading for component sections */
+.comp-group-heading{font-size:14px;font-weight:700;color:var(--text-head);margin:28px 0 10px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;border-left:3px solid var(--blue)}
+
+/* Counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.c1{border-left:3px solid var(--blue)}.c1 .chip-num{color:var(--blue)}
+.c2{border-left:3px solid var(--green)}.c2 .chip-num{color:var(--green)}
+.c3{border-left:3px solid var(--amber)}.c3 .chip-num{color:var(--amber)}
+.c4{border-left:3px solid var(--purple)}.c4 .chip-num{color:var(--purple)}
+
+/* Flow step inline */
+.flow-row{display:flex;align-items:center;gap:0;margin:10px 0;flex-wrap:wrap}
+.flow-box{background:var(--bg2);border:1px solid var(--border);border-radius:5px;
+  padding:8px 14px;font-size:11.5px;font-weight:600;color:var(--text-head);white-space:nowrap}
+.flow-box.flow-auto{border-color:var(--blue);color:var(--blue)}
+.flow-box.flow-git{border-color:var(--green);color:var(--green)}
+.flow-box.flow-k8s{border-color:var(--purple);color:var(--purple)}
+.flow-arrow{font-size:14px;color:var(--text-dim);padding:0 8px;flex-shrink:0}
+
+/* Inline label */
+.lbl{font-size:10px;font-weight:700;border-radius:3px;padding:1px 5px;vertical-align:middle;margin-right:4px}
+.lbl-auto{background:#dbeeff;color:#0550ae}
+.lbl-manual{background:#fef3c7;color:#92400e}
+.lbl-warn{background:#fee2e2;color:#991b1b}
+.lbl-ok{background:#d1fae5;color:#065f46}
+
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#e6edf3;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--purple:#bc8cff;--red:#f85149;
+  }
+  .warn-block{background:#2d2100;border-color:#4a3800}
+  .note-block{background:#0d2744;border-color:#2d4a6a}
+  .decision-block{background:#0d2b15;border-color:#238636}
+  .failure-block{background:#2d0a0a;border-color:#8b1a1a}
+  .gotcha-block{background:#2d1f00;border-color:#d97706}
+  .why-block{background:#2d1f00;border-color:#d97706}
+  .diagram-box{background:#161b22;border-color:#30363d}
+  .comp-ok{background:#052e16;color:#86efac;border-color:#166534}
+  .comp-missing{background:#2d0a0a;color:#fca5a5;border-color:#7f1d1d}
+  .hero-intro{background:var(--bg2)!important;border-color:var(--border)!important}
+  .lbl-auto{background:#0d2744;color:#58a6ff}
+  .lbl-manual{background:#2d1f00;color:#d29922}
+  .lbl-warn{background:#2d0a0a;color:#f85149}
+  .lbl-ok{background:#052e16;color:#3fb950}
+  .flow-box{background:var(--bg2);border-color:var(--border)}
+}
+@media print{
+  nav{display:none}
+  main{max-width:100%;padding:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR NAV -->
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">&#8962; Hub</a>
+
+  <details>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+  </details>
+
+  <details>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+
+  <details>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+
+  <details>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+
+  <details>
+    <summary>Maintaining<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Runbook</a>
+    <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+
+  <details open>
+    <summary>Guides<span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 Getting started</a>
+    <a href="20-local-dev.html" class="nav-link">20 Local dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 Build axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 Add a service</a>
+    <a href="23-deployment.html" class="nav-link" aria-current="page">23 Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 Debugging</a>
+  </details>
+
+  <a href="#main-content" class="nav-top">&#8593; Back to top</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-title">23 &#8212; Deployment</div>
+  <div class="page-covers"><strong>What this covers:</strong> How to deploy any service from a git commit to a running pod. ArgoCD GitOps flow, Helm chart deployment, image promotion, and rollback procedure.</div>
+  <div class="page-when"><strong>When to read:</strong> When deploying a new service. When promoting from dev to staging to prod. When a deployment fails.</div>
+  <div class="page-pillar">Guides section &#183; Related: <a href="22-add-a-service.html">22 Add a service</a> &#183; <a href="19-cluster-setup.html">19 Cluster setup</a> &#183; <a href="24-debugging.html">24 Debugging</a></div>
+</div>
+
+<!-- SUMMARY CHIPS -->
+<div class="counts-bar">
+  <div class="count-chip c1"><div class="chip-num">8</div><div class="chip-label">Sections<br>in this guide</div></div>
+  <div class="count-chip c2"><div class="chip-num">8</div><div class="chip-label">CI pipeline<br>steps (in order)</div></div>
+  <div class="count-chip c3"><div class="chip-num">3</div><div class="chip-label">Rollback<br>options</div></div>
+  <div class="count-chip c4"><div class="chip-num">6</div><div class="chip-label">Failure modes<br>documented</div></div>
+</div>
+
+<!-- SECTION 1 -->
+<h2 class="section-accent-blue">1. The deployment flow &#8212; overview</h2>
+<p class="section-sub">Every step from git push to running pod. Every step is automatic. No manual <code class="ic">kubectl apply</code> in normal operation.</p>
+
+<div class="diagram-box">
+  <span class="d-highlight">git push</span> <span class="d-arrow">&#8594;</span>
+  <span class="d-highlight">GitHub Actions</span>
+  <span style="color:var(--text-dim)"> (builds &amp; pushes image)</span>
+  <span class="d-arrow"> &#8594; </span>
+  <span class="d-highlight">GHCR</span>
+  <span style="color:var(--text-dim)"> (image stored)</span>
+  <br>
+  <span style="padding-left:2.6em;color:var(--text-dim)">&#8595; developer edits values.yaml with new SHA</span>
+  <br>
+  <span class="d-highlight" style="padding-left:2.6em;">ArgoCD</span>
+  <span style="color:var(--text-dim)"> (detects Git diff, syncs within 3 min)</span>
+  <span class="d-arrow"> &#8594; </span>
+  <span class="d-highlight">Helm chart applied</span>
+  <span class="d-arrow"> &#8594; </span>
+  <span class="d-highlight">Kubernetes rolling update</span>
+  <span class="d-arrow"> &#8594; </span>
+  <span class="d-highlight" style="color:var(--green)">pod running</span>
+</div>
+
+<div class="note-block">
+  <strong>Note:</strong> ArgoCD (a GitOps tool that syncs Kubernetes cluster state from a Git repository) is the only actor that applies changes to the cluster.
+  Developers do not run <code class="ic">kubectl apply</code> or <code class="ic">helm upgrade</code> in normal operation.
+  Git is the single source of truth.
+</div>
+
+<h3>The two phases</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Phase</th>
+        <th>What happens</th>
+        <th>Who triggers it</th>
+        <th>How long it takes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Phase 1 &#8212; Build</strong></td>
+        <td>GitHub Actions builds the Docker image, pushes to GHCR, signs with cosign, generates SBOM, runs Trivy scan.</td>
+        <td>Automatic on push to <code class="ic">main</code> or PR to <code class="ic">main</code> touching <code class="ic">services/**</code>.</td>
+        <td>~3&#8211;6 minutes depending on service size and cache hit rate.</td>
+      </tr>
+      <tr>
+        <td><strong>Phase 2 &#8212; Deploy</strong></td>
+        <td>Developer edits <code class="ic">values.yaml</code> with the new image SHA. ArgoCD detects the change and applies the Helm chart. Kubernetes performs a rolling update.</td>
+        <td>Developer edits the values file and pushes. ArgoCD syncs automatically.</td>
+        <td>ArgoCD sync: up to 3 minutes. Rolling update: 30&#8211;120 seconds depending on pod readiness.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="why-block">
+  <strong>Why these are two separate phases:</strong>
+  The build phase is triggered by code changes.
+  The deploy phase is triggered by a deliberate configuration change.
+  Separating them means a build can succeed but not be deployed until a human edits the values file.
+  This prevents accidental auto-promotion to staging or prod.
+</div>
+
+<h3>What ArgoCD does (plain English)</h3>
+<p style="font-size:12px;color:var(--text-dim)">ArgoCD watches a Git repository. Every 3 minutes it compares what is in Git against what is running in the cluster. If they differ, it applies the diff using Helm. The cluster always converges back to what Git says.</p>
+<p style="font-size:12px;color:var(--text-dim)">If someone runs <code class="ic">kubectl apply</code> manually and bypasses Git, ArgoCD will overwrite that change on the next sync. Git wins. Always.</p>
+
+<!-- SECTION 2 -->
+<h2 class="section-accent-blue">2. The GitHub Actions CI pipeline</h2>
+<p class="section-sub">The full pipeline from source code to a signed, scanned image in GHCR.</p>
+
+<h3>Trigger conditions</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Branch / path condition</th>
+        <th>What runs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Push to branch</td>
+        <td>Branch is <code class="ic">main</code> AND path matches <code class="ic">services/**</code></td>
+        <td>Full build: image build, push, sign, SBOM, Trivy.</td>
+      </tr>
+      <tr>
+        <td>Pull request</td>
+        <td>PR targets <code class="ic">main</code> AND path matches <code class="ic">services/**</code></td>
+        <td>Build and scan only &#8212; image is NOT pushed to GHCR. Trivy results posted as PR comment.</td>
+      </tr>
+      <tr>
+        <td>Push to branch</td>
+        <td>Branch is NOT <code class="ic">main</code></td>
+        <td>No CI runs automatically. Use local Docker build (<a href="20-local-dev.html">20 Local dev</a>).</td>
+      </tr>
+      <tr>
+        <td>Push touching non-service paths</td>
+        <td>Path does NOT match <code class="ic">services/**</code></td>
+        <td>No image build. Other workflows (linting, docs checks) run if configured.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Pipeline steps &#8212; in order</h3>
+
+<ul class="steps-list">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Checkout code</strong>
+      <span class="step-cmd">uses: actions/checkout@v4</span>
+      <span class="step-why">Fetches the full repository including submodules. Uses <code class="ic">fetch-depth: 0</code> so cosign can access full git history for provenance.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>Set up Docker Buildx (multi-platform builder)</strong>
+      <span class="step-cmd">uses: docker/setup-buildx-action@v3</span>
+      <span class="step-why">Buildx is required for multi-platform builds (linux/amd64, linux/arm64). Also enables build cache export to GitHub Actions cache, which reduces build time on cache hits by 60&#8211;80%.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>Log in to GHCR (GitHub Container Registry)</strong>
+      <span class="step-cmd">uses: docker/login-action@v3
+with:
+  registry: ghcr.io
+  username: ${{ github.actor }}
+  password: ${{ secrets.GITHUB_TOKEN }}</span>
+      <span class="step-why">GITHUB_TOKEN is automatically issued per workflow run by GitHub Actions. No static credentials stored. The token expires when the workflow run ends.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <strong>Build image with all default build args</strong>
+      <span class="step-cmd">uses: docker/build-push-action@v5
+with:
+  context: services/&lt;service-name&gt;
+  file: services/&lt;service-name&gt;/Dockerfile
+  platforms: linux/amd64,linux/arm64
+  push: ${{ github.ref == 'refs/heads/main' }}
+  tags: ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;:${{ github.sha }}
+  build-args: |
+    NODE_VERSION=22
+    ALPINE_VERSION=3.20
+  cache-from: type=gha
+  cache-to: type=gha,mode=max</span>
+      <span class="step-why">Only pushes on <code class="ic">main</code>. PR builds run to completion for scan results but the image is not stored. Cache mode <code class="ic">max</code> caches all layers including intermediate stages.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <strong>Push to GHCR</strong>
+      <span class="step-why">Handled by the <code class="ic">push: true</code> flag in step 4. The image is pushed as <code class="ic">ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;:&lt;git-sha&gt;</code>. No <code class="ic">:latest</code> tag is pushed.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">6</div>
+    <div class="step-body">
+      <strong>Sign image with cosign (supply chain security)</strong>
+      <span class="step-cmd">uses: sigstore/cosign-installer@v3
+# Then:
+cosign sign --yes \
+  ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;@${{ steps.build.outputs.digest }}</span>
+      <span class="step-why">cosign (a tool for signing container images using OIDC credentials) creates a verifiable signature stored alongside the image in GHCR. The signature proves the image was built by this exact GitHub Actions workflow. Any unsigned image is rejected at the cluster admission webhook.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">7</div>
+    <div class="step-body">
+      <strong>Generate SBOM (Software Bill of Materials) attestation</strong>
+      <span class="step-cmd">uses: anchore/sbom-action@v0
+with:
+  image: ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;@${{ steps.build.outputs.digest }}
+  format: spdx-json
+  output-file: sbom.spdx.json
+# Attach to image:
+cosign attest --yes \
+  --predicate sbom.spdx.json \
+  --type spdxjson \
+  ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;@${{ steps.build.outputs.digest }}</span>
+      <span class="step-why">An SBOM (a machine-readable list of every library and dependency in the image) is required for supply chain compliance. Stored as a cosign attestation alongside the image so it travels with every promotion.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">8</div>
+    <div class="step-body">
+      <strong>Run Trivy security scan on the pushed image</strong>
+      <span class="step-cmd">uses: aquasecurity/trivy-action@master
+with:
+  image-ref: ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;@${{ steps.build.outputs.digest }}
+  format: sarif
+  output: trivy-results.sarif
+  severity: CRITICAL,HIGH
+  exit-code: '1'</span>
+      <span class="step-why">Trivy (a vulnerability scanner for container images) scans the final image for known CVEs. <code class="ic">exit-code: 1</code> means the pipeline fails on CRITICAL or HIGH findings. Results are uploaded to GitHub Security tab as SARIF for triage. The pipeline does not proceed to ArgoCD promotion if Trivy fails.</span>
+    </div>
+  </li>
+</ul>
+
+<h3>Image tag format</h3>
+
+<pre class="code-block">ghcr.io/yarova-ca/pipeline-studio/&lt;service-name&gt;:&lt;git-sha&gt;
+
+# Example:
+ghcr.io/yarova-ca/pipeline-studio/api-gateway:a3f8d2c1b4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9</pre>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: Git SHA as image tag &#8212; not <code>:latest</code></div>
+  <div class="decision-rejected">Rejected: <code>:latest</code> tag</div>
+  <div style="color:var(--text-dim);margin-bottom:4px">Why rejected: <code>:latest</code> is mutable. Rolling back with <code>:latest</code> is impossible &#8212; the tag always points at whatever was last pushed. Two pods can be running different images while both report <code>:latest</code>.</div>
+  <div class="decision-tradeoff">Tradeoff accepted: The values.yaml file must be edited with the exact SHA for each deployment. This is two extra lines of git work per deployment. The auditability and rollback precision gained are worth it.</div>
+</div>
+
+<h3>Where to find the SHA after a build</h3>
+
+<p style="font-size:12px;color:var(--text-dim)">Three places:</p>
+<ul style="font-size:12px;color:var(--text-dim);margin-left:18px;margin-bottom:12px;line-height:1.8">
+  <li>GitHub Actions run page &#8212; the workflow summary shows the digest and SHA.</li>
+  <li><code class="ic">git log --oneline -1</code> on your local branch after push.</li>
+  <li>GHCR package page at <code class="ic">github.com/orgs/yarova-ca/packages</code> &#8212; lists all tags by push time.</li>
+</ul>
+
+<!-- SECTION 3 -->
+<h2 class="section-accent-green">3. Promoting an image to a cluster environment</h2>
+<p class="section-sub">ArgoCD watches Git. Change Git, the cluster follows. Every environment is a separate Git path.</p>
+
+<h3>How ArgoCD watches for changes</h3>
+
+<p style="font-size:12px;color:var(--text-dim)">ArgoCD (GitOps tool &#8212; syncs Kubernetes state from Git) is configured to watch two paths:</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>ArgoCD watches this Git path</th>
+        <th>What it controls</th>
+        <th>Sync interval</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">infra/argocd/</code></td>
+        <td>ArgoCD Application definitions &#8212; what apps exist and which cluster/namespace they deploy to.</td>
+        <td>3 minutes (default ArgoCD polling interval)</td>
+      </tr>
+      <tr>
+        <td><code class="ic">services/*/helm/values.yaml</code></td>
+        <td>Per-service Helm values &#8212; including <code class="ic">image.tag</code> which controls which image version is running.</td>
+        <td>3 minutes (same polling interval)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="why-block">
+  <strong>Why separate overlays for each environment (dev / staging / prod):</strong>
+  Dev, staging, and prod get different replica counts, resource limits (CPU/memory requests and limits), and environment variables.
+  Sharing a single values file would force all three environments to use the same configuration.
+  Kustomize overlays (per-environment patches applied on top of the base Helm values) let each environment diverge on exactly the fields it needs to diverge on, while inheriting everything else.
+</div>
+
+<h3>To deploy a new image to dev</h3>
+
+<ul class="steps-list">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Edit the dev values file</strong>
+      <span class="step-cmd">services/&lt;name&gt;/helm/values.yaml</span>
+      <span class="step-why">Set <code class="ic">image.tag</code> to the new git SHA. Example: <code class="ic">image.tag: a3f8d2c1b4e5f6a7</code></span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>Commit and push to main</strong>
+      <span class="step-cmd">git add services/&lt;name&gt;/helm/values.yaml
+git commit -m "promote &lt;service&gt; to &lt;sha&gt; in dev"
+git push origin main</span>
+      <span class="step-why">ArgoCD watches main. The commit must reach main before ArgoCD will pick it up.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>ArgoCD detects the change within 3 minutes</strong>
+      <span class="step-why">ArgoCD polls Git every 3 minutes by default. To force an immediate sync: <code class="ic">argocd app sync &lt;app-name&gt;</code></span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <strong>ArgoCD applies the Helm chart with the new tag</strong>
+      <span class="step-why">ArgoCD runs <code class="ic">helm template</code> with the updated values file, diffs the output against what is running in the cluster, and applies only the changed resources.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <strong>Kubernetes performs a rolling update</strong>
+      <span class="step-why">Kubernetes replaces old pods with new pods one at a time (by default). The deployment does not go fully unavailable. New pods must pass readiness probes before old pods are terminated.</span>
+    </div>
+  </li>
+</ul>
+
+<h3>To promote from dev to staging</h3>
+
+<ul class="steps-list">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Edit the staging kustomize overlay</strong>
+      <span class="step-cmd">kustomize/overlays/staging/kustomization.yaml</span>
+      <span class="step-why">Find the <code class="ic">images:</code> block. Update <code class="ic">newTag</code> to the SHA you validated in dev.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>What the kustomization.yaml change looks like</strong>
+      <span class="step-cmd">images:
+  - name: ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;
+    newTag: a3f8d2c1b4e5f6a7   # &lt;-- update this line</span>
+      <span class="step-why">Kustomize overlays (per-environment config patches layered on top of the base Helm values) allow staging to get a different image tag than dev without touching the dev config.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>Commit and push to main</strong>
+      <span class="step-cmd">git add kustomize/overlays/staging/kustomization.yaml
+git commit -m "promote &lt;service&gt; to &lt;sha&gt; in staging"
+git push origin main</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <strong>ArgoCD syncs the staging Application</strong>
+      <span class="step-why">ArgoCD has separate Application resources for dev and staging. Updating the staging overlay only affects the staging Application. Dev is unchanged.</span>
+    </div>
+  </li>
+</ul>
+
+<h3>To promote from staging to prod</h3>
+
+<ul class="steps-list">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Edit the prod kustomize overlay</strong>
+      <span class="step-cmd">kustomize/overlays/prod/kustomization.yaml</span>
+      <span class="step-why">Use the exact same SHA that passed in staging. Never promote a SHA that was not tested in staging.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>Commit and push to main</strong>
+      <span class="step-cmd">git add kustomize/overlays/prod/kustomization.yaml
+git commit -m "promote &lt;service&gt; to &lt;sha&gt; in prod"
+git push origin main</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>Verify the prod rollout immediately</strong>
+      <span class="step-cmd">kubectl rollout status deployment/&lt;service-name&gt; -n &lt;prod-namespace&gt;</span>
+      <span class="step-why">Do not leave a prod promotion unmonitored. Watch the rollout to completion before closing the terminal. See Section 5 for full verification procedure.</span>
+    </div>
+  </li>
+</ul>
+
+<h3>Why separate overlays per environment &#8212; full detail</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Config field</th>
+        <th>Dev</th>
+        <th>Staging</th>
+        <th>Prod</th>
+        <th>Why they differ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">replicaCount</code></td>
+        <td>1</td>
+        <td>2</td>
+        <td>3+</td>
+        <td>Dev uses 1 replica to save cluster cost. Prod uses 3+ for high availability.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">resources.requests.cpu</code></td>
+        <td>50m</td>
+        <td>100m</td>
+        <td>200m</td>
+        <td>Dev is under-provisioned deliberately. Prod is right-sized from load testing.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">resources.limits.memory</code></td>
+        <td>256Mi</td>
+        <td>512Mi</td>
+        <td>1Gi</td>
+        <td>Prod handles real traffic volume. Dev handles one developer at a time.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">image.tag</code></td>
+        <td>latest dev SHA</td>
+        <td>validated SHA</td>
+        <td>release SHA</td>
+        <td>Each environment points to a different commit, enabling staged promotion.</td>
+      </tr>
+      <tr>
+        <td>Environment variables</td>
+        <td>DEV URLs, mock secrets</td>
+        <td>Staging URLs, real but non-prod secrets</td>
+        <td>Prod URLs, real secrets from Vault</td>
+        <td>Services connect to different backing services per environment.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 4 -->
+<h2 class="section-accent-amber">4. Manual deployment (for debugging &#8212; not normal operation)</h2>
+<p class="section-sub">Use only when ArgoCD is unavailable or you need to test a Helm chart change locally before committing.</p>
+
+<div class="warn-block">
+  <strong>Warning:</strong> Running helm upgrade manually bypasses ArgoCD.
+  ArgoCD will detect the drift on its next sync and overwrite your manual change.
+  Manual deployments are for debugging only.
+  Any production change must go through Git.
+</div>
+
+<h3>Full helm upgrade command</h3>
+
+<pre class="code-block">helm upgrade --install &lt;service-name&gt; services/&lt;name&gt;/helm/ \
+  --namespace &lt;ns&gt; \
+  --values services/&lt;name&gt;/helm/values.yaml \
+  --values services/&lt;name&gt;/helm/values.&lt;env&gt;.yaml \
+  --set image.tag=&lt;git-sha&gt;</pre>
+
+<h3>Concrete example for api-gateway in dev</h3>
+
+<pre class="code-block">helm upgrade --install api-gateway services/api-gateway/helm/ \
+  --namespace pipeline-studio-dev \
+  --values services/api-gateway/helm/values.yaml \
+  --values services/api-gateway/helm/values.dev.yaml \
+  --set image.tag=a3f8d2c1b4e5f6a7</pre>
+
+<h3>Flags explained</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Flag</th>
+        <th>What it does</th>
+        <th>When to change it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">--install</code></td>
+        <td>Creates the release if it does not exist. Without this flag, <code class="ic">helm upgrade</code> fails on a missing release.</td>
+        <td>Never remove this. Always include it.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">--namespace</code></td>
+        <td>The Kubernetes namespace to deploy into. Must already exist.</td>
+        <td>Change per environment: <code class="ic">-dev</code>, <code class="ic">-staging</code>, <code class="ic">-prod</code> suffix.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">--values values.yaml</code></td>
+        <td>Base values shared across all environments. Applied first.</td>
+        <td>Never skip. This file contains all required defaults.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">--values values.&lt;env&gt;.yaml</code></td>
+        <td>Environment-specific overrides. Applied second &#8212; overrides base values on conflict.</td>
+        <td>Swap <code class="ic">&lt;env&gt;</code> for <code class="ic">dev</code>, <code class="ic">staging</code>, or <code class="ic">prod</code>.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">--set image.tag=&lt;sha&gt;</code></td>
+        <td>Overrides the image tag at deploy time. Takes precedence over all values files.</td>
+        <td>Use the exact git SHA from the CI build. Never use <code class="ic">latest</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>After a manual deploy &#8212; re-sync ArgoCD</h3>
+
+<p style="font-size:12px;color:var(--text-dim)">After testing, update the values file in Git and push so ArgoCD re-owns the state.</p>
+
+<pre class="code-block"># Re-sync ArgoCD to bring it back in line with Git:
+argocd app sync &lt;app-name&gt;
+
+# Or: trigger a sync via the ArgoCD web UI at:
+# https://argocd.&lt;your-domain&gt;</pre>
+
+<!-- SECTION 5 -->
+<h2 class="section-accent-green">5. Verifying a deployment</h2>
+<p class="section-sub">Four verification steps. Run them in order after any promotion.</p>
+
+<h3>Step 1 &#8212; Watch the rollout</h3>
+
+<pre class="code-block">kubectl rollout status deployment/&lt;service-name&gt; -n &lt;namespace&gt;</pre>
+
+<p style="font-size:12px;color:var(--text-dim)">Expected output when healthy:</p>
+<pre class="code-block">deployment "api-gateway" successfully rolled out</pre>
+
+<p style="font-size:12px;color:var(--text-dim)">If the command hangs for more than 5 minutes, the rollout is stuck.</p>
+<p style="font-size:12px;color:var(--text-dim)">Press Ctrl+C and move to Step 2 to diagnose.</p>
+
+<h3>Step 2 &#8212; Check pods are running</h3>
+
+<pre class="code-block">kubectl get pods -n &lt;namespace&gt; -l app=&lt;service-name&gt;</pre>
+
+<p style="font-size:12px;color:var(--text-dim)">Expected output when healthy:</p>
+<pre class="code-block">NAME                           READY   STATUS    RESTARTS   AGE
+api-gateway-7d8f9b6c4-xk2p9   1/1     Running   0          45s
+api-gateway-7d8f9b6c4-m3n4p   1/1     Running   0          42s</pre>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Pod STATUS value</th>
+        <th>What it means</th>
+        <th>What to do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">Running</code></td>
+        <td>Pod is healthy and processing requests.</td>
+        <td>Nothing. This is expected.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">ContainerCreating</code></td>
+        <td>Pod is starting. Image is being pulled or volumes are being mounted.</td>
+        <td>Wait up to 2 minutes. If stuck, see Section 7 &#8212; ImagePullBackOff row.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">ImagePullBackOff</code></td>
+        <td>Kubernetes cannot pull the image from GHCR. Tag does not exist or auth failed.</td>
+        <td>See Section 7 &#8212; Image pull fails row.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">CrashLoopBackOff</code></td>
+        <td>Container starts and immediately crashes. Health check or startup error.</td>
+        <td>See Section 7 &#8212; Health check fails row.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">Pending</code></td>
+        <td>Pod is waiting to be scheduled. Could be resource pressure or a policy block.</td>
+        <td>See Section 7 &#8212; Kyverno policy blocks pod row.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">Terminating</code></td>
+        <td>Old pods from previous rollout being cleaned up.</td>
+        <td>Normal during a rolling update. Wait for it to complete.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Step 3 &#8212; Check health endpoint</h3>
+
+<pre class="code-block"># Forward the service port to localhost:
+kubectl port-forward svc/&lt;service-name&gt; 3000:3000 -n &lt;namespace&gt;
+
+# In a second terminal, hit the health endpoint:
+curl http://localhost:3000/health/live</pre>
+
+<p style="font-size:12px;color:var(--text-dim)">Expected response from a healthy service:</p>
+<pre class="code-block">{"status":"ok","timestamp":"2026-06-05T10:00:00.000Z"}</pre>
+
+<p style="font-size:12px;color:var(--text-dim)">When health check returns a non-200 status: the service is up but unhealthy.</p>
+<p style="font-size:12px;color:var(--text-dim)">Check the pod logs: <code class="ic">kubectl logs &lt;pod-name&gt; -n &lt;namespace&gt; --tail=100</code></p>
+
+<h3>Step 4 &#8212; Check ArgoCD sync status</h3>
+
+<pre class="code-block">kubectl get application &lt;service-name&gt; -n argocd</pre>
+
+<p style="font-size:12px;color:var(--text-dim)">Expected output when healthy:</p>
+<pre class="code-block">NAME          SYNC STATUS   HEALTH STATUS
+api-gateway   Synced        Healthy</pre>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>SYNC STATUS value</th>
+        <th>HEALTH STATUS value</th>
+        <th>What it means</th>
+        <th>What to do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">Synced</code></td>
+        <td><code class="ic">Healthy</code></td>
+        <td>Cluster state matches Git. All pods running and passing health checks.</td>
+        <td>Nothing. Deployment is complete.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">OutOfSync</code></td>
+        <td><code class="ic">Healthy</code></td>
+        <td>Git has a change ArgoCD has not applied yet. Usually means ArgoCD is still in its polling interval.</td>
+        <td>Wait 3 minutes, or run <code class="ic">argocd app sync &lt;name&gt;</code> to force immediately.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">Synced</code></td>
+        <td><code class="ic">Degraded</code></td>
+        <td>ArgoCD applied the chart but the pods are not healthy. Likely a startup failure or bad config.</td>
+        <td>Check pod events and logs. See Section 7.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">OutOfSync</code></td>
+        <td><code class="ic">Degraded</code></td>
+        <td>Both a Git diff and an unhealthy pod. Likely a bad values.yaml was pushed.</td>
+        <td>Revert the values.yaml change immediately. Push the revert. ArgoCD will re-sync.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Full verification checklist</h3>
+
+<ul class="checklist">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Rollout status reports success</strong>
+      <span class="step-cmd">kubectl rollout status deployment/&lt;service-name&gt; -n &lt;namespace&gt;</span>
+      <span class="step-why">Pass: "successfully rolled out". Fail: command hangs or reports error.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>All pods in Running state, READY column shows 1/1</strong>
+      <span class="step-cmd">kubectl get pods -n &lt;namespace&gt; -l app=&lt;service-name&gt;</span>
+      <span class="step-why">Pass: every row shows STATUS=Running and READY=1/1. Fail: any row shows a different status.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>Health endpoint returns 200 OK with status:ok</strong>
+      <span class="step-cmd">kubectl port-forward svc/&lt;service-name&gt; 3000:3000 -n &lt;namespace&gt;
+curl -s http://localhost:3000/health/live | jq .status</span>
+      <span class="step-why">Pass: output is "ok". Fail: non-200 response or connection refused.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <strong>ArgoCD reports Synced / Healthy</strong>
+      <span class="step-cmd">kubectl get application &lt;service-name&gt; -n argocd</span>
+      <span class="step-why">Pass: SYNC STATUS=Synced and HEALTH STATUS=Healthy. Fail: any other combination.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <strong>Image tag in running pod matches the SHA you promoted</strong>
+      <span class="step-cmd">kubectl get pod &lt;pod-name&gt; -n &lt;namespace&gt; \
+  -o jsonpath='{.spec.containers[0].image}'</span>
+      <span class="step-why">Pass: output ends in the exact git SHA you set in values.yaml. Fail: old SHA still showing (rollout not complete or ArgoCD did not sync).</span>
+    </div>
+  </li>
+</ul>
+
+<!-- SECTION 6 -->
+<h2 class="section-accent-amber">6. Rollback procedure</h2>
+<p class="section-sub">When a deployment fails, roll back in under 2 minutes. Three options. Pick Option B (Git revert) unless the cluster is on fire and you need Option A now.</p>
+
+<div class="warn-block">
+  <strong>Before rolling back:</strong> Capture the pod logs from the failing deployment first.
+  Once you roll back, the failing pods will be terminated and logs may be lost.
+  Run: <code class="ic">kubectl logs &lt;pod-name&gt; -n &lt;namespace&gt; --tail=200 &gt; /tmp/failure-logs.txt</code>
+</div>
+
+<h3>Option A &#8212; Helm rollback (fastest, bypasses Git)</h3>
+
+<pre class="code-block">helm rollback &lt;service-name&gt; -n &lt;namespace&gt;</pre>
+
+<p style="font-size:12px;color:var(--text-dim)">Helm rollback (reverts the cluster to the previous Helm release revision) takes effect in under 60 seconds.</p>
+<p style="font-size:12px;color:var(--text-dim)">This bypasses Git. ArgoCD will detect drift and overwrite this rollback on its next sync.</p>
+<p style="font-size:12px;color:var(--text-dim)">After using Option A: immediately do Option C to update Git before ArgoCD re-syncs.</p>
+
+<pre class="code-block"># See available Helm revisions before rolling back:
+helm history &lt;service-name&gt; -n &lt;namespace&gt;
+
+# Roll back to a specific revision:
+helm rollback &lt;service-name&gt; 3 -n &lt;namespace&gt;</pre>
+
+<h3>Option B &#8212; Git revert (preferred &#8212; keeps Git as source of truth)</h3>
+
+<ul class="steps-list">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Revert the commit that changed the image tag</strong>
+      <span class="step-cmd">git revert HEAD
+git push origin main</span>
+      <span class="step-why">This creates a new commit that undoes the image tag change. Git history is preserved. ArgoCD syncs the reverted values within 3 minutes. No manual cluster interaction required.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>ArgoCD syncs the reverted values</strong>
+      <span class="step-why">ArgoCD detects the new commit, re-renders the Helm chart with the old image tag, and applies the diff to the cluster. The rolling update replaces the failing pods with pods running the previous image.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>Verify the rollback succeeded</strong>
+      <span class="step-cmd">kubectl rollout status deployment/&lt;service-name&gt; -n &lt;namespace&gt;</span>
+      <span class="step-why">Confirm the pod is running again before declaring the incident resolved.</span>
+    </div>
+  </li>
+</ul>
+
+<div class="decision-block">
+  <div class="decision-chosen">Why Option B (Git revert) is preferred over Option A (Helm rollback):</div>
+  <div style="color:var(--text-dim);margin-bottom:4px">Option A bypasses Git. The cluster temporarily has a state that does not match Git. ArgoCD will overwrite the rollback when it next syncs, unless you also update Git. This creates a race condition.</div>
+  <div style="color:var(--text-dim);margin-bottom:4px">Option B keeps Git as the single source of truth from the first second. No race condition. The revert commit is audit-logged. The cause and fix are both visible in git log.</div>
+  <div class="decision-tradeoff">Tradeoff accepted: Option B is 3 minutes slower than Option A (ArgoCD sync interval). If the cluster is on fire and 3 minutes matters, use Option A and immediately follow up with Option C.</div>
+</div>
+
+<h3>Option C &#8212; Pin to previous tag immediately</h3>
+
+<p style="font-size:12px;color:var(--text-dim)">Use when you know the exact previous SHA and want an explicit commit record (not a git revert).</p>
+
+<ul class="steps-list">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Find the previous SHA</strong>
+      <span class="step-cmd">git log --oneline services/&lt;name&gt;/helm/values.yaml</span>
+      <span class="step-why">Shows the last two commits that touched values.yaml. The second entry is the previous known-good SHA.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>Edit values.yaml to pin to the previous SHA</strong>
+      <span class="step-cmd">services/&lt;name&gt;/helm/values.yaml</span>
+      <span class="step-why">Change <code class="ic">image.tag</code> back to the previous SHA. Save the file.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>Commit and push the rollback</strong>
+      <span class="step-cmd">git add services/&lt;name&gt;/helm/values.yaml
+git commit -m "rollback &lt;service&gt; to &lt;previous-sha&gt;"
+git push origin main</span>
+      <span class="step-why">This gives the rollback an explicit commit with a clear message in git log, making it easier to trace the incident timeline.</span>
+    </div>
+  </li>
+</ul>
+
+<h3>Rollback options comparison</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Option</th>
+        <th>Speed</th>
+        <th>Git is source of truth?</th>
+        <th>Audit trail?</th>
+        <th>Use when</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>A &#8212; Helm rollback</strong></td>
+        <td>&lt;60 seconds</td>
+        <td>No &#8212; cluster drifts from Git until ArgoCD syncs</td>
+        <td>Helm history only</td>
+        <td>Cluster on fire. Need immediate recovery. Follow up with C immediately.</td>
+      </tr>
+      <tr>
+        <td><strong>B &#8212; Git revert</strong></td>
+        <td>~3 minutes (ArgoCD sync)</td>
+        <td>Yes &#8212; from first second</td>
+        <td>Yes &#8212; full git log with revert commit</td>
+        <td>Normal rollback. Preferred in all non-emergency cases.</td>
+      </tr>
+      <tr>
+        <td><strong>C &#8212; Pin previous tag</strong></td>
+        <td>~3 minutes (ArgoCD sync)</td>
+        <td>Yes &#8212; from first second</td>
+        <td>Yes &#8212; explicit rollback commit message</td>
+        <td>When you want a clear commit message naming the SHA rather than a generic revert commit.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 7 -->
+<h2 class="section-accent-amber">7. Failure modes during deployment</h2>
+<p class="section-sub">Six failure modes. Every one documented with trigger, symptom, diagnostic command, and fix.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>What breaks</th>
+        <th>What you see</th>
+        <th>Diagnostic command</th>
+        <th>Fix</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Image pull fails</strong></td>
+        <td>Pod stuck in <code class="ic">ImagePullBackOff</code> or <code class="ic">ErrImagePull</code></td>
+        <td><code class="ic">kubectl describe pod &lt;pod&gt; -n &lt;ns&gt;</code><br><br>Look for: <code class="ic">Events:</code> section. The error will say either "not found" (tag does not exist) or "unauthorized" (GHCR credentials missing).</td>
+        <td>1. Verify the image exists: open <code class="ic">github.com/orgs/yarova-ca/packages</code> and search for <code class="ic">ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;:&lt;sha&gt;</code>.<br>2. If tag missing: the CI build failed or was not pushed. Re-run the CI workflow.<br>3. If unauthorized: the imagePullSecret in the namespace is expired or missing. See <a href="19-cluster-setup.html">19 Cluster setup</a> &#8212; GHCR pull secret section.</td>
+      </tr>
+      <tr>
+        <td><strong>Helm chart invalid</strong></td>
+        <td>ArgoCD shows <code class="ic">Degraded</code> sync status. ArgoCD UI shows a red sync error.</td>
+        <td><code class="ic">kubectl logs -n argocd -l app.kubernetes.io/name=argocd-server --tail=100</code><br><br>Also: <code class="ic">argocd app get &lt;app-name&gt;</code> shows the exact Helm rendering error.</td>
+        <td>Read the Helm error message. Common causes: a required value is missing from values.yaml, a template syntax error, or an invalid resource definition. Fix the values file or template and push to main. ArgoCD will retry.</td>
+      </tr>
+      <tr>
+        <td><strong>Health check fails / startup crash</strong></td>
+        <td>Pod in <code class="ic">CrashLoopBackOff</code> or <code class="ic">OOMKilled</code></td>
+        <td><code class="ic">kubectl logs &lt;pod&gt; -n &lt;ns&gt; --tail=100</code><br><br>Also: <code class="ic">kubectl describe pod &lt;pod&gt; -n &lt;ns&gt;</code> to see the last exit code and OOM indicator.</td>
+        <td>CrashLoopBackOff: read the last 100 lines of logs for the startup error. OOMKilled: the pod hit its memory limit. Increase <code class="ic">resources.limits.memory</code> in the values overlay for that environment. Rollback first, then fix the config.</td>
+      </tr>
+      <tr>
+        <td><strong>Kyverno policy blocks pod</strong></td>
+        <td>Pod stuck in <code class="ic">Pending</code>. <code class="ic">kubectl describe pod</code> shows admission webhook error.</td>
+        <td><code class="ic">kubectl get events -n &lt;ns&gt; --sort-by=.lastTimestamp</code><br><br>The event will name the ClusterPolicy that denied admission and which rule matched.</td>
+        <td>Read the policy name and rule in the event. Common violations: missing required labels, image not signed with cosign, container running as root when not permitted. Fix the Helm chart or values to comply with the policy. If the policy is wrong, update it in <code class="ic">infra/kyverno/</code> and push.</td>
+      </tr>
+      <tr>
+        <td><strong>PodDisruptionBudget blocks node drain</strong></td>
+        <td>Node stuck draining. <code class="ic">kubectl drain</code> hangs or times out.</td>
+        <td><code class="ic">kubectl get pdb -n &lt;ns&gt;</code><br><br>Look for a PDB with <code class="ic">minAvailable</code> equal to the current replica count. This means zero pods can be evicted, blocking the drain forever.</td>
+        <td>The PDB is misconfigured. It should use <code class="ic">maxUnavailable</code> instead of <code class="ic">minAvailable</code>. Fix: edit the Helm chart for that service to set <code class="ic">podDisruptionBudget.maxUnavailable: 1</code> and remove the <code class="ic">minAvailable</code> field. Push to main. ArgoCD will update the PDB.</td>
+      </tr>
+      <tr>
+        <td><strong>ArgoCD out of sync</strong></td>
+        <td>ArgoCD UI shows <code class="ic">OutOfSync</code>. The cluster state does not match Git.</td>
+        <td><code class="ic">argocd app diff &lt;app-name&gt;</code><br><br>Shows exactly what ArgoCD wants to apply vs what is running. Also visible in the ArgoCD web UI diff view.</td>
+        <td>If the diff shows your intended change: ArgoCD just has not synced yet. Wait 3 minutes or run <code class="ic">argocd app sync &lt;app-name&gt;</code>. If the diff shows unexpected drift (someone ran kubectl manually): push a no-op Git commit to trigger a clean sync, or run <code class="ic">argocd app sync &lt;app-name&gt; --force</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Detailed failure blocks for the three most common failures</h3>
+
+<!-- FAILURE 1 -->
+<div class="failure-block">
+  <div class="failure-label">If image pull fails</div>
+  <div><strong>Trigger:</strong> <code class="ic">image.tag</code> in values.yaml points to a SHA that does not exist in GHCR, or the imagePullSecret in the namespace is missing or expired.</div>
+  <div><strong>System:</strong> Kubernetes retries the image pull with exponential backoff. Pod stays in <code class="ic">ImagePullBackOff</code>. The deployment stalls. No traffic is lost if old pods are still running (rolling update did not complete).</div>
+  <div><strong>User sees:</strong> No visible impact if the rolling update did not complete &#8212; old pods continue serving traffic. The deployment simply does not finish.</div>
+  <div><strong>To diagnose:</strong> <code class="ic">kubectl describe pod &lt;pod&gt; -n &lt;ns&gt;</code> &#8212; Events section.</div>
+  <div><strong>To fix:</strong>
+    <ol style="margin-left:16px;margin-top:4px;font-size:12px;line-height:1.8">
+      <li>If tag missing: check CI pipeline. Re-run if needed.</li>
+      <li>If unauthorized: recreate the GHCR imagePullSecret in the namespace.</li>
+      <li>Rollback to previous known-good SHA via Option B (Section 6).</li>
+    </ol>
+  </div>
+</div>
+
+<!-- FAILURE 2 -->
+<div class="failure-block">
+  <div class="failure-label">If pod crashes on startup (CrashLoopBackOff)</div>
+  <div><strong>Trigger:</strong> The container process exits immediately after starting. Could be: missing environment variable, unreachable database at startup, startup script error, OOM killed.</div>
+  <div><strong>System:</strong> Kubernetes restarts the container with exponential backoff (1s, 2s, 4s, 8s, up to 5 minutes). Pod stays in <code class="ic">CrashLoopBackOff</code>. Rolling update stalls. Old pods continue serving.</div>
+  <div><strong>User sees:</strong> No visible impact while old pods still running. If this is a fresh deploy (no old pods), users see service unavailable.</div>
+  <div><strong>To diagnose:</strong>
+    <pre class="code-block" style="margin:4px 0">kubectl logs &lt;pod&gt; -n &lt;ns&gt; --previous --tail=200
+kubectl describe pod &lt;pod&gt; -n &lt;ns&gt;</pre>
+    The <code class="ic">--previous</code> flag shows logs from the last crash, not the current (blank) container.
+  </div>
+  <div><strong>To fix:</strong> Read the crash log. Identify missing config or startup error. Fix in code or values file. Rollback first if users are impacted, then fix forward.</div>
+</div>
+
+<!-- FAILURE 3 -->
+<div class="failure-block">
+  <div class="failure-label">If Kyverno blocks the pod</div>
+  <div><strong>Trigger:</strong> The pod spec violates a Kyverno ClusterPolicy. Common violations: image not signed with cosign, container runs as root UID, required label missing, image from non-approved registry.</div>
+  <div><strong>System:</strong> Kubernetes admission webhook (Kyverno) rejects the pod creation request before the pod is scheduled. Pod never reaches <code class="ic">Pending</code>. It stays blocked at the admission layer.</div>
+  <div><strong>User sees:</strong> Rolling update never starts. Old pods continue serving (no traffic loss).</div>
+  <div><strong>To diagnose:</strong>
+    <pre class="code-block" style="margin:4px 0">kubectl get events -n &lt;ns&gt; --sort-by=.lastTimestamp | head -20</pre>
+    Events will name the policy and the violated rule.
+  </div>
+  <div><strong>To fix:</strong>
+    <ol style="margin-left:16px;margin-top:4px;font-size:12px;line-height:1.8">
+      <li>If cosign signature missing: re-run the CI pipeline. The pipeline signs the image automatically. A manual push bypasses signing.</li>
+      <li>If running as root: add <code class="ic">securityContext.runAsNonRoot: true</code> to the Helm chart.</li>
+      <li>If label missing: add the required label to the Helm chart template.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- SECTION 8 -->
+<h2 class="section-accent-purple">8. Image signing verification</h2>
+<p class="section-sub">Every image pushed by CI is signed with cosign. Verify before manually pulling any image.</p>
+
+<h3>What cosign signing means</h3>
+
+<p style="font-size:12px;color:var(--text-dim)">cosign (a tool for signing and verifying container images using short-lived OIDC credentials) attaches a cryptographic signature to each image in GHCR.</p>
+<p style="font-size:12px;color:var(--text-dim)">The signature proves: this exact image was built by the <code class="ic">yarova-ca/pipeline-studio</code> GitHub Actions workflow on GitHub&#8217;s infrastructure.</p>
+<p style="font-size:12px;color:var(--text-dim)">An unsigned image cannot have come from the legitimate CI pipeline. Reject it.</p>
+
+<h3>Verify an image before pulling</h3>
+
+<pre class="code-block">cosign verify ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;:&lt;sha&gt; \
+  --certificate-identity-regexp="https://github.com/yarova-ca/pipeline-studio" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com"</pre>
+
+<h3>Concrete example for api-gateway</h3>
+
+<pre class="code-block">cosign verify \
+  ghcr.io/yarova-ca/pipeline-studio/api-gateway:a3f8d2c1b4e5f6a7 \
+  --certificate-identity-regexp="https://github.com/yarova-ca/pipeline-studio" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com"</pre>
+
+<h3>What the output means</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>cosign output</th>
+        <th>What it means</th>
+        <th>What to do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Outputs JSON with <code class="ic">issuer</code>, <code class="ic">subject</code>, and workflow fields. Exit code 0.</td>
+        <td>Signature is valid. Image was built by the legitimate GitHub Actions workflow.</td>
+        <td>Safe to deploy.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">Error: no matching signatures</code>. Exit code non-zero.</td>
+        <td>Image was never signed. It was either built outside CI, tampered with, or the wrong image entirely.</td>
+        <td>Do NOT deploy this image. Investigate where it came from. Alert the security contact for the org.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">Error: certificate not found</code>. Exit code non-zero.</td>
+        <td>Image exists but the signing certificate was not stored correctly. The CI step may have failed partway through.</td>
+        <td>Re-run the CI pipeline for this commit. The re-run will produce a new image with a valid signature.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">Error: subject does not match</code>. Exit code non-zero.</td>
+        <td>Signature exists but was issued to a different repository or workflow path. Could indicate a supply chain attack.</td>
+        <td>Do NOT deploy. Treat as a security incident. The image may be from a fork or a different repository.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>How Kyverno enforces signing at the cluster level</h3>
+
+<p style="font-size:12px;color:var(--text-dim)">Kyverno (the cluster admission policy engine) has a <code class="ic">ClusterPolicy</code> that runs cosign verification on every pod admission.</p>
+<p style="font-size:12px;color:var(--text-dim)">You do not need to run cosign manually before every deployment to the cluster &#8212; Kyverno does it automatically.</p>
+<p style="font-size:12px;color:var(--text-dim)">Manual verification is only needed when pulling an image to a local machine for inspection or debugging.</p>
+
+<pre class="code-block"># Kyverno ClusterPolicy that enforces signing (reference &#8212; do not modify manually):
+# infra/kyverno/policies/verify-image-signatures.yaml
+
+# To see the current policy status:
+kubectl get clusterpolicy verify-image-signatures</pre>
+
+<h3>SBOM verification</h3>
+
+<p style="font-size:12px;color:var(--text-dim)">Every image also has an SBOM (Software Bill of Materials &#8212; a machine-readable list of every library in the image) attached as a cosign attestation.</p>
+<p style="font-size:12px;color:var(--text-dim)">To view the SBOM for any image:</p>
+
+<pre class="code-block">cosign verify-attestation \
+  ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;:&lt;sha&gt; \
+  --type spdxjson \
+  --certificate-identity-regexp="https://github.com/yarova-ca/pipeline-studio" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  | jq -r '.payload' | base64 -d | jq '.subject[].name'</pre>
+
+<p style="font-size:12px;color:var(--text-dim)">This outputs every package name included in the image at build time.</p>
+<p style="font-size:12px;color:var(--text-dim)">Useful for: incident response (was a vulnerable library shipped?), compliance audits, supply chain review.</p>
+
+<h3>Image tag format &#8212; full reference</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Tag type</th>
+        <th>Format</th>
+        <th>Example</th>
+        <th>When used</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Git SHA (primary)</td>
+        <td><code class="ic">ghcr.io/yarova-ca/pipeline-studio/&lt;service&gt;:&lt;40-char-sha&gt;</code></td>
+        <td><code class="ic">ghcr.io/yarova-ca/pipeline-studio/api-gateway:a3f8d2c1b4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9</code></td>
+        <td>All deployments. The only tag type deployed to clusters.</td>
+      </tr>
+      <tr>
+        <td>Short SHA (reference only)</td>
+        <td><code class="ic">&lt;service&gt;:&lt;7-char-sha&gt;</code></td>
+        <td><code class="ic">api-gateway:a3f8d2c</code></td>
+        <td>Human reference only. The full 40-char SHA is used in all config files.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">:latest</code></td>
+        <td>Never used</td>
+        <td>&#8212;</td>
+        <td>Never. See decision block in Section 2.</td>
+      </tr>
+      <tr>
+        <td>Digest (immutable)</td>
+        <td><code class="ic">&lt;service&gt;@sha256:&lt;digest&gt;</code></td>
+        <td><code class="ic">api-gateway@sha256:abc123...</code></td>
+        <td>Used by cosign for signing. ArgoCD can be configured to use digest pinning &#8212; see 19 Cluster setup.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- APPENDIX: Quick reference -->
+<h2 class="section-accent-blue">Quick reference &#8212; most-used commands</h2>
+<p class="section-sub">Copy-paste commands for the five most common deployment tasks.</p>
+
+<h3>Deploy to dev</h3>
+<pre class="code-block"># Edit:
+services/&lt;name&gt;/helm/values.yaml   # set image.tag: &lt;sha&gt;
+
+# Push:
+git add services/&lt;name&gt;/helm/values.yaml
+git commit -m "promote &lt;service&gt; to &lt;sha&gt; in dev"
+git push origin main
+
+# Monitor:
+kubectl rollout status deployment/&lt;name&gt; -n pipeline-studio-dev</pre>
+
+<h3>Promote to staging</h3>
+<pre class="code-block"># Edit:
+kustomize/overlays/staging/kustomization.yaml   # set newTag: &lt;sha&gt;
+
+# Push:
+git add kustomize/overlays/staging/kustomization.yaml
+git commit -m "promote &lt;service&gt; to &lt;sha&gt; in staging"
+git push origin main
+
+# Monitor:
+kubectl rollout status deployment/&lt;name&gt; -n pipeline-studio-staging</pre>
+
+<h3>Promote to prod</h3>
+<pre class="code-block"># Edit:
+kustomize/overlays/prod/kustomization.yaml   # set newTag: &lt;sha&gt;
+
+# Push:
+git add kustomize/overlays/prod/kustomization.yaml
+git commit -m "promote &lt;service&gt; to &lt;sha&gt; in prod"
+git push origin main
+
+# Monitor (stay on this until it completes):
+kubectl rollout status deployment/&lt;name&gt; -n pipeline-studio-prod</pre>
+
+<h3>Rollback (preferred &#8212; Option B)</h3>
+<pre class="code-block"># Capture logs from the failing pod first:
+kubectl logs &lt;pod&gt; -n &lt;ns&gt; --previous --tail=200 &gt; /tmp/failure-logs.txt
+
+# Revert the values change:
+git revert HEAD
+git push origin main
+
+# Watch the rollback:
+kubectl rollout status deployment/&lt;name&gt; -n &lt;ns&gt;</pre>
+
+<h3>Force ArgoCD sync (when you can&#8217;t wait 3 minutes)</h3>
+<pre class="code-block">argocd app sync &lt;app-name&gt;
+
+# To sync all apps at once:
+argocd app sync --selector app.kubernetes.io/part-of=pipeline-studio</pre>
+
+<h3>Check deployment health (all four checks at once)</h3>
+<pre class="code-block"># 1. Rollout status
+kubectl rollout status deployment/&lt;name&gt; -n &lt;ns&gt;
+
+# 2. Pod status
+kubectl get pods -n &lt;ns&gt; -l app=&lt;name&gt;
+
+# 3. ArgoCD status
+kubectl get application &lt;name&gt; -n argocd
+
+# 4. Image tag in running pod
+kubectl get pod \
+  $(kubectl get pods -n &lt;ns&gt; -l app=&lt;name&gt; -o name | head -1) \
+  -n &lt;ns&gt; \
+  -o jsonpath='{.spec.containers[0].image}'</pre>
+
+</main>
+</body>
+</html>

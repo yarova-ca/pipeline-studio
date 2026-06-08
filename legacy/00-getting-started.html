@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>00 — Getting Started | Pipeline Studio</title>
+<meta name="description" content="What pipeline-studio is, who it is for, and how all 8 build axes and 106 services fit together. The mental model every maintainer must have before touching anything.">
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d0d7de;--text:#1f2328;--text-dim:#656d76;--text-head:#1f2328;
+  --blue:#0969da;--green:#1a7f37;--amber:#7a4f00;--purple:#6f42c1;--red:#b91c1c;
+  --sidebar-w:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;
+  background:var(--bg);color:var(--text);line-height:1.5;display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);
+  border-right:1px solid var(--border);padding:16px 0;position:sticky;top:0;height:100vh;
+  overflow-y:auto;flex-shrink:0}
+nav a{display:block;padding:5px 16px;font-size:12px;color:var(--text-dim);text-decoration:none;
+  transition:color .12s,background .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text);background:var(--bg3)}
+nav a[aria-current]{color:var(--blue);font-weight:600;background:var(--bg3)}
+.nav-top{color:var(--text-dim)!important;margin-top:8px;border-top:1px solid var(--border)}
+main{flex:1;padding:24px 32px;max-width:1100px;overflow-x:auto}
+h1{font-size:20px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+.page-meta{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+h2{font-size:15px;font-weight:700;color:var(--text-head);margin:32px 0 6px;
+  padding-top:10px;border-top:2px solid var(--border)}
+h3{font-size:13px;font-weight:700;color:var(--text-head);margin:18px 0 6px}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:12px}
+p{margin-bottom:8px;font-size:13px;line-height:1.6}
+
+/* Warn / note blocks */
+.warn-block{background:#fff8c5;border:1px solid #e8d064;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.warn-block strong{color:var(--amber)}
+.note-block{background:#dbeeff;border:1px solid #b6d7f5;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.note-block strong{color:var(--blue)}
+
+/* Code blocks */
+pre.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  padding:12px 16px;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  overflow-x:auto;line-height:1.7;margin:8px 0}
+code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+
+/* Table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:12px}
+.xref-table,.qr-table{width:100%;border-collapse:collapse;font-size:12px}
+.xref-table th,.qr-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
+  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap}
+.xref-table td,.qr-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.xref-table tr:last-child td,.qr-table tr:last-child td{border-bottom:none}
+.xref-table tr:hover td,.qr-table tr:hover td{background:var(--bg2)}
+
+/* Diagram */
+.diagram-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:20px 24px;margin:12px 0;font-family:"SFMono-Regular",Consolas,monospace;
+  font-size:12px;line-height:2;color:var(--text-dim)}
+.diagram-box .d-highlight{color:var(--blue);font-weight:600}
+.diagram-box .d-arrow{color:var(--text-dim)}
+
+/* Step list */
+.steps-list{list-style:none;padding:0;margin:0 0 12px}
+.steps-list li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}
+.steps-list li:last-child{border-bottom:none}
+.step-num{min-width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px}
+.step-body{flex:1}
+.step-cmd{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:3px 8px;margin-top:3px;white-space:pre-wrap;word-break:break-all}
+.step-why{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}
+
+/* Decision block */
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+
+/* Failure block */
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.failure-label{font-weight:700;color:var(--red);margin-bottom:6px}
+
+/* Gotcha block */
+.gotcha-block{background:#fffbeb;border-left:3px solid #d97706;padding:10px 14px;margin:8px 0;font-size:12px;border-radius:0 4px 4px 0}
+.gotcha-block strong{color:var(--amber)}
+
+/* Section accent */
+.section-accent-blue{border-top-color:var(--blue)}
+.section-accent-green{border-top-color:var(--green)}
+.section-accent-amber{border-top-color:var(--amber)}
+.section-accent-purple{border-top-color:var(--purple)}
+
+/* Pillar badge / nav */
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;
+  color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;
+  display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);
+  background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.nav-logo{padding:0 16px 14px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.page-title{font-size:24px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+
+/* Why block */
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+
+/* Component detail blocks */
+.component-detail{border:1px solid var(--border);border-radius:6px;margin-bottom:8px;overflow:hidden}
+.component-detail[open]{border-color:var(--blue)}
+.component-summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;align-items:center;gap:10px;background:var(--bg2)}
+.component-summary:hover{background:var(--bg3)}
+.component-summary::-webkit-details-marker{display:none}
+.component-summary::before{display:none}
+.comp-num{font-size:10px;font-weight:700;background:var(--blue);color:#fff;border-radius:3px;padding:1px 6px;min-width:28px;text-align:center}
+.comp-name{font-weight:600;font-size:12.5px;flex:1}
+.comp-layer{font-size:10.5px;color:var(--text-dim);background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 6px}
+.comp-status{font-size:10px;font-weight:700;border-radius:3px;padding:1px 6px}
+.comp-ok{background:#d1fae5;color:#065f46;border:1px solid #86efac}
+.comp-missing{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.comp-body{padding:16px;border-top:1px solid var(--border)}
+.comp-what,.comp-why-p{font-size:12px;color:var(--text-dim);margin-bottom:8px;line-height:1.65}
+.comp-section{margin:10px 0;font-size:12px}
+.comp-cmd{display:block;font-family:monospace;background:var(--bg3);padding:6px 10px;border-radius:4px;font-size:11px;margin:4px 0;white-space:pre-wrap;word-break:break-all}
+.comp-expected{font-size:11px;color:var(--text-dim);font-style:italic;display:block;margin-top:2px}
+.hero-intro h2{padding:0;border:none;margin:0 0 10px}
+
+/* Group heading for component sections */
+.comp-group-heading{font-size:14px;font-weight:700;color:var(--text-head);margin:28px 0 10px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;border-left:3px solid var(--blue)}
+
+/* Counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.c1{border-left:3px solid var(--blue)}.c1 .chip-num{color:var(--blue)}
+.c2{border-left:3px solid var(--green)}.c2 .chip-num{color:var(--green)}
+.c3{border-left:3px solid var(--amber)}.c3 .chip-num{color:var(--amber)}
+.c4{border-left:3px solid var(--purple)}.c4 .chip-num{color:var(--purple)}
+
+/* Check list for env check */
+.check-list{list-style:none;padding:0;margin:0 0 12px}
+.check-list li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}
+.check-list li:last-child{border-bottom:none}
+.check-icon{min-width:20px;height:20px;border-radius:4px;display:flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.check-pass{background:#d1fae5;color:#065f46;border:1px solid #86efac}
+.check-fail{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.check-body{flex:1}
+.check-cmd{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:3px 8px;margin-top:3px}
+.check-expect{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}
+.check-fail-action{display:block;font-size:11px;color:var(--red);margin-top:2px;font-weight:600}
+
+/* Inline badge */
+.badge{display:inline-block;font-size:10px;font-weight:700;border-radius:3px;padding:1px 6px;line-height:1.5}
+.badge-blue{background:#dbeeff;color:var(--blue);border:1px solid #b6d7f5}
+.badge-green{background:#d1fae5;color:#065f46;border:1px solid #86efac}
+.badge-amber{background:#fff8c5;color:var(--amber);border:1px solid #e8d064}
+.badge-purple{background:#f3e8ff;color:var(--purple);border:1px solid #d8b4fe}
+
+/* Layer stack */
+.layer-stack{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:12px 0}
+.layer-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border)}
+.layer-row:last-child{border-bottom:none}
+.layer-num{width:36px;min-width:36px;background:var(--blue);color:#fff;font-size:10px;
+  font-weight:700;display:flex;align-items:center;justify-content:center;font-family:monospace}
+.layer-name{width:180px;min-width:180px;padding:8px 12px;font-size:12px;font-weight:600;
+  background:var(--bg2);border-right:1px solid var(--border)}
+.layer-desc{padding:8px 12px;font-size:12px;color:var(--text-dim);flex:1}
+.layer-path{padding:8px 12px;font-size:11px;font-family:"SFMono-Regular",Consolas,monospace;
+  color:var(--text-dim);border-left:1px solid var(--border);white-space:nowrap;min-width:200px}
+
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#e6edf3;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--purple:#bc8cff;--red:#f85149;
+  }
+  .warn-block{background:#2d2100;border-color:#4a3800}
+  .note-block{background:#0d2744;border-color:#2d4a6a}
+  .decision-block{background:#0d2b15;border-color:#238636}
+  .failure-block{background:#2d0a0a;border-color:#8b1a1a}
+  .gotcha-block{background:#2d1f00;border-color:#d97706}
+  .why-block{background:#2d1f00;border-color:#d97706}
+  .diagram-box{background:#161b22;border-color:#30363d}
+  .comp-ok{background:#052e16;color:#86efac;border-color:#166534}
+  .comp-missing{background:#2d0a0a;color:#fca5a5;border-color:#7f1d1d}
+  .hero-intro{background:var(--bg2)!important;border-color:var(--border)!important}
+  .badge-blue{background:#0d2744;border-color:#2d4a6a;color:#93c5fd}
+  .badge-green{background:#052e16;color:#86efac;border-color:#166534}
+  .badge-amber{background:#2d2100;border-color:#4a3800;color:#fde68a}
+  .badge-purple{background:#1e1030;color:#bc8cff;border-color:#6d4aff}
+  .check-pass{background:#052e16;color:#86efac;border-color:#166534}
+  .check-fail{background:#2d0a0a;color:#fca5a5;border-color:#7f1d1d}
+}
+@media print{
+  nav{display:none}
+  main{max-width:100%;padding:12px}
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link" style="position:absolute;left:-9999px">Skip to content</a>
+
+<!-- ═══ SIDEBAR NAV ═══ -->
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">&#8962; Hub</a>
+  <details>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+  </details>
+  <details>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details>
+    <summary>Maintaining<span class="pillar-badge">2</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Runbook</a>
+    <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details open>
+    <summary>Guides<span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link" aria-current="page">00 Getting started</a>
+    <a href="20-local-dev.html" class="nav-link">20 Local dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 Build axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 Add a service</a>
+    <a href="23-deployment.html" class="nav-link">23 Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 Debugging</a>
+  </details>
+  <a href="#main-content" class="nav-top">&#8593; Back to top</a>
+</nav>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main id="main-content">
+
+<div class="page-header">
+  <div class="page-title">00 &#8212; Getting Started</div>
+  <div class="page-covers"><strong>What this covers:</strong> What pipeline-studio is, who it is for, and how all 8 build axes and 106 services fit together. The mental model every maintainer must have before touching anything.</div>
+  <div class="page-when"><strong>When to read:</strong> Before reading any other doc. Before your first commit. When onboarding a new team member.</div>
+  <div class="page-pillar">Guides &mdash; Start here &middot; Next: <a href="20-local-dev.html">20 Local dev</a></div>
+</div>
+
+<!-- ═══ HERO INTRO ═══ -->
+<div class="hero-intro" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:24px">
+  <h2 style="margin:0 0 10px;border:none;padding:0;font-size:16px">The one-paragraph summary</h2>
+  <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:8px;line-height:1.7">
+    pipeline-studio is a monorepo of 106 production-ready service starters, each covering one framework.
+    Every starter ships with a Dockerfile, Helm chart, Kustomize overlays, Backstage catalog entry, and GitHub Actions CI — ready to clone and deploy.
+  </p>
+  <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:8px;line-height:1.7">
+    Each starter accepts 8 Docker build arguments (axes) that control the base image, runtime, package manager, build tool, compliance profile, observability stack, auth method, and ORM.
+    Changing an axis at build time produces a different image — no code change required.
+  </p>
+  <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:0;line-height:1.7">
+    A new team copies a starter, sets the axes they need, and has a production-grade service in 30 minutes.
+    Without pipeline-studio, building CI, Dockerfiles, and Helm charts from scratch takes 2&#8211;4 days per service.
+  </p>
+</div>
+
+<!-- ═══ COUNTS BAR ═══ -->
+<div class="counts-bar">
+  <div class="count-chip c1"><div class="chip-num">106</div><div class="chip-label">Service starters<br>across all frameworks</div></div>
+  <div class="count-chip c2"><div class="chip-num">8</div><div class="chip-label">Build axes<br>per service</div></div>
+  <div class="count-chip c3"><div class="chip-num">5</div><div class="chip-label">Files per starter<br>Dockerfile · Helm · Kustomize · Backstage · CI</div></div>
+  <div class="count-chip c4"><div class="chip-num">30 min</div><div class="chip-label">To production-grade service<br>from zero</div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 1: What is pipeline-studio?         -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 class="section-accent-blue">1. What is pipeline-studio?</h2>
+<p class="section-sub">The complete definition — every component, why it exists, what it replaces.</p>
+
+<p>pipeline-studio is a monorepo of 106 production-ready service starters.</p>
+
+<p>Each starter covers one framework: Next.js, FastAPI, Gin, Spring Boot, Rails, Django, NestJS, Actix, and more.</p>
+
+<p>Every starter ships with five artifacts, all complete and production-grade out of the box:</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Artifact</th>
+        <th>What it is</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">Dockerfile</code></td>
+        <td>Multi-stage build. Accepts all 8 build axes as <code class="ic">ARG</code>. Produces a minimal production image.</td>
+        <td><code class="ic">services/&lt;name&gt;/Dockerfile</code></td>
+      </tr>
+      <tr>
+        <td>Helm chart</td>
+        <td>Parameterized Kubernetes deployment, service, ingress, HPA, and PodDisruptionBudget.</td>
+        <td><code class="ic">services/&lt;name&gt;/helm/</code></td>
+      </tr>
+      <tr>
+        <td>Kustomize overlays</td>
+        <td>Environment overlays for dev, staging, and prod. Patches image tags and replica counts.</td>
+        <td><code class="ic">services/&lt;name&gt;/kustomize/</code></td>
+      </tr>
+      <tr>
+        <td>Backstage catalog entry</td>
+        <td><code class="ic">catalog-info.yaml</code> declaring the component, owner, system, and links.</td>
+        <td><code class="ic">services/&lt;name&gt;/catalog-info.yaml</code></td>
+      </tr>
+      <tr>
+        <td>GitHub Actions CI</td>
+        <td>Build, test, lint, SBOM, and push workflow. Parameterized by the same 8 build axes.</td>
+        <td><code class="ic">.github/workflows/&lt;name&gt;.yml</code></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="why-block">
+  <strong>Why this exists:</strong> Building a Dockerfile, Helm chart, Kustomize overlays, and CI pipeline from scratch for one service takes 2&#8211;4 days of engineering time.
+  Across a portfolio of 10 services, that is 20&#8211;40 days.
+  pipeline-studio reduces each service to a 30-minute copy-and-configure operation.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 2: The 8 build axes                -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 class="section-accent-purple">2. The 8 build axes &#8212; every service accepts these Docker build args</h2>
+<p class="section-sub">Build axes are Docker <code class="ic">ARG</code> values passed at build time. They control what goes into the image without changing source code.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Axis</th>
+        <th>Default</th>
+        <th>What it controls</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">BUILD_IMAGE</code></td>
+        <td><code class="ic">node</code></td>
+        <td>Base image family. Sets the runtime language and toolchain for the build stage.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">RUNTIME</code></td>
+        <td><code class="ic">alpine</code></td>
+        <td>Final image variant: <code class="ic">alpine</code> (smallest), <code class="ic">slim</code> (standard Debian), <code class="ic">fips</code> (FIPS-compliant OpenSSL).</td>
+      </tr>
+      <tr>
+        <td><code class="ic">PKG_MGR</code></td>
+        <td><code class="ic">npm</code></td>
+        <td>Package manager. <code class="ic">npm</code> / <code class="ic">pnpm</code> / <code class="ic">yarn</code> / <code class="ic">bun</code> for Node; <code class="ic">pip</code> / <code class="ic">poetry</code> / <code class="ic">uv</code> for Python.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">BUILD_TOOL</code></td>
+        <td><code class="ic">tsc</code></td>
+        <td>Compiler or bundler for Node backends: <code class="ic">tsc</code> (TypeScript), <code class="ic">esbuild</code> (fast bundler), <code class="ic">swc</code> (Rust-based transpiler).</td>
+      </tr>
+      <tr>
+        <td><code class="ic">COMPLIANCE</code></td>
+        <td><code class="ic">standard</code></td>
+        <td>Compliance profile compiled into the image: <code class="ic">standard</code> / <code class="ic">hipaa</code> / <code class="ic">pci</code> / <code class="ic">pipeda</code> / <code class="ic">fips</code> / <code class="ic">soc2</code> / <code class="ic">cmmc</code> / <code class="ic">nerc</code>.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">OBSERVABILITY</code></td>
+        <td><code class="ic">none</code></td>
+        <td>Telemetry SDK bundled into the image: <code class="ic">none</code> / <code class="ic">otel</code> (OpenTelemetry) / <code class="ic">prometheus</code> / <code class="ic">datadog</code>.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">AUTH</code></td>
+        <td><code class="ic">all</code></td>
+        <td>Auth middleware compiled in: <code class="ic">none</code> / <code class="ic">jwt</code> / <code class="ic">oauth2</code> / <code class="ic">apikey</code> / <code class="ic">all</code>.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">ORM</code></td>
+        <td>Varies by ecosystem</td>
+        <td>ORM variant compiled into the image. Default: <code class="ic">prisma</code> (Node) / <code class="ic">sqlalchemy</code> (Python) / <code class="ic">gorm</code> (Go).</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:6px"><strong>Example &#8212; build a HIPAA-compliant Node service with Prometheus metrics:</strong></p>
+<pre class="code-block">docker build \
+  --build-arg COMPLIANCE=hipaa \
+  --build-arg OBSERVABILITY=prometheus \
+  --build-arg PKG_MGR=pnpm \
+  .</pre>
+
+<div class="note-block">
+  <strong>Note:</strong> Axes are additive. You can set any combination.
+  The Dockerfile uses <code class="ic">ARG</code> branching to include or exclude the relevant packages and config at build time.
+  The final image contains only what the axes request.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 3: Three canonical reference services -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 class="section-accent-green">3. The three canonical reference services</h2>
+<p class="section-sub">When a build axis is added or changed, these three services are the first to be updated and verified. They are the ground truth for how axes behave.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Stack</th>
+        <th>Ecosystem</th>
+        <th>Why canonical</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">14-express</code></td>
+        <td>Node / TypeScript / Express</td>
+        <td>npm / pnpm / yarn / bun</td>
+        <td>Most build axes are first tested here. Covers all four Node package managers and all three Node build tools.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">15-fastapi</code></td>
+        <td>Python / FastAPI / Uvicorn</td>
+        <td>pip / poetry / uv</td>
+        <td>Canonical Python backend. Covers all three Python package managers. First to test Python-specific axis behavior.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">16-gin</code></td>
+        <td>Go / Gin / net/http</td>
+        <td>go modules</td>
+        <td>Canonical Go backend. Go has one package manager and one build tool. Tests axes that must work across all three ecosystems.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="why-block">
+  <strong>Why these three:</strong> Together they cover the three most common enterprise ecosystems &#8212; npm, pip, and go modules.
+  A change that works on all three is safe to propagate to the remaining 103 services.
+  A change that breaks any one of them is not ready.
+</div>
+
+<div class="gotcha-block">
+  <strong>Rule:</strong> When you add or modify a build axis, verify it against 14-express, 15-fastapi, and 16-gin before opening a PR.
+  All three must build successfully with the new axis value.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 4: Platform layers                 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 class="section-accent-amber">4. Platform layers &#8212; bottom to top</h2>
+<p class="section-sub">pipeline-studio is not only the service starters. It includes the full platform stack that runs and operates those services in production.</p>
+
+<div class="layer-stack">
+  <div class="layer-row">
+    <div class="layer-num">9</div>
+    <div class="layer-name">Portal</div>
+    <div class="layer-desc">Backstage developer portal. Hosts the software catalog, TechDocs, and scaffolder templates for all 106 services.</div>
+    <div class="layer-path">backstage/</div>
+  </div>
+  <div class="layer-row">
+    <div class="layer-num">8</div>
+    <div class="layer-name">Observability</div>
+    <div class="layer-desc">Prometheus (metrics) + Loki (logs) + Tempo (traces). Unified via Grafana. All services export to this stack when <code class="ic">OBSERVABILITY=otel</code> or <code class="ic">prometheus</code>.</div>
+    <div class="layer-path">infra/prometheus/ infra/loki/ infra/tempo/</div>
+  </div>
+  <div class="layer-row">
+    <div class="layer-num">7</div>
+    <div class="layer-name">Secrets</div>
+    <div class="layer-desc">External Secrets Operator syncs secrets from AWS Secrets Manager, Vault, or GCP Secret Manager into Kubernetes Secrets.</div>
+    <div class="layer-path">infra/external-secrets/</div>
+  </div>
+  <div class="layer-row">
+    <div class="layer-num">6</div>
+    <div class="layer-name">Policies</div>
+    <div class="layer-desc">Kyverno ClusterPolicies enforce image signing, required labels, resource limits, and compliance rules at admission time.</div>
+    <div class="layer-path">infra/kyverno/</div>
+  </div>
+  <div class="layer-row">
+    <div class="layer-num">5</div>
+    <div class="layer-name">GitOps</div>
+    <div class="layer-desc">ArgoCD app-of-apps pattern. Every service has an Application resource. Syncs from the Kustomize overlays in each service directory.</div>
+    <div class="layer-path">infra/argocd/</div>
+  </div>
+  <div class="layer-row">
+    <div class="layer-num">4</div>
+    <div class="layer-name">Kubernetes</div>
+    <div class="layer-desc">Helm chart and Kustomize overlays per service. Helm for templated manifests, Kustomize for environment-specific patches.</div>
+    <div class="layer-path">services/*/helm/ services/*/kustomize/</div>
+  </div>
+  <div class="layer-row">
+    <div class="layer-num">3</div>
+    <div class="layer-name">Containers</div>
+    <div class="layer-desc">Multi-stage Dockerfiles per service. Build args control the final image. Images are signed with Cosign and attested with SBOM.</div>
+    <div class="layer-path">services/*/Dockerfile</div>
+  </div>
+  <div class="layer-row">
+    <div class="layer-num">2</div>
+    <div class="layer-name">CI/CD</div>
+    <div class="layer-desc">GitHub Actions workflows. Build, test, lint, scan, sign, push. Triggered on pull request and push to main. Parameterized by build axes.</div>
+    <div class="layer-path">.github/workflows/</div>
+  </div>
+  <div class="layer-row">
+    <div class="layer-num">1</div>
+    <div class="layer-name">Services</div>
+    <div class="layer-desc">106 framework starters. Each a complete, self-contained service directory ready to clone and extend.</div>
+    <div class="layer-path">services/</div>
+  </div>
+</div>
+
+<div class="note-block">
+  <strong>Key insight:</strong> Layers 1&#8211;3 (Services, CI/CD, Containers) are per-service.
+  Layers 4&#8211;9 (Kubernetes through Portal) are shared platform infrastructure.
+  A new service only needs to understand layers 1&#8211;3. Platform engineers maintain layers 4&#8211;9.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 5: When to use each RUNTIME value  -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>5. When to use each RUNTIME value</h2>
+<p class="section-sub">RUNTIME controls the final image base. The wrong value causes either oversized images or build failures. Use this decision block every time.</p>
+
+<div class="decision-block">
+  <div class="decision-chosen">When RUNTIME=alpine (default): smallest image, use for all services unless a specific reason to change.</div>
+  <div style="margin-bottom:4px;font-size:12px">Produces a musl libc base. Alpine images are 5&#8211;10x smaller than Debian-based images.</div>
+  <div style="margin-bottom:0;font-size:12px;color:var(--text-dim);font-style:italic">Switch away from alpine only when the build log shows a musl libc error.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">When RUNTIME=slim: a native module fails on alpine.</div>
+  <div style="margin-bottom:4px;font-size:12px">
+    Trigger: docker build output contains a line like <code class="ic">Error loading shared library libssl.so: No such file or directory</code> or <code class="ic">cannot open shared object file: musl not found</code>.
+  </div>
+  <div style="margin-bottom:4px;font-size:12px">slim uses Debian slim (glibc). Most native modules that fail on alpine will succeed on slim.</div>
+  <div style="margin-bottom:0;font-size:12px;color:var(--text-dim);font-style:italic">Tradeoff: slim images are ~80MB larger than alpine equivalents.</div>
+</div>
+
+<div class="warn-block">
+  <strong>Warning &#8212; RUNTIME=fips has a hard rule:</strong>
+  <br>RUNTIME=fips is only valid when COMPLIANCE=fips is also set, OR when deploying to a federal environment that mandates FIPS-compliant OpenSSL.
+  <br><br>
+  When COMPLIANCE=fips is set but RUNTIME is not also set to fips: the build will fail with an explicit error.
+  <br>
+  The error message is: <code class="ic">COMPLIANCE=fips requires RUNTIME=fips. Set --build-arg RUNTIME=fips.</code>
+</div>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>RUNTIME value</th>
+        <th>Base</th>
+        <th>Image size</th>
+        <th>When to use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">alpine</code></td>
+        <td>Alpine Linux (musl libc)</td>
+        <td>Smallest &#8212; typically 20&#8211;80MB</td>
+        <td>Default. Use unless build fails with a musl error.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">slim</code></td>
+        <td>Debian slim (glibc)</td>
+        <td>Medium &#8212; typically 80&#8211;200MB</td>
+        <td>Native module fails on alpine (musl libc error in docker build output).</td>
+      </tr>
+      <tr>
+        <td><code class="ic">fips</code></td>
+        <td>FIPS-validated OpenSSL base</td>
+        <td>Medium &#8212; typically 100&#8211;220MB</td>
+        <td>COMPLIANCE=fips is set, OR deploying to a federal environment. Must pair with COMPLIANCE=fips or build fails.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 6: Navigation guide                -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>6. Navigation guide &#8212; which doc to read when</h2>
+<p class="section-sub">Use this table to jump directly to the doc you need. Every goal has exactly one starting doc.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Goal</th>
+        <th>Read</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Run a service locally</td>
+        <td><a href="20-local-dev.html">20 &#8212; Local dev</a></td>
+        <td>How to run any starter on your machine. Docker Compose and bare Node/Python/Go modes.</td>
+      </tr>
+      <tr>
+        <td>Use build axes</td>
+        <td><a href="21-build-axes.html">21 &#8212; Build axes</a></td>
+        <td>Full reference for all 8 axes. Every valid value, every interaction, every failure mode.</td>
+      </tr>
+      <tr>
+        <td>Add a new service</td>
+        <td><a href="22-add-a-service.html">22 &#8212; Add a service</a></td>
+        <td>Step-by-step: scaffold, Dockerfile, Helm, Kustomize, Backstage, CI. Every command is copy-pasteable.</td>
+      </tr>
+      <tr>
+        <td>Deploy to cluster</td>
+        <td><a href="23-deployment.html">23 &#8212; Deployment</a></td>
+        <td>ArgoCD sync, Helm upgrade, image tag promotion. Covers dev &#8594; staging &#8594; prod flow.</td>
+      </tr>
+      <tr>
+        <td>Debug a failure</td>
+        <td><a href="24-debugging.html">24 &#8212; Debugging</a></td>
+        <td>Runbook for the 20 most common failure patterns. Pod crashloops, image pull errors, OOM, axis conflicts.</td>
+      </tr>
+      <tr>
+        <td>Understand Dockerfiles</td>
+        <td><a href="11-dockerfile-catalog.html">11 &#8212; Dockerfile catalog</a></td>
+        <td>Every Dockerfile pattern used across the 106 services. Annotated build stages.</td>
+      </tr>
+      <tr>
+        <td>Understand CI pipeline</td>
+        <td><a href="02-pipeline-schema.html">02 &#8212; Pipeline schema</a> + <a href="13-pipeline-build-catalog.html">13 &#8212; Pipeline build catalog</a></td>
+        <td>Schema first, then the full catalog of workflow templates per framework.</td>
+      </tr>
+      <tr>
+        <td>Set up a new cluster</td>
+        <td><a href="19-cluster-setup.html">19 &#8212; Cluster setup</a></td>
+        <td>All 30 platform components. Install order, verify commands, failure modes.</td>
+      </tr>
+      <tr>
+        <td>Find current versions</td>
+        <td><a href="15-version-registry.html">15 &#8212; Version registry</a></td>
+        <td>Single source of truth for all pinned versions: runtimes, base images, tools, Helm charts.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 7: 5-minute environment check      -->
+<!-- ═══════════════════════════════════════════ -->
+<h2 class="section-accent-green">7. 5-minute environment check</h2>
+<p class="section-sub">Run all six commands before any other work. Every command must pass. One failure blocks you.</p>
+
+<div class="warn-block">
+  <strong>Hard stop:</strong> Do not proceed to <a href="20-local-dev.html">20 &#8212; Local dev</a> or any other doc until every command below returns the expected output.
+  A missing tool will cause a confusing failure later in a build or deploy step.
+</div>
+
+<ul class="check-list">
+  <li>
+    <div class="check-icon check-pass">&#10003;</div>
+    <div class="check-body">
+      <strong>Docker daemon is running</strong>
+      <span class="check-cmd">docker info</span>
+      <span class="check-expect">Expected: output showing server version, running containers, and storage driver. No error text.</span>
+      <span class="check-fail-action">When this fails: Docker Desktop is not running. Start it and wait for the whale icon to show as running.</span>
+    </div>
+  </li>
+  <li>
+    <div class="check-icon check-pass">&#10003;</div>
+    <div class="check-body">
+      <strong>kubectl client v1.28 or later</strong>
+      <span class="check-cmd">kubectl version --client</span>
+      <span class="check-expect">Expected: <code class="ic">Client Version: v1.28.x</code> or higher. Server connection is not required at this step.</span>
+      <span class="check-fail-action">When this fails: install from <a href="https://kubernetes.io/docs/tasks/tools/" target="_blank" rel="noopener">kubernetes.io/docs/tasks/tools</a></span>
+    </div>
+  </li>
+  <li>
+    <div class="check-icon check-pass">&#10003;</div>
+    <div class="check-body">
+      <strong>Helm v3.14 or later</strong>
+      <span class="check-cmd">helm version</span>
+      <span class="check-expect">Expected: <code class="ic">version.BuildInfo{Version:"v3.14.x"}</code> or higher.</span>
+      <span class="check-fail-action">When this fails: install from <a href="https://helm.sh/docs/intro/install/" target="_blank" rel="noopener">helm.sh/docs/intro/install</a></span>
+    </div>
+  </li>
+  <li>
+    <div class="check-icon check-pass">&#10003;</div>
+    <div class="check-body">
+      <strong>Node.js v22 or later</strong>
+      <span class="check-cmd">node --version</span>
+      <span class="check-expect">Expected: <code class="ic">v22.x.x</code> or higher.</span>
+      <span class="check-fail-action">When this fails: install from <a href="https://nodejs.org/en/download" target="_blank" rel="noopener">nodejs.org/en/download</a> or use <code class="ic">nvm install 22</code></span>
+    </div>
+  </li>
+  <li>
+    <div class="check-icon check-pass">&#10003;</div>
+    <div class="check-body">
+      <strong>Go 1.23 or later</strong>
+      <span class="check-cmd">go version</span>
+      <span class="check-expect">Expected: <code class="ic">go version go1.23.x</code> or higher.</span>
+      <span class="check-fail-action">When this fails: install from <a href="https://go.dev/doc/install" target="_blank" rel="noopener">go.dev/doc/install</a></span>
+    </div>
+  </li>
+  <li>
+    <div class="check-icon check-pass">&#10003;</div>
+    <div class="check-body">
+      <strong>Python 3.12 or later</strong>
+      <span class="check-cmd">python3 --version</span>
+      <span class="check-expect">Expected: <code class="ic">Python 3.12.x</code> or higher.</span>
+      <span class="check-fail-action">When this fails: install from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a> or use <code class="ic">pyenv install 3.12</code></span>
+    </div>
+  </li>
+</ul>
+
+<p style="font-size:12px;margin-top:8px">Run all six as a single paste to see all results at once:</p>
+<pre class="code-block">docker info              # must show running daemon
+kubectl version --client # must show v1.28+
+helm version             # must show v3.14+
+node --version           # must show v22+
+go version               # must show go1.23+
+python3 --version        # must show 3.12+</pre>
+
+<div class="decision-block">
+  <div class="decision-chosen">When all six pass: proceed to <a href="20-local-dev.html">20 &#8212; Local dev</a>.</div>
+  <div class="decision-rejected">When any fail: install the missing tool using the link in the check above. Re-run the command. Do not proceed until it passes.</div>
+  <div class="decision-tradeoff">Why strict: a missing tool produces a cryptic error deep inside a build step, not a clear "tool not found" message at the start. The 5-minute check here saves 30+ minutes of debugging later.</div>
+</div>
+
+</main>
+</body>
+</html>

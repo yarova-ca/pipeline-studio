@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Pipeline Schema — full CI/CD pipeline flow from Phase 0 Bootstrap through Promotions. 6 phases, all stages, all connections, all promotion environments.">
+<title>Pipeline Schema — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:220px;
+  --p0-color:#8250df;--p1-color:#1a7f37;--p2-color:#9a6700;--p3-color:#0969da;--reg-color:#cf222e;--promo-color:#1a7f37;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.p0{border-left-color:var(--p0-color)}
+nav a.p1{border-left-color:var(--p1-color)}
+nav a.p2{border-left-color:var(--p2-color)}
+nav a.p3{border-left-color:var(--p3-color)}
+nav a.reg{border-left-color:var(--reg-color)}
+nav a.promo{border-left-color:var(--promo-color)}
+main{flex:1;min-width:0;padding:40px 52px 100px}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+/* Section legends */
+.section-legend{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:20px 0 28px;font-size:12px;line-height:1.6}
+.section-legend strong{color:var(--text-head)}
+.leg-row{margin-top:4px;color:var(--text)}
+.leg-insight{margin-top:6px;color:var(--text-dim);font-style:italic}
+.section-legend details{margin-top:12px;border-top:1px solid #c8dff5;padding-top:10px}
+.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none;display:flex;align-items:center;gap:6px}
+.section-legend summary::-webkit-details-marker{display:none}
+.section-legend summary::before{content:'▶';font-size:9px;display:inline-block;color:var(--blue)}
+.section-legend details[open] summary::before{content:'▼'}
+.section-legend summary .sum-label{flex:1}
+.expand-content{margin-top:10px;font-size:11px;line-height:1.7;color:var(--text)}
+.expand-content h4{font-size:11px;font-weight:700;color:var(--text-head);margin:12px 0 3px;text-transform:uppercase;letter-spacing:.04em}
+.expand-content h4:first-child{margin-top:0}
+.expand-content p{margin-bottom:3px}
+/* Page-level headings */
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.phase-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px;font-style:italic}
+/* ─── PIPELINE FLOW HORIZONTAL DIAGRAM ─── */
+.flow-diagram{overflow-x:auto;padding:8px 0 20px}
+.flow-row{display:flex;align-items:flex-start;gap:0;min-width:max-content}
+.flow-connector{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:28px;width:32px;flex-shrink:0}
+/* Summary counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.count-chip.phase-chip{border-left:3px solid var(--blue)}.count-chip.phase-chip .chip-num{color:var(--blue)}
+.count-chip.stage-chip{border-left:3px solid var(--green)}.count-chip.stage-chip .chip-num{color:var(--green)}
+.flow-connector .arrow-line{width:1px;height:20px;background:var(--border)}
+.flow-connector .arrow-head{font-size:14px;color:var(--text-dim);line-height:1;margin-top:-2px}
+.flow-connector-h{display:flex;align-items:center;justify-content:center;width:28px;flex-shrink:0;padding-top:22px;font-size:18px;color:var(--text-dim)}
+/* Phase block */
+.phase-block{flex-shrink:0;width:190px;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:11.5px}
+.phase-block.p0{border-top:3px solid var(--p0-color)}
+.phase-block.p1{border-top:3px solid var(--p1-color)}
+.phase-block.p2{border-top:3px solid var(--p2-color)}
+.phase-block.p3{border-top:3px solid var(--p3-color)}
+.phase-block.reg{border-top:3px solid var(--reg-color)}
+.phase-block.promo{border-top:3px solid var(--promo-color)}
+.phase-header{padding:9px 12px 8px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.phase-num{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.phase-num.p0{color:var(--p0-color)}.phase-num.p1{color:var(--p1-color)}.phase-num.p2{color:var(--p2-color)}.phase-num.p3{color:var(--p3-color)}.phase-num.reg{color:var(--reg-color)}.phase-num.promo{color:var(--promo-color)}
+.phase-name{font-size:13px;font-weight:700;color:var(--text-head)}
+.phase-trigger{font-size:10px;color:var(--text-dim);margin-top:2px;font-style:italic}
+.stage-list{padding:8px 0}
+.stage-item{padding:3px 12px 3px 10px;display:flex;align-items:flex-start;gap:7px;font-size:11px;color:var(--text)}
+.stage-item:hover{background:var(--bg2)}
+.stage-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;background:var(--border)}
+.stage-dot.devsec{background:var(--blue)}
+.stage-dot.devops{background:var(--green)}
+.stage-name{flex:1;line-height:1.4}
+/* Parallel group bracket inside stage list */
+.par-header{padding:5px 12px 3px;font-size:9px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:5px;background:#faf8ff;border-top:1px solid #ede0ff;border-bottom:1px dashed #d2bef5}
+.par-header::after{content:'';flex:1;height:1px;background:#d2bef5}
+.par-footer{padding:3px 12px 5px;font-size:9px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.06em;background:#faf8ff;border-top:1px dashed #d2bef5;border-bottom:1px solid #ede0ff}
+/* Track separators — Phase 3 parallel tracks */
+.track-sec{padding:5px 12px 3px;font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;background:#f0f6ff;border-top:1px solid #b6d7f5;border-bottom:1px dashed #b6d7f5}
+.track-test{padding:5px 12px 3px;font-size:9px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;background:#dafbe1;border-top:1px solid #aadebc;border-bottom:1px dashed #aadebc}
+.track-end{padding:3px 12px 5px;font-size:9px;color:var(--text-dim);border-top:1px solid var(--border);text-align:center;letter-spacing:.03em}
+/* Promotion environments sub-row */
+.promo-env-grid{padding:8px 10px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.promo-env-card{border:1px solid var(--border);border-radius:5px;overflow:hidden;font-size:10.5px}
+.promo-env-label{padding:3px 7px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--bg3);border-bottom:1px solid var(--border)}
+.promo-env-label.dev{color:#0969da}.promo-env-label.test{color:#9a6700}.promo-env-label.staging{color:#8250df}.promo-env-label.prod{color:#cf222e}
+.promo-env-stages{padding:4px 7px}
+.promo-env-stage{font-size:10px;color:var(--text);padding:1px 0;display:flex;align-items:center;gap:5px}
+.promo-env-stage .stage-dot{width:4px;height:4px;margin-top:4px}
+/* Wide promo block */
+.phase-block.promo-wide{width:400px}
+/* legend dot row */
+.dot-legend{display:flex;align-items:center;gap:16px;margin-bottom:18px;font-size:11px;color:var(--text-dim)}
+.dot-legend-item{display:flex;align-items:center;gap:5px}
+.dot-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+/* Full pipeline vertical diagram (below the flow) */
+.full-diagram{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;white-space:pre;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px 24px;overflow-x:auto;color:var(--text);margin-top:20px}
+.full-diagram .phase-label{font-weight:600;color:var(--text-head)}
+.full-diagram .dsec{color:var(--blue)}
+.full-diagram .dops{color:var(--green)}
+.full-diagram .connector{color:var(--text-dim)}
+/* Phase jump strip */
+.phase-jump{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;position:sticky;top:0;z-index:100}
+.phase-jump a{display:inline-flex;align-items:center;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600;text-decoration:none;border:1px solid var(--border);background:var(--bg);color:var(--text-dim);white-space:nowrap}
+.phase-jump a:hover{background:var(--bg3);color:var(--text-head);border-color:var(--blue)}
+.phase-jump a.pj-p0{border-left:3px solid var(--p0-color);color:var(--p0-color)}
+.phase-jump a.pj-p1{border-left:3px solid var(--p1-color);color:var(--p1-color)}
+.phase-jump a.pj-p2{border-left:3px solid var(--p2-color);color:var(--p2-color)}
+.phase-jump a.pj-p3{border-left:3px solid var(--p3-color);color:var(--p3-color)}
+.phase-jump a.pj-reg{border-left:3px solid var(--reg-color);color:var(--reg-color)}
+.phase-jump a.pj-promo{border-left:3px solid var(--promo-color);color:var(--promo-color)}
+.phase-jump a.pj-flow{border-left:3px solid var(--text-dim)}
+/* Per-diagram legend strip */
+.diagram-legend{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:10px;margin-bottom:4px;font-size:11px;color:var(--text-dim)}
+.dl-item{display:flex;align-items:center;gap:5px}
+.dl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
+.dl-swatch{width:22px;height:7px;border-radius:2px;flex-shrink:0;display:inline-block}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#c5a7f5;
+  }
+  .section-legend{background:#1c2a3a;border-color:#2d4a6a}
+  .section-legend details{border-top-color:#2d4a6a}
+  .par-header,.par-footer{background:#1a1530;border-color:#4a3580}
+  .par-header::after{background:#4a3580}
+  .track-sec{background:#1c2a3a;border-color:#2d4a6a}
+  .track-test{background:#0f3320;border-color:#1e5c35}
+  .track-end{border-top-color:var(--border)}
+  .promo-env-card{border-color:var(--border)}
+  .full-diagram{background:var(--bg2);border-color:var(--border)}
+}
+@media print{
+  .skip-link,nav{display:none}
+  main{padding:20px}
+  .section-legend{border:1px solid #ccc;background:none}
+  h2{margin-top:24px}
+  .phase-block{break-inside:avoid}
+}
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.why-inline{cursor:help;color:var(--amber);font-size:10px;font-weight:700;border:1px solid var(--amber);border-radius:3px;padding:0 4px;margin-left:3px;vertical-align:middle;opacity:.7}
+.why-inline:hover{opacity:1}
+/* ── Dual-audience sections ── */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.audience-card{border-radius:8px;padding:16px;font-size:12px}
+.audience-new{background:#e8f4fd;border:1px solid #90caf9}
+.audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.audience-maintainer{background:#f1f8e9;border:1px solid #a5d6a7}
+.audience-maintainer .audience-label{font-weight:700;color:#2e7d32;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.qr-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.qr-table td{padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.08);vertical-align:top}
+.qr-table tr:last-child td{border-bottom:none}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
+.checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
+.checklist-item input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+.checklist-cmd{font-family:monospace;background:var(--bg3);padding:4px 8px;border-radius:4px;font-size:11px;margin:4px 0}
+.checklist-pass{font-size:11px;color:var(--green);margin-top:2px}
+.checklist-fail{font-size:11px;color:var(--red);margin-top:2px}
+@media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){
+  .audience-new{background:#0d2744;border-color:#1565c0}
+  .audience-new .audience-label{color:#90caf9}
+  .audience-maintainer{background:#1b2e1b;border-color:#2e7d32}
+  .audience-maintainer .audience-label{color:#a5d6a7}
+  .qr-table td{border-bottom-color:rgba(255,255,255,.08)}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">⌂ Hub</a>
+  <details>
+    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+  </details>
+  <details>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details open>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link" aria-current="page">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details>
+    <summary>Maintaining<span class="pillar-badge">8</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+    <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
+  </details>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<main id="main-content">
+<div class="page-header">
+  <div class="page-title">Pipeline Schema</div>
+  <div class="page-covers"><strong>What this covers:</strong> The 6-phase CI/CD pipeline — every phase, every stage, trigger conditions, outputs, and why each phase boundary exists.</div>
+  <div class="page-when"><strong>When to read:</strong> Start here to understand the CI/CD pipeline shape. When building a new service, read 01-framework-catalog.html first.</div>
+  <div class="page-pillar">Pillar 4 — Pipeline &amp; Tools &nbsp;·&nbsp; Related: <a href="03-stage-types.html">03 Stage types</a> &nbsp;·&nbsp; <a href="04-tool-catalog.html">04 Tool catalog</a> &nbsp;·&nbsp; <a href="05-invariants.html">05 Invariants</a></div>
+</div>
+
+<!-- ── Dual-audience intro ─────────────────────────────────────────── -->
+<div class="audience-grid">
+  <div class="audience-card audience-new">
+    <div class="audience-label">New to CI/CD? Start here.</div>
+    <p><strong>CI/CD</strong> (Continuous Integration / Continuous Delivery): automated system that tests and deploys code every time a developer pushes a change.</p>
+    <p>Without CI/CD: developers manually run tests, manually build Docker images, manually deploy. Takes hours. Prone to human error.</p>
+    <p>With CI/CD: all of that happens automatically in minutes. This page explains exactly what runs and in what order.</p>
+    <p style="margin-top:8px"><strong>Before you read further:</strong> you do not need to know what each stage does — just follow the left-to-right flow. Each block is one phase. Phases run in order.</p>
+    <p><strong>After reading this page you will be able to:</strong> describe the 6 phases, explain why PRs get blocked by security scans, and know where to add a new stage.</p>
+  </div>
+  <div class="audience-card audience-maintainer">
+    <div class="audience-label">Platform Maintainer — Quick Reference</div>
+    <table class="qr-table">
+      <tr><td>Add a new stage</td><td>Read phase boundary rules first → add to correct phase → update <a href="05-invariants.html">05-invariants.html</a></td></tr>
+      <tr><td>Stage failing in CI</td><td>Check stage type (<a href="03-stage-types.html">03-stage-types.html</a>) → DevOps: engineering owns it → DevSecOps: security team owns it</td></tr>
+      <tr><td>Pipeline is slow</td><td>Check which phase is slowest → Phase 3 (scanning) is usually the bottleneck → see <a href="04-tool-catalog.html">tool catalog</a> for swap options</td></tr>
+      <tr><td>Add compliance standard</td><td>Add to <a href="12-compliance-variations.html">12-compliance-variations.html</a> as additive delta on top of base pipeline</td></tr>
+      <tr><td>Phase 2 PR gate stuck</td><td>HIGH/CRITICAL CVE in scanner output → fix or add to suppression list with security sign-off → re-push to unblock</td></tr>
+      <tr><td>Verify pipeline is healthy</td><td><code style="font-family:monospace;font-size:10px">gh run list --repo yarova-ca/pipeline-studio --limit 10</code></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: 6 phases (not 4, not 8)</div>
+  <div class="decision-rejected">Rejected: 4 phases — too coarse. Cannot isolate a security gate failure from a build failure. A failed Phase 2 and a failed Phase 3 look the same.</div>
+  <div class="decision-rejected">Rejected: 8 phases — too granular. Adds cognitive overhead and more YAML per pipeline without adding security enforcement value.</div>
+  <div class="decision-tradeoff">Accepted tradeoff: 6 phases adds ~3 min to total pipeline runtime vs a 4-phase baseline. That cost is accepted because security gate isolation is non-negotiable.</div>
+</div>
+
+<div class="failure-block">
+  <div><strong>If Phase 2 PR Gate fails:</strong></div>
+  <div><strong>Trigger:</strong> SAST or SCA scanner returns a HIGH or CRITICAL severity finding.</div>
+  <div><strong>System:</strong> PR is blocked. No merge is allowed until the finding is resolved or suppressed with a written justification.</div>
+  <div><strong>User sees:</strong> GitHub check status "failed" — shows scanner name (CodeQL / Trivy) and finding count.</div>
+  <div><strong>User can:</strong> Fix the vulnerability in the branch and re-push, or add the finding to the suppression list with justification and security team sign-off.</div>
+</div>
+
+<div class="page-meta">6 phases &nbsp;·&nbsp; 44 stages<span class="why-inline" title="Why 44: 16 DevOps stages (workflow management) + 28 DevSecOps stages (security gates). Each phase adds stages proportional to its security requirements.">?</span> &nbsp;·&nbsp; Phase 0 through Promotions &nbsp;·&nbsp; verified 2026-05-26</div>
+
+<div class="counts-bar">
+  <div class="count-chip phase-chip"><div class="chip-num">6</div><div class="chip-label">Phases<br>total</div></div>
+  <div class="count-chip stage-chip" title="Why 44: 16 DevOps stages (workflow management) + 28 DevSecOps stages (security gates). Each phase adds stages proportional to its security requirements."><div class="chip-num">44</div><div class="chip-label">Unique<br>stages</div></div>
+  <div class="count-chip" title="4 environments: dev → test → staging → prod. Each environment requires an explicit approval gate — test pass alone does not open the gate."><div class="chip-num">4</div><div class="chip-label">Promotion<br>environments</div></div>
+</div>
+
+<div class="phase-jump" aria-label="Jump to phase">
+  <a href="#full-flow" class="pj-flow">Full flow</a>
+  <a href="#p0" class="pj-p0">P0 Bootstrap</a>
+  <a href="#p1" class="pj-p1">P1 Local Dev</a>
+  <a href="#p2" class="pj-p2">P2 PR Gate</a>
+  <a href="#p3" class="pj-p3">P3 Main Build</a>
+  <a href="#reg" class="pj-reg">Registry</a>
+  <a href="#promo" class="pj-promo">Promotions</a>
+</div>
+
+<div class="section-legend">
+  <strong>What this doc covers</strong>
+  <div class="leg-row">The full pipeline — every phase, every stage, every connection, every environment.</div>
+  <div class="leg-row">Stage type shown here via dot color (blue = DevSecOps, green = DevOps). Full classification table is in <a href="03-stage-types.html">doc 03</a>. Invariants are in <a href="05-invariants.html">doc 05</a>.</div>
+  <div class="leg-insight">Read this to understand the shape of the pipeline. Read <a href="03-stage-types.html">03-stage-types</a> to understand what each stage enforces. Read <a href="05-invariants.html">05-invariants</a> to understand what cannot be violated.</div>
+  <details>
+    <summary><span class="sum-label">Acronym definitions — terms used in this doc</span></summary>
+    <div class="expand-content">
+      <p><strong>SCA</strong> — Software Composition Analysis. Scans third-party dependencies for known CVEs.</p>
+      <p><strong>SAST</strong> — Static Application Security Testing. Scans source code for insecure patterns without running the code.</p>
+      <p><strong>DAST</strong> — Dynamic Application Security Testing. Runs the application and probes it for vulnerabilities over HTTP.</p>
+      <p><strong>IaC</strong> — Infrastructure as Code. Terraform, Helm, Kubernetes manifests, CloudFormation, etc.</p>
+      <p><strong>SBOM</strong> — Software Bill of Materials. A machine-readable list of every component in the build artifact.</p>
+      <p><strong>SLSA</strong> — Supply-chain Levels for Software Artifacts. A provenance attestation proving the artifact was built by a trusted pipeline from a known source.</p>
+      <p><strong>OIDC</strong> — OpenID Connect. Used here for keyless CI authentication — each job gets a short-lived token, no stored credentials.</p>
+    </div>
+  </details>
+  <details>
+    <summary><span class="sum-label">Phase summary — trigger conditions and outputs</span></summary>
+    <div class="expand-content">
+      <h4>Phase 0 — Bootstrap</h4>
+      <p>Runs once when the repository is created. Not triggered by PRs or pushes.</p>
+      <p>Output: the hard constraints (branch protection, OIDC, registry policy, Kyverno) that every other phase depends on.</p>
+      <h4>Phase 1 — Local Dev</h4>
+      <p>Runs on the developer machine. Triggered by <code>git commit</code>.</p>
+      <p>Output: commit proceeds only if pre-commit hooks pass and no secret is detected.</p>
+      <h4>Phase 2 — PR Gate</h4>
+      <p>Runs on every push to an open PR. Triggered by: <code>pull_request</code> event.</p>
+      <p>Output: PR is mergeable only when all 10 stages pass and a human approves.</p>
+      <p>5 security scans (SCA, SAST, License, IaC, Secrets) run in parallel. Build waits for all 5.</p>
+      <h4>Phase 3 — Main Build</h4>
+      <p>Runs on merge to main. Triggered by: <code>push</code> to main.</p>
+      <p>Output: signed container image in registry with SBOM attestation, SLSA provenance, and semantic version tag.</p>
+      <p>5 security scans run in parallel. Build waits for all 5. Sign depends on container scan. Attestations depend on sign.</p>
+      <h4>Registry</h4>
+      <p>Immediately after Phase 3 completes. The registry holds the canonical artifact for all promotions.</p>
+      <p>Output: image digest with signature, SBOM attestation, and SLSA provenance all attached. No promotion starts until all three are present.</p>
+      <h4>Promotions</h4>
+      <p>Same 5 stages across DEV, TEST, and STAGING. PROD replaces stages 4–5 with Argo Rollouts and Monitor.</p>
+      <p>Trigger: GitOps PR merged into the target environment overlay. ArgoCD or Flux reconciles.</p>
+      <p>Gate between each environment: explicit approval required. Test pass alone does not open the gate.</p>
+    </div>
+  </details>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FULL FLOW — VISUAL CARDS
+════════════════════════════════════════════════════════════ -->
+<h2 id="full-flow">Full Pipeline Flow</h2>
+<div class="phase-sub">Read left to right. Each block is one phase. Filled dot = DevSecOps stage. Open dot = DevOps stage.</div>
+
+<div class="dot-legend">
+  <div class="dot-legend-item"><div class="dot-legend-dot" style="background:var(--blue)"></div> DevSecOps stage</div>
+  <div class="dot-legend-item"><div class="dot-legend-dot" style="background:var(--green)"></div> DevOps stage</div>
+  <div class="dot-legend-item"><div class="dot-legend-dot" style="background:var(--purple);border-radius:2px;width:10px;height:10px"></div> Parallel group</div>
+</div>
+
+<div class="flow-diagram">
+<div class="flow-row">
+
+  <!-- PHASE 0 -->
+  <div class="phase-block p0">
+    <div class="phase-header">
+      <div class="phase-num p0">Phase 0</div>
+      <div class="phase-name">Bootstrap</div>
+      <div class="phase-trigger">Once — repo setup</div>
+    </div>
+    <div class="stage-list">
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">Branch protection</div></div>
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">CODEOWNERS</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">OIDC trust</div></div>
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">Registry access</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Kyverno admission policy</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Dependency update automation</div></div>
+    </div>
+  </div>
+
+  <div class="flow-connector-h">→</div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-block p1">
+    <div class="phase-header">
+      <div class="phase-num p1">Phase 1</div>
+      <div class="phase-name">Local Dev</div>
+      <div class="phase-trigger">On git commit</div>
+    </div>
+    <div class="stage-list">
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">IDE plugins</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Pre-commit hooks</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Local secret scan</div></div>
+    </div>
+  </div>
+
+  <div class="flow-connector-h">→</div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-block p2">
+    <div class="phase-header">
+      <div class="phase-num p2">Phase 2</div>
+      <div class="phase-name">PR Gate</div>
+      <div class="phase-trigger">On every PR push</div>
+    </div>
+    <div class="stage-list">
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Pre-commit (CI)</div></div>
+      <div class="par-header">Parallel ×5</div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">SCA</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">SAST</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">License scan</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">IaC scan</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Secrets scan</div></div>
+      <div class="par-footer">↓ all 5 must pass</div>
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">Build (no push)</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">SBOM generate</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Container scan</div></div>
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">PR review</div></div>
+    </div>
+  </div>
+
+  <div class="flow-connector-h">→</div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-block p3">
+    <div class="phase-header">
+      <div class="phase-num p3">Phase 3</div>
+      <div class="phase-name">Main Build</div>
+      <div class="phase-trigger">On merge to main</div>
+    </div>
+    <div class="stage-list">
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Pre-commit (CI)</div></div>
+      <div class="par-header">Parallel ×5</div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">SCA</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">SAST</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">License scan</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">IaC scan</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Secrets scan</div></div>
+      <div class="par-footer">↓ all 5 must pass</div>
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">Build + Push</div></div>
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">Release tag</div></div>
+      <div class="track-sec">Security track ↓</div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Container scan</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Sign</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">SBOM generate + attest</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">SLSA provenance</div></div>
+      <div class="track-test">Test track ↓ parallel above</div>
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">Tests + Codecov</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">DAST</div></div>
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">Perf test</div></div>
+      <div class="track-end">↓ both tracks complete</div>
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">Notify</div></div>
+    </div>
+  </div>
+
+  <div class="flow-connector-h">→</div>
+
+  <!-- REGISTRY -->
+  <div class="phase-block reg">
+    <div class="phase-header">
+      <div class="phase-num reg">Registry</div>
+      <div class="phase-name">Image store</div>
+      <div class="phase-trigger">After Phase 3</div>
+    </div>
+    <div class="stage-list">
+      <div class="stage-item"><div class="stage-dot devops"></div><div class="stage-name">Image store</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">Sign verify</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">SBOM attach</div></div>
+      <div class="stage-item"><div class="stage-dot devsec"></div><div class="stage-name">SLSA attach</div></div>
+    </div>
+  </div>
+
+  <div class="flow-connector-h">→</div>
+
+  <!-- PROMOTIONS -->
+  <div class="phase-block promo-wide promo">
+    <div class="phase-header">
+      <div class="phase-num promo">Promotions</div>
+      <div class="phase-name">4 environments</div>
+      <div class="phase-trigger">GitOps PR per environment</div>
+    </div>
+    <div class="promo-env-grid">
+      <div class="promo-env-card">
+        <div class="promo-env-label dev">DEV</div>
+        <div class="promo-env-stages">
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>GitOps PR</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>ArgoCD / Flux deploy</div>
+          <div class="promo-env-stage"><div class="stage-dot devsec"></div>cosign verify</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>Integration tests</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>Gate</div>
+        </div>
+      </div>
+      <div class="promo-env-card">
+        <div class="promo-env-label test">TEST</div>
+        <div class="promo-env-stages">
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>GitOps PR</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>ArgoCD / Flux deploy</div>
+          <div class="promo-env-stage"><div class="stage-dot devsec"></div>cosign verify</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>Integration + contract tests</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>Gate</div>
+        </div>
+      </div>
+      <div class="promo-env-card">
+        <div class="promo-env-label staging">STAGING</div>
+        <div class="promo-env-stages">
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>GitOps PR</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>ArgoCD / Flux deploy</div>
+          <div class="promo-env-stage"><div class="stage-dot devsec"></div>cosign verify</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>Regression tests</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>Gate</div>
+        </div>
+      </div>
+      <div class="promo-env-card">
+        <div class="promo-env-label prod">PROD ★</div>
+        <div class="promo-env-stages">
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>GitOps PR</div>
+          <div class="promo-env-stage"><div class="stage-dot devops"></div>ArgoCD / Flux deploy</div>
+          <div class="promo-env-stage"><div class="stage-dot devsec"></div>cosign verify</div>
+          <div class="promo-env-stage" style="color:var(--amber)"><div class="stage-dot devops" style="background:var(--amber)"></div>Argo Rollouts ↑</div>
+          <div class="promo-env-stage" style="color:var(--amber)"><div class="stage-dot devops" style="background:var(--amber)"></div>Monitor → complete/rollback ↑</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:6px 10px 8px;font-size:9.5px;color:var(--text-dim);border-top:1px solid var(--border)">★ PROD replaces stages 4–5 with Argo Rollouts canary + Monitor</div>
+  </div>
+
+</div><!-- end .flow-row -->
+</div><!-- end .flow-diagram -->
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ANNOTATED TEXT DIAGRAM
+════════════════════════════════════════════════════════════ -->
+<h2 id="p0">Phase 0 — Bootstrap</h2>
+<div class="phase-sub">Runs once, not per PR. Sets the constraints every other phase depends on.</div>
+<div class="why-block"><strong>Why once, not per PR:</strong> Bootstrap configures repo-level and cluster-level controls — branch protection, OIDC trust, admission policies. These are not per-commit artifacts. Running them per PR would add ~4 min of idempotent setup work with no security gain.</div>
+
+<div class="diagram-legend">
+  <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>
+  <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div> DevOps — infrastructure / workflow</div>
+</div>
+
+<div class="full-diagram">
+<span class="phase-label">PHASE 0 — Bootstrap (runs once, not per PR)</span>
+├── <span class="dops">Branch protection</span>      — no direct push to main
+├── <span class="dops">CODEOWNERS</span>             — auto-assign reviewers by path
+├── <span class="dsec">OIDC trust</span>             — CI talks to cloud, no stored passwords
+├── <span class="dops">Registry access</span>        — push scoped to exact repo + branch
+├── <span class="dsec">Kyverno admission policy</span>  — cluster rejects unsigned images
+└── <span class="dsec">Dependency update automation</span>  — Renovate / Dependabot configured
+</div>
+
+<h2 id="p1">Phase 1 — Local Dev</h2>
+<div class="phase-sub">Runs on developer machine. Triggered on git commit.</div>
+<div class="why-block"><strong>Why pre-commit hooks, not CI-only:</strong> CI feedback takes 3–8 minutes round-trip (push → GitHub Actions runner → result). Pre-commit hooks return in under 2 seconds. Secret leaks caught in CI have already been pushed to the remote. Pre-commit catches them before the network hop.</div>
+
+<div class="diagram-legend">
+  <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>
+  <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div> DevOps — infrastructure / workflow</div>
+</div>
+
+<div class="full-diagram">
+<span class="phase-label">PHASE 1 — Local Dev (developer machine)</span>
+├── <span class="dops">IDE plugins</span>            — linters, formatters, real-time hints
+├── <span class="dsec">Pre-commit hooks</span>       — gitleaks, hadolint, checkov
+└── <span class="dsec">Local secret scan</span>      — blocks commit if secret pattern detected
+</div>
+
+<h2 id="p2">Phase 2 — PR Gate</h2>
+<div class="phase-sub">Triggers on every PR push. No merge until all 10 stages green and human approves.</div>
+<div class="why-block"><strong>Why no image push on PR:</strong> An image pushed from a PR branch has not been reviewed or approved. It cannot be signed with a main-branch OIDC identity. Pushing it would produce an unsigned, unattested artifact that looks like a production image but is not. The build step on PR produces a tarball only — discarded after scanning.</div>
+
+<div class="diagram-legend">
+  <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>
+  <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div> DevOps — infrastructure / workflow</div>
+  <div class="dl-item"><div class="dl-swatch" style="background:#d2bef5"></div> Parallel group — all 5 scans run at the same time; build waits for all 5</div>
+</div>
+
+<div class="full-diagram">
+<span class="phase-label">PHASE 2 — PR Gate (triggers on every PR push)</span>
+├── <span class="dsec">Pre-commit (CI)</span>
+├── <span class="connector">┌──────────────────────────────────┐</span>
+│   <span class="connector">│</span> <span class="dsec">SCA</span> <span class="connector">│</span> <span class="dsec">SAST</span> <span class="connector">│</span> <span class="dsec">License</span> <span class="connector">│</span> <span class="dsec">IaC</span> <span class="connector">│</span> <span class="dsec">Secrets</span> <span class="connector">│</span>  ← all parallel
+│   <span class="connector">└──────────────────────────────────┘</span>
+├── <span class="dops">Build (no push)</span>        — tarball only
+├── <span class="dsec">SBOM generate</span>
+├── <span class="dsec">Container scan</span>        — Trivy on tarball
+└── <span class="dops">PR review</span>              — human must approve
+</div>
+
+<h2 id="p3">Phase 3 — Main Build</h2>
+<div class="phase-sub">Triggers on merge to main. Produces the signed, attested, promotion-ready image.</div>
+<div class="why-block"><strong>Why image signing happens here, not in Phase 2:</strong> cosign keyless signing uses the GitHub Actions OIDC token issued to the <code>refs/heads/main</code> branch identity. PR branches produce a different OIDC subject (<code>refs/pull/N/merge</code>). Signing a PR image would produce an attestation with the wrong subject — Kyverno admission policies would reject it at deploy time anyway.</div>
+
+<div class="diagram-legend">
+  <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>
+  <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div> DevOps — infrastructure / workflow</div>
+  <div class="dl-item"><div class="dl-swatch" style="background:#d2bef5"></div> Parallel group — 5 scans run together; build waits</div>
+  <div class="dl-item"><div class="dl-swatch" style="background:#b6d7f5"></div> Security track — Container scan → Sign → SBOM → SLSA</div>
+  <div class="dl-item"><div class="dl-swatch" style="background:#aadebc"></div> Test track — runs parallel to security track; both start after Build + Push</div>
+</div>
+
+<div class="full-diagram">
+<span class="phase-label">PHASE 3 — Main Build (triggers on merge)</span>
+├── <span class="dsec">Pre-commit (CI)</span>
+├── <span class="connector">┌──────────────────────────────────┐</span>
+│   <span class="connector">│</span> <span class="dsec">SCA</span> <span class="connector">│</span> <span class="dsec">SAST</span> <span class="connector">│</span> <span class="dsec">License</span> <span class="connector">│</span> <span class="dsec">IaC</span> <span class="connector">│</span> <span class="dsec">Secrets</span> <span class="connector">│</span>  ← all parallel
+│   <span class="connector">└──────────────────────────────────┘</span>
+├── <span class="dops">Build + Push</span>           — to registry
+├── <span class="dops">Release tag</span>            — semantic version applied to image
+<span class="connector">│</span>
+<span class="connector">│   ↓ two parallel tracks — both start from Build + Push</span>
+<span class="connector">│</span>
+├── <span class="connector">── SECURITY TRACK ────────────────────────────────────────────</span>
+│   ├── <span class="dsec">Container scan</span>     — Trivy on registry image
+│   ├── <span class="dsec">Sign</span>               — cosign keyless OIDC
+│   ├── <span class="dsec">SBOM generate + attest</span>
+│   └── <span class="dsec">SLSA provenance</span>    — Level 3
+<span class="connector">│</span>
+├── <span class="connector">── TEST TRACK ── (parallel to security track above) ──────────</span>
+│   ├── <span class="dops">Tests + Codecov</span>
+│   ├── <span class="dsec">DAST</span>               — ZAP against local running container
+│   └── <span class="dops">Perf test</span>          — k6
+<span class="connector">│</span>
+└── <span class="dops">Notify</span>                 — Slack
+</div>
+
+<h2 id="reg">Registry</h2>
+<div class="phase-sub">After Phase 3. Before any promotion. All three artifacts must be attached.</div>
+
+<div class="diagram-legend">
+  <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>
+  <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div> DevOps — infrastructure / workflow</div>
+</div>
+
+<div class="full-diagram">
+<span class="phase-label">REGISTRY</span>
+├── <span class="dops">Image store</span>
+├── <span class="dsec">Sign verify</span>
+├── <span class="dsec">SBOM attach</span>
+└── <span class="dsec">SLSA attach</span>
+</div>
+
+<h2 id="promo">Promotions</h2>
+<div class="phase-sub">Same 5 stages across DEV, TEST, STAGING. PROD replaces stages 4–5 with Argo Rollouts + Monitor.</div>
+
+<div class="diagram-legend">
+  <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div> DevSecOps — security control</div>
+  <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div> DevOps — infrastructure / workflow</div>
+  <div class="dl-item"><div class="dl-dot" style="background:var(--amber)"></div> PROD-only — replaces Env tests (stage 4) and Gate (stage 5) with canary + monitor</div>
+</div>
+
+<div class="full-diagram">
+<span class="phase-label">PROMOTIONS (each environment = the same 5 steps)</span>
+<span class="connector">│</span>
+├── <span class="phase-label">DEV</span>
+│   ├── <span class="dops">GitOps PR</span>              — bump image digest in dev overlay
+│   ├── <span class="dops">ArgoCD / Flux deploy</span>
+│   ├── <span class="dsec">cosign verify</span>          — re-check signature in cluster
+│   ├── <span class="dops">Integration tests</span>
+│   └── <span class="dops">Gate</span>                   ──▶
+<span class="connector">│</span>
+├── <span class="phase-label">TEST</span>
+│   ├── <span class="dops">GitOps PR</span>              — bump image digest in test overlay
+│   ├── <span class="dops">ArgoCD / Flux deploy</span>
+│   ├── <span class="dsec">cosign verify</span>
+│   ├── <span class="dops">Integration + contract tests</span>
+│   └── <span class="dops">Gate</span>                   ──▶
+<span class="connector">│</span>
+├── <span class="phase-label">STAGING</span>
+│   ├── <span class="dops">GitOps PR</span>              — bump image digest in staging overlay
+│   ├── <span class="dops">ArgoCD / Flux deploy</span>
+│   ├── <span class="dsec">cosign verify</span>
+│   ├── <span class="dops">Regression tests</span>
+│   └── <span class="dops">Gate</span>                   ──▶
+<span class="connector">│</span>
+└── <span class="phase-label">PROD</span>
+    ├── <span class="dops">GitOps PR</span>              — bump image digest in prod overlay
+    ├── <span class="dops">ArgoCD / Flux deploy</span>
+    ├── <span class="dsec">cosign verify</span>
+    ├── <span class="dops">Argo Rollouts</span>          — canary traffic shift  ← replaces Env tests
+    └── <span class="dops">Monitor</span>                → complete or rollback   ← replaces Gate
+</div>
+
+</main>
+</body>
+</html>

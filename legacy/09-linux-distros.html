@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Linux Distros &amp; Base Images — 22 distros across 4 families: container-optimized, general purpose, RHEL enterprise, and immutable K8s-native. Features, FIPS, STIG, CIS, tradeoffs.">
+<title>Linux Distros — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:220px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a[aria-current="page"]{color:var(--blue);font-weight:600;border-left-color:var(--blue)}
+main{flex:1;min-width:0;padding:40px 52px 100px}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+/* Section legend */
+.section-legend{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:20px 0 28px;font-size:12px;line-height:1.6}
+.section-legend strong{color:var(--text-head)}
+.leg-row{margin-top:4px;color:var(--text)}
+.leg-insight{margin-top:6px;color:var(--text-dim);font-style:italic}
+.section-legend details{margin-top:12px;border-top:1px solid #c8dff5;padding-top:10px}
+.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none;display:flex;align-items:center;gap:6px}
+.section-legend summary::-webkit-details-marker{display:none}
+.section-legend summary::before{content:'▶';font-size:9px;display:inline-block;color:var(--blue)}
+.section-legend details[open] summary::before{content:'▼'}
+.section-legend summary .sum-label{flex:1}
+.expand-content{margin-top:10px;font-size:11px;line-height:1.7;color:var(--text)}
+.expand-content p{margin-bottom:6px}
+.expand-content h4{font-size:11px;font-weight:700;color:var(--text-head);margin:12px 0 3px;text-transform:uppercase;letter-spacing:.04em}
+/* Headings */
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px;font-style:italic}
+/* Counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.count-chip.dist-chip{border-left:3px solid var(--purple)}
+.count-chip.dist-chip .chip-num{color:var(--purple)}
+.count-chip.fam-chip{border-left:3px solid var(--blue)}
+.count-chip.fam-chip .chip-num{color:var(--blue)}
+.count-chip.col-chip{border-left:3px solid var(--green)}
+.count-chip.col-chip .chip-num{color:var(--green)}
+.count-chip.ctx-chip{border-left:3px solid var(--amber)}
+.count-chip.ctx-chip .chip-num{color:var(--amber)}
+/* Tooltip hint on column headers */
+th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
+/* Table wrapper */
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
+.tbl-wrap.container-fam{border-top:3px solid var(--purple)}
+.tbl-wrap.general-fam{border-top:3px solid var(--blue)}
+.tbl-wrap.rhel-fam{border-top:3px solid var(--red)}
+.tbl-wrap.immutable-fam{border-top:3px solid var(--green)}
+.tbl-scroll{overflow-x:auto}
+/* Main distro table */
+.distro-table{width:100%;border-collapse:collapse;font-size:11.5px;min-width:1800px}
+.distro-table thead tr{background:var(--bg2)}
+.distro-table th{text-align:left;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);white-space:nowrap}
+.distro-table td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.45}
+.distro-table tbody tr:hover{background:var(--bg2)}
+.distro-table tbody tr:last-child td{border-bottom:none}
+/* Column widths */
+.c0{min-width:145px;font-weight:600}
+.c1{min-width:95px;color:var(--text-dim);font-size:11px}
+.c2{min-width:65px;font-family:monospace;font-size:11px;color:var(--text-dim)}
+.c3{min-width:75px;font-family:monospace;font-size:11px;color:var(--text-dim)}
+.c4{min-width:95px;font-size:11px;color:var(--text-dim)}
+.carch{min-width:110px;font-size:11px;color:var(--text-dim)}
+.c5{min-width:75px;text-align:center}
+.c6{min-width:75px;text-align:center}
+.c7{min-width:85px;text-align:center}
+.c8{min-width:130px;font-size:11px;color:var(--text-dim)}
+.c9{min-width:100px;font-size:11px;color:var(--text-dim)}
+.c10{min-width:185px;font-size:11px}
+.c11{min-width:215px;font-size:11px}
+.c12{min-width:195px;font-size:11px;color:var(--text-dim)}
+.c13{min-width:230px;font-size:11px;color:var(--text-dim)}
+.cfrom{min-width:200px;font-family:monospace;font-size:10px;color:var(--text-dim)}
+.ccerts{min-width:60px;text-align:center}
+.cuser{min-width:70px;text-align:center}
+/* Certification cells */
+.cert-yes{color:var(--green);font-weight:600;font-size:11px}
+.cert-partial{color:var(--amber);font-weight:600;font-size:11px}
+.cert-no{color:var(--text-dim);font-size:11px}
+/* Table footer */
+.tbl-foot{padding:7px 14px;font-size:11px;color:var(--text-dim);background:var(--bg2);border-top:2px solid var(--border);display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+/* Misc */
+code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+nav details{border-bottom:1px solid var(--border)}
+nav details:last-of-type{border-bottom:none}
+nav details summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;user-select:none}
+nav details summary::-webkit-details-marker{display:none}
+nav details summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+nav details[open] summary::before{transform:rotate(90deg)}
+nav details summary:hover{background:var(--bg3);color:var(--text-head)}
+nav details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#c5a7f5;
+  }
+  .section-legend{background:#1c2a3a;border-color:#2d4a6a}
+  .section-legend details{border-top-color:#2d4a6a}
+  code{background:#1c2028;border-color:#30363d}
+  th[title]{border-bottom-color:var(--blue)}
+}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.quick-decision{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0 20px;border-radius:6px;overflow:hidden}
+.quick-decision th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--text-dim);border-bottom:2px solid var(--border)}
+.quick-decision td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55}
+.quick-decision tr:last-child td{border-bottom:none}
+.quick-decision tr:hover td{background:var(--bg2)}
+@media(prefers-color-scheme:dark){
+  .why-block{background:#2a1f00;border-left-color:#d97706}
+  .decision-block{background:#0d2d1a;border-color:#1e5c35}
+  .failure-block{background:#3a0a0a;border-color:#6a1515}
+}
+@media print{
+  .skip-link,nav{display:none}
+  main{padding:20px}
+  .section-legend{border:1px solid #ccc;background:none}
+  h2{margin-top:24px}
+  .tbl-wrap{break-inside:avoid}
+}
+/* ── Dual-audience sections ── */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.audience-card{border-radius:8px;padding:16px;font-size:12px}
+.audience-new{background:#e8f4fd;border:1px solid #90caf9}
+.audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.audience-maintainer{background:#f1f8e9;border:1px solid #a5d6a7}
+.audience-maintainer .audience-label{font-weight:700;color:#2e7d32;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.qr-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.qr-table td{padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.08);vertical-align:top}
+.qr-table tr:last-child td{border-bottom:none}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
+.checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
+.checklist-item input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+.checklist-cmd{font-family:monospace;background:var(--bg3);padding:4px 8px;border-radius:4px;font-size:11px;margin:4px 0}
+.checklist-pass{font-size:11px;color:var(--green);margin-top:2px}
+.checklist-fail{font-size:11px;color:var(--red);margin-top:2px}
+@media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){
+  .audience-new{background:#0d2744;border-color:#1565c0}
+  .audience-new .audience-label{color:#90caf9}
+  .audience-maintainer{background:#1b2e1b;border-color:#2e7d32}
+  .audience-maintainer .audience-label{color:#a5d6a7}
+  .qr-table td{border-bottom-color:rgba(255,255,255,.08)}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">⌂ Hub</a>
+  <details>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+  </details>
+  <details open>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link" aria-current="page">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details>
+    <summary>Maintaining<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details>
+<summary>GUIDES <span class="pillar-badge">6</span></summary>
+<a class="nav-link" href="00-getting-started.html">00 — Getting Started</a>
+<a class="nav-link" href="20-local-dev.html">20 — Local Dev</a>
+<a class="nav-link" href="21-build-axes.html">21 — Build Axes</a>
+<a class="nav-link" href="22-add-a-service.html">22 — Add a Service</a>
+<a class="nav-link" href="23-deployment.html">23 — Deployment</a>
+<a class="nav-link" href="24-debugging.html">24 — Debugging</a>
+</details>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<main id="main-content">
+<div class="page-header">
+  <div class="page-title">Linux Distro Catalog</div>
+  <div class="page-covers"><strong>What this covers:</strong> 22 Linux distributions — when to use each, FIPS support, EOL dates, exact FROM tags, and tradeoff vs closest alternative.</div>
+  <div class="page-when"><strong>When to read:</strong> Writing a FROM line in any Dockerfile. Selecting a build image or runtime image.</div>
+  <div class="page-pillar">Pillar 3 — Build &amp; Runtime &nbsp;·&nbsp; Related: <a href="10-linux-compliance.html">10 Compliance matrices</a> &nbsp;·&nbsp; <a href="11-dockerfile-catalog.html">11 Dockerfiles</a></div>
+</div>
+<!-- ── Dual-audience intro ─────────────────────────────────────────── -->
+<div class="audience-grid">
+  <div class="audience-card audience-new">
+    <div class="audience-label">New to base images? Start here.</div>
+    <p><strong>Base image</strong>: the starting layer every Docker container is built from. Like a pre-installed OS — your app code runs on top of it.</p>
+    <p><strong>Why it matters:</strong> smaller image = faster pulls = less attack surface = fewer CVEs to patch.</p>
+    <p><strong>The three you'll use most:</strong></p>
+    <ul style="margin:4px 0 0 14px;font-size:11px;line-height:2">
+      <li><strong>Alpine</strong> — 5 MB, minimal. Use for Go, Rust, or pure-Python apps.</li>
+      <li><strong>Debian slim</strong> — 80 MB, glibc. Use when Python/Node native modules break on Alpine.</li>
+      <li><strong>UBI9 (Red Hat)</strong> — 200 MB+, enterprise. Use when FIPS 140-2 compliance is required.</li>
+    </ul>
+    <p style="margin-top:8px"><strong>Rule of thumb:</strong> start with Alpine. If the build fails because of missing libraries, switch to <code style="font-family:monospace;font-size:10px">debian:12-slim</code>.</p>
+    <p><strong>After reading this page you will be able to:</strong> choose the right base image for any service, explain why Alpine breaks some Python packages, and know when FIPS requires UBI9.</p>
+  </div>
+  <div class="audience-card audience-maintainer">
+    <div class="audience-label">Platform Maintainer — Quick Reference</div>
+    <table class="qr-table">
+      <tr><td>Build fails — missing library</td><td>Switch runtime from <code style="font-family:monospace;font-size:10px">alpine</code> to <code style="font-family:monospace;font-size:10px">debian:12-slim</code> — musl/glibc incompatibility</td></tr>
+      <tr><td>FIPS compliance required</td><td>Use <code style="font-family:monospace;font-size:10px">ubi9/ubi-micro</code> or <code style="font-family:monospace;font-size:10px">ubi9/nodejs-22-minimal</code> — only UBI9 has validated FIPS module</td></tr>
+      <tr><td>Verify FIPS mode active</td><td><code style="font-family:monospace;font-size:10px">cat /proc/sys/crypto/fips_enabled</code> → must output <code style="font-family:monospace;font-size:10px">1</code></td></tr>
+      <tr><td>Check image size before push</td><td><code style="font-family:monospace;font-size:10px">docker image inspect &lt;image&gt; --format='{{.Size}}'</code></td></tr>
+      <tr><td>Trivy scan before push</td><td><code style="font-family:monospace;font-size:10px">trivy image --exit-code 1 --severity HIGH,CRITICAL &lt;image&gt;</code></td></tr>
+      <tr><td>Base image has new CVE</td><td>HIGH: update within 7 days. MEDIUM: update within 30 days. See <a href="15-version-registry.html">15-version-registry.html</a></td></tr>
+      <tr><td>Update FROM tag</td><td>Change tag in <a href="11-dockerfile-catalog.html">11-dockerfile-catalog.html</a> + update verified date in <a href="15-version-registry.html">doc 15</a></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="page-meta">22 distros &nbsp;·&nbsp; 4 families &nbsp;·&nbsp; container base images to enterprise OS &nbsp;·&nbsp; compliance matrix: <a href="10-linux-compliance.html">doc 10</a></div>
+
+<!-- Counts bar -->
+<div class="counts-bar">
+  <div class="count-chip dist-chip">
+    <div class="chip-num">22</div>
+    <div class="chip-label">Distros &amp;<br>base images</div>
+  </div>
+  <div class="count-chip fam-chip">
+    <div class="chip-num">4</div>
+    <div class="chip-label">Families<br>(use-case groups)</div>
+  </div>
+  <div class="count-chip col-chip">
+    <div class="chip-num">18</div>
+    <div class="chip-label">Columns<br>per distro</div>
+  </div>
+  <div class="count-chip ctx-chip">
+    <div class="chip-num">4</div>
+    <div class="chip-label">Use contexts:<br>container / CI / VM / K8s</div>
+  </div>
+</div>
+
+<!-- Quick decision guide -->
+<div style="background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:14px 18px;margin:0 0 20px;font-size:12px">
+  <strong>Quick decision guide</strong>
+  <table class="quick-decision" style="margin-top:10px">
+    <thead><tr><th>If you need…</th><th>Use</th><th>Avoid</th></tr></thead>
+    <tbody>
+      <tr><td>Smallest possible image, Go or Rust static binary</td><td><code>scratch</code></td><td><code>alpine</code> — adds 7 MB you don't need for fully static binaries</td></tr>
+      <tr><td>Small image, Node.js or Python without glibc-dependent native modules</td><td><code>alpine:3.21</code></td><td><code>debian:12-slim</code> — 10× larger for no benefit if all packages are pure-language</td></tr>
+      <tr><td>glibc compatibility (Python native extensions, Node bcrypt/sharp)</td><td><code>debian:12-slim</code> or <code>ubuntu:24.04-minimal</code></td><td><code>alpine</code> — musl libc breaks precompiled glibc binaries without rebuild</td></tr>
+      <tr><td>FIPS 140-2/3 validated crypto (US federal, FedRAMP, DoD)</td><td><code>ubi9/ubi-micro</code> or <code>ubi9/nodejs-22-minimal</code></td><td><code>alpine</code> — no FIPS-validated module available</td></tr>
+      <tr><td>Zero shell, minimal CVE surface, glibc-linked binary</td><td><code>gcr.io/distroless/base-debian12</code></td><td><code>scratch</code> — scratch has no CA certs or glibc</td></tr>
+      <tr><td>CI runner with full toolchain (compilers, make, git)</td><td><code>ubuntu:24.04</code></td><td><code>alpine</code> — musl breaks many CI tool binaries (e.g., Trivy, some JVM tools)</td></tr>
+      <tr><td>SBOM-native supply chain compliance (EO 14028, SSDF)</td><td><code>cgr.dev/chainguard/wolfi-base:latest</code></td><td><code>debian</code> — no per-package SBOM or SLSA provenance</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="failure-block" style="margin:0 0 16px">
+  <div><strong>If you use <code>scratch</code> as runtime and your app makes HTTPS calls:</strong></div>
+  <div><strong>Trigger:</strong> App binary starts in scratch container and attempts outbound HTTPS.</div>
+  <div><strong>System:</strong> TLS handshake fails — no CA certificate bundle present to verify server certificates.</div>
+  <div><strong>User sees:</strong> SSL error, certificate error, or connection refused — not a clear "missing certs" message.</div>
+  <div><strong>User can:</strong> Add <code>COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/</code> immediately after <code>FROM scratch</code>. Or switch to <code>gcr.io/distroless/base-debian12</code> which includes CA certs.</div>
+</div>
+
+<div class="failure-block" style="margin:0 0 16px">
+  <div><strong>If you run a glibc-compiled binary on Alpine:</strong></div>
+  <div><strong>Trigger:</strong> Any binary or native extension compiled against glibc is run inside an Alpine (musl) container.</div>
+  <div><strong>System:</strong> The binary fails to load — musl is not ABI-compatible with glibc. Python native extensions segfault. Node.js native modules fail to dlopen.</div>
+  <div><strong>User sees:</strong> <code>Error loading shared library libc.so.6: No such file or directory</code> or a segfault with no clear error.</div>
+  <div><strong>User can:</strong> Switch runtime to <code>debian:12-slim</code> (glibc). Or recompile the native extension on Alpine using <code>apk add build-base</code> before pip/npm install.</div>
+</div>
+
+<!-- Top-level knowledge legend -->
+<div class="section-legend">
+  <strong>How to read:</strong> rows are individual distros or base images. Grouped by primary use context, not by vendor.<br>
+  <span class="leg-row"><strong>FIPS / DISA STIG / CIS</strong> — compliance certifications explained in the knowledge blocks below.</span>
+  <span class="leg-insight">Full compliance × distro matrix: <a href="10-linux-compliance.html">doc 10</a>. Framework compatibility (Node/Go/Python/etc): <a href="10-linux-compliance.html">doc 10</a>.</span>
+
+  <details>
+    <summary><span class="sum-label">libc — what it is and why it matters</span></summary>
+    <div class="expand-content">
+      <p><strong>libc</strong> (C library) is the standard library that links to almost every Linux binary. It provides system calls, string functions, file I/O, and memory management.</p>
+      <h4>glibc</h4>
+      <p>GNU C Library — the default on Debian, Ubuntu, RHEL, and most distros. Widest binary compatibility. Pre-compiled binaries targeting glibc run on glibc systems without modification.</p>
+      <h4>musl</h4>
+      <p>Lightweight alternative used by Alpine Linux. ~5× smaller than glibc. Strict POSIX compliance. Problem: binaries compiled against glibc do not run on musl — they segfault or produce wrong output. Affects Python native extensions, Node.js native modules, and any C/C++ binary that was compiled on glibc.</p>
+      <h4>none (scratch)</h4>
+      <p>No libc at all. Only statically-linked binaries work. Go binaries compiled with <code>CGO_ENABLED=0</code> and Rust binaries with static linking are the main use case.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">FIPS 140-2 — what it is and when it is required</span></summary>
+    <div class="expand-content">
+      <p><strong>FIPS 140-2 / 140-3</strong> (Federal Information Processing Standard) is a US government standard for cryptographic modules. It certifies that the specific implementation of AES, SHA, RSA, and other algorithms meets NSA/NIST requirements.</p>
+      <h4>FIPS 140-2 vs 140-3</h4>
+      <p>FIPS 140-2 was the previous standard. NIST will close new FIPS 140-2 submissions in September 2026 — existing validated modules remain valid indefinitely. New certifications will be issued under FIPS 140-3 (ISO/IEC 19790). For compliance purposes, both 140-2 and 140-3 validated modules are accepted by US government auditors.</p>
+      <h4>When required</h4>
+      <p>US federal contracts (FedRAMP Moderate and High), DoD IL2–IL6, ITAR-controlled systems, and some financial sector contracts (FFIEC, OCC guidance) require FIPS 140-2 or 140-3 validated modules.</p>
+      <h4>What "FIPS" means in this table</h4>
+      <p>Yes: the vendor ships a FIPS 140-2 or 140-3 validated module and it is active by default or enabled via a supported configuration. Partial: FIPS mode is available but not yet independently certified for this exact distro release, or certification is in progress.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">DISA STIG — what it is and who requires it</span></summary>
+    <div class="expand-content">
+      <p><strong>DISA STIG</strong> (Defense Information Systems Agency Security Technical Implementation Guide) is a configuration baseline published by the US DoD. It specifies exact settings — file permissions, service states, kernel parameters, audit rules — for hardening a system.</p>
+      <h4>When required</h4>
+      <p>DoD IL4 and above. FedRAMP High (STIG is one accepted hardening baseline). Some US federal civilian contracts. Financial institutions under OCC supervision in regulated environments.</p>
+      <h4>What "DISA STIG available" means</h4>
+      <p>Yes: an official STIG has been published by DISA for this distro and version. It is regularly updated. Partial: RHEL STIG applies to this distro, or a vendor-maintained hardening guide exists, but no official DISA STIG has been published for this specific distro.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">CIS Benchmark — what it is and who uses it</span></summary>
+    <div class="expand-content">
+      <p><strong>CIS Benchmark</strong> (Center for Internet Security) is a set of hardening recommendations — not as strict as DISA STIG, but widely used in commercial sectors (SOC 2, ISO 27001, PCI-DSS environments).</p>
+      <h4>Levels</h4>
+      <p>Level 1: conservative hardening with minimal performance impact. Level 2: defense-in-depth, may affect usability. Most environments use Level 1.</p>
+      <h4>Who uses it</h4>
+      <p>Financial services, healthcare, technology companies under SOC 2 audits. Cloud providers (AWS, Azure, GCP) publish pre-hardened AMIs/images that pass CIS benchmarks.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">OCI image — what it is</span></summary>
+    <div class="expand-content">
+      <p><strong>OCI</strong> (Open Container Initiative) is the standard format for container images. All major registries (Docker Hub, GHCR, ECR, GCR, ACR) store OCI images. Docker images are OCI-compatible.</p>
+      <p>Min image size in this table is the compressed OCI image size pulled from the official registry for the smallest available variant of the distro (e.g., alpine:3.20, debian:12-slim).</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">musl vs glibc — the Alpine breakage pattern</span></summary>
+    <div class="expand-content">
+      <p>The most common Alpine pitfall: a library or binary compiled against glibc fails silently or crashes on Alpine (musl).</p>
+      <h4>Affected cases</h4>
+      <p>Python packages with C extensions (cryptography, lxml, numpy) — must rebuild from source or use manylinux wheel. Node.js native modules (bcrypt, node-canvas, sharp) — require compilation on musl. Java: works (JVM is statically linked). Go: works when CGO_ENABLED=0. Rust: works with musl target.</p>
+      <h4>Detection</h4>
+      <p>Run <code>ldd /usr/local/bin/your-binary</code> inside the Alpine container. If it outputs <code>not a dynamic executable</code> or <code>no dynamic linker</code>, the binary will fail. If it lists <code>libc.so.6</code>, it requires glibc and will not run on Alpine.</p>
+    </div>
+  </details>
+  <details>
+    <summary><span class="sum-label">Multi-arch and docker buildx — ARM64 vs x86_64</span></summary>
+    <div class="expand-content">
+      <p>The 18 container base images in this catalog publish official OCI images for both <strong>x86_64</strong> (Intel/AMD) and <strong>ARM64</strong> (Apple Silicon, AWS Graviton). The 4 VM/node OS entries (Google COS, Flatcar, Talos, Bottlerocket) are not OCI images — their architecture support applies to VM images, not Docker FROM tags.</p>
+      <h4>x86_64 (amd64)</h4>
+      <p>Intel and AMD processors. Universal default for GitHub Actions runners, GitLab CI, and most CI providers. Always available.</p>
+      <h4>ARM64 (aarch64)</h4>
+      <p>Apple Silicon (M1/M2/M3), AWS Graviton 2/3/4, Ampere Altra. Graviton 3 is ~40% cheaper than equivalent x86_64 EC2 and 60% more energy efficient. GitHub Actions offers ARM64 runners (larger plan required).</p>
+      <h4>Multi-arch OCI manifest</h4>
+      <p>A multi-arch image is a single tag (<code>alpine:3.21</code>) that resolves to the correct architecture automatically. <code>docker pull alpine:3.21</code> on ARM64 gets the ARM64 layer; on x86_64 gets the x86_64 layer.</p>
+      <h4>Building multi-arch images</h4>
+      <p>Use <code>docker buildx build --platform linux/amd64,linux/arm64 -t your-image:tag .</code> — requires Docker Desktop or a Docker daemon with buildx enabled. CI providers: GitHub Actions supports this natively; add <code>platforms: linux/amd64,linux/arm64</code> to your workflow.</p>
+      <h4>When ARM64 matters for base image selection</h4>
+      <p>If your CI runs on ARM64 (Graviton) and your Dockerfile uses a musl-based base (Alpine), test on both architectures — musl behavior is identical across architectures, but native modules compiled at build time must match the target arch.</p>
+    </div>
+  </details>
+</div>
+
+<!-- ═══ SECTION 1: CONTAINER-OPTIMIZED ═══ -->
+<h2 id="container-opt">Container-optimized base images</h2>
+<p class="section-sub">7 images — designed for use as the <code>FROM</code> line in a Dockerfile. Primary goal: minimal size and minimal attack surface.</p>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>alpine:3.21</code> as the default runtime base for all non-FIPS services.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> <code>debian:12-slim</code> as default — Debian-slim is ~75 MB vs Alpine's ~7 MB. For services without glibc-dependent native modules, the size difference provides no benefit and increases the CVE surface area.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Alpine uses musl libc. Services with Python native extensions (cryptography, lxml, numpy) or Node.js native modules (bcrypt, sharp) must switch to <code>debian:12-slim</code>.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>ubuntu:24.04</code> as the default builder stage image (not alpine).</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> <code>alpine:3.21</code> as builder — musl libc breaks many CI and build tools. Most package managers, compilers, and build scripts assume glibc. Using Alpine as builder causes sporadic build failures that are hard to diagnose.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Ubuntu builder images are ~500 MB vs Alpine's ~7 MB. The builder stage is discarded in multi-stage builds — its size does not affect the final runtime image.</div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>ubi9/ubi-micro</code> for FIPS runtime (not other FIPS options).</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> <code>azure-linux-2-fips</code> as universal FIPS default — Azure Linux FIPS is optimized for Azure-hosted workloads. UBI9 FIPS is multi-cloud, widely supported, and the standard for OpenShift and AWS GovCloud.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> UBI9 requires a Red Hat subscription to install additional RHEL packages. The base image itself is free to pull and run. Azure Linux FIPS has better integration with Azure Defender and ACR scanning.</div>
+</div>
+
+<div class="section-legend">
+  <strong>These are not full operating systems.</strong> They are base layers for container images.<br>
+  <span class="leg-row"><strong>scratch</strong> and <strong>Distroless</strong> have no shell — debugging requires a debug variant or a sidecar.</span>
+  <span class="leg-insight">Choose by compliance requirement first: FIPS → UBI-micro/UBI-minimal. SBOM-native → Wolfi. Smallest image → scratch (static) or Alpine. Azure workloads → Azure Linux.</span>
+
+  <details>
+    <summary><span class="sum-label">UBI (Universal Base Image) — what it is</span></summary>
+    <div class="expand-content">
+      <p><strong>UBI</strong> (Red Hat Universal Base Image) is a free-to-redistribute subset of RHEL. It includes RHEL's FIPS-certified crypto module and receives the same security updates as RHEL.</p>
+      <p>Three tiers: <strong>micro</strong> (no package manager, ~27MB), <strong>minimal</strong> (microdnf, ~37MB), <strong>standard</strong> (dnf, ~220MB). All three share the same FIPS-certified crypto module.</p>
+      <p>UBI does not require a Red Hat subscription to pull or run. A subscription is required to install additional RHEL packages.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">Distroless — what it is</span></summary>
+    <div class="expand-content">
+      <p><strong>Distroless</strong> images (gcr.io/distroless) are built by Google. They contain only the application runtime — no shell, no package manager, no coreutils. Built on Debian.</p>
+      <p>Available variants: <code>static</code> (~2MB, no libc), <code>base</code> (~20MB, glibc), <code>java17</code>, <code>python3</code>, <code>nodejs</code>. The static variant is for Go/Rust. The language variants include the runtime only.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">Wolfi / Chainguard — what it is</span></summary>
+    <div class="expand-content">
+      <p><strong>Wolfi</strong> is a Linux distribution designed specifically for container security. Built by Chainguard. Uses apk (same format as Alpine) but targets glibc instead of musl — solving the Alpine binary-compat problem while keeping image sizes small.</p>
+      <p>Every package in Wolfi ships with an SBOM (Software Bill of Materials) and SLSA Level 3 provenance. This means every dependency is traceable to its source and build process. Required for SSDF and EO 14028 supply chain compliance.</p>
+      <p>Free tier: wolfi-base available publicly. FIPS tier: paid Chainguard Images subscription required.</p>
+    </div>
+  </details>
+  <details>
+    <summary><span class="sum-label">CA certificates — what breaks without them</span></summary>
+    <div class="expand-content">
+      <h4>Images with no CA certificate bundle</h4>
+      <p><strong>scratch</strong> and <strong>gcr.io/distroless/static-debian12</strong> ship with no CA cert bundle. The CA certs column shows "No" for these two.</p>
+      <h4>What fails without CA certs</h4>
+      <p>Any app making outbound HTTPS calls: API clients, npm install, pip install, cargo registry calls, apt-get over HTTPS. The error appears as connection refused, SSL_ERROR_HANDSHAKE_FAILURE, or a generic certificate error — not a clear "no certs" message.</p>
+      <h4>Fix for scratch</h4>
+      <p>Copy certs from a build stage in a multi-stage Dockerfile: <code>COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/</code>. Add this immediately after <code>FROM scratch</code>.</p>
+      <h4>Fix for distroless/static-debian12</h4>
+      <p>Switch to <code>gcr.io/distroless/base-debian12</code>. The base variant adds ~18MB but includes CA certs, glibc, and libssl. Use base if your app makes HTTPS calls or uses glibc networking.</p>
+      <h4>Alpine is fine</h4>
+      <p>Alpine ships <code>ca-certificates</code> by default. Alpine CI images and Alpine runtime images can make HTTPS calls without any extra steps.</p>
+    </div>
+  </details>
+</div>
+
+<div class="tbl-wrap container-fam">
+  <div class="tbl-scroll">
+    <table class="distro-table">
+      <thead>
+        <tr>
+          <th class="c0" title="Distro or base image name and current stable version">Distro / Image</th>
+          <th class="c1" title="Base lineage — Debian / RHEL / Alpine / Custom / None">Family</th>
+          <th class="c2" title="C library: glibc (broad compat), musl (small, strict), none (scratch/static-only)">libc</th>
+          <th class="c3" title="Package manager available in the image — or none if the image has no pkg mgr">Pkg mgr</th>
+          <th class="c4" title="Compressed OCI image size from the official registry, smallest available variant">Min image</th>
+          <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
+          <th class="cfrom" title="Exact Docker Hub or registry pull path for the official image. Use this in your Dockerfile FROM line.">FROM tag</th>
+          <th class="ccerts" title="CA certificate bundle: required for HTTPS calls, package manager installs, and registry access. scratch and distroless/static have none — apps making outbound HTTPS calls will fail.">CA certs</th>
+          <th class="cuser" title="Default process UID in the container. Distroless is nonroot by default. All others are root — add USER directive before CMD/ENTRYPOINT for security hardening.">Default user</th>
+          <th class="c5" title="FIPS 140-2 / 140-3: whether a validated cryptographic module is available">FIPS</th>
+          <th class="c6" title="DISA STIG: whether an official Defense Information Systems Agency hardening guide exists for this distro">DISA STIG</th>
+          <th class="c7" title="CIS Benchmark: whether the Center for Internet Security publishes a hardening benchmark for this image">CIS</th>
+          <th class="c8" title="Vendor or maintainer who publishes and supports this distro or image">Vendor</th>
+          <th class="c9" title="How long the current stable release is supported with security patches">EOL / Support</th>
+          <th class="c10" title="Where this image fits in the pipeline: container base, CI runner, VM/bare-metal, or K8s node OS">Use context</th>
+          <th class="c11" title="The specific condition that makes this the right choice">When to use</th>
+          <th class="c12" title="The condition where a different distro is the better choice">When NOT</th>
+          <th class="c13" title="The primary tradeoff vs the closest alternative">Primary tradeoff</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="c0"><code>scratch</code></td>
+          <td class="c1">None</td>
+          <td class="c2">none</td>
+          <td class="c3">none</td>
+          <td class="c4">0 bytes (empty)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>scratch</code></td>
+          <td class="ccerts"><span class="cert-partial" title="No CA cert bundle. Fix: COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/">No</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-no">No</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-no">No</span></td>
+          <td class="c8">Docker / community</td>
+          <td class="c9">N/A (static artifact)</td>
+          <td class="c10">Container base only</td>
+          <td class="c11">Statically-linked Go (<code>CGO_ENABLED=0</code>) or Rust binaries. Zero attack surface required. No CVEs possible — no packages.</td>
+          <td class="c12">Any binary that requires libc, shell, dynamic linking, or CA certificates (use Distroless static instead).</td>
+          <td class="c13">Zero attack surface, zero image size vs zero tooling — no shell, no certs, no debug tools. Distroless static adds ~2MB but includes CA certs.</td>
+        </tr>
+        <tr>
+          <td class="c0">Alpine Linux 3.21</td>
+          <td class="c1">Alpine</td>
+          <td class="c2">musl</td>
+          <td class="c3">apk</td>
+          <td class="c4">~7 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>alpine:3.21</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add: adduser -S appuser &amp;&amp; USER appuser">root</span></td>
+          <td class="c5"><span class="cert-no">No</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Alpine Linux community</td>
+          <td class="c9">2 years per release</td>
+          <td class="c10">Container base · CI runner</td>
+          <td class="c11">Smallest possible image where no musl-incompatible binary is in the stack. Go (CGO disabled), Python (pure-Python packages), static Rust.</td>
+          <td class="c12">Any binary compiled against glibc — Python native extensions (cryptography, lxml, numpy), Node.js native modules (bcrypt, sharp), or cgo-enabled Go.</td>
+          <td class="c13">Smallest image (~7MB vs Debian-slim ~75MB) vs musl libc breaks ~15% of precompiled binaries without rebuild.</td>
+        </tr>
+        <tr>
+          <td class="c0">UBI-micro 9</td>
+          <td class="c1">RHEL</td>
+          <td class="c2">glibc</td>
+          <td class="c3">none</td>
+          <td class="c4">~27 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">registry.access.redhat.com/ubi9/ubi-micro</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-yes">Yes</span></td>
+          <td class="c6"><span class="cert-partial">Partial</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Red Hat (IBM)</td>
+          <td class="c9">2032 (RHEL 9 EOL)</td>
+          <td class="c10">Container base</td>
+          <td class="c11">FIPS required. Red Hat / OpenShift environment. No runtime package installation needed — all packages layered at build time in Dockerfile.</td>
+          <td class="c12">Need to install packages at container runtime. Need a shell in the final image. Non-Red Hat environment.</td>
+          <td class="c13">Smallest RHEL-based FIPS image (~27MB) vs no package manager — must build all layers in the Dockerfile, cannot <code>dnf install</code> at runtime.</td>
+        </tr>
+        <tr>
+          <td class="c0">UBI-minimal 9</td>
+          <td class="c1">RHEL</td>
+          <td class="c2">glibc</td>
+          <td class="c3">microdnf</td>
+          <td class="c4">~37 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">registry.access.redhat.com/ubi9/ubi-minimal</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-yes">Yes</span></td>
+          <td class="c6"><span class="cert-partial">Partial</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Red Hat (IBM)</td>
+          <td class="c9">2032 (RHEL 9 EOL)</td>
+          <td class="c10">Container base</td>
+          <td class="c11">FIPS required. Need to install a small number of packages. Red Hat ecosystem.</td>
+          <td class="c12">Need full dnf (use UBI-standard). Pure build-time layering is sufficient (use UBI-micro and save 10MB).</td>
+          <td class="c13">FIPS + microdnf package installer vs 10MB larger than UBI-micro. Full dnf is not available — use UBI-standard for that.</td>
+        </tr>
+        <tr>
+          <td class="c0">Distroless (gcr.io)</td>
+          <td class="c1">Debian-derived</td>
+          <td class="c2">glibc</td>
+          <td class="c3">none</td>
+          <td class="c4">~2 MB (static)<br>~20 MB (base)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">gcr.io/distroless/static-debian12</code> <small>(static)</small><br><code style="font-size:9px">gcr.io/distroless/base-debian12</code> <small>(base)</small></td>
+          <td class="ccerts"><span class="cert-partial" title="static-debian12 has no CA certs. Switch to base-debian12 for HTTPS support.">No (static)</span><br><span class="cert-yes">Yes (base)</span></td>
+          <td class="cuser"><span class="cert-yes" title="Distroless runs as nonroot (UID 65532) by default — no USER directive needed.">nonroot</span></td>
+          <td class="c5"><span class="cert-no">No</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-no">No</span></td>
+          <td class="c8">Google</td>
+          <td class="c9">Tied to Debian stable lifecycle</td>
+          <td class="c10">Container base</td>
+          <td class="c11">glibc binary compat required. No shell in the final image. Go, Java, Python, Node.js apps where language-specific variant is available.</td>
+          <td class="c12">FIPS required (use UBI). Need a shell in the final image. RHEL/OpenShift environment.</td>
+          <td class="c13">glibc compat + no shell vs no FIPS, no official CIS benchmark, Debian lifecycle dependency.</td>
+        </tr>
+        <tr>
+          <td class="c0">Wolfi / Chainguard</td>
+          <td class="c1">Wolfi (custom)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">apk</td>
+          <td class="c4">~5 MB (wolfi-base)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">cgr.dev/chainguard/wolfi-base:latest</code><br><small style="font-family:sans-serif;font-size:9px;color:var(--text-dim)">Note: Wolfi's :latest is a rolling release — pin to a date-stamped digest for reproducible builds (e.g. <code style="font-size:9px">cgr.dev/chainguard/wolfi-base:latest@sha256:...</code>).</small></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="wolfi-base runs as root. Chainguard application images (e.g. cgr.dev/chainguard/node) have non-root variants.">root</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-no">No</span></td>
+          <td class="c8">Chainguard</td>
+          <td class="c9">Rolling release (SLA on paid tier)</td>
+          <td class="c10">Container base</td>
+          <td class="c11">SBOM-native required. Supply chain compliance (SLSA Level 3, EO 14028). glibc needed but Alpine-sized image wanted.</td>
+          <td class="c12">Free tier only with strict budget. Red Hat / OpenShift ecosystem. DISA STIG required.</td>
+          <td class="c13">SBOM-native + glibc + Alpine-sized image vs newer ecosystem with fewer third-party packages, FIPS requires paid Chainguard subscription.</td>
+        </tr>
+        <tr>
+          <td class="c0">Azure Linux 3 (CBL-Mariner)</td>
+          <td class="c1">RPM (Microsoft)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">tdnf</td>
+          <td class="c4">~30 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">mcr.microsoft.com/azurelinux/base/core:3.0</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-yes">Yes</span></td>
+          <td class="c6"><span class="cert-partial">Partial</span></td>
+          <td class="c7"><span class="cert-partial">Partial</span></td>
+          <td class="c8">Microsoft</td>
+          <td class="c9">2 years per release</td>
+          <td class="c10">Container base · AKS node OS</td>
+          <td class="c11">Azure-native workloads. AKS clusters. FIPS on Azure Government. Microsoft enterprise support required.</td>
+          <td class="c12">Non-Azure environments. RHEL ecosystem required. DISA STIG officially required.</td>
+          <td class="c13">FIPS + Azure-native + tdnf package manager vs Microsoft-locked, small community, 2-year release cycle.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">
+    <span>Container-optimized: 7 images</span>
+    <span>FIPS: UBI-micro, UBI-minimal, Azure Linux 3, Wolfi (paid tier)</span>
+    <span>No shell: scratch, Distroless, UBI-micro</span>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2: GENERAL PURPOSE ═══ -->
+<h2 id="general-purpose">General purpose</h2>
+<p class="section-sub">6 distros — full OS with package managers, shells, and broad ecosystem support. Used as container bases, CI runners, and VMs.</p>
+
+<div class="why-block"><strong>Why Ubuntu 24.04 over Debian 12 as builder stage:</strong> Ubuntu 24.04 is the <code>ubuntu-latest</code> GitHub Actions runner as of January 2025. Using the same OS for CI and your build stage eliminates environment-mismatch bugs where packages install correctly in CI but fail in Docker. Debian 12 is equally valid if you need strict minimal toolchain control.</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>debian:12-slim</code> as the glibc runtime base (not ubuntu:24.04-minimal).</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> ubuntu:24.04-minimal as glibc runtime — Ubuntu adds snap, systemd stubs, and Ubuntu-specific packages that add ~20 MB with no benefit in a container runtime. Debian slim is leaner for container use.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> Debian uses apt, Ubuntu uses apt — they are compatible. But Debian security advisories (DSA) are separate from Ubuntu USN. You must track Debian's CVE feed for Debian-based runtime images.</div>
+</div>
+
+<div class="section-legend">
+  <strong>Ubuntu 24.04 LTS</strong> is the default GitHub Actions runner OS as of 2026 (<code>ubuntu-latest</code> moved from 22.04 to 24.04 in January 2025).<br>
+  <span class="leg-row"><strong>Debian slim</strong> is the most commonly used container base for glibc-dependent runtimes (Node.js, Python, Ruby, PHP) when image size matters and FIPS is not required.</span>
+  <span class="leg-insight">Amazon Linux 2023 is optimal only for AWS-native workloads. Fedora's 13-month lifecycle makes it unsuitable as a container base or production server OS.</span>
+
+  <details>
+    <summary><span class="sum-label">Ubuntu FIPS — what "Ubuntu Pro" means</span></summary>
+    <div class="expand-content">
+      <p><strong>Ubuntu Pro</strong> (formerly Ubuntu Advantage) is Canonical's paid subscription. It unlocks FIPS 140-3 validated modules (140-2 for 22.04, 140-3 for 24.04), DISA STIG tooling, and Expanded Security Maintenance (ESM) beyond the 5-year standard LTS window.</p>
+      <p>Cost: free for up to 5 personal machines. Enterprise pricing applies per-node. AWS/Azure/GCP marketplace instances can subscribe per-hour.</p>
+      <p>Without Ubuntu Pro: Ubuntu 22.04 LTS has no FIPS certification. The standard OpenSSL build in Ubuntu is not FIPS-validated.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">Amazon Linux 2023 — EOL and AWS lock-in</span></summary>
+    <div class="expand-content">
+      <p>Amazon Linux 2023 (AL2023) replaces Amazon Linux 2 (EOL 2025). AL2023 uses dnf (same as Fedora/RHEL), not yum.</p>
+      <p>AL2023 packages lag RHEL 9 by one release cycle — packages are pulled from Fedora after they ship in RHEL, giving AL2023 newer packages than RHEL but with less enterprise testing.</p>
+      <p>AL2023 is optimized for EC2 and Lambda container images. Kernel is patched for AWS Nitro hypervisor. Not recommended for on-premises or non-AWS environments — packages and kernel patches are AWS-specific.</p>
+    </div>
+  </details>
+</div>
+
+<div class="tbl-wrap general-fam">
+  <div class="tbl-scroll">
+    <table class="distro-table">
+      <thead>
+        <tr>
+          <th class="c0" title="Distro name and current stable version">Distro</th>
+          <th class="c1" title="Base lineage — Debian / RHEL / Alpine / Custom">Family</th>
+          <th class="c2" title="C library: glibc (broad compat), musl (small, strict), none">libc</th>
+          <th class="c3" title="Package manager: apt / dnf / apk / tdnf / none">Pkg mgr</th>
+          <th class="c4" title="Compressed OCI image size, smallest official variant">Min image</th>
+          <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
+          <th class="cfrom" title="Exact Docker Hub or registry pull path for the official image. Use this in your Dockerfile FROM line.">FROM tag</th>
+          <th class="ccerts" title="CA certificate bundle: required for HTTPS calls, package manager installs, and registry access. scratch and distroless/static have none — apps making outbound HTTPS calls will fail.">CA certs</th>
+          <th class="cuser" title="Default process UID in the container. Distroless is nonroot by default. All others are root — add USER directive before CMD/ENTRYPOINT for security hardening.">Default user</th>
+          <th class="c5" title="FIPS 140-2 / 140-3: whether a validated cryptographic module is available — 140-2 still valid; new certifications issued under 140-3">FIPS</th>
+          <th class="c6" title="DISA STIG: official DoD hardening guide published for this distro">DISA STIG</th>
+          <th class="c7" title="CIS Benchmark: Center for Internet Security hardening guide published">CIS</th>
+          <th class="c8" title="Vendor or maintainer who publishes and supports this distro">Vendor</th>
+          <th class="c9" title="How long the current stable release receives security patches">EOL / Support</th>
+          <th class="c10" title="Where this distro fits: container base, CI runner, VM/bare-metal, K8s node OS">Use context</th>
+          <th class="c11" title="Specific condition that makes this the right choice">When to use</th>
+          <th class="c12" title="Condition where a different distro is the better choice">When NOT</th>
+          <th class="c13" title="Primary tradeoff vs the closest alternative">Primary tradeoff</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="c0">Debian 12 (Bookworm)<br><small style="color:var(--text-dim)">stable / slim</small></td>
+          <td class="c1">Debian</td>
+          <td class="c2">glibc</td>
+          <td class="c3">apt</td>
+          <td class="c4">~75 MB (slim)<br>~130 MB (full)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>debian:12-slim</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-no">No</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Debian Project (community)</td>
+          <td class="c9">~5 years (Bookworm until 2028)</td>
+          <td class="c10">Container base · CI runner</td>
+          <td class="c11">Maximum package availability. glibc binary compat for every pre-compiled binary. Base image for Ubuntu, Kali, Mint. No FIPS required.</td>
+          <td class="c12">FIPS required. Enterprise vendor support SLA required. RHEL ecosystem expected.</td>
+          <td class="c13">Largest package ecosystem + free vs no FIPS, no vendor support SLA, no DISA STIG.</td>
+        </tr>
+        <tr>
+          <td class="c0">Ubuntu 22.04 LTS<br><small style="color:var(--text-dim)">(Jammy Jellyfish)</small></td>
+          <td class="c1">Debian (Ubuntu)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">apt</td>
+          <td class="c4">~78 MB (minimal)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>ubuntu:22.04</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-yes">Yes</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Canonical</td>
+          <td class="c9">2027 standard · 2032 ESM (Ubuntu Pro)</td>
+          <td class="c10">Container base · CI runner · VM/bare-metal</td>
+          <td class="c11">Most common dev environment. FIPS needed with Canonical support (Ubuntu Pro — FIPS 140-2 module). DISA STIG required. 22.04 still needed when 24.04 toolchain compatibility is uncertain.</td>
+          <td class="c12">RHEL ecosystem required. RPM-native tooling. Budget constraint (FIPS requires Ubuntu Pro paid tier).</td>
+          <td class="c13">Most common OS (lowest developer friction) vs FIPS requires Ubuntu Pro subscription, DISA STIG tooling requires Pro.</td>
+        </tr>
+        <tr>
+          <td class="c0">Ubuntu 24.04 LTS<br><small style="color:var(--text-dim)">(Noble Numbat)</small></td>
+          <td class="c1">Debian (Ubuntu)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">apt</td>
+          <td class="c4">~80 MB (minimal)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>ubuntu:24.04</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-yes">Yes</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Canonical</td>
+          <td class="c9">2029 standard · 2034 ESM · 2036 Legacy Support (Ubuntu Pro)</td>
+          <td class="c10">Container base · CI runner · VM/bare-metal</td>
+          <td class="c11">Default GitHub Actions runner (<code>ubuntu-latest</code> since Jan 2025). New projects. Longest support window (2036 with Legacy Support). Latest toolchain (Python 3.12, GCC 13, kernel 6.8). DISA STIG published 2025.</td>
+          <td class="c12">FIPS independently certified required — 24.04 FIPS 140-3 module is in validation progress via Ubuntu Pro; use 22.04 if a current FIPS 140-2 certificate number is required by the auditor.</td>
+          <td class="c13">Longest support + default CI runner + DISA STIG vs FIPS 140-3 certification still completing (use 22.04 for FIPS-required environments until 24.04 cert is finalized).</td>
+        </tr>
+        <tr>
+          <td class="c0">Fedora 42</td>
+          <td class="c1">RHEL upstream</td>
+          <td class="c2">glibc</td>
+          <td class="c3">dnf</td>
+          <td class="c4">~185 MB (minimal)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>fedora:42</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-no">No</span></td>
+          <td class="c8">Fedora Project / Red Hat</td>
+          <td class="c9">~13 months per release</td>
+          <td class="c10">CI runner · Development VM</td>
+          <td class="c11">Testing new RHEL features before they land in RHEL. Cutting-edge package versions. Developer workstations.</td>
+          <td class="c12">Production container base (13-month EOL). FIPS independently certified required. DISA STIG or CIS required. Long-running servers.</td>
+          <td class="c13">Latest RHEL-bound features + free vs 13-month lifecycle, not production-safe for servers or containers.</td>
+        </tr>
+        <tr>
+          <td class="c0">Amazon Linux 2023</td>
+          <td class="c1">Fedora-derived (RPM)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">dnf</td>
+          <td class="c4">~65 MB (minimal)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>amazonlinux:2023</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-yes">Yes</span></td>
+          <td class="c6"><span class="cert-partial">Partial</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Amazon Web Services</td>
+          <td class="c9">Standard support March 2028 · maintenance June 2029</td>
+          <td class="c10">Container base · EC2 · Lambda · CI runner</td>
+          <td class="c11">AWS-native workloads. Lambda container images. EC2 with FIPS in GovCloud. AWS manages kernel patches for Nitro hypervisor.</td>
+          <td class="c12">Non-AWS environments. RHEL ecosystem migration. OpenShift. On-premises bare-metal.</td>
+          <td class="c13">AWS-optimized kernel + FIPS + free on EC2 vs AWS-locked, packages lag RHEL by one cycle, no DISA STIG officially.</td>
+        </tr>
+        <tr>
+          <td class="c0">VMware Photon OS 5</td>
+          <td class="c1">RPM (VMware)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">tdnf</td>
+          <td class="c4">~40 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>photon:5.0</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-partial">Partial</span></td>
+          <td class="c7"><span class="cert-no">No</span></td>
+          <td class="c8">VMware (now Broadcom)</td>
+          <td class="c9">5 years per release</td>
+          <td class="c10">Container base · vSphere VMs · Tanzu</td>
+          <td class="c11">VMware vSphere / Tanzu / Broadcom ecosystem. vSphere-native container workloads. FIPS-capable environment on VMware (Photon 5 FIPS validation in progress).</td>
+          <td class="c12">FIPS certificate number required by auditor — Photon 5 FIPS validation not yet independently certified (Photon 3.0 had the last certified module). Broadcom licensing uncertainty post-acquisition. No CIS benchmark.</td>
+          <td class="c13">VMware-optimized vs FIPS not independently certified for Photon 5 (Photon 3.0 module held the certificate), Broadcom acquisition, small community.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">
+    <span>General purpose: 6 distros</span>
+    <span>FIPS: Amazon Linux 2023, Ubuntu 22.04/24.04 (requires Ubuntu Pro) · Partial: Photon OS 5 (Photon 5 FIPS not yet independently certified)</span>
+    <span>DISA STIG: Ubuntu 22.04 LTS, Ubuntu 24.04 LTS</span>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: RHEL FAMILY ═══ -->
+<h2 id="rhel-family">RHEL family — enterprise</h2>
+<p class="section-sub">5 distros — all binary-compatible with RHEL 9. Differ by vendor, FIPS certification status, and cost.</p>
+
+<div class="why-block"><strong>Why UBI9 (not full RHEL) for FIPS container runtime:</strong> UBI (Universal Base Image) is the free-to-redistribute subset of RHEL. It includes RHEL's FIPS-certified crypto module. A RHEL subscription is required only to install additional RHEL packages — not to pull or run the UBI image. This lets teams ship FIPS-compliant containers without paying for RHEL licenses per container.</div>
+
+<div class="decision-block">
+  <div class="decision-chosen"><strong>Decision:</strong> <code>ubi9/ubi-micro</code> for FIPS runtime over Rocky Linux 9 or AlmaLinux 9.</div>
+  <div class="decision-rejected"><strong>Rejected:</strong> Rocky Linux 9 / AlmaLinux 9 for FIPS — these distros use the same RHEL 9 crypto code but do NOT hold their own FIPS 140-2 certificate number. US government auditors who require a valid NIST certificate number must use RHEL 9 or Oracle Linux 9. UBI9 shares RHEL 9's certificate.</div>
+  <div class="decision-tradeoff"><strong>Accepted tradeoff:</strong> UBI9 ties you to Red Hat's release cadence. Rocky and Alma have slightly faster community patch turnarounds for non-FIPS packages.</div>
+</div>
+
+<div class="section-legend">
+  <strong>Only RHEL 9 and Oracle Linux 9 have independently certified FIPS 140-2 modules</strong> as of 2026.<br>
+  <span class="leg-row">Rocky Linux 9 and AlmaLinux 9 use the same crypto code as RHEL 9 but do not hold their own FIPS certificate — regulators who require the certificate number must use RHEL or Oracle Linux.</span>
+  <span class="leg-insight">CentOS Stream 9 is the upstream of RHEL 9 — it receives changes before RHEL QA finishes. Use it for staging and dev, not production.</span>
+
+  <details>
+    <summary><span class="sum-label">RHEL binary compatibility — what it means</span></summary>
+    <div class="expand-content">
+      <p>All 5 distros in this section are binary-compatible with RHEL 9. A binary compiled on RHEL 9 runs on Rocky 9, Alma 9, Oracle 9, and CentOS Stream 9 without recompilation.</p>
+      <p>Package managers (dnf) use the same RPM format. Package names and paths are identical. Configuration files are in the same locations.</p>
+      <p>Not a guarantee: third-party software vendors certify on RHEL. They do not independently certify on Rocky, Alma, or Oracle Linux. A vendor's RHEL certification does not transfer to these clones.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">CentOS Stream 9 — the upstream shift explained</span></summary>
+    <div class="expand-content">
+      <p>CentOS Linux 8 was discontinued in December 2021. CentOS Stream 9 replaced it — but CentOS Stream is the upstream of RHEL, not a downstream clone.</p>
+      <p>This means: CentOS Stream 9 receives changes before RHEL 9 QA has finished validating them. It is a rolling release. It is not production-safe for regulated environments.</p>
+      <p>Use case: staging or CI runner where RHEL-compatible behavior is needed without a subscription, and where receiving pre-release RHEL patches is acceptable.</p>
+    </div>
+  </details>
+</div>
+
+<div class="tbl-wrap rhel-fam">
+  <div class="tbl-scroll">
+    <table class="distro-table">
+      <thead>
+        <tr>
+          <th class="c0" title="Distro name and current stable version">Distro</th>
+          <th class="c1" title="Base lineage">Family</th>
+          <th class="c2" title="C library">libc</th>
+          <th class="c3" title="Package manager">Pkg mgr</th>
+          <th class="c4" title="Compressed OCI image size, smallest official variant">Min image</th>
+          <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
+          <th class="cfrom" title="Exact Docker Hub or registry pull path for the official image. Use this in your Dockerfile FROM line.">FROM tag</th>
+          <th class="ccerts" title="CA certificate bundle: required for HTTPS calls, package manager installs, and registry access. scratch and distroless/static have none — apps making outbound HTTPS calls will fail.">CA certs</th>
+          <th class="cuser" title="Default process UID in the container. Distroless is nonroot by default. All others are root — add USER directive before CMD/ENTRYPOINT for security hardening.">Default user</th>
+          <th class="c5" title="FIPS 140-2 / 140-3: independently certified module available from vendor">FIPS</th>
+          <th class="c6" title="DISA STIG: official DoD hardening guide published for this exact distro">DISA STIG</th>
+          <th class="c7" title="CIS Benchmark: hardening guide published by Center for Internet Security">CIS</th>
+          <th class="c8" title="Vendor or maintainer">Vendor</th>
+          <th class="c9" title="Security patch support window for current stable release">EOL / Support</th>
+          <th class="c10" title="Primary use context: container base, CI runner, VM/bare-metal, K8s node OS">Use context</th>
+          <th class="c11" title="Specific condition that makes this the right choice">When to use</th>
+          <th class="c12" title="Condition where another distro is the better choice">When NOT</th>
+          <th class="c13" title="Primary tradeoff vs the closest alternative">Primary tradeoff</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="c0">RHEL 9</td>
+          <td class="c1">RHEL</td>
+          <td class="c2">glibc</td>
+          <td class="c3">dnf</td>
+          <td class="c4">~27 MB (UBI-micro)<br>~225 MB (full)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">registry.access.redhat.com/ubi9/ubi</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-yes">Yes</span></td>
+          <td class="c6"><span class="cert-yes">Yes</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Red Hat (IBM)</td>
+          <td class="c9">2032 (10-year lifecycle)</td>
+          <td class="c10">VM/bare-metal · Container base (UBI) · CI runner</td>
+          <td class="c11">FedRAMP High, DoD IL4+, financial sector. FIPS + DISA STIG both required. Red Hat subscription available. ISV software with RHEL certification.</td>
+          <td class="c12">No Red Hat subscription budget (self-support from $349/year/server, Standard ~$800, Premium ~$1,300). Cost-sensitive non-regulated workload. Non-enterprise use.</td>
+          <td class="c13">Best compliance coverage (FIPS + STIG + CIS all official) vs requires paid Red Hat subscription.</td>
+        </tr>
+        <tr>
+          <td class="c0">CentOS Stream 9</td>
+          <td class="c1">RHEL (upstream)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">dnf</td>
+          <td class="c4">~210 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code style="font-size:9px">quay.io/centos/centos:stream9</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Red Hat (upstream project)</td>
+          <td class="c9">Rolling until RHEL 9 EOL (2032)</td>
+          <td class="c10">CI runner · Staging VM · Development</td>
+          <td class="c11">Testing RHEL 9 features pre-release. No subscription cost. Dev/staging environments where pre-release patches are acceptable.</td>
+          <td class="c12">Production. FIPS certification required. DISA STIG required. Any regulated environment.</td>
+          <td class="c13">Free + RHEL-compatible package format vs receives changes before RHEL QA, not production-safe.</td>
+        </tr>
+        <tr>
+          <td class="c0">Rocky Linux 9</td>
+          <td class="c1">RHEL (community clone)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">dnf</td>
+          <td class="c4">~210 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>rockylinux:9</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-partial">Partial</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Rocky Enterprise Software Foundation</td>
+          <td class="c9">Until RHEL 9 EOL (2032)</td>
+          <td class="c10">VM/bare-metal · CI runner · Container base</td>
+          <td class="c11">RHEL-compatible, no subscription cost. Community support acceptable. Non-DoD/non-FedRAMP environments.</td>
+          <td class="c12">Independent FIPS certificate required. DISA STIG officially required. Red Hat support SLA required. ISV RHEL certification required.</td>
+          <td class="c13">Free RHEL-compatible vs FIPS not independently certified (uses RHEL crypto code without its own certificate number), community support only.</td>
+        </tr>
+        <tr>
+          <td class="c0">AlmaLinux 9</td>
+          <td class="c1">RHEL (community clone)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">dnf</td>
+          <td class="c4">~205 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>almalinux:9</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-partial">Partial</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">CloudLinux / AlmaLinux OS Foundation</td>
+          <td class="c9">Until RHEL 9 EOL (2032)</td>
+          <td class="c10">VM/bare-metal · CI runner · Container base</td>
+          <td class="c11">CentOS 7/8 migration path. RHEL-compatible. CloudLinux commercial backing. Community support acceptable.</td>
+          <td class="c12">Independent FIPS certificate required. Red Hat support SLA required. ISV RHEL certification required.</td>
+          <td class="c13">Free + CentOS migration tooling + CloudLinux backing vs same FIPS caveat as Rocky (no independent certificate).</td>
+        </tr>
+        <tr>
+          <td class="c0">Oracle Linux 9</td>
+          <td class="c1">RHEL (Oracle clone)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">dnf</td>
+          <td class="c4">~215 MB</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><code>oraclelinux:9</code></td>
+          <td class="ccerts"><span class="cert-yes">Yes</span></td>
+          <td class="cuser"><span class="cert-no" title="Runs as root (UID 0). Add USER directive before CMD/ENTRYPOINT.">root</span></td>
+          <td class="c5"><span class="cert-yes">Yes</span></td>
+          <td class="c6"><span class="cert-yes">Yes</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Oracle Corporation</td>
+          <td class="c9">Until RHEL 9 EOL (2032) + Oracle Premier Support</td>
+          <td class="c10">VM/bare-metal · Oracle Cloud · CI runner</td>
+          <td class="c11">Oracle Cloud Infrastructure (OCI). Oracle Database on Linux. FIPS independently certified required. DISA STIG required (OL9 STIG published 2024). Oracle enterprise support required.</td>
+          <td class="c12">Non-Oracle environments. AWS/Azure native. No Oracle licensing budget. Red Hat ISV certification required (Oracle clone does not carry Red Hat cert).</td>
+          <td class="c13">Independently FIPS-certified + official DISA STIG + Oracle support vs Oracle licensing costs for Premier Support, OCI-centric kernel optimizations.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">
+    <span>RHEL family: 5 distros</span>
+    <span>Independently FIPS-certified: RHEL 9, Oracle Linux 9</span>
+    <span>DISA STIG (official): RHEL 9, Oracle Linux 9</span>
+    <span>Free: CentOS Stream, Rocky, AlmaLinux, Oracle Linux base image</span>
+  </div>
+</div>
+
+<!-- ═══ SECTION 4: IMMUTABLE / K8S-NATIVE ═══ -->
+<h2 id="immutable">Immutable / Kubernetes-native node OS</h2>
+<p class="section-sub">4 distros — designed as Kubernetes node operating systems. Not container base images. Not general-purpose servers.</p>
+
+<div class="section-legend">
+  <strong>These are not used as Dockerfile FROM images.</strong> They are the OS running on the Kubernetes worker node itself.<br>
+  <span class="leg-row"><strong>Talos Linux</strong> has no shell and no SSH — the most locked-down option. All management is via API.</span>
+  <span class="leg-insight">Choose by cloud: EKS → Bottlerocket. GKE → Google COS (see below). AKS → Azure Linux or Flatcar. Self-managed → Flatcar or Talos.</span>
+
+  <details>
+    <summary><span class="sum-label">Immutable OS — what it means for a K8s node</span></summary>
+    <div class="expand-content">
+      <p>An <strong>immutable OS</strong> has a read-only root filesystem. You cannot install packages or modify configuration files on a running node. Updates happen atomically — the entire OS is swapped to a new image, then the node reboots.</p>
+      <p>Benefits: no configuration drift, no manual package installs that bypass audit, automatic rollback if the new image fails to boot.</p>
+      <p>Tradeoff: if you need to install a kernel module, a debug tool, or a monitoring agent that runs on the host OS, you cannot use a standard package install. It must be a DaemonSet (running as a container) or the image must be rebuilt.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="sum-label">Talos Linux — no shell, no SSH explained</span></summary>
+    <div class="expand-content">
+      <p>Talos Linux has <strong>no shell</strong> and <strong>no SSH daemon</strong>. The only management interface is the Talos API (gRPC). <code>talosctl</code> is the only way to interact with the node.</p>
+      <p>This eliminates the entire class of attacks that require shell access: no <code>kubectl exec</code> into the node, no SSH brute force, no shell injection via misconfigured services.</p>
+      <p>Consequence: if a process is broken and you need to debug it interactively, you cannot. You must collect logs via the API or rebuild the cluster. Accepted tradeoff in high-security environments.</p>
+    </div>
+  </details>
+</div>
+
+<div class="tbl-wrap immutable-fam">
+  <div class="tbl-scroll">
+    <table class="distro-table">
+      <thead>
+        <tr>
+          <th class="c0" title="Distro name and current stable version">Distro</th>
+          <th class="c1" title="Base lineage">Family</th>
+          <th class="c2" title="C library used by the host OS">libc</th>
+          <th class="c3" title="Package manager — or none if immutable with no pkg mgr">Pkg mgr</th>
+          <th class="c4" title="VM image size — these are not container base images">Image size</th>
+          <th class="carch" title="CPU architectures with official images: x86_64 = Intel/AMD (universal CI default). ARM64 = Apple Silicon, AWS Graviton, cost savings. Multi-arch = single OCI manifest, Docker selects correct layer automatically.">Architecture</th>
+          <th class="cfrom" title="Exact Docker Hub or registry pull path for the official image. Use this in your Dockerfile FROM line.">FROM tag</th>
+          <th class="ccerts" title="CA certificate bundle: required for HTTPS calls, package manager installs, and registry access. scratch and distroless/static have none — apps making outbound HTTPS calls will fail.">CA certs</th>
+          <th class="cuser" title="Default process UID in the container. Distroless is nonroot by default. All others are root — add USER directive before CMD/ENTRYPOINT for security hardening.">Default user</th>
+          <th class="c5" title="FIPS 140-2 / 140-3: whether a validated cryptographic module is available — 140-2 still valid; new certifications issued under 140-3">FIPS</th>
+          <th class="c6" title="DISA STIG: official DoD hardening guide published">DISA STIG</th>
+          <th class="c7" title="CIS Benchmark: hardening guide published by Center for Internet Security">CIS</th>
+          <th class="c8" title="Vendor or maintainer">Vendor</th>
+          <th class="c9" title="Security patch support window">EOL / Support</th>
+          <th class="c10" title="Use context — these are K8s node OS only, not container base images">Use context</th>
+          <th class="c11" title="Specific condition that makes this the right choice">When to use</th>
+          <th class="c12" title="Condition where another distro is the better choice">When NOT</th>
+          <th class="c13" title="Primary tradeoff vs the closest alternative">Primary tradeoff</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="c0">Flatcar Container Linux</td>
+          <td class="c1">CoreOS-derived (Gentoo)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">none (immutable)</td>
+          <td class="c4">~300 MB (VM image)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
+          <td class="ccerts"><span class="cert-no">N/A</span></td>
+          <td class="cuser"><span class="cert-no">N/A</span></td>
+          <td class="c5"><span class="cert-no">No</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-partial">Partial</span></td>
+          <td class="c8">Microsoft (acquired Kinvolk 2021)</td>
+          <td class="c9">Stable channel rolling (LTS available)</td>
+          <td class="c10">K8s node OS · AKS</td>
+          <td class="c11">Kubernetes node OS. Immutable OS required. Atomic OS updates with auto-rollback. Azure / AKS workloads. SSH still available (vs Talos).</td>
+          <td class="c12">Non-Kubernetes workloads. Need to install host-level packages. FIPS required. DISA STIG required.</td>
+          <td class="c13">Immutable + auto-update + SSH available vs no FIPS, no DISA STIG, Microsoft-controlled release cadence.</td>
+        </tr>
+        <tr>
+          <td class="c0">Talos Linux 1.10</td>
+          <td class="c1">Custom (no Debian/RHEL)</td>
+          <td class="c2">glibc (minimal userspace)</td>
+          <td class="c3">none (API-driven)</td>
+          <td class="c4">~80 MB (system image)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
+          <td class="ccerts"><span class="cert-no">N/A</span></td>
+          <td class="cuser"><span class="cert-no">N/A</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-no">No</span></td>
+          <td class="c8">Sidero Labs</td>
+          <td class="c9">~1 year per release</td>
+          <td class="c10">K8s node OS only</td>
+          <td class="c11">Kubernetes-only clusters. Maximum attack surface reduction — no SSH, no shell, no unnecessary processes. GitOps-driven cluster management via talosctl API.</td>
+          <td class="c12">Any non-Kubernetes workload. Need SSH access to nodes. Need custom kernel modules. FIPS certificate independently required. DISA STIG required.</td>
+          <td class="c13">Smallest attack surface of any K8s node OS (no shell, no SSH) vs absolutely no host-level interactive access, ~1-year release lifecycle.</td>
+        </tr>
+        <tr>
+          <td class="c0">Bottlerocket 1.x</td>
+          <td class="c1">AWS custom (RPM-based internally)</td>
+          <td class="c2">glibc</td>
+          <td class="c3">none (immutable, SSM API)</td>
+          <td class="c4">~500 MB (VM, two-partition)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
+          <td class="ccerts"><span class="cert-no">N/A</span></td>
+          <td class="cuser"><span class="cert-no">N/A</span></td>
+          <td class="c5"><span class="cert-yes">Yes</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-yes">Yes</span></td>
+          <td class="c8">Amazon Web Services</td>
+          <td class="c9">Rolling (AWS-managed)</td>
+          <td class="c10">EKS node OS</td>
+          <td class="c11">EKS on AWS. FIPS in GovCloud. Auto-patching required. Minimal attack surface on K8s nodes with AWS management integration (SSM).</td>
+          <td class="c12">Non-EKS Kubernetes. On-premises. DISA STIG officially required. Non-AWS environments.</td>
+          <td class="c13">FIPS + immutable + AWS-managed patching vs AWS-locked, no DISA STIG, no SSH (admin container required for debug).</td>
+        </tr>
+        <tr>
+          <td class="c0">Google COS</td>
+          <td class="c1">Chromium OS-derived</td>
+          <td class="c2">glibc</td>
+          <td class="c3">none (read-only OS)</td>
+          <td class="c4">~2.5 GB (GKE node OS — not a Dockerfile FROM image)</td>
+          <td class="carch">x86_64 + ARM64</td>
+          <td class="cfrom"><span class="cert-no">N/A — VM image</span></td>
+          <td class="ccerts"><span class="cert-no">N/A</span></td>
+          <td class="cuser"><span class="cert-no">N/A</span></td>
+          <td class="c5"><span class="cert-partial">Partial</span></td>
+          <td class="c6"><span class="cert-no">No</span></td>
+          <td class="c7"><span class="cert-partial">Partial</span></td>
+          <td class="c8">Google</td>
+          <td class="c9">~1 year per milestone</td>
+          <td class="c10">GKE node OS only</td>
+          <td class="c11">GKE node OS. Automatic security patching required. No node-level customization needed.</td>
+          <td class="c12">Non-GKE Kubernetes. Need custom kernel modules. Need host-level packages. DISA STIG required.</td>
+          <td class="c13">Auto-patched + container-optimized kernel vs immutable (cannot apt-get on the node), 1-year release cycle, GKE-locked.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">
+    <span>Immutable / K8s-native: 4 distros</span>
+    <span>These are VM/node images — not container base images</span>
+    <span>FIPS: Bottlerocket (AWS GovCloud) · Google COS (partial) · Talos (partial, not independently certified)</span>
+    <span>No shell: Talos Linux · Bottlerocket (admin container required) · Google COS</span>
+  </div>
+</div>
+
+</main>
+</body>
+</html>
