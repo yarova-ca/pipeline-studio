@@ -44,9 +44,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # ── DEFAULT: Semgrep ─────────────────────────────────────────
-      - uses: returntocorp/semgrep-action@v1
-        with:
-          config: auto
+      - name: SAST — Semgrep
+        run: |
+          docker run --rm -v "$PWD:/src" returntocorp/semgrep:latest \
+            semgrep scan --config auto --error /src
       #
       # ── ALTERNATIVE: NodeJsScan ──────────────────────────────────
       # - name: SAST — NodeJsScan

@@ -195,10 +195,11 @@ jobs:
         run: cosign sign --yes $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
 
       - name: Generate SBOM
-        uses: anchore/syft-action@v1
+        uses: anchore/sbom-action@v0
         with:
           image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           output-file: sbom.spdx.json
+          format: spdx-json
 
       - name: Attest SBOM to image
         run: |
@@ -206,22 +207,14 @@ jobs:
             --predicate sbom.spdx.json \
             $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
 
-  # ── SLSA Level 3 provenance (needs image digest from build-push-sign) ─
-  slsa-provenance:
-    needs: build-push-sign
-    permissions:
-      actions: read
-      id-token: write
-      packages: write
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2
-    with:
-      image: ghcr.io/${{ github.repository }}
-      digest: ${{ needs.build-push-sign.outputs.image-digest }}
-    secrets:
-      registry-username: ${{ github.actor }}
-      registry-password: ${{ secrets.GITHUB_TOKEN }}
+# ── SLSA Level 3 provenance ────────────────────────────────────────
+# REMOVED: the slsa-framework reusable workflow job required placeholder
+# inputs/secrets and a populated image-digest output that this template
+# does not provide. As wired it failed the whole run with a workflow file
+# error. To enable SLSA provenance: emit an `image-digest` output from the
+# build-push-sign job, then re-add the reusable workflow call with real values.
 
-# ── Compliance delta checklist ─────────────────────────────────────
+# ── Compliance delta checklist ────────────────────────────────────
 # FIPS 140-2/3:  use --target runtime-fips (block above, wired for mcr.microsoft.com/dotnet/aspnet:9.0-cbl-mariner2.0-fips)
 # PCI DSS v4.0:  trivy --severity CRITICAL --exit-code 1 (already set)
 # HIPAA:         add step: semgrep --config p/hipaa .

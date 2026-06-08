@@ -12,7 +12,7 @@
 ARG BUILD_IMAGE=ubuntu
 ARG BUILD_BASE=ubuntu:24.04
 FROM ubuntu:24.04 AS base-ubuntu
-RUN apt-get update && apt-get install -y --no-install-recommends php8.3 php8.3-cli php8.3-mbstring php8.3-xml \
+RUN apt-get update && apt-get install -y --no-install-recommends php8.3 php8.3-cli php8.3-mbstring php8.3-xml php8.3-curl php8.3-zip php8.3-pdo php8.3-mysql curl ca-certificates unzip git \
  && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
  && rm -rf /var/lib/apt/lists/*
 
@@ -22,8 +22,8 @@ FROM ${BUILD_BASE} AS base-custom
 
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+COPY composer.json composer.lock* ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --ignore-platform-reqs
 COPY . .
 
 # ── Runtime stage (standard — php-fpm-alpine) ─────────────────────────────

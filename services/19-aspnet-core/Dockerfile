@@ -9,7 +9,7 @@
 # ─────────────────────────────────────────────────────────────────────────
 
 # ── Build stage ───────────────────────────────────────────────────────────
-ARG BUILD_IMAGE=ubuntu
+ARG BUILD_IMAGE=sdk
 ARG BUILD_BASE=ubuntu:24.04
 ARG RUNTIME=alpine
 FROM ubuntu:24.04 AS base-ubuntu
@@ -25,10 +25,10 @@ FROM ${BUILD_BASE} AS base-custom
 
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
-COPY *.csproj ./
-RUN dotnet restore
-COPY . .
-RUN dotnet publish -c Release -o /app/out --self-contained false
+COPY App/*.csproj ./App/
+RUN dotnet restore App/19-aspnet-core.csproj
+COPY App/ ./App/
+RUN dotnet publish App/19-aspnet-core.csproj -c Release -o /app/out --self-contained false
 RUN printf 'root:x:0:0:root:/root:/bin/sh\nnobody:x:65534:65534:nobody:/nonexistent:/bin/false\napp:x:1001:1001::/home/app:/sbin/nologin\n' > /tmp/app-passwd \
  && printf 'root:x:0:\nnobody:x:65534:\napp:x:1001:\n' > /tmp/app-group
 

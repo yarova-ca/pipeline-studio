@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.6
-ARG BUILD_IMAGE=ubuntu
+ARG BUILD_IMAGE=sdk
 ARG BUILD_BASE=ubuntu:24.04
 
 FROM ubuntu:24.04 AS base-ubuntu

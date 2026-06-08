@@ -12,7 +12,7 @@
 
 import type { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import Redis from 'ioredis'
+import { Redis } from 'ioredis'
 import { prisma } from '../db/client.js'
 import { logger } from '../logger.js'
 import { auditLog } from './audit.js'

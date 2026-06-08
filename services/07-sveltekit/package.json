@@ -9,7 +9,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@sveltejs/adapter-node": "^5.2.0"
+    "@sveltejs/adapter-node": "^5.2.0",
+    "pino": "^9.0.0",
+    "prom-client": "^15.0.0"
   },
   "devDependencies": {
     "@sveltejs/kit": "^2.57.0",

@@ -27,7 +27,7 @@ FROM ${BUILD_BASE} AS base-custom
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
 COPY Cargo.toml Cargo.lock ./
-RUN mkdir src && echo "fn main(){}" > src/main.rs && cargo build --release --target x86_64-unknown-linux-musl && rm src/main.rs
+RUN mkdir src && echo "fn main(){}" > src/main.rs && echo "" > src/lib.rs && cargo build --release --target x86_64-unknown-linux-musl && rm src/main.rs src/lib.rs
 COPY src ./src
 RUN cargo build --release --target x86_64-unknown-linux-musl
 # REPLACE: binary name in COPY below defaults to 'app' — update to your Cargo package name
@@ -45,7 +45,7 @@ FROM base-${RUNTIME} AS runtime
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /tmp/app-passwd /etc/passwd
 COPY --from=build /tmp/app-group /etc/group
-COPY --from=build /app/target/x86_64-unknown-linux-musl/release/20-axum /app
+COPY --from=build /app/target/x86_64-unknown-linux-musl/release/axum-service /app
 USER 1001
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
@@ -60,7 +60,7 @@ FROM base-fips AS runtime-fips
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /tmp/app-passwd /etc/passwd
 COPY --from=build /tmp/app-group /etc/group
-COPY --from=build /app/target/x86_64-unknown-linux-musl/release/20-axum /usr/local/bin/app
+COPY --from=build /app/target/x86_64-unknown-linux-musl/release/axum-service /usr/local/bin/app
 RUN microdnf install -y curl && microdnf clean all
 USER 1001
 EXPOSE 8080

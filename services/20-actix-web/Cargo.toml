@@ -1,7 +1,11 @@
 [package]
-name = "20-actix-web"
+name = "svc-20-actix-web"
 version = "1.0.0"
 edition = "2021"
+
+[[bin]]
+name = "20-actix-web"
+path = "src/main.rs"
 
 [dependencies]
 actix-web   = "4.9"
@@ -24,7 +28,7 @@ jsonwebtoken = "9"
 uuid         = { version = "1", features = ["v4", "serde"] }
 
 # GitHub OAuth HTTP client
-reqwest = { version = "0.12", features = ["json"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 
 [dev-dependencies]
 actix-web = { version = "4.9", features = ["macros"] }

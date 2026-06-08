@@ -28,7 +28,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -a -installsuffix cgo -ldflags="-s -w" -o /app/bin/app ./...
+RUN go build -a -installsuffix cgo -ldflags="-s -w" -o /app/bin/app .
 
 # ── Runtime stage (standard — scratch, zero attack surface) ───────────────
 FROM scratch AS runtime

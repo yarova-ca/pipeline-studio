@@ -9,7 +9,7 @@
 # ─────────────────────────────────────────────────────────────────────────
 
 # ── Build stage ───────────────────────────────────────────────────────────
-ARG BUILD_IMAGE=ubuntu
+ARG BUILD_IMAGE=sdk
 ARG BUILD_BASE=ubuntu:24.04
 ARG RUNTIME=debian
 FROM ubuntu:24.04 AS base-ubuntu
@@ -22,7 +22,7 @@ FROM ${BUILD_BASE} AS base-custom
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
 ENV MIX_ENV=prod
-COPY mix.exs mix.lock ./
+COPY mix.exs mix.lock* ./
 RUN mix local.hex --force && mix local.rebar --force && mix deps.get --only prod
 COPY config ./config
 COPY lib ./lib
@@ -42,7 +42,7 @@ FROM base-${RUNTIME} AS runtime
 WORKDIR /app
 COPY --from=build /tmp/app-passwd /etc/passwd
 COPY --from=build /tmp/app-group /etc/group
-COPY --from=build --chown=1001:1001 /app/_build/prod/rel/myapp ./
+COPY --from=build --chown=1001:1001 /app/_build/prod/rel/app ./
 # REPLACE: myapp with your OTP release name
 USER 1001
 EXPOSE 4000
@@ -59,7 +59,7 @@ FROM base-fips AS runtime-fips
 WORKDIR /app
 COPY --from=build /tmp/app-passwd /etc/passwd
 COPY --from=build /tmp/app-group /etc/group
-COPY --from=build --chown=1001:1001 /app/_build/prod/rel/myapp ./
+COPY --from=build --chown=1001:1001 /app/_build/prod/rel/app ./
 # REPLACE: myapp with your OTP release name
 USER 1001
 EXPOSE 4000

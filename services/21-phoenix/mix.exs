@@ -27,7 +27,7 @@ defmodule App.MixProject do
       {:logger_json, "~> 6.0"},
 
       # Rate limiting via Hammer (token bucket, in-memory per IP)
-      {:hammer, "~> 7.0"},
+      {:hammer, "~> 6.1"},
       {:hammer_plug, "~> 3.0"},
 
       # OpenTelemetry — guarded by OTEL_ENABLED=true in application.ex

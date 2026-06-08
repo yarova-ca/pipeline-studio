@@ -13,7 +13,9 @@
     "@remix-run/react": "^7.0.0",
     "@remix-run/serve": "^7.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "pino": "^9.0.0",
+    "prom-client": "^15.0.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^7.0.0",

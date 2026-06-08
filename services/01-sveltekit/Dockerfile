@@ -25,7 +25,7 @@ FROM ${BUILD_BASE} AS base-custom
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 COPY . .
 RUN npm run build
 RUN printf 'root:x:0:0:root:/root:/bin/sh\nnobody:x:65534:65534:nobody:/nonexistent:/bin/false\napp:x:1001:1001::/home/app:/sbin/nologin\n' > /tmp/app-passwd \

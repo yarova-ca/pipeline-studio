@@ -1,7 +1,11 @@
 [package]
-name = "30-ws-rust"
+name = "svc-30-ws-rust"
 version = "1.0.0"
 edition = "2021"
+
+[[bin]]
+name = "30-ws-rust"
+path = "src/main.rs"
 
 [dependencies]
 axum = { version = "0.7", features = ["ws"] }

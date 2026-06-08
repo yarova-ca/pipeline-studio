@@ -9,12 +9,13 @@
 # ─────────────────────────────────────────────────────────────────────────
 
 # ── Build stage ───────────────────────────────────────────────────────────
-ARG BUILD_IMAGE=ubuntu
+ARG BUILD_IMAGE=sdk
 ARG BUILD_BASE=ubuntu:24.04
 ARG RUNTIME=alpine
 FROM ubuntu:24.04 AS base-ubuntu
 RUN apt-get update && apt-get install -y --no-install-recommends ruby ruby-dev build-essential \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && gem install bundler --no-document
 
 FROM ruby:3.3-bookworm AS base-sdk
 FROM ruby:3.3-alpine AS base-sdk-alpine
@@ -22,9 +23,10 @@ FROM ${BUILD_BASE} AS base-custom
 
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
-COPY Gemfile Gemfile.lock ./
-RUN bundle config set without 'development test' \
- && bundle install --path vendor/bundle
+COPY Gemfile Gemfile.lock* ./
+RUN bundle config set --local without 'development test' \
+ && bundle config set --local path 'vendor/bundle' \
+ && bundle install
 COPY . .
 RUN printf 'root:x:0:0:root:/root:/bin/sh\nnobody:x:65534:65534:nobody:/nonexistent:/bin/false\napp:x:1001:1001::/home/app:/sbin/nologin\n' > /tmp/app-passwd \
  && printf 'root:x:0:\nnobody:x:65534:\napp:x:1001:\n' > /tmp/app-group

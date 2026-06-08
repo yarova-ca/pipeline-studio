@@ -26,9 +26,9 @@ jobs:
       - uses: slackapi/slack-github-action@v1
         with:
           payload: |
-            {{
+            {
               "text": "Pipeline ${{ github.event.workflow_run.conclusion }}: Actix-web 4.9 — ${{ github.event.workflow_run.head_sha }}"
-            }}
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       #
