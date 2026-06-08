@@ -7,7 +7,7 @@
     "vlucas/phpdotenv": "^5.6",
     "firebase/php-jwt": "^6.10",
     "laravel/sanctum": "^4.0",
-    "darkaonline/l5-swagger": "^8.6",
+    "darkaonline/l5-swagger": "^11.0",
     "open-telemetry/sdk": "^1.0",
     "open-telemetry/exporter-otlp": "^1.0",
     "open-telemetry/opentelemetry-auto-laravel": "^0.0.5"
