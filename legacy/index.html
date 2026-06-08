@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Pipeline Studio — Platform engineering reference and runnable service starters for all 106 frameworks, every industry vertical, and all compliance standards.">
+<title>Pipeline Studio — Hub</title>
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;--border:#d0d7de;
+  --text:#1f2328;--text-dim:#636c76;--text-head:#1f2328;
+  --blue:#0969da;--green:#1a7f37;--red:#cf222e;--purple:#8250df;
+  --orange:#bc4c00;--teal:#0969da;
+  --sidebar-w:240px
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:13px;line-height:1.5}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+/* Skip link */
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+/* Sidebar */
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:16px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 14px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.nav-hub[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3)}
+/* Pillar groups */
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3);font-weight:600}
+.nav-top{display:block;padding:6px 16px;color:var(--text-dim);font-size:10px;opacity:.6;margin-top:12px;border-top:1px solid var(--border);cursor:pointer;text-decoration:none}
+.nav-top:hover{opacity:1;color:var(--blue)}
+/* Main */
+main{flex:1;padding:40px 48px;max-width:1140px}
+.page-header{margin-bottom:8px}
+.page-title{font-size:24px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:20px}
+/* Section headings */
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:36px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:13px;font-weight:600;color:var(--text-head);margin:20px 0 8px}
+/* Platform overview banner */
+.platform-overview{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:28px}
+.platform-overview h3{margin:0 0 10px;font-size:14px;color:var(--text-head)}
+.platform-overview p{font-size:12.5px;color:var(--text-dim);line-height:1.65;margin-bottom:8px}
+.platform-overview p:last-child{margin-bottom:0}
+/* Pillar sections */
+.pillar-section{margin-bottom:36px}
+.pillar-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.pillar-num{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#fff;background:var(--blue);border-radius:4px;padding:2px 7px}
+.pillar-title{font-size:16px;font-weight:700;color:var(--text-head)}
+.pillar-desc{font-size:12px;color:var(--text-dim);margin-left:auto}
+/* Doc cards grid */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.doc-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:15px 17px;text-decoration:none;color:var(--text);display:block;transition:border-color .15s,box-shadow .15s}
+.doc-card:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(9,105,218,.12);text-decoration:none}
+.doc-card-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);margin-bottom:4px}
+.doc-card-title{font-size:13.5px;font-weight:600;color:var(--text-head);margin-bottom:6px}
+.doc-card-covers{font-size:11.5px;color:var(--text-dim);line-height:1.5;margin-bottom:6px}
+.doc-card-when{font-size:11px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:7px;margin-top:4px}
+.doc-card-when strong{color:var(--text)}
+/* Services card */
+.services-card{background:linear-gradient(135deg,#f0f6ff,#f6f8fa);border:1px solid #b6d7f5;border-radius:8px;padding:18px 22px;margin-bottom:28px}
+.services-card h3{font-size:14px;color:var(--text-head);margin:0 0 8px}
+.services-stats{display:flex;gap:20px;flex-wrap:wrap;margin:10px 0 12px}
+.services-stat{font-size:12px;color:var(--text-dim)}
+.services-stat strong{color:var(--text-head)}
+.services-langs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.lang-chip{font-size:11px;font-weight:600;padding:3px 9px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);color:var(--text-dim);text-decoration:none}
+.lang-chip:hover{border-color:var(--blue);color:var(--blue);text-decoration:none}
+/* Hint card */
+.hint-card{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;font-size:12px;line-height:1.6;color:var(--text-dim);margin-bottom:16px}
+.hint-card strong{color:var(--text-head)}
+/* Scenario paths */
+.sp-list{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.sp-block{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:12px 16px}
+.sp-label{font-size:12px;font-weight:600;color:var(--text-head);margin-bottom:8px}
+.sp-hint{font-size:11px;color:var(--text-dim);margin-top:7px;line-height:1.5}
+.sp-chain{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.sp-node{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;background:#dbeeff;color:var(--blue);border:1px solid #b6d7f5;border-radius:4px;text-decoration:none;white-space:nowrap}
+.sp-node:hover{background:#b6d7f5;text-decoration:none}
+.sp-arr{font-size:12px;color:var(--text-dim);flex-shrink:0}
+/* Dependency map */
+.dep-box{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px}
+.dep-row{display:flex;align-items:center;gap:8px;font-size:12px;padding:8px 16px;border-bottom:1px solid var(--border)}
+.dep-row:last-child{border-bottom:none}
+.dep-from{min-width:200px;font-weight:500}
+.dep-arrow{color:var(--text-dim);font-size:14px}
+.dep-to{color:var(--text-dim)}
+/* Quick reference table */
+.qr-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}
+.qr-table th{text-align:left;padding:7px 12px;font-size:10.5px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);background:var(--bg2)}
+.qr-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+.qr-table tbody tr:last-child td{border-bottom:none}
+.qr-table tbody tr:hover{background:var(--bg2)}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;color:var(--text-head)}
+/* Status badges */
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
+.badge-green{background:#dafbe1;color:var(--green);border:1px solid #a0e0b0}
+.badge-blue{background:#dbeeff;color:var(--blue);border:1px solid #b6d7f5}
+.badge-dim{background:var(--bg3);color:var(--text-dim);border:1px solid var(--border)}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--text:#e6edf3;--text-dim:#848d97;--text-head:#e6edf3}
+  .doc-card:hover{box-shadow:0 2px 8px rgba(56,139,253,.15)}
+  .hint-card,.services-card{background:#1c2a3a;border-color:#2d4a6a;color:var(--text-dim)}
+  .sp-node{background:#0d2744;border-color:#2d4a6a;color:#58a6ff}
+  .sp-node:hover{background:#1c3a5e}
+  .platform-overview{background:#161b22}
+  .badge-green{background:#1a3a20;color:#3fb950}
+  .badge-blue{background:#0d2744;color:#58a6ff}
+}
+@media print{
+  .skip-link,nav{display:none}
+  main{padding:20px;max-width:none}
+  .doc-card{border:1px solid #ccc;break-inside:avoid}
+}
+/* Hero section */
+.hero-section{padding:24px 0 8px;border-bottom:2px solid var(--border);margin-bottom:24px}
+.hero-title{font-size:28px;font-weight:800;color:var(--text-head);margin-bottom:6px}
+.hero-tagline{font-size:14px;font-weight:600;color:var(--text-head);margin-bottom:6px}
+.hero-sub{font-size:12.5px;color:var(--text-dim);margin-bottom:20px;line-height:1.65}
+.reader-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px}
+.reader-card{background:var(--bg2);border:2px solid var(--border);border-radius:10px;padding:16px;text-decoration:none;color:var(--text);transition:all .15s;display:block}
+.reader-card:hover{border-color:var(--blue);box-shadow:0 3px 12px rgba(9,105,218,.15);text-decoration:none}
+.reader-card strong{font-size:13px;display:block;margin-bottom:4px;color:var(--text-head)}
+.rc-emoji{font-size:24px;margin-bottom:8px}
+.rc-desc{font-size:11.5px;color:var(--text-dim);line-height:1.5}
+.reading-path{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:20px}
+@media(max-width:700px){.reader-cards{grid-template-columns:1fr}}
+
+/* ── Dual-audience sections ── */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.audience-card{border-radius:8px;padding:16px;font-size:12px}
+.audience-new{background:#e8f4fd;border:1px solid #90caf9}
+.audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.audience-maintainer{background:#f1f8e9;border:1px solid #a5d6a7}
+.audience-maintainer .audience-label{font-weight:700;color:#2e7d32;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.qr-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.qr-table td{padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.08);vertical-align:top}
+.qr-table tr:last-child td{border-bottom:none}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
+.checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
+.checklist-item input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+.checklist-cmd{font-family:monospace;background:var(--bg3);padding:4px 8px;border-radius:4px;font-size:11px;margin:4px 0}
+.checklist-pass{font-size:11px;color:var(--green);margin-top:2px}
+.checklist-fail{font-size:11px;color:var(--red);margin-top:2px}
+@media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){
+  .audience-new{background:#0d2744;border-color:#1565c0}
+  .audience-new .audience-label{color:#90caf9}
+  .audience-maintainer{background:#1b2e1b;border-color:#2e7d32}
+  .audience-maintainer .audience-label{color:#a5d6a7}
+  .qr-table td{border-bottom-color:rgba(255,255,255,.08)}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<!-- ═══ SIDEBAR NAV ═══ -->
+<nav aria-label="Platform navigation">
+  <div class="nav-logo">
+    <h1>Pipeline Studio</h1>
+    <p>Platform engineering hub</p>
+  </div>
+
+  <a href="index.html" class="nav-hub" aria-current="page">⌂ Hub</a>
+
+  <details open>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+  </details>
+
+  <details open>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+
+  <details open>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+
+  <details open>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+
+  <details open>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+
+  <details open>
+    <summary>Maintaining<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
+  </details>
+
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main id="main-content">
+
+<!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+<div class="hero-section">
+  <h1 class="hero-title">Pipeline Studio</h1>
+  <p class="hero-tagline">
+    Every service, every language, every compliance standard — documented and ready to deploy.
+  </p>
+  <p class="hero-sub">
+    106 runnable service starters across 30 framework groups.
+    17 reference docs. Full CI/CD, Helm charts, Backstage catalog, and compliance configs included.
+  </p>
+  <div class="reader-cards">
+    <a href="#path-new" class="reader-card" onclick="selectPath('new')">
+      <div class="rc-emoji">👋</div>
+      <strong>New here?</strong>
+      <div class="rc-desc">Learn what this platform is and what it gives you</div>
+    </a>
+    <a href="#path-build" class="reader-card" onclick="selectPath('build')">
+      <div class="rc-emoji">🔨</div>
+      <strong>Building a service?</strong>
+      <div class="rc-desc">Pick your language and start in 5 minutes</div>
+    </a>
+    <a href="#path-maintain" class="reader-card" onclick="selectPath('maintain')">
+      <div class="rc-emoji">⚙️</div>
+      <strong>Maintaining the platform?</strong>
+      <div class="rc-desc">Weekly checklist, audit guide, and architecture decisions</div>
+    </a>
+  </div>
+</div>
+
+<!-- ── Reading paths (shown on click) ────────────────────────────────────── -->
+<div id="path-new" class="reading-path" style="display:none">
+  <h2 style="margin-top:0">What is Pipeline Studio?</h2>
+  <p style="font-size:13px;line-height:1.7;color:var(--text-dim);margin-bottom:12px">
+    Pipeline Studio is a platform engineering platform. A team picks a framework (e.g. Express, FastAPI, Spring Boot),
+    an industry (e.g. Healthcare), and a compliance standard (e.g. HIPAA) — and gets a complete, deployable service
+    with health endpoints, CI/CD pipelines, Helm charts, auth, ORM, logging, and compliance configs already wired.
+  </p>
+  <p style="font-size:13px;line-height:1.7;color:var(--text-dim);margin-bottom:16px">
+    The HTML pages document every decision. The <code>services/</code> directory contains the runnable code.
+    The <code>infra/</code> directory contains the Kubernetes manifests. Backstage connects it all as a developer portal.
+  </p>
+  <div class="hint-card">
+    <strong>Start with:</strong> <a href="02-pipeline-schema.html">02 — Pipeline Schema</a> to understand the 6-phase CI/CD flow.
+    Then <a href="01-framework-catalog.html">01 — Framework Catalog</a> to pick your language.
+    Then <a href="18-service-status.html">18 — Service Status</a> to see what's implemented for your language.
+  </div>
+</div>
+
+<div id="path-build" class="reading-path" style="display:none">
+  <h2 style="margin-top:0">Building a service — start here</h2>
+  <div class="sp-list">
+    <div class="sp-block">
+      <div class="sp-label">Step 1 — Pick your framework</div>
+      <div class="sp-chain">
+        <a href="01-framework-catalog.html" class="sp-node">01 Framework Catalog</a>
+      </div>
+      <div class="sp-hint">Find your language group. Compare maturity, performance, and tradeoffs.</div>
+    </div>
+    <div class="sp-block">
+      <div class="sp-label">Step 2 — Pick your base image</div>
+      <div class="sp-chain">
+        <a href="09-linux-distros.html" class="sp-node">09 Linux Distros</a>
+        <span class="sp-arr">→</span>
+        <a href="11-dockerfile-catalog.html" class="sp-node">11 Dockerfiles</a>
+      </div>
+      <div class="sp-hint">Alpine for default. Slim for glibc compatibility. UBI9 for FIPS.</div>
+    </div>
+    <div class="sp-block">
+      <div class="sp-label">Step 3 — Add compliance (if needed)</div>
+      <div class="sp-chain">
+        <a href="12-compliance-variations.html" class="sp-node">12 Compliance</a>
+      </div>
+      <div class="sp-hint">Each standard adds a delta on top of the base Dockerfile.</div>
+    </div>
+    <div class="sp-block">
+      <div class="sp-label">Step 4 — Clone the service starter</div>
+      <div class="sp-chain">
+        <a href="18-service-status.html" class="sp-node">18 Service Status</a>
+        <span class="sp-arr">→</span>
+        <span class="sp-node" style="background:#d1fae5;color:#065f46;border-color:#86efac">Clone services/XX/</span>
+      </div>
+      <div class="sp-hint">Every starter has health endpoints, Dockerfile, CI, Helm, auth, ORM, logging, and compliance configs.</div>
+    </div>
+  </div>
+</div>
+
+<div id="path-maintain" class="reading-path" style="display:none">
+  <h2 style="margin-top:0">Maintaining the platform — start here</h2>
+  <div class="cards-grid" style="margin-bottom:16px">
+    <a href="16-maintainability-runbook.html" class="doc-card">
+      <div class="doc-card-title">Weekly health checklist</div>
+      <div class="doc-card-covers">7 commands that verify the platform is healthy. Takes 5 minutes.</div>
+    </a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/blob/main/AUDIT_PROCESS.md" class="doc-card" target="_blank">
+      <div class="doc-card-title">Quarterly Google-level audit</div>
+      <div class="doc-card-covers">5 audit prompts covering auth, reliability, observability, infra, and data.</div>
+    </a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/blob/main/DECISIONS.md" class="doc-card" target="_blank">
+      <div class="doc-card-title">Architecture decisions</div>
+      <div class="doc-card-covers">Every major choice documented with WHY and what was rejected.</div>
+    </a>
+    <a href="18-service-status.html" class="doc-card">
+      <div class="doc-card-title">Service implementation status</div>
+      <div class="doc-card-covers">105-service table showing what's complete and what's missing per layer.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ── Service status banner ──────────────────────────────────────────────── -->
+<div class="services-card" style="margin-top:8px">
+  <h3>Service starters — <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services">services/</a></h3>
+  <p style="font-size:12px;color:var(--text-dim);margin:6px 0 10px">106 runnable services. Each has: health endpoints + Dockerfile + CI/CD + Helm + auth + ORM + logging + compliance configs.</p>
+  <div class="services-stats">
+    <div class="services-stat"><strong>106</strong> services</div>
+    <div class="services-stat"><strong>30</strong> framework groups</div>
+    <div class="services-stat"><strong>10</strong> language groups</div>
+    <div class="services-stat"><strong>3</strong> Docker RUNTIME axes per service</div>
+  </div>
+  <a href="18-service-status.html" style="font-size:12px;font-weight:600">View full implementation status →</a>
+</div>
+
+<!-- ═══ THREE LAYERS ═══ -->
+<h2>How this platform is structured</h2>
+<table class="qr-table" style="margin-bottom:20px">
+  <thead><tr><th>Layer</th><th>What it is</th><th>Who uses it</th><th>Where</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Knowledge</td>
+      <td>17 HTML pages across 7 topic pillars. Every decision explained. Every alternative rejected. Self-contained — no page requires another page to act on.</td>
+      <td>Engineers learning the platform. Teams picking frameworks, distros, compliance standards.</td>
+      <td>These HTML files. Also rendered in Backstage TechDocs.</td>
+    </tr>
+    <tr>
+      <td>Implementation</td>
+      <td>106 runnable service starters. Each has: app code, health endpoints, Dockerfile with all RUNTIME axes, passing tests.</td>
+      <td>Teams cloning a starter to build a new service.</td>
+      <td><code><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services">services/</a></code> in this repo.</td>
+    </tr>
+    <tr>
+      <td>Platform</td>
+      <td>Shared infrastructure: ArgoCD, Kyverno, cert-manager, Prometheus + Grafana, Harbor, Backstage.</td>
+      <td>Platform team only. Not per-service.</td>
+      <td>Separate platform infra repo (Phase 4).</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ═══ SERVICES SECTION ═══ -->
+<div class="services-card">
+  <h3>Service starters — <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services">services/</a></h3>
+  <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px">106 runnable services across 30 framework groups. Every service has: hello world + 4 health endpoints + tests + multi-stage Dockerfile.</p>
+  <div class="services-stats">
+    <div class="services-stat"><strong>106</strong> services</div>
+    <div class="services-stat"><strong>30</strong> framework groups</div>
+    <div class="services-stat"><strong>10</strong> language groups</div>
+    <div class="services-stat"><strong>3</strong> RUNTIME axes per service</div>
+    <div class="services-stat"><strong>4</strong> health endpoints per service</div>
+  </div>
+  <div><strong style="font-size:11.5px">Language groups:</strong></div>
+  <div class="services-langs" style="margin-top:6px">
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-express" class="lang-chip">Node / Deno / Bun</a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/15-fastapi" class="lang-chip">Python</a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/16-gin" class="lang-chip">Go</a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/17-spring-boot" class="lang-chip">Java</a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/18-ktor" class="lang-chip">Kotlin</a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/19-aspnet-core" class="lang-chip">.NET</a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/20-axum" class="lang-chip">Rust</a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/22-rails" class="lang-chip">Ruby</a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/23-laravel" class="lang-chip">PHP</a>
+    <a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/21-phoenix" class="lang-chip">Elixir</a>
+  </div>
+  <p style="font-size:11.5px;color:var(--text-dim);margin-top:12px">
+    Build locally: <code>cd services/14-express &amp;&amp; npm install &amp;&amp; npm run dev</code><br>
+    Docker: <code>docker build --build-arg RUNTIME=alpine|slim|fips -t myservice .</code>
+  </p>
+</div>
+
+<!-- ═══ PILLAR 2: FRAMEWORKS & SERVICES ═══ -->
+<div class="pillar-section">
+  <div class="pillar-header">
+    <span class="pillar-num">Pillar 2</span>
+    <span class="pillar-title">Frameworks &amp; Services</span>
+    <span class="pillar-desc">Start here to pick a framework or check implementation status.</span>
+  </div>
+  <div class="cards-grid">
+    <a href="01-framework-catalog.html" class="doc-card">
+      <div class="doc-card-num">Doc 01</div>
+      <div class="doc-card-title">Framework Catalog</div>
+      <div class="doc-card-covers">106 frameworks across 30 categories. Frontend, mobile, backend, edge, protocol services. Every framework compared on license, maturity, performance, security posture, and tradeoff vs closest alternative.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Picking a framework for a new service. Comparing frameworks in the same language group.</div>
+    </a>
+    <a href="17-feature-matrix.html" class="doc-card">
+      <div class="doc-card-num">Doc 17</div>
+      <div class="doc-card-title">Feature Axis Matrix</div>
+      <div class="doc-card-covers">All 7 build axes (RUNTIME, PKG_MANAGER, BUILD_TOOL, COMPLIANCE, OBSERVABILITY, AUTH, ORM) × all 30 service groups. Which axes apply to which service type. Implementation status per row. Tier 1 (maintained) vs Tier 2 (stable) highlighted.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Deciding which axis to implement next. Checking if a specific axis applies to your service type.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ PILLAR 3: BUILD & RUNTIME ═══ -->
+<div class="pillar-section">
+  <div class="pillar-header">
+    <span class="pillar-num">Pillar 3</span>
+    <span class="pillar-title">Build &amp; Runtime</span>
+    <span class="pillar-desc">Everything about container images — what to use, why, and how to write the FROM line.</span>
+  </div>
+  <div class="cards-grid">
+    <a href="09-linux-distros.html" class="doc-card">
+      <div class="doc-card-num">Doc 09</div>
+      <div class="doc-card-title">Linux Distro Catalog</div>
+      <div class="doc-card-covers">22 Linux distributions across 4 families. Every distro: libc, package manager, image size, exact FROM tag, CA certs status, default user, FIPS support, EOL date, when to use, when NOT to use, tradeoff vs closest alternative.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Writing a FROM line. Selecting a build image or runtime image for any service.</div>
+    </a>
+    <a href="11-dockerfile-catalog.html" class="doc-card">
+      <div class="doc-card-num">Doc 11</div>
+      <div class="doc-card-title">Dockerfile Catalog</div>
+      <div class="doc-card-covers">Dockerfile patterns for all 106 frameworks. Multi-stage build: ubuntu:24.04 builder → minimal runtime. ARG-driven package manager and runtime selection. Two named targets: runtime (alpine/slim default) and runtime-fips (UBI9 FIPS-validated). CI-only categories show GitHub Actions YAML.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Writing or copying a Dockerfile for any framework. Read after Doc 09 (distro selection) and Doc 10 (compliance).</div>
+    </a>
+    <a href="15-version-registry.html" class="doc-card">
+      <div class="doc-card-num">Doc 15</div>
+      <div class="doc-card-title">Version Registry</div>
+      <div class="doc-card-covers">Master version table for every item across all docs. Frameworks, CI tools, base images, Linux distros, compliance standards — each with current version, source URL, docs where used, last verified date, and review cadence.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Verifying or updating any version. Review base images every 30 days, everything else every 90 days.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ PILLAR 4: PIPELINE & TOOLS ═══ -->
+<div class="pillar-section">
+  <div class="pillar-header">
+    <span class="pillar-num">Pillar 4</span>
+    <span class="pillar-title">Pipeline &amp; Tools</span>
+    <span class="pillar-desc">The 6-phase CI/CD pipeline — what runs, when, why, and which tool to use for each stage.</span>
+  </div>
+  <div class="cards-grid">
+    <a href="02-pipeline-schema.html" class="doc-card">
+      <div class="doc-card-num">Doc 02</div>
+      <div class="doc-card-title">Pipeline Schema</div>
+      <div class="doc-card-covers">The full pipeline shape. 6 phases (Bootstrap → Local Dev → PR Gate → Main Build → Registry → Promotions), 44 stages, 4 environments. Phase trigger conditions, stage outputs, parallel stage groups. Why 6 phases and what each phase boundary protects.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> First doc to read. Understanding what runs when and in what order. Adding a new stage.</div>
+    </a>
+    <a href="03-stage-types.html" class="doc-card">
+      <div class="doc-card-num">Doc 03</div>
+      <div class="doc-card-title">Stage Types</div>
+      <div class="doc-card-covers">44 stages classified as DevOps (16) or DevSecOps (28). DevOps failure = workflow problem, engineering team owns it, pipeline may retry. DevSecOps failure = security event, artifact does not ship, security team is notified.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Deciding who owns a failed stage. Understanding the difference between a workflow error and a security gate.</div>
+    </a>
+    <a href="04-tool-catalog.html" class="doc-card">
+      <div class="doc-card-num">Doc 04</div>
+      <div class="doc-card-title">Tool Catalog</div>
+      <div class="doc-card-covers">The selected tool for every pipeline stage. Per tool: version, license, what it detects, false positive rate, why it was chosen over the nearest alternative, exact CLI invocation, CI integration, mandatory vs conditional vs optional, and primary tradeoff.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Choosing a scanner, signer, or runner. Swapping one tool for another.</div>
+    </a>
+    <a href="13-pipeline-build-catalog.html" class="doc-card">
+      <div class="doc-card-num">Doc 13</div>
+      <div class="doc-card-title">Pipeline Build Catalog</div>
+      <div class="doc-card-covers">Full CI/CD pipeline for all 106 frameworks. Every stage across all 6 phases with language-specific commands. Compliance deltas for all 11 standards. Push format and OIDC auth for all 6 registries. Links to service code in services/. Ticket-ready format for Backstage/Jira.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Implementing the full CI/CD pipeline for any framework. Read after Docs 02, 09, 11.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ PILLAR 5: COMPLIANCE & SECURITY ═══ -->
+<div class="pillar-section">
+  <div class="pillar-header">
+    <span class="pillar-num">Pillar 5</span>
+    <span class="pillar-title">Compliance &amp; Security</span>
+    <span class="pillar-desc">Non-negotiable rules, distro-level compliance matrices, and per-standard Dockerfile deltas.</span>
+  </div>
+  <div class="cards-grid">
+    <a href="05-invariants.html" class="doc-card">
+      <div class="doc-card-num">Doc 05</div>
+      <div class="doc-card-title">Invariants</div>
+      <div class="doc-card-covers">25 conditions that must always hold. Violation = build stops or artifact does not ship. 12 Security invariants, 5 Compliance invariants, 8 Process invariants. Every invariant: what it enforces, what triggers a violation, what the system does when violated.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Adding a stage or changing stage order. Verifying a new tool does not break ordering rules.</div>
+    </a>
+    <a href="10-linux-compliance.html" class="doc-card">
+      <div class="doc-card-num">Doc 10</div>
+      <div class="doc-card-title">Linux Compliance Matrices</div>
+      <div class="doc-card-covers">5 matrices for all 22 distros: compliance readiness (11 standards), industry vertical fit (16 verticals), build-runner compatibility (30 framework categories), runtime output compatibility (12 output types), multi-stage Dockerfile pairings (build image + runtime image per category).</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Picking the right distro for a compliance requirement. Read after Doc 09.</div>
+    </a>
+    <a href="12-compliance-variations.html" class="doc-card">
+      <div class="doc-card-num">Doc 12</div>
+      <div class="doc-card-title">Compliance Variations</div>
+      <div class="doc-card-covers">How 11 compliance standards (FIPS, PCI DSS, HIPAA, FedRAMP, CMMC, SOC 2, SOX, GDPR, PIPEDA, NERC CIP, ISO 27001) change a Dockerfile. Additive delta model: base Dockerfile from Doc 11 + compliance layer. 10 industry profiles mapped to applicable standards. Canada-specific: OSFI B-10, FINTRAC, PHIPA, ITSG-33.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Applying compliance requirements to a container image. Read after Doc 11.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ PILLAR 6: INDUSTRY VERTICALS ═══ -->
+<div class="pillar-section">
+  <div class="pillar-header">
+    <span class="pillar-num">Pillar 6</span>
+    <span class="pillar-title">Industry Verticals</span>
+    <span class="pillar-desc">Every regulated industry in the US and Canada — compliance, employers, systems, entry requirements.</span>
+  </div>
+  <div class="cards-grid">
+    <a href="06-industry-schema.html" class="doc-card">
+      <div class="doc-card-num">Doc 06</div>
+      <div class="doc-card-title">US Industry Schema</div>
+      <div class="doc-card-covers">74 US industries across 16 verticals. Per industry: mandatory and optional compliance standards, regulatory body, data sensitivity, pipeline stages affected, framework notes, security requirements, audit requirements.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Adapting the pipeline for a US regulated industry.</div>
+    </a>
+    <a href="07-canada-schema.html" class="doc-card">
+      <div class="doc-card-num">Doc 07</div>
+      <div class="doc-card-title">Canada Industry Schema</div>
+      <div class="doc-card-covers">73 Canadian industries with provincial regulators, PIPEDA / OSFI / FINTRAC compliance, OCAP® data sovereignty, Protected B classification, and GC PBMM notes. 13 provinces/territories. 14 major tech hubs.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Adapting the pipeline for a Canadian regulated industry.</div>
+    </a>
+    <a href="08-canada-market.html" class="doc-card">
+      <div class="doc-card-num">Doc 08</div>
+      <div class="doc-card-title">Canada Market Navigation</div>
+      <div class="doc-card-covers">73 Canadian industries with market data: employer tier, demand direction, wage band, entry difficulty. City × vertical heatmap. Certification ROI. NOC codes. Express Entry CRS cut-offs. PNP streams per province.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Choosing a target industry, city, or immigration route in Canada.</div>
+    </a>
+    <a href="14-canada-industry-catalog.html" class="doc-card">
+      <div class="doc-card-num">Doc 14</div>
+      <div class="doc-card-title">Canada Industry Catalog</div>
+      <div class="doc-card-covers">Developer intelligence for all 73 Canadian industries. Per industry: named systems built in Canada, project types, employers by province, tech stack signals, compliance frameworks, clearance requirements, hiring patterns.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Targeting a specific Canadian industry for a role, consulting engagement, or product.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ PILLAR 7: OPERATIONS ═══ -->
+<div class="pillar-section">
+  <div class="pillar-header">
+    <span class="pillar-num">Pillar 7</span>
+    <span class="pillar-title">Operations</span>
+    <span class="pillar-desc">How to maintain this platform — adding docs, updating versions, keeping everything in sync.</span>
+  </div>
+  <div class="cards-grid">
+    <a href="16-maintainability-runbook.html" class="doc-card">
+      <div class="doc-card-num">Doc 16</div>
+      <div class="doc-card-title">Maintainability Runbook</div>
+      <div class="doc-card-covers">Step-by-step checklists for every maintenance task: adding a new doc, updating a version, updating market data, keeping nav in sync. File map for all 17 docs. Commit style guide. Generation script reference.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Before adding a new doc, running a version update batch, or re-verifying any data.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ GUIDES: KNOWLEDGE TO PRODUCTION ═══ -->
+<div class="pillar-section">
+  <div class="pillar-header">
+    <span class="pillar-num">Guides</span>
+    <span class="pillar-title">Knowledge to Production</span>
+    <span class="pillar-desc">From zero to full platform maintainability. Run, build, deploy, and debug.</span>
+  </div>
+  <div class="cards-grid">
+    <a href="00-getting-started.html" class="doc-card">
+      <div class="doc-card-num">00 GUIDE</div>
+      <div class="doc-card-title">Getting Started</div>
+      <div class="doc-card-covers">First-run orientation: what this platform is, what each pillar covers, and the fastest path to a working local environment.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> First time opening this platform or onboarding a new team member.</div>
+    </a>
+    <a href="20-local-dev.html" class="doc-card">
+      <div class="doc-card-num">20 GUIDE</div>
+      <div class="doc-card-title">Local Dev</div>
+      <div class="doc-card-covers">Everything needed to run the platform on a local machine: prerequisites, env setup, running services, and verifying they work.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Setting up a dev environment or diagnosing a local run failure.</div>
+    </a>
+    <a href="21-build-axes.html" class="doc-card">
+      <div class="doc-card-num">21 GUIDE</div>
+      <div class="doc-card-title">Build Axes</div>
+      <div class="doc-card-covers">How each service is built: language, framework, build tool, output artifact. The dimensions that determine how a service gets packaged and shipped.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Adding a service, changing a build tool, or tracing a build failure.</div>
+    </a>
+    <a href="22-add-a-service.html" class="doc-card">
+      <div class="doc-card-num">22 GUIDE</div>
+      <div class="doc-card-title">Add a Service</div>
+      <div class="doc-card-covers">Step-by-step checklist for introducing a new service: repo structure, pipeline registration, schema entry, nav update, and verification.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Before creating any new service in this platform.</div>
+    </a>
+    <a href="23-deployment.html" class="doc-card">
+      <div class="doc-card-num">23 GUIDE</div>
+      <div class="doc-card-title">Deployment</div>
+      <div class="doc-card-covers">How services move from build to running: image promotion, environment gates, rollout commands, and rollback procedure.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Releasing a change, promoting an image, or recovering from a failed rollout.</div>
+    </a>
+    <a href="24-debugging.html" class="doc-card">
+      <div class="doc-card-num">24 GUIDE</div>
+      <div class="doc-card-title">Debugging</div>
+      <div class="doc-card-covers">Systematic diagnosis playbook: pipeline failures, pod crashes, config drift, and network errors. Includes log commands and known failure patterns.</div>
+      <div class="doc-card-when"><strong>When to read:</strong> Something is broken and you need a starting point.</div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ USE-CASE PATHS ═══ -->
+<h2>Use-case reading paths</h2>
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Every path below is self-contained. You do not need to read all 17 docs to act on your use case.</p>
+
+<div class="sp-list">
+
+  <div class="sp-block">
+    <div class="sp-label">New service — pick framework, write Dockerfile, set up pipeline</div>
+    <div class="sp-chain">
+      <a href="01-framework-catalog.html" class="sp-node">01 Frameworks</a><span class="sp-arr">→</span>
+      <a href="09-linux-distros.html" class="sp-node">09 Distros</a><span class="sp-arr">→</span>
+      <a href="11-dockerfile-catalog.html" class="sp-node">11 Dockerfiles</a><span class="sp-arr">→</span>
+      <a href="13-pipeline-build-catalog.html" class="sp-node">13 Pipeline</a><span class="sp-arr">→</span>
+      <span class="sp-node" style="background:#dafbe1;color:var(--green);border-color:#a0e0b0">services/XX/</span>
+    </div>
+    <div class="sp-hint">01 narrows framework choices by language. 09 picks the base image. 11 gives the copy-paste Dockerfile. 13 gives every stage command. Then clone the matching service starter from services/ and build on top.</div>
+  </div>
+
+  <div class="sp-block">
+    <div class="sp-label">Canadian regulated industry — fintech, healthcare, or government</div>
+    <div class="sp-chain">
+      <a href="08-canada-market.html" class="sp-node">08 CA Market</a><span class="sp-arr">→</span>
+      <a href="14-canada-industry-catalog.html" class="sp-node">14 CA Industries</a><span class="sp-arr">→</span>
+      <a href="07-canada-schema.html" class="sp-node">07 CA Schema</a><span class="sp-arr">→</span>
+      <a href="10-linux-compliance.html" class="sp-node">10 Compliance</a><span class="sp-arr">→</span>
+      <a href="12-compliance-variations.html" class="sp-node">12 Compliance layers</a><span class="sp-arr">→</span>
+      <a href="13-pipeline-build-catalog.html" class="sp-node">13 Pipeline</a>
+    </div>
+    <div class="sp-hint">Start with 08 to pick hub and province. Then 14 to identify which systems get built and which regulations apply. 12 adds the Dockerfile compliance deltas (PIPEDA, OSFI B-10, FINTRAC, PHIPA) on top of the base Dockerfile from 11.</div>
+  </div>
+
+  <div class="sp-block">
+    <div class="sp-label">FIPS 140-2 or FedRAMP compliance — any framework</div>
+    <div class="sp-chain">
+      <a href="10-linux-compliance.html" class="sp-node">10 Distro compliance</a><span class="sp-arr">→</span>
+      <a href="11-dockerfile-catalog.html" class="sp-node">11 runtime-fips target</a><span class="sp-arr">→</span>
+      <a href="12-compliance-variations.html" class="sp-node">12 FIPS delta</a><span class="sp-arr">→</span>
+      <a href="05-invariants.html" class="sp-node">05 Invariants</a>
+    </div>
+    <div class="sp-hint">10 shows which distros have FIPS 140-2 validated modules. 11 shows the runtime-fips named target — uses UBI9 (Red Hat Universal Base Image v9) instead of alpine. 12 shows the full Dockerfile delta. Every Dockerfile in services/ already has RUNTIME=fips wired.</div>
+  </div>
+
+  <div class="sp-block">
+    <div class="sp-label">Protocol service — gRPC, GraphQL, or WebSocket</div>
+    <div class="sp-chain">
+      <a href="01-framework-catalog.html" class="sp-node">01 #c28–30</a><span class="sp-arr">→</span>
+      <a href="15-version-registry.html" class="sp-node">15 #protocols</a><span class="sp-arr">→</span>
+      <a href="11-dockerfile-catalog.html" class="sp-node">11 #cat-grpc</a><span class="sp-arr">→</span>
+      <a href="13-pipeline-build-catalog.html" class="sp-node">13 #grpc</a><span class="sp-arr">→</span>
+      <span class="sp-node" style="background:#dafbe1;color:var(--green);border-color:#a0e0b0">services/28–30/</span>
+    </div>
+    <div class="sp-hint">All 3 protocol groups (28 gRPC · 29 GraphQL · 30 WebSocket) have anchor-linked sections in 01, 11, 13, and 15. Use the anchor links to jump directly. Each language variant has its own service starter in services/.</div>
+  </div>
+
+  <div class="sp-block">
+    <div class="sp-label">Federal government Canada — ITSG-33, Protected B, GCKey</div>
+    <div class="sp-chain">
+      <a href="14-canada-industry-catalog.html" class="sp-node">14 #gov</a><span class="sp-arr">→</span>
+      <a href="07-canada-schema.html" class="sp-node">07 CA Industries</a><span class="sp-arr">→</span>
+      <a href="10-linux-compliance.html" class="sp-node">10 Compliance</a><span class="sp-arr">→</span>
+      <a href="12-compliance-variations.html" class="sp-node">12 ITSG-33 delta</a><span class="sp-arr">→</span>
+      <a href="05-invariants.html" class="sp-node">05 Invariants</a><span class="sp-arr">→</span>
+      <a href="13-pipeline-build-catalog.html" class="sp-node">13 Pipeline</a>
+    </div>
+    <div class="sp-hint">14 #gov covers GCKey, Protected B, WCAG 2.1 AA, Official Languages Act. Reliability Status clearance required for all federal roles. Secret clearance required for ~40% of federal IT positions.</div>
+  </div>
+
+  <div class="sp-block">
+    <div class="sp-label">Understanding the pipeline before building anything</div>
+    <div class="sp-chain">
+      <a href="02-pipeline-schema.html" class="sp-node">02 Schema</a><span class="sp-arr">→</span>
+      <a href="03-stage-types.html" class="sp-node">03 Stage types</a><span class="sp-arr">→</span>
+      <a href="04-tool-catalog.html" class="sp-node">04 Tools</a><span class="sp-arr">→</span>
+      <a href="05-invariants.html" class="sp-node">05 Invariants</a>
+    </div>
+    <div class="sp-hint">This is the foundational reading path. 02 gives the shape. 03 tells you who owns each failure. 04 tells you which tool to use at each stage. 05 tells you the rules you cannot violate. Every other doc assumes you have read these four.</div>
+  </div>
+
+</div>
+
+<!-- ═══ CROSS-DOC DEPENDENCIES ═══ -->
+<h2>Cross-doc dependencies</h2>
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:12px">These are informational links — each page below is still self-contained. Reading the upstream doc adds depth but is not required to act on the downstream doc.</p>
+
+<div class="dep-box">
+  <div class="dep-row">
+    <div class="dep-from"><a href="02-pipeline-schema.html">02 Pipeline Schema</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">defines the 6 phases and 44 stages referenced in 03, 04, 05, 13</div>
+  </div>
+  <div class="dep-row">
+    <div class="dep-from"><a href="03-stage-types.html">03 Stage Types</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">classification used by 04 (tool selection per stage type)</div>
+  </div>
+  <div class="dep-row">
+    <div class="dep-from"><a href="04-tool-catalog.html">04 Tool Catalog</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">deep-links to invariants in 05 (I-P3-1, I-P3-2, I-P3-4, I-P3-6)</div>
+  </div>
+  <div class="dep-row">
+    <div class="dep-from"><a href="09-linux-distros.html">09 Linux Distros</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">distro catalog used by 10 (compliance matrices) and 11 (Dockerfile FROM lines)</div>
+  </div>
+  <div class="dep-row">
+    <div class="dep-from"><a href="10-linux-compliance.html">10 Linux Compliance</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">compliance readiness matrix feeds 11 (Dockerfile choice) and 12 (compliance deltas)</div>
+  </div>
+  <div class="dep-row">
+    <div class="dep-from"><a href="11-dockerfile-catalog.html">11 Dockerfile Catalog</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">base Dockerfiles referenced by 12 (compliance layers are added on top)</div>
+  </div>
+  <div class="dep-row">
+    <div class="dep-from"><a href="07-canada-schema.html">07 Canada Schema</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">industry list and provincial regulators referenced by 08 (market data) and 14 (employer catalog)</div>
+  </div>
+  <div class="dep-row">
+    <div class="dep-from"><a href="08-canada-market.html">08 Canada Market</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">market-level data (wages, demand, NOC) combined with 14 (employer-level data) for full picture</div>
+  </div>
+  <div class="dep-row">
+    <div class="dep-from"><a href="15-version-registry.html">15 Version Registry</a></div>
+    <div class="dep-arrow">→</div>
+    <div class="dep-to">source of truth for all versions referenced across all 17 docs</div>
+  </div>
+</div>
+
+<!-- ═══ QUICK REFERENCE ═══ -->
+<h2>Quick reference — what to open for each question</h2>
+<table class="qr-table">
+  <thead><tr><th>Question</th><th>Open this</th></tr></thead>
+  <tbody>
+    <tr><td>Which framework should I use for a Python API?</td><td><a href="01-framework-catalog.html">01 — Framework Catalog</a> → category 15 Python</td></tr>
+    <tr><td>What base image should I use in my FROM line?</td><td><a href="09-linux-distros.html">09 — Linux Distros</a></td></tr>
+    <tr><td>Copy a Dockerfile for my framework</td><td><a href="11-dockerfile-catalog.html">11 — Dockerfile Catalog</a></td></tr>
+    <tr><td>What stages run in a PR gate?</td><td><a href="02-pipeline-schema.html">02 — Pipeline Schema</a> → Phase 2</td></tr>
+    <tr><td>Which tool scans for secrets in CI?</td><td><a href="04-tool-catalog.html">04 — Tool Catalog</a> → Phase 1 secret scan</td></tr>
+    <tr><td>Does alpine support FIPS 140-2?</td><td><a href="10-linux-compliance.html">10 — Linux Compliance</a> → Matrix 1</td></tr>
+    <tr><td>What does HIPAA require in my Dockerfile?</td><td><a href="12-compliance-variations.html">12 — Compliance Variations</a> → HIPAA delta</td></tr>
+    <tr><td>What compliance applies to Canadian fintech?</td><td><a href="14-canada-industry-catalog.html">14 — Canada Industry Catalog</a> → Finance vertical</td></tr>
+    <tr><td>What is the current version of node:22-alpine?</td><td><a href="15-version-registry.html">15 — Version Registry</a> → Base images</td></tr>
+    <tr><td>Clone a runnable Express service starter</td><td><a href="https://github.com/yarova-ca/pipeline-studio/tree/main/services/14-express">services/14-express/</a></td></tr>
+    <tr><td>What rules can never be violated in the pipeline?</td><td><a href="05-invariants.html">05 — Invariants</a></td></tr>
+    <tr><td>How do I add a new doc to this repo?</td><td><a href="16-maintainability-runbook.html">16 — Maintainability Runbook</a></td></tr>
+  </tbody>
+</table>
+
+</main>
+<script>
+function selectPath(type) {
+  document.querySelectorAll('.reading-path').forEach(el => { el.style.display = 'none' });
+  document.querySelectorAll('.reader-card').forEach(el => { el.style.borderColor = '' });
+  var el = document.getElementById('path-' + type);
+  if (el) {
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+</script>
+</body>
+</html>

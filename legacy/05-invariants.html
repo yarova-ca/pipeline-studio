@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Pipeline Invariants — 25 conditions across Phase 0 through Phase 3, Registry, and Promotions. 12 Security, 5 Compliance, 8 Process controls.">
+<title>Pipeline Invariants — Pipeline Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d1d9e0;--text:#24292f;--text-dim:#57606a;--text-head:#0d1117;
+  --blue:#0969da;--green:#1a7f37;--amber:#9a6700;--purple:#8250df;--red:#cf222e;
+  --sidebar-w:220px;
+  --p0-color:#8250df;--p1-color:#1a7f37;--p2-color:#9a6700;--p3-color:#0969da;--reg-color:#cf222e;--promo-color:#1a7f37;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:var(--text);background:var(--bg);display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 40px;font-size:12px}
+.nav-logo{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.nav-section{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;padding:8px 16px 3px}
+nav a{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.p0{border-left-color:var(--p0-color)}
+nav a.p1{border-left-color:var(--p1-color)}
+nav a.p2{border-left-color:var(--p2-color)}
+nav a.p3{border-left-color:var(--p3-color)}
+nav a.reg{border-left-color:var(--reg-color)}
+nav a.promo{border-left-color:var(--promo-color)}
+main{flex:1;min-width:0;padding:40px 52px 100px}
+.page-title{font-size:22px;font-weight:700;color:var(--text-head);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.page-meta{font-size:12px;color:var(--text-dim);margin-bottom:28px}
+/* Section legend */
+.section-legend{background:#f0f6ff;border:1px solid #b6d7f5;border-radius:7px;padding:12px 16px;margin:20px 0 28px;font-size:12px;line-height:1.6}
+.section-legend strong{color:var(--text-head)}
+.leg-row{margin-top:4px;color:var(--text)}
+.leg-insight{margin-top:6px;color:var(--text-dim);font-style:italic}
+.section-legend details{margin-top:12px;border-top:1px solid #c8dff5;padding-top:10px}
+.section-legend summary{cursor:pointer;font-size:11px;color:var(--blue);font-weight:600;list-style:none;user-select:none;display:flex;align-items:center;gap:6px}
+.section-legend summary::-webkit-details-marker{display:none}
+.section-legend summary::before{content:'▶';font-size:9px;display:inline-block;color:var(--blue)}
+.section-legend details[open] summary::before{content:'▼'}
+.section-legend summary .sum-label{flex:1}
+.expand-content{margin-top:10px;font-size:11px;line-height:1.7;color:var(--text)}
+.expand-content p{margin-bottom:6px}
+/* Headings */
+h2{font-size:15px;font-weight:600;color:var(--text-head);margin:48px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.phase-sub{font-size:11px;color:var(--text-dim);margin-bottom:16px;font-style:italic}
+/* Summary counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;color:var(--text-head);line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.count-chip.total .chip-num{color:var(--text-head)}
+.count-chip.sec-chip{border-left:3px solid var(--red)}
+.count-chip.sec-chip .chip-num{color:var(--red)}
+.count-chip.comp-chip{border-left:3px solid var(--blue)}
+.count-chip.comp-chip .chip-num{color:var(--blue)}
+.count-chip.proc-chip{border-left:3px solid var(--text-dim)}
+.count-chip.proc-chip .chip-num{color:var(--text-dim)}
+/* Tooltip hint on column headers */
+th[title]{cursor:help;border-bottom:2px dotted var(--blue)}
+/* Table wrapper */
+.tbl-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
+.tbl-wrap.p0{border-top:3px solid var(--p0-color)}
+.tbl-wrap.p1{border-top:3px solid var(--p1-color)}
+.tbl-wrap.p2{border-top:3px solid var(--p2-color)}
+.tbl-wrap.p3{border-top:3px solid var(--p3-color)}
+.tbl-wrap.reg{border-top:3px solid var(--reg-color)}
+.tbl-wrap.promo{border-top:3px solid var(--promo-color)}
+/* Invariant table */
+.tbl-scroll{overflow-x:auto}
+.inv-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:960px}
+.inv-table thead tr{background:var(--bg2)}
+.inv-table th{text-align:left;padding:7px 14px;font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);white-space:nowrap}
+.inv-table td{padding:8px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.inv-table tbody tr:hover{background:var(--bg2)}
+.inv-table tbody tr:last-child td{border-bottom:none}
+/* Column widths */
+.col-id{min-width:90px;font-family:monospace;font-size:11.5px;color:var(--text-dim);font-weight:600;white-space:nowrap}
+.col-stage{min-width:160px;font-weight:500}
+.col-inv{min-width:260px}
+.col-viol{min-width:190px;color:var(--text-dim);font-size:12px}
+.col-enf{min-width:200px;font-size:12px}
+.col-class{min-width:90px}
+/* Control class badges */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge .bdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.badge-sec{background:#fff0f0;color:#a40000}
+.badge-sec .bdot{background:#cf222e}
+.badge-comp{background:#dbeeff;color:#0550ae}
+.badge-comp .bdot{background:#0969da}
+.badge-proc{background:#f0f0f5;color:#3a3a5c}
+.badge-proc .bdot{background:#57606a}
+/* Table footer */
+.tbl-foot{padding:7px 14px;font-size:11px;color:var(--text-dim);background:var(--bg2);border-top:2px solid var(--border);display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+/* Summary table */
+.summary-wrap{margin-top:44px}
+.summary-tbl{width:100%;border-collapse:collapse;font-size:12.5px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.summary-tbl th{text-align:left;padding:7px 16px;font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;background:var(--bg2);border-bottom:2px solid var(--border)}
+.summary-tbl td{padding:7px 16px;border-bottom:1px solid var(--border)}
+.summary-tbl tbody tr:last-child td{border-bottom:none;font-weight:700;background:var(--bg2);color:var(--text-head)}
+.summary-tbl .num-cell{text-align:center;font-weight:600}
+.summary-tbl .num-sec{color:var(--red)}
+.summary-tbl .num-comp{color:var(--blue)}
+.summary-tbl .num-proc{color:var(--text-dim)}
+/* Misc */
+code{font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:monospace}
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.nav-top{display:block;padding:4px 16px;color:var(--text-dim);text-decoration:none;font-size:10px;opacity:.6;margin-top:12px;border-left:2px solid transparent}
+.nav-top:hover{color:var(--blue);opacity:1}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#f0f6fc;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#c5a7f5;
+  }
+  .section-legend{background:#1c2a3a;border-color:#2d4a6a}
+  .section-legend details{border-top-color:#2d4a6a}
+  .badge-sec{background:#2d0a0a;color:#ff7b7b}
+  .badge-comp{background:#0d2744;color:#79c0ff}
+  .badge-proc{background:#1c1c28;color:#8b949e}
+  code{background:#1c2028;border-color:#30363d}
+}
+@media print{
+  .skip-link,nav{display:none}
+  main{padding:20px}
+  .section-legend{border:1px solid #ccc;background:none}
+  h2{margin-top:24px}
+  .tbl-wrap{break-inside:avoid}
+  .badge{color-adjust:exact;-webkit-print-color-adjust:exact}
+}
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+
+/* ── Dual-audience sections ── */
+.audience-card{border-radius:8px;padding:16px;font-size:12px}
+.audience-new{background:#e8f4fd;border:1px solid #90caf9}
+.audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.audience-maintainer{background:#f1f8e9;border:1px solid #a5d6a7}
+.audience-maintainer .audience-label{font-weight:700;color:#2e7d32;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.qr-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.qr-table td{padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.08);vertical-align:top}
+.qr-table tr:last-child td{border-bottom:none}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
+.checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+@media(prefers-color-scheme:dark){
+  .audience-new{background:#0d2744;border-color:#1565c0}
+  .audience-new .audience-label{color:#90caf9}
+  .audience-maintainer{background:#1b2e1b;border-color:#2e7d32}
+  .audience-maintainer .audience-label{color:#a5d6a7}
+  .qr-table td{border-bottom-color:rgba(255,255,255,.08)}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">⌂ Hub</a>
+  <details>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+  </details>
+  <details>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details open>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link" aria-current="page">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details>
+    <summary>Maintaining<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details>
+    <summary>GUIDES <span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 — Getting Started</a>
+    <a href="20-local-dev.html" class="nav-link">20 — Local Dev</a>
+    <a href="21-build-axes.html" class="nav-link">21 — Build Axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 — Add a Service</a>
+    <a href="23-deployment.html" class="nav-link">23 — Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 — Debugging</a>
+  </details>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+
+<main id="main-content">
+<div class="page-header">
+  <div class="page-title">Invariants</div>
+  <div class="page-covers"><strong>What this covers:</strong> 25 non-negotiable conditions — 12 Security, 5 Compliance, 8 Process. Violation stops the build or prevents the artifact from shipping.</div>
+  <div class="page-when"><strong>When to read:</strong> Adding a new pipeline stage. Changing stage order. Verifying a tool does not break ordering rules.</div>
+  <div class="page-pillar">Pillar 5 — Compliance &amp; Security &nbsp;·&nbsp; Related: <a href="04-tool-catalog.html">04 Tool catalog</a> &nbsp;·&nbsp; <a href="02-pipeline-schema.html">02 Pipeline schema</a></div>
+</div>
+
+<div class="decision-block">
+  <div class="decision-chosen">Decision: invariants are hardcoded rules — violation stops the pipeline</div>
+  <div class="decision-rejected">Rejected: guidelines — teams read them, agree with them, then skip them at 4pm on a Friday when a release is blocked. Every "guideline" becomes optional under deadline pressure. Every "optional" eventually becomes ignored.</div>
+  <div class="decision-tradeoff">Accepted tradeoff: slower initial setup. Teams must configure scanners and signing before their first pipeline run. Zero drift over time — the pipeline cannot silently degrade.</div>
+</div>
+
+<div class="failure-block">
+  <div><strong>If Invariant <a href="#I-P2-2">I-P2-2</a> is violated (SAST runs after Build):</strong></div>
+  <div><strong>Trigger:</strong> Pipeline YAML places the CodeQL step after the docker build step in the same job or later job.</div>
+  <div><strong>System:</strong> Pipeline linter (checkov on the workflow file) fails at Phase 0 Bootstrap. The pipeline cannot start.</div>
+  <div><strong>User sees:</strong> Bootstrap check "Pipeline ordering" fails — "SAST must precede Build. Found: Build at step 3, SAST at step 5."</div>
+  <div><strong>User can:</strong> Reorder the steps so SAST runs before the docker build command and re-push the workflow file.</div>
+</div>
+
+<div class="failure-block">
+  <div><strong>If Invariant <a href="#I-P0-4">I-P0-4</a> is violated (unsigned image reaches registry):</strong></div>
+  <div><strong>Trigger:</strong> An image is pushed to the registry without a cosign signature attached (sign step missing or failed silently).</div>
+  <div><strong>System:</strong> Kyverno admission policy blocks deployment. The pod spec is rejected at the Kubernetes API server. No container starts.</div>
+  <div><strong>User sees:</strong> kubectl apply returns — "admission webhook denied the request: image signature verification failed."</div>
+  <div><strong>User can:</strong> Re-run Phase 3 with the sign step present and successful, then re-push the image and re-apply the manifest.</div>
+</div>
+
+<div class="page-meta">25 conditions that must always hold. Violation = pipeline broken — build must stop or never reach the next stage. &nbsp;·&nbsp; verified 2026-05-26</div>
+
+<!-- Summary counts bar -->
+<div id="summary" class="counts-bar">
+  <div class="count-chip total">
+    <div class="chip-num">25</div>
+    <div class="chip-label">Total<br>invariants</div>
+  </div>
+  <div class="count-chip sec-chip">
+    <div class="chip-num">12</div>
+    <div class="chip-label">Security<br>controls</div>
+  </div>
+  <div class="count-chip comp-chip">
+    <div class="chip-num">5</div>
+    <div class="chip-label">Compliance<br>controls</div>
+  </div>
+  <div class="count-chip proc-chip">
+    <div class="chip-num">8</div>
+    <div class="chip-label">Process<br>controls</div>
+  </div>
+</div>
+
+<!-- How to read legend -->
+<div id="legend" class="section-legend">
+  <strong>What an invariant is:</strong> a condition that is always true at the named stage. No exception. No partial pass.<br>
+  <span class="leg-row"><strong>If violated</strong> — what breaks downstream when this condition is not met.</span>
+  <span class="leg-row"><strong>Enforced by</strong> — the specific tool or mechanism that makes the condition hold.</span>
+  <span class="leg-row"><strong>Control class</strong> — category of the invariant:</span>
+  <span class="leg-row">&nbsp;&nbsp;<span class="badge badge-sec"><span class="bdot"></span>Security</span> — prevents an attack vector or credential exposure.</span>
+  <span class="leg-row">&nbsp;&nbsp;<span class="badge badge-comp"><span class="bdot"></span>Compliance</span> — required for supply chain attestation or audit trail.</span>
+  <span class="leg-row">&nbsp;&nbsp;<span class="badge badge-proc"><span class="bdot"></span>Process</span> — enforces workflow order or human review gate.</span>
+  <div class="leg-insight">When adding a new stage or changing stage order: check every invariant in the affected phase. A single ordering change can break multiple downstream invariants.</div>
+  <details>
+    <summary><span class="sum-label">Acronym definitions — terms used in this doc</span></summary>
+    <div class="expand-content">
+      <p><strong>SCA</strong> — Software Composition Analysis. Scans third-party dependencies for known CVEs.</p>
+      <p><strong>SAST</strong> — Static Application Security Testing. Scans source code for insecure patterns without running the code.</p>
+      <p><strong>DAST</strong> — Dynamic Application Security Testing. Runs the application and probes it for vulnerabilities over HTTP.</p>
+      <p><strong>IaC</strong> — Infrastructure as Code. Terraform, Helm, Kubernetes manifests, CloudFormation, etc.</p>
+      <p><strong>SBOM</strong> — Software Bill of Materials. Machine-readable list of every component in the build artifact.</p>
+      <p><strong>SLSA</strong> — Supply-chain Levels for Software Artifacts. Provenance attestation proving the artifact was built by a trusted pipeline from a known source.</p>
+      <p><strong>OIDC</strong> — OpenID Connect. Used for keyless CI authentication — each CI job gets a short-lived token, no stored credentials.</p>
+    </div>
+  </details>
+  <details>
+    <summary><span class="sum-label">Column definitions — all 6 columns</span></summary>
+    <div class="expand-content">
+      <p><strong>ID</strong> — unique identifier. Format: <code>I-&lt;phase&gt;-&lt;n&gt;</code>. Example: <code>I-P3-1</code> = Phase 3, first invariant.</p>
+      <p><strong>Stage</strong> — the pipeline stage where this invariant is enforced.</p>
+      <p><strong>Invariant</strong> — the exact condition that must always hold. Written as a positive statement.</p>
+      <p><strong>If violated</strong> — what breaks downstream. Downstream = anything after this stage in the same pipeline run or in a later environment.</p>
+      <p><strong>Enforced by</strong> — the tool, CI mechanism, or policy that enforces the invariant. If the enforcer fails or is misconfigured, the invariant is not guaranteed.</p>
+      <p><strong>Control class</strong> — Security / Compliance / Process. See legend above for definitions.</p>
+    </div>
+  </details>
+</div>
+
+<!-- Phase 0 -->
+<h2 id="p0">Phase 0 — Bootstrap</h2>
+<div class="phase-sub">5 invariants — 3 Security, 0 Compliance, 2 Process</div>
+<div class="tbl-wrap p0">
+  <div class="tbl-scroll">
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="I-P0-1">
+          <td class="col-id">I-P0-1</td>
+          <td class="col-stage">Branch protection</td>
+          <td class="col-inv">No direct push to main ever</td>
+          <td class="col-viol">Unreviewed code ships</td>
+          <td class="col-enf">GitHub branch protection rules</td>
+          <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
+        </tr>
+        <tr id="I-P0-2">
+          <td class="col-id">I-P0-2</td>
+          <td class="col-stage">OIDC trust</td>
+          <td class="col-inv">CI uses OIDC tokens — no long-lived secrets stored in CI</td>
+          <td class="col-viol">Credential leak if repo compromised</td>
+          <td class="col-enf">GitHub OIDC + cloud IAM</td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-P0-3">
+          <td class="col-id">I-P0-3</td>
+          <td class="col-stage">Registry access</td>
+          <td class="col-inv">Push scoped to exact repo + branch only</td>
+          <td class="col-viol">Any branch can push any image</td>
+          <td class="col-enf">Registry policy + OIDC role binding</td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-P0-4">
+          <td class="col-id">I-P0-4</td>
+          <td class="col-stage">Kyverno admission policy</td>
+          <td class="col-inv">Cluster rejects any image not signed by the pipeline</td>
+          <td class="col-viol">Unsigned images run in production</td>
+          <td class="col-enf">Kyverno ClusterPolicy</td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-P0-5">
+          <td class="col-id">I-P0-5</td>
+          <td class="col-stage">Dependency update automation</td>
+          <td class="col-inv">All dependency updates arrive as PRs — never manual edits</td>
+          <td class="col-viol">Drift accumulates silently</td>
+          <td class="col-enf">Renovate / Dependabot config</td>
+          <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">5 invariants &nbsp;·&nbsp; <span style="color:var(--red)">3 Security</span> &nbsp;·&nbsp; 2 Process</div>
+</div>
+
+<!-- Phase 1 -->
+<h2 id="p1">Phase 1 — Local Dev</h2>
+<div class="phase-sub">2 invariants — 1 Security, 0 Compliance, 1 Process</div>
+<div class="tbl-wrap p1">
+  <div class="tbl-scroll">
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="I-P1-1">
+          <td class="col-id">I-P1-1</td>
+          <td class="col-stage">Local secret scan</td>
+          <td class="col-inv">A commit containing a detected secret is blocked before it leaves the developer machine</td>
+          <td class="col-viol">Secret reaches remote, requires rotation</td>
+          <td class="col-enf">gitleaks pre-commit hook</td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-P1-2">
+          <td class="col-id">I-P1-2</td>
+          <td class="col-stage">Pre-commit hooks</td>
+          <td class="col-inv">Dockerfile linting (hadolint) and IaC checks (checkov) block commit on failure</td>
+          <td class="col-viol">Bad Dockerfile or IaC ships to PR</td>
+          <td class="col-enf">pre-commit framework + hadolint + checkov</td>
+          <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">2 invariants &nbsp;·&nbsp; <span style="color:var(--red)">1 Security</span> &nbsp;·&nbsp; 1 Process</div>
+</div>
+
+<!-- Phase 2 -->
+<h2 id="p2">Phase 2 — PR Gate</h2>
+<div class="phase-sub">5 invariants — 3 Security, 1 Compliance, 1 Process</div>
+<div class="tbl-wrap p2">
+  <div class="tbl-scroll">
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="I-P2-1">
+          <td class="col-id">I-P2-1</td>
+          <td class="col-stage">Build (no push)</td>
+          <td class="col-inv">Image is built to tarball only — no push to registry ever</td>
+          <td class="col-viol">Unscanned image in registry</td>
+          <td class="col-enf">Docker build with <code>--output type=tar</code> or no <code>--push</code></td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-P2-2">
+          <td class="col-id">I-P2-2</td>
+          <td class="col-stage">SCA / SAST / License / IaC / Secrets</td>
+          <td class="col-inv">All five scans complete before build step begins</td>
+          <td class="col-viol">Build promotes code that fails a scan</td>
+          <td class="col-enf">CI job ordering — scans in parallel, build depends on all five</td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-P2-3">
+          <td class="col-id">I-P2-3</td>
+          <td class="col-stage">Container scan</td>
+          <td class="col-inv">Trivy scans the tarball — not a registry image</td>
+          <td class="col-viol">A pushed image is scanned; PR gate is bypassed</td>
+          <td class="col-enf">Trivy <code>--input tarball.tar</code></td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-P2-4">
+          <td class="col-id">I-P2-4</td>
+          <td class="col-stage">PR review</td>
+          <td class="col-inv">At least one human approval required before merge</td>
+          <td class="col-viol">No human review of code changes</td>
+          <td class="col-enf">GitHub branch protection — required reviewers</td>
+          <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
+        </tr>
+        <tr id="I-P2-5">
+          <td class="col-id">I-P2-5</td>
+          <td class="col-stage">SBOM generate</td>
+          <td class="col-inv">SBOM is generated from the same tarball scanned by Trivy</td>
+          <td class="col-viol">SBOM and scan diverge — different artifact</td>
+          <td class="col-enf">SBOM tool points at the same tarball</td>
+          <td class="col-class"><span class="badge badge-comp"><span class="bdot"></span>Compliance</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">5 invariants &nbsp;·&nbsp; <span style="color:var(--red)">3 Security</span> &nbsp;·&nbsp; <span style="color:var(--blue)">1 Compliance</span> &nbsp;·&nbsp; 1 Process</div>
+</div>
+
+<!-- Phase 3 -->
+<h2 id="p3">Phase 3 — Main Build</h2>
+<div class="phase-sub">6 invariants — 2 Security, 2 Compliance, 2 Process — these define the ordering constraints that all other docs reference</div>
+<div class="tbl-wrap p3">
+  <div class="tbl-scroll">
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="I-P3-1">
+          <td class="col-id">I-P3-1</td>
+          <td class="col-stage">Sign</td>
+          <td class="col-inv">Image is signed only after it is pushed and scanned — never before</td>
+          <td class="col-viol">Signature covers unscanned image</td>
+          <td class="col-enf">CI job ordering — sign depends on container scan</td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-P3-2">
+          <td class="col-id">I-P3-2</td>
+          <td class="col-stage">SBOM generate + attest</td>
+          <td class="col-inv">SBOM attestation is attached only after signing — never before</td>
+          <td class="col-viol">Attestation has no verified image to anchor to</td>
+          <td class="col-enf">CI job ordering — attest depends on sign</td>
+          <td class="col-class"><span class="badge badge-comp"><span class="bdot"></span>Compliance</span></td>
+        </tr>
+        <tr id="I-P3-3">
+          <td class="col-id">I-P3-3</td>
+          <td class="col-stage">Container scan</td>
+          <td class="col-inv">Trivy scans the registry image digest — not a tarball or tag</td>
+          <td class="col-viol">Scan and deployed image diverge</td>
+          <td class="col-enf">Trivy <code>--image registry/repo@sha256:...</code></td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-P3-4">
+          <td class="col-id">I-P3-4</td>
+          <td class="col-stage">SLSA provenance</td>
+          <td class="col-inv">SLSA provenance is generated only after image is signed</td>
+          <td class="col-viol">Provenance anchors to an unsigned image</td>
+          <td class="col-enf">CI job ordering — SLSA depends on sign</td>
+          <td class="col-class"><span class="badge badge-comp"><span class="bdot"></span>Compliance</span></td>
+        </tr>
+        <tr id="I-P3-5">
+          <td class="col-id">I-P3-5</td>
+          <td class="col-stage">Release tag</td>
+          <td class="col-inv">Semantic version tag applied before SBOM and SLSA generation</td>
+          <td class="col-viol">SBOM and SLSA reference untagged digest</td>
+          <td class="col-enf">CI job ordering — tag before attest and provenance</td>
+          <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
+        </tr>
+        <tr id="I-P3-6">
+          <td class="col-id">I-P3-6</td>
+          <td class="col-stage">Tests + Codecov</td>
+          <td class="col-inv">All tests pass before DAST runs</td>
+          <td class="col-viol">DAST runs against a broken application</td>
+          <td class="col-enf">CI job ordering — DAST depends on test success</td>
+          <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">6 invariants &nbsp;·&nbsp; <span style="color:var(--red)">2 Security</span> &nbsp;·&nbsp; <span style="color:var(--blue)">2 Compliance</span> &nbsp;·&nbsp; 2 Process</div>
+</div>
+
+<!-- Registry -->
+<h2 id="reg">Registry</h2>
+<div class="phase-sub">3 invariants — 1 Security, 2 Compliance, 0 Process — gate between build and any environment promotion</div>
+<div class="tbl-wrap reg">
+  <div class="tbl-scroll">
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="I-R-1">
+          <td class="col-id">I-R-1</td>
+          <td class="col-stage">Sign verify</td>
+          <td class="col-inv">No image is promoted from registry to any environment without cosign signature verification</td>
+          <td class="col-viol">Unsigned image runs in environment</td>
+          <td class="col-enf">cosign verify at registry promotion step</td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-R-2">
+          <td class="col-id">I-R-2</td>
+          <td class="col-stage">SBOM attach</td>
+          <td class="col-inv">SBOM is attached to the registry image before any promotion</td>
+          <td class="col-viol">Environment has no SBOM for the running image</td>
+          <td class="col-enf">OCI SBOM attach step before promotion gate</td>
+          <td class="col-class"><span class="badge badge-comp"><span class="bdot"></span>Compliance</span></td>
+        </tr>
+        <tr id="I-R-3">
+          <td class="col-id">I-R-3</td>
+          <td class="col-stage">SLSA attach</td>
+          <td class="col-inv">SLSA provenance is attached to the registry image before any promotion</td>
+          <td class="col-viol">Supply chain attestation missing in environment</td>
+          <td class="col-enf">OCI SLSA attach step before promotion gate</td>
+          <td class="col-class"><span class="badge badge-comp"><span class="bdot"></span>Compliance</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">3 invariants &nbsp;·&nbsp; <span style="color:var(--red)">1 Security</span> &nbsp;·&nbsp; <span style="color:var(--blue)">2 Compliance</span></div>
+</div>
+
+<!-- Promotions -->
+<h2 id="promo">Promotions — all 4 environments (DEV / TEST / STAGING / PROD)</h2>
+<div class="phase-sub">4 invariants — 2 Security, 0 Compliance, 2 Process — apply at every environment promotion</div>
+<div class="tbl-wrap promo">
+  <div class="tbl-scroll">
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th class="col-id" title="Unique identifier. Format: I-{phase}-{n}. Example: I-P3-1 = Phase 3, first invariant. Referenced in doc 04 tool-catalog.">ID</th>
+          <th class="col-stage" title="The pipeline stage where this invariant is enforced. Stage classification in doc 03. Tools in doc 04.">Stage</th>
+          <th class="col-inv" title="The condition that must always hold. Written as a positive statement. No exceptions.">Invariant</th>
+          <th class="col-viol" title="What breaks downstream when this condition is not met. Downstream = anything after this stage in the same run or later environment.">If violated</th>
+          <th class="col-enf" title="The tool, CI mechanism, or policy that enforces the invariant. If this enforcer is misconfigured, the invariant is not guaranteed.">Enforced by</th>
+          <th class="col-class" title="Security = prevents an attack vector. Compliance = required for supply chain attestation. Process = enforces workflow order or review gate.">Control class</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="I-PR-1">
+          <td class="col-id">I-PR-1</td>
+          <td class="col-stage">cosign verify</td>
+          <td class="col-inv">Signature verified in the target environment before ArgoCD / Flux deploys</td>
+          <td class="col-viol">Deployment of unverified image</td>
+          <td class="col-enf">cosign verify step in promotion workflow</td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-PR-2">
+          <td class="col-id">I-PR-2</td>
+          <td class="col-stage">GitOps PR</td>
+          <td class="col-inv">Deployment references image by digest — never by mutable tag</td>
+          <td class="col-viol">Tag re-tag swaps running image silently</td>
+          <td class="col-enf">GitOps PR sets <code>image: repo@sha256:...</code></td>
+          <td class="col-class"><span class="badge badge-sec"><span class="bdot"></span>Security</span></td>
+        </tr>
+        <tr id="I-PR-3">
+          <td class="col-id">I-PR-3</td>
+          <td class="col-stage">Gate</td>
+          <td class="col-inv">Promotion to the next environment requires explicit gate approval</td>
+          <td class="col-viol">Any environment auto-promotes on test pass</td>
+          <td class="col-enf">Manual approval gate or policy gate in ArgoCD</td>
+          <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
+        </tr>
+        <tr id="I-PR-4">
+          <td class="col-id">I-PR-4</td>
+          <td class="col-stage">Env tests</td>
+          <td class="col-inv">Tests must pass before gate opens — gate cannot open on partial test results</td>
+          <td class="col-viol">Broken build promotes through environments</td>
+          <td class="col-enf">CI gate condition — all test steps green</td>
+          <td class="col-class"><span class="badge badge-proc"><span class="bdot"></span>Process</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-foot">4 invariants &nbsp;·&nbsp; <span style="color:var(--red)">2 Security</span> &nbsp;·&nbsp; 2 Process</div>
+</div>
+
+<!-- Summary table -->
+<div id="summary-tbl" class="summary-wrap">
+  <h2 style="margin-top:44px">Summary counts by phase</h2>
+  <div class="phase-sub">25 invariants total — 12 Security, 5 Compliance, 8 Process</div>
+  <div class="tbl-wrap" style="border-top:3px solid var(--text-dim)">
+    <table class="summary-tbl">
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th class="num-cell">Total</th>
+          <th class="num-cell">Security</th>
+          <th class="num-cell">Compliance</th>
+          <th class="num-cell">Process</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="#p0" style="color:var(--p0-color);text-decoration:none;font-weight:500">Phase 0 — Bootstrap</a></td>
+          <td class="num-cell">5</td>
+          <td class="num-cell num-sec">3</td>
+          <td class="num-cell num-comp">0</td>
+          <td class="num-cell num-proc">2</td>
+        </tr>
+        <tr>
+          <td><a href="#p1" style="color:var(--p1-color);text-decoration:none;font-weight:500">Phase 1 — Local Dev</a></td>
+          <td class="num-cell">2</td>
+          <td class="num-cell num-sec">1</td>
+          <td class="num-cell num-comp">0</td>
+          <td class="num-cell num-proc">1</td>
+        </tr>
+        <tr>
+          <td><a href="#p2" style="color:var(--p2-color);text-decoration:none;font-weight:500">Phase 2 — PR Gate</a></td>
+          <td class="num-cell">5</td>
+          <td class="num-cell num-sec">3</td>
+          <td class="num-cell num-comp">1</td>
+          <td class="num-cell num-proc">1</td>
+        </tr>
+        <tr>
+          <td><a href="#p3" style="color:var(--p3-color);text-decoration:none;font-weight:500">Phase 3 — Main Build</a></td>
+          <td class="num-cell">6</td>
+          <td class="num-cell num-sec">2</td>
+          <td class="num-cell num-comp">2</td>
+          <td class="num-cell num-proc">2</td>
+        </tr>
+        <tr>
+          <td><a href="#reg" style="color:var(--reg-color);text-decoration:none;font-weight:500">Registry</a></td>
+          <td class="num-cell">3</td>
+          <td class="num-cell num-sec">1</td>
+          <td class="num-cell num-comp">2</td>
+          <td class="num-cell num-proc">0</td>
+        </tr>
+        <tr>
+          <td><a href="#promo" style="color:var(--promo-color);text-decoration:none;font-weight:500">Promotions</a></td>
+          <td class="num-cell">4</td>
+          <td class="num-cell num-sec">2</td>
+          <td class="num-cell num-comp">0</td>
+          <td class="num-cell num-proc">2</td>
+        </tr>
+        <tr>
+          <td><strong>Total</strong></td>
+          <td class="num-cell"><strong>25</strong></td>
+          <td class="num-cell num-sec"><strong>12</strong></td>
+          <td class="num-cell num-comp"><strong>5</strong></td>
+          <td class="num-cell num-proc"><strong>8</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

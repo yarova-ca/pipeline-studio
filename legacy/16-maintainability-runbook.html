@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16 — Maintainability Runbook | Pipeline Studio</title>
+<meta name="description" content="Runbook for maintaining all 16 pipeline-studio docs. Checklists for adding new docs, updating versions, updating data, and keeping nav/index in sync.">
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d0d7de;--text:#1f2328;--text-dim:#656d76;--text-head:#1f2328;
+  --blue:#0969da;--green:#1a7f37;--amber:#7a4f00;--purple:#6f42c1;--red:#b91c1c;
+  --sidebar-w:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;
+  background:var(--bg);color:var(--text);line-height:1.5;display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);
+  border-right:1px solid var(--border);padding:16px 0;position:sticky;top:0;height:100vh;
+  overflow-y:auto;flex-shrink:0}
+nav a{display:block;padding:5px 16px;font-size:12px;color:var(--text-dim);text-decoration:none;
+  transition:color .12s,background .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text);background:var(--bg3)}
+nav a[aria-current]{color:var(--blue);font-weight:600;background:var(--bg3)}
+.nav-top{color:var(--text-dim)!important;margin-top:8px;border-top:1px solid var(--border)}
+main{flex:1;padding:24px 32px;max-width:1100px;overflow-x:auto}
+h1{font-size:20px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+.page-meta{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+h2{font-size:15px;font-weight:700;color:var(--text-head);margin:32px 0 6px;
+  padding-top:10px;border-top:2px solid var(--border)}
+h3{font-size:13px;font-weight:700;color:var(--text-head);margin:18px 0 6px}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:12px}
+p{margin-bottom:8px;font-size:13px;line-height:1.6}
+
+/* Checklist */
+.checklist{list-style:none;padding:0;margin:0 0 12px}
+.checklist li{display:flex;gap:8px;align-items:flex-start;padding:5px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}
+.checklist li:last-child{border-bottom:none}
+.step-num{min-width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px}
+.step-body{flex:1}
+.step-cmd{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:3px 8px;margin-top:3px;white-space:pre-wrap;word-break:break-all}
+.step-why{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}
+
+/* Warn / note blocks */
+.warn-block{background:#fff8c5;border:1px solid #e8d064;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.warn-block strong{color:var(--amber)}
+.note-block{background:#dbeeff;border:1px solid #b6d7f5;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.note-block strong{color:var(--blue)}
+
+/* Code blocks */
+pre.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  padding:12px 16px;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  overflow-x:auto;line-height:1.7;margin:8px 0}
+code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+
+/* File map table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:12px}
+.xref-table{width:100%;border-collapse:collapse;font-size:12px}
+.xref-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
+  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap}
+.xref-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.xref-table tr:last-child td{border-bottom:none}
+.xref-table tr:hover td{background:var(--bg2)}
+
+/* Counts bar */
+.counts-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.count-chip{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:7px}
+.count-chip .chip-num{font-size:22px;font-weight:700;line-height:1}
+.count-chip .chip-label{font-size:11px;color:var(--text-dim);line-height:1.4}
+.c1{border-left:3px solid var(--blue)}.c1 .chip-num{color:var(--blue)}
+.c2{border-left:3px solid var(--green)}.c2 .chip-num{color:var(--green)}
+.c3{border-left:3px solid var(--amber)}.c3 .chip-num{color:var(--amber)}
+.c4{border-left:3px solid var(--purple)}.c4 .chip-num{color:var(--purple)}
+
+/* Section accent */
+.section-accent-blue{border-top-color:var(--blue)}
+.section-accent-green{border-top-color:var(--green)}
+.section-accent-amber{border-top-color:var(--amber)}
+.section-accent-purple{border-top-color:var(--purple)}
+
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#e6edf3;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--purple:#bc8cff;--red:#f85149;
+  }
+  .warn-block{background:#2d2100;border-color:#4a3800}
+  .note-block{background:#0d2744;border-color:#2d4a6a}
+}
+@media print{
+  nav{display:none}
+  main{max-width:100%;padding:12px}
+}
+.skip-link{position:absolute;top:-48px;left:0;padding:8px 16px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;border-radius:0 0 6px 0;z-index:9999;transition:top .1s}
+.skip-link:focus{top:0}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.doc-card{display:block;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;text-decoration:none;color:var(--text);transition:border-color .12s,background .12s}
+.doc-card:hover{border-color:var(--blue);background:var(--bg3)}
+.doc-card-title{font-size:13px;font-weight:700;color:var(--text-head);margin-bottom:6px}
+.doc-card-covers{font-size:11.5px;color:var(--text-dim);line-height:1.5;margin-bottom:6px}
+.doc-card-when{font-size:11px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:7px;margin-top:4px}
+.doc-card-when strong{color:var(--text)}
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+/* ── Dual-audience sections ── */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.audience-card{border-radius:8px;padding:16px;font-size:12px}
+.audience-new{background:#e8f4fd;border:1px solid #90caf9}
+.audience-new .audience-label{font-weight:700;color:#1565c0;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.audience-maintainer{background:#f1f8e9;border:1px solid #a5d6a7}
+.audience-maintainer .audience-label{font-weight:700;color:#2e7d32;margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.qr-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.qr-table td{padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.08);vertical-align:top}
+.qr-table tr:last-child td{border-bottom:none}
+.qr-table td:first-child{font-weight:600;white-space:nowrap;padding-right:10px;min-width:130px}
+.checklist-section{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.checklist-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
+.checklist-item input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+.checklist-cmd{font-family:monospace;background:var(--bg3);padding:4px 8px;border-radius:4px;font-size:11px;margin:4px 0}
+.checklist-pass{font-size:11px;color:var(--green);margin-top:2px}
+.checklist-fail{font-size:11px;color:var(--red);margin-top:2px}
+@media(max-width:768px){.audience-grid{grid-template-columns:1fr}}
+@media(prefers-color-scheme:dark){
+  .audience-new{background:#0d2744;border-color:#1565c0}
+  .audience-new .audience-label{color:#90caf9}
+  .audience-maintainer{background:#1b2e1b;border-color:#2e7d32}
+  .audience-maintainer .audience-label{color:#a5d6a7}
+  .qr-table td{border-bottom-color:rgba(255,255,255,.08)}
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><p style="font-size:14px;font-weight:700;color:var(--text-head);margin-bottom:2px">Pipeline Studio</p><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">⌂ Hub</a>
+  <details>
+    <summary>Choose a Framework<span class="pillar-badge">2</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+  </details>
+  <details>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details open>
+    <summary>Maintaining<span class="pillar-badge">7</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link" aria-current="page">16 Maintainability runbook</a>
+    <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details>
+<summary>GUIDES <span class="pillar-badge">6</span></summary>
+<a class="nav-link" href="00-getting-started.html">00 — Getting Started</a>
+<a class="nav-link" href="20-local-dev.html">20 — Local Dev</a>
+<a class="nav-link" href="21-build-axes.html">21 — Build Axes</a>
+<a class="nav-link" href="22-add-a-service.html">22 — Add a Service</a>
+<a class="nav-link" href="23-deployment.html">23 — Deployment</a>
+<a class="nav-link" href="24-debugging.html">24 — Debugging</a>
+</details>
+  <a href="#main-content" class="nav-top">↑ Back to top</a>
+</nav>
+<main id="main-content">
+<div class="page-header">
+  <div class="page-title">Maintainability Runbook</div>
+  <div class="page-covers"><strong>What this covers:</strong> Step-by-step checklists for every maintenance task — adding a new doc, updating versions, updating market data, keeping nav in sync. File map for all 19 docs.</div>
+  <div class="page-when"><strong>When to read:</strong> Before adding a new doc, running a version update batch, or re-verifying any data in any doc.</div>
+  <div class="page-pillar">Pillar 7 — Operations &nbsp;·&nbsp; Related: <a href="15-version-registry.html">15 Version registry</a> &nbsp;·&nbsp; <a href="index.html">Hub</a></div>
+</div>
+<!-- ── Dual-audience intro ─────────────────────────────────────────── -->
+<div class="audience-grid">
+  <div class="audience-card audience-new">
+    <div class="audience-label">New to the platform? Start here.</div>
+    <p><strong>This page is the maintenance manual.</strong> Every task that keeps the platform healthy has a numbered checklist here.</p>
+    <p><strong>You do not need to understand all 19 docs</strong> before using this page. Each checklist tells you exactly which file to open and what to change.</p>
+    <p><strong>The four task types covered:</strong></p>
+    <ul style="margin:4px 0 0 14px;font-size:11px;line-height:2">
+      <li>Adding a new service to the catalog</li>
+      <li>Updating a version (framework, base image, tool)</li>
+      <li>Updating market / industry data</li>
+      <li>Adding a brand new doc</li>
+    </ul>
+    <p style="margin-top:8px"><strong>After reading this page you will be able to:</strong> add a new service without breaking navigation, update a base image version safely, and know when to run each generation script.</p>
+  </div>
+  <div class="audience-card audience-maintainer">
+    <div class="audience-label">Platform Maintainer — Quick Reference</div>
+    <table class="qr-table">
+      <tr><td>Weekly health check</td><td>See "Platform Health — Weekly Checklist" section below</td></tr>
+      <tr><td>Add new service</td><td>7 steps starting at <a href="#add-service">Adding a new service</a></td></tr>
+      <tr><td>Update a version</td><td>6 steps at <a href="#update-version">Updating a version</a> — also update FROM in doc 11</td></tr>
+      <tr><td>Add new doc</td><td>15 steps at <a href="#add-doc">Adding a new doc</a> — nav must be updated in ALL existing docs</td></tr>
+      <tr><td>Regenerate doc 14</td><td><code style="font-family:monospace;font-size:10px">python3 scripts/generate_14.py</code></td></tr>
+      <tr><td>Regenerate doc 15</td><td><code style="font-family:monospace;font-size:10px">python3 scripts/generate_15.py</code></td></tr>
+      <tr><td>Regenerate this doc (16)</td><td><code style="font-family:monospace;font-size:10px">python3 scripts/generate_16.py</code></td></tr>
+      <tr><td>Regenerate workflow YAMLs</td><td><code style="font-family:monospace;font-size:10px">python3 scripts/generate_workflow_templates.py</code></td></tr>
+      <tr><td>Verify all nav links intact</td><td><code style="font-family:monospace;font-size:10px">grep -rL '16-maintainability' *.html</code> → output must be empty</td></tr>
+    </table>
+  </div>
+</div>
+
+<h1>Maintainability Runbook</h1>
+<div class="page-meta">4 task types · 8 checklists · last updated 2026-06-05</div>
+
+<h2 id="when-to-update">When to update vs when to skip</h2>
+<div class="section-sub">Binary rules — apply them in order. First match wins.</div>
+
+<div class="why-block">
+  <strong>Base image CVE patches:</strong><br>
+  When a base image receives a CVE patch rated HIGH severity: update within 7 days.<br>
+  When a base image receives a CVE patch rated MEDIUM severity: update within 30 days.<br>
+  When a base image has no new CVE patches: skip. Review at 30-day cadence regardless.
+</div>
+
+<div class="why-block">
+  <strong>Framework major version releases:</strong><br>
+  When a framework releases a major version containing a security fix: update immediately.<br>
+  When a framework releases a major version with no security fix: update within 90 days.<br>
+  When a framework releases a minor or patch version: update at next scheduled 30-day review.
+</div>
+
+<div class="failure-block">
+  <div><strong>If version registry is not updated within cadence:</strong></div>
+  <div><strong>Trigger:</strong> Base image has 30+ days since last review in <a href="15-version-registry.html">15-version-registry.html</a>.</div>
+  <div><strong>System:</strong> Trivy scan finds CVE in base image. PR gate blocks all open pull requests using that image.</div>
+  <div><strong>User sees:</strong> CI failure — "HIGH CVE in node:22-alpine (CVE-2024-XXXX) — update base image before merge."</div>
+  <div><strong>User can:</strong> Run <code class="ic">python3 scripts/generate_full_bundles.py --only env</code> to regenerate .env.example. Update the version pin in <a href="15-version-registry.html">15-version-registry.html</a>. Re-push to unblock the PR gate.</div>
+</div>
+
+<h2 id="add-service">Adding a new service — step by step</h2>
+<div class="section-sub">Follow in order. Each step has a defined output. Do not skip steps.</div>
+
+<ol class="checklist">
+  <li>
+    <div class="step-num">1</div>
+    <div class="step-body">
+      Add entry to <code class="ic">SERVICES_META</code> in <code class="ic">scripts/generate_full_bundles.py</code>.
+      <span class="step-why">Input: service name, port, tier, stack. Output: script knows the service exists.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">2</div>
+    <div class="step-body">
+      Create <code class="ic">services/XX-name/</code> with Dockerfile, app code, and tests.
+      <span class="step-why">Input: service directory. Output: buildable image. CI runs Docker build on push.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">3</div>
+    <div class="step-body">
+      Run: <code class="step-cmd">python3 scripts/generate_full_bundles.py --service XX-name</code>
+      <span class="step-why">Output: .env.example, docker-compose snippet, and bundle manifest for this service.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">4</div>
+    <div class="step-body">
+      Add workflow template to <code class="ic">workflow-templates/XX-name/</code> if this service introduces a new pipeline pattern.
+      <span class="step-why">Skip this step if the service reuses an existing pattern exactly.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">5</div>
+    <div class="step-body">
+      Add row to <a href="01-framework-catalog.html">01-framework-catalog.html</a> framework table.
+      <span class="step-why">Output: service is discoverable from the hub. Missing row = service is invisible to users of the catalog.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">6</div>
+    <div class="step-body">
+      Add row to <a href="17-feature-matrix.html">17-feature-matrix.html</a> with tier and status.
+      <span class="step-why">Output: feature matrix is accurate. Status = Draft / Beta / Stable. Tier = 1 / 2 / 3.</span>
+    </div>
+  </li>
+  <li>
+    <div class="step-num">7</div>
+    <div class="step-body">
+      Commit and push. Docker build CI validates the new service immediately on push.
+      <span class="step-why">CI result = binary pass/fail. Fail = service directory or Dockerfile has an error. Fix before merging.</span>
+    </div>
+  </li>
+</ol>
+
+<div class="counts-bar">
+  <div class="count-chip c1"><div class="chip-num">19</div><div class="chip-label">Docs in this<br>project</div></div>
+  <div class="count-chip c2"><div class="chip-num">4</div><div class="chip-label">Task types<br>covered</div></div>
+  <div class="count-chip c3"><div class="chip-num">8</div><div class="chip-label">Step-by-step<br>checklists</div></div>
+  <div class="count-chip c4"><div class="chip-num">5</div><div class="chip-label">Generation<br>scripts</div></div>
+</div>
+
+<div class="note-block">
+  <strong>Who this is for:</strong> Anyone (human or AI) adding, modifying, or maintaining any file in this repo.
+  Read the relevant section before touching any file. All steps are mandatory — none are optional unless labeled <em>skip when</em>.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="add-doc" class="section-accent-blue">Adding a new doc (doc N)</h2>
+<p class="section-sub">Use this checklist every time a new HTML doc is added, whether doc 17, 20, or any number.</p>
+
+<div class="warn-block">
+  <strong>Do this in order.</strong> Steps 1–3 must complete before step 4. Steps 4–6 can run in any order after step 3.
+</div>
+
+<h3>Step 1 — Create the HTML file</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      Create the file at: <code class="ic">/mnt/c/Users/RohithY/yarova/pipeline-studio/NN-doc-name.html</code>
+      <span class="step-why">Why: all docs live in the root of pipeline-studio — no subdirectories.</span>
+      <span class="step-cmd">touch NN-doc-name.html</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      Use an existing doc as a CSS/nav template base. Copy from: <code class="ic">08-canada-market.html</code> (cleanest nav pattern).
+      <span class="step-why">Why: all docs share the same CSS variables, font stack, sidebar width (220px), and nav structure. Diverging breaks dark mode and print styles.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      Add all 19 existing doc links to the new doc's nav sidebar.
+      <span class="step-why">Why: every doc must link to every other doc — this is the only navigation mechanism.</span>
+      <span class="step-cmd">grep -A2 'nav-top' 08-canada-market.html  # copy the nav block pattern</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      Mark the new doc's own nav link with <code class="ic">aria-current="page"</code>.
+      <span class="step-why">Why: this is how the sidebar highlights the active doc — missing it leaves no visual indicator of which doc you're reading.</span>
+    </span>
+  </li>
+</ol>
+
+<h3>Step 2 — Add the new doc's nav link to all existing docs</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      In every existing HTML file, add the new link before the <code class="ic">↑ Back to top</code> line.
+      <span class="step-why">Why: the nav link must appear in all existing docs — readers of any doc must be able to reach the new one.</span>
+      <span class="step-cmd">python3 - &lt;&lt;'EOF'
+NEW = '&lt;a href="NN-doc-name.html"&gt;NN Doc label&lt;/a&gt;'
+BACK = '&lt;a href="#main-content" class="nav-top"&gt;↑ Back to top&lt;/a&gt;'
+import glob
+for f in glob.glob('*.html'):
+    with open(f) as fh: html = fh.read()
+    if NEW in html or f == 'NN-doc-name.html': continue
+    if BACK in html:
+        html = html.replace(BACK, NEW + '\n' + BACK)
+        with open(f, 'w') as fh: fh.write(html)
+        print('updated:', f)
+EOF</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">6</span>
+    <span class="step-body">
+      Verify: every HTML file now contains the new link.
+      <span class="step-cmd">grep -rL 'NN-doc-name.html' *.html</span>
+      <span class="step-why">Why: any file missing the link breaks navigation from that doc to the new one. Output must be empty (no files missing the link).</span>
+    </span>
+  </li>
+</ol>
+
+<h3>Step 3 — Update index.html</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">7</span>
+    <span class="step-body">
+      Update the <strong>page-meta count chip</strong>: <code class="ic">N design docs</code> → <code class="ic">N+1 design docs</code>.
+      <span class="step-why">Why: the page meta is the first thing readers see — a stale count implies the docs are not maintained.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">8</span>
+    <span class="step-body">
+      Add a <strong>doc card</strong> to the "All N+1 docs" grid. Copy the card template below.
+      <span class="step-why">Why: the index is the entry point — a missing card means the doc is invisible to new readers.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">9</span>
+    <span class="step-body">
+      Update the <strong>"All N docs" h2 heading</strong> to <code class="ic">All N+1 docs</code>.
+    </span>
+  </li>
+  <li>
+    <span class="step-num">10</span>
+    <span class="step-body">
+      Add an entry to the <strong>Recommended reading order</strong> section.
+      <span class="step-why">Why: reading order tells readers when to use the new doc relative to existing ones — without it, readers encounter it out of context.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">11</span>
+    <span class="step-body">
+      Add an entry to the <strong>Cross-doc dependencies</strong> section.
+      <span class="step-why">Why: the dependency map shows which docs the new one depends on — missing it means the relationship is undocumented.</span>
+    </span>
+  </li>
+</ol>
+
+<h3>Step 4 — Update doc 15 (Version Registry)</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">12</span>
+    <span class="step-body">
+      Add any new versioned items from the new doc to <code class="ic">15-version-registry.html</code>.
+      <span class="step-why">Why: doc 15 is the single maintenance index — a versioned item not listed there will never be updated.</span>
+      To add: open <code class="ic">scripts/generate_15.py</code> → add entries to the <code class="ic">ITEMS</code> list → re-run the script.
+      <span class="step-cmd">python3 scripts/generate_15.py</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">13</span>
+    <span class="step-body">
+      Update doc 15's nav to include the new doc link (it will be added automatically in step 5 above if you ran the nav script).
+      Verify: <code class="ic">grep 'NN-doc-name.html' 15-version-registry.html</code>
+    </span>
+  </li>
+</ol>
+
+<h3>Step 5 — Update this runbook (doc 16)</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">14</span>
+    <span class="step-body">
+      Update the <strong>File map</strong> section below to include the new doc.
+      <span class="step-why">Why: the file map is the authoritative list of all docs — a missing entry creates confusion about what exists.</span>
+      To update: open <code class="ic">scripts/generate_16.py</code> → add row to DOCS list and file map table → re-run.
+      <span class="step-cmd">python3 scripts/generate_16.py</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">15</span>
+    <span class="step-body">
+      Update the counts bar chip from <code class="ic">N Docs</code> to <code class="ic">N+1 Docs</code>, where N is the current value shown in the chip.
+    </span>
+  </li>
+</ol>
+
+<h3>Doc card template for index.html</h3>
+<pre class="code-block">&lt;a href="NN-doc-name.html" class="doc-card"&gt;
+  &lt;div class="doc-card-num"&gt;Doc NN&lt;/div&gt;
+  &lt;div class="doc-card-title"&gt;[Title]&lt;/div&gt;
+  &lt;div class="doc-card-covers"&gt;[One paragraph — what it is, what it covers, key counts.]&lt;/div&gt;
+  &lt;div class="doc-card-when"&gt;&lt;strong&gt;When to read:&lt;/strong&gt; [specific trigger]&lt;/div&gt;
+&lt;/a&gt;</pre>
+
+<h3>Dependency map entry template for index.html</h3>
+<pre class="code-block">&lt;div class="dep-row" style="padding:8px 16px"&gt;
+  &lt;div class="dep-from"&gt;&lt;a href="NN-doc-name.html"&gt;NN Doc label&lt;/a&gt;&lt;/div&gt;
+  &lt;div class="dep-arrow"&gt;→&lt;/div&gt;
+  &lt;div class="dep-to"&gt;[what this doc depends on and what it extends]&lt;/div&gt;
+&lt;/div&gt;</pre>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="update-version" class="section-accent-green">Updating a version</h2>
+<p class="section-sub">Use when any tool, framework, base image, or distro version changes. Check doc 15 for review cadence.</p>
+
+<ol class="checklist">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      Open <a href="15-version-registry.html" style="color:var(--blue)">doc 15 — Version Registry</a>. Find the item. Click its source link.
+      <span class="step-why">Why: doc 15 lists every versioned item with its source URL — no need to search individual docs.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      Note the new version. Note which docs it appears in (the "Used in" badges column).
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      Update the version string in every listed doc.
+      <span class="step-why">Why: the same item appears in multiple docs — updating only one creates inconsistency that the next audit will flag.</span>
+      <span class="step-cmd">grep -n "OldVersion" doc-NN.html  # find exact location first</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      For base images: also update the <code class="ic">FROM</code> tag in the actual Dockerfile shown in doc 11.
+      <span class="step-why">Why: doc 11 contains literal Dockerfile content that readers copy — a stale FROM tag ships a vulnerable image.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      Update the "Last verified" date in doc 15 for the changed item.
+      To do: open <code class="ic">scripts/generate_15.py</code> → update the <code class="ic">VERIFIED</code> constant at the top to today's date → re-run.
+      <span class="step-cmd">python3 scripts/generate_15.py</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">6</span>
+    <span class="step-body">
+      Commit with exact format:
+      <span class="step-cmd">git commit -m "Update [item name] [old version] → [new version] (verified YYYY-MM-DD)"</span>
+    </span>
+  </li>
+</ol>
+
+<div class="warn-block">
+  <strong>Base image version change requires extra check:</strong> when <code class="ic">node:22-alpine</code> bumps to <code class="ic">node:24-alpine</code>, the Node.js major version inside the container changes. Verify the framework in doc 01 still supports that Node.js version before shipping. Check: <a href="01-framework-catalog.html" style="color:var(--blue)">doc 01 framework runtime column</a>.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="update-data" class="section-accent-amber">Updating market or industry data</h2>
+<p class="section-sub">Use when re-verifying Canadian market data (docs 07, 08, 14) or US industry data (doc 06). Annual cadence.</p>
+
+<ol class="checklist">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      Identify what changed: demand signal, wage band, tier, employer name, compliance framework, or entry notes.
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      Update the relevant doc:
+      <span class="step-why">Why: data is in three separate docs — 07 (schema/compliance), 08 (market signals), 14 (deep-dive). All three must stay consistent.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      Cross-check: if demand changes in doc 08 for an industry, verify the same industry's entry notes in doc 14 still match.
+      <span class="step-why">Why: a "Flat" demand industry in doc 08 with "Hot — roles open immediately" entry notes in doc 14 is a direct contradiction.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      Update the <code class="ic">data verified</code> date in the page-meta line of each updated doc.
+      <span class="step-cmd">grep -n "data verified" doc-NN.html  # find the meta line</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      Update the market data row in doc 15 (last verified date).
+    </span>
+  </li>
+</ol>
+
+<h3>Docs that must stay consistent with each other</h3>
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>Data point</th><th>Primary doc</th><th>Must match in</th><th>What to check</th></tr></thead>
+<tbody>
+<tr><td>Industry demand signal</td><td><a href="08-canada-market.html">08</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Entry Notes card — "hot demand" language must not contradict doc 08 chip</td></tr>
+<tr><td>Industry tier (T1–T4)</td><td><a href="08-canada-market.html">08</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Summary table tier chip in doc 14 must match doc 08 Tier column</td></tr>
+<tr><td>Compliance framework per industry</td><td><a href="07-canada-schema.html">07</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Compliance card in doc 14 must list same frameworks as doc 07</td></tr>
+<tr><td>Wage band</td><td><a href="08-canada-market.html">08</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Wage chip in doc 14 summary must match doc 08 Wage column</td></tr>
+<tr><td>Hub / province presence</td><td><a href="08-canada-market.html">08</a></td><td><a href="14-canada-industry-catalog.html">14</a></td><td>Employers by Province card in doc 14 must only list provinces shown in doc 08 Primary hubs</td></tr>
+<tr><td>US industry compliance</td><td><a href="06-industry-schema.html">06</a></td><td><a href="10-linux-compliance.html">10</a></td><td>Industry vertical rows in doc 10 Matrix 2 must match doc 06 compliance column</td></tr>
+</tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="nav-pattern" class="section-accent-purple">Nav link pattern — exact format required</h2>
+<p class="section-sub">Every nav sidebar in every doc must follow this exact structure. Deviation breaks navigation.</p>
+
+<h3>Standard nav link (all docs except the active one)</h3>
+<pre class="code-block">&lt;a href="NN-doc-name.html"&gt;NN Label text&lt;/a&gt;</pre>
+
+<h3>Active doc nav link (the doc you are currently in)</h3>
+<pre class="code-block">&lt;a href="NN-doc-name.html" aria-current="page"&gt;NN Label text&lt;/a&gt;</pre>
+
+<h3>Back to top link — always last in nav</h3>
+<p>Two variants exist in the repo. Both are correct — do not change them:</p>
+<pre class="code-block">&lt;!-- Most docs use: --&gt;
+&lt;a href="#main-content" class="nav-top"&gt;↑ Back to top&lt;/a&gt;
+
+&lt;!-- Doc 14 uses HTML entity (both render identically): --&gt;
+&lt;a href="#main-content" class="nav-top"&gt;&amp;#8593; Back to top&lt;/a&gt;</pre>
+
+<div class="warn-block">
+  <strong>When adding a nav link:</strong> always insert it immediately before the <code class="ic">Back to top</code> line — never after. The Back to top link must always be last.
+</div>
+
+<h3>Nav label format</h3>
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>Doc</th><th>Exact nav label</th></tr></thead>
+<tbody>
+<tr><td>01</td><td>01 Framework catalog</td></tr>
+<tr><td>02</td><td>02 Pipeline schema</td></tr>
+<tr><td>03</td><td>03 Stage types</td></tr>
+<tr><td>04</td><td>04 Tool catalog</td></tr>
+<tr><td>05</td><td>05 Invariants</td></tr>
+<tr><td>06</td><td>06 US industries</td></tr>
+<tr><td>07</td><td>07 Canada schema</td></tr>
+<tr><td>08</td><td>08 CA market</td></tr>
+<tr><td>09</td><td>09 Linux distros</td></tr>
+<tr><td>10</td><td>10 Linux compliance</td></tr>
+<tr><td>11</td><td>11 Dockerfile catalog</td></tr>
+<tr><td>12</td><td>12 Compliance variations</td></tr>
+<tr><td>13</td><td>13 Pipeline build catalog</td></tr>
+<tr><td>14</td><td>14 Canada industry catalog</td></tr>
+<tr><td>15</td><td>15 Version registry</td></tr>
+<tr><td>16</td><td>16 Runbook</td></tr>
+<tr><td>17</td><td>17 Feature matrix</td></tr>
+<tr><td>18</td><td>18 Service status</td></tr>
+<tr><td>19</td><td>19 Cluster setup</td></tr>
+</tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="index-pattern">index.html — what must change for every new doc</h2>
+<p class="section-sub">index.html has 5 locations that must be updated for every new doc. Missing any one creates an inconsistency.</p>
+
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>#</th><th>Location in index.html</th><th>What to change</th><th>How to find it</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>page-meta line</td><td><code class="ic">N design docs</code> → <code class="ic">N+1 design docs</code></td><td><code class="ic">grep -n "design docs" index.html</code></td></tr>
+<tr><td>2</td><td>"All N docs" h2 heading</td><td><code class="ic">All N docs</code> → <code class="ic">All N+1 docs</code></td><td><code class="ic">grep -n "All [0-9]* docs" index.html</code></td></tr>
+<tr><td>3</td><td>Doc cards grid</td><td>Add new <code class="ic">&lt;a class="doc-card"&gt;</code> block after the last card</td><td><code class="ic">grep -n "doc-card-num" index.html | tail -1</code></td></tr>
+<tr><td>4</td><td>Recommended reading order</td><td>Add <code class="ic">&lt;div class="sp-block"&gt;</code> with a <code class="ic">&lt;div class="sp-chain"&gt;</code> inside it. Use <code class="ic">&lt;a class="sp-node"&gt;</code> for each doc in the chain.</td><td><code class="ic">grep -c "sp-block" index.html</code></td></tr>
+<tr><td>5</td><td>Cross-doc dependencies</td><td>Add <code class="ic">&lt;div class="dep-row"&gt;</code> block</td><td><code class="ic">grep -n "dep-row" index.html | tail -1</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note-block">
+  <strong>Verify all 5 updated:</strong>
+  <span class="step-cmd" style="display:block;margin-top:4px">grep -c "doc-card-num" index.html  # must equal total doc count
+grep -c "sp-block" index.html    # must equal total reading-order block count
+grep -c "dep-row" index.html     # must equal total doc count</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="gen-scripts">Generation scripts — when and how to use</h2>
+<p class="section-sub">Five outputs are generated from Python scripts in <code class="ic">scripts/</code>. Never edit generated files directly — edit the script and regenerate.</p>
+
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>Script</th><th>Generates</th><th>Edit when</th><th>Run command</th></tr></thead>
+<tbody>
+<tr>
+  <td><code class="ic">scripts/generate_14.py</code></td>
+  <td><a href="14-canada-industry-catalog.html">14-canada-industry-catalog.html</a></td>
+  <td>Adding or changing any industry, employer, tech stack, compliance, or entry note. Changing CSS. Adding a new vertical.</td>
+  <td><code class="ic">python3 scripts/generate_14.py</code></td>
+</tr>
+<tr>
+  <td><code class="ic">scripts/generate_15.py</code></td>
+  <td><a href="15-version-registry.html">15-version-registry.html</a></td>
+  <td>Adding a new versioned item. Updating a version. Changing a source URL. Adding a new doc (add its items). Changing review cadence.</td>
+  <td><code class="ic">python3 scripts/generate_15.py</code></td>
+</tr>
+<tr>
+  <td><code class="ic">scripts/generate_16.py</code></td>
+  <td><a href="16-maintainability-runbook.html">16-maintainability-runbook.html</a> (this file)</td>
+  <td>Adding a new doc (update DOCS list and file map). Changing any checklist step. Adding a new task type.</td>
+  <td><code class="ic">python3 scripts/generate_16.py</code></td>
+</tr>
+<tr>
+  <td><code class="ic">scripts/generate_issue_templates.py</code></td>
+  <td><code class="ic">.github/ISSUE_TEMPLATE/pipeline-setup/*.md</code> — 75 files</td>
+  <td>Changing framework versions, runtimes, compliance standards, or tool options for any of the 75 frameworks. Adding a new framework.</td>
+  <td><code class="ic">python3 scripts/generate_issue_templates.py</code></td>
+</tr>
+<tr>
+  <td><code class="ic">scripts/generate_workflow_templates.py</code></td>
+  <td><code class="ic">workflow-templates/{slug}/</code> — 75 folders, 499 YAML files (7 stages per multi-stage framework; 5 stages per CI-only/mobile/edge framework)</td>
+  <td>Changing language toolchain steps, security gates, registry config, signing, or pipeline structure for any of the 75 frameworks. Adding a new framework. Each stage file triggers independently — edit only the stage file that needs changing.</td>
+  <td><code class="ic">python3 scripts/generate_workflow_templates.py</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="note-block">
+  <strong>All 5 scripts are committed to <code class="ic">scripts/</code> in the repo.</strong>
+  They are the source of truth for generated outputs. Edit in place, regenerate, commit output + script together in the same PR.
+</div>
+
+<div class="note-block">
+  <strong>After running any generation script:</strong> the generated HTML file must be added to a new branch and PR — never commit directly to main.
+  <span class="step-cmd" style="display:block;margin-top:4px">git checkout -b update-doc-NN-description
+git add NN-doc-name.html
+git commit -m "Update [doc name] — [what changed]"
+git push -u origin update-doc-NN-description
+gh pr create --title "..." --body "..."</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="file-map">File map — all files in this repo</h2>
+<p class="section-sub">Complete list of every file. Status: Generated = produced by a script. Hand-authored = written directly.</p>
+
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>File</th><th>Doc #</th><th>Type</th><th>Generated by</th><th>Depends on</th><th>Nav links to</th></tr></thead>
+<tbody>
+<tr><td><a href="index.html">index.html</a></td><td>—</td><td>Hub / entry point</td><td>Hand-authored</td><td>All docs (lists them)</td><td>All docs</td></tr>
+<tr><td><a href="01-framework-catalog.html">01-framework-catalog.html</a></td><td>01</td><td>Reference table</td><td>Hand-authored</td><td>None</td><td>All docs</td></tr>
+<tr><td><a href="02-pipeline-schema.html">02-pipeline-schema.html</a></td><td>02</td><td>Reference diagram + table</td><td>Hand-authored</td><td>None</td><td>All docs</td></tr>
+<tr><td><a href="03-stage-types.html">03-stage-types.html</a></td><td>03</td><td>Reference table</td><td>Hand-authored</td><td>02</td><td>All docs</td></tr>
+<tr><td><a href="04-tool-catalog.html">04-tool-catalog.html</a></td><td>04</td><td>Reference table</td><td>Hand-authored</td><td>02, 03</td><td>All docs</td></tr>
+<tr><td><a href="05-invariants.html">05-invariants.html</a></td><td>05</td><td>Reference table</td><td>Hand-authored</td><td>02, 03, 04</td><td>All docs</td></tr>
+<tr><td><a href="06-industry-schema.html">06-industry-schema.html</a></td><td>06</td><td>Reference table</td><td>Hand-authored</td><td>None</td><td>All docs</td></tr>
+<tr><td><a href="07-canada-schema.html">07-canada-schema.html</a></td><td>07</td><td>Reference table</td><td>Hand-authored</td><td>06 (same structure)</td><td>All docs</td></tr>
+<tr><td><a href="08-canada-market.html">08-canada-market.html</a></td><td>08</td><td>Reference table + heatmap</td><td>Hand-authored</td><td>07</td><td>All docs</td></tr>
+<tr><td><a href="09-linux-distros.html">09-linux-distros.html</a></td><td>09</td><td>Reference table</td><td>Hand-authored</td><td>None</td><td>All docs</td></tr>
+<tr><td><a href="10-linux-compliance.html">10-linux-compliance.html</a></td><td>10</td><td>Cross-ref matrices</td><td>Hand-authored</td><td>09</td><td>All docs</td></tr>
+<tr><td><a href="11-dockerfile-catalog.html">11-dockerfile-catalog.html</a></td><td>11</td><td>Dockerfile catalog</td><td>Hand-authored</td><td>01, 09, 10</td><td>All docs</td></tr>
+<tr><td><a href="12-compliance-variations.html">12-compliance-variations.html</a></td><td>12</td><td>Compliance delta reference</td><td>Hand-authored</td><td>11</td><td>All docs</td></tr>
+<tr><td><a href="13-pipeline-build-catalog.html">13-pipeline-build-catalog.html</a></td><td>13</td><td>Pipeline build catalog</td><td>Hand-authored</td><td>02, 11, 12</td><td>All docs</td></tr>
+<tr><td><a href="14-canada-industry-catalog.html">14-canada-industry-catalog.html</a></td><td>14</td><td>Industry deep-dive accordion</td><td><code class="ic">scripts/generate_14.py</code></td><td>07, 08</td><td>All docs</td></tr>
+<tr><td><a href="15-version-registry.html">15-version-registry.html</a></td><td>15</td><td>Version tracking table</td><td><code class="ic">scripts/generate_15.py</code></td><td>All docs (aggregates)</td><td>All docs</td></tr>
+<tr><td><a href="16-maintainability-runbook.html">16-maintainability-runbook.html</a></td><td>16</td><td>Maintenance runbook</td><td><code class="ic">scripts/generate_16.py</code></td><td>All docs (describes)</td><td>All docs</td></tr>
+<tr><td><a href="17-feature-matrix.html">17-feature-matrix.html</a></td><td>17</td><td>Feature matrix table</td><td>Hand-authored</td><td>01 (framework list)</td><td>All docs</td></tr>
+<tr><td><a href="18-service-status.html">18-service-status.html</a></td><td>18</td><td>Service status dashboard</td><td>Hand-authored</td><td>01, 17</td><td>All docs</td></tr>
+<tr><td><a href="19-cluster-setup.html">19-cluster-setup.html</a></td><td>19</td><td>Cluster setup guide</td><td>Hand-authored</td><td>11, 13</td><td>All docs</td></tr>
+</tbody>
+</table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="platform-health" class="section-accent-green">Platform Health — Weekly Checklist</h2>
+<p class="section-sub">Run every week. Each item has a pass/fail command. Fix any fail before the next review cycle.</p>
+
+<div class="checklist-section">
+  <div class="checklist-item">
+    <input type="checkbox">
+    <div>
+      <strong>GitHub Actions all green</strong>
+      <div class="checklist-cmd">gh run list --repo yarova-ca/pipeline-studio --limit 10 | grep -v success</div>
+      <div class="checklist-pass">Pass: no output (all runs successful)</div>
+      <div class="checklist-fail">Fail: fix the failing workflow before proceeding to any other checklist item</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <input type="checkbox">
+    <div>
+      <strong>No HIGH/CRITICAL CVEs in base images</strong>
+      <div class="checklist-cmd">gh run list --repo yarova-ca/pipeline-studio --workflow security-scan.yml --limit 1 --json conclusion</div>
+      <div class="checklist-pass">Pass: <code class="ic">conclusion</code> = <code class="ic">success</code></div>
+      <div class="checklist-fail">Fail: open the security-scan run → find failing Trivy job → update base image tag in <a href="11-dockerfile-catalog.html">doc 11</a> → update verified date in <a href="15-version-registry.html">doc 15</a></div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <input type="checkbox">
+    <div>
+      <strong>Version registry reviewed in last 30 days</strong>
+      <div class="checklist-cmd">grep -c "2026-" 15-version-registry.html</div>
+      <div class="checklist-pass">Pass: all items show a date within 30 days of today</div>
+      <div class="checklist-fail">Fail: open <a href="15-version-registry.html">doc 15</a> → find items with stale dates → re-verify each one → update date</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <input type="checkbox">
+    <div>
+      <strong>All 19 HTML docs updated if code changed this week</strong>
+      <div class="checklist-cmd">git log --since="7 days ago" --oneline -- '*.html' | wc -l</div>
+      <div class="checklist-pass">Pass: HTML commit count matches code commit count for the week</div>
+      <div class="checklist-fail">Fail: identify which code change lacks a matching doc update → update the relevant HTML page before this week's review</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <input type="checkbox">
+    <div>
+      <strong>Nav links consistent across all docs</strong>
+      <div class="checklist-cmd">for f in *.html; do count=$(grep -c 'nav-link' "$f" 2>/dev/null); echo "$f: $count"; done | sort -t: -k2 -n | head -3</div>
+      <div class="checklist-pass">Pass: all docs show the same nav-link count (lowest 3 match the others)</div>
+      <div class="checklist-fail">Fail: the lowest-count docs are missing nav links — run the nav propagation script in <a href="#add-doc">Step 2 of Adding a new doc</a></div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <input type="checkbox">
+    <div>
+      <strong>Generation scripts still produce clean output</strong>
+      <div class="checklist-cmd">python3 scripts/generate_15.py 2>&amp;1 | tail -3</div>
+      <div class="checklist-pass">Pass: script exits 0, last line confirms file written</div>
+      <div class="checklist-fail">Fail: script has a Python error → fix the script before running it in production → do not commit broken script</div>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <input type="checkbox">
+    <div>
+      <strong>No open PRs older than 7 days</strong>
+      <div class="checklist-cmd">gh pr list --repo yarova-ca/pipeline-studio --state open --json number,title,createdAt</div>
+      <div class="checklist-pass">Pass: all PRs created within the last 7 days</div>
+      <div class="checklist-fail">Fail: review stale PRs — either merge, close, or add a comment explaining the block</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2 id="commit-style">Commit style — required format</h2>
+<p class="section-sub">All commits to this repo must follow this format. No exceptions.</p>
+
+<h3>Rules</h3>
+<ol class="checklist">
+  <li>
+    <span class="step-num">R1</span>
+    <span class="step-body">
+      <strong>Never commit directly to main.</strong> Always: new branch → commit → PR → merge.
+      <span class="step-why">Why: direct commits to main bypass review and break the audit trail.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">R2</span>
+    <span class="step-body">
+      <strong>One topic per PR.</strong> A version update PR contains only version changes. A new doc PR contains only the new doc and nav updates.
+      <span class="step-why">Why: mixed PRs make rollback impossible without also reverting unrelated changes.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">R3</span>
+    <span class="step-body">
+      <strong>Commit message: plain English, one line, why not what.</strong>
+      No <code class="ic">feat:</code>, <code class="ic">fix:</code>, <code class="ic">chore:</code> prefixes.
+    </span>
+  </li>
+</ol>
+
+<h3>Commit message examples</h3>
+<div class="tbl-wrap">
+<table class="xref-table">
+<thead><tr><th>Task type</th><th>Good message</th><th>Bad message</th></tr></thead>
+<tbody>
+<tr><td>Version update</td><td><code class="ic">Update Trivy v0.58 → v0.60 (verified 2026-08-15)</code></td><td><code class="ic">fix: update version</code></td></tr>
+<tr><td>New doc</td><td><code class="ic">Add doc 17 — US pipeline build catalog (74 industries)</code></td><td><code class="ic">feat: add new page</code></td></tr>
+<tr><td>Data update</td><td><code class="ic">Update CA market data demand signals — Q3 2026 verify</code></td><td><code class="ic">update data</code></td></tr>
+<tr><td>Bug fix</td><td><code class="ic">Fix broken anchor links in doc 13 compliance table</code></td><td><code class="ic">fix: anchors</code></td></tr>
+<tr><td>Nav fix</td><td><code class="ic">Add doc 17 nav link to all existing docs</code></td><td><code class="ic">update nav</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Branch name format</h3>
+<pre class="code-block">add-docNN-short-description     # new doc
+update-docNN-what-changed       # single doc update
+fix-what-was-broken             # bug fix
+update-versions-YYYY-MM-DD      # batch version update</pre>
+
+<h2>Architecture Decision Records</h2>
+<p style="font-size:12.5px;color:var(--text-dim);margin-bottom:12px">
+  Every major decision is documented with what was chosen, what was rejected, and why.
+  Read these before making architectural changes.
+</p>
+<div class="cards-grid">
+  <a href="https://github.com/yarova-ca/pipeline-studio/blob/main/DECISIONS.md" class="doc-card" target="_blank">
+    <div class="doc-card-title">DECISIONS.md</div>
+    <div class="doc-card-covers">13 architectural decisions — JWT, Redis blacklist, RBAC, Prisma, K8s, Argo Rollouts, canary deployments. Each with: chosen, rejected, why, accepted tradeoff.</div>
+    <div class="doc-card-when"><strong>When to read:</strong> Before changing any architecture decision.</div>
+  </a>
+  <a href="https://github.com/yarova-ca/pipeline-studio/blob/main/AUDIT_PROCESS.md" class="doc-card" target="_blank">
+    <div class="doc-card-title">AUDIT_PROCESS.md</div>
+    <div class="doc-card-covers">Quarterly Google-Fellow-level audit guide. 10-command quick audit (30 min). Full 5-prompt audit (2 hours). Remediation tracking format.</div>
+    <div class="doc-card-when"><strong>When to read:</strong> Every quarter. After any major change.</div>
+  </a>
+</div>
+
+</main>
+</body>
+</html>

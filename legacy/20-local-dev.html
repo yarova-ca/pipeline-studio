@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>20 — Local Development | Pipeline Studio</title>
+<meta name="description" content="How to run any of the 106 services locally. Prerequisites, one-command setup, verify steps, and failure modes for every tool.">
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;
+  --border:#d0d7de;--text:#1f2328;--text-dim:#656d76;--text-head:#1f2328;
+  --blue:#0969da;--green:#1a7f37;--amber:#7a4f00;--purple:#6f42c1;--red:#b91c1c;
+  --sidebar-w:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;
+  background:var(--bg);color:var(--text);line-height:1.5;display:flex;min-height:100vh}
+nav{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg2);
+  border-right:1px solid var(--border);padding:16px 0;position:sticky;top:0;height:100vh;
+  overflow-y:auto;flex-shrink:0}
+nav a{display:block;padding:5px 16px;font-size:12px;color:var(--text-dim);text-decoration:none;
+  transition:color .12s,background .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav a:hover{color:var(--text);background:var(--bg3)}
+nav a[aria-current]{color:var(--blue);font-weight:600;background:var(--bg3)}
+.nav-top{color:var(--text-dim)!important;margin-top:8px;border-top:1px solid var(--border)}
+main{flex:1;padding:24px 32px;max-width:1100px;overflow-x:auto}
+h1{font-size:20px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+.page-meta{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+h2{font-size:15px;font-weight:700;color:var(--text-head);margin:32px 0 6px;
+  padding-top:10px;border-top:2px solid var(--border)}
+h3{font-size:13px;font-weight:700;color:var(--text-head);margin:18px 0 6px}
+.section-sub{font-size:11px;color:var(--text-dim);margin-bottom:12px}
+p{margin-bottom:8px;font-size:13px;line-height:1.6}
+
+/* Warn / note blocks */
+.warn-block{background:#fff8c5;border:1px solid #e8d064;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.warn-block strong{color:var(--amber)}
+.note-block{background:#dbeeff;border:1px solid #b6d7f5;border-radius:6px;
+  padding:10px 14px;font-size:12px;margin:10px 0}
+.note-block strong{color:var(--blue)}
+
+/* Code blocks */
+pre.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  padding:12px 16px;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  overflow-x:auto;line-height:1.7;margin:8px 0}
+code.ic{font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+
+/* Table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:7px;margin-bottom:12px}
+.xref-table,.qr-table{width:100%;border-collapse:collapse;font-size:12px}
+.xref-table th,.qr-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
+  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap}
+.xref-table td,.qr-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.xref-table tr:last-child td,.qr-table tr:last-child td{border-bottom:none}
+.xref-table tr:hover td,.qr-table tr:hover td{background:var(--bg2)}
+
+/* Diagram */
+.diagram-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:20px 24px;margin:12px 0;font-family:"SFMono-Regular",Consolas,monospace;
+  font-size:12px;line-height:2;color:var(--text-dim)}
+.diagram-box .d-highlight{color:var(--blue);font-weight:600}
+.diagram-box .d-arrow{color:var(--text-dim)}
+
+/* Step list */
+.steps-list{list-style:none;padding:0;margin:0 0 12px}
+.steps-list li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;
+  border-bottom:1px solid var(--border);font-size:12px;line-height:1.6}
+.steps-list li:last-child{border-bottom:none}
+.step-num{min-width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px}
+.step-body{flex:1}
+.step-cmd{display:block;font-family:"SFMono-Regular",Consolas,monospace;font-size:11px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+  padding:3px 8px;margin-top:3px;white-space:pre-wrap;word-break:break-all}
+.step-why{display:block;font-size:11px;color:var(--text-dim);margin-top:2px}
+
+/* Decision block */
+.decision-block{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.decision-chosen{font-weight:600;color:var(--green);margin-bottom:4px}
+.decision-rejected{color:var(--text-dim);margin-bottom:4px}
+.decision-tradeoff{color:var(--text-dim);font-style:italic}
+
+/* Failure block */
+.failure-block{background:#fff1f2;border:1px solid #fca5a5;border-radius:6px;padding:12px 16px;margin:10px 0;font-size:12px}
+.failure-block div{margin-bottom:4px}
+.failure-block div:last-child{margin-bottom:0}
+.failure-label{font-weight:700;color:var(--red);margin-bottom:6px}
+
+/* Gotcha block */
+.gotcha-block{background:#fffbeb;border-left:3px solid #d97706;padding:10px 14px;margin:8px 0;font-size:12px;border-radius:0 4px 4px 0}
+.gotcha-block strong{color:var(--amber)}
+
+/* Section accent */
+.section-accent-blue{border-top-color:var(--blue)}
+.section-accent-green{border-top-color:var(--green)}
+.section-accent-amber{border-top-color:var(--amber)}
+.section-accent-purple{border-top-color:var(--purple)}
+
+/* Pillar badge / nav */
+details{border-bottom:1px solid var(--border)}
+details:last-of-type{border-bottom:none}
+summary{list-style:none;cursor:pointer;padding:7px 16px;font-size:10.5px;font-weight:700;
+  color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;
+  display:flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶";font-size:8px;color:var(--text-dim);transition:transform .15s;flex-shrink:0}
+details[open] summary::before{transform:rotate(90deg)}
+summary:hover{background:var(--bg3);color:var(--text-head)}
+details[open] summary{color:var(--text-head)}
+.pillar-badge{margin-left:auto;font-size:9.5px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:3px;padding:0 4px;color:var(--text-dim);font-weight:600}
+nav a.nav-link{display:block;padding:4px 16px 4px 26px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;font-size:11.5px}
+nav a.nav-link:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+nav a.nav-link[aria-current="page"]{color:var(--blue);border-left-color:var(--blue);
+  background:var(--bg3);font-weight:600}
+nav a.nav-hub{display:block;padding:5px 16px;color:var(--text-dim);text-decoration:none;
+  border-left:2px solid transparent;font-weight:600;font-size:12px;margin-bottom:6px}
+nav a.nav-hub:hover{color:var(--text-head);background:var(--bg3);border-left-color:var(--blue)}
+.nav-logo{padding:0 16px 14px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.nav-logo h1{font-size:12px;font-weight:700;color:var(--text-head);text-transform:uppercase;letter-spacing:.04em}
+.nav-logo p{font-size:11px;color:var(--text-dim);margin-top:2px}
+.page-covers{font-size:12px;color:var(--text-dim);margin-bottom:2px}
+.page-when{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.page-pillar{font-size:11px;color:var(--text-dim);margin-bottom:20px}
+.page-title{font-size:24px;font-weight:700;color:var(--text-head);margin-bottom:4px}
+
+/* Why block */
+.why-block{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;margin:6px 0;font-size:12px;border-radius:0 4px 4px 0}
+
+/* Component detail blocks */
+.component-detail{border:1px solid var(--border);border-radius:6px;margin-bottom:8px;overflow:hidden}
+.component-detail[open]{border-color:var(--blue)}
+.component-summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;align-items:center;gap:10px;background:var(--bg2)}
+.component-summary:hover{background:var(--bg3)}
+.component-summary::-webkit-details-marker{display:none}
+.component-summary::before{display:none}
+.comp-num{font-size:10px;font-weight:700;background:var(--blue);color:#fff;border-radius:3px;padding:1px 6px;min-width:28px;text-align:center}
+.comp-name{font-weight:600;font-size:12.5px;flex:1}
+.comp-layer{font-size:10.5px;color:var(--text-dim);background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 6px}
+.comp-status{font-size:10px;font-weight:700;border-radius:3px;padding:1px 6px}
+.comp-ok{background:#d1fae5;color:#065f46;border:1px solid #86efac}
+.comp-missing{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+.comp-body{padding:16px;border-top:1px solid var(--border)}
+.comp-what,.comp-why-p{font-size:12px;color:var(--text-dim);margin-bottom:8px;line-height:1.65}
+.comp-section{margin:10px 0;font-size:12px}
+.comp-cmd{display:block;font-family:monospace;background:var(--bg3);padding:6px 10px;border-radius:4px;font-size:11px;margin:4px 0;white-space:pre-wrap;word-break:break-all}
+.comp-expected{font-size:11px;color:var(--text-dim);font-style:italic;display:block;margin-top:2px}
+.hero-intro h2{padding:0;border:none;margin:0 0 10px}
+
+/* Group heading for component sections */
+.comp-group-heading{font-size:14px;font-weight:700;color:var(--text-head);margin:28px 0 10px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;border-left:3px solid var(--blue)}
+
+/* Inline env var rows */
+.env-table{width:100%;border-collapse:collapse;font-size:12px}
+.env-table th{background:var(--bg2);padding:7px 10px;text-align:left;font-size:11px;
+  font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border)}
+.env-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top;font-size:12px}
+.env-table tr:last-child td{border-bottom:none}
+.env-table tr:hover td{background:var(--bg2)}
+.env-required{display:inline-block;font-size:10px;font-weight:700;color:#991b1b;
+  background:#fee2e2;border:1px solid #fca5a5;border-radius:3px;padding:0 5px;margin-left:4px}
+.env-optional{display:inline-block;font-size:10px;font-weight:700;color:#065f46;
+  background:#d1fae5;border:1px solid #86efac;border-radius:3px;padding:0 5px;margin-left:4px}
+
+/* Section label chip */
+.section-chip{display:inline-block;font-size:10px;font-weight:700;border-radius:3px;
+  padding:1px 7px;margin-right:6px;vertical-align:middle}
+.chip-blue{background:#dbeeff;color:var(--blue);border:1px solid #b6d7f5}
+.chip-green{background:#d1fae5;color:#065f46;border:1px solid #86efac}
+.chip-amber{background:#fef3c7;color:var(--amber);border:1px solid #fde68a}
+.chip-red{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+    --border:#30363d;--text:#e6edf3;--text-dim:#8b949e;--text-head:#e6edf3;
+    --blue:#58a6ff;--green:#3fb950;--amber:#d29922;--purple:#bc8cff;--red:#f85149;
+  }
+  .warn-block{background:#2d2100;border-color:#4a3800}
+  .note-block{background:#0d2744;border-color:#2d4a6a}
+  .decision-block{background:#0d2b15;border-color:#238636}
+  .failure-block{background:#2d0a0a;border-color:#8b1a1a}
+  .gotcha-block{background:#2d1f00;border-color:#d97706}
+  .why-block{background:#2d1f00;border-color:#d97706}
+  .diagram-box{background:#161b22;border-color:#30363d}
+  .comp-ok{background:#052e16;color:#86efac;border-color:#166534}
+  .comp-missing{background:#2d0a0a;color:#fca5a5;border-color:#7f1d1d}
+  .hero-intro{background:var(--bg2)!important;border-color:var(--border)!important}
+  .env-required{background:#2d0a0a;color:#fca5a5;border-color:#7f1d1d}
+  .env-optional{background:#052e16;color:#86efac;border-color:#166534}
+  .chip-blue{background:#0d2744;border-color:#2d4a6a}
+  .chip-green{background:#052e16;border-color:#166534}
+  .chip-amber{background:#2d2100;border-color:#4a3800}
+  .chip-red{background:#2d0a0a;border-color:#7f1d1d}
+}
+@media print{
+  nav{display:none}
+  main{max-width:100%;padding:12px}
+}
+</style>
+</head>
+<body>
+<a href="#main-content" style="position:absolute;left:-9999px;top:4px;z-index:999;background:var(--blue);color:#fff;padding:4px 8px;border-radius:4px;font-size:12px" onfocus="this.style.left='4px'" onblur="this.style.left='-9999px'">Skip to content</a>
+
+<!-- ═══ SIDEBAR NAV ═══ -->
+<nav aria-label="Platform navigation">
+  <div class="nav-logo"><h1>Pipeline Studio</h1><p>Platform engineering hub</p></div>
+  <a href="index.html" class="nav-hub">&#8962; Hub</a>
+  <details>
+    <summary>Choose a Framework<span class="pillar-badge">3</span></summary>
+    <a href="01-framework-catalog.html" class="nav-link">01 Framework catalog</a>
+    <a href="17-feature-matrix.html" class="nav-link">17 Feature matrix</a>
+    <a href="18-service-status.html" class="nav-link">18 Service status</a>
+  </details>
+  <details>
+    <summary>Docker &amp; Base Images<span class="pillar-badge">3</span></summary>
+    <a href="09-linux-distros.html" class="nav-link">09 Linux distros</a>
+    <a href="11-dockerfile-catalog.html" class="nav-link">11 Dockerfile catalog</a>
+    <a href="15-version-registry.html" class="nav-link">15 Version registry</a>
+  </details>
+  <details>
+    <summary>CI/CD Pipeline<span class="pillar-badge">4</span></summary>
+    <a href="02-pipeline-schema.html" class="nav-link">02 Pipeline schema</a>
+    <a href="03-stage-types.html" class="nav-link">03 Stage types</a>
+    <a href="04-tool-catalog.html" class="nav-link">04 Tool catalog</a>
+    <a href="13-pipeline-build-catalog.html" class="nav-link">13 Pipeline build catalog</a>
+  </details>
+  <details>
+    <summary>Compliance &amp; Security<span class="pillar-badge">5</span></summary>
+    <a href="05-invariants.html" class="nav-link">05 Invariants</a>
+    <a href="10-linux-compliance.html" class="nav-link">10 Linux compliance</a>
+    <a href="12-compliance-variations.html" class="nav-link">12 Compliance variations</a>
+  </details>
+  <details>
+    <summary>Industries<span class="pillar-badge">6</span></summary>
+    <a href="06-industry-schema.html" class="nav-link">06 US industries</a>
+    <a href="07-canada-schema.html" class="nav-link">07 Canada schema</a>
+    <a href="08-canada-market.html" class="nav-link">08 Canada market</a>
+    <a href="14-canada-industry-catalog.html" class="nav-link">14 Canada industry catalog</a>
+  </details>
+  <details>
+    <summary>Maintaining<span class="pillar-badge">2</span></summary>
+    <a href="16-maintainability-runbook.html" class="nav-link">16 Maintainability runbook</a>
+    <a href="19-cluster-setup.html" class="nav-link">19 Cluster setup</a>
+  </details>
+  <details open>
+    <summary>Guides<span class="pillar-badge">6</span></summary>
+    <a href="00-getting-started.html" class="nav-link">00 Getting started</a>
+    <a href="20-local-dev.html" class="nav-link" aria-current="page">20 Local development</a>
+    <a href="21-build-axes.html" class="nav-link">21 Build axes</a>
+    <a href="22-add-a-service.html" class="nav-link">22 Add a service</a>
+    <a href="23-deployment.html" class="nav-link">23 Deployment</a>
+    <a href="24-debugging.html" class="nav-link">24 Debugging</a>
+  </details>
+  <a href="#main-content" class="nav-top">&#8593; Back to top</a>
+</nav>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main id="main-content">
+
+<div class="page-header">
+  <div class="page-title">20 &#8212; Local Development</div>
+  <div class="page-covers"><strong>What this covers:</strong> How to run any of the 106 services locally. Prerequisites, one-command setup, verify steps, and failure modes for every tool.</div>
+  <div class="page-when"><strong>When to read:</strong> Before writing any code. When setting up a new machine. When a service fails to start locally.</div>
+  <div class="page-pillar">Guides &#183; Related: <a href="21-build-axes.html">21 Build axes</a> &#183; <a href="22-add-a-service.html">22 Add a service</a> &#183; <a href="24-debugging.html">24 Debugging</a></div>
+</div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="hero-intro" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:24px">
+  <h2 style="margin:0 0 10px;border:none;padding:0;font-size:16px">How local development works</h2>
+  <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:8px;line-height:1.7">
+    Every service in <code class="ic">services/</code> runs in two modes: Docker Compose (fastest, no native tooling required) and natively (faster iteration once tools are installed).
+  </p>
+  <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:8px;line-height:1.7">
+    Docker Compose is the default path. Use native mode when you need hot-reload or are actively changing source files.
+  </p>
+  <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:0;line-height:1.7">
+    All services expose <code class="ic">/health/live</code> and <code class="ic">/health/ready</code>. Live returns 200 when the process is running. Ready returns 200 only when the database is reachable.
+  </p>
+</div>
+
+<!-- ═══ SECTION 1: Prerequisites ═══ -->
+<h2 class="section-accent-blue">1. Prerequisites</h2>
+<p class="section-sub">Install all six tools before starting. Each row includes the minimum version, install command for both platforms, and the verify command.</p>
+
+<div class="warn-block">
+  <strong>&#9888; Version matters.</strong> Services use language features and CLI flags tied to these minimum versions. Running an older version produces confusing errors, not a clear version mismatch message.
+</div>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Minimum version</th>
+        <th>Install (macOS)</th>
+        <th>Install (Linux)</th>
+        <th>Verify</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Docker</strong></td>
+        <td><code class="ic">25.0+</code></td>
+        <td><code class="ic">brew install --cask docker</code></td>
+        <td><code class="ic">apt install docker.io</code></td>
+        <td><code class="ic">docker info</code></td>
+      </tr>
+      <tr>
+        <td><strong>Node.js</strong></td>
+        <td><code class="ic">22.x</code></td>
+        <td><code class="ic">brew install node@22</code></td>
+        <td><code class="ic">nvm install 22</code></td>
+        <td><code class="ic">node --version</code></td>
+      </tr>
+      <tr>
+        <td><strong>Python</strong></td>
+        <td><code class="ic">3.12+</code></td>
+        <td><code class="ic">brew install python@3.12</code></td>
+        <td><code class="ic">apt install python3.12</code></td>
+        <td><code class="ic">python3 --version</code></td>
+      </tr>
+      <tr>
+        <td><strong>Go</strong></td>
+        <td><code class="ic">1.23+</code></td>
+        <td><code class="ic">brew install go</code></td>
+        <td><code class="ic">apt install golang-1.23</code></td>
+        <td><code class="ic">go version</code></td>
+      </tr>
+      <tr>
+        <td><strong>kubectl</strong></td>
+        <td><code class="ic">1.28+</code></td>
+        <td><code class="ic">brew install kubectl</code></td>
+        <td><code class="ic">snap install kubectl</code></td>
+        <td><code class="ic">kubectl version --client</code></td>
+      </tr>
+      <tr>
+        <td><strong>Helm</strong></td>
+        <td><code class="ic">3.14+</code></td>
+        <td><code class="ic">brew install helm</code></td>
+        <td><code class="ic">snap install helm</code></td>
+        <td><code class="ic">helm version</code></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note-block">
+  <strong>Note:</strong> Node and Python are only required if you plan to run those services natively. Docker is sufficient for all services via Docker Compose.
+</div>
+
+<!-- ═══ SECTION 2: Clone and navigate ═══ -->
+<h2 class="section-accent-blue">2. Clone and navigate</h2>
+<p class="section-sub">One-time setup. Run these two commands before anything else.</p>
+
+<ul class="steps-list">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      <strong>Clone the repository.</strong>
+      <code class="step-cmd">git clone https://github.com/yarova-ca/pipeline-studio.git</code>
+      <span class="step-why">Downloads the full monorepo including all 106 service directories.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      <strong>Enter the repo root.</strong>
+      <code class="step-cmd">cd pipeline-studio</code>
+      <span class="step-why">All service paths are relative to this root. Run every subsequent command from here unless a section specifies otherwise.</span>
+    </span>
+  </li>
+</ul>
+
+<div class="note-block">
+  <strong>Repo structure:</strong> Each service lives at <code class="ic">services/&lt;N&gt;-&lt;name&gt;/</code>. Every service directory contains a <code class="ic">docker-compose.yml</code>, a <code class="ic">.env.example</code>, and source code. The number prefix matches the service index in the <a href="18-service-status.html">service status page</a>.
+</div>
+
+<!-- ═══ SECTION 3: Docker Compose (fastest path) ═══ -->
+<h2 class="section-accent-green">3. Run any service with Docker Compose</h2>
+<p class="section-sub">Fastest path. No native language tooling required. Every service has a <code class="ic">docker-compose.yml</code> at <code class="ic">services/&lt;N&gt;-&lt;name&gt;/docker-compose.yml</code>.</p>
+
+<h3>Example &#8212; 14-express</h3>
+
+<ul class="steps-list">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      <strong>Enter the service directory.</strong>
+      <code class="step-cmd">cd services/14-express</code>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      <strong>Start the service.</strong>
+      <code class="step-cmd">docker compose up</code>
+      <span class="step-why">Builds the image if not cached, starts the container, and streams logs to the terminal.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      <strong>Verify the service is running.</strong>
+      <code class="step-cmd">curl http://localhost:3000/health/live</code>
+      <span class="step-why">Expected response: <code class="ic">{"status":"ok"}</code> with HTTP 200.</span>
+    </span>
+  </li>
+</ul>
+
+<h3>Health check response reference</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Health endpoint</th>
+        <th>HTTP status</th>
+        <th>Meaning</th>
+        <th>What to do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">/health/live</code></td>
+        <td><span class="section-chip chip-green">200</span></td>
+        <td>Service process is running.</td>
+        <td>Nothing &#8212; service is up.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">/health/ready</code></td>
+        <td><span class="section-chip chip-green">200</span></td>
+        <td>Service is running and database is reachable.</td>
+        <td>Nothing &#8212; fully ready.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">/health/ready</code></td>
+        <td><span class="section-chip chip-red">503</span></td>
+        <td>Database is not reachable.</td>
+        <td>Start PostgreSQL &#8212; see <a href="#section-7">section 7</a>.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">/health/live</code></td>
+        <td><span class="section-chip chip-red">404</span></td>
+        <td>Wrong URL or port.</td>
+        <td>Check the <code class="ic">PORT</code> env var in <code class="ic">docker-compose.yml</code>.</td>
+      </tr>
+      <tr>
+        <td>Connection refused</td>
+        <td>&#8212;</td>
+        <td>Container is not running.</td>
+        <td>Run <code class="ic">docker compose up</code> or check <code class="ic">docker compose ps</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="gotcha-block">
+  <strong>&#9888; Port conflicts:</strong> Each service uses a default port defined in its <code class="ic">docker-compose.yml</code>. When running multiple services, each must use a unique port. Check <code class="ic">docker compose ps</code> to see which ports are bound.
+</div>
+
+<!-- ═══ SECTION 4: Build axes ═══ -->
+<h2 class="section-accent-purple">4. Run with build axes</h2>
+<p class="section-sub">Build axes are compile-time switches that activate compliance and auth variants. Pass them as environment variables or Docker build args.</p>
+
+<h3>Via Docker Compose &#8212; environment override</h3>
+
+<pre class="code-block">COMPLIANCE=hipaa docker compose up</pre>
+
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Pass any axis as a prefix environment variable. Docker Compose reads it and injects it as a build arg.</p>
+
+<h3>Via docker build + run</h3>
+
+<pre class="code-block">docker build \
+  --build-arg COMPLIANCE=hipaa \
+  --build-arg AUTH=jwt \
+  -t myapp .
+
+docker run -p 3000:3000 myapp</pre>
+
+<h3>Available build axes</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Axis</th>
+        <th>Values</th>
+        <th>Default</th>
+        <th>What it activates</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">COMPLIANCE</code></td>
+        <td><code class="ic">none</code>, <code class="ic">hipaa</code>, <code class="ic">pci</code>, <code class="ic">fips</code></td>
+        <td><code class="ic">none</code></td>
+        <td>Audit logging, encryption, FIPS runtime swap.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">AUTH</code></td>
+        <td><code class="ic">none</code>, <code class="ic">jwt</code>, <code class="ic">oidc</code></td>
+        <td><code class="ic">none</code></td>
+        <td>Authentication middleware and token validation.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">RUNTIME</code></td>
+        <td><code class="ic">standard</code>, <code class="ic">fips</code></td>
+        <td><code class="ic">standard</code></td>
+        <td>FIPS-validated OpenSSL module in place of default.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note-block">
+  <strong>Note:</strong> Full axis documentation including combination rules and what each value changes at the code level: <a href="21-build-axes.html">21 Build axes</a>.
+</div>
+
+<!-- ═══ SECTION 5: Run natively ═══ -->
+<h2 class="section-accent-amber">5. Run natively (without Docker)</h2>
+<p class="section-sub">Use when you need hot-reload or are actively editing source. Each framework has its own setup sequence.</p>
+
+<h3>14-express &#8212; Node / TypeScript</h3>
+
+<ul class="steps-list">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      <strong>Enter the service directory.</strong>
+      <code class="step-cmd">cd services/14-express</code>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      <strong>Install dependencies.</strong>
+      <code class="step-cmd">npm install</code>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      <strong>Copy the env file.</strong>
+      <code class="step-cmd">cp .env.example .env</code>
+      <span class="step-why">The service will not start without a <code class="ic">.env</code> file. Edit the values before running if you need a real database.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      <strong>Start the dev server.</strong>
+      <code class="step-cmd">npm run dev</code>
+      <span class="step-why">Starts tsx in watch mode. Source changes restart the server automatically.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      <strong>Verify.</strong>
+      <code class="step-cmd">curl http://localhost:3000/health/live</code>
+      <span class="step-why">Expected: <code class="ic">{"status":"ok"}</code> with HTTP 200.</span>
+    </span>
+  </li>
+</ul>
+
+<h3>15-fastapi &#8212; Python</h3>
+
+<ul class="steps-list">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      <strong>Enter the service directory.</strong>
+      <code class="step-cmd">cd services/15-fastapi</code>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      <strong>Create and activate a virtual environment.</strong>
+      <code class="step-cmd">python3 -m venv .venv &amp;&amp; source .venv/bin/activate</code>
+      <span class="step-why">Isolates dependencies from the system Python. Always activate before installing or running.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      <strong>Install dependencies.</strong>
+      <code class="step-cmd">pip install -r requirements.txt</code>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      <strong>Copy the env file.</strong>
+      <code class="step-cmd">cp .env.example .env</code>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      <strong>Start the dev server.</strong>
+      <code class="step-cmd">uvicorn src.main:app --reload --port 3001</code>
+      <span class="step-why"><code class="ic">--reload</code> restarts on source changes. Port 3001 avoids conflict with 14-express on 3000.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">6</span>
+    <span class="step-body">
+      <strong>Verify.</strong>
+      <code class="step-cmd">curl http://localhost:3001/health/live</code>
+      <span class="step-why">Expected: <code class="ic">{"status":"ok"}</code> with HTTP 200.</span>
+    </span>
+  </li>
+</ul>
+
+<h3>16-gin &#8212; Go</h3>
+
+<ul class="steps-list">
+  <li>
+    <span class="step-num">1</span>
+    <span class="step-body">
+      <strong>Enter the service directory.</strong>
+      <code class="step-cmd">cd services/16-gin</code>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">2</span>
+    <span class="step-body">
+      <strong>Download Go module dependencies.</strong>
+      <code class="step-cmd">go mod download</code>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">3</span>
+    <span class="step-body">
+      <strong>Copy the env file.</strong>
+      <code class="step-cmd">cp .env.example .env</code>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">4</span>
+    <span class="step-body">
+      <strong>Run the service.</strong>
+      <code class="step-cmd">go run main.go</code>
+      <span class="step-why">Compiles and runs in one step. No hot-reload &#8212; restart manually after source changes, or use <code class="ic">air</code> for watch mode.</span>
+    </span>
+  </li>
+  <li>
+    <span class="step-num">5</span>
+    <span class="step-body">
+      <strong>Verify.</strong>
+      <code class="step-cmd">curl http://localhost:3002/health/live</code>
+      <span class="step-why">Expected: <code class="ic">{"status":"ok"}</code> with HTTP 200.</span>
+    </span>
+  </li>
+</ul>
+
+<div class="gotcha-block">
+  <strong>&#9888; Go hot-reload:</strong> <code class="ic">go run</code> does not watch for file changes. Install <code class="ic">air</code> (<code class="ic">go install github.com/cosmtrek/air@latest</code>) and run <code class="ic">air</code> instead of <code class="ic">go run main.go</code> for automatic restarts.
+</div>
+
+<!-- ═══ SECTION 6: Required environment variables ═══ -->
+<h2 class="section-accent-amber">6. Required environment variables</h2>
+<p class="section-sub">Every service reads from <code class="ic">.env</code> in its own directory. Copy from <code class="ic">.env.example</code> first. The three variables below are required in every service.</p>
+
+<div class="warn-block">
+  <strong>&#9888; Copy first, then edit.</strong> Running without <code class="ic">.env</code> causes an immediate crash with "required env var" errors. Always <code class="ic">cp .env.example .env</code> before the first run.
+</div>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Required</th>
+        <th>Example value</th>
+        <th>When missing: what happens</th>
+        <th>When invalid: what happens</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">JWT_SECRET</code></td>
+        <td><span class="env-required">required</span></td>
+        <td><code class="ic">dev-secret-change-in-prod-32ch</code></td>
+        <td>Service exits: <code class="ic">JWT_SECRET required</code></td>
+        <td>When &lt; 32 chars: service exits: <code class="ic">JWT_SECRET must be at least 32 chars</code></td>
+      </tr>
+      <tr>
+        <td><code class="ic">DATABASE_URL</code></td>
+        <td><span class="env-required">required</span></td>
+        <td><code class="ic">postgresql://postgres:localdev@localhost:5432/pipeline_dev</code></td>
+        <td>Service starts but <code class="ic">/health/ready</code> returns 503</td>
+        <td>Service starts but all DB queries fail with connection error</td>
+      </tr>
+      <tr>
+        <td><code class="ic">PORT</code></td>
+        <td><span class="env-optional">optional</span></td>
+        <td><code class="ic">3000</code></td>
+        <td>Defaults to <code class="ic">3000</code> when not set</td>
+        <td>Non-numeric value causes crash: <code class="ic">invalid port</code></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Service-specific variables</h3>
+<p style="font-size:12px;color:var(--text-dim)">Each <code class="ic">.env.example</code> lists every variable that service reads. Variables not in the table above are service-specific. The example file includes a comment for each one explaining what it controls.</p>
+
+<div class="note-block">
+  <strong>Note:</strong> <code class="ic">JWT_SECRET</code> must be identical across services that share a JWT-authenticated boundary. A mismatch causes 401 errors on every cross-service request.
+</div>
+
+<!-- ═══ SECTION 7: Local database setup ═══ -->
+<h2 id="section-7" class="section-accent-green">7. Local database setup</h2>
+<p class="section-sub">Three services require PostgreSQL: <strong>14-express</strong> (Prisma ORM), <strong>15-fastapi</strong> (SQLAlchemy), <strong>16-gin</strong> (GORM). All three share the same local PostgreSQL instance.</p>
+
+<h3>Start PostgreSQL via Docker</h3>
+
+<pre class="code-block">docker run -d \
+  -p 5432:5432 \
+  -e POSTGRES_PASSWORD=localdev \
+  --name pg \
+  postgres:16-alpine</pre>
+
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:6px">This starts a named container called <code class="ic">pg</code> on port 5432. The container persists across reboots. Use <code class="ic">docker start pg</code> to restart it without creating a new one.</p>
+
+<h3>Set DATABASE_URL in .env</h3>
+
+<pre class="code-block">DATABASE_URL=postgresql://postgres:localdev@localhost:5432/pipeline_dev</pre>
+
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:6px">Copy this exact value into the <code class="ic">.env</code> of each service that needs a database. The database name <code class="ic">pipeline_dev</code> is created automatically by each service's ORM on first run.</p>
+
+<h3>Verify database connection</h3>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>Expected output</th>
+        <th>What it means</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="ic">curl http://localhost:3000/health/ready</code></td>
+        <td><code class="ic">{"status":"ready"}</code> HTTP 200</td>
+        <td>PostgreSQL is running and reachable.</td>
+      </tr>
+      <tr>
+        <td><code class="ic">curl http://localhost:3000/health/ready</code></td>
+        <td>HTTP 503</td>
+        <td>PostgreSQL is not running. Run <code class="ic">docker start pg</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="failure-block">
+  <div class="failure-label">If PostgreSQL is not running</div>
+  <div><strong>Trigger:</strong> <code class="ic">/health/ready</code> returns 503. Service logs show <code class="ic">Connection refused :5432</code>.</div>
+  <div><strong>System:</strong> Service starts and handles HTTP. All routes that touch the database return 500.</div>
+  <div><strong>User sees:</strong> 503 on <code class="ic">/health/ready</code>. 500 on any data endpoint.</div>
+  <div><strong>To restore:</strong> Run <code class="ic">docker start pg</code>. If the container does not exist, run the full <code class="ic">docker run</code> command above. Verify with <code class="ic">/health/ready</code>.</div>
+</div>
+
+<div class="note-block">
+  <strong>One database, three services:</strong> All three services can connect to the same <code class="ic">pipeline_dev</code> database simultaneously. Each ORM manages its own schema in separate tables. There are no naming conflicts.
+</div>
+
+<!-- ═══ SECTION 8: Failure modes ═══ -->
+<h2 class="section-accent-amber">8. Failure modes</h2>
+<p class="section-sub">Every common failure you will encounter, what the error looks like, and exactly what to do. All commands are copy-pasteable.</p>
+
+<div class="tbl-wrap">
+  <table class="xref-table">
+    <thead>
+      <tr>
+        <th>What breaks</th>
+        <th>What you see</th>
+        <th>What to do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Port in use</strong></td>
+        <td><code class="ic">Error: listen EADDRINUSE :3000</code></td>
+        <td>
+          Find and kill the process:<br>
+          <code class="ic">lsof -i :3000</code><br>
+          Then: <code class="ic">kill &lt;PID&gt;</code>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Docker not running</strong></td>
+        <td><code class="ic">Cannot connect to the Docker daemon</code></td>
+        <td>
+          macOS: Start Docker Desktop from Applications.<br>
+          Linux: <code class="ic">sudo systemctl start docker</code>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>npm install fails</strong></td>
+        <td><code class="ic">ERESOLVE peer dep errors</code></td>
+        <td>
+          Delete lockfile and modules, then reinstall:<br>
+          <code class="ic">rm -rf node_modules package-lock.json</code><br>
+          Then: <code class="ic">npm install</code>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Database not running</strong></td>
+        <td><code class="ic">Connection refused :5432</code> in logs</td>
+        <td>
+          Restart existing container: <code class="ic">docker start pg</code><br>
+          Container missing: run the full <code class="ic">docker run</code> command from section 7.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>.env missing</strong></td>
+        <td><code class="ic">Service crashes: "required env var"</code></td>
+        <td>
+          <code class="ic">cp .env.example .env</code><br>
+          Edit the values if you need real database credentials.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>FIPS build fails</strong></td>
+        <td><code class="ic">FIPS module not active</code></td>
+        <td>
+          Add both axes together:<br>
+          <code class="ic">--build-arg COMPLIANCE=fips --build-arg RUNTIME=fips</code><br>
+          FIPS compliance requires the FIPS runtime &#8212; neither alone is sufficient.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Go build fails</strong></td>
+        <td><code class="ic">cannot find package internal/compliance/active</code></td>
+        <td>
+          The COPY for the compliance variant in the Dockerfile must run before <code class="ic">go build</code>.<br>
+          Check the Dockerfile layer order: compliance <code class="ic">COPY</code> must precede the <code class="ic">RUN go build</code> step.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Detailed failure block &#8212; FIPS</h3>
+
+<div class="failure-block">
+  <div class="failure-label">If FIPS build fails</div>
+  <div><strong>Trigger:</strong> <code class="ic">docker build --build-arg COMPLIANCE=fips</code> without <code class="ic">--build-arg RUNTIME=fips</code>.</div>
+  <div><strong>System:</strong> Build fails at the runtime validation step with <code class="ic">FIPS module not active</code>.</div>
+  <div><strong>User sees:</strong> Docker build exits non-zero. No image is produced.</div>
+  <div><strong>To restore:</strong> Add both build args: <code class="ic">--build-arg COMPLIANCE=fips --build-arg RUNTIME=fips</code>. Both are required together. See <a href="21-build-axes.html">21 Build axes</a> for the full FIPS setup.</div>
+</div>
+
+<h3>Detailed failure block &#8212; Go compliance variant</h3>
+
+<div class="failure-block">
+  <div class="failure-label">If Go build fails with missing compliance package</div>
+  <div><strong>Trigger:</strong> <code class="ic">go build</code> runs before the compliance variant files are copied into the build layer.</div>
+  <div><strong>System:</strong> Build fails: <code class="ic">cannot find package internal/compliance/active</code>.</div>
+  <div><strong>User sees:</strong> Docker build exits non-zero. No image is produced.</div>
+  <div><strong>To restore:</strong> Open the service <code class="ic">Dockerfile</code>. Ensure the <code class="ic">COPY</code> for the compliance variant appears before <code class="ic">RUN go build</code>. The correct order: <code class="ic">COPY internal/compliance/${COMPLIANCE}/. internal/compliance/active/</code> then <code class="ic">RUN go build ./...</code></div>
+</div>
+
+</main>
+</body>
+</html>
