@@ -1,10 +1,11 @@
 # syntax=docker/dockerfile:1.6
-ARG BUILD_IMAGE=ubuntu
+ARG BUILD_IMAGE=sdk
 ARG BUILD_BASE=ubuntu:24.04
 
 FROM ubuntu:24.04 AS base-ubuntu
 RUN apt-get update && apt-get install -y --no-install-recommends ruby ruby-dev build-essential \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && gem install bundler --no-document
 
 FROM ruby:3.3-bookworm AS base-sdk
 FROM ruby:3.3-alpine AS base-sdk-alpine

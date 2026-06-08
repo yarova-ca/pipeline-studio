@@ -14,14 +14,14 @@ ARG BUILD_BASE=ubuntu:24.04
 ARG RUNTIME=scratch
 FROM ubuntu:24.04 AS base-ubuntu
 RUN apt-get update && apt-get install -y --no-install-recommends wget ca-certificates \
- && wget -q https://go.dev/dl/go1.23.4.linux-amd64.tar.gz \
- && tar -C /usr/local -xzf go1.23.4.linux-amd64.tar.gz \
- && rm go1.23.4.linux-amd64.tar.gz \
+ && wget -q https://go.dev/dl/go1.25.0.linux-amd64.tar.gz \
+ && tar -C /usr/local -xzf go1.25.0.linux-amd64.tar.gz \
+ && rm go1.25.0.linux-amd64.tar.gz \
  && rm -rf /var/lib/apt/lists/*
 ENV PATH="/usr/local/go/bin:$PATH" CGO_ENABLED=0 GOOS=linux
 
-FROM golang:1.23-bookworm AS base-sdk
-FROM golang:1.23-alpine AS base-sdk-alpine
+FROM golang:1.25-bookworm AS base-sdk
+FROM golang:1.25-alpine AS base-sdk-alpine
 FROM ${BUILD_BASE} AS base-custom
 
 FROM base-${BUILD_IMAGE} AS build
@@ -39,7 +39,7 @@ ARG ORM=gorm
 COPY internal/db/${ORM}/ ./internal/db/active/
 RUN if [ "${COMPLIANCE}" = "fips" ] && [ "${RUNTIME}" != "fips" ]; then \
       echo "ERROR: COMPLIANCE=fips requires RUNTIME=fips"; exit 1; fi
-RUN go build -a -installsuffix cgo -ldflags="-s -w" -o /app/bin/app ./...
+RUN go build -a -installsuffix cgo -ldflags="-s -w" -o /app/bin/app .
 RUN printf 'root:x:0:0:root:/root:/bin/sh\nnobody:x:65534:65534:nobody:/nonexistent:/bin/false\napp:x:1001:1001::/home/app:/sbin/nologin\n' > /tmp/app-passwd \
  && printf 'root:x:0:\nnobody:x:65534:\napp:x:1001:\n' > /tmp/app-group
 

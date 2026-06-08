@@ -12,8 +12,8 @@
 ARG BUILD_IMAGE=ubuntu
 ARG BUILD_BASE=ubuntu:24.04
 FROM ubuntu:24.04 AS base-ubuntu
-RUN apt-get update && apt-get install -y --no-install-recommends cmake clang libssl-dev zlib1g-dev \
-    libjsoncpp-dev uuid-dev libpq-dev libbrotli-dev \
+RUN apt-get update && apt-get install -y --no-install-recommends cmake ninja-build clang git ca-certificates pkg-config \
+    libssl-dev zlib1g-dev libjsoncpp-dev uuid-dev libpq-dev libpqxx-dev libbrotli-dev libgtest-dev libasio-dev \
  && rm -rf /var/lib/apt/lists/*
 
 FROM debian:bookworm AS base-sdk
@@ -21,19 +21,20 @@ FROM ${BUILD_BASE} AS base-custom
 
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
-COPY CMakeLists.txt ./
+COPY CMakeLists.txt main.cc ./
 COPY src ./src
-COPY include ./include
-RUN cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ \
- && cmake --build build --parallel $(nproc)
-# REPLACE: binary name 'app' below with your CMake target name
+COPY tests ./tests
+RUN cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ \
+    -DCMAKE_CXX_SCAN_FOR_MODULES=OFF \
+ && cmake --build build --parallel $(nproc) --target 27-crow
+# Binary name is the CMake target: 27-crow
 
 # ── Runtime stage (standard — debian:12-slim with shared libs) ────────────
 FROM debian:12-slim AS runtime
-RUN apt-get update && apt-get install -y --no-install-recommends libssl3 zlib1g libjsoncpp25 \
+RUN apt-get update && apt-get install -y --no-install-recommends libssl3 zlib1g libjsoncpp25 libpqxx-6.4 libpq5 \
  && rm -rf /var/lib/apt/lists/*
 RUN useradd -u 1001 -r app
-COPY --from=build /app/build/app /usr/local/bin/app
+COPY --from=build /app/build/27-crow /usr/local/bin/app
 USER app
 EXPOSE 8080
 ENTRYPOINT ["/usr/local/bin/app"]
@@ -61,10 +62,7 @@ ENTRYPOINT ["/usr/local/bin/app"]
 
 # ── Runtime — FIPS (ubi-micro) ────────────────────────────────────────────
 FROM registry.access.redhat.com/ubi9/ubi-micro AS runtime-fips
-COPY --from=build /app/build/app /usr/local/bin/app
+COPY --from=build /app/build/27-crow /usr/local/bin/app
 USER 1001
 EXPOSE 8080
-
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:8080/health || exit 1
 ENTRYPOINT ["/usr/local/bin/app"]

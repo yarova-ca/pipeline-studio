@@ -4,6 +4,11 @@ project(27-drogon VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Debian's Drogon 1.8.x ships FindJsoncpp.cmake using the removed exec_program
+# command. CMake 3.28 rejects it under policy CMP0153. Allow the old behavior.
+if(POLICY CMP0153)
+    cmake_policy(SET CMP0153 OLD)
+endif()
 find_package(Drogon REQUIRED)
 
 # jwt-cpp: header-only JWT library (requires OpenSSL)
@@ -15,7 +20,10 @@ FetchContent_Declare(jwt-cpp
 FetchContent_MakeAvailable(jwt-cpp)
 
 # libpqxx: PostgreSQL C++ client
-find_package(libpqxx REQUIRED)
+# Ubuntu's libpqxx-dev (7.x) ships pkg-config only, no CMake package config.
+# Use pkg-config to locate it instead of find_package(libpqxx).
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(PQXX REQUIRED IMPORTED_TARGET libpqxx)
 find_package(OpenSSL REQUIRED)
 
 add_executable(${PROJECT_NAME}
@@ -27,7 +35,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Drogon::Drogon
     jwt-cpp::jwt-cpp
-    libpqxx::pqxx
+    PkgConfig::PQXX
     OpenSSL::SSL
     OpenSSL::Crypto
 )

@@ -19,7 +19,10 @@ FetchContent_Declare(jwt-cpp
 FetchContent_MakeAvailable(jwt-cpp)
 
 # libpqxx: PostgreSQL C++ client
-find_package(libpqxx REQUIRED)
+# Ubuntu's libpqxx-dev (7.x) ships pkg-config only, no CMake package config.
+# Use pkg-config to locate it instead of find_package(libpqxx).
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(PQXX REQUIRED IMPORTED_TARGET libpqxx)
 find_package(OpenSSL REQUIRED)
 
 add_executable(${PROJECT_NAME}
@@ -31,7 +34,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Crow::Crow
     jwt-cpp::jwt-cpp
-    libpqxx::pqxx
+    PkgConfig::PQXX
     OpenSSL::SSL
     OpenSSL::Crypto
 )

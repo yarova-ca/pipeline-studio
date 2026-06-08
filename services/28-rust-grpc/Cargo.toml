@@ -1,7 +1,11 @@
 [package]
-name = "28-rust-grpc"
+name = "svc-28-rust-grpc"
 version = "1.0.0"
 edition = "2021"
+
+[[bin]]
+name = "28-rust-grpc"
+path = "src/main.rs"
 
 [dependencies]
 tonic = { version = "0.11", features = ["transport"] }

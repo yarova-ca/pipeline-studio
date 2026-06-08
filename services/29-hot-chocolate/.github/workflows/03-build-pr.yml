@@ -39,10 +39,11 @@ jobs:
             --load .
 
       - name: Generate SBOM (PR build)
-        uses: anchore/syft-action@v1
+        uses: anchore/sbom-action@v0
         with:
           image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.sha }}
           output-file: sbom-pr.spdx.json
+          format: spdx-json
 
       # ── DEFAULT: Trivy container scan ─────────────────────────────
       - name: Container scan — Trivy

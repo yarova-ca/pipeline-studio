@@ -24,7 +24,7 @@ FROM ${BUILD_BASE} AS base-custom
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 COPY . .
 RUN npm run build
 

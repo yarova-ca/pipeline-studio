@@ -15,6 +15,7 @@ defmodule WsElixir.MixProject do
       {:postgrex, "~> 0.17"},
       {:logger_json, "~> 5.0"},
       {:prometheus_ex, "~> 3.0"},
+      {:joken, "~> 2.6"},
     ]
   end
 end

@@ -1,7 +1,11 @@
 [package]
-name = "29-async-graphql"
+name = "svc-29-async-graphql"
 version = "1.0.0"
 edition = "2021"
+
+[[bin]]
+name = "29-async-graphql"
+path = "src/main.rs"
 
 [dependencies]
 async-graphql = { version = "7.0", features = ["chrono"] }

@@ -215,7 +215,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}@${{ steps.build.outputs.digest }}
 
       - name: Generate SBOM
-        uses: anchore/syft-action@v1
+        uses: anchore/sbom-action@v0
         with:
           image: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.service }}:latest
           output-file: sbom-${{ matrix.service }}.spdx.json

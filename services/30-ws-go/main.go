@@ -1,10 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -22,7 +23,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	for {
 		mt, msg, err := conn.ReadMessage()
 		if err != nil { break }
-		conn.WriteMessage(mt, []byte(`{"echo":"`+string(msg)+`","ts":`+json.Number(string(rune(time.Now().UnixMilli())))+`}`))
+		conn.WriteMessage(mt, []byte(`{"echo":"`+string(msg)+`","ts":`+strconv.FormatInt(time.Now().UnixMilli(), 10)+`}`))
 	}
 }
 

@@ -200,7 +200,7 @@ jobs:
         run: cosign sign --yes $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
 
       - name: Generate SBOM
-        uses: anchore/syft-action@v1
+        uses: anchore/sbom-action@v0
         with:
           image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           output-file: sbom.spdx.json
@@ -210,21 +210,6 @@ jobs:
           cosign attest --yes \
             --predicate sbom.spdx.json \
             $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
-
-  # ── SLSA Level 3 provenance (needs image digest from build-push-sign) ─
-  slsa-provenance:
-    needs: build-push-sign
-    permissions:
-      actions: read
-      id-token: write
-      packages: write
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2
-    with:
-      image: ghcr.io/${{ github.repository }}
-      digest: ${{ needs.build-push-sign.outputs.image-digest }}
-    secrets:
-      registry-username: ${{ github.actor }}
-      registry-password: ${{ secrets.GITHUB_TOKEN }}
 
 # ── Compliance delta checklist ─────────────────────────────────────
 # FIPS 140-2/3:  use --target runtime-fips (block above, wired for registry.access.redhat.com/ubi9/openjdk-21-runtime)

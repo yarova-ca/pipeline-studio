@@ -7,7 +7,7 @@
 
 import type { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import Redis from 'ioredis'
+import { Redis } from 'ioredis'
 import { logger } from '../../logger.js'
 import { auditLog } from '../../middleware/audit.js'
 

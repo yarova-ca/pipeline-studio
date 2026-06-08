@@ -9,7 +9,7 @@
 # ─────────────────────────────────────────────────────────────────────────
 
 # ── Build stage ───────────────────────────────────────────────────────────
-ARG BUILD_IMAGE=ubuntu
+ARG BUILD_IMAGE=sdk
 ARG BUILD_BASE=ubuntu:24.04
 FROM ubuntu:24.04 AS base-ubuntu
 RUN apt-get update && apt-get install -y --no-install-recommends wget apt-transport-https \
@@ -24,10 +24,10 @@ FROM ${BUILD_BASE} AS base-custom
 
 FROM base-${BUILD_IMAGE} AS build
 WORKDIR /app
-COPY *.csproj ./
-RUN dotnet restore
-COPY . .
-RUN dotnet publish -c Release -o /app/out --self-contained false
+COPY App/*.csproj ./App/
+RUN dotnet restore App/19-minimal-apis.csproj
+COPY App/ ./App/
+RUN dotnet publish App/19-minimal-apis.csproj -c Release -o /app/out --self-contained false
 
 # ── Runtime stage (standard) ──────────────────────────────────────────────
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS runtime

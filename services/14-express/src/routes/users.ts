@@ -204,7 +204,7 @@ router.post('/me/items', async (req: Request, res: Response) => {
 // ── Get one item ───────────────────────────────────────────────────────────
 router.get('/me/items/:id', async (req: Request, res: Response) => {
   const item = await prisma.item.findFirst({
-    where: { id: req.params.id, userId: req.user!.id },
+    where: { id: String(req.params.id), userId: req.user!.id },
   })
   if (!item) {
     res.status(404).json({ error: 'Item not found' })
@@ -223,14 +223,14 @@ router.put('/me/items/:id', async (req: Request, res: Response) => {
   }
   const { title, description } = result.data
   const existing = await prisma.item.findFirst({
-    where: { id: req.params.id, userId: req.user!.id },
+    where: { id: String(req.params.id), userId: req.user!.id },
   })
   if (!existing) {
     res.status(404).json({ error: 'Item not found' })
     return
   }
   const item = await prisma.item.update({
-    where: { id: req.params.id },
+    where: { id: String(req.params.id) },
     data: { ...(title && { title }), ...(description !== undefined && { description }) },
   })
   res.json({ item })
@@ -239,13 +239,13 @@ router.put('/me/items/:id', async (req: Request, res: Response) => {
 // ── Delete item ────────────────────────────────────────────────────────────
 router.delete('/me/items/:id', async (req: Request, res: Response) => {
   const existing = await prisma.item.findFirst({
-    where: { id: req.params.id, userId: req.user!.id },
+    where: { id: String(req.params.id), userId: req.user!.id },
   })
   if (!existing) {
     res.status(404).json({ error: 'Item not found' })
     return
   }
-  await prisma.item.delete({ where: { id: req.params.id } })
+  await prisma.item.delete({ where: { id: String(req.params.id) } })
   res.status(204).send()
 })
 

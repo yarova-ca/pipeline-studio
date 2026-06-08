@@ -12,5 +12,9 @@
     "nuxt": "^4.4.0",
     "vitest": "^3.0.0",
     "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "pino": "^9.0.0",
+    "prom-client": "^15.0.0"
   }
 }
