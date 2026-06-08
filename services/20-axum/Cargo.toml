@@ -36,7 +36,7 @@ utoipa              = { version = "4", features = ["axum_extras"] }
 utoipa-swagger-ui   = { version = "7", features = ["axum"] }
 
 # ORM / DB
-sqlx = { version = "0.8", features = ["postgres", "uuid", "chrono", "runtime-tokio", "macros"] }
+sqlx = { version = "0.9", features = ["postgres", "uuid", "chrono", "runtime-tokio", "macros"] }
 
 # Auth
 jsonwebtoken = "9"
