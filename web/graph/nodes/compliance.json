@@ -1,0 +1,150 @@
+[
+  {
+    "id": "cmmc",
+    "name": "cmmc",
+    "label": "CMMC — Defense supply chain",
+    "region": [
+      "US"
+    ],
+    "requiredControls": {
+      "blockedPaths": "/debug/* → 404",
+      "auditLog": "cmmc_audit · actor, action, resource, timestamp",
+      "noEgress": "Set",
+      "verboseErrors": "Disabled"
+    },
+    "middleware": "Audit log (cmmc_audit), debug→404, NO_EGRESS=true, verbose errors disabled",
+    "useWhen": "DoD contractors. Service handles CUI."
+  },
+  {
+    "id": "fips",
+    "name": "fips",
+    "label": "FIPS 140-2 — US federal cryptography",
+    "region": [
+      "US"
+    ],
+    "forces": {
+      "RUNTIME": "fips"
+    },
+    "distroSupport": {
+      "use": [
+        "RHEL UBI 9",
+        "Oracle Linux 9",
+        "Amazon Linux 2023"
+      ],
+      "avoid": [
+        "Alpine (musl)",
+        "Wolfi",
+        "Distroless"
+      ],
+      "why": "FIPS requires validated OpenSSL (FIPS object module). Alpine uses musl libc — no FIPS-validated crypto. RHEL, Oracle Linux 9, and Amazon Linux 2023 ship OpenSSL 3.x with FIPS validation certificates. CentOS Stream 9 has no independent FIPS certificate."
+    },
+    "requiredControls": {
+      "startup": "OpenSSL FIPS not active → throws / Fatal"
+    },
+    "middleware": "None — startup-check only",
+    "useWhen": "US federal / defense. All crypto must be FIPS-validated.",
+    "startupCheck": "OpenSSL FIPS mode check"
+  },
+  {
+    "id": "hipaa",
+    "name": "hipaa",
+    "label": "HIPAA — Healthcare data",
+    "region": [
+      "US"
+    ],
+    "distroSupport": {
+      "use": [
+        "Debian 12",
+        "Ubuntu 22.04 LTS",
+        "RHEL UBI 9"
+      ],
+      "avoid": [
+        "Alpine (for production patient data workloads)"
+      ],
+      "why": "HIPAA requires audit logging (auditd) and access controls. Alpine lacks auditd in base. Debian/Ubuntu ship auditd and have long LTS cycles for patch compliance evidence."
+    },
+    "requiredControls": {
+      "auditLog": "hipaa_access · actor, action, resource, request-id, timestamp",
+      "piiMasking": "ssn, dob, mrn, diagnosis, patientName, address, phone → ***REDACTED***",
+      "verboseErrors": "Disabled"
+    },
+    "middleware": "Audit log (every request) + PHI masking in logger + verbose errors disabled",
+    "useWhen": "US healthcare. Service handles PHI (patient data)."
+  },
+  {
+    "id": "nerc",
+    "name": "nerc",
+    "label": "NERC CIP — Energy grid / OT-IT boundary",
+    "requiredControls": {
+      "headersAdded": "X-OT-IT-Boundary: enforced · X-Network-Isolation: on",
+      "noEgress": "Set"
+    },
+    "middleware": "OT/IT boundary headers, NO_EGRESS=true",
+    "useWhen": "Electric utilities. Service operates in OT/IT boundary."
+  },
+  {
+    "id": "pci",
+    "name": "pci",
+    "label": "PCI DSS — Payment card data",
+    "distroSupport": {
+      "use": [
+        "Distroless",
+        "Wolfi (minimal attack surface)"
+      ],
+      "avoid": [
+        "Ubuntu full",
+        "Debian full (too many unnecessary packages)"
+      ],
+      "why": "PCI DSS v4.0 requires removing all unnecessary software components. Distroless and Wolfi have near-zero package footprint — easier to pass PCI 6.3.3 (no unnecessary software)."
+    },
+    "requiredControls": {
+      "startup": "SECRET/KEY/TOKEN/PASS <16 chars → fatal exit",
+      "blockedPaths": "/debug/* → 404 · /metrics → 404",
+      "headersAdded": "X-PCI-DSS: enforced · Strict-Transport-Security"
+    },
+    "middleware": "HTTP→403, debug/metrics→404, response headers (X-PCI-DSS, HSTS)",
+    "useWhen": "Cardholder data environment. Service processes card data.",
+    "startupCheck": "Weak secrets check"
+  },
+  {
+    "id": "pipeda",
+    "name": "pipeda",
+    "label": "PIPEDA — Canadian personal information",
+    "region": [
+      "CA"
+    ],
+    "distroSupport": {
+      "use": [
+        "Debian 12",
+        "Ubuntu 22.04 LTS"
+      ],
+      "avoid": [],
+      "why": "PIPEDA is primarily a data-handling regulation, not a cryptography standard. Any distro with current security patches satisfies the technical baseline. Debian/Ubuntu preferred for long LTS support windows matching data retention periods."
+    },
+    "requiredControls": {
+      "blockedPaths": "POST/PUT/PATCH without X-Consent: granted → 451",
+      "piiMasking": "email, name, phone, address, sin → ***",
+      "headersAdded": "X-Data-Residency: CA"
+    },
+    "middleware": "Consent gate (POST/PUT/PATCH), X-Data-Residency: CA header, PII masking",
+    "useWhen": "Canadian orgs. Service collects personal information."
+  },
+  {
+    "id": "soc2",
+    "name": "soc2",
+    "label": "SOC 2 — Service organization controls",
+    "requiredControls": {
+      "auditLog": "soc2_audit · actor, action, resource, timestamp",
+      "verboseErrors": "Disabled"
+    },
+    "middleware": "Immutable audit log (soc2_audit event) + verbose errors disabled",
+    "useWhen": "SaaS. Service stores customer data. SOC 2 audit required."
+  },
+  {
+    "id": "standard",
+    "name": "standard",
+    "label": "standard — No extra middleware",
+    "middleware": "None — applyCompliance is a no-op",
+    "useWhen": "Default. No regulated data. No compliance requirement."
+  }
+]

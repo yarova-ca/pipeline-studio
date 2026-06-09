@@ -1,0 +1,32 @@
+[
+  {
+    "id": "kong",
+    "name": "Kong",
+    "kind": "api-gateway",
+    "notes": "OSS + enterprise; plugin auth, rate limiting, mTLS."
+  },
+  {
+    "id": "apigee",
+    "name": "Google Apigee",
+    "kind": "api-gateway",
+    "notes": "Enterprise API mgmt; OAuth2, quotas, analytics."
+  },
+  {
+    "id": "aws-api-gateway",
+    "name": "AWS API Gateway",
+    "kind": "api-gateway",
+    "notes": "Managed; IAM/Cognito auth, WAF, usage plans."
+  },
+  {
+    "id": "azure-apim",
+    "name": "Azure API Management",
+    "kind": "api-gateway",
+    "notes": "Managed; AAD/OAuth2, products, policies."
+  },
+  {
+    "id": "nginx-gateway",
+    "name": "NGINX Gateway",
+    "kind": "api-gateway",
+    "notes": "Ingress-level; JWT auth, mTLS, rate limit."
+  }
+]

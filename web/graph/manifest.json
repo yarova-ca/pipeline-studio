@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "nodeCounts": {
+    "frameworks": 106,
+    "categories": 30,
+    "industries": 73,
+    "verticals": 16,
+    "stages": 46,
+    "tools": 98,
+    "invariants": 25,
+    "images": 22,
+    "compliance": 8,
+    "clusters": 4,
+    "versions": 148,
+    "buildAxes": 8
+  },
+  "edgeTotal": 3581,
+  "edgeTypes": {
+    "IN_CATEGORY": 106,
+    "USES_LANGUAGE": 106,
+    "ON_DEVICE": 106,
+    "PINNED_AT": 72,
+    "BUILDS_IMAGE": 82,
+    "DEPLOYS_TO": 424,
+    "USES_STAGE": 2059,
+    "FORCES": 1,
+    "RATED_ON": 126,
+    "REQUIRES": 186,
+    "CONTAINS": 73,
+    "HAS_INTEGRATION": 38,
+    "USES_GATEWAY": 38,
+    "HAS_COMPONENT": 120,
+    "USES_GITOPS": 20,
+    "GUARDS_STAGE": 24
+  },
+  "merges": {
+    "frameworksWithShipped": 105,
+    "fwStageEdges": 2059,
+    "industryComplianceEdges": 74
+  },
+  "danglingEdges": 0
+}

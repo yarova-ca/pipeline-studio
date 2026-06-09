@@ -1,0 +1,3993 @@
+[
+  {
+    "id": "retail-banking",
+    "name": "Retail Banking",
+    "rowNumber": 1,
+    "verticalId": "financial-services",
+    "vertical": "Financial Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "OSFI B-10/B-13",
+      "Bank Act",
+      "PIPEDA",
+      "FINTRAC PCMLTFA",
+      "AML/ATF"
+    ],
+    "optionalCompliance": [
+      "SOC 2 Type II",
+      "ISO 27001",
+      "PCI DSS"
+    ],
+    "regulators": [
+      "OSFI",
+      "FINTRAC",
+      "Bank of Canada"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "PCI",
+      "Financial"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "OSFI B-13 requires vendor notification for cloud. Core system data must reside in Canada unless OSFI-approved.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "MFA on all customer-facing systems",
+        "AES-256 encryption",
+        "FINTRAC transaction monitoring",
+        "fraud detection",
+        "secure core banking access"
+      ],
+      "auditRequirements": [
+        "Financial records 7 yr",
+        "FINTRAC records 5 yr",
+        "Suspicious transaction reports 5 yr"
+      ]
+    },
+    "market": {
+      "catalogName": null,
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Ontario": "RBC, TD Bank, Scotiabank, BMO, CIBC, Equitable Bank (Toronto)",
+        "Quebec": "Desjardins, National Bank, Laurentian Bank (Montréal)",
+        "British Columbia": "Coast Capital, Vancity, CWB (Vancouver)",
+        "Alberta": "ATB Financial, Servus Credit Union (Edmonton/Calgary)",
+        "Nova Scotia": "CIBC Atlantic, Scotiabank Halifax"
+      },
+      "wage": "CA$90k–CA$130k",
+      "demand": "Warm",
+      "tier": "T1",
+      "entry": [
+        "No security clearance required; standard criminal background check",
+        "AWS/Azure Certified Solutions Architect valued by Big 5",
+        "CISSP or CISM for security-adjacent roles",
+        "French-English bilingual valued at Desjardins, National Bank, Laurentian",
+        "Entry difficulty 4 = interview bar is high (system design), not role scarcity"
+      ]
+    }
+  },
+  {
+    "id": "investment-banking",
+    "name": "Investment Banking",
+    "rowNumber": 2,
+    "verticalId": "financial-services",
+    "vertical": "Financial Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "OSFI",
+      "CIRO (formerly IIROC)",
+      "Provincial securities acts",
+      "PIPEDA"
+    ],
+    "optionalCompliance": [
+      "SOC 2 Type II",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "OSFI",
+      "CIRO",
+      "OSC/AMF (provincial)"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "MNPI",
+      "Financial"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "CIRO Rule 3200 data segregation. MNPI firewall enforcement between trading desks. Trading systems require sub-50ms latency.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "MNPI access controls",
+        "Chinese Wall enforcement",
+        "audit trail for all trades and communications",
+        "voice recording archiving"
+      ],
+      "auditRequirements": [
+        "Trade records 7 yr",
+        "Electronic communications 5 yr",
+        "Voice communications 3 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "life-insurance",
+    "name": "Life Insurance",
+    "rowNumber": 3,
+    "verticalId": "financial-services",
+    "vertical": "Financial Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "OSFI",
+      "Provincial Insurance Acts",
+      "PIPEDA",
+      "PHIPA (where health data)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "OSFI",
+      "FSRA (ON)",
+      "AMF (QC)",
+      "BCFSA (BC)"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "PHI",
+      "Financial"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "DAST"
+    ],
+    "frameworkNotes": "Health data triggers PHIPA (ON) or provincial equivalent. OSFI Guideline E-21 for operational risk. Federal insurers under OSFI; provincial under provincial acts.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "PHI encryption per PHIPA",
+        "underwriting model integrity",
+        "claims fraud detection",
+        "actuarial data access controls"
+      ],
+      "auditRequirements": [
+        "Policy records 10 yr",
+        "Claims 7 yr",
+        "PHIPA breach notification required"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "p-and-c-insurance",
+    "name": "P&C Insurance",
+    "rowNumber": 4,
+    "verticalId": "financial-services",
+    "vertical": "Financial Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial Insurance Acts",
+      "PIPEDA",
+      "Motor Vehicle Act (auto lines)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "FSRA (ON)",
+      "BCFSA (BC)",
+      "AMF (QC)",
+      "provincial regulators"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Financial"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Auto insurance publicly administered in BC (ICBC), MB (MPI), SK (SGI), QC (SAAQ) — separate regulatory regime. IFRS 17 financial reporting compliance.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Claims processing integrity",
+        "telematics data protection",
+        "broker portal security",
+        "fraud detection"
+      ],
+      "auditRequirements": [
+        "Policy and claims records 7 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "asset-management",
+    "name": "Asset Management",
+    "rowNumber": 5,
+    "verticalId": "financial-services",
+    "vertical": "Financial Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "CIRO",
+      "CSA",
+      "NI 81-102",
+      "NI 31-103",
+      "PIPEDA"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "CIRO",
+      "CSA",
+      "OSC (ON primary)"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Financial"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "NI 81-102 governs mutual funds. ETFs under NI 41-101. NI 31-103 registration required. Fund accounting systems require 99.9% uptime SLA.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "NAV calculation integrity",
+        "client account segregation",
+        "trade order management security",
+        "benchmark manipulation prevention"
+      ],
+      "auditRequirements": [
+        "Trade records 7 yr",
+        "Compliance records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "fintech-and-neobanks",
+    "name": "Fintech & Neobanks",
+    "rowNumber": 6,
+    "verticalId": "financial-services",
+    "vertical": "Financial Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "FINTRAC (if MSB)",
+      "PIPEDA",
+      "OSFI (if licensed)",
+      "Provincial consumer protection"
+    ],
+    "optionalCompliance": [
+      "PCI DSS",
+      "SOC 2",
+      "ISO 27001",
+      "Open Banking Canada framework"
+    ],
+    "regulators": [
+      "FINTRAC",
+      "OSFI (if licensed)",
+      "Provincial regulators"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "PCI",
+      "Financial"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Canada Open Banking framework: federal progress disrupted by April 2025 election; legislative timeline under review. OSFI B-13 applies to tech-heavy operations. FINTRAC MSB registration mandatory for money services businesses.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "KYC/AML onboarding",
+        "FINTRAC transaction monitoring",
+        "API security for open banking",
+        "fraud detection",
+        "biometric authentication"
+      ],
+      "auditRequirements": [
+        "FINTRAC records 5 yr",
+        "AML records 5 yr",
+        "Transaction logs 1 yr rolling"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "credit-unions",
+    "name": "Credit Unions",
+    "rowNumber": 7,
+    "verticalId": "financial-services",
+    "vertical": "Financial Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial credit union legislation",
+      "DICO (ON)/CUDIC (BC)",
+      "PIPEDA",
+      "FINTRAC"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "FSRA (ON)",
+      "BCFSA (BC)",
+      "AMF (QC)"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "PCI",
+      "Financial"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Provincially regulated only (no federal charter). Desjardins Group (QC) is Canada's largest credit union network. Deposit insurance varies by province.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Member data protection",
+        "core banking security",
+        "FINTRAC reporting",
+        "ATM/debit network security (Interac)"
+      ],
+      "auditRequirements": [
+        "Financial records 7 yr",
+        "FINTRAC records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "payments-processing",
+    "name": "Payments Processing",
+    "rowNumber": 8,
+    "verticalId": "financial-services",
+    "vertical": "Financial Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Payments Canada rules",
+      "PIPEDA",
+      "FINTRAC",
+      "PCI DSS",
+      "Bank Act (if bank-affiliated)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "Payments Canada",
+      "Bank of Canada",
+      "FINTRAC"
+    ],
+    "dataSensitivity": [
+      "PCI",
+      "PII",
+      "Transaction records"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Payments Canada Modernization: Lynx RTGS system live, RTR real-time rail programme restructured (2024) — launch timeline under review. Interac dominant domestic network. ISO 20022 migration underway.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "PCI DSS Level 1",
+        "transaction integrity",
+        "real-time fraud prevention",
+        "tokenization",
+        "HSM secure key management"
+      ],
+      "auditRequirements": [
+        "PCI DSS quarterly ASV scans",
+        "Transaction logs 1 yr rolling",
+        "Compliance records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "hospitals-and-health-systems",
+    "name": "Hospitals & Health Systems",
+    "rowNumber": 9,
+    "verticalId": "healthcare-and-life-sciences",
+    "vertical": "Healthcare & Life Sciences",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PHIPA (ON)",
+      "HIA (AB)",
+      "PIPA (BC)",
+      "Provincial equivalents",
+      "Health Canada"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "CAN/CIOSC 103-1"
+    ],
+    "regulators": [
+      "Provincial health ministries",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PHI",
+      "PII"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Data must stay within the province for patient records. PHIPA (ON) most stringent provincial law. Federal hospitals (Veterans Affairs, DND) follow PIPEDA additionally.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "PHI encryption at rest and in transit",
+        "access controls per circle of care",
+        "breach notification within 24 hr (PHIPA)",
+        "medical device integration security",
+        "PACS/DICOM security"
+      ],
+      "auditRequirements": [
+        "Patient records 10 yr",
+        "Breach log indefinitely",
+        "Access logs 2 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "provincial-health-insurance",
+    "name": "Provincial Health Insurance",
+    "rowNumber": 10,
+    "verticalId": "healthcare-and-life-sciences",
+    "vertical": "Healthcare & Life Sciences",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial health insurance acts (OHIP-ON, MSP-BC, AHCIP-AB)",
+      "PHIPA equivalent",
+      "PIPEDA"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "SOC 2"
+    ],
+    "regulators": [
+      "Provincial ministries of health",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PHI",
+      "PII",
+      "Government"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Each province operates own health insurance program. Data residency within province mandatory. Federal transfers via Canada Health Act. Billing systems require HL7/FHIR integration security.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Interprovincial data sharing controls",
+        "billing fraud prevention",
+        "health card identity verification",
+        "clinician credential validation"
+      ],
+      "auditRequirements": [
+        "Billing records 10 yr",
+        "Eligibility verification logs 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "pharmaceutical",
+    "name": "Pharmaceutical",
+    "rowNumber": 11,
+    "verticalId": "healthcare-and-life-sciences",
+    "vertical": "Healthcare & Life Sciences",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Health Canada (Food and Drug Regulations)",
+      "ICH GCP/GMP",
+      "PIPEDA",
+      "CDSA (Controlled Drugs)"
+    ],
+    "optionalCompliance": [
+      "FDA 21 CFR Part 11 (US exports)",
+      "ISO 27001",
+      "GxP"
+    ],
+    "regulators": [
+      "Health Canada (Drug Directorate)",
+      "PHAC"
+    ],
+    "dataSensitivity": [
+      "PHI",
+      "PII",
+      "Trade secrets"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "Health Canada requires 21 CFR Part 11-equivalent electronic records validation. CDSA for controlled substance tracking. GCP/GMP validation requirements affect CI/CD pipeline (change control procedures).",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "GxP validation of CI/CD systems",
+        "chain of custody for controlled substances",
+        "clinical trial data integrity",
+        "IP/trade secret protection"
+      ],
+      "auditRequirements": [
+        "Clinical trial records 25 yr",
+        "Drug approval files permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "biotech-and-life-sciences-research",
+    "name": "Biotech & Life Sciences Research",
+    "rowNumber": 12,
+    "verticalId": "healthcare-and-life-sciences",
+    "vertical": "Healthcare & Life Sciences",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "TCPS 2 (Tri-Council research ethics)",
+      "Health Canada (if clinical)",
+      "Provincial privacy acts"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "NIH-equivalent security guidelines"
+    ],
+    "regulators": [
+      "Health Canada",
+      "Institutional REBs",
+      "PHAC"
+    ],
+    "dataSensitivity": [
+      "PHI",
+      "PII",
+      "Genomic",
+      "Research IP"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Genomic data requires explicit consent under TCPS 2 Article 13. ELSI (Ethical, Legal, Social Implications) framework applies. National Security Guidelines for Research Partnerships (2023) affect foreign-funded research.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Genomic data de-identification",
+        "research data sovereignty (data stays in Canada)",
+        "IP protection",
+        "chain of custody for specimens"
+      ],
+      "auditRequirements": [
+        "Research records 10 yr minimum",
+        "Ethics approvals permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "medical-devices",
+    "name": "Medical Devices",
+    "rowNumber": 13,
+    "verticalId": "healthcare-and-life-sciences",
+    "vertical": "Healthcare & Life Sciences",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Health Canada SOR/98-282",
+      "PIPEDA",
+      "IEC 62443",
+      "IEC 62304"
+    ],
+    "optionalCompliance": [
+      "ISO 13485",
+      "ISO 14971",
+      "FDA 21 CFR 820 (US market)"
+    ],
+    "regulators": [
+      "Health Canada (Therapeutic Products Directorate)"
+    ],
+    "dataSensitivity": [
+      "PHI",
+      "PII",
+      "Device telemetry"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "DAST"
+    ],
+    "frameworkNotes": "Health Canada Class I–IV determines regulatory pathway. Class III/IV require QMS. SaMD (Software as Medical Device) follows IMDRF guidance. SBOM required for Class III/IV devices.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "IEC 62304 software lifecycle documentation",
+        "vulnerability disclosure program",
+        "patch management for deployed devices",
+        "firmware signing"
+      ],
+      "auditRequirements": [
+        "Design history file: product lifetime + 10 yr",
+        "Post-market surveillance 15 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "clinical-diagnostics-and-labs",
+    "name": "Clinical Diagnostics & Labs",
+    "rowNumber": 14,
+    "verticalId": "healthcare-and-life-sciences",
+    "vertical": "Healthcare & Life Sciences",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "Provincial lab accreditation (CMLTO-ON, CSMLS)",
+      "PHIPA/equivalent",
+      "Health Canada"
+    ],
+    "optionalCompliance": [
+      "ISO 15189",
+      "CAP accreditation",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "Provincial colleges of laboratory technologists",
+      "provincial health ministries"
+    ],
+    "dataSensitivity": [
+      "PHI",
+      "PII",
+      "Lab results"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "LIS (Laboratory Information System) integration requires HL7 v2/FHIR security. Result sign-off workflow integrity mandatory. POCT (Point-of-Care Testing) devices follow specific Health Canada regulations.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Result integrity and non-repudiation",
+        "access controls by ordering physician circle of care",
+        "LIS/HIS interface security",
+        "specimen tracking chain of custody"
+      ],
+      "auditRequirements": [
+        "Lab results 10 yr",
+        "QC records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "telehealth-and-digital-health",
+    "name": "Telehealth & Digital Health",
+    "rowNumber": 15,
+    "verticalId": "healthcare-and-life-sciences",
+    "vertical": "Healthcare & Life Sciences",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PHIPA (ON)/provincial equivalent",
+      "PIPEDA",
+      "Health Canada (if SaMD)",
+      "CASL"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "CAN/CIOSC 103-1"
+    ],
+    "regulators": [
+      "Provincial colleges of regulated health professionals",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PHI",
+      "PII",
+      "Video/audio"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Canadian data centres required for patient video/audio. Provincial practitioner licensing restricts cross-provincial care delivery. CASL applies to appointment reminders.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "End-to-end encryption of video sessions",
+        "PHIPA-compliant BAA with cloud providers",
+        "MFA for practitioners",
+        "session recording consent management"
+      ],
+      "auditRequirements": [
+        "Session records per PHIPA (10 yr)",
+        "Consent logs 10 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "long-term-care-and-home-care",
+    "name": "Long-term Care & Home Care",
+    "rowNumber": 16,
+    "verticalId": "healthcare-and-life-sciences",
+    "vertical": "Healthcare & Life Sciences",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial long-term care acts (LTCHA-ON)",
+      "PHIPA/equivalent",
+      "PIPEDA"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "Accreditation Canada standards"
+    ],
+    "regulators": [
+      "Provincial ministries of health and long-term care",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PHI",
+      "PII (vulnerable populations)"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "IoT/smart home integration for resident monitoring requires additional security controls. Mobile care worker apps require MDM. Data sharing with acute care follows provincial health information custodian rules.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Resident PHI protection",
+        "medication administration security",
+        "family portal access controls",
+        "IoT/sensor device security"
+      ],
+      "auditRequirements": [
+        "Resident records 10 yr",
+        "Medication administration records 7 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "federal-government",
+    "name": "Federal Government",
+    "rowNumber": 17,
+    "verticalId": "government-and-public-sector",
+    "vertical": "Government & Public Sector",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Privacy Act",
+      "ATIA",
+      "Security of Information Act",
+      "ITSG-33",
+      "TBS policies",
+      "<span class=\"tag-pbmm\">GC PBMM</span>"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "NIST CSF"
+    ],
+    "regulators": [
+      "TBS",
+      "OPC",
+      "CSE/CCCS"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-protected-b\">Protected B</span>",
+      "Secret",
+      "PII"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "GC PBMM mandatory for cloud workloads. CCCS ITSG-33 IT security controls. Data residency in Canada mandatory. PSPC cloud procurement rules apply. ATO (Authority to Operate) process required.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "PBMM cloud controls",
+        "CCCS-approved encryption",
+        "separation of classified/unclassified networks",
+        "identity via GCKey or Sign-In Canada",
+        "SA&A (Security Assessment and Authorization)"
+      ],
+      "auditRequirements": [
+        "Access logs 2 yr",
+        "Security incident logs 10 yr",
+        "Classified audit trails indefinitely"
+      ]
+    },
+    "market": {
+      "catalogName": "Federal Government IT",
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Ontario": "SSC, CRA, ESDC, IRCC, DND CIO, PSPC, Statistics Canada (Ottawa NCR)",
+        "British Columbia": "CRA Pacific, DFO, CBSA Pacific, Pacific Region digital (Victoria/Vancouver)",
+        "Quebec": "CBC/Radio-Canada tech, NRC, CFIA, IRB Quebec (Montréal/Quebec City)",
+        "Nova Scotia": "DND Halifax (CFB Halifax), CBSA Atlantic (Halifax)",
+        "Alberta": "Service Canada Alberta, CBSA Prairie Region (Edmonton)"
+      },
+      "wage": "CA$85k–CA$125k",
+      "demand": "Warm",
+      "tier": "T1",
+      "entry": [
+        "Reliability Status clearance minimum for all federal IT roles",
+        "Secret clearance required for approximately 40% of federal IT positions",
+        "Top Secret required for DND, CSE, and CSIS-adjacent roles",
+        "Canadian citizenship required for Secret clearance and above",
+        "Permanent Residents eligible for Reliability Status only",
+        "GC Cloud experience (AWS GovCloud, Azure Government) increasingly valued"
+      ]
+    }
+  },
+  {
+    "id": "provincial-government",
+    "name": "Provincial Government",
+    "rowNumber": 18,
+    "verticalId": "government-and-public-sector",
+    "vertical": "Government & Public Sector",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial FIPPA/FOIPPA/ATI Acts",
+      "Provincial privacy acts",
+      "ITSG-33 equivalent policies"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "CAN/CIOSC 103-1"
+    ],
+    "regulators": [
+      "Provincial OIPCs",
+      "provincial CISOs"
+    ],
+    "dataSensitivity": [
+      "Protected",
+      "PII",
+      "Public"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Data residency within province mandatory for most provincial systems. BC Cloud Hosting Services, Ontario Government cloud policy vary. Identity via provincial SSO.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Access controls per provincial RBAC policies",
+        "data residency enforcement",
+        "BC/ON/QC-specific cloud security standards",
+        "citizen data protection"
+      ],
+      "auditRequirements": [
+        "Administrative records 7 yr",
+        "FOIPPA request logs 5 yr"
+      ]
+    },
+    "market": {
+      "catalogName": "Provincial Government IT",
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Ontario": "Ontario Digital Service, ServiceOntario, MGCS, OPS tech (Toronto/Ottawa)",
+        "British Columbia": "BC Digital Service (Victoria), OCIO BC, Ministry of Health IT",
+        "Alberta": "Service Alberta, Alberta Digital, ASIRT tech (Edmonton)",
+        "Quebec": "Direction des technologies, SQI (Quebec City/Montréal)",
+        "New Brunswick": "Service New Brunswick (Fredericton — shared services for Atlantic provinces)"
+      },
+      "wage": "CA$80k–CA$115k",
+      "demand": "Warm",
+      "tier": "T1",
+      "entry": [
+        "Provincial security clearance (Reliability Status equivalent) for most roles",
+        "No clearance required for some contracted roles through provincial tech procurement",
+        "Entry difficulty 3 = stable hiring; BC Digital is particularly active",
+        "Public sector pay grids cap salaries below private sector; compensated by stability",
+        "Service New Brunswick is a shared services model hiring for multiple Atlantic provinces"
+      ]
+    }
+  },
+  {
+    "id": "municipal-government",
+    "name": "Municipal Government",
+    "rowNumber": 19,
+    "verticalId": "government-and-public-sector",
+    "vertical": "Government & Public Sector",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial MFIPPA/FOIPPA (Municipal)",
+      "Provincial privacy acts",
+      "PIPEDA (limited)"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "NIST CSF"
+    ],
+    "regulators": [
+      "Provincial OIPCs",
+      "municipal auditors"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Public",
+      "Local government records"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Smart city deployments require Privacy Impact Assessments (PIAs). IoT/sensor data in public spaces regulated by provincial FIPPA. Procurement through municipal procurement offices.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Citizen data protection",
+        "311 system security",
+        "smart city IoT security",
+        "open data privacy review before publication"
+      ],
+      "auditRequirements": [
+        "Municipal records 7 yr",
+        "Council minutes permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "crown-corporations",
+    "name": "Crown Corporations",
+    "rowNumber": 20,
+    "verticalId": "government-and-public-sector",
+    "vertical": "Government & Public Sector",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Privacy Act (if federal)",
+      "ATIA",
+      "Financial Administration Act",
+      "mixed provincial/federal"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "SOC 2"
+    ],
+    "regulators": [
+      "TBS (federal)",
+      "provincial equivalents",
+      "OPC"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Commercial",
+      "Government"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Each Crown operates under its own mandate act (CBC Act, Canada Post Act, VIA Rail). Commercial activities follow PIPEDA; government activities follow Privacy Act. Canada Post is critical infrastructure designated.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Crown-specific security policies",
+        "commercial customer data protection",
+        "government information handling",
+        "critical infrastructure protection"
+      ],
+      "auditRequirements": [
+        "Varies by Crown mandate",
+        "Financial records 7 yr"
+      ]
+    },
+    "market": {
+      "catalogName": null,
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Ontario": "Canada Post HQ, CBC English digital, EDC, BDC, Via Rail IT (Ottawa/Toronto)",
+        "Quebec": "CBC/Radio-Canada French digital, BDC HQ (Montréal)",
+        "British Columbia": "Canada Post Pacific, NAV CANADA Pacific (Vancouver)",
+        "Alberta": "NAV CANADA Prairie, Canada Post Prairie ops (Calgary)"
+      },
+      "wage": "CA$80k–CA$115k",
+      "demand": "Flat",
+      "tier": "T2",
+      "entry": [
+        "Reliability Status clearance typically required",
+        "Entry difficulty 3 = moderate; stable hiring across Crown Corporations",
+        "Canada Post is a large tech employer — 500+ IT staff in Ottawa HQ",
+        "CBC/Radio-Canada requires bilingual candidates for all Montréal-based roles",
+        "NAV CANADA roles require Transport Canada security clearance"
+      ]
+    }
+  },
+  {
+    "id": "public-safety-and-law-enforcement",
+    "name": "Public Safety & Law Enforcement",
+    "rowNumber": 21,
+    "verticalId": "government-and-public-sector",
+    "vertical": "Government & Public Sector",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Privacy Act",
+      "RCMP Act",
+      "Criminal Code (lawful interception)",
+      "PIPEDA",
+      "Provincial police acts"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "NIST CSF"
+    ],
+    "regulators": [
+      "RCMP",
+      "provincial police oversight bodies",
+      "CISC"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-protected-b\">Protected B</span>",
+      "Criminal records",
+      "PII"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "RCMP CPIC system requires CCCS approval. Provincial police systems (OPP, SQ) follow provincial data governance. Biometric data (fingerprints, DNA) under Privacy Act with additional restrictions.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "CPIC connection security",
+        "biometric data protection",
+        "officer safety data controls",
+        "intercept capability per Criminal Code Part VI",
+        "chain of evidence integrity"
+      ],
+      "auditRequirements": [
+        "Criminal records permanent",
+        "Occurrence reports 7 yr minimum",
+        "Intercept authorizations sealed by court"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "justice-and-courts",
+    "name": "Justice & Courts",
+    "rowNumber": 22,
+    "verticalId": "government-and-public-sector",
+    "vertical": "Government & Public Sector",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Privacy Act",
+      "Provincial court administration acts",
+      "PIPEDA",
+      "Court Records Management standards"
+    ],
+    "optionalCompliance": [
+      "ISO 27001"
+    ],
+    "regulators": [
+      "Courts Administration Service (federal)",
+      "provincial court services branches"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-protected-b\">Protected B</span>",
+      "PII",
+      "Court records",
+      "Publication ban records"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Electronic court filing systems (eCourt, Caselines) require strict access controls. Publication bans enforced at data access layer. Federal courts follow CAS IT standards; provincial courts follow provincial systems.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Publication ban enforcement in court record systems",
+        "accused/witness identity protection",
+        "judicial independence of court systems",
+        "evidence integrity chain"
+      ],
+      "auditRequirements": [
+        "Court records permanent",
+        "Publication ban orders indefinitely"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "canadian-armed-forces",
+    "name": "Canadian Armed Forces",
+    "rowNumber": 23,
+    "verticalId": "defense-and-intelligence",
+    "vertical": "Defense & Intelligence",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Security of Information Act",
+      "DND Security Orders",
+      "NATO security requirements",
+      "COMSEC standards"
+    ],
+    "optionalCompliance": [
+      "CMMC (working group)",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "DND/ADM(IM)",
+      "CSE",
+      "NATO"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-secret\">Secret</span>",
+      "NATO RESTRICTED/SECRET",
+      "Protected B/C"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Classified networks (SNET/DWAN) separated from unclassified. COMSEC device approval by CSE. NATO interoperability requirements. ITSG-33 mandatory. Five Eyes data sharing protocols apply.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "COMSEC equipment approval",
+        "personnel security (Top Secret clearance)",
+        "physical security zones",
+        "NATO interoperability standards",
+        "supply chain integrity for weapons systems"
+      ],
+      "auditRequirements": [
+        "Classified logs indefinitely",
+        "COMSEC accounting permanent",
+        "Personnel security records permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "cse-signals-intelligence",
+    "name": "CSE (Signals Intelligence)",
+    "rowNumber": 24,
+    "verticalId": "defense-and-intelligence",
+    "vertical": "Defense & Intelligence",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "CSE Act",
+      "Security of Information Act",
+      "Five Eyes agreements"
+    ],
+    "optionalCompliance": [
+      "N/A — classified"
+    ],
+    "regulators": [
+      "Minister of National Defence",
+      "NSICOP",
+      "NSIRA"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-secret\">Secret</span>",
+      "Top Secret",
+      "EYES ONLY"
+    ],
+    "pipelineStagesAffected": [
+      "All stages with classified controls"
+    ],
+    "frameworkNotes": "Most requirements classified. Public-facing CCCS cloud security guidance published. CCCS vulnerability disclosure coordination. CCCS Annual Threat Report governs GC cyber posture.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Classified COMSEC",
+        "cryptographic key management",
+        "SIGINT protection",
+        "signals protection"
+      ],
+      "auditRequirements": [
+        "Classified",
+        "oversight by NSICOP and NSIRA"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "csis-domestic-intelligence",
+    "name": "CSIS (Domestic Intelligence)",
+    "rowNumber": 25,
+    "verticalId": "defense-and-intelligence",
+    "vertical": "Defense & Intelligence",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "CSIS Act",
+      "Security of Information Act",
+      "Privacy Act",
+      "Five Eyes protocols"
+    ],
+    "optionalCompliance": [
+      "N/A — classified"
+    ],
+    "regulators": [
+      "Minister of Public Safety",
+      "NSIRA",
+      "NSICOP"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-secret\">Secret</span>",
+      "Top Secret",
+      "HUMINT source protection"
+    ],
+    "pipelineStagesAffected": [
+      "All stages with classified controls"
+    ],
+    "frameworkNotes": "HUMINT source data has absolute legal protection. Warrant-based collection under CSIS Act. NSIRA oversight. Intelligence community data sharing via classified channels.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Source protection systems",
+        "counter-surveillance in dev environments",
+        "HUMINT data compartmentalization",
+        "secure development facilities"
+      ],
+      "auditRequirements": [
+        "Classified",
+        "warrant records sealed by court order"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "defense-contractors",
+    "name": "Defense Contractors",
+    "rowNumber": 26,
+    "verticalId": "defense-and-intelligence",
+    "vertical": "Defense & Intelligence",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PSPC Industrial Security Program (ISP)",
+      "ITAR (US-origin tech)",
+      "Security of Information Act",
+      "CAN/CIOSC 103-2",
+      "Controlled Goods Program"
+    ],
+    "optionalCompliance": [
+      "CMMC (if prime to US DoD)",
+      "ISO 27001",
+      "AS9100"
+    ],
+    "regulators": [
+      "PSPC Industrial Security Directorate",
+      "Global Affairs Canada (export)",
+      "US State Dept (ITAR)"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-protected-b\">Protected B</span>",
+      "Controlled Goods",
+      "ITAR-controlled",
+      "NATO RESTRICTED"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "PSPC ISP mandatory for all defense contracts. Controlled Goods Program registration required. ITAR compliance for US-origin defense tech. PSPC requires facility security clearance. CITP (Canadian IT security profile) for system classification.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Facility security clearance",
+        "personnel security screening",
+        "Controlled Goods handling",
+        "ITAR export control compliance",
+        "supply chain security",
+        "foreign ownership disclosure"
+      ],
+      "auditRequirements": [
+        "Controlled Goods records 10 yr",
+        "PSPC contract records 7 yr",
+        "ITAR records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "drdc-defence-research",
+    "name": "DRDC (Defence Research)",
+    "rowNumber": 27,
+    "verticalId": "defense-and-intelligence",
+    "vertical": "Defense & Intelligence",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Security of Information Act",
+      "DND Security Orders",
+      "PSPC ISP",
+      "Scientific data management policy"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "ISO 9001"
+    ],
+    "regulators": [
+      "DND/ADM(S&T)",
+      "CSE"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-protected-b\">Protected B</span>",
+      "Confidential",
+      "Secret",
+      "Research IP"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Research facilities hold facility security clearances. Quantum computing research has additional controls. Export controls on dual-use research. University collaborations require Tech Transfer Agreements.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Research IP protection",
+        "dual-use technology controls",
+        "classified research environment security",
+        "foreign entity relationships management",
+        "lab access controls"
+      ],
+      "auditRequirements": [
+        "Research records 25 yr",
+        "Classified project files permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "oil-and-gas-upstream",
+    "name": "Oil & Gas (Upstream)",
+    "rowNumber": 28,
+    "verticalId": "energy-and-environment",
+    "vertical": "Energy & Environment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "AER (AB)",
+      "BCER (BC)",
+      "CER (cross-border)",
+      "CEPA",
+      "PIPEDA"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "IEC 62443 (OT)",
+      "NERC CIP (if power generation)"
+    ],
+    "regulators": [
+      "CER",
+      "AER (AB)",
+      "BCER (BC)",
+      "NSPB (SK)"
+    ],
+    "dataSensitivity": [
+      "OT/SCADA",
+      "Commercial",
+      "Environmental"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "OT (Operational Technology) networks strictly separated from IT. SCADA security per IEC 62443. Wellbore data subject to provincial Crown royalty reporting. Alberta is Canada's primary upstream hub.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "IT/OT network segregation",
+        "SCADA system hardening",
+        "emergency shutdown system integrity",
+        "seismic/geological data IP protection",
+        "wellbore reporting integrity"
+      ],
+      "auditRequirements": [
+        "Regulatory filings 10 yr",
+        "SCADA event logs 5 yr",
+        "Environmental incident records permanent"
+      ]
+    },
+    "market": {
+      "catalogName": null,
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Alberta": "Suncor, CNRL, Cenovus, Imperial Oil, MEG Energy, Baytex (Calgary T1)",
+        "British Columbia": "Tourmaline Oil, ARC Resources (Montney play — NE BC)",
+        "Saskatchewan": "Whitecap Resources, Crescent Point Energy (Estevan/Weyburn)",
+        "Newfoundland": "Cenovus Hibernia, ExxonMobil Hebron (St. John's offshore)"
+      },
+      "wage": "CA$95k–CA$140k",
+      "demand": "Warm",
+      "tier": "T1",
+      "entry": [
+        "No security clearance required",
+        "P.Eng (APEGA) valued for control systems and process engineering-adjacent roles",
+        "NERC CIP cybersecurity training (SANS ICS/SCADA) opens OT security roles",
+        "Entry difficulty 3 = Calgary accessible for mid-level DevOps and OT integration engineers",
+        "OSIsoft PI (AVEVA) experience is near-universal requirement for data engineering roles"
+      ]
+    }
+  },
+  {
+    "id": "pipelines-and-midstream",
+    "name": "Pipelines & Midstream",
+    "rowNumber": 29,
+    "verticalId": "energy-and-environment",
+    "vertical": "Energy & Environment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "CER Pipeline Regulations",
+      "Transportation of Dangerous Goods Act",
+      "CEPA",
+      "PIPEDA"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "IEC 62443",
+      "NIST CSF"
+    ],
+    "regulators": [
+      "CER (Canada Energy Regulator)"
+    ],
+    "dataSensitivity": [
+      "OT/SCADA",
+      "Commercial",
+      "Critical infrastructure"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "CER Critical Energy Infrastructure protection program. Trans Mountain, Enbridge, TC Energy pipelines under federal oversight. SCADA/DCS systems on isolated OT networks. Geospatial pipeline route data is sensitive.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "SCADA/DCS isolation",
+        "emergency management system security",
+        "leak detection system integrity",
+        "geospatial data protection",
+        "cross-border data sharing with US NERC"
+      ],
+      "auditRequirements": [
+        "Pipeline integrity logs permanent",
+        "SCADA records 10 yr",
+        "Incident records permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "electricity-and-utilities",
+    "name": "Electricity & Utilities",
+    "rowNumber": 30,
+    "verticalId": "energy-and-environment",
+    "vertical": "Energy & Environment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "NERC CIP (cross-border grids)",
+      "OEB (ON)",
+      "BCUC (BC)",
+      "AUC (AB)",
+      "REGIE (QC)",
+      "PIPEDA"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "IEC 62443",
+      "NIST CSF"
+    ],
+    "regulators": [
+      "OEB (ON)",
+      "BCUC (BC)",
+      "AUC (AB)",
+      "CER (interprovincial)"
+    ],
+    "dataSensitivity": [
+      "OT/SCADA",
+      "Customer PII",
+      "Critical infrastructure"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "NERC CIP mandatory for bulk electric systems connected to North American grid. Smart meter data is PII under PIPEDA. Ontario IESO and BC Hydro operate under distinct provincial frameworks.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "NERC CIP CIP-002 through CIP-013 controls",
+        "AMI (Advanced Metering Infrastructure) security",
+        "grid SCADA protection",
+        "customer energy usage data privacy"
+      ],
+      "auditRequirements": [
+        "NERC CIP records 6 yr",
+        "Smart meter data varies by province",
+        "Grid event logs permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "nuclear-energy",
+    "name": "Nuclear Energy",
+    "rowNumber": 31,
+    "verticalId": "energy-and-environment",
+    "vertical": "Energy & Environment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Nuclear Safety and Control Act",
+      "CNSC regulations",
+      "IAEA safeguards",
+      "PIPEDA",
+      "Security of Information Act (national security aspects)"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "IEC 62443",
+      "IAEA nuclear security recommendations"
+    ],
+    "regulators": [
+      "CNSC",
+      "IAEA (international safeguards)"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-protected-b\">Protected B</span>",
+      "Nuclear",
+      "OT/SCADA"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "CNSC regulates all Canadian nuclear facilities. Bruce Power, OPG (ON), NB Power Point Lepreau, AECL/CNL. Safety systems on air-gapped networks. Nuclear material accounting reported to IAEA. CANDU reactor-specific cybersecurity requirements.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Air-gapped safety systems",
+        "nuclear material accountancy system integrity",
+        "CANDU-specific cybersecurity",
+        "physical protection systems integration",
+        "IAEA safeguards reporting integrity",
+        "insider threat controls"
+      ],
+      "auditRequirements": [
+        "Nuclear records permanent (CNSC)",
+        "IAEA safeguards records permanent",
+        "Security incident reports 25 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "renewables-and-cleantech",
+    "name": "Renewables & Cleantech",
+    "rowNumber": 32,
+    "verticalId": "energy-and-environment",
+    "vertical": "Energy & Environment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "CER (interprovincial)",
+      "Provincial energy regulators (OEB, AUC, BCUC)",
+      "PIPEDA",
+      "CEPA (environmental)"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "IEC 62443",
+      "ISO 50001"
+    ],
+    "regulators": [
+      "CER",
+      "Provincial energy regulators",
+      "ECCC"
+    ],
+    "dataSensitivity": [
+      "OT/SCADA",
+      "Commercial",
+      "Environmental"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "Grid interconnection requires NERC CIP compliance for bulk systems. Smart inverter protocols (IEEE 2030.5) security requirements. Carbon credit systems subject to PIPEDA and provincial regulations. IESO/AESO market data feeds require secure access.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "SCADA for wind/solar farms",
+        "carbon registry system integrity",
+        "energy management system access controls",
+        "smart grid device security",
+        "grid stability event logging"
+      ],
+      "auditRequirements": [
+        "Grid event logs 10 yr",
+        "Carbon credit records 10 yr",
+        "Environmental reports permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "mining-and-resources",
+    "name": "Mining & Resources",
+    "rowNumber": 33,
+    "verticalId": "energy-and-environment",
+    "vertical": "Energy & Environment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial Mines Acts",
+      "CEPA",
+      "PIPEDA",
+      "TSX financial disclosure rules"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "ISO 14001",
+      "TSM (Towards Sustainable Mining)"
+    ],
+    "regulators": [
+      "EMLI (BC)",
+      "AER (AB)",
+      "MNDM (ON)",
+      "CEPA",
+      "TSX"
+    ],
+    "dataSensitivity": [
+      "OT/SCADA",
+      "Commercial",
+      "Geological IP",
+      "Environmental"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Geological survey data (seismic, assay) is commercially sensitive IP. TSX/TSX-V material information disclosure rules. Indigenous consultation records may require privacy protections. Automated mine systems follow IEC 62443.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Geological IP protection",
+        "OT/SCADA for automated mining",
+        "tailings management system integrity",
+        "Indigenous consultation record management",
+        "financial disclosure control systems"
+      ],
+      "auditRequirements": [
+        "Environmental records permanent",
+        "Financial disclosure 7 yr",
+        "Geological data retained as trade secret"
+      ]
+    },
+    "market": {
+      "catalogName": "Mining & Resources Technology",
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "British Columbia": "Teck Resources HQ (Vancouver), Goldcorp/Newmont BC, Glencore Canada",
+        "Ontario": "Barrick Gold (Toronto HQ), Agnico Eagle (Toronto), Kinross HQ (Toronto)",
+        "Quebec": "Agnico Eagle LaRonde mine digital, Osisko Mining (Montréal HQ)",
+        "Saskatchewan": "Cameco (uranium — Saskatoon), Mosaic Company (potash — Regina)"
+      },
+      "wage": "CA$85k–CA$130k",
+      "demand": "Warm",
+      "tier": "T2",
+      "entry": [
+        "No security clearance required",
+        "P.Eng or Geoscientist (EGBC, APEGA) valued for mine planning and geotechnical roles",
+        "Autonomous systems experience (ROS, Komatsu FrontRunner SDK) is fastest-growing niche",
+        "Entry difficulty 3 = niche but steady; remote site work common in BC and Northern Ontario",
+        "Rotational work common — 14/14, 20/10 schedules; premium pay for remote assignments"
+      ]
+    }
+  },
+  {
+    "id": "software-and-saas",
+    "name": "Software & SaaS",
+    "rowNumber": 34,
+    "verticalId": "technology",
+    "vertical": "Technology",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA (if handling Canadian personal data)",
+      "CASL",
+      "Provincial privacy acts (Law 25-QC, PIPA-BC)"
+    ],
+    "optionalCompliance": [
+      "SOC 2 Type II",
+      "ISO 27001",
+      "CSA STAR",
+      "CAN/CIOSC 103-1"
+    ],
+    "regulators": [
+      "OPC",
+      "CRTC (CASL)",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Customer data"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "CASL applies to all commercial electronic messages to Canadian addresses. Quebec Law 25 is stricter than PIPEDA. GC customers require GC PBMM compliance.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "PIPEDA privacy-by-design",
+        "CASL consent management",
+        "SBOM for software supply chain",
+        "vulnerability disclosure policy",
+        "data minimization enforcement"
+      ],
+      "auditRequirements": [
+        "PIPEDA breach log 3 yr",
+        "CASL consent records 3 yr",
+        "Security logs 1 yr rolling"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "ai-and-ml-platforms",
+    "name": "AI & ML Platforms",
+    "rowNumber": 35,
+    "verticalId": "technology",
+    "vertical": "Technology",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "Provincial privacy acts",
+      "CASL"
+    ],
+    "optionalCompliance": [
+      "ISO 42001 (AI management)",
+      "NIST AI RMF",
+      "IEEE AI standards"
+    ],
+    "regulators": [
+      "OPC",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Training data",
+      "Model IP"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "AIDA (Bill C-27) lapsed when Parliament dissolved April 2025 — not in force as of May 2026. TBS Directive on Automated Decision-Making applies to federal government AI. Biometric data in training sets has heightened requirements.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Training data privacy protection",
+        "model extraction attack prevention",
+        "adversarial robustness",
+        "bias/fairness monitoring",
+        "explainability for regulated decisions",
+        "consent for personal data in training"
+      ],
+      "auditRequirements": [
+        "Training data provenance 5 yr",
+        "Model versioning 5 yr",
+        "Automated decision logs 5 yr"
+      ]
+    },
+    "market": {
+      "catalogName": null,
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Ontario": "Cohere (Toronto), Layer 6 (TD AI), NVIDIA Toronto lab, Google DeepMind Toronto, Microsoft AI Toronto",
+        "Quebec": "Mila-affiliated startups, Element AI legacy (ServiceNow), Scale AI secretariat (Montréal)",
+        "British Columbia": "D-Wave Systems (Burnaby), Accenture AI, Amazon Science Vancouver",
+        "Ontario/Quebec": "Vector Institute affiliates (UofT, McGill, Waterloo researchers)"
+      },
+      "wage": "CA$105k–CA$175k",
+      "demand": "Hot",
+      "tier": "T1",
+      "entry": [
+        "No security clearance required for commercial AI roles",
+        "PhD or MSc valued but not mandatory — strong GitHub portfolio with ML projects accepted",
+        "Vector Institute, Mila, Amii research network connections accelerate hiring",
+        "Entry difficulty 4 = competitive, not credential-locked; research vs product pedigree split",
+        "Cohere and D-Wave are the most accessible large employers for ML infrastructure roles"
+      ]
+    }
+  },
+  {
+    "id": "cloud-services",
+    "name": "Cloud Services",
+    "rowNumber": 36,
+    "verticalId": "technology",
+    "vertical": "Technology",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CASL",
+      "Provincial privacy acts",
+      "<span class=\"tag-pbmm\">GC PBMM</span> (for federal workloads)"
+    ],
+    "optionalCompliance": [
+      "SOC 2 Type II",
+      "ISO 27001",
+      "CSA STAR",
+      "CAN/CIOSC 103-1"
+    ],
+    "regulators": [
+      "OPC",
+      "TBS (GC PBMM)",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Customer data",
+      "Varies by tenant"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "AWS Canada (Central and West), Azure Canada Central/East, GCP Canada provide Canadian data residency. GC Marketplace for PSPC-approved cloud services. CCCS ITSP.50.105 cloud security guidance. GC PBMM required for all federal workloads.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Data residency enforcement",
+        "GC PBMM controls",
+        "multi-tenant isolation",
+        "Canadian data sovereignty",
+        "CCCS cloud security assessment",
+        "zero-trust architecture"
+      ],
+      "auditRequirements": [
+        "Access logs 1 yr min (GC: 2 yr)",
+        "Incident response records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "cybersecurity",
+    "name": "Cybersecurity",
+    "rowNumber": 37,
+    "verticalId": "technology",
+    "vertical": "Technology",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CASL",
+      "Sector-specific laws (OSFI, PHIPA, etc.)",
+      "CCCS guidance (ITSG-33)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "NIST CSF",
+      "CIS Controls",
+      "ITSG-33"
+    ],
+    "regulators": [
+      "CCCS",
+      "OPC",
+      "Sector regulators"
+    ],
+    "dataSensitivity": [
+      "Security telemetry",
+      "Client data",
+      "Vulnerability intelligence"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "CCCS (Canadian Centre for Cyber Security) is primary guidance body. GC clients require ITSG-33. CCCS Coordinated Vulnerability Disclosure guidelines for security research. CCCS Annual Threat Assessment governs national posture.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Secure development (supply chain integrity)",
+        "vulnerability research ethics",
+        "client data segmentation",
+        "CCCS notifications for critical vulnerabilities",
+        "threat intelligence data sovereignty"
+      ],
+      "auditRequirements": [
+        "Security logs 1 yr rolling",
+        "Incident reports 5 yr",
+        "Penetration test reports 3 yr"
+      ]
+    },
+    "market": {
+      "catalogName": "Cybersecurity Products & Services",
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Ontario": "BlackBerry Security (Waterloo/Toronto), eSentire (Cambridge), Arctic Wolf CA, Cyclera (Toronto)",
+        "British Columbia": "Absolute Security (Vancouver), BreachLock CA (Vancouver)",
+        "Alberta": "CrowdStrike Canada, Fortinet Canada regional (Calgary)",
+        "Quebec": "Genetec (physical security AI), Devolutions (Montréal)"
+      },
+      "wage": "CA$95k–CA$150k",
+      "demand": "Hot",
+      "tier": "T2",
+      "entry": [
+        "No security clearance for commercial roles; Reliability Status for GC contracts",
+        "OSCP, GREM, or GCIH certifications valued for threat intel and IR roles",
+        "Entry difficulty 4 = advanced technical skill required",
+        "BlackBerry (Waterloo) is Canada's largest cybersecurity product employer",
+        "Bug bounty track record and open source security tools are accepted as portfolio"
+      ]
+    }
+  },
+  {
+    "id": "hardware-and-semiconductor",
+    "name": "Hardware & Semiconductor",
+    "rowNumber": 38,
+    "verticalId": "technology",
+    "vertical": "Technology",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA (if collecting data)",
+      "ITAR (for defense-use chips)",
+      "Export Controls Order (Canada)"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "IEC 62443",
+      "Common Criteria"
+    ],
+    "regulators": [
+      "ISED",
+      "Global Affairs Canada (export controls)"
+    ],
+    "dataSensitivity": [
+      "Commercial",
+      "IP",
+      "Export-controlled"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Canada's National Quantum Strategy (2022) includes security implications. ITAR/EAR applies to exported goods containing US technology. Quantum hardware research at IQC (Waterloo) and TRIUMF.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Chip design IP protection",
+        "supply chain integrity for components",
+        "export control classification review",
+        "tamper evidence for security chips",
+        "firmware signing"
+      ],
+      "auditRequirements": [
+        "Export control records 5 yr",
+        "Design IP records retained as trade secret"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "wireless-carriers-mno",
+    "name": "Wireless Carriers (MNO)",
+    "rowNumber": 39,
+    "verticalId": "telecommunications",
+    "vertical": "Telecommunications",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Telecommunications Act",
+      "CRTC regulations",
+      "PIPEDA",
+      "CASL",
+      "ISED spectrum licensing"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "GSMA security guidelines"
+    ],
+    "regulators": [
+      "CRTC",
+      "ISED (spectrum)",
+      "OPC"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Location data",
+      "Call records"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Big 3: Bell, Rogers, Telus. CRTC-mandated MVNO wholesale access (2021 decision). Lawful interception under Criminal Code Part VI. 5G security guidance from CCCS (ITSAP.80.004). ISED manages spectrum allocation.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Lawful interception compliance",
+        "subscriber data protection",
+        "SS7/Diameter signaling security",
+        "5G network slicing security",
+        "roaming agreement security"
+      ],
+      "auditRequirements": [
+        "Call records 1 yr",
+        "CRTC complaints 2 yr",
+        "Network security events 2 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "internet-service-providers",
+    "name": "Internet Service Providers",
+    "rowNumber": 40,
+    "verticalId": "telecommunications",
+    "vertical": "Telecommunications",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Telecommunications Act",
+      "CRTC",
+      "PIPEDA",
+      "CASL",
+      "Mandatory breach notification"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "CRTC",
+      "OPC"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Browsing patterns",
+      "Network logs"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "CRTC net neutrality rules (Internet Traffic Management Practices). Mandatory DMARC/DNSSEC deployment guidance. Domain blocking orders (piracy via court order). CASL requires cooperation with CRTC enforcement.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Subscriber data minimization",
+        "network logging per court orders",
+        "DDoS mitigation",
+        "DNSSEC deployment",
+        "BGP route origin validation (RPKI)",
+        "CASL compliance systems"
+      ],
+      "auditRequirements": [
+        "Traffic logs 1 yr (court order may extend)",
+        "CRTC requests 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "broadcasting-and-cable",
+    "name": "Broadcasting & Cable",
+    "rowNumber": 41,
+    "verticalId": "telecommunications",
+    "vertical": "Telecommunications",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Broadcasting Act",
+      "CRTC broadcasting regulations",
+      "CanCon rules",
+      "PIPEDA",
+      "CASL",
+      "Online Streaming Act (C-11, 2023)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "CRTC"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Subscriber data",
+      "Content rights"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Online Streaming Act (C-11, 2023) extends CRTC jurisdiction to streaming platforms (Netflix, Disney+). CanCon requirements mandate % of Canadian programming. National Public Alerting System (NPAS) emergency broadcast mandatory.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Emergency alert system hardening",
+        "broadcast automation security",
+        "DRM for premium content",
+        "CanCon tracking system integrity",
+        "subscriber authentication"
+      ],
+      "auditRequirements": [
+        "CRTC broadcast logs 7 yr",
+        "CanCon certification records 7 yr",
+        "Subscriber data 3 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "satellite-communications",
+    "name": "Satellite Communications",
+    "rowNumber": 42,
+    "verticalId": "telecommunications",
+    "vertical": "Telecommunications",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Radiocommunications Act",
+      "Telecommunications Act",
+      "CRTC",
+      "ISED spectrum licensing",
+      "PIPEDA"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "ITU-T standards"
+    ],
+    "regulators": [
+      "ISED (spectrum licensing)",
+      "CRTC",
+      "Global Affairs Canada (foreign satellite)"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Transmission data",
+      "Defense-adjacent"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Telesat, MDA Group key Canadian players. Radarsat/WCAAF earth observation data may be defense-adjacent. Telesat Lightspeed LEO constellation under development. Canadian Space Agency data sharing protocols.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Ground station security",
+        "satellite command integrity",
+        "anti-jamming measures",
+        "earth observation data classification",
+        "COMSEC for defense-adjacent systems"
+      ],
+      "auditRequirements": [
+        "Transmission logs 2 yr",
+        "Spectrum use reports annually"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "grocery-and-food-retail",
+    "name": "Grocery & Food Retail",
+    "rowNumber": 43,
+    "verticalId": "retail-and-commerce",
+    "vertical": "Retail & Commerce",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CASL",
+      "CFIA (food safety)",
+      "Competition Act",
+      "Provincial consumer protection"
+    ],
+    "optionalCompliance": [
+      "PCI DSS",
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "Competition Bureau",
+      "CFIA",
+      "OPC"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "PCI",
+      "Purchase history"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "DAST"
+    ],
+    "frameworkNotes": "Loblaws, Metro, Sobeys, Costco. Loyalty programs (PC Optimum, Scene+) subject to PIPEDA consent. CFIA food safety traceability systems (STELA). PIPEDA breach notification if loyalty data compromised.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "POS system security",
+        "loyalty program data minimization",
+        "CFIA traceability system integrity",
+        "supply chain fraud prevention",
+        "loyalty point fraud detection"
+      ],
+      "auditRequirements": [
+        "Transaction records 7 yr",
+        "PCI DSS quarterly scans",
+        "CFIA traceability 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "e-commerce-and-marketplace",
+    "name": "E-Commerce & Marketplace",
+    "rowNumber": 44,
+    "verticalId": "retail-and-commerce",
+    "vertical": "Retail & Commerce",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CASL",
+      "Competition Act",
+      "Provincial consumer protection acts",
+      "Quebec Law 25"
+    ],
+    "optionalCompliance": [
+      "PCI DSS",
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "OPC (privacy)",
+      "CRTC (CASL)",
+      "Competition Bureau"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "PCI",
+      "Purchase history",
+      "Behavioral"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Shopify (Waterloo/Ottawa origin), Amazon.ca, Kijiji. CASL consent mandatory for transactional email. Quebec Law 25 stricter consent requirements than federal PIPEDA. PIPEDA consent for behavioral tracking.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Fraud detection",
+        "CASL consent management",
+        "PCI DSS for payment card",
+        "behavioral tracking consent",
+        "bot detection",
+        "account takeover prevention"
+      ],
+      "auditRequirements": [
+        "CASL consent records 3 yr",
+        "Transaction records 7 yr",
+        "Fraud reports 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "general-retail",
+    "name": "General Retail",
+    "rowNumber": 45,
+    "verticalId": "retail-and-commerce",
+    "vertical": "Retail & Commerce",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CASL",
+      "Provincial consumer protection acts"
+    ],
+    "optionalCompliance": [
+      "PCI DSS",
+      "SOC 2"
+    ],
+    "regulators": [
+      "OPC",
+      "Provincial consumer protection offices"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "PCI",
+      "Purchase history"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Hudson's Bay Company, Canadian Tire, Dollarama. In-store facial recognition analytics banned under OPC/provincial orders. Quebec Law 25 applies to Quebec retail operations. Loyalty programs under PIPEDA.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "POS/payment security",
+        "loyalty data consent",
+        "video surveillance compliance",
+        "data breach notification",
+        "staff PII protection"
+      ],
+      "auditRequirements": [
+        "Financial records 7 yr",
+        "PCI DSS quarterly scans",
+        "PIPEDA breach logs 3 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "automotive-manufacturing",
+    "name": "Automotive Manufacturing",
+    "rowNumber": 46,
+    "verticalId": "manufacturing-and-industrial",
+    "vertical": "Manufacturing & Industrial",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Transport Canada (Motor Vehicle Safety Act)",
+      "PIPEDA",
+      "Environmental Protection Act",
+      "Provincial OHS"
+    ],
+    "optionalCompliance": [
+      "ISO/SAE 21434 (automotive cybersecurity)",
+      "ISO 27001",
+      "IATF 16949"
+    ],
+    "regulators": [
+      "Transport Canada",
+      "Provincial labour ministries",
+      "ECCC"
+    ],
+    "dataSensitivity": [
+      "PII (connected vehicles)",
+      "OT/SCADA",
+      "IP/trade secrets"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Ontario auto corridor: Windsor, Oshawa, Cambridge, Ingersoll. Stellantis, GM, Toyota, Honda plants. Connected vehicle data follows PIPEDA. Autonomous vehicle testing regulated by Transport Canada and Ontario.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Connected vehicle OTA update signing",
+        "manufacturing OT/SCADA security",
+        "EDR data privacy",
+        "supply chain SBOM",
+        "EV charging infrastructure security",
+        "assembly line automation security"
+      ],
+      "auditRequirements": [
+        "Safety incident records permanent",
+        "Vehicle recall records permanent",
+        "Environmental reports 10 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "aerospace-and-aviation",
+    "name": "Aerospace & Aviation",
+    "rowNumber": 47,
+    "verticalId": "manufacturing-and-industrial",
+    "vertical": "Manufacturing & Industrial",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Aeronautics Act",
+      "Canadian Aviation Regulations (CARs)",
+      "ITAR (defense components)",
+      "PSPC ISP",
+      "Export Controls Order",
+      "DO-178C (avionics)"
+    ],
+    "optionalCompliance": [
+      "AS9100",
+      "DO-326A",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "Transport Canada (TCCA)",
+      "PSPC",
+      "Global Affairs Canada (export)"
+    ],
+    "dataSensitivity": [
+      "OT",
+      "IP/trade secrets",
+      "Controlled Goods",
+      "ITAR-controlled"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Bombardier, Pratt & Whitney Canada, Magellan Aerospace, CAE. DO-178C/DO-326A for avionics software certification. ITAR applies to US-origin aerospace components. Defense contracts require PSPC ISP. Montreal is Canada's aerospace hub.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "DO-178C software qualification traceability",
+        "ITAR export controls on tech transfer",
+        "supply chain counterfeit part prevention",
+        "avionics firmware signing",
+        "flight data security",
+        "CAE simulation IP protection"
+      ],
+      "auditRequirements": [
+        "Aircraft maintenance records: lifetime + 25 yr",
+        "DO-178C qualification records retained with aircraft",
+        "ITAR records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "food-processing-and-manufacturing",
+    "name": "Food Processing & Manufacturing",
+    "rowNumber": 48,
+    "verticalId": "manufacturing-and-industrial",
+    "vertical": "Manufacturing & Industrial",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Safe Food for Canadians Act (SFCA)",
+      "CFIA",
+      "HACCP",
+      "PIPEDA",
+      "Provincial OHS"
+    ],
+    "optionalCompliance": [
+      "ISO 22000",
+      "SQF",
+      "BRC",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "CFIA",
+      "Provincial health and labour ministries"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Commercial",
+      "Food safety records"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "SFCR requires traceability one step back, one step forward. CFIA Preventive Control Plans (PCPs) must be in digital systems. McCain Foods, Maple Leaf Foods, Saputo are key anchors. Allergen management system integrity is critical.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "CFIA traceability system integrity",
+        "PCP documentation access controls",
+        "allergen management system security",
+        "recall management system",
+        "supplier verification systems",
+        "cold chain monitoring integrity"
+      ],
+      "auditRequirements": [
+        "CFIA traceability records 5 yr",
+        "PCP records 5 yr",
+        "Recall records permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "industrial-equipment-and-heavy-mfg",
+    "name": "Industrial Equipment & Heavy Mfg",
+    "rowNumber": 49,
+    "verticalId": "manufacturing-and-industrial",
+    "vertical": "Manufacturing & Industrial",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial OHS Acts",
+      "Environmental permits",
+      "PIPEDA (employee data)",
+      "Export Controls Order (dual-use)"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "IEC 62443",
+      "ISO 9001"
+    ],
+    "regulators": [
+      "Provincial labour ministries",
+      "ECCC",
+      "Global Affairs Canada (dual-use export)"
+    ],
+    "dataSensitivity": [
+      "OT/SCADA",
+      "IP/trade secrets",
+      "Commercial"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Finning International, Toromont, CNH Industrial Canada. OT/SCADA for automated production lines. Predictive maintenance IoT creates data obligations. Export of dual-use equipment under Export Controls Order.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "OT/SCADA network segmentation",
+        "predictive maintenance IoT security",
+        "equipment telematics data protection",
+        "dual-use export control screening",
+        "ERP system access controls"
+      ],
+      "auditRequirements": [
+        "Safety incident records permanent",
+        "OHS inspections 5 yr",
+        "Environmental records 10 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "broadcasting-tv-and-radio",
+    "name": "Broadcasting (TV & Radio)",
+    "rowNumber": 50,
+    "verticalId": "media-and-entertainment",
+    "vertical": "Media & Entertainment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Broadcasting Act",
+      "CRTC conditions of licence",
+      "CanCon regulations",
+      "PIPEDA",
+      "CASL",
+      "Online Streaming Act (C-11, 2023)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "CRTC"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Content rights",
+      "Subscriber data"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "CBC/Radio-Canada, CTV, Global, Corus, Bell Media. CanCon requirements per CRTC. National Public Alerting System (NPAS) emergency broadcast mandatory. French-language programming requirements for QC-distributed content.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Emergency alert system hardening",
+        "broadcast automation security",
+        "DRM for premium content",
+        "CanCon tracking system integrity",
+        "subscriber authentication"
+      ],
+      "auditRequirements": [
+        "CRTC broadcast logs 7 yr",
+        "CanCon certification records 7 yr",
+        "Subscriber data 3 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "video-gaming",
+    "name": "Video Gaming",
+    "rowNumber": 51,
+    "verticalId": "media-and-entertainment",
+    "vertical": "Media & Entertainment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CASL",
+      "Quebec Law 25",
+      "Competition Act",
+      "COPPA (for US child users)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "ESRB",
+      "PEGI (European)"
+    ],
+    "regulators": [
+      "OPC",
+      "CRTC (CASL)",
+      "Quebec CAI",
+      "provincial consumer protection"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Payment",
+      "Behavioral",
+      "Minor data"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Montreal gaming hub: Ubisoft, Eidos-Montréal, WB Games, Square Enix. Quebec government game tax credits. Loot box regulation under review in Canada. Quebec Law 25 stricter for QC studios.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Minor age verification",
+        "in-game purchase controls",
+        "DDoS protection",
+        "cheat detection",
+        "PII/behavioral data minimization",
+        "Quebec Law 25 privacy consent",
+        "anti-piracy"
+      ],
+      "auditRequirements": [
+        "CASL consent records 3 yr",
+        "Financial/in-app purchase 7 yr",
+        "Security incidents 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "film-and-tv-production",
+    "name": "Film & TV Production",
+    "rowNumber": 52,
+    "verticalId": "media-and-entertainment",
+    "vertical": "Media & Entertainment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CRTC (broadcasters)",
+      "CRA (film tax credits)",
+      "CASL"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "MPA content security standards"
+    ],
+    "regulators": [
+      "Telefilm Canada",
+      "CMF",
+      "CRA (tax credits)",
+      "CRTC (broadcast)"
+    ],
+    "dataSensitivity": [
+      "PII (cast/crew)",
+      "IP/creative",
+      "Financial (tax credits)"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Vancouver (BC Film) and Toronto (Ontario Creates) primary hubs. Federal/provincial tax credits (CAVCO, OMDC) require Canadian content certification. MPA content security standards for major studio co-productions. ACTRA/IATSE union data management.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Production IP/dailies protection",
+        "tax credit documentation integrity",
+        "ACTRA/union member PII",
+        "digital cinema mastering (DCP) security",
+        "NDA enforcement systems",
+        "anti-piracy for screeners"
+      ],
+      "auditRequirements": [
+        "Tax credit records 7 yr",
+        "Union records 7 yr",
+        "Insurance claims permanent"
+      ]
+    },
+    "market": {
+      "catalogName": "Film & TV Production Technology",
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "British Columbia": "ILM Vancouver, Deluxe BC, Pixomondo Vancouver, Image Engine (Vancouver)",
+        "Ontario": "Technicolor Toronto, Industrial Brothers, Guru Studio (Toronto)",
+        "Quebec": "Rodeo FX (Montréal), Framestore Montréal, Lakeside Studio (Montréal)"
+      },
+      "wage": "CA$75k–CA$115k",
+      "demand": "Warm",
+      "tier": "T2",
+      "entry": [
+        "No security clearance required",
+        "Houdini + Python pipeline scripting is the key hire signal for TD (Technical Director) roles",
+        "Entry difficulty 3 = junior compositor and TD roles available; Vancouver is Canada's VFX hub",
+        "Tax credits make Vancouver and Montréal dominant; Toronto is smaller by comparison",
+        "BCIT Film + Humber animation are the major Canadian feeder programs"
+      ]
+    }
+  },
+  {
+    "id": "digital-media-and-publishing",
+    "name": "Digital Media & Publishing",
+    "rowNumber": 53,
+    "verticalId": "media-and-entertainment",
+    "vertical": "Media & Entertainment",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CASL",
+      "Competition Act",
+      "Copyright Act",
+      "Online News Act (C-18, 2023)",
+      "CRTC (if broadcaster)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "OPC",
+      "CRTC (CASL)",
+      "Competition Bureau"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Behavioral",
+      "Subscriber"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Online News Act (C-18, 2023) governs Google/Meta payments to news publishers. CASL consent for newsletters and notifications. Copyright Act AI training data exemptions under review. Quebec Law 25 cookie consent requirements.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "CASL consent management",
+        "copyright protection for digital assets",
+        "subscriber authentication",
+        "ad fraud prevention",
+        "Quebec Law 25 consent implementation",
+        "paywall security"
+      ],
+      "auditRequirements": [
+        "CASL records 3 yr",
+        "Subscriber data 3 yr after subscription ends",
+        "Copyright licensing records 7 yr"
+      ]
+    },
+    "market": {
+      "catalogName": null,
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Ontario": "Postmedia (Toronto), Globe and Mail (Toronto), TorStar (Toronto), Maclean's/Rogers Media",
+        "Quebec": "Quebecor/Canoe Media (Montréal), Le Devoir, La Presse digital (Montréal)",
+        "British Columbia": "Black Press Group (Victoria), Glacier Media (Vancouver)"
+      },
+      "wage": "CA$65k–CA$100k",
+      "demand": "Declining",
+      "tier": "T2",
+      "entry": [
+        "No security clearance required",
+        "Demand is declining overall; subscription tech is the growth pocket within a contracting sector",
+        "Entry difficulty 3 = accessible but sector is contracting",
+        "Bill C-18 has created unexpected demand for compliance tooling and negotiation support",
+        "React/Next.js + SEO knowledge is the core skill for front-end publishing roles"
+      ]
+    }
+  },
+  {
+    "id": "universities-and-research",
+    "name": "Universities & Research",
+    "rowNumber": 54,
+    "verticalId": "education",
+    "vertical": "Education",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "FIPPA/ATIA (public institutions)",
+      "TCPS 2 (research ethics)",
+      "Provincial university acts"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "NIST CSF",
+      "CAN/CIOSC 103-1"
+    ],
+    "regulators": [
+      "OPC",
+      "Provincial ministries of advanced education",
+      "Tri-Council (CIHR/NSERC/SSHRC)"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "PHI (health research)",
+      "Research IP",
+      "Student records"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Tri-Agency Research Data Management Policy requires data management plans. National Security Guidelines for Research Partnerships (2023) restrict some foreign-funded research. NSERC restrictions apply to sensitive research areas.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Research data sovereignty",
+        "national security vetting for research partnerships (NSICOP guidance)",
+        "student FIPPA rights",
+        "clinical research PHI under TCPS 2/PHIPA",
+        "lab control systems security",
+        "foreign researcher oversight"
+      ],
+      "auditRequirements": [
+        "Student records 10 yr post-graduation",
+        "Research data per RDM plan (typically 10 yr)",
+        "Ethics approvals permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "k-12-schools",
+    "name": "K-12 Schools",
+    "rowNumber": 55,
+    "verticalId": "education",
+    "vertical": "Education",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial education acts",
+      "Provincial FIPPA/MFIPPA",
+      "PIPEDA (limited — provincial primary)",
+      "COPPA (for US platforms used)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "Provincial ed-tech procurement requirements"
+    ],
+    "regulators": [
+      "Provincial ministries of education",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Minor data",
+      "Student records"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Ontario school boards under MFIPPA. BC under FOIPPA. US-hosted platforms (Google Workspace for Education, Microsoft 365) under OPC scrutiny. Ed-tech vendor reviews required. Indigenous student data sovereignty per OCAP® principles.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Minor data protection",
+        "parental consent management",
+        "cloud vendor data residency for student data",
+        "cybersecurity training integration",
+        "video conferencing security"
+      ],
+      "auditRequirements": [
+        "Student records 10 yr",
+        "Access logs 2 yr",
+        "Incident records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "online-learning-and-edtech",
+    "name": "Online Learning & EdTech",
+    "rowNumber": 56,
+    "verticalId": "education",
+    "vertical": "Education",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CASL",
+      "COPPA (if children)",
+      "Quebec Law 25",
+      "Provincial consumer protection"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "OPC",
+      "CRTC (CASL)",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Behavioral (learning)",
+      "Minor data (if applicable)"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "D2L (Desire2Learn — Waterloo), Top Hat, Prodigy are Canadian EdTech anchors. CASL consent for course reminders. AODA accessibility compliance mandatory in Ontario. Quebec Law 25 cookie consent for QC learners.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "CASL consent for notifications",
+        "learning analytics privacy",
+        "minor consent management",
+        "plagiarism detection system access controls",
+        "payment card security for course fees",
+        "Quebec Law 25 privacy dashboard"
+      ],
+      "auditRequirements": [
+        "CASL records 3 yr",
+        "Student learning data 5 yr",
+        "Financial records 7 yr"
+      ]
+    },
+    "market": {
+      "catalogName": "EdTech & Online Learning",
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Ontario": "D2L HQ (Kitchener), Top Hat (Toronto), Riipen (Toronto reg.), Prodigy Education (Toronto)",
+        "British Columbia": "BCcampus (Victoria), SkillsEngine BC, FreshGrade (Kelowna)",
+        "Alberta": "Apply to Education (Calgary), Alberta Digital Learning Alliance (Edmonton)",
+        "Quebec": "Classter (Montréal), Collecto (Quebec edtech cooperative)"
+      },
+      "wage": "CA$80k–CA$125k",
+      "demand": "Hot",
+      "tier": "T2",
+      "entry": [
+        "No security clearance required",
+        "Entry difficulty 3 = growing sector with active junior hiring at D2L and Top Hat",
+        "LTI and xAPI knowledge opens LMS integration roles",
+        "D2L (Kitchener) is the most accessible large EdTech employer in Canada",
+        "TypeScript + React + accessibility (WCAG) is the front-end skill stack that wins EdTech roles"
+      ]
+    }
+  },
+  {
+    "id": "air-transport",
+    "name": "Air Transport",
+    "rowNumber": 57,
+    "verticalId": "transportation-and-logistics",
+    "vertical": "Transportation & Logistics",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Aeronautics Act",
+      "Canadian Aviation Regulations (CARs)",
+      "Transport Canada",
+      "IATA standards",
+      "PIPEDA",
+      "CATSA (screening)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "IOSA"
+    ],
+    "regulators": [
+      "Transport Canada (TCCA)",
+      "Nav Canada",
+      "CATSA"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Passenger data",
+      "Security (CATSA)"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "Air Canada, WestJet, Transat. CATSA for passenger screening. API/PNR data shared with CBSA under CANPASS. Nav Canada air traffic control systems are critical infrastructure. ICAO cybersecurity standards (Doc 10164).",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Passenger screening data security",
+        "PNR/API encryption",
+        "CBSA data sharing protocols",
+        "baggage system security",
+        "aircraft OTA update signing",
+        "ACARS communication security"
+      ],
+      "auditRequirements": [
+        "Passenger records 5 yr",
+        "Security event logs 10 yr",
+        "Maintenance records: aircraft lifetime"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "rail-transport",
+    "name": "Rail Transport",
+    "rowNumber": 58,
+    "verticalId": "transportation-and-logistics",
+    "vertical": "Transportation & Logistics",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Railway Safety Act",
+      "Transport Canada",
+      "PIPEDA",
+      "Transportation of Dangerous Goods Act"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "NIST CSF"
+    ],
+    "regulators": [
+      "Transport Canada",
+      "TSB (Transportation Safety Board)"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "OT/SCADA",
+      "Dangerous goods"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "CN, CP (CPKC), VIA Rail, commuter rail (GO Transit, RTM). SCADA for wayside signaling and PTC (Positive Train Control). TDG Act for dangerous goods manifests. Critical infrastructure designation for transcontinental rail.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Signaling system isolation (SCADA/PTC)",
+        "dangerous goods tracking integrity",
+        "passenger manifest security",
+        "bridge/infrastructure monitoring system security",
+        "employee OHS data protection"
+      ],
+      "auditRequirements": [
+        "Safety records permanent",
+        "SCADA logs 5 yr",
+        "Dangerous goods records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "trucking-and-logistics",
+    "name": "Trucking & Logistics",
+    "rowNumber": 59,
+    "verticalId": "transportation-and-logistics",
+    "vertical": "Transportation & Logistics",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Motor Vehicle Transport Act",
+      "Provincial Highway Traffic Acts",
+      "PIPEDA",
+      "Transportation of Dangerous Goods Act",
+      "ELD mandate (2021)"
+    ],
+    "optionalCompliance": [
+      "C-TPAT (if cross-border)",
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "Transport Canada",
+      "Provincial transport ministries",
+      "CBSA (cross-border)"
+    ],
+    "dataSensitivity": [
+      "PII (driver/ELD)",
+      "Commercial",
+      "Location/telematics"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "ELD (Electronic Logging Device) mandate (2021) creates regulated driver data. CBSA eManifest for cross-border shipments. C-TPAT for Canada-US border trade. PIP (Partners in Protection) program for trusted shippers.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "ELD data protection (driver hours and location)",
+        "supply chain integrity",
+        "dangerous goods compliance system",
+        "border clearance data security",
+        "cargo theft prevention systems"
+      ],
+      "auditRequirements": [
+        "ELD records 6 months minimum",
+        "TDG records 2 yr",
+        "CBSA records 7 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "marine-ports-and-shipping",
+    "name": "Marine, Ports & Shipping",
+    "rowNumber": 60,
+    "verticalId": "transportation-and-logistics",
+    "vertical": "Transportation & Logistics",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Canada Shipping Act 2001",
+      "Transport Canada (marine)",
+      "PIPEDA",
+      "Marine Transportation Security Act",
+      "ISPS Code"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "IMO guidelines"
+    ],
+    "regulators": [
+      "Transport Canada (marine safety)",
+      "Port Authorities",
+      "Coast Guard"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Commercial",
+      "Critical infrastructure",
+      "ISPS-classified"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest"
+    ],
+    "frameworkNotes": "Port authorities (Vancouver, Montreal, Halifax, Prince Rupert) designated critical infrastructure. ISPS Code security plans are classified. VTS (Vessel Traffic Services) under Nav Canada/Coast Guard. Arctic sovereignty implications for Northern shipping routes.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Port access control systems",
+        "vessel tracking (AIS) security",
+        "ISPS security plan protection",
+        "cargo manifest encryption",
+        "port OT security",
+        "Arctic communications security"
+      ],
+      "auditRequirements": [
+        "Security plans classified/permanent",
+        "Vessel records 10 yr",
+        "Cargo manifests 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "urban-and-public-transit",
+    "name": "Urban & Public Transit",
+    "rowNumber": 61,
+    "verticalId": "transportation-and-logistics",
+    "vertical": "Transportation & Logistics",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial transit acts",
+      "AODA (ON accessibility)",
+      "Provincial privacy acts",
+      "PIPEDA",
+      "PCI DSS (fare payments)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "IEC 62443"
+    ],
+    "regulators": [
+      "Provincial transit authorities",
+      "municipal governments",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Payment",
+      "Location",
+      "Tap-in/tap-out data"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Presto (Metrolinx-ON), Compass (TransLink-BC), Opus (STM-QC). Tap-in/tap-out creates detailed location history under PIPEDA. AODA accessibility compliance mandatory for Ontario transit apps. TTC, OC Transpo, STM, Calgary Transit, Edmonton Transit.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Fare payment security (PCI DSS)",
+        "commuter location data minimization",
+        "transit card data protection",
+        "OT/SCADA security",
+        "real-time data API security",
+        "AODA app compliance"
+      ],
+      "auditRequirements": [
+        "Transaction records 1 yr",
+        "Security incidents 5 yr",
+        "PCI DSS quarterly scans"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "residential-real-estate",
+    "name": "Residential Real Estate",
+    "rowNumber": 62,
+    "verticalId": "real-estate-and-construction",
+    "vertical": "Real Estate & Construction",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "FINTRAC (AML for realtors)",
+      "PIPEDA",
+      "Provincial real estate acts (TRESA-ON, RESA-BC)",
+      "Prohibition on Purchase by Non-Canadians Act (2022)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "FINTRAC",
+      "RECO (ON)",
+      "BCFSA (BC)",
+      "OACIQ (QC)"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Financial",
+      "PCI (deposits)"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "FINTRAC requires realtors to collect client ID and beneficial ownership (since 2023 amendments). Foreign buyer ban under Prohibition on Purchase by Non-Canadians Act (2022). BC Beneficial Ownership Land Title Registry (LOTR) integration required.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "FINTRAC beneficial ownership verification",
+        "client identity management",
+        "land title system integration",
+        "deposit trust account security",
+        "foreign buyer verification",
+        "BC beneficial ownership registry access"
+      ],
+      "auditRequirements": [
+        "FINTRAC client records 5 yr",
+        "Transaction records 7 yr",
+        "Trust account records 5 yr"
+      ]
+    },
+    "market": {
+      "catalogName": "Residential Real Estate Technology",
+      "matchConfidence": 1.0,
+      "employersByProvince": {
+        "Ontario": "Properly (Toronto), Ratehub (Toronto), Centract (Toronto), Royal LePage Digital (Mississauga)",
+        "British Columbia": "Doormat (Vancouver), Sutton Group digital, RE/MAX BC digital",
+        "Alberta": "Honestdoor (Edmonton), Zolo (Calgary/national)",
+        "Quebec": "Via Capitale digital, Century 21 QC portal (Montréal)"
+      },
+      "wage": "CA$75k–CA$110k",
+      "demand": "Flat",
+      "tier": "T2",
+      "entry": [
+        "No security clearance required",
+        "Entry difficulty 3 = niche; CREA DDF knowledge differentiates candidates",
+        "CREA Data Distribution Facility (DDF) API expertise is the specialist credential",
+        "Ratehub and Properly are the most accessible technology-focused residential real estate employers",
+        "React + mapping (Mapbox GL/Leaflet) is the dominant frontend skill pair for listing portals"
+      ]
+    }
+  },
+  {
+    "id": "commercial-real-estate",
+    "name": "Commercial Real Estate",
+    "rowNumber": 63,
+    "verticalId": "real-estate-and-construction",
+    "vertical": "Real Estate & Construction",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "FINTRAC (AML)",
+      "PIPEDA",
+      "Provincial real estate and planning acts",
+      "Competition Act (REIT disclosure)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "BOMA standards"
+    ],
+    "regulators": [
+      "FINTRAC",
+      "OSFI (REIT financing)",
+      "provincial regulators"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Financial",
+      "Commercial IP"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Cadillac Fairview, Oxford Properties, RioCan. Building automation systems (BAS) require OT security. REIT disclosure rules under CSA National Instruments. Smart building IoT creates new PIPEDA obligations.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Tenant PII protection",
+        "building access control system security",
+        "BAS/smart building IoT security",
+        "FINTRAC client verification",
+        "REIT financial disclosure systems",
+        "property management platform security"
+      ],
+      "auditRequirements": [
+        "FINTRAC records 5 yr",
+        "Financial records 7 yr",
+        "Building safety inspections permanent"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "property-management",
+    "name": "Property Management",
+    "rowNumber": 64,
+    "verticalId": "real-estate-and-construction",
+    "vertical": "Real Estate & Construction",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Provincial Residential Tenancy Acts (RTA-ON, RTA-BC)",
+      "PIPEDA",
+      "FINTRAC (AML, cash rental)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "Provincial landlord-tenant boards",
+      "FINTRAC",
+      "provincial OIPCs"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Financial",
+      "Location",
+      "Tenant data"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Boardwalk, Killam, Minto. Tenant credit checks under provincial tenancy acts. Smart lock and access fob data creates location PII under PIPEDA. Maintenance request data is PII. FINTRAC applies for cash rental transactions.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Tenant PII minimization",
+        "credit bureau access controls",
+        "rental payment processing (PCI)",
+        "smart building access data security",
+        "tenant portal authentication",
+        "maintenance worker data collection limits"
+      ],
+      "auditRequirements": [
+        "Tenancy records 3 yr after tenancy ends",
+        "Financial records 7 yr",
+        "FINTRAC records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "crop-farming-and-grain",
+    "name": "Crop Farming & Grain",
+    "rowNumber": 65,
+    "verticalId": "agriculture",
+    "vertical": "Agriculture",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "CFIA (Feeds Act, Seeds Act, Plant Protection Act)",
+      "SFCA",
+      "PIPEDA (agtech platforms)",
+      "Canada Grain Act"
+    ],
+    "optionalCompliance": [
+      "ISO 22000",
+      "GlobalG.A.P.",
+      "SOC 2 (agtech platforms)"
+    ],
+    "regulators": [
+      "CFIA",
+      "Canadian Grain Commission",
+      "Provincial agriculture ministries"
+    ],
+    "dataSensitivity": [
+      "Commercial",
+      "IP (crop data)",
+      "Agricultural records"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Canadian Grain Commission regulates grain grading and weighing. Prairie grain belt (SK, MB, AB) is primary region. Precision agriculture platforms (Farmers Edge, Trimble) handle sensitive crop yield/soil data. Provincial farm data legislation emerging (Alberta leading).",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Crop yield data sovereignty",
+        "precision agriculture platform data portability",
+        "grain trading system integrity",
+        "supply chain traceability for CFIA",
+        "farm equipment telematics privacy",
+        "provincial grain elevator system security"
+      ],
+      "auditRequirements": [
+        "CFIA records 5 yr",
+        "Agri-program records 7 yr",
+        "Grain commission records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "livestock-and-aquaculture",
+    "name": "Livestock & Aquaculture",
+    "rowNumber": 66,
+    "verticalId": "agriculture",
+    "vertical": "Agriculture",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Health of Animals Act (CFIA)",
+      "SFCA",
+      "PIPEDA",
+      "DFO (aquaculture)",
+      "Animal Health Act (provincial)"
+    ],
+    "optionalCompliance": [
+      "ISO 22000",
+      "HACCP",
+      "GlobalG.A.P."
+    ],
+    "regulators": [
+      "CFIA",
+      "DFO (Fisheries and Oceans Canada)",
+      "Provincial agriculture ministries"
+    ],
+    "dataSensitivity": [
+      "Commercial",
+      "Animal health records",
+      "PII (producers)"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "RFID animal traceability via CCIA (Canadian Cattle Identification Agency) for bovine. DFO aquaculture licensing for BC salmon and shellfish. Avian influenza/disease outbreak reporting is mandatory. HACCP plans must be in digital systems.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Animal ID traceability system integrity",
+        "DFO fish harvest data security",
+        "disease outbreak reporting system security",
+        "supply chain traceability farm-to-table",
+        "HACCP plan access controls",
+        "producer PII protection"
+      ],
+      "auditRequirements": [
+        "Animal traceability records 3 yr",
+        "CFIA inspection records 5 yr",
+        "DFO catch records 10 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "agritech-and-precision-ag",
+    "name": "AgriTech & Precision Ag",
+    "rowNumber": 67,
+    "verticalId": "agriculture",
+    "vertical": "Agriculture",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA (farmer data)",
+      "CASL",
+      "CFIA (crop/pest data)",
+      "Provincial privacy acts"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "ISO 22000"
+    ],
+    "regulators": [
+      "OPC",
+      "CFIA",
+      "ISED (IoT devices)"
+    ],
+    "dataSensitivity": [
+      "PII (farmer)",
+      "Commercial (crop data)",
+      "IP (algorithms)"
+    ],
+    "pipelineStagesAffected": [
+      "SCA",
+      "SAST",
+      "Secrets scan",
+      "Container scan",
+      "Sign",
+      "SBOM + attest",
+      "DAST"
+    ],
+    "frameworkNotes": "Farmers Edge, Decisive Farming, Veritas Farm Management are key Canadian AgriTech firms. Farm data ownership legislation has no federal law yet (Alberta leading with emerging rules). Satellite/drone imagery creates data sovereignty questions. Saskatoon is Canada's AgriTech hub.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Farm data ownership controls",
+        "IoT field sensor security",
+        "drone data handling",
+        "precision agriculture API security",
+        "crop yield prediction model IP protection",
+        "CASL consent for farming recommendations"
+      ],
+      "auditRequirements": [
+        "CASL records 3 yr",
+        "Financial records 7 yr",
+        "Crop data per contract terms",
+        "Security incidents 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "law-firms",
+    "name": "Law Firms",
+    "rowNumber": 68,
+    "verticalId": "legal-and-professional-services",
+    "vertical": "Legal & Professional Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "Provincial law society rules (LSO-ON, LSBC, BSQ-QC)",
+      "Solicitor-client privilege",
+      "FINTRAC (real estate/corporate transactions)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "Provincial law societies",
+      "FINTRAC (designated activities)",
+      "OPC"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Privileged communications",
+      "Financial"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Solicitor-client privilege creates absolute confidentiality obligation. Law Society of Ontario Technology Practice Area guidelines. FINTRAC reporting for real estate lawyers and trust accounts. Cloud storage requires law society compliance assessment before adoption.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Solicitor-client privilege technical controls",
+        "encrypted client file storage",
+        "trust account segregation",
+        "FINTRAC client verification",
+        "law society-compliant cloud storage",
+        "MDM for remote lawyers"
+      ],
+      "auditRequirements": [
+        "File retention per law society rules (typically 10 yr)",
+        "FINTRAC records 5 yr",
+        "Trust account records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "accounting-audit-and-tax",
+    "name": "Accounting, Audit & Tax",
+    "rowNumber": 69,
+    "verticalId": "legal-and-professional-services",
+    "vertical": "Legal & Professional Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "CPA Canada standards",
+      "Income Tax Act (CRA)",
+      "PIPEDA",
+      "FINTRAC (designated activities)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "CPA Canada (via provincial bodies)",
+      "CRA (tax)",
+      "FINTRAC"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Financial",
+      "Tax records",
+      "PCI"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Big 4 Canadian practices (Deloitte, PwC, KPMG, EY). CSQM (Canadian Standard on Quality Management) for firms. CRA e-filing security (EFILE). PCAOB oversight for US-listed Canadian companies. Data analytics in audit creates bulk financial data obligations.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Client financial data segmentation",
+        "CRA EFILE credential security",
+        "tax return data encryption",
+        "audit file access controls",
+        "CRA MyAccount API security",
+        "independence documentation integrity"
+      ],
+      "auditRequirements": [
+        "Tax files 7 yr minimum (CRA)",
+        "Audit working papers 7 yr",
+        "CPA quality management records 5 yr"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "management-consulting",
+    "name": "Management Consulting",
+    "rowNumber": 70,
+    "verticalId": "legal-and-professional-services",
+    "vertical": "Legal & Professional Services",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "CASL",
+      "Provincial employment standards (where employee data)",
+      "PSPC supplier qualification (gov contracts)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001",
+      "ISO 20000"
+    ],
+    "regulators": [
+      "OPC",
+      "CRTC (CASL)",
+      "PSPC (government contracts)"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Confidential client data",
+      "IP"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "McKinsey, Deloitte, PwC, Accenture, KPMG Canadian practices. Government consulting contracts require PSPC security screening (reliability or secret). No sector-specific regulation — inherits client regulatory context.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Client data compartmentalization",
+        "NDA technical enforcement",
+        "government security screening compliance",
+        "knowledge management platform security",
+        "AI-assisted tool data privacy",
+        "CASL consent for client communications"
+      ],
+      "auditRequirements": [
+        "Client records per contract (typically 7 yr)",
+        "CASL consent records 3 yr",
+        "Government contracts per PSPC requirements"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "registered-charities",
+    "name": "Registered Charities",
+    "rowNumber": 71,
+    "verticalId": "non-profit-and-social",
+    "vertical": "Non-profit & Social",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "Income Tax Act (CRA charity registration)",
+      "PIPEDA",
+      "Provincial Charities Acts",
+      "CASL"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "CRA (Charities Directorate)",
+      "Provincial charity regulators (PGT-BC, PGT-ON)",
+      "OPC"
+    ],
+    "dataSensitivity": [
+      "PII",
+      "Donor data",
+      "Beneficiary data"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "CRA charity registration requires annual T3010 reporting. CASL rules for non-profits relaxed but commercial electronic message rules still apply for fundraising. International fund transfer reporting if political activities exceed 10% threshold.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Donor database security",
+        "CASL consent for fundraising emails",
+        "CRA T3010 reporting system integrity",
+        "donation processing PCI DSS",
+        "beneficiary data sensitivity",
+        "international transfer AML controls"
+      ],
+      "auditRequirements": [
+        "CRA charity records 7 yr",
+        "CASL consent records 3 yr",
+        "Donor PII 7 yr post last donation"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "healthcare-charities",
+    "name": "Healthcare Charities",
+    "rowNumber": 72,
+    "verticalId": "non-profit-and-social",
+    "vertical": "Non-profit & Social",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "PHIPA (if patient data)",
+      "Provincial charity acts",
+      "CASL",
+      "Health Canada (if clinical research funded)"
+    ],
+    "optionalCompliance": [
+      "SOC 2",
+      "ISO 27001"
+    ],
+    "regulators": [
+      "CRA",
+      "Provincial OIPCs",
+      "Provincial charity regulators"
+    ],
+    "dataSensitivity": [
+      "PHI",
+      "PII",
+      "Donor data"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "Canadian Cancer Society, Heart & Stroke, MS Society. Patient data subject to PHIPA where circle-of-care adjacent. Research funding requires TCPS 2 alignment. Patient registries under PHIPA. CRA charity rules limit advocacy activities.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "Patient PII/PHI segmentation from donor data",
+        "PHIPA-compliant patient engagement",
+        "research participant consent management",
+        "CASL fundraising consent",
+        "donor PII protection"
+      ],
+      "auditRequirements": [
+        "Patient records per PHIPA (10 yr)",
+        "CRA records 7 yr",
+        "Research data per RDM plan"
+      ]
+    },
+    "market": null
+  },
+  {
+    "id": "indigenous-community-services",
+    "name": "Indigenous Community Services",
+    "rowNumber": 73,
+    "verticalId": "non-profit-and-social",
+    "vertical": "Non-profit & Social",
+    "region": "CA",
+    "mandatoryCompliance": [
+      "PIPEDA",
+      "OCAP® principles (Ownership, Control, Access, Possession)",
+      "Indian Act (where applicable)",
+      "Provincial/federal social service acts"
+    ],
+    "optionalCompliance": [
+      "ISO 27001",
+      "FNFMB standards"
+    ],
+    "regulators": [
+      "ISC (Indigenous Services Canada)",
+      "provincial child welfare",
+      "band councils"
+    ],
+    "dataSensitivity": [
+      "<span class=\"tag-ocap\">OCAP®</span>",
+      "PII",
+      "Cultural heritage data",
+      "Genealogical"
+    ],
+    "pipelineStagesAffected": [
+      "Secrets scan",
+      "Container scan",
+      "SAST",
+      "Sign"
+    ],
+    "frameworkNotes": "OCAP® principles: data must be Owned and Controlled by the community. FNIGC (First Nations Information Governance Centre) governs standards. Sixties Scoop and residential school records require special handling. ISC funding agreements require data sharing with consent.",
+    "securityAuditRequirements": {
+      "keySecurityRequirements": [
+        "OCAP® compliance for data sovereignty",
+        "cultural data access restrictions",
+        "genealogical data special handling",
+        "community-controlled identity systems",
+        "residential school survivor data security",
+        "federal/band dual jurisdiction access controls"
+      ],
+      "auditRequirements": [
+        "Band council records per community governance",
+        "ISC reporting 7 yr",
+        "Cultural records permanent (community-governed)"
+      ]
+    },
+    "market": null
+  }
+]

@@ -1,0 +1,4727 @@
+{
+  "frameworkPipelines.json#ssr-hybrid--nextjs.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nextjs.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nextjs.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nextjs.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nextjs.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nextjs.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nextjs.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nextjs.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nextjs.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--remix.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--remix.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--remix.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--remix.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--remix.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--remix.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--remix.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--remix.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--remix.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nuxt.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nuxt.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nuxt.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nuxt.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nuxt.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nuxt.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nuxt.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nuxt.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--nuxt.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--sveltekit.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--sveltekit.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--sveltekit.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--sveltekit.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--sveltekit.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--sveltekit.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--sveltekit.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--sveltekit.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--sveltekit.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--angular-ssr.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--angular-ssr.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--angular-ssr.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--angular-ssr.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--angular-ssr.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--angular-ssr.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--angular-ssr.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--angular-ssr.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--angular-ssr.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--solid-start.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--solid-start.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--solid-start.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--solid-start.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--solid-start.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--solid-start.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--solid-start.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--solid-start.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssr-hybrid--solid-start.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--react.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--react.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--react.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--react.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--react.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--react.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--react.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--react.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--react.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--vue.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--vue.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--vue.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--vue.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--vue.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--vue.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--vue.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--vue.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--vue.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--angular.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--angular.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--angular.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--angular.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--angular.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--angular.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--angular.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--angular.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--angular.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--svelte.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--svelte.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--svelte.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--svelte.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--svelte.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--svelte.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--svelte.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--svelte.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--svelte.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--solidjs.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--solidjs.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--solidjs.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--solidjs.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--solidjs.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--solidjs.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--solidjs.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--solidjs.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--solidjs.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--preact.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--preact.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--preact.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--preact.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--preact.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--preact.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--preact.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--preact.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--preact.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--lit.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--lit.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--lit.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--lit.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--lit.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--lit.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--lit.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--lit.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#csr-spa--lit.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--astro.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--astro.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--astro.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--astro.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--astro.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--astro.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--astro.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--astro.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--astro.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--eleventy.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--eleventy.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--eleventy.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--eleventy.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--eleventy.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--eleventy.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--eleventy.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--eleventy.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--eleventy.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--hugo.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--hugo.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--hugo.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--hugo.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--hugo.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--hugo.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--hugo.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--hugo.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--hugo.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--gatsby.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--gatsby.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--gatsby.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--gatsby.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--gatsby.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--gatsby.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--gatsby.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--gatsby.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ssg--gatsby.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--astro.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--astro.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--astro.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--astro.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--astro.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--astro.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--astro.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--astro.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--astro.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--fresh.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--fresh.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--fresh.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--fresh.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--fresh.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--fresh.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--fresh.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--fresh.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#islands--fresh.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#resumability--qwik.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#resumability--qwik.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#resumability--qwik.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#resumability--qwik.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#resumability--qwik.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#resumability--qwik.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#resumability--qwik.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#resumability--qwik.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#resumability--qwik.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--nextjs-edge.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--nextjs-edge.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--nextjs-edge.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--nextjs-edge.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--nextjs-edge.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--nextjs-edge.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--nextjs-edge.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--nextjs-edge.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--nextjs-edge.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--hono.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--hono.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--hono.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--hono.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--hono.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--hono.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--hono.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--hono.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--hono.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--remix-cloudflare.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--remix-cloudflare.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--remix-cloudflare.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--remix-cloudflare.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--remix-cloudflare.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--remix-cloudflare.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--remix-cloudflare.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--remix-cloudflare.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#edge-rendering--remix-cloudflare.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--nextjs-app-router.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--nextjs-app-router.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--nextjs-app-router.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--nextjs-app-router.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--nextjs-app-router.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--nextjs-app-router.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--nextjs-app-router.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--nextjs-app-router.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--nextjs-app-router.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--remix.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--remix.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--remix.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--remix.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--remix.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--remix.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--remix.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--remix.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--remix.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--sveltekit.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--sveltekit.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--sveltekit.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--sveltekit.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--sveltekit.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--sveltekit.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--sveltekit.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--sveltekit.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#streaming-ssr--sveltekit.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-webpack.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-webpack.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-webpack.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-webpack.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-webpack.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-webpack.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-webpack.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-webpack.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-webpack.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-rspack.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-rspack.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-rspack.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-rspack.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-rspack.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-rspack.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-rspack.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-rspack.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--module-federation-rspack.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--single-spa.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--single-spa.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--single-spa.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--single-spa.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--single-spa.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--single-spa.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--single-spa.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--single-spa.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#micro-frontends--single-spa.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--react-native.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--react-native.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--react-native.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--react-native.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--react-native.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--react-native.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--react-native.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--react-native.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--react-native.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--expo.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--expo.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--expo.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--expo.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--expo.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--expo.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--expo.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--expo.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--expo.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--ionic.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--ionic.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--ionic.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--ionic.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--ionic.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--ionic.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--ionic.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--ionic.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-js--ionic.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--flutter.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--flutter.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--flutter.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--flutter.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--flutter.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--flutter.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--flutter.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--flutter.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--flutter.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--net-maui.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--net-maui.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--net-maui.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--net-maui.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--net-maui.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--net-maui.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--net-maui.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--net-maui.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--net-maui.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--kotlin-multiplatform.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--kotlin-multiplatform.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--kotlin-multiplatform.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--kotlin-multiplatform.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--kotlin-multiplatform.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--kotlin-multiplatform.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--kotlin-multiplatform.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--kotlin-multiplatform.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cross-platform-nonjs--kotlin-multiplatform.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--swift-swiftui.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--swift-swiftui.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--swift-swiftui.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--swift-swiftui.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--swift-swiftui.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--swift-swiftui.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--swift-swiftui.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--swift-swiftui.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--swift-swiftui.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--objective-c-uikit.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--objective-c-uikit.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--objective-c-uikit.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--objective-c-uikit.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--objective-c-uikit.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--objective-c-uikit.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--objective-c-uikit.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--objective-c-uikit.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-ios--objective-c-uikit.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--kotlin-jetpack-compose.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--kotlin-jetpack-compose.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--kotlin-jetpack-compose.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--kotlin-jetpack-compose.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--kotlin-jetpack-compose.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--kotlin-jetpack-compose.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--kotlin-jetpack-compose.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--kotlin-jetpack-compose.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--kotlin-jetpack-compose.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--java-android-sdk.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--java-android-sdk.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--java-android-sdk.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--java-android-sdk.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--java-android-sdk.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--java-android-sdk.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--java-android-sdk.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--java-android-sdk.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#native-android--java-android-sdk.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--workbox.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--workbox.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--workbox.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--workbox.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--workbox.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--workbox.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--workbox.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--workbox.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--workbox.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--vite-pwa-plugin.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--vite-pwa-plugin.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--vite-pwa-plugin.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--vite-pwa-plugin.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--vite-pwa-plugin.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--vite-pwa-plugin.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--vite-pwa-plugin.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--vite-pwa-plugin.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#pwa--vite-pwa-plugin.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--express.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--express.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--express.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--express.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--express.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--express.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--express.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--express.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--express.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--fastify.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--fastify.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--fastify.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--fastify.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--fastify.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--fastify.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--fastify.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--fastify.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--fastify.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--nestjs.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--nestjs.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--nestjs.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--nestjs.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--nestjs.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--nestjs.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--nestjs.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--nestjs.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--nestjs.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--hono.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--hono.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--hono.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--hono.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--hono.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--hono.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--hono.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--hono.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--hono.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--deno.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--deno.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--deno.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--deno.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--deno.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--deno.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--deno.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--deno.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--deno.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--elysia.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--elysia.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--elysia.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--elysia.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--elysia.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--elysia.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--elysia.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--elysia.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--elysia.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--bun-native.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--bun-native.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--bun-native.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--bun-native.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--bun-native.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--bun-native.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--bun-native.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--bun-native.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#node-backend--bun-native.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--fastapi.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--fastapi.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--fastapi.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--fastapi.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--fastapi.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--fastapi.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--fastapi.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--fastapi.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--fastapi.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--django.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--django.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--django.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--django.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--django.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--django.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--django.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--django.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--django.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--flask.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--flask.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--flask.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--flask.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--flask.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--flask.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--flask.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--flask.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--flask.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--starlette.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--starlette.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--starlette.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--starlette.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--starlette.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--starlette.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--starlette.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--starlette.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#python--starlette.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--gin.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--gin.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--gin.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--gin.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--gin.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--gin.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--gin.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--gin.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--gin.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--echo.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--echo.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--echo.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--echo.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--echo.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--echo.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--echo.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--echo.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--echo.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--fiber.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--fiber.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--fiber.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--fiber.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--fiber.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--fiber.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--fiber.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--fiber.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--fiber.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--chi.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--chi.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--chi.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--chi.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--chi.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--chi.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--chi.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--chi.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#go--chi.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--spring-boot.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--spring-boot.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--spring-boot.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--spring-boot.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--spring-boot.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--spring-boot.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--spring-boot.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--spring-boot.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--spring-boot.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--quarkus.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--quarkus.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--quarkus.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--quarkus.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--quarkus.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--quarkus.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--quarkus.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--quarkus.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--quarkus.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--micronaut.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--micronaut.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--micronaut.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--micronaut.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--micronaut.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--micronaut.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--micronaut.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--micronaut.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#java--micronaut.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--ktor.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--ktor.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--ktor.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--ktor.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--ktor.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--ktor.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--ktor.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--ktor.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--ktor.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--spring-boot-kotlin.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--spring-boot-kotlin.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--spring-boot-kotlin.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--spring-boot-kotlin.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--spring-boot-kotlin.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--spring-boot-kotlin.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--spring-boot-kotlin.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--spring-boot-kotlin.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#kotlin--spring-boot-kotlin.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--aspnet-core.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--aspnet-core.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--aspnet-core.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--aspnet-core.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--aspnet-core.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--aspnet-core.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--aspnet-core.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--aspnet-core.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--aspnet-core.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--minimal-apis-net.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--minimal-apis-net.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--minimal-apis-net.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--minimal-apis-net.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--minimal-apis-net.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--minimal-apis-net.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--minimal-apis-net.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--minimal-apis-net.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#dotnet--minimal-apis-net.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--axum.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--axum.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--axum.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--axum.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--axum.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--axum.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--axum.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--axum.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--axum.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--actix-web.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--actix-web.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--actix-web.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--actix-web.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--actix-web.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--actix-web.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--actix-web.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--actix-web.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#rust--actix-web.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#elixir--phoenix.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#elixir--phoenix.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#elixir--phoenix.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#elixir--phoenix.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#elixir--phoenix.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#elixir--phoenix.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#elixir--phoenix.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#elixir--phoenix.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#elixir--phoenix.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--rails.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--rails.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--rails.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--rails.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--rails.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--rails.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--rails.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--rails.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--rails.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--sinatra.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--sinatra.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--sinatra.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--sinatra.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--sinatra.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--sinatra.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--sinatra.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--sinatra.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#ruby--sinatra.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--laravel.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--laravel.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--laravel.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--laravel.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--laravel.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--laravel.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--laravel.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--laravel.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--laravel.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--symfony.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--symfony.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--symfony.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--symfony.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--symfony.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--symfony.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--symfony.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--symfony.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--symfony.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--slim.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--slim.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--slim.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--slim.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--slim.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--slim.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--slim.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--slim.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#php--slim.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--vapor.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--vapor.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--vapor.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--vapor.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--vapor.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--vapor.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--vapor.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--vapor.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--vapor.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--hummingbird.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--hummingbird.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--hummingbird.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--hummingbird.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--hummingbird.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--hummingbird.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--hummingbird.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--hummingbird.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#swift-server--hummingbird.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--play.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--play.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--play.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--play.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--play.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--play.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--play.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--play.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--play.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--http4s.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--http4s.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--http4s.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--http4s.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--http4s.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--http4s.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--http4s.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--http4s.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#scala--http4s.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--ring.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--ring.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--ring.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--ring.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--ring.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--ring.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--ring.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--ring.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--ring.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--pedestal.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--pedestal.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--pedestal.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--pedestal.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--pedestal.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--pedestal.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--pedestal.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--pedestal.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#clojure--pedestal.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--drogon.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--drogon.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--drogon.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--drogon.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--drogon.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--drogon.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--drogon.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--drogon.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--drogon.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--crow.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--crow.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--crow.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--crow.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--crow.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--crow.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--crow.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--crow.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#cpp--crow.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-go.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-go.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-go.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-go.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-go.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-go.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-go.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-go.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-go.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-java.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-java.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-java.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-java.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-java.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-java.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-java.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-java.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-java.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpcio.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpcio.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpcio.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpcio.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpcio.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpcio.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpcio.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpcio.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpcio.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-grpc-js.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-grpc-js.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-grpc-js.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-grpc-js.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-grpc-js.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-grpc-js.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-grpc-js.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-grpc-js.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-grpc-js.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-dotnet.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-dotnet.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-dotnet.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-dotnet.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-dotnet.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-dotnet.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-dotnet.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-dotnet.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-dotnet.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--tonic.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--tonic.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--tonic.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--tonic.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--tonic.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--tonic.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--tonic.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--tonic.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--tonic.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-swift.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-swift.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-swift.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-swift.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-swift.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-swift.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-swift.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-swift.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-swift.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-kotlin.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-kotlin.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-kotlin.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-kotlin.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-kotlin.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-kotlin.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-kotlin.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-kotlin.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-kotlin.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--connect-go.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--connect-go.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--connect-go.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--connect-go.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--connect-go.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--connect-go.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--connect-go.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--connect-go.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--connect-go.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-php.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-php.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-php.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-php.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-php.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-php.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-php.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-php.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#grpc--grpc-php.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--apollo-server.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--apollo-server.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--apollo-server.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--apollo-server.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--apollo-server.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--apollo-server.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--apollo-server.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--apollo-server.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--apollo-server.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-yoga.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-yoga.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-yoga.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-yoga.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-yoga.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-yoga.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-yoga.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-yoga.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-yoga.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--strawberry.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--strawberry.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--strawberry.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--strawberry.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--strawberry.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--strawberry.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--strawberry.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--strawberry.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--strawberry.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--gqlgen.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--gqlgen.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--gqlgen.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--gqlgen.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--gqlgen.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--gqlgen.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--gqlgen.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--gqlgen.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--gqlgen.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--spring-for-graphql.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--spring-for-graphql.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--spring-for-graphql.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--spring-for-graphql.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--spring-for-graphql.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--spring-for-graphql.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--spring-for-graphql.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--spring-for-graphql.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--spring-for-graphql.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--hot-chocolate.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--hot-chocolate.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--hot-chocolate.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--hot-chocolate.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--hot-chocolate.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--hot-chocolate.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--hot-chocolate.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--hot-chocolate.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--hot-chocolate.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-ruby.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-ruby.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-ruby.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-ruby.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-ruby.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-ruby.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-ruby.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-ruby.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--graphql-ruby.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--async-graphql.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--async-graphql.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--async-graphql.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--async-graphql.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--async-graphql.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--async-graphql.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--async-graphql.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--async-graphql.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#graphql--async-graphql.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--ws.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--ws.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--ws.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--ws.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--ws.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--ws.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--ws.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--ws.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--ws.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--gorilla-websocket.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--gorilla-websocket.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--gorilla-websocket.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--gorilla-websocket.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--gorilla-websocket.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--gorilla-websocket.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--gorilla-websocket.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--gorilla-websocket.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--gorilla-websocket.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--websockets.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--websockets.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--websockets.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--websockets.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--websockets.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--websockets.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--websockets.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--websockets.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--websockets.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--java-websocket.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--java-websocket.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--java-websocket.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--java-websocket.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--java-websocket.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--java-websocket.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--java-websocket.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--java-websocket.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--java-websocket.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--phoenix-channels.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--phoenix-channels.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--phoenix-channels.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--phoenix-channels.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--phoenix-channels.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--phoenix-channels.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--phoenix-channels.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--phoenix-channels.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--phoenix-channels.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--tokio-tungstenite.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--tokio-tungstenite.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--tokio-tungstenite.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--tokio-tungstenite.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--tokio-tungstenite.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--tokio-tungstenite.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--tokio-tungstenite.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--tokio-tungstenite.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--tokio-tungstenite.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--signalr.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--signalr.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--signalr.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--signalr.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--signalr.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--signalr.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--signalr.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--signalr.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--signalr.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--faye-websocket.name": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--faye-websocket.label": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--faye-websocket.version": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--faye-websocket.language": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--faye-websocket.pattern": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--faye-websocket.phases": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--faye-websocket.envInstructions": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--faye-websocket.verifySteps": {
+    "source": "legacy/13-pipeline-build-catalog.html",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  },
+  "frameworkPipelines.json#websocket--faye-websocket.complianceDeltas": {
+    "source": "legacy/13-pipeline-build-catalog.html (global #compliance-deltas table, applies to all frameworks)",
+    "sourceType": "legacy",
+    "confidence": 1.0
+  }
+}
