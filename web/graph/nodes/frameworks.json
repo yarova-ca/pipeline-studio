@@ -277,7 +277,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "01-remix",
@@ -564,7 +568,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "01-nuxt",
@@ -820,7 +828,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "01-sveltekit",
@@ -1088,7 +1100,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "01-angular-ssr",
@@ -1402,7 +1418,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "01-solid-start",
@@ -1655,7 +1675,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "02-react",
@@ -1930,7 +1954,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "02-vue",
@@ -2181,7 +2209,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "02-angular",
@@ -2473,7 +2505,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "02-svelte",
@@ -2718,7 +2754,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "02-solidjs",
@@ -2946,7 +2986,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "02-preact",
@@ -3179,7 +3223,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "02-lit",
@@ -3406,7 +3454,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "03-astro",
@@ -3639,7 +3691,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "03-eleventy",
@@ -3862,7 +3918,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "03-hugo",
@@ -4077,7 +4137,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "03-gatsby",
@@ -4319,7 +4383,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "04-astro",
@@ -4558,7 +4626,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "04-fresh",
@@ -4767,7 +4839,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "05-qwik",
@@ -5078,7 +5154,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "06-nextjs-edge",
@@ -5257,7 +5337,12 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "curated",
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "06-hono-edge",
@@ -5437,7 +5522,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "06-remix-cloudflare",
@@ -5616,7 +5705,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "07-nextjs-app-router",
@@ -5898,7 +5991,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "07-remix",
@@ -6186,7 +6283,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "07-sveltekit",
@@ -6450,7 +6551,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "08-mf-webpack",
@@ -6727,7 +6832,12 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "curated",
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "08-single-spa",
@@ -6956,7 +7066,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "08-mf-rspack",
@@ -7233,7 +7347,12 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "curated",
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "09-react-native",
@@ -7415,7 +7534,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "09-expo",
@@ -7597,7 +7720,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "09-ionic",
@@ -7778,7 +7905,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "10-flutter",
@@ -7953,7 +8084,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "10-dotnet-maui",
@@ -8127,7 +8262,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "10-kmp",
@@ -8301,7 +8440,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "11-swift-swiftui",
@@ -8474,7 +8617,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "11-objc-uikit",
@@ -8646,7 +8793,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "12-kotlin-jetpack",
@@ -8822,7 +8973,12 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "curated",
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "12-java-android",
@@ -8994,7 +9150,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "13-workbox",
@@ -9225,7 +9385,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "13-vite-pwa",
@@ -9463,7 +9627,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "14-express",
@@ -9935,7 +10103,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "14-fastify",
@@ -10293,7 +10465,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "14-nestjs",
@@ -10704,7 +10880,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "14-hono",
@@ -11044,7 +11224,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "14-deno",
@@ -11260,7 +11444,11 @@
       "ormDetected": true,
       "ormName": "prisma",
       "observabilityDetected": true
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "14-elysia",
@@ -11567,7 +11755,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "14-bun",
@@ -11821,7 +12013,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "15-fastapi",
@@ -12155,7 +12351,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "15-django",
@@ -12467,7 +12667,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "15-flask",
@@ -12769,7 +12973,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "15-starlette",
@@ -13076,7 +13284,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "16-gin",
@@ -13794,7 +14006,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "16-echo",
@@ -14194,7 +14410,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "16-fiber",
@@ -14618,7 +14838,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "16-chi",
@@ -14980,7 +15204,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "17-spring-boot",
@@ -15253,7 +15481,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "17-quarkus",
@@ -15479,7 +15711,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "17-micronaut",
@@ -15723,7 +15959,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "18-ktor",
@@ -16021,7 +16261,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "18-spring-boot-kotlin",
@@ -16272,7 +16516,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "19-aspnet-core",
@@ -16489,7 +16737,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "19-minimal-apis",
@@ -16701,7 +16953,12 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "curated",
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "20-axum",
@@ -17050,7 +17307,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "20-actix-web",
@@ -17357,7 +17618,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "21-phoenix",
@@ -17570,7 +17835,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "22-rails",
@@ -17882,7 +18151,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "22-sinatra",
@@ -18165,7 +18438,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "23-laravel",
@@ -18432,7 +18709,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "23-symfony",
@@ -18718,7 +18999,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "23-slim",
@@ -18986,7 +19271,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "24-vapor",
@@ -19193,7 +19482,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "24-hummingbird",
@@ -19399,7 +19692,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "25-play",
@@ -19609,7 +19906,12 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "curated",
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "25-http4s",
@@ -19818,7 +20120,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "26-ring",
@@ -20027,7 +20333,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "26-pedestal",
@@ -20236,7 +20546,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "27-drogon",
@@ -20444,7 +20758,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "27-crow",
@@ -20652,7 +20970,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "28-go-grpc",
@@ -21028,7 +21350,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "28-java-grpc",
@@ -21278,7 +21604,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "28-python-grpc",
@@ -21550,7 +21880,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "28-node-grpc",
@@ -21873,7 +22207,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "28-dotnet-grpc",
@@ -22082,7 +22420,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "28-rust-grpc",
@@ -22345,7 +22687,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "28-swift-grpc",
@@ -22552,7 +22898,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "28-kotlin-grpc",
@@ -22795,7 +23145,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "connect-go",
@@ -22830,7 +23184,10 @@
     "containerSize": "~15 MB (golang:alpine)",
     "threadModel": "Goroutines (M:N green threads \u2014 auto-scales to all CPUs)",
     "homepage": "https://connectrpc.com",
-    "versionSource": "https://github.com/connectrpc/connect-go/releases"
+    "versionSource": "https://github.com/connectrpc/connect-go/releases",
+    "provSources": [
+      "legacy catalog"
+    ]
   },
   {
     "id": "28-php-grpc",
@@ -23057,7 +23414,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "28-ruby-grpc",
@@ -23290,7 +23651,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "29-apollo",
@@ -23630,7 +23995,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "29-graphql-yoga",
@@ -23927,7 +24296,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "29-strawberry",
@@ -24191,7 +24564,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "29-gqlgen",
@@ -24541,7 +24918,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "29-spring-graphql",
@@ -24771,7 +25152,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "29-hot-chocolate",
@@ -24981,7 +25366,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "29-graphql-ruby",
@@ -25221,7 +25610,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "29-async-graphql",
@@ -25479,7 +25872,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "30-ws-node",
@@ -25795,7 +26192,11 @@
           "direct": false
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "30-ws-go",
@@ -26146,7 +26547,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "30-ws-python",
@@ -26411,7 +26816,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "30-ws-java",
@@ -26654,7 +27063,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "30-ws-elixir",
@@ -26859,7 +27272,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "30-ws-rust",
@@ -27112,7 +27529,11 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "30-ws-dotnet",
@@ -27323,7 +27744,11 @@
       "ormDetected": false,
       "ormName": null,
       "observabilityDetected": false
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   },
   {
     "id": "30-ws-ruby",
@@ -27564,6 +27989,10 @@
           "direct": true
         }
       ]
-    }
+    },
+    "provSources": [
+      "legacy catalog",
+      "service code"
+    ]
   }
 ]

@@ -142,7 +142,34 @@ def main():
             merged_shipped += 1
         if svc in libs_by_service:
             f.setdefault("shipped", {})["libraries"] = libs_by_service[svc]
-    # write frameworks back with shipped merged
+
+    # attach provenance summary per framework (distinct sourceTypes for its fields) — trust signal
+    prov_all = {}
+    for pf in glob.glob(os.path.join(G, "provenance", "*.json")):
+        if os.path.basename(pf) == "provenance.json":
+            continue
+        try:
+            prov_all.update(json.load(open(pf)))
+        except Exception:
+            pass
+    src_by_fw = {}
+    for k, v in prov_all.items():
+        # keys like "frameworks.json#14-express.perf"
+        if "#" in k:
+            ent = k.split("#", 1)[1].split(".")[0]
+            st = (v or {}).get("sourceType")
+            if st:
+                src_by_fw.setdefault(ent, set()).add(st)
+    SRC_LABEL = {"legacy": "legacy catalog", "service-code": "service code",
+                 "curated": "curated", "net-new": "seeded (net-new)"}
+    for f in frameworks:
+        srcs = src_by_fw.get(f["id"]) or src_by_fw.get(f.get("serviceSlug") or "")
+        if f.get("shipped"):
+            srcs = (srcs or set()) | {"service-code"}
+        if srcs:
+            f["provSources"] = sorted(SRC_LABEL.get(s, s) for s in srcs)
+
+    # write frameworks back with shipped + provSources merged
     json.dump(frameworks, open(os.path.join(N, "frameworks.json"), "w"), indent=2)
 
     # attach dockerfile template to framework

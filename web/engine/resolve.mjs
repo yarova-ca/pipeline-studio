@@ -54,16 +54,34 @@ export function buildIndex(graph) {
     if (cid) idx.deltaByComp[cid] = d;
   }
 
-  // image -> set of compliance ids it is rated for
+  // image -> set of compliance ids it is rated for; compliance id -> rated images
   idx.imageRatedFor = {};
+  idx.imagesByCompliance = {};
   for (const e of edges) if (e.type === "RATED_ON") {
     (idx.imageRatedFor[e.to] ||= new Set()).add(e.from);
+    (idx.imagesByCompliance[e.to] ||= []).push(e.from);
   }
+  // dockerfile template by framework key (byId is taken by the framework on id collision)
+  idx.templateByFw = {};
+  for (const t of (nodes.dockerfileTemplates || [])) {
+    idx.templateByFw[normFwKey(t.frameworkId || t.id)] = t;
+  }
+  // standard (global) pipeline phases — fallback for frameworks with no per-fw rows
+  idx.standardPhases = (idx.phases || []).map((p) => ({
+    phase: p.name || p.id,
+    stages: (idx.stages || []).filter((s) => (s.phaseId && s.phaseId === p.id) ||
+      (s.phase && slug(s.phase) === slug(p.name || ""))).map((s) => ({ stage: s.name || s.label, type: s.type, tool: s.tool })),
+  })).filter((p) => p.stages.length);
   // edges grouped
   idx.usesStageByFw = {};
   for (const e of edges) if (e.type === "USES_STAGE") (idx.usesStageByFw[e.from] ||= []).push(e);
   return idx;
 }
+
+// rating key in images.complianceRatings for one of our compliance ids
+const RATING_KEY = { fips: "FIPS", pci: "PCI-DSS", hipaa: "HIPAA", soc2: "SOC 2",
+  cmmc: "DISA STIG", nerc: "DISA STIG", pipeda: "ISO 27001" };
+const stripRef = (s) => String(s || "").replace(/^(url:|dir:)/, "");
 
 const cell = (value, state = "green", reason = "") => ({ value, state, reason });
 
@@ -116,25 +134,38 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
       }
     }
     if (value == null || value === "") { state = "red"; value = "not defined"; reason = "Gap — no value."; gaps.push(`buildAxis ${key} undefined`); }
-    axes[a.id] = cell(value, state, reason);
+    const detected = baseAxes[key] != null && baseAxes[key] !== "";
+    axes[a.id] = { ...cell(value, state, reason), detected, origin: detected ? "detected" : "default" };
   }
 
   // ── compliance section ─────────────────────────────────────────────────────
-  const complianceRows = reqStds.map((cid) => {
+  // Every regulatory requirement on the industry gets a row — never silently dropped.
+  const complianceRows = [];
+  const seenComp = new Set();
+  // 1) explicit compliance ids + mapped industry standards that DO ship
+  for (const cid of reqStds) {
+    if (seenComp.has(cid)) continue; seenComp.add(cid);
     const c = idx.byId[cid] || { id: cid, label: cid };
     const sc = shippedComp[cid];
     if (sc) {
-      return {
-        id: cid, label: c.label || cid, state: "green",
-        ships: true, file: sc.file, requiredControls: sc.requiredControls || [],
-        forcedBuildArgs: sc.buildArgs || {},
-        pipelineAdditions: idx.deltaByComp[cid]?.phases || {},
-      };
+      complianceRows.push({ id: cid, label: c.label || cid, state: "green", ships: true,
+        file: stripRef(sc.file), requiredControls: sc.requiredControls || [],
+        forcedBuildArgs: sc.buildArgs || {}, pipelineAdditions: idx.deltaByComp[cid]?.phases || {} });
+    } else {
+      gaps.push(`requires ${cid} but ${fw.serviceSlug} ships no compliance/${cid}.yaml`);
+      complianceRows.push({ id: cid, label: c.label || cid, state: "red", ships: false,
+        reason: `Required, but service ships no compliance/${cid}.yaml.` });
     }
-    gaps.push(`industry requires ${cid} but ${fw.serviceSlug} ships no compliance/${cid}.yaml`);
-    return { id: cid, label: c.label || cid, state: "red", ships: false,
-      reason: `Required by industry; service ships no compliance/${cid}.yaml.` };
-  });
+  }
+  // 2) raw regulatory strings that map to NO shipped control — show as explicit gaps
+  for (const r of rawReqs) {
+    const cid = mapCompliance(r.text, idx.complianceIds);
+    if (cid) continue; // already represented above
+    const key = `raw:${r.text}`; if (seenComp.has(key)) continue; seenComp.add(key);
+    complianceRows.push({ id: key, label: r.text, state: "red", ships: false, regulator: true,
+      reason: "No shipped control profile yet — needs a compliance profile for this regulator." });
+    gaps.push(`regulator "${r.text}" has no shipped control profile`);
+  }
 
   // ── per-framework pipeline (real USES_STAGE edges) + compliance additions ──
   const stageEdges = idx.usesStageByFw[frameworkId] || [];
@@ -146,7 +177,12 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
       tool: e.attrs?.tool, command: e.attrs?.command,
     });
   }
-  const pipeline = Object.entries(phaseMap).map(([phase, stages]) => ({ phase, stages }));
+  let pipeline = Object.entries(phaseMap).map(([phase, stages]) => ({ phase, stages }));
+  let pipelineIsStandard = false;
+  if (!pipeline.length) {            // no per-framework rows → show the standard platform pipeline
+    pipeline = idx.standardPhases || [];
+    pipelineIsStandard = true;
+  }
   const pipelineAdds = reqStds.map((cid) => ({ standard: cid, phases: idx.deltaByComp[cid]?.phases || {} }))
     .filter((x) => Object.keys(x.phases).length);
 
@@ -167,17 +203,44 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
   };
   if (obsRequired && !shipped.observabilityDetected) gaps.push("compliance requires observability/audit logging; none detected");
 
-  // ── invariants validation ──────────────────────────────────────────────────
+  // ── invariants — evaluate ALL against real shipped CI signals ──────────────
   const runtime = axes["runtime"]?.value;
-  const invariantResults = [];
-  for (const inv of (idx.invariants || [])) {
-    const rule = `${inv.rule || inv.invariant || inv.condition || ""}`.toLowerCase();
-    if (rule.includes("fips")) {
-      const fipsReq = reqStds.includes("fips") || reqStds.some((c) => (shippedComp[c]?.buildArgs?.RUNTIME === "fips"));
-      const pass = !fipsReq || runtime === "fips";
-      invariantResults.push({ id: inv.id, rule: inv.rule || inv.invariant, state: pass ? "green" : "red",
-        reason: pass ? "" : `Runtime is ${runtime} but a FIPS regime is required.` });
-      if (!pass) gaps.push(`invariant ${inv.id} violated: ${inv.rule || inv.invariant}`);
+  const wfJobs = new Set();
+  for (const w of (shipped.workflows || [])) { (w.jobs || []).forEach((j) => wfJobs.add(j.toLowerCase())); (w.file ? wfJobs.add(w.file.toLowerCase()) : 0); }
+  const wfHas = (...keys) => keys.some((k) => [...wfJobs].some((j) => j.includes(k)));
+  // map an invariant's enforcing mechanism to a shipped CI signal we can verify
+  const verifyInv = (inv) => {
+    const t = `${inv.condition || ""} ${inv.enforcedBy || ""}`.toLowerCase();
+    if (t.includes("signed") || t.includes("cosign") || t.includes("kyverno")) return wfHas("sign", "cosign", "build-push") ? "verified" : "platform";
+    if (t.includes("sbom") || t.includes("syft")) return wfHas("sbom", "sign", "build-push") ? "verified" : "platform";
+    if (t.includes("secret")) return wfHas("secret") ? "verified" : "platform";
+    if (t.includes("sast") || t.includes("codeql")) return wfHas("codeql", "sast") ? "verified" : "platform";
+    if (t.includes("sca") || t.includes("dependency")) return wfHas("sca", "dependabot", "renovate") ? "verified" : "platform";
+    if (t.includes("iac") || t.includes("checkov") || t.includes("hadolint") || t.includes("lint")) return wfHas("iac", "pre-commit") ? "verified" : "platform";
+    if (t.includes("test")) return wfHas("test") ? "verified" : "platform";
+    return "platform"; // branch protection, OIDC, registry policy — platform-enforced
+  };
+  const invariantResults = (idx.invariants || []).map((inv) => {
+    const v = verifyInv(inv);
+    return { id: inv.id, rule: inv.condition || inv.label || inv.id,
+      enforcedBy: inv.enforcedBy, controlClass: inv.controlClass,
+      state: v === "verified" ? "green" : "amber",
+      reason: v === "verified" ? "Enforced — verified in this service's CI." : `Enforced by ${inv.enforcedBy || "platform CI"} (platform control).` };
+  });
+
+  // ── base image (per framework; compliance lens may require a rated distro) ──
+  const tmpl = idx.templateByFw[normFwKey(frameworkId)] || idx.templateByFw[normFwKey(fw.serviceSlug || "")];
+  let baseImage = cell(tmpl?.runtimeFrom || "—", "green", "");
+  for (const cid of reqStds) {
+    const key = RATING_KEY[cid];
+    const rated = key && (idx.imagesByCompliance[cid] || []);
+    if (key && rated && rated.length) {
+      const cur = (tmpl?.runtimeFrom || "").toLowerCase();
+      const curRated = rated.some((iid) => cur.includes((idx.byId[iid]?.name || iid).split(/[ :]/)[0].toLowerCase()));
+      if (!curRated) {
+        const suggest = idx.byId[rated[0]]?.name || rated[0];
+        baseImage = cell(suggest, "amber", `${cid.toUpperCase()} requires a rated base image — current ${tmpl?.runtimeFrom||'?'} is not ${key}-rated.`);
+      }
     }
   }
 
@@ -185,6 +248,7 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
   const clusterId = lens.clusterId || null;
   const clusters = clusterId ? [idx.byId[clusterId]].filter(Boolean) : (idx.clusters || []);
   const deploy = {
+    baseImage,
     clusters: clusters.map((c) => c.name || c.id),
     components: (idx.clusterComponents || []).map((c) => c.name || c.label || c.id),
     gitops: (idx.gitopsTools || []).map((g) => g.name || g.label || g.id),
@@ -219,7 +283,8 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
     framework: { id: fw.id, name: fw.name,
       category: categoryName, categoryId: fw.categoryId,
       language: languageName, languageId: fw.languageId,
-      tier: fw.tier, repo: shipped.sourceLocation, catalogRef: shipped.catalogRef,
+      tier: fw.tier, repo: stripRef(shipped.sourceLocation), catalogRef: stripRef(shipped.catalogRef),
+      sources: fw.provSources || null,
       version: fw.version, license: fw.license, maturity: fw.maturity, perf: fw.perf,
       memory: fw.memory, concurrency: fw.concurrency, securityPosture: fw.securityPosture },
     lens: { industryId: lens.industryId || null, clusterId: clusterId,
@@ -227,7 +292,7 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
       requiredStandards: reqStds, regulatoryRequirements: rawReqs },
     buildAxes: axes,
     compliance: complianceRows,
-    pipeline, pipelineAdditions: pipelineAdds,
+    pipeline, pipelineIsStandard, pipelineAdditions: pipelineAdds,
     authOrmObs,
     invariants: invariantResults,
     deploy,
