@@ -214,7 +214,69 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "next",
+          "version": "^16.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react-dom",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@types/node",
+          "version": "^22.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-jest",
+          "version": "^29.3.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -427,7 +489,81 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@remix-run/node",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@remix-run/react",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@remix-run/serve",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react-dom",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@remix-run/dev",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -645,7 +781,45 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@nuxt/test-utils",
+          "version": "^3.15.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "nuxt",
+          "version": "^4.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -863,7 +1037,57 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@sveltejs/adapter-node",
+          "version": "^5.2.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@sveltejs/kit",
+          "version": "^2.57.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "svelte",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -1073,7 +1297,111 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@angular/animations",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/common",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/compiler",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/core",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/forms",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/platform-browser",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/platform-server",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/router",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/ssr",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "rxjs",
+          "version": "^7.8.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "zone.js",
+          "version": "^0.15.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular-devkit/build-angular",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@angular/cli",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^22.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -1282,7 +1610,51 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@solidjs/start",
+          "version": "^1.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "solid-js",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "vinxi",
+          "version": "^0.4.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "typescript",
+          "version": "^5.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -1501,7 +1873,63 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react-dom",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@types/react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/react-dom",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@vitejs/plugin-react",
+          "version": "^4.3.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@testing-library/react",
+          "version": "^16.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@testing-library/jest-dom",
+          "version": "^6.6.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -1720,7 +2148,39 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "vue",
+          "version": "^3.5.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@vitejs/plugin-vue",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@vue/test-utils",
+          "version": "^2.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -1938,7 +2398,81 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "@angular/animations",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/common",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/compiler",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/core",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/forms",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/platform-browser",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular/router",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "rxjs",
+          "version": "^7.8.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "zone.js",
+          "version": "^0.15.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@angular-devkit/build-angular",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@angular/cli",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -2157,7 +2691,33 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "@sveltejs/vite-plugin-svelte",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "svelte",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -2371,7 +2931,21 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -2578,7 +3152,33 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "preact",
+          "version": "^10.25.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@preact/preset-vite",
+          "version": "^2.9.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite",
+          "version": "^5.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -2785,7 +3385,27 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "lit",
+          "version": "^3.2.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "vite",
+          "version": "^5.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -3004,7 +3624,21 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -3213,7 +3847,21 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "@11ty/eleventy",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -3638,7 +4286,39 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "gatsby",
+          "version": "^5.13.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react-dom",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "jest",
+          "version": "^29.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -3851,7 +4531,33 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "@astrojs/node",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "astro",
+          "version": "^6.3.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -4273,7 +4979,105 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@builder.io/qwik",
+          "version": "^2.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@builder.io/qwik-city",
+          "version": "^2.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "dotenv",
+          "version": "^16.4.5",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@types/express",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -5031,7 +5835,69 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "next",
+          "version": "^16.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react-dom",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@types/node",
+          "version": "^22.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-jest",
+          "version": "^29.3.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -5245,7 +6111,81 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@remix-run/node",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@remix-run/react",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@remix-run/serve",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react-dom",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@remix-run/dev",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -5459,7 +6399,57 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@sveltejs/adapter-node",
+          "version": "^5.2.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@sveltejs/kit",
+          "version": "^2.57.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "svelte",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -5674,7 +6664,69 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react-dom",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@module-federation/enhanced",
+          "version": "^0.8.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "webpack",
+          "version": "^5.97.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "webpack-cli",
+          "version": "^5.1.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "webpack-dev-server",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "html-webpack-plugin",
+          "version": "^5.6.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-loader",
+          "version": "^9.5.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -5889,7 +6941,21 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -6104,7 +7170,69 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "react",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "react-dom",
+          "version": "^19.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@module-federation/enhanced",
+          "version": "^0.8.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "webpack",
+          "version": "^5.97.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "webpack-cli",
+          "version": "^5.1.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "webpack-dev-server",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "html-webpack-plugin",
+          "version": "^5.6.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-loader",
+          "version": "^9.5.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -8076,7 +9204,27 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "workbox-webpack-plugin",
+          "version": "^7.3",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -8294,7 +9442,27 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "vite",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vite-plugin-pwa",
+          "version": "^0.21",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -8530,7 +9698,243 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@prisma/client",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "cookie-parser",
+          "version": "^1.4.7",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "cors",
+          "version": "^2.8.5",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "dotenv",
+          "version": "^16.4.5",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "helmet",
+          "version": "^8.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "ioredis",
+          "version": "^5.6.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "swagger-jsdoc",
+          "version": "^6.2.8",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "swagger-ui-express",
+          "version": "^5.0.1",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "dd-trace",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "zod",
+          "version": "^3.23.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@pact-foundation/pact",
+          "version": "^12.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/cookie-parser",
+          "version": "^1.4.7",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/cors",
+          "version": "^2.8.17",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/express",
+          "version": "^5.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/jest",
+          "version": "^30.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^22.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/supertest",
+          "version": "^6.0.2",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/swagger-jsdoc",
+          "version": "^6.0.4",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/swagger-ui-express",
+          "version": "^4.1.7",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "prisma",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "supertest",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-jest",
+          "version": "^29.3.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "tsx",
+          "version": "^4.19.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@swc/cli",
+          "version": "^0.5.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@swc/core",
+          "version": "^1.10.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "esbuild",
+          "version": "^0.24.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -8754,7 +10158,141 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@fastify/cookie",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@prisma/client",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "fastify",
+          "version": "^5.2.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "dotenv",
+          "version": "^16.4.5",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@types/jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^22.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/supertest",
+          "version": "^6.0.2",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "prisma",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "supertest",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-jest",
+          "version": "^29.3.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "tsx",
+          "version": "^4.19.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -8977,7 +10515,195 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@nestjs/common",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@nestjs/core",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@nestjs/platform-express",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@nestjs/terminus",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@nestjs/passport",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@prisma/client",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "dotenv",
+          "version": "^16.4.5",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "passport",
+          "version": "^0.7.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "passport-jwt",
+          "version": "^4.0.1",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "reflect-metadata",
+          "version": "^0.2.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "rxjs",
+          "version": "^7.8.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@nestjs/cli",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@nestjs/testing",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^22.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/passport-jwt",
+          "version": "^4.0.1",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/supertest",
+          "version": "^6.0.2",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "prisma",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "supertest",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-jest",
+          "version": "^29.3.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -9201,7 +10927,123 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@hono/node-server",
+          "version": "^1.14.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@prisma/client",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "hono",
+          "version": "^4.7.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "dotenv",
+          "version": "^16.4.5",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@types/jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^22.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "prisma",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "tsx",
+          "version": "^4.19.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "typescript",
+          "version": "^5.7.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "vitest",
+          "version": "^3.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -9632,7 +11474,99 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@prisma/client",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "elysia",
+          "version": "^1.2.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "dotenv",
+          "version": "^16.4.5",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@types/jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "bun-types",
+          "version": "^1.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "prisma",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -9848,7 +11782,45 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@prisma/client",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "dotenv",
+          "version": "^16.4.5",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@types/jsonwebtoken",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/bun",
+          "version": "^1.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "prisma",
+          "version": "^6.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -10078,7 +12050,111 @@
       },
       "ormDetected": true,
       "ormName": "sqlalchemy",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "fastapi",
+          "version": "==0.115.6",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "uvicorn",
+          "version": "",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "python-dotenv",
+          "version": "==1.0.1",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "sqlalchemy",
+          "version": "==2.0.36",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "alembic",
+          "version": "==1.14.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "asyncpg",
+          "version": "==0.30.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "aiosqlite",
+          "version": "==0.20.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "python-jose",
+          "version": "",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "httpx",
+          "version": "==0.28.1",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "structlog",
+          "version": "==24.4.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "slowapi",
+          "version": "==0.1.9",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-sdk",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-exporter-otlp-proto-grpc",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-instrumentation-fastapi",
+          "version": "==0.48b0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "pytest",
+          "version": "==8.3.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "pytest-asyncio",
+          "version": "==0.24.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "==0.21.0",
+          "ecosystem": "pip",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -10292,7 +12368,105 @@
       },
       "ormDetected": true,
       "ormName": "sqlalchemy",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "Django",
+          "version": "==5.2",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "gunicorn",
+          "version": ">=23.0.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "python-dotenv",
+          "version": ">=1.0.1",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "sqlalchemy",
+          "version": ">=2.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "psycopg2-binary",
+          "version": ">=2.9",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "aiosqlite",
+          "version": ">=0.20",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "python-jose",
+          "version": "",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "httpx",
+          "version": ">=0.28.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "pytest",
+          "version": ">=8.3.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "pytest-django",
+          "version": ">=4.9.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "structlog",
+          "version": "==24.4.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "==0.21.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "slowapi",
+          "version": "==0.1.9",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-sdk",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-exporter-otlp",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-instrumentation-fastapi",
+          "version": "==0.48b0",
+          "ecosystem": "pip",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -10502,7 +12676,99 @@
       },
       "ormDetected": true,
       "ormName": "sqlalchemy",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "Flask",
+          "version": "==3.1",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "gunicorn",
+          "version": ">=23.0.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "python-dotenv",
+          "version": ">=1.0.1",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "sqlalchemy",
+          "version": ">=2.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "psycopg2-binary",
+          "version": ">=2.9",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "aiosqlite",
+          "version": ">=0.20",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "python-jose",
+          "version": "",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "httpx",
+          "version": ">=0.28.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "pytest",
+          "version": ">=8.3.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "structlog",
+          "version": "==24.4.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "==0.21.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "slowapi",
+          "version": "==0.1.9",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-sdk",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-exporter-otlp",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-instrumentation-fastapi",
+          "version": "==0.48b0",
+          "ecosystem": "pip",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -10711,7 +12977,105 @@
       },
       "ormDetected": true,
       "ormName": "sqlalchemy",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "starlette",
+          "version": "==0.41",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "uvicorn",
+          "version": "",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "python-dotenv",
+          "version": ">=1.0.1",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "sqlalchemy",
+          "version": ">=2.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "asyncpg",
+          "version": ">=0.29",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "aiosqlite",
+          "version": ">=0.20",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "python-jose",
+          "version": "",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "httpx",
+          "version": ">=0.28.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "pytest",
+          "version": ">=8.3.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "pytest-asyncio",
+          "version": ">=0.24.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "structlog",
+          "version": "==24.4.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "==0.21.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "slowapi",
+          "version": "==0.1.9",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-sdk",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-exporter-otlp",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-instrumentation-fastapi",
+          "version": "==0.48b0",
+          "ecosystem": "pip",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -10941,7 +13305,495 @@
       },
       "ormDetected": true,
       "ormName": "gorm",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "github.com/gin-contrib/cors",
+          "version": "v1.7.7",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/gin-gonic/gin",
+          "version": "v1.12.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/golang-jwt/jwt/v5",
+          "version": "v5.2.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/google/uuid",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/swaggo/files",
+          "version": "v1.0.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/swaggo/gin-swagger",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "go.opentelemetry.io/otel",
+          "version": "v1.29.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc",
+          "version": "v1.29.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "go.opentelemetry.io/otel/sdk",
+          "version": "v1.29.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/time",
+          "version": "v0.5.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/postgres",
+          "version": "v1.5.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/sqlite",
+          "version": "v1.5.6",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/gorm",
+          "version": "v1.25.12",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/KyleBanks/depth",
+          "version": "v1.2.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/PuerkitoBio/purell",
+          "version": "v1.1.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/PuerkitoBio/urlesc",
+          "version": "v0.0.0-20170810143723-de5bf2ad4578",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/beorn7/perks",
+          "version": "v1.0.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/bytedance/gopkg",
+          "version": "v0.1.3",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/bytedance/sonic",
+          "version": "v1.15.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/bytedance/sonic/loader",
+          "version": "v0.5.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/cenkalti/backoff/v4",
+          "version": "v4.3.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/cespare/xxhash/v2",
+          "version": "v2.3.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/cloudwego/base64x",
+          "version": "v0.1.6",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/gabriel-vasile/mimetype",
+          "version": "v1.4.12",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/gin-contrib/sse",
+          "version": "v1.1.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/go-logr/logr",
+          "version": "v1.4.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/go-logr/stdr",
+          "version": "v1.2.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/go-openapi/jsonpointer",
+          "version": "v0.19.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/go-openapi/jsonreference",
+          "version": "v0.19.6",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/go-openapi/spec",
+          "version": "v0.20.4",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/go-openapi/swag",
+          "version": "v0.19.15",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/go-playground/locales",
+          "version": "v0.14.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/go-playground/universal-translator",
+          "version": "v0.18.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/go-playground/validator/v10",
+          "version": "v10.30.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/goccy/go-json",
+          "version": "v0.10.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/goccy/go-yaml",
+          "version": "v1.19.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/grpc-ecosystem/grpc-gateway/v2",
+          "version": "v2.22.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgpassfile",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgservicefile",
+          "version": "v0.0.0-20221227161230-091c0ba34f0a",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgx/v5",
+          "version": "v5.5.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/puddle/v2",
+          "version": "v2.2.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/inflection",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/now",
+          "version": "v1.1.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/josharian/intern",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/json-iterator/go",
+          "version": "v1.1.12",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/klauspost/compress",
+          "version": "v1.17.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/klauspost/cpuid/v2",
+          "version": "v2.3.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/leodido/go-urn",
+          "version": "v1.4.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mailru/easyjson",
+          "version": "v0.7.6",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mattn/go-isatty",
+          "version": "v0.0.20",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mattn/go-sqlite3",
+          "version": "v1.14.22",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/modern-go/concurrent",
+          "version": "v0.0.0-20180306012644-bacd9c7ef1dd",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/modern-go/reflect2",
+          "version": "v1.0.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/munnerz/goautoneg",
+          "version": "v0.0.0-20191010083416-a7dc8b61c822",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/pelletier/go-toml/v2",
+          "version": "v2.2.4",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_model",
+          "version": "v0.6.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/common",
+          "version": "v0.55.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/procfs",
+          "version": "v0.15.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/quic-go/qpack",
+          "version": "v0.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/quic-go/quic-go",
+          "version": "v0.59.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/rogpeppe/go-internal",
+          "version": "v1.15.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/swaggo/swag",
+          "version": "v1.16.3",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/twitchyliquid64/golang-asm",
+          "version": "v0.15.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/ugorji/go/codec",
+          "version": "v1.3.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "go.mongodb.org/mongo-driver/v2",
+          "version": "v2.5.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "go.opentelemetry.io/otel/exporters/otlp/otlptrace",
+          "version": "v1.29.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "go.opentelemetry.io/otel/metric",
+          "version": "v1.29.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "go.opentelemetry.io/otel/trace",
+          "version": "v1.29.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "go.opentelemetry.io/proto/otlp",
+          "version": "v1.3.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/arch",
+          "version": "v0.23.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/crypto",
+          "version": "v0.48.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/net",
+          "version": "v0.51.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sync",
+          "version": "v0.20.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sys",
+          "version": "v0.41.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/text",
+          "version": "v0.35.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/tools",
+          "version": "v0.42.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/genproto/googleapis/api",
+          "version": "v0.0.0-20240822170219-fc7c04adadcd",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/genproto/googleapis/rpc",
+          "version": "v0.0.0-20240822170219-fc7c04adadcd",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/grpc",
+          "version": "v1.65.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/protobuf",
+          "version": "v1.36.10",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gopkg.in/yaml.v2",
+          "version": "v2.4.0",
+          "ecosystem": "go",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -11153,7 +14005,195 @@
       },
       "ormDetected": true,
       "ormName": "gorm",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "github.com/golang-jwt/jwt/v5",
+          "version": "v5.2.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/google/uuid",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/labstack/echo/v4",
+          "version": "v4.12.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/postgres",
+          "version": "v1.5.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/sqlite",
+          "version": "v1.5.6",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/gorm",
+          "version": "v1.25.12",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/beorn7/perks",
+          "version": "v1.0.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/cespare/xxhash/v2",
+          "version": "v2.3.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgpassfile",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgservicefile",
+          "version": "v0.0.0-20221227161230-091c0ba34f0a",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgx/v5",
+          "version": "v5.5.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/puddle/v2",
+          "version": "v2.2.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/inflection",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/now",
+          "version": "v1.1.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/klauspost/compress",
+          "version": "v1.17.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/labstack/gommon",
+          "version": "v0.4.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mattn/go-colorable",
+          "version": "v0.1.13",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mattn/go-isatty",
+          "version": "v0.0.20",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mattn/go-sqlite3",
+          "version": "v1.14.22",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/munnerz/goautoneg",
+          "version": "v0.0.0-20191010083416-a7dc8b61c822",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_model",
+          "version": "v0.6.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/common",
+          "version": "v0.55.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/procfs",
+          "version": "v0.15.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/valyala/bytebufferpool",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/valyala/fasttemplate",
+          "version": "v1.2.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/crypto",
+          "version": "v0.24.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/net",
+          "version": "v0.26.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sync",
+          "version": "v0.7.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sys",
+          "version": "v0.22.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/text",
+          "version": "v0.16.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/protobuf",
+          "version": "v1.34.2",
+          "ecosystem": "go",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -11365,7 +14405,219 @@
       },
       "ormDetected": true,
       "ormName": "gorm",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "github.com/gofiber/fiber/v3",
+          "version": "v3.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/golang-jwt/jwt/v5",
+          "version": "v5.2.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/google/uuid",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/postgres",
+          "version": "v1.5.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/sqlite",
+          "version": "v1.5.6",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/gorm",
+          "version": "v1.25.12",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/andybalholm/brotli",
+          "version": "v1.2.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/beorn7/perks",
+          "version": "v1.0.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/cespare/xxhash/v2",
+          "version": "v2.3.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/gofiber/schema",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/gofiber/utils/v2",
+          "version": "v2.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgpassfile",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgservicefile",
+          "version": "v0.0.0-20221227161230-091c0ba34f0a",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgx/v5",
+          "version": "v5.5.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/puddle/v2",
+          "version": "v2.2.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/inflection",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/now",
+          "version": "v1.1.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/klauspost/compress",
+          "version": "v1.18.3",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mattn/go-colorable",
+          "version": "v0.1.14",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mattn/go-isatty",
+          "version": "v0.0.20",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mattn/go-sqlite3",
+          "version": "v1.14.22",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/munnerz/goautoneg",
+          "version": "v0.0.0-20191010083416-a7dc8b61c822",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/philhofer/fwd",
+          "version": "v1.2.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_model",
+          "version": "v0.6.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/common",
+          "version": "v0.55.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/procfs",
+          "version": "v0.15.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/tinylib/msgp",
+          "version": "v1.6.3",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/valyala/bytebufferpool",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/valyala/fasthttp",
+          "version": "v1.69.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/crypto",
+          "version": "v0.47.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/net",
+          "version": "v0.49.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sync",
+          "version": "v0.19.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sys",
+          "version": "v0.40.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/text",
+          "version": "v0.33.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/protobuf",
+          "version": "v1.34.2",
+          "ecosystem": "go",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -11575,7 +14827,159 @@
       },
       "ormDetected": true,
       "ormName": "gorm",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "github.com/go-chi/chi/v5",
+          "version": "v5.2.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/golang-jwt/jwt/v5",
+          "version": "v5.2.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/google/uuid",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/postgres",
+          "version": "v1.5.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/sqlite",
+          "version": "v1.5.6",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/gorm",
+          "version": "v1.25.12",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/beorn7/perks",
+          "version": "v1.0.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/cespare/xxhash/v2",
+          "version": "v2.3.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgpassfile",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgservicefile",
+          "version": "v0.0.0-20221227161230-091c0ba34f0a",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgx/v5",
+          "version": "v5.5.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/puddle/v2",
+          "version": "v2.2.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/inflection",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/now",
+          "version": "v1.1.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/klauspost/compress",
+          "version": "v1.17.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/mattn/go-sqlite3",
+          "version": "v1.14.22",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/munnerz/goautoneg",
+          "version": "v0.0.0-20191010083416-a7dc8b61c822",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_model",
+          "version": "v0.6.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/common",
+          "version": "v0.55.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/procfs",
+          "version": "v0.15.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/crypto",
+          "version": "v0.17.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sync",
+          "version": "v0.7.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sys",
+          "version": "v0.22.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/text",
+          "version": "v0.16.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/protobuf",
+          "version": "v1.34.2",
+          "ecosystem": "go",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -11792,7 +15196,63 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "spring-boot-starter-parent",
+          "version": "3.4.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "17-spring-boot",
+          "version": "1.0.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "jjwt-api",
+          "version": "${jjwt.version}",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "jjwt-impl",
+          "version": "${jjwt.version}",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "jjwt-jackson",
+          "version": "${jjwt.version}",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "logstash-logback-encoder",
+          "version": "7.4",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "bucket4j-core",
+          "version": "8.10.1",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-spring-boot-starter",
+          "version": "2.6.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "springdoc-openapi-starter-webmvc-ui",
+          "version": "2.6.0",
+          "ecosystem": "maven",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -12004,7 +15464,21 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "17-quarkus",
+          "version": "1.0.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "quarkus-bom",
+          "version": "${quarkus.platform.version}",
+          "ecosystem": "maven",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -12216,7 +15690,39 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "17-micronaut",
+          "version": "1.0.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "micronaut-parent",
+          "version": "5.0.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "postgresql",
+          "version": "42.7.3",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "logstash-logback-encoder",
+          "version": "7.4",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "h2",
+          "version": "2.2.224",
+          "ecosystem": "maven",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -12434,7 +15940,87 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "ch.qos.logback:logback-classic",
+          "version": "1.5.6",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "net.logstash.logback:logstash-logback-encoder",
+          "version": "7.4",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "org.jetbrains.exposed:exposed-core",
+          "version": "0.54.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "org.jetbrains.exposed:exposed-dao",
+          "version": "0.54.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "org.jetbrains.exposed:exposed-jdbc",
+          "version": "0.54.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "com.zaxxer:HikariCP",
+          "version": "5.1.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "com.auth0:java-jwt",
+          "version": "4.4.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "io.github.smiley4:ktor-swagger-ui",
+          "version": "4.1.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "io.github.smiley4:ktor-openapi",
+          "version": "4.1.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "org.jetbrains.kotlinx:kotlinx-serialization-json",
+          "version": "1.7.1",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "org.postgresql:postgresql",
+          "version": "42.7.3",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "com.h2database:h2",
+          "version": "2.2.224",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "io.micrometer:micrometer-registry-prometheus",
+          "version": "1.12.0",
+          "ecosystem": "gradle",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -12647,7 +16233,45 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "io.jsonwebtoken:jjwt-api",
+          "version": "0.12.6",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "io.jsonwebtoken:jjwt-impl",
+          "version": "0.12.6",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "io.jsonwebtoken:jjwt-jackson",
+          "version": "0.12.6",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "net.logstash.logback:logstash-logback-encoder",
+          "version": "7.4",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "org.postgresql:postgresql",
+          "version": "42.7.3",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "com.h2database:h2",
+          "version": "2.2.224",
+          "ecosystem": "gradle",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -13291,7 +16915,141 @@
       },
       "ormDetected": true,
       "ormName": "sqlx",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "axum",
+          "version": "0.8",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "serde",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "serde_json",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tokio",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tower",
+          "version": "0.5",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tower-http",
+          "version": "0.6",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "dotenvy",
+          "version": "0.15",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "chrono",
+          "version": "0.4",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing",
+          "version": "0.1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing-subscriber",
+          "version": "0.3",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "# OpenTelemetry \u2014 guarded by OTEL_ENABLED",
+          "version": "",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry",
+          "version": "0.24",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-otlp",
+          "version": "0.17",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry_sdk",
+          "version": "0.24",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "utoipa",
+          "version": "4",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "utoipa-swagger-ui",
+          "version": "7",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "sqlx",
+          "version": "0.8",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "jsonwebtoken",
+          "version": "9",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "uuid",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "reqwest",
+          "version": "0.12",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "http-body-util",
+          "version": "0.1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "axum",
+          "version": "0.8",
+          "ecosystem": "cargo",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -13500,7 +17258,105 @@
       },
       "ormDetected": true,
       "ormName": "sqlx",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "actix-web",
+          "version": "4.9",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "serde",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "serde_json",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tokio",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "dotenvy",
+          "version": "0.15",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "chrono",
+          "version": "0.4",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing",
+          "version": "0.1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing-subscriber",
+          "version": "0.3",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "prometheus",
+          "version": "0.13",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "env_logger",
+          "version": "0.11",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "futures",
+          "version": "0.3",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "sqlx",
+          "version": "0.8",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "jsonwebtoken",
+          "version": "9",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "uuid",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "reqwest",
+          "version": "0.12",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "actix-web",
+          "version": "4.9",
+          "ecosystem": "cargo",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -13927,7 +17783,105 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "rails",
+          "version": "~> 8.0",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "puma",
+          "version": "~> 6.4",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "dotenv-rails",
+          "version": "~> 3.1",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "jwt",
+          "version": "~> 2.9",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "pg",
+          "version": "~> 1.5",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "lograge",
+          "version": "~> 0.14",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rack-attack",
+          "version": "~> 6.7",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-sdk",
+          "version": "~> 1.4",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-exporter-otlp",
+          "version": "~> 0.29",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-instrumentation-rails",
+          "version": "~> 0.32",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-instrumentation-active_record",
+          "version": "~> 0.8",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rswag-api",
+          "version": "~> 2.14",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rswag-ui",
+          "version": "~> 2.14",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rspec-rails",
+          "version": "~> 7.0",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rswag-specs",
+          "version": "~> 2.14",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "sqlite3",
+          "version": "~> 2.0",
+          "ecosystem": "gem",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -14136,7 +18090,81 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "sinatra",
+          "version": "~> 4.0",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rackup",
+          "version": "~> 2.1",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "puma",
+          "version": "~> 6.4",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "dotenv",
+          "version": "~> 3.1",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "jwt",
+          "version": "~> 2.8",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "sequel",
+          "version": "~> 5.80",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "pg",
+          "version": "~> 1.5",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "sqlite3",
+          "version": "~> 1.7",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "logger",
+          "version": "~> 1.6",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "~> 4.0",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rspec",
+          "version": "~> 3.13",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rack-test",
+          "version": "~> 2.1",
+          "ecosystem": "gem",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -14347,7 +18375,63 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "laravel/framework",
+          "version": "^12.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "vlucas/phpdotenv",
+          "version": "^5.6",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "firebase/php-jwt",
+          "version": "^6.10",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "laravel/sanctum",
+          "version": "^4.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "darkaonline/l5-swagger",
+          "version": "^8.6",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "open-telemetry/sdk",
+          "version": "^1.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "open-telemetry/exporter-otlp",
+          "version": "^1.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "open-telemetry/opentelemetry-auto-laravel",
+          "version": "^0.0.5",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "phpunit/phpunit",
+          "version": "^11.0",
+          "ecosystem": "composer",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -14553,7 +18637,87 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "symfony/framework-bundle",
+          "version": "^7.2",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "symfony/yaml",
+          "version": "^7.2",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "symfony/serializer",
+          "version": "^7.2",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "symfony/security-bundle",
+          "version": "^7.2",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "symfony/uid",
+          "version": "^7.2",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "doctrine/orm",
+          "version": "^3.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "doctrine/doctrine-bundle",
+          "version": "^2.12",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "lexik/jwt-authentication-bundle",
+          "version": "^3.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "ext-curl",
+          "version": "*",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "monolog/monolog",
+          "version": "^3.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "promphp/prometheus_client_php",
+          "version": "^2.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "phpunit/phpunit",
+          "version": "^11.0",
+          "ecosystem": "composer",
+          "direct": false
+        },
+        {
+          "name": "symfony/test-pack",
+          "version": "^1.1",
+          "ecosystem": "composer",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -14759,7 +18923,69 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "slim/slim",
+          "version": "^4.14",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "slim/psr7",
+          "version": "^1.7",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "firebase/php-jwt",
+          "version": "^6.10",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "ramsey/uuid",
+          "version": "^4.7",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "vlucas/phpdotenv",
+          "version": "^5.6",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "ext-pdo",
+          "version": "*",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "ext-curl",
+          "version": "*",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "monolog/monolog",
+          "version": "^3.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "promphp/prometheus_client_php",
+          "version": "^2.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "phpunit/phpunit",
+          "version": "^11.0",
+          "ecosystem": "composer",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -16643,7 +20869,165 @@
       },
       "ormDetected": true,
       "ormName": "gorm",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "google.golang.org/grpc",
+          "version": "v1.63.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/protobuf",
+          "version": "v1.34.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/golang-jwt/jwt/v5",
+          "version": "v5.3.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/google/uuid",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_golang",
+          "version": "v1.20.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/postgres",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/gorm",
+          "version": "v1.31.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/beorn7/perks",
+          "version": "v1.0.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/cespare/xxhash/v2",
+          "version": "v2.3.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgpassfile",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgservicefile",
+          "version": "v0.0.0-20240606120523-5a60cdf6a761",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgx/v5",
+          "version": "v5.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/puddle/v2",
+          "version": "v2.2.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/inflection",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/now",
+          "version": "v1.1.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/klauspost/compress",
+          "version": "v1.17.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/munnerz/goautoneg",
+          "version": "v0.0.0-20191010083416-a7dc8b61c822",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_model",
+          "version": "v0.6.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/common",
+          "version": "v0.55.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/procfs",
+          "version": "v0.15.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/crypto",
+          "version": "v0.31.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/net",
+          "version": "v0.26.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sync",
+          "version": "v0.10.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sys",
+          "version": "v0.28.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/text",
+          "version": "v0.21.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/genproto/googleapis/rpc",
+          "version": "v0.0.0-20240227224415-6ceb2ff114de",
+          "ecosystem": "go",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -16861,7 +21245,39 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "28-java-grpc",
+          "version": "1.0.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "grpc-netty-shaded",
+          "version": "${grpc.version}",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "grpc-protobuf",
+          "version": "${grpc.version}",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "grpc-stub",
+          "version": "${grpc.version}",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "grpc-services",
+          "version": "${grpc.version}",
+          "ecosystem": "maven",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -17077,7 +21493,63 @@
       },
       "ormDetected": true,
       "ormName": "sqlalchemy",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "grpcio",
+          "version": "==1.63.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "grpcio-tools",
+          "version": "==1.63.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "grpcio-health-checking",
+          "version": "==1.63.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "structlog",
+          "version": "==24.4.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "==0.21.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "slowapi",
+          "version": "==0.1.9",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-sdk",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-exporter-otlp",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-instrumentation-fastapi",
+          "version": "==0.48b0",
+          "ecosystem": "pip",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -17302,7 +21774,105 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@grpc/grpc-js",
+          "version": "^1.10.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@grpc/proto-loader",
+          "version": "^0.7.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "typescript",
+          "version": "^5.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-node",
+          "version": "^10.9.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/jest",
+          "version": "^29.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-jest",
+          "version": "^29.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -17718,7 +22288,63 @@
       },
       "ormDetected": true,
       "ormName": "sqlx",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "tonic",
+          "version": "0.11",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tonic-health",
+          "version": "0.11",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tokio",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing",
+          "version": "0.1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing-subscriber",
+          "version": "0.3",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "prometheus",
+          "version": "0.13",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "hyper",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "hyper-util",
+          "version": "0.1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "http-body-util",
+          "version": "0.1",
+          "ecosystem": "cargo",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -18136,7 +22762,39 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "io.grpc:grpc-kotlin-stub",
+          "version": "1.4.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "io.grpc:grpc-protobuf",
+          "version": "1.63.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "io.grpc:grpc-netty-shaded",
+          "version": "1.63.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "io.grpc:grpc-services",
+          "version": "1.63.0",
+          "ecosystem": "gradle",
+          "direct": true
+        },
+        {
+          "name": "net.logstash.logback:logstash-logback-encoder",
+          "version": "7.4",
+          "ecosystem": "gradle",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -18378,7 +23036,27 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "grpc/grpc",
+          "version": "^1.63",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "monolog/monolog",
+          "version": "^3.0",
+          "ecosystem": "composer",
+          "direct": true
+        },
+        {
+          "name": "promphp/prometheus_client_php",
+          "version": "^2.0",
+          "ecosystem": "composer",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -18585,7 +23263,33 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "grpc",
+          "version": "~> 1.63",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "grpc-tools",
+          "version": "~> 1.63",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "logger",
+          "version": "~> 1.6",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "~> 4.0",
+          "ecosystem": "gem",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -18803,7 +23507,129 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "@apollo/server",
+          "version": "^4.10.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express",
+          "version": "^4.19.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "cors",
+          "version": "^2.8.5",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "graphql",
+          "version": "^16.8.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "typescript",
+          "version": "^5.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/express",
+          "version": "^4.17.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/cors",
+          "version": "^2.8.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-node",
+          "version": "^10.9.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/jest",
+          "version": "^29.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-jest",
+          "version": "^29.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -19020,7 +23846,87 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "graphql-yoga",
+          "version": "^5.6.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "graphql",
+          "version": "^16.8.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "typescript",
+          "version": "^5.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-node",
+          "version": "^10.9.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -19228,7 +24134,63 @@
       },
       "ormDetected": true,
       "ormName": "sqlalchemy",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "strawberry-graphql",
+          "version": "",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "fastapi",
+          "version": "==0.111.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "uvicorn",
+          "version": "",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "structlog",
+          "version": "==24.4.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "==0.21.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "slowapi",
+          "version": "==0.1.9",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-sdk",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-exporter-otlp",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-instrumentation-fastapi",
+          "version": "==0.48b0",
+          "ecosystem": "pip",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -19438,7 +24400,147 @@
       },
       "ormDetected": true,
       "ormName": "gorm",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "github.com/golang-jwt/jwt/v5",
+          "version": "v5.3.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/google/uuid",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_golang",
+          "version": "v1.20.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/postgres",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/gorm",
+          "version": "v1.31.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/beorn7/perks",
+          "version": "v1.0.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/cespare/xxhash/v2",
+          "version": "v2.3.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgpassfile",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgservicefile",
+          "version": "v0.0.0-20240606120523-5a60cdf6a761",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgx/v5",
+          "version": "v5.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/puddle/v2",
+          "version": "v2.2.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/inflection",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/now",
+          "version": "v1.1.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/klauspost/compress",
+          "version": "v1.17.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/munnerz/goautoneg",
+          "version": "v0.0.0-20191010083416-a7dc8b61c822",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_model",
+          "version": "v0.6.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/common",
+          "version": "v0.55.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/procfs",
+          "version": "v0.15.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/crypto",
+          "version": "v0.31.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sync",
+          "version": "v0.10.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sys",
+          "version": "v0.28.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/text",
+          "version": "v0.21.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/protobuf",
+          "version": "v1.34.2",
+          "ecosystem": "go",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -19648,7 +24750,27 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "spring-boot-starter-parent",
+          "version": "3.3.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "29-spring-graphql",
+          "version": "1.0.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "logstash-logback-encoder",
+          "version": "7.4",
+          "ecosystem": "maven",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -20066,7 +25188,39 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "graphql",
+          "version": "~> 2.3",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rack",
+          "version": "~> 3.0",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "puma",
+          "version": "~> 6.0",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "logger",
+          "version": "~> 1.6",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "~> 4.0",
+          "ecosystem": "gem",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -20274,7 +25428,57 @@
       },
       "ormDetected": true,
       "ormName": "sqlx",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "async-graphql",
+          "version": "7.0",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "async-graphql-axum",
+          "version": "7.0",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "axum",
+          "version": "0.7",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tokio",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing",
+          "version": "0.1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing-subscriber",
+          "version": "0.3",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "prometheus",
+          "version": "0.13",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "serde_json",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -20492,7 +25696,105 @@
       },
       "ormDetected": true,
       "ormName": "prisma",
-      "observabilityDetected": true
+      "observabilityDetected": true,
+      "libraries": [
+        {
+          "name": "ws",
+          "version": "^8.17.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "pino",
+          "version": "^9.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "prom-client",
+          "version": "^15.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/sdk-node",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/auto-instrumentations-node",
+          "version": "^0.49.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/api",
+          "version": "^1.9.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "@opentelemetry/exporter-trace-otlp-http",
+          "version": "^0.52.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "express-rate-limit",
+          "version": "^7.0.0",
+          "ecosystem": "npm",
+          "direct": true
+        },
+        {
+          "name": "typescript",
+          "version": "^5.4.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/node",
+          "version": "^20.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/ws",
+          "version": "^8.5.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-node",
+          "version": "^10.9.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "jest",
+          "version": "^29.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "@types/jest",
+          "version": "^29.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "ts-jest",
+          "version": "^29.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        },
+        {
+          "name": "pino-pretty",
+          "version": "^11.0.0",
+          "ecosystem": "npm",
+          "direct": false
+        }
+      ]
     }
   },
   {
@@ -20703,7 +26005,147 @@
       },
       "ormDetected": true,
       "ormName": "gorm",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "github.com/golang-jwt/jwt/v5",
+          "version": "v5.3.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/google/uuid",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_golang",
+          "version": "v1.20.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/driver/postgres",
+          "version": "v1.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "gorm.io/gorm",
+          "version": "v1.31.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/beorn7/perks",
+          "version": "v1.0.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/cespare/xxhash/v2",
+          "version": "v2.3.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgpassfile",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgservicefile",
+          "version": "v0.0.0-20240606120523-5a60cdf6a761",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/pgx/v5",
+          "version": "v5.6.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jackc/puddle/v2",
+          "version": "v2.2.2",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/inflection",
+          "version": "v1.0.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/jinzhu/now",
+          "version": "v1.1.5",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/klauspost/compress",
+          "version": "v1.17.9",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/munnerz/goautoneg",
+          "version": "v0.0.0-20191010083416-a7dc8b61c822",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/client_model",
+          "version": "v0.6.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/common",
+          "version": "v0.55.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "github.com/prometheus/procfs",
+          "version": "v0.15.1",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/crypto",
+          "version": "v0.31.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sync",
+          "version": "v0.10.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/sys",
+          "version": "v0.28.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "golang.org/x/text",
+          "version": "v0.21.0",
+          "ecosystem": "go",
+          "direct": true
+        },
+        {
+          "name": "google.golang.org/protobuf",
+          "version": "v1.34.2",
+          "ecosystem": "go",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -20912,7 +26354,63 @@
       },
       "ormDetected": true,
       "ormName": "sqlalchemy",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "websockets",
+          "version": "==12.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "fastapi",
+          "version": "==0.111.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "uvicorn",
+          "version": "",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "structlog",
+          "version": "==24.4.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "==0.21.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "slowapi",
+          "version": "==0.1.9",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-sdk",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-exporter-otlp",
+          "version": "==1.27.0",
+          "ecosystem": "pip",
+          "direct": true
+        },
+        {
+          "name": "opentelemetry-instrumentation-fastapi",
+          "version": "==0.48b0",
+          "ecosystem": "pip",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -21123,7 +26621,39 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "30-ws-java",
+          "version": "1.0.0",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "Java-WebSocket",
+          "version": "1.5.6",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "logstash-logback-encoder",
+          "version": "7.4",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "logback-classic",
+          "version": "1.5.6",
+          "ecosystem": "maven",
+          "direct": true
+        },
+        {
+          "name": "micrometer-registry-prometheus",
+          "version": "1.13.0",
+          "ecosystem": "maven",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -21537,7 +27067,51 @@
       },
       "ormDetected": true,
       "ormName": "sqlx",
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "axum",
+          "version": "0.7",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tokio",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tokio-tungstenite",
+          "version": "0.23",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing",
+          "version": "0.1",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "tracing-subscriber",
+          "version": "0.3",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "prometheus",
+          "version": "0.13",
+          "ecosystem": "cargo",
+          "direct": true
+        },
+        {
+          "name": "serde_json",
+          "version": "1",
+          "ecosystem": "cargo",
+          "direct": true
+        }
+      ]
     }
   },
   {
@@ -21957,7 +27531,39 @@
       },
       "ormDetected": false,
       "ormName": null,
-      "observabilityDetected": false
+      "observabilityDetected": false,
+      "libraries": [
+        {
+          "name": "faye-websocket",
+          "version": "~> 0.11",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "puma",
+          "version": "~> 6.0",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "rack",
+          "version": "~> 3.0",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "logger",
+          "version": "~> 1.6",
+          "ecosystem": "gem",
+          "direct": true
+        },
+        {
+          "name": "prometheus-client",
+          "version": "~> 4.0",
+          "ecosystem": "gem",
+          "direct": true
+        }
+      ]
     }
   }
 ]

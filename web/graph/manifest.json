@@ -14,7 +14,7 @@
     "versions": 148,
     "buildAxes": 8
   },
-  "edgeTotal": 3581,
+  "edgeTotal": 4301,
   "edgeTypes": {
     "IN_CATEGORY": 106,
     "USES_LANGUAGE": 106,
@@ -22,6 +22,7 @@
     "PINNED_AT": 72,
     "BUILDS_IMAGE": 82,
     "DEPLOYS_TO": 424,
+    "DEPENDS_ON_LIB": 720,
     "USES_STAGE": 2059,
     "FORCES": 1,
     "RATED_ON": 126,
