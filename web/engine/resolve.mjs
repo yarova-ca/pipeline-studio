@@ -226,6 +226,7 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
     invariants: invariantResults,
     deploy,
     integrations,
+    libraries: (shipped.libraries || []).map((l) => ({ name: l.name, version: l.version, ecosystem: l.ecosystem, direct: l.direct })),
     gaps, drift,
   };
 }

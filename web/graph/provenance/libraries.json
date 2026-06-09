@@ -1,0 +1,367 @@
+{
+  "libraries.perService#01-angular-ssr": {
+    "source": "services/01-angular-ssr manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#01-nextjs": {
+    "source": "services/01-nextjs manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#01-nuxt": {
+    "source": "services/01-nuxt manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#01-remix": {
+    "source": "services/01-remix manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#01-solid-start": {
+    "source": "services/01-solid-start manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#01-sveltekit": {
+    "source": "services/01-sveltekit manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#02-angular": {
+    "source": "services/02-angular manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#02-lit": {
+    "source": "services/02-lit manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#02-preact": {
+    "source": "services/02-preact manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#02-react": {
+    "source": "services/02-react manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#02-solidjs": {
+    "source": "services/02-solidjs manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#02-svelte": {
+    "source": "services/02-svelte manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#02-vue": {
+    "source": "services/02-vue manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#03-astro": {
+    "source": "services/03-astro manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#03-eleventy": {
+    "source": "services/03-eleventy manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#03-gatsby": {
+    "source": "services/03-gatsby manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#04-astro": {
+    "source": "services/04-astro manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#05-qwik": {
+    "source": "services/05-qwik manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#07-nextjs-app-router": {
+    "source": "services/07-nextjs-app-router manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#07-remix": {
+    "source": "services/07-remix manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#07-sveltekit": {
+    "source": "services/07-sveltekit manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#08-mf-rspack": {
+    "source": "services/08-mf-rspack manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#08-mf-webpack": {
+    "source": "services/08-mf-webpack manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#08-single-spa": {
+    "source": "services/08-single-spa manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#13-vite-pwa": {
+    "source": "services/13-vite-pwa manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#13-workbox": {
+    "source": "services/13-workbox manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#14-bun": {
+    "source": "services/14-bun manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#14-elysia": {
+    "source": "services/14-elysia manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#14-express": {
+    "source": "services/14-express manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#14-fastify": {
+    "source": "services/14-fastify manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#14-hono": {
+    "source": "services/14-hono manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#14-nestjs": {
+    "source": "services/14-nestjs manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#15-django": {
+    "source": "services/15-django manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#15-fastapi": {
+    "source": "services/15-fastapi manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#15-flask": {
+    "source": "services/15-flask manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#15-starlette": {
+    "source": "services/15-starlette manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#16-chi": {
+    "source": "services/16-chi manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#16-echo": {
+    "source": "services/16-echo manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#16-fiber": {
+    "source": "services/16-fiber manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#16-gin": {
+    "source": "services/16-gin manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#17-micronaut": {
+    "source": "services/17-micronaut manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#17-quarkus": {
+    "source": "services/17-quarkus manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#17-spring-boot": {
+    "source": "services/17-spring-boot manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#18-ktor": {
+    "source": "services/18-ktor manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#18-spring-boot-kotlin": {
+    "source": "services/18-spring-boot-kotlin manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#20-actix-web": {
+    "source": "services/20-actix-web manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#20-axum": {
+    "source": "services/20-axum manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#22-rails": {
+    "source": "services/22-rails manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#22-sinatra": {
+    "source": "services/22-sinatra manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#23-laravel": {
+    "source": "services/23-laravel manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#23-slim": {
+    "source": "services/23-slim manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#23-symfony": {
+    "source": "services/23-symfony manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#28-go-grpc": {
+    "source": "services/28-go-grpc manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#28-java-grpc": {
+    "source": "services/28-java-grpc manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#28-kotlin-grpc": {
+    "source": "services/28-kotlin-grpc manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#28-node-grpc": {
+    "source": "services/28-node-grpc manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#28-php-grpc": {
+    "source": "services/28-php-grpc manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#28-python-grpc": {
+    "source": "services/28-python-grpc manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#28-ruby-grpc": {
+    "source": "services/28-ruby-grpc manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#28-rust-grpc": {
+    "source": "services/28-rust-grpc manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#29-apollo": {
+    "source": "services/29-apollo manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#29-async-graphql": {
+    "source": "services/29-async-graphql manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#29-gqlgen": {
+    "source": "services/29-gqlgen manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#29-graphql-ruby": {
+    "source": "services/29-graphql-ruby manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#29-graphql-yoga": {
+    "source": "services/29-graphql-yoga manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#29-spring-graphql": {
+    "source": "services/29-spring-graphql manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#29-strawberry": {
+    "source": "services/29-strawberry manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#30-ws-go": {
+    "source": "services/30-ws-go manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#30-ws-java": {
+    "source": "services/30-ws-java manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#30-ws-node": {
+    "source": "services/30-ws-node manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#30-ws-python": {
+    "source": "services/30-ws-python manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#30-ws-ruby": {
+    "source": "services/30-ws-ruby manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "libraries.perService#30-ws-rust": {
+    "source": "services/30-ws-rust manifests",
+    "sourceType": "service-code",
+    "confidence": "high"
+  }
+}
