@@ -254,6 +254,10 @@ function viewBundle(id){
     ${kvRow("Auth",b.authOrmObs.auth)}${kvRow("ORM",b.authOrmObs.orm)}${kvRow("Observability",b.authOrmObs.observability)}
   </div></div></details>
 
+  <details class="section"><summary>Libraries — real dependencies (${(b.libraries||[]).filter(l=>l.direct).length} direct)</summary><div class="body">
+    ${(b.libraries&&b.libraries.length)?b.libraries.filter(l=>l.direct).map(l=>`<span class="tag" title="${esc(l.ecosystem)}">${esc(l.name)}${l.version?` ${esc(l.version)}`:''}</span>`).join(""):'<span class="sub">No manifest libraries detected for this service.</span>'}
+  </div></details>
+
   <details class="section"><summary>Deploy · clusters · GitOps</summary><div class="body"><div class="kv">
     <div class="k">Clusters</div><div>${b.deploy.clusters.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
     <div class="k">GitOps</div><div>${b.deploy.gitops.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>

@@ -56,6 +56,46 @@
     "attrs": {}
   },
   {
+    "from": "01-nextjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-next",
+    "attrs": {
+      "version": "^16.0.0"
+    }
+  },
+  {
+    "from": "01-nextjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "01-nextjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react-dom",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "01-nextjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "01-nextjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
     "from": "01-remix",
     "type": "IN_CATEGORY",
     "to": "c1",
@@ -104,6 +144,62 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "01-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-remix-run-node",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
+    "from": "01-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-remix-run-react",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
+    "from": "01-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-remix-run-serve",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
+    "from": "01-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "01-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react-dom",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "01-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "01-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
   },
   {
     "from": "01-nuxt",
@@ -162,6 +258,22 @@
     "attrs": {}
   },
   {
+    "from": "01-nuxt",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "01-nuxt",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
     "from": "01-sveltekit",
     "type": "IN_CATEGORY",
     "to": "c1",
@@ -216,6 +328,30 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "01-sveltekit",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-sveltejs-adapter-node",
+    "attrs": {
+      "version": "^5.2.0"
+    }
+  },
+  {
+    "from": "01-sveltekit",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "01-sveltekit",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
   },
   {
     "from": "01-angular-ssr",
@@ -274,6 +410,110 @@
     "attrs": {}
   },
   {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-animations",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-common",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-compiler",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-core",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-forms",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-platform-browser",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-platform-server",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-router",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-ssr",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-rxjs",
+    "attrs": {
+      "version": "^7.8.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-zone-js",
+    "attrs": {
+      "version": "^0.15.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "01-angular-ssr",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
     "from": "01-solid-start",
     "type": "IN_CATEGORY",
     "to": "c1",
@@ -328,6 +568,46 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "01-solid-start",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-solidjs-start",
+    "attrs": {
+      "version": "^1.0.0"
+    }
+  },
+  {
+    "from": "01-solid-start",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-solid-js",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "01-solid-start",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-vinxi",
+    "attrs": {
+      "version": "^0.4.0"
+    }
+  },
+  {
+    "from": "01-solid-start",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "01-solid-start",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
   },
   {
     "from": "02-react",
@@ -386,6 +666,22 @@
     "attrs": {}
   },
   {
+    "from": "02-react",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "02-react",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react-dom",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
     "from": "02-vue",
     "type": "IN_CATEGORY",
     "to": "c2",
@@ -442,6 +738,14 @@
     "attrs": {}
   },
   {
+    "from": "02-vue",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-vue",
+    "attrs": {
+      "version": "^3.5.0"
+    }
+  },
+  {
     "from": "02-angular",
     "type": "IN_CATEGORY",
     "to": "c2",
@@ -496,6 +800,78 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "02-angular",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-animations",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "02-angular",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-common",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "02-angular",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-compiler",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "02-angular",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-core",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "02-angular",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-forms",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "02-angular",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-platform-browser",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "02-angular",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-angular-router",
+    "attrs": {
+      "version": "^20.0.0"
+    }
+  },
+  {
+    "from": "02-angular",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-rxjs",
+    "attrs": {
+      "version": "^7.8.0"
+    }
+  },
+  {
+    "from": "02-angular",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-zone-js",
+    "attrs": {
+      "version": "^0.15.0"
+    }
   },
   {
     "from": "02-svelte",
@@ -660,6 +1036,14 @@
     "attrs": {}
   },
   {
+    "from": "02-preact",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-preact",
+    "attrs": {
+      "version": "^10.25.0"
+    }
+  },
+  {
     "from": "02-lit",
     "type": "IN_CATEGORY",
     "to": "c2",
@@ -714,6 +1098,14 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "02-lit",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-lit",
+    "attrs": {
+      "version": "^3.2.0"
+    }
   },
   {
     "from": "03-astro",
@@ -940,6 +1332,30 @@
     "attrs": {}
   },
   {
+    "from": "03-gatsby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-gatsby",
+    "attrs": {
+      "version": "^5.13.0"
+    }
+  },
+  {
+    "from": "03-gatsby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "03-gatsby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react-dom",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
     "from": "04-astro",
     "type": "IN_CATEGORY",
     "to": "c4",
@@ -994,6 +1410,22 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "04-astro",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-astrojs-node",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "04-astro",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-astro",
+    "attrs": {
+      "version": "^6.3.0"
+    }
   },
   {
     "from": "04-fresh",
@@ -1098,6 +1530,94 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-builder-io-qwik",
+    "attrs": {
+      "version": "^2.0.0"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-builder-io-qwik-city",
+    "attrs": {
+      "version": "^2.0.0"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express",
+    "attrs": {
+      "version": "^5.0.0"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-dotenv",
+    "attrs": {
+      "version": "^16.4.5"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "05-qwik",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
   },
   {
     "from": "06-nextjs-edge",
@@ -1288,6 +1808,46 @@
     "attrs": {}
   },
   {
+    "from": "07-nextjs-app-router",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-next",
+    "attrs": {
+      "version": "^16.0.0"
+    }
+  },
+  {
+    "from": "07-nextjs-app-router",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "07-nextjs-app-router",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react-dom",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "07-nextjs-app-router",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "07-nextjs-app-router",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
     "from": "07-remix",
     "type": "IN_CATEGORY",
     "to": "c7",
@@ -1336,6 +1896,62 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "07-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-remix-run-node",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
+    "from": "07-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-remix-run-react",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
+    "from": "07-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-remix-run-serve",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
+    "from": "07-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "07-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react-dom",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "07-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "07-remix",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
   },
   {
     "from": "07-sveltekit",
@@ -1394,6 +2010,30 @@
     "attrs": {}
   },
   {
+    "from": "07-sveltekit",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-sveltejs-adapter-node",
+    "attrs": {
+      "version": "^5.2.0"
+    }
+  },
+  {
+    "from": "07-sveltekit",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "07-sveltekit",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
     "from": "08-mf-webpack",
     "type": "IN_CATEGORY",
     "to": "c8",
@@ -1444,6 +2084,22 @@
     "attrs": {}
   },
   {
+    "from": "08-mf-webpack",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "08-mf-webpack",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react-dom",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
     "from": "08-single-spa",
     "type": "IN_CATEGORY",
     "to": "c8",
@@ -1542,6 +2198,22 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "08-mf-rspack",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react",
+    "attrs": {
+      "version": "^19.0.0"
+    }
+  },
+  {
+    "from": "08-mf-rspack",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-react-dom",
+    "attrs": {
+      "version": "^19.0.0"
+    }
   },
   {
     "from": "09-react-native",
@@ -2132,6 +2804,158 @@
     "attrs": {}
   },
   {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prisma-client",
+    "attrs": {
+      "version": "^6.0.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-cookie-parser",
+    "attrs": {
+      "version": "^1.4.7"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-cors",
+    "attrs": {
+      "version": "^2.8.5"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-dotenv",
+    "attrs": {
+      "version": "^16.4.5"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express",
+    "attrs": {
+      "version": "^5.0.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-helmet",
+    "attrs": {
+      "version": "^8.0.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-ioredis",
+    "attrs": {
+      "version": "^5.6.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-jsonwebtoken",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-swagger-jsdoc",
+    "attrs": {
+      "version": "^6.2.8"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-swagger-ui-express",
+    "attrs": {
+      "version": "^5.0.1"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-dd-trace",
+    "attrs": {
+      "version": "^5.0.0"
+    }
+  },
+  {
+    "from": "14-express",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-zod",
+    "attrs": {
+      "version": "^3.23.0"
+    }
+  },
+  {
     "from": "14-fastify",
     "type": "IN_CATEGORY",
     "to": "c14",
@@ -2186,6 +3010,102 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-fastify-cookie",
+    "attrs": {
+      "version": "^11.0.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prisma-client",
+    "attrs": {
+      "version": "^6.0.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-fastify",
+    "attrs": {
+      "version": "^5.2.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-dotenv",
+    "attrs": {
+      "version": "^16.4.5"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-jsonwebtoken",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-fastify",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
   },
   {
     "from": "14-nestjs",
@@ -2244,6 +3164,158 @@
     "attrs": {}
   },
   {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-nestjs-common",
+    "attrs": {
+      "version": "^11.0.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-nestjs-core",
+    "attrs": {
+      "version": "^11.0.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-nestjs-platform-express",
+    "attrs": {
+      "version": "^11.0.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-nestjs-terminus",
+    "attrs": {
+      "version": "^11.0.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-nestjs-passport",
+    "attrs": {
+      "version": "^11.0.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prisma-client",
+    "attrs": {
+      "version": "^6.0.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-dotenv",
+    "attrs": {
+      "version": "^16.4.5"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-jsonwebtoken",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-passport",
+    "attrs": {
+      "version": "^0.7.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-passport-jwt",
+    "attrs": {
+      "version": "^4.0.1"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-reflect-metadata",
+    "attrs": {
+      "version": "^0.2.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-rxjs",
+    "attrs": {
+      "version": "^7.8.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-nestjs",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
     "from": "14-hono",
     "type": "IN_CATEGORY",
     "to": "c14",
@@ -2290,6 +3362,102 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-hono-node-server",
+    "attrs": {
+      "version": "^1.14.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prisma-client",
+    "attrs": {
+      "version": "^6.0.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-hono",
+    "attrs": {
+      "version": "^4.7.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-dotenv",
+    "attrs": {
+      "version": "^16.4.5"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-jsonwebtoken",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-hono",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
   },
   {
     "from": "14-deno",
@@ -2390,6 +3558,94 @@
     "attrs": {}
   },
   {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prisma-client",
+    "attrs": {
+      "version": "^6.0.0"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-elysia",
+    "attrs": {
+      "version": "^1.2.0"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-jsonwebtoken",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-dotenv",
+    "attrs": {
+      "version": "^16.4.5"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "14-elysia",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
     "from": "14-bun",
     "type": "IN_CATEGORY",
     "to": "c14",
@@ -2440,6 +3696,30 @@
     "attrs": {}
   },
   {
+    "from": "14-bun",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prisma-client",
+    "attrs": {
+      "version": "^6.0.0"
+    }
+  },
+  {
+    "from": "14-bun",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-jsonwebtoken",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "14-bun",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-dotenv",
+    "attrs": {
+      "version": "^16.4.5"
+    }
+  },
+  {
     "from": "15-fastapi",
     "type": "IN_CATEGORY",
     "to": "c15",
@@ -2486,6 +3766,142 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-fastapi",
+    "attrs": {
+      "version": "==0.115.6"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-uvicorn",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-python-dotenv",
+    "attrs": {
+      "version": "==1.0.1"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-sqlalchemy",
+    "attrs": {
+      "version": "==2.0.36"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-alembic",
+    "attrs": {
+      "version": "==1.14.0"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-asyncpg",
+    "attrs": {
+      "version": "==0.30.0"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-aiosqlite",
+    "attrs": {
+      "version": "==0.20.0"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-python-jose",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-httpx",
+    "attrs": {
+      "version": "==0.28.1"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-structlog",
+    "attrs": {
+      "version": "==24.4.0"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-slowapi",
+    "attrs": {
+      "version": "==0.1.9"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-sdk",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-exporter-otlp-proto-grpc",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-instrumentation-fastapi",
+    "attrs": {
+      "version": "==0.48b0"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-pytest",
+    "attrs": {
+      "version": "==8.3.0"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-pytest-asyncio",
+    "attrs": {
+      "version": "==0.24.0"
+    }
+  },
+  {
+    "from": "15-fastapi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-prometheus-client",
+    "attrs": {
+      "version": "==0.21.0"
+    }
   },
   {
     "from": "15-django",
@@ -2536,6 +3952,134 @@
     "attrs": {}
   },
   {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-django",
+    "attrs": {
+      "version": "==5.2"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-gunicorn",
+    "attrs": {
+      "version": ">=23.0.0"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-python-dotenv",
+    "attrs": {
+      "version": ">=1.0.1"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-sqlalchemy",
+    "attrs": {
+      "version": ">=2.0"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-psycopg2-binary",
+    "attrs": {
+      "version": ">=2.9"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-aiosqlite",
+    "attrs": {
+      "version": ">=0.20"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-python-jose",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-httpx",
+    "attrs": {
+      "version": ">=0.28.0"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-pytest",
+    "attrs": {
+      "version": ">=8.3.0"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-pytest-django",
+    "attrs": {
+      "version": ">=4.9.0"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-structlog",
+    "attrs": {
+      "version": "==24.4.0"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-prometheus-client",
+    "attrs": {
+      "version": "==0.21.0"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-slowapi",
+    "attrs": {
+      "version": "==0.1.9"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-sdk",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-exporter-otlp",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "15-django",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-instrumentation-fastapi",
+    "attrs": {
+      "version": "==0.48b0"
+    }
+  },
+  {
     "from": "15-flask",
     "type": "IN_CATEGORY",
     "to": "c15",
@@ -2584,6 +4128,126 @@
     "attrs": {}
   },
   {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-flask",
+    "attrs": {
+      "version": "==3.1"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-gunicorn",
+    "attrs": {
+      "version": ">=23.0.0"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-python-dotenv",
+    "attrs": {
+      "version": ">=1.0.1"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-sqlalchemy",
+    "attrs": {
+      "version": ">=2.0"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-psycopg2-binary",
+    "attrs": {
+      "version": ">=2.9"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-aiosqlite",
+    "attrs": {
+      "version": ">=0.20"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-python-jose",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-httpx",
+    "attrs": {
+      "version": ">=0.28.0"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-pytest",
+    "attrs": {
+      "version": ">=8.3.0"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-structlog",
+    "attrs": {
+      "version": "==24.4.0"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-prometheus-client",
+    "attrs": {
+      "version": "==0.21.0"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-slowapi",
+    "attrs": {
+      "version": "==0.1.9"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-sdk",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-exporter-otlp",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "15-flask",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-instrumentation-fastapi",
+    "attrs": {
+      "version": "==0.48b0"
+    }
+  },
+  {
     "from": "15-starlette",
     "type": "IN_CATEGORY",
     "to": "c15",
@@ -2630,6 +4294,134 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-starlette",
+    "attrs": {
+      "version": "==0.41"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-uvicorn",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-python-dotenv",
+    "attrs": {
+      "version": ">=1.0.1"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-sqlalchemy",
+    "attrs": {
+      "version": ">=2.0"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-asyncpg",
+    "attrs": {
+      "version": ">=0.29"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-aiosqlite",
+    "attrs": {
+      "version": ">=0.20"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-python-jose",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-httpx",
+    "attrs": {
+      "version": ">=0.28.0"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-pytest",
+    "attrs": {
+      "version": ">=8.3.0"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-pytest-asyncio",
+    "attrs": {
+      "version": ">=0.24.0"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-structlog",
+    "attrs": {
+      "version": "==24.4.0"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-prometheus-client",
+    "attrs": {
+      "version": "==0.21.0"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-slowapi",
+    "attrs": {
+      "version": "==0.1.9"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-sdk",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-exporter-otlp",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "15-starlette",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-instrumentation-fastapi",
+    "attrs": {
+      "version": "==0.48b0"
+    }
   },
   {
     "from": "16-gin",
@@ -2688,6 +4480,654 @@
     "attrs": {}
   },
   {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-gin-contrib-cors",
+    "attrs": {
+      "version": "v1.7.7"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-gin-gonic-gin",
+    "attrs": {
+      "version": "v1.12.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-golang-jwt-jwt-v5",
+    "attrs": {
+      "version": "v5.2.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-google-uuid",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-swaggo-files",
+    "attrs": {
+      "version": "v1.0.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-swaggo-gin-swagger",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-go-opentelemetry-io-otel",
+    "attrs": {
+      "version": "v1.29.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-go-opentelemetry-io-otel-exporters-otlp-otlptrace-otlptracegrpc",
+    "attrs": {
+      "version": "v1.29.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-go-opentelemetry-io-otel-sdk",
+    "attrs": {
+      "version": "v1.29.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-time",
+    "attrs": {
+      "version": "v0.5.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-postgres",
+    "attrs": {
+      "version": "v1.5.9"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-sqlite",
+    "attrs": {
+      "version": "v1.5.6"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-gorm",
+    "attrs": {
+      "version": "v1.25.12"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-kylebanks-depth",
+    "attrs": {
+      "version": "v1.2.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-puerkitobio-purell",
+    "attrs": {
+      "version": "v1.1.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-puerkitobio-urlesc",
+    "attrs": {
+      "version": "v0.0.0-20170810143723-de5bf2ad4578"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-beorn7-perks",
+    "attrs": {
+      "version": "v1.0.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-bytedance-gopkg",
+    "attrs": {
+      "version": "v0.1.3"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-bytedance-sonic",
+    "attrs": {
+      "version": "v1.15.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-bytedance-sonic-loader",
+    "attrs": {
+      "version": "v0.5.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-cenkalti-backoff-v4",
+    "attrs": {
+      "version": "v4.3.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-cespare-xxhash-v2",
+    "attrs": {
+      "version": "v2.3.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-cloudwego-base64x",
+    "attrs": {
+      "version": "v0.1.6"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-gabriel-vasile-mimetype",
+    "attrs": {
+      "version": "v1.4.12"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-gin-contrib-sse",
+    "attrs": {
+      "version": "v1.1.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-logr-logr",
+    "attrs": {
+      "version": "v1.4.2"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-logr-stdr",
+    "attrs": {
+      "version": "v1.2.2"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-openapi-jsonpointer",
+    "attrs": {
+      "version": "v0.19.5"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-openapi-jsonreference",
+    "attrs": {
+      "version": "v0.19.6"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-openapi-spec",
+    "attrs": {
+      "version": "v0.20.4"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-openapi-swag",
+    "attrs": {
+      "version": "v0.19.15"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-playground-locales",
+    "attrs": {
+      "version": "v0.14.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-playground-universal-translator",
+    "attrs": {
+      "version": "v0.18.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-playground-validator-v10",
+    "attrs": {
+      "version": "v10.30.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-goccy-go-json",
+    "attrs": {
+      "version": "v0.10.5"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-goccy-go-yaml",
+    "attrs": {
+      "version": "v1.19.2"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-grpc-ecosystem-grpc-gateway-v2",
+    "attrs": {
+      "version": "v2.22.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgpassfile",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgservicefile",
+    "attrs": {
+      "version": "v0.0.0-20221227161230-091c0ba34f0a"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgx-v5",
+    "attrs": {
+      "version": "v5.5.5"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-puddle-v2",
+    "attrs": {
+      "version": "v2.2.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-inflection",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-now",
+    "attrs": {
+      "version": "v1.1.5"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-josharian-intern",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-json-iterator-go",
+    "attrs": {
+      "version": "v1.1.12"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-klauspost-compress",
+    "attrs": {
+      "version": "v1.17.9"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-klauspost-cpuid-v2",
+    "attrs": {
+      "version": "v2.3.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-leodido-go-urn",
+    "attrs": {
+      "version": "v1.4.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mailru-easyjson",
+    "attrs": {
+      "version": "v0.7.6"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mattn-go-isatty",
+    "attrs": {
+      "version": "v0.0.20"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mattn-go-sqlite3",
+    "attrs": {
+      "version": "v1.14.22"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-modern-go-concurrent",
+    "attrs": {
+      "version": "v0.0.0-20180306012644-bacd9c7ef1dd"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-modern-go-reflect2",
+    "attrs": {
+      "version": "v1.0.2"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-munnerz-goautoneg",
+    "attrs": {
+      "version": "v0.0.0-20191010083416-a7dc8b61c822"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-pelletier-go-toml-v2",
+    "attrs": {
+      "version": "v2.2.4"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-model",
+    "attrs": {
+      "version": "v0.6.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-common",
+    "attrs": {
+      "version": "v0.55.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-procfs",
+    "attrs": {
+      "version": "v0.15.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-quic-go-qpack",
+    "attrs": {
+      "version": "v0.6.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-quic-go-quic-go",
+    "attrs": {
+      "version": "v0.59.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-rogpeppe-go-internal",
+    "attrs": {
+      "version": "v1.15.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-swaggo-swag",
+    "attrs": {
+      "version": "v1.16.3"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-twitchyliquid64-golang-asm",
+    "attrs": {
+      "version": "v0.15.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-ugorji-go-codec",
+    "attrs": {
+      "version": "v1.3.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-go-mongodb-org-mongo-driver-v2",
+    "attrs": {
+      "version": "v2.5.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-go-opentelemetry-io-otel-exporters-otlp-otlptrace",
+    "attrs": {
+      "version": "v1.29.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-go-opentelemetry-io-otel-metric",
+    "attrs": {
+      "version": "v1.29.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-go-opentelemetry-io-otel-trace",
+    "attrs": {
+      "version": "v1.29.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-go-opentelemetry-io-proto-otlp",
+    "attrs": {
+      "version": "v1.3.1"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-arch",
+    "attrs": {
+      "version": "v0.23.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-crypto",
+    "attrs": {
+      "version": "v0.48.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-net",
+    "attrs": {
+      "version": "v0.51.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sync",
+    "attrs": {
+      "version": "v0.20.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sys",
+    "attrs": {
+      "version": "v0.41.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-text",
+    "attrs": {
+      "version": "v0.35.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-tools",
+    "attrs": {
+      "version": "v0.42.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-genproto-googleapis-api",
+    "attrs": {
+      "version": "v0.0.0-20240822170219-fc7c04adadcd"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-genproto-googleapis-rpc",
+    "attrs": {
+      "version": "v0.0.0-20240822170219-fc7c04adadcd"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-grpc",
+    "attrs": {
+      "version": "v1.65.0"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-protobuf",
+    "attrs": {
+      "version": "v1.36.10"
+    }
+  },
+  {
+    "from": "16-gin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gopkg-in-yaml-v2",
+    "attrs": {
+      "version": "v2.4.0"
+    }
+  },
+  {
     "from": "16-echo",
     "type": "IN_CATEGORY",
     "to": "c16",
@@ -2744,6 +5184,254 @@
     "attrs": {}
   },
   {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-golang-jwt-jwt-v5",
+    "attrs": {
+      "version": "v5.2.1"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-google-uuid",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-labstack-echo-v4",
+    "attrs": {
+      "version": "v4.12.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-postgres",
+    "attrs": {
+      "version": "v1.5.9"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-sqlite",
+    "attrs": {
+      "version": "v1.5.6"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-gorm",
+    "attrs": {
+      "version": "v1.25.12"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-beorn7-perks",
+    "attrs": {
+      "version": "v1.0.1"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-cespare-xxhash-v2",
+    "attrs": {
+      "version": "v2.3.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgpassfile",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgservicefile",
+    "attrs": {
+      "version": "v0.0.0-20221227161230-091c0ba34f0a"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgx-v5",
+    "attrs": {
+      "version": "v5.5.5"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-puddle-v2",
+    "attrs": {
+      "version": "v2.2.1"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-inflection",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-now",
+    "attrs": {
+      "version": "v1.1.5"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-klauspost-compress",
+    "attrs": {
+      "version": "v1.17.9"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-labstack-gommon",
+    "attrs": {
+      "version": "v0.4.2"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mattn-go-colorable",
+    "attrs": {
+      "version": "v0.1.13"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mattn-go-isatty",
+    "attrs": {
+      "version": "v0.0.20"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mattn-go-sqlite3",
+    "attrs": {
+      "version": "v1.14.22"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-munnerz-goautoneg",
+    "attrs": {
+      "version": "v0.0.0-20191010083416-a7dc8b61c822"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-model",
+    "attrs": {
+      "version": "v0.6.1"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-common",
+    "attrs": {
+      "version": "v0.55.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-procfs",
+    "attrs": {
+      "version": "v0.15.1"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-valyala-bytebufferpool",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-valyala-fasttemplate",
+    "attrs": {
+      "version": "v1.2.2"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-crypto",
+    "attrs": {
+      "version": "v0.24.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-net",
+    "attrs": {
+      "version": "v0.26.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sync",
+    "attrs": {
+      "version": "v0.7.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sys",
+    "attrs": {
+      "version": "v0.22.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-text",
+    "attrs": {
+      "version": "v0.16.0"
+    }
+  },
+  {
+    "from": "16-echo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-protobuf",
+    "attrs": {
+      "version": "v1.34.2"
+    }
+  },
+  {
     "from": "16-fiber",
     "type": "IN_CATEGORY",
     "to": "c16",
@@ -2792,6 +5480,286 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-gofiber-fiber-v3",
+    "attrs": {
+      "version": "v3.0.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-golang-jwt-jwt-v5",
+    "attrs": {
+      "version": "v5.2.1"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-google-uuid",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-postgres",
+    "attrs": {
+      "version": "v1.5.9"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-sqlite",
+    "attrs": {
+      "version": "v1.5.6"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-gorm",
+    "attrs": {
+      "version": "v1.25.12"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-andybalholm-brotli",
+    "attrs": {
+      "version": "v1.2.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-beorn7-perks",
+    "attrs": {
+      "version": "v1.0.1"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-cespare-xxhash-v2",
+    "attrs": {
+      "version": "v2.3.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-gofiber-schema",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-gofiber-utils-v2",
+    "attrs": {
+      "version": "v2.0.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgpassfile",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgservicefile",
+    "attrs": {
+      "version": "v0.0.0-20221227161230-091c0ba34f0a"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgx-v5",
+    "attrs": {
+      "version": "v5.5.5"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-puddle-v2",
+    "attrs": {
+      "version": "v2.2.1"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-inflection",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-now",
+    "attrs": {
+      "version": "v1.1.5"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-klauspost-compress",
+    "attrs": {
+      "version": "v1.18.3"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mattn-go-colorable",
+    "attrs": {
+      "version": "v0.1.14"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mattn-go-isatty",
+    "attrs": {
+      "version": "v0.0.20"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mattn-go-sqlite3",
+    "attrs": {
+      "version": "v1.14.22"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-munnerz-goautoneg",
+    "attrs": {
+      "version": "v0.0.0-20191010083416-a7dc8b61c822"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-philhofer-fwd",
+    "attrs": {
+      "version": "v1.2.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-model",
+    "attrs": {
+      "version": "v0.6.1"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-common",
+    "attrs": {
+      "version": "v0.55.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-procfs",
+    "attrs": {
+      "version": "v0.15.1"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-tinylib-msgp",
+    "attrs": {
+      "version": "v1.6.3"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-valyala-bytebufferpool",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-valyala-fasthttp",
+    "attrs": {
+      "version": "v1.69.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-crypto",
+    "attrs": {
+      "version": "v0.47.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-net",
+    "attrs": {
+      "version": "v0.49.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sync",
+    "attrs": {
+      "version": "v0.19.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sys",
+    "attrs": {
+      "version": "v0.40.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-text",
+    "attrs": {
+      "version": "v0.33.0"
+    }
+  },
+  {
+    "from": "16-fiber",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-protobuf",
+    "attrs": {
+      "version": "v1.34.2"
+    }
   },
   {
     "from": "16-chi",
@@ -2850,6 +5818,206 @@
     "attrs": {}
   },
   {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-go-chi-chi-v5",
+    "attrs": {
+      "version": "v5.2.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-golang-jwt-jwt-v5",
+    "attrs": {
+      "version": "v5.2.1"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-google-uuid",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-postgres",
+    "attrs": {
+      "version": "v1.5.9"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-sqlite",
+    "attrs": {
+      "version": "v1.5.6"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-gorm",
+    "attrs": {
+      "version": "v1.25.12"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-beorn7-perks",
+    "attrs": {
+      "version": "v1.0.1"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-cespare-xxhash-v2",
+    "attrs": {
+      "version": "v2.3.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgpassfile",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgservicefile",
+    "attrs": {
+      "version": "v0.0.0-20221227161230-091c0ba34f0a"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgx-v5",
+    "attrs": {
+      "version": "v5.5.5"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-puddle-v2",
+    "attrs": {
+      "version": "v2.2.1"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-inflection",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-now",
+    "attrs": {
+      "version": "v1.1.5"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-klauspost-compress",
+    "attrs": {
+      "version": "v1.17.9"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-mattn-go-sqlite3",
+    "attrs": {
+      "version": "v1.14.22"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-munnerz-goautoneg",
+    "attrs": {
+      "version": "v0.0.0-20191010083416-a7dc8b61c822"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-model",
+    "attrs": {
+      "version": "v0.6.1"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-common",
+    "attrs": {
+      "version": "v0.55.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-procfs",
+    "attrs": {
+      "version": "v0.15.1"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-crypto",
+    "attrs": {
+      "version": "v0.17.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sync",
+    "attrs": {
+      "version": "v0.7.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sys",
+    "attrs": {
+      "version": "v0.22.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-text",
+    "attrs": {
+      "version": "v0.16.0"
+    }
+  },
+  {
+    "from": "16-chi",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-protobuf",
+    "attrs": {
+      "version": "v1.34.2"
+    }
+  },
+  {
     "from": "17-spring-boot",
     "type": "IN_CATEGORY",
     "to": "c17",
@@ -2904,6 +6072,78 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "17-spring-boot",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-spring-boot-starter-parent",
+    "attrs": {
+      "version": "3.4.0"
+    }
+  },
+  {
+    "from": "17-spring-boot",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-17-spring-boot",
+    "attrs": {
+      "version": "1.0.0"
+    }
+  },
+  {
+    "from": "17-spring-boot",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-jjwt-api",
+    "attrs": {
+      "version": "${jjwt.version}"
+    }
+  },
+  {
+    "from": "17-spring-boot",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-jjwt-impl",
+    "attrs": {
+      "version": "${jjwt.version}"
+    }
+  },
+  {
+    "from": "17-spring-boot",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-jjwt-jackson",
+    "attrs": {
+      "version": "${jjwt.version}"
+    }
+  },
+  {
+    "from": "17-spring-boot",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-logstash-logback-encoder",
+    "attrs": {
+      "version": "7.4"
+    }
+  },
+  {
+    "from": "17-spring-boot",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-bucket4j-core",
+    "attrs": {
+      "version": "8.10.1"
+    }
+  },
+  {
+    "from": "17-spring-boot",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-opentelemetry-spring-boot-starter",
+    "attrs": {
+      "version": "2.6.0"
+    }
+  },
+  {
+    "from": "17-spring-boot",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-springdoc-openapi-starter-webmvc-ui",
+    "attrs": {
+      "version": "2.6.0"
+    }
   },
   {
     "from": "17-quarkus",
@@ -2962,6 +6202,22 @@
     "attrs": {}
   },
   {
+    "from": "17-quarkus",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-17-quarkus",
+    "attrs": {
+      "version": "1.0.0"
+    }
+  },
+  {
+    "from": "17-quarkus",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-quarkus-bom",
+    "attrs": {
+      "version": "${quarkus.platform.version}"
+    }
+  },
+  {
     "from": "17-micronaut",
     "type": "IN_CATEGORY",
     "to": "c17",
@@ -3016,6 +6272,46 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "17-micronaut",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-17-micronaut",
+    "attrs": {
+      "version": "1.0.0"
+    }
+  },
+  {
+    "from": "17-micronaut",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-micronaut-parent",
+    "attrs": {
+      "version": "5.0.0"
+    }
+  },
+  {
+    "from": "17-micronaut",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-postgresql",
+    "attrs": {
+      "version": "42.7.3"
+    }
+  },
+  {
+    "from": "17-micronaut",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-logstash-logback-encoder",
+    "attrs": {
+      "version": "7.4"
+    }
+  },
+  {
+    "from": "17-micronaut",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-h2",
+    "attrs": {
+      "version": "2.2.224"
+    }
   },
   {
     "from": "18-ktor",
@@ -3074,6 +6370,110 @@
     "attrs": {}
   },
   {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-ch-qos-logback-logback-classic",
+    "attrs": {
+      "version": "1.5.6"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-net-logstash-logback-logstash-logback-encoder",
+    "attrs": {
+      "version": "7.4"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-org-jetbrains-exposed-exposed-core",
+    "attrs": {
+      "version": "0.54.0"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-org-jetbrains-exposed-exposed-dao",
+    "attrs": {
+      "version": "0.54.0"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-org-jetbrains-exposed-exposed-jdbc",
+    "attrs": {
+      "version": "0.54.0"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-com-zaxxer-hikaricp",
+    "attrs": {
+      "version": "5.1.0"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-com-auth0-java-jwt",
+    "attrs": {
+      "version": "4.4.0"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-github-smiley4-ktor-swagger-ui",
+    "attrs": {
+      "version": "4.1.0"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-github-smiley4-ktor-openapi",
+    "attrs": {
+      "version": "4.1.0"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-org-jetbrains-kotlinx-kotlinx-serialization-json",
+    "attrs": {
+      "version": "1.7.1"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-org-postgresql-postgresql",
+    "attrs": {
+      "version": "42.7.3"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-com-h2database-h2",
+    "attrs": {
+      "version": "2.2.224"
+    }
+  },
+  {
+    "from": "18-ktor",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-micrometer-micrometer-registry-prometheus",
+    "attrs": {
+      "version": "1.12.0"
+    }
+  },
+  {
     "from": "18-spring-boot-kotlin",
     "type": "IN_CATEGORY",
     "to": "c18",
@@ -3122,6 +6522,54 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "18-spring-boot-kotlin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-jsonwebtoken-jjwt-api",
+    "attrs": {
+      "version": "0.12.6"
+    }
+  },
+  {
+    "from": "18-spring-boot-kotlin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-jsonwebtoken-jjwt-impl",
+    "attrs": {
+      "version": "0.12.6"
+    }
+  },
+  {
+    "from": "18-spring-boot-kotlin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-jsonwebtoken-jjwt-jackson",
+    "attrs": {
+      "version": "0.12.6"
+    }
+  },
+  {
+    "from": "18-spring-boot-kotlin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-net-logstash-logback-logstash-logback-encoder",
+    "attrs": {
+      "version": "7.4"
+    }
+  },
+  {
+    "from": "18-spring-boot-kotlin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-org-postgresql-postgresql",
+    "attrs": {
+      "version": "42.7.3"
+    }
+  },
+  {
+    "from": "18-spring-boot-kotlin",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-com-h2database-h2",
+    "attrs": {
+      "version": "2.2.224"
+    }
   },
   {
     "from": "19-aspnet-core",
@@ -3286,6 +6734,182 @@
     "attrs": {}
   },
   {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-axum",
+    "attrs": {
+      "version": "0.8"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-serde",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-serde-json",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tokio",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tower",
+    "attrs": {
+      "version": "0.5"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tower-http",
+    "attrs": {
+      "version": "0.6"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-dotenvy",
+    "attrs": {
+      "version": "0.15"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-chrono",
+    "attrs": {
+      "version": "0.4"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing",
+    "attrs": {
+      "version": "0.1"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing-subscriber",
+    "attrs": {
+      "version": "0.3"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-opentelemetry-guarded-by-otel-enabled",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-opentelemetry",
+    "attrs": {
+      "version": "0.24"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-opentelemetry-otlp",
+    "attrs": {
+      "version": "0.17"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-opentelemetry-sdk",
+    "attrs": {
+      "version": "0.24"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-utoipa",
+    "attrs": {
+      "version": "4"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-utoipa-swagger-ui",
+    "attrs": {
+      "version": "7"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-sqlx",
+    "attrs": {
+      "version": "0.8"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-jsonwebtoken",
+    "attrs": {
+      "version": "9"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-uuid",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-reqwest",
+    "attrs": {
+      "version": "0.12"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-http-body-util",
+    "attrs": {
+      "version": "0.1"
+    }
+  },
+  {
+    "from": "20-axum",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-axum",
+    "attrs": {
+      "version": "0.8"
+    }
+  },
+  {
     "from": "20-actix-web",
     "type": "IN_CATEGORY",
     "to": "c20",
@@ -3340,6 +6964,134 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-actix-web",
+    "attrs": {
+      "version": "4.9"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-serde",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-serde-json",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tokio",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-dotenvy",
+    "attrs": {
+      "version": "0.15"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-chrono",
+    "attrs": {
+      "version": "0.4"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing",
+    "attrs": {
+      "version": "0.1"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing-subscriber",
+    "attrs": {
+      "version": "0.3"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-prometheus",
+    "attrs": {
+      "version": "0.13"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-env-logger",
+    "attrs": {
+      "version": "0.11"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-futures",
+    "attrs": {
+      "version": "0.3"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-sqlx",
+    "attrs": {
+      "version": "0.8"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-jsonwebtoken",
+    "attrs": {
+      "version": "9"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-uuid",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-reqwest",
+    "attrs": {
+      "version": "0.12"
+    }
+  },
+  {
+    "from": "20-actix-web",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-actix-web",
+    "attrs": {
+      "version": "4.9"
+    }
   },
   {
     "from": "21-phoenix",
@@ -3454,6 +7206,134 @@
     "attrs": {}
   },
   {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rails",
+    "attrs": {
+      "version": "~> 8.0"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-puma",
+    "attrs": {
+      "version": "~> 6.4"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-dotenv-rails",
+    "attrs": {
+      "version": "~> 3.1"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-jwt",
+    "attrs": {
+      "version": "~> 2.9"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-pg",
+    "attrs": {
+      "version": "~> 1.5"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-lograge",
+    "attrs": {
+      "version": "~> 0.14"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rack-attack",
+    "attrs": {
+      "version": "~> 6.7"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-opentelemetry-sdk",
+    "attrs": {
+      "version": "~> 1.4"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-opentelemetry-exporter-otlp",
+    "attrs": {
+      "version": "~> 0.29"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-opentelemetry-instrumentation-rails",
+    "attrs": {
+      "version": "~> 0.32"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-opentelemetry-instrumentation-active-record",
+    "attrs": {
+      "version": "~> 0.8"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rswag-api",
+    "attrs": {
+      "version": "~> 2.14"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rswag-ui",
+    "attrs": {
+      "version": "~> 2.14"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rspec-rails",
+    "attrs": {
+      "version": "~> 7.0"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rswag-specs",
+    "attrs": {
+      "version": "~> 2.14"
+    }
+  },
+  {
+    "from": "22-rails",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-sqlite3",
+    "attrs": {
+      "version": "~> 2.0"
+    }
+  },
+  {
     "from": "22-sinatra",
     "type": "IN_CATEGORY",
     "to": "c22",
@@ -3504,6 +7384,102 @@
     "attrs": {}
   },
   {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-sinatra",
+    "attrs": {
+      "version": "~> 4.0"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rackup",
+    "attrs": {
+      "version": "~> 2.1"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-puma",
+    "attrs": {
+      "version": "~> 6.4"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-dotenv",
+    "attrs": {
+      "version": "~> 3.1"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-jwt",
+    "attrs": {
+      "version": "~> 2.8"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-sequel",
+    "attrs": {
+      "version": "~> 5.80"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-pg",
+    "attrs": {
+      "version": "~> 1.5"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-sqlite3",
+    "attrs": {
+      "version": "~> 1.7"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-logger",
+    "attrs": {
+      "version": "~> 1.6"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-prometheus-client",
+    "attrs": {
+      "version": "~> 4.0"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rspec",
+    "attrs": {
+      "version": "~> 3.13"
+    }
+  },
+  {
+    "from": "22-sinatra",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rack-test",
+    "attrs": {
+      "version": "~> 2.1"
+    }
+  },
+  {
     "from": "23-laravel",
     "type": "IN_CATEGORY",
     "to": "c23",
@@ -3552,6 +7528,70 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "23-laravel",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-laravel-framework",
+    "attrs": {
+      "version": "^12.0"
+    }
+  },
+  {
+    "from": "23-laravel",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-vlucas-phpdotenv",
+    "attrs": {
+      "version": "^5.6"
+    }
+  },
+  {
+    "from": "23-laravel",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-firebase-php-jwt",
+    "attrs": {
+      "version": "^6.10"
+    }
+  },
+  {
+    "from": "23-laravel",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-laravel-sanctum",
+    "attrs": {
+      "version": "^4.0"
+    }
+  },
+  {
+    "from": "23-laravel",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-darkaonline-l5-swagger",
+    "attrs": {
+      "version": "^8.6"
+    }
+  },
+  {
+    "from": "23-laravel",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-open-telemetry-sdk",
+    "attrs": {
+      "version": "^1.0"
+    }
+  },
+  {
+    "from": "23-laravel",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-open-telemetry-exporter-otlp",
+    "attrs": {
+      "version": "^1.0"
+    }
+  },
+  {
+    "from": "23-laravel",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-open-telemetry-opentelemetry-auto-laravel",
+    "attrs": {
+      "version": "^0.0.5"
+    }
   },
   {
     "from": "23-symfony",
@@ -3610,6 +7650,94 @@
     "attrs": {}
   },
   {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-symfony-framework-bundle",
+    "attrs": {
+      "version": "^7.2"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-symfony-yaml",
+    "attrs": {
+      "version": "^7.2"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-symfony-serializer",
+    "attrs": {
+      "version": "^7.2"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-symfony-security-bundle",
+    "attrs": {
+      "version": "^7.2"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-symfony-uid",
+    "attrs": {
+      "version": "^7.2"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-doctrine-orm",
+    "attrs": {
+      "version": "^3.0"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-doctrine-doctrine-bundle",
+    "attrs": {
+      "version": "^2.12"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-lexik-jwt-authentication-bundle",
+    "attrs": {
+      "version": "^3.0"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-ext-curl",
+    "attrs": {
+      "version": "*"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-monolog-monolog",
+    "attrs": {
+      "version": "^3.0"
+    }
+  },
+  {
+    "from": "23-symfony",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-promphp-prometheus-client-php",
+    "attrs": {
+      "version": "^2.0"
+    }
+  },
+  {
     "from": "23-slim",
     "type": "IN_CATEGORY",
     "to": "c23",
@@ -3664,6 +7792,78 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "23-slim",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-slim-slim",
+    "attrs": {
+      "version": "^4.14"
+    }
+  },
+  {
+    "from": "23-slim",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-slim-psr7",
+    "attrs": {
+      "version": "^1.7"
+    }
+  },
+  {
+    "from": "23-slim",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-firebase-php-jwt",
+    "attrs": {
+      "version": "^6.10"
+    }
+  },
+  {
+    "from": "23-slim",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-ramsey-uuid",
+    "attrs": {
+      "version": "^4.7"
+    }
+  },
+  {
+    "from": "23-slim",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-vlucas-phpdotenv",
+    "attrs": {
+      "version": "^5.6"
+    }
+  },
+  {
+    "from": "23-slim",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-ext-pdo",
+    "attrs": {
+      "version": "*"
+    }
+  },
+  {
+    "from": "23-slim",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-ext-curl",
+    "attrs": {
+      "version": "*"
+    }
+  },
+  {
+    "from": "23-slim",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-monolog-monolog",
+    "attrs": {
+      "version": "^3.0"
+    }
+  },
+  {
+    "from": "23-slim",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-promphp-prometheus-client-php",
+    "attrs": {
+      "version": "^2.0"
+    }
   },
   {
     "from": "24-vapor",
@@ -4124,6 +8324,214 @@
     "attrs": {}
   },
   {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-grpc",
+    "attrs": {
+      "version": "v1.63.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-protobuf",
+    "attrs": {
+      "version": "v1.34.2"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-golang-jwt-jwt-v5",
+    "attrs": {
+      "version": "v5.3.1"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-google-uuid",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-golang",
+    "attrs": {
+      "version": "v1.20.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-postgres",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-gorm",
+    "attrs": {
+      "version": "v1.31.1"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-beorn7-perks",
+    "attrs": {
+      "version": "v1.0.1"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-cespare-xxhash-v2",
+    "attrs": {
+      "version": "v2.3.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgpassfile",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgservicefile",
+    "attrs": {
+      "version": "v0.0.0-20240606120523-5a60cdf6a761"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgx-v5",
+    "attrs": {
+      "version": "v5.6.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-puddle-v2",
+    "attrs": {
+      "version": "v2.2.2"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-inflection",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-now",
+    "attrs": {
+      "version": "v1.1.5"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-klauspost-compress",
+    "attrs": {
+      "version": "v1.17.9"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-munnerz-goautoneg",
+    "attrs": {
+      "version": "v0.0.0-20191010083416-a7dc8b61c822"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-model",
+    "attrs": {
+      "version": "v0.6.1"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-common",
+    "attrs": {
+      "version": "v0.55.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-procfs",
+    "attrs": {
+      "version": "v0.15.1"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-crypto",
+    "attrs": {
+      "version": "v0.31.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-net",
+    "attrs": {
+      "version": "v0.26.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sync",
+    "attrs": {
+      "version": "v0.10.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sys",
+    "attrs": {
+      "version": "v0.28.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-text",
+    "attrs": {
+      "version": "v0.21.0"
+    }
+  },
+  {
+    "from": "28-go-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-genproto-googleapis-rpc",
+    "attrs": {
+      "version": "v0.0.0-20240227224415-6ceb2ff114de"
+    }
+  },
+  {
     "from": "28-java-grpc",
     "type": "IN_CATEGORY",
     "to": "c28",
@@ -4178,6 +8586,46 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "28-java-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-28-java-grpc",
+    "attrs": {
+      "version": "1.0.0"
+    }
+  },
+  {
+    "from": "28-java-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-grpc-netty-shaded",
+    "attrs": {
+      "version": "${grpc.version}"
+    }
+  },
+  {
+    "from": "28-java-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-grpc-protobuf",
+    "attrs": {
+      "version": "${grpc.version}"
+    }
+  },
+  {
+    "from": "28-java-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-grpc-stub",
+    "attrs": {
+      "version": "${grpc.version}"
+    }
+  },
+  {
+    "from": "28-java-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-grpc-services",
+    "attrs": {
+      "version": "${grpc.version}"
+    }
   },
   {
     "from": "28-python-grpc",
@@ -4236,6 +8684,78 @@
     "attrs": {}
   },
   {
+    "from": "28-python-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-grpcio",
+    "attrs": {
+      "version": "==1.63.0"
+    }
+  },
+  {
+    "from": "28-python-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-grpcio-tools",
+    "attrs": {
+      "version": "==1.63.0"
+    }
+  },
+  {
+    "from": "28-python-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-grpcio-health-checking",
+    "attrs": {
+      "version": "==1.63.0"
+    }
+  },
+  {
+    "from": "28-python-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-structlog",
+    "attrs": {
+      "version": "==24.4.0"
+    }
+  },
+  {
+    "from": "28-python-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-prometheus-client",
+    "attrs": {
+      "version": "==0.21.0"
+    }
+  },
+  {
+    "from": "28-python-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-slowapi",
+    "attrs": {
+      "version": "==0.1.9"
+    }
+  },
+  {
+    "from": "28-python-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-sdk",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "28-python-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-exporter-otlp",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "28-python-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-instrumentation-fastapi",
+    "attrs": {
+      "version": "==0.48b0"
+    }
+  },
+  {
     "from": "28-node-grpc",
     "type": "IN_CATEGORY",
     "to": "c28",
@@ -4290,6 +8810,78 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "28-node-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-grpc-grpc-js",
+    "attrs": {
+      "version": "^1.10.0"
+    }
+  },
+  {
+    "from": "28-node-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-grpc-proto-loader",
+    "attrs": {
+      "version": "^0.7.0"
+    }
+  },
+  {
+    "from": "28-node-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "28-node-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "28-node-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "28-node-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "28-node-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "28-node-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "28-node-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
   },
   {
     "from": "28-dotnet-grpc",
@@ -4404,6 +8996,78 @@
     "attrs": {}
   },
   {
+    "from": "28-rust-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tonic",
+    "attrs": {
+      "version": "0.11"
+    }
+  },
+  {
+    "from": "28-rust-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tonic-health",
+    "attrs": {
+      "version": "0.11"
+    }
+  },
+  {
+    "from": "28-rust-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tokio",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "28-rust-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing",
+    "attrs": {
+      "version": "0.1"
+    }
+  },
+  {
+    "from": "28-rust-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing-subscriber",
+    "attrs": {
+      "version": "0.3"
+    }
+  },
+  {
+    "from": "28-rust-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-prometheus",
+    "attrs": {
+      "version": "0.13"
+    }
+  },
+  {
+    "from": "28-rust-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-hyper",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "28-rust-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-hyper-util",
+    "attrs": {
+      "version": "0.1"
+    }
+  },
+  {
+    "from": "28-rust-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-http-body-util",
+    "attrs": {
+      "version": "0.1"
+    }
+  },
+  {
     "from": "28-swift-grpc",
     "type": "IN_CATEGORY",
     "to": "c28",
@@ -4506,6 +9170,46 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "28-kotlin-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-grpc-grpc-kotlin-stub",
+    "attrs": {
+      "version": "1.4.0"
+    }
+  },
+  {
+    "from": "28-kotlin-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-grpc-grpc-protobuf",
+    "attrs": {
+      "version": "1.63.0"
+    }
+  },
+  {
+    "from": "28-kotlin-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-grpc-grpc-netty-shaded",
+    "attrs": {
+      "version": "1.63.0"
+    }
+  },
+  {
+    "from": "28-kotlin-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-io-grpc-grpc-services",
+    "attrs": {
+      "version": "1.63.0"
+    }
+  },
+  {
+    "from": "28-kotlin-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gradle-net-logstash-logback-logstash-logback-encoder",
+    "attrs": {
+      "version": "7.4"
+    }
   },
   {
     "from": "connect-go",
@@ -4620,6 +9324,30 @@
     "attrs": {}
   },
   {
+    "from": "28-php-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-grpc-grpc",
+    "attrs": {
+      "version": "^1.63"
+    }
+  },
+  {
+    "from": "28-php-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-monolog-monolog",
+    "attrs": {
+      "version": "^3.0"
+    }
+  },
+  {
+    "from": "28-php-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "composer-promphp-prometheus-client-php",
+    "attrs": {
+      "version": "^2.0"
+    }
+  },
+  {
     "from": "28-ruby-grpc",
     "type": "IN_CATEGORY",
     "to": "c28",
@@ -4660,6 +9388,38 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "28-ruby-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-grpc",
+    "attrs": {
+      "version": "~> 1.63"
+    }
+  },
+  {
+    "from": "28-ruby-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-grpc-tools",
+    "attrs": {
+      "version": "~> 1.63"
+    }
+  },
+  {
+    "from": "28-ruby-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-logger",
+    "attrs": {
+      "version": "~> 1.6"
+    }
+  },
+  {
+    "from": "28-ruby-grpc",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-prometheus-client",
+    "attrs": {
+      "version": "~> 4.0"
+    }
   },
   {
     "from": "29-apollo",
@@ -4718,6 +9478,94 @@
     "attrs": {}
   },
   {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-apollo-server",
+    "attrs": {
+      "version": "^4.10.0"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express",
+    "attrs": {
+      "version": "^4.19.0"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-cors",
+    "attrs": {
+      "version": "^2.8.5"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-graphql",
+    "attrs": {
+      "version": "^16.8.0"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "29-apollo",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
     "from": "29-graphql-yoga",
     "type": "IN_CATEGORY",
     "to": "c29",
@@ -4772,6 +9620,78 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "29-graphql-yoga",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-graphql-yoga",
+    "attrs": {
+      "version": "^5.6.0"
+    }
+  },
+  {
+    "from": "29-graphql-yoga",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-graphql",
+    "attrs": {
+      "version": "^16.8.0"
+    }
+  },
+  {
+    "from": "29-graphql-yoga",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "29-graphql-yoga",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "29-graphql-yoga",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "29-graphql-yoga",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "29-graphql-yoga",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "29-graphql-yoga",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "29-graphql-yoga",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
   },
   {
     "from": "29-strawberry",
@@ -4830,6 +9750,78 @@
     "attrs": {}
   },
   {
+    "from": "29-strawberry",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-strawberry-graphql",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "29-strawberry",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-fastapi",
+    "attrs": {
+      "version": "==0.111.0"
+    }
+  },
+  {
+    "from": "29-strawberry",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-uvicorn",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "29-strawberry",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-structlog",
+    "attrs": {
+      "version": "==24.4.0"
+    }
+  },
+  {
+    "from": "29-strawberry",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-prometheus-client",
+    "attrs": {
+      "version": "==0.21.0"
+    }
+  },
+  {
+    "from": "29-strawberry",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-slowapi",
+    "attrs": {
+      "version": "==0.1.9"
+    }
+  },
+  {
+    "from": "29-strawberry",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-sdk",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "29-strawberry",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-exporter-otlp",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "29-strawberry",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-instrumentation-fastapi",
+    "attrs": {
+      "version": "==0.48b0"
+    }
+  },
+  {
     "from": "29-gqlgen",
     "type": "IN_CATEGORY",
     "to": "c29",
@@ -4886,6 +9878,190 @@
     "attrs": {}
   },
   {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-golang-jwt-jwt-v5",
+    "attrs": {
+      "version": "v5.3.1"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-google-uuid",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-golang",
+    "attrs": {
+      "version": "v1.20.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-postgres",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-gorm",
+    "attrs": {
+      "version": "v1.31.1"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-beorn7-perks",
+    "attrs": {
+      "version": "v1.0.1"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-cespare-xxhash-v2",
+    "attrs": {
+      "version": "v2.3.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgpassfile",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgservicefile",
+    "attrs": {
+      "version": "v0.0.0-20240606120523-5a60cdf6a761"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgx-v5",
+    "attrs": {
+      "version": "v5.6.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-puddle-v2",
+    "attrs": {
+      "version": "v2.2.2"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-inflection",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-now",
+    "attrs": {
+      "version": "v1.1.5"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-klauspost-compress",
+    "attrs": {
+      "version": "v1.17.9"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-munnerz-goautoneg",
+    "attrs": {
+      "version": "v0.0.0-20191010083416-a7dc8b61c822"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-model",
+    "attrs": {
+      "version": "v0.6.1"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-common",
+    "attrs": {
+      "version": "v0.55.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-procfs",
+    "attrs": {
+      "version": "v0.15.1"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-crypto",
+    "attrs": {
+      "version": "v0.31.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sync",
+    "attrs": {
+      "version": "v0.10.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sys",
+    "attrs": {
+      "version": "v0.28.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-text",
+    "attrs": {
+      "version": "v0.21.0"
+    }
+  },
+  {
+    "from": "29-gqlgen",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-protobuf",
+    "attrs": {
+      "version": "v1.34.2"
+    }
+  },
+  {
     "from": "29-spring-graphql",
     "type": "IN_CATEGORY",
     "to": "c29",
@@ -4940,6 +10116,30 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "29-spring-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-spring-boot-starter-parent",
+    "attrs": {
+      "version": "3.3.0"
+    }
+  },
+  {
+    "from": "29-spring-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-29-spring-graphql",
+    "attrs": {
+      "version": "1.0.0"
+    }
+  },
+  {
+    "from": "29-spring-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-logstash-logback-encoder",
+    "attrs": {
+      "version": "7.4"
+    }
   },
   {
     "from": "29-hot-chocolate",
@@ -5054,6 +10254,46 @@
     "attrs": {}
   },
   {
+    "from": "29-graphql-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-graphql",
+    "attrs": {
+      "version": "~> 2.3"
+    }
+  },
+  {
+    "from": "29-graphql-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rack",
+    "attrs": {
+      "version": "~> 3.0"
+    }
+  },
+  {
+    "from": "29-graphql-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-puma",
+    "attrs": {
+      "version": "~> 6.0"
+    }
+  },
+  {
+    "from": "29-graphql-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-logger",
+    "attrs": {
+      "version": "~> 1.6"
+    }
+  },
+  {
+    "from": "29-graphql-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-prometheus-client",
+    "attrs": {
+      "version": "~> 4.0"
+    }
+  },
+  {
     "from": "29-async-graphql",
     "type": "IN_CATEGORY",
     "to": "c29",
@@ -5108,6 +10348,70 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "29-async-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-async-graphql",
+    "attrs": {
+      "version": "7.0"
+    }
+  },
+  {
+    "from": "29-async-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-async-graphql-axum",
+    "attrs": {
+      "version": "7.0"
+    }
+  },
+  {
+    "from": "29-async-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-axum",
+    "attrs": {
+      "version": "0.7"
+    }
+  },
+  {
+    "from": "29-async-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tokio",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "29-async-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing",
+    "attrs": {
+      "version": "0.1"
+    }
+  },
+  {
+    "from": "29-async-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing-subscriber",
+    "attrs": {
+      "version": "0.3"
+    }
+  },
+  {
+    "from": "29-async-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-prometheus",
+    "attrs": {
+      "version": "0.13"
+    }
+  },
+  {
+    "from": "29-async-graphql",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-serde-json",
+    "attrs": {
+      "version": "1"
+    }
   },
   {
     "from": "30-ws-node",
@@ -5166,6 +10470,70 @@
     "attrs": {}
   },
   {
+    "from": "30-ws-node",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-ws",
+    "attrs": {
+      "version": "^8.17.0"
+    }
+  },
+  {
+    "from": "30-ws-node",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-pino",
+    "attrs": {
+      "version": "^9.0.0"
+    }
+  },
+  {
+    "from": "30-ws-node",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-prom-client",
+    "attrs": {
+      "version": "^15.0.0"
+    }
+  },
+  {
+    "from": "30-ws-node",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-sdk-node",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "30-ws-node",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-auto-instrumentations-node",
+    "attrs": {
+      "version": "^0.49.0"
+    }
+  },
+  {
+    "from": "30-ws-node",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-api",
+    "attrs": {
+      "version": "^1.9.0"
+    }
+  },
+  {
+    "from": "30-ws-node",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-opentelemetry-exporter-trace-otlp-http",
+    "attrs": {
+      "version": "^0.52.0"
+    }
+  },
+  {
+    "from": "30-ws-node",
+    "type": "DEPENDS_ON_LIB",
+    "to": "npm-express-rate-limit",
+    "attrs": {
+      "version": "^7.0.0"
+    }
+  },
+  {
     "from": "30-ws-go",
     "type": "IN_CATEGORY",
     "to": "c30",
@@ -5222,6 +10590,190 @@
     "attrs": {}
   },
   {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-golang-jwt-jwt-v5",
+    "attrs": {
+      "version": "v5.3.1"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-google-uuid",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-golang",
+    "attrs": {
+      "version": "v1.20.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-driver-postgres",
+    "attrs": {
+      "version": "v1.6.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-gorm-io-gorm",
+    "attrs": {
+      "version": "v1.31.1"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-beorn7-perks",
+    "attrs": {
+      "version": "v1.0.1"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-cespare-xxhash-v2",
+    "attrs": {
+      "version": "v2.3.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgpassfile",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgservicefile",
+    "attrs": {
+      "version": "v0.0.0-20240606120523-5a60cdf6a761"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-pgx-v5",
+    "attrs": {
+      "version": "v5.6.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jackc-puddle-v2",
+    "attrs": {
+      "version": "v2.2.2"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-inflection",
+    "attrs": {
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-jinzhu-now",
+    "attrs": {
+      "version": "v1.1.5"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-klauspost-compress",
+    "attrs": {
+      "version": "v1.17.9"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-munnerz-goautoneg",
+    "attrs": {
+      "version": "v0.0.0-20191010083416-a7dc8b61c822"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-client-model",
+    "attrs": {
+      "version": "v0.6.1"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-common",
+    "attrs": {
+      "version": "v0.55.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-github-com-prometheus-procfs",
+    "attrs": {
+      "version": "v0.15.1"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-crypto",
+    "attrs": {
+      "version": "v0.31.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sync",
+    "attrs": {
+      "version": "v0.10.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-sys",
+    "attrs": {
+      "version": "v0.28.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-golang-org-x-text",
+    "attrs": {
+      "version": "v0.21.0"
+    }
+  },
+  {
+    "from": "30-ws-go",
+    "type": "DEPENDS_ON_LIB",
+    "to": "go-google-golang-org-protobuf",
+    "attrs": {
+      "version": "v1.34.2"
+    }
+  },
+  {
     "from": "30-ws-python",
     "type": "IN_CATEGORY",
     "to": "c30",
@@ -5270,6 +10822,78 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "30-ws-python",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-websockets",
+    "attrs": {
+      "version": "==12.0"
+    }
+  },
+  {
+    "from": "30-ws-python",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-fastapi",
+    "attrs": {
+      "version": "==0.111.0"
+    }
+  },
+  {
+    "from": "30-ws-python",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-uvicorn",
+    "attrs": {
+      "version": ""
+    }
+  },
+  {
+    "from": "30-ws-python",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-structlog",
+    "attrs": {
+      "version": "==24.4.0"
+    }
+  },
+  {
+    "from": "30-ws-python",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-prometheus-client",
+    "attrs": {
+      "version": "==0.21.0"
+    }
+  },
+  {
+    "from": "30-ws-python",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-slowapi",
+    "attrs": {
+      "version": "==0.1.9"
+    }
+  },
+  {
+    "from": "30-ws-python",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-sdk",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "30-ws-python",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-exporter-otlp",
+    "attrs": {
+      "version": "==1.27.0"
+    }
+  },
+  {
+    "from": "30-ws-python",
+    "type": "DEPENDS_ON_LIB",
+    "to": "pip-opentelemetry-instrumentation-fastapi",
+    "attrs": {
+      "version": "==0.48b0"
+    }
   },
   {
     "from": "30-ws-java",
@@ -5326,6 +10950,46 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "30-ws-java",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-30-ws-java",
+    "attrs": {
+      "version": "1.0.0"
+    }
+  },
+  {
+    "from": "30-ws-java",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-java-websocket",
+    "attrs": {
+      "version": "1.5.6"
+    }
+  },
+  {
+    "from": "30-ws-java",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-logstash-logback-encoder",
+    "attrs": {
+      "version": "7.4"
+    }
+  },
+  {
+    "from": "30-ws-java",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-logback-classic",
+    "attrs": {
+      "version": "1.5.6"
+    }
+  },
+  {
+    "from": "30-ws-java",
+    "type": "DEPENDS_ON_LIB",
+    "to": "maven-micrometer-registry-prometheus",
+    "attrs": {
+      "version": "1.13.0"
+    }
   },
   {
     "from": "30-ws-elixir",
@@ -5434,6 +11098,62 @@
     "attrs": {}
   },
   {
+    "from": "30-ws-rust",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-axum",
+    "attrs": {
+      "version": "0.7"
+    }
+  },
+  {
+    "from": "30-ws-rust",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tokio",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
+    "from": "30-ws-rust",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tokio-tungstenite",
+    "attrs": {
+      "version": "0.23"
+    }
+  },
+  {
+    "from": "30-ws-rust",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing",
+    "attrs": {
+      "version": "0.1"
+    }
+  },
+  {
+    "from": "30-ws-rust",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-tracing-subscriber",
+    "attrs": {
+      "version": "0.3"
+    }
+  },
+  {
+    "from": "30-ws-rust",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-prometheus",
+    "attrs": {
+      "version": "0.13"
+    }
+  },
+  {
+    "from": "30-ws-rust",
+    "type": "DEPENDS_ON_LIB",
+    "to": "cargo-serde-json",
+    "attrs": {
+      "version": "1"
+    }
+  },
+  {
     "from": "30-ws-dotnet",
     "type": "IN_CATEGORY",
     "to": "c30",
@@ -5538,6 +11258,46 @@
     "type": "DEPLOYS_TO",
     "to": "openshift",
     "attrs": {}
+  },
+  {
+    "from": "30-ws-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-faye-websocket",
+    "attrs": {
+      "version": "~> 0.11"
+    }
+  },
+  {
+    "from": "30-ws-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-puma",
+    "attrs": {
+      "version": "~> 6.0"
+    }
+  },
+  {
+    "from": "30-ws-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-rack",
+    "attrs": {
+      "version": "~> 3.0"
+    }
+  },
+  {
+    "from": "30-ws-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-logger",
+    "attrs": {
+      "version": "~> 1.6"
+    }
+  },
+  {
+    "from": "30-ws-ruby",
+    "type": "DEPENDS_ON_LIB",
+    "to": "gem-prometheus-client",
+    "attrs": {
+      "version": "~> 4.0"
+    }
   },
   {
     "from": "01-nextjs",

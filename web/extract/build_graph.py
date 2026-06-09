@@ -127,6 +127,12 @@ def main():
         edges.append({"from": frm, "type": typ, "to": to, "attrs": attrs or {}})
 
     # merge shipped into frameworks (join by serviceSlug)
+    libs_by_service = {}
+    p_libs = os.path.join(N, "_libsByService.json")
+    if os.path.exists(p_libs):
+        libs_by_service = json.load(open(p_libs))
+    libraries = load("libraries")
+    lib_ids = ids(libraries)
     merged_shipped = 0
     for f in frameworks:
         svc = f.get("serviceSlug") or f.get("id")
@@ -134,6 +140,8 @@ def main():
         if sh:
             f["shipped"] = sh
             merged_shipped += 1
+        if svc in libs_by_service:
+            f.setdefault("shipped", {})["libraries"] = libs_by_service[svc]
     # write frameworks back with shipped merged
     json.dump(frameworks, open(os.path.join(N, "frameworks.json"), "w"), indent=2)
 
@@ -170,6 +178,15 @@ def main():
         # deploy to all clusters (cluster-agnostic services)
         for c in clusters:
             edge(fid, "DEPLOYS_TO", c["id"])
+        # real library dependencies (direct only, capped for edge volume)
+        svc = f.get("serviceSlug") or fid
+        for lib in (libs_by_service.get(svc, []) or []):
+            if not lib.get("direct"):
+                continue
+            import re as _re
+            lid = _re.sub(r"[^a-z0-9]+", "-", f"{lib['ecosystem']}-{lib['name']}".lower()).strip("-")
+            if lid in lib_ids:
+                edge(fid, "DEPENDS_ON_LIB", lid, {"version": lib.get("version")})
 
     # framework -> pipeline stages (the real per-framework difference)
     fw_stage_edges = 0
@@ -261,7 +278,7 @@ def main():
     for arr in [frameworks, categories, devices, languages, phases, stages, tools,
                 build_axes, images, comp_list, industries, verticals, regions,
                 clusters, cluster_components, gitops_tools, invariants, versions,
-                load("integrations"), load("apiGateways")]:
+                load("integrations"), load("apiGateways"), libraries]:
         all_ids |= ids(arr)
     dangling = [e for e in edges if e["from"] not in all_ids or e["to"] not in all_ids]
 
@@ -300,6 +317,7 @@ def main():
         "ormOptions": load("ormOptions"), "observabilityOptions": load("observabilityOptions"),
         "invariants": invariants, "versions": versions, "conceptNotes": load("conceptNotes"),
         "integrations": load("integrations"), "apiGateways": load("apiGateways"),
+        "libraries": libraries,
     }
     bundle = {"nodes": node_bundle, "edges": edges, "pipelines": fw_pipelines, "manifest": manifest}
     json.dump(bundle, open(os.path.join(ROOT, "web", "graph.json"), "w"))
