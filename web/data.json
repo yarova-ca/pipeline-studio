@@ -1,0 +1,3425 @@
+{
+  "meta": {
+    "region": "CA",
+    "generated": "B1",
+    "frameworkCount": 105
+  },
+  "categories": [
+    {
+      "id": "01-ssr",
+      "name": "SSR frameworks"
+    },
+    {
+      "id": "02-spa",
+      "name": "SPA frameworks"
+    },
+    {
+      "id": "03-ssg",
+      "name": "Static site generation"
+    },
+    {
+      "id": "04-islands",
+      "name": "Islands"
+    },
+    {
+      "id": "05-resumable",
+      "name": "Resumable"
+    },
+    {
+      "id": "06-edge",
+      "name": "Edge"
+    },
+    {
+      "id": "07-react-patterns",
+      "name": "React patterns"
+    },
+    {
+      "id": "08-micro-frontends",
+      "name": "Micro-frontends"
+    },
+    {
+      "id": "09-mobile",
+      "name": "Mobile"
+    },
+    {
+      "id": "10-cross-platform",
+      "name": "Cross-platform"
+    },
+    {
+      "id": "11-native-ios",
+      "name": "Native iOS"
+    },
+    {
+      "id": "12-native-android",
+      "name": "Native Android"
+    },
+    {
+      "id": "13-pwa",
+      "name": "PWA"
+    },
+    {
+      "id": "14-nodejs",
+      "name": "Node.js"
+    },
+    {
+      "id": "15-python",
+      "name": "Python"
+    },
+    {
+      "id": "16-go",
+      "name": "Go"
+    },
+    {
+      "id": "17-java",
+      "name": "Java"
+    },
+    {
+      "id": "18-kotlin",
+      "name": "Kotlin"
+    },
+    {
+      "id": "19-dotnet",
+      "name": ".NET"
+    },
+    {
+      "id": "20-rust",
+      "name": "Rust"
+    },
+    {
+      "id": "21-elixir",
+      "name": "Elixir"
+    },
+    {
+      "id": "22-ruby",
+      "name": "Ruby"
+    },
+    {
+      "id": "23-php",
+      "name": "PHP"
+    },
+    {
+      "id": "24-swift",
+      "name": "Swift"
+    },
+    {
+      "id": "25-scala",
+      "name": "Scala"
+    },
+    {
+      "id": "26-clojure",
+      "name": "Clojure"
+    },
+    {
+      "id": "27-cpp",
+      "name": "C++"
+    },
+    {
+      "id": "28-grpc",
+      "name": "gRPC"
+    },
+    {
+      "id": "29-graphql",
+      "name": "GraphQL"
+    },
+    {
+      "id": "30-websocket",
+      "name": "WebSocket"
+    }
+  ],
+  "frameworks": [
+    {
+      "id": "01-angular-ssr",
+      "name": "Angular SSR",
+      "categoryId": "01-ssr",
+      "category": "SSR frameworks",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "4000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/01-angular-ssr",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/01-angular-ssr"
+    },
+    {
+      "id": "01-nextjs",
+      "name": "Next.js",
+      "categoryId": "01-ssr",
+      "category": "SSR frameworks",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/01-nextjs",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/01-nextjs"
+    },
+    {
+      "id": "01-nuxt",
+      "name": "Nuxt 3",
+      "categoryId": "01-ssr",
+      "category": "SSR frameworks",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/01-nuxt",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/01-nuxt"
+    },
+    {
+      "id": "01-remix",
+      "name": "Remix",
+      "categoryId": "01-ssr",
+      "category": "SSR frameworks",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/01-remix",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/01-remix"
+    },
+    {
+      "id": "01-solid-start",
+      "name": "SolidStart",
+      "categoryId": "01-ssr",
+      "category": "SSR frameworks",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/01-solid-start",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/01-solid-start"
+    },
+    {
+      "id": "01-sveltekit",
+      "name": "SvelteKit",
+      "categoryId": "01-ssr",
+      "category": "SSR frameworks",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/01-sveltekit",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/01-sveltekit"
+    },
+    {
+      "id": "02-angular",
+      "name": "Angular",
+      "categoryId": "02-spa",
+      "category": "SPA frameworks",
+      "language": "typescript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa"
+      ],
+      "repo": "https://github.com/yarova-ca/02-angular",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/02-angular"
+    },
+    {
+      "id": "02-lit",
+      "name": "Lit",
+      "categoryId": "02-spa",
+      "category": "SPA frameworks",
+      "language": "javascript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "node",
+        "spa",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/02-lit",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/02-lit"
+    },
+    {
+      "id": "02-preact",
+      "name": "Preact",
+      "categoryId": "02-spa",
+      "category": "SPA frameworks",
+      "language": "javascript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "node",
+        "spa",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/02-preact",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/02-preact"
+    },
+    {
+      "id": "02-react",
+      "name": "React",
+      "categoryId": "02-spa",
+      "category": "SPA frameworks",
+      "language": "typescript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa"
+      ],
+      "repo": "https://github.com/yarova-ca/02-react",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/02-react"
+    },
+    {
+      "id": "02-solidjs",
+      "name": "SolidJS",
+      "categoryId": "02-spa",
+      "category": "SPA frameworks",
+      "language": "typescript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa"
+      ],
+      "repo": "https://github.com/yarova-ca/02-solidjs",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/02-solidjs"
+    },
+    {
+      "id": "02-svelte",
+      "name": "Svelte",
+      "categoryId": "02-spa",
+      "category": "SPA frameworks",
+      "language": "typescript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa"
+      ],
+      "repo": "https://github.com/yarova-ca/02-svelte",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/02-svelte"
+    },
+    {
+      "id": "02-vue",
+      "name": "Vue 3",
+      "categoryId": "02-spa",
+      "category": "SPA frameworks",
+      "language": "typescript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa"
+      ],
+      "repo": "https://github.com/yarova-ca/02-vue",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/02-vue"
+    },
+    {
+      "id": "03-astro",
+      "name": "Astro (static)",
+      "categoryId": "03-ssg",
+      "category": "Static site generation",
+      "language": "typescript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa"
+      ],
+      "repo": "https://github.com/yarova-ca/03-astro",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/03-astro"
+    },
+    {
+      "id": "03-eleventy",
+      "name": "Eleventy",
+      "categoryId": "03-ssg",
+      "category": "Static site generation",
+      "language": "javascript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "node",
+        "spa",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/03-eleventy",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/03-eleventy"
+    },
+    {
+      "id": "03-gatsby",
+      "name": "Gatsby",
+      "categoryId": "03-ssg",
+      "category": "Static site generation",
+      "language": "javascript",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "node",
+        "spa",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/03-gatsby",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/03-gatsby"
+    },
+    {
+      "id": "03-hugo",
+      "name": "Hugo",
+      "categoryId": "03-ssg",
+      "category": "Static site generation",
+      "language": "go",
+      "pattern": "spa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "go",
+        "golang",
+        "spa",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/03-hugo",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/03-hugo"
+    },
+    {
+      "id": "04-astro",
+      "name": "Astro (islands)",
+      "categoryId": "04-islands",
+      "category": "Islands",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa"
+      ],
+      "repo": "https://github.com/yarova-ca/04-astro",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/04-astro"
+    },
+    {
+      "id": "04-fresh",
+      "name": "Fresh (Deno)",
+      "categoryId": "04-islands",
+      "category": "Islands",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "8000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa"
+      ],
+      "repo": "https://github.com/yarova-ca/04-fresh",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/04-fresh"
+    },
+    {
+      "id": "05-qwik",
+      "name": "Qwik",
+      "categoryId": "05-resumable",
+      "category": "Resumable",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa"
+      ],
+      "repo": "https://github.com/yarova-ca/05-qwik",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/05-qwik"
+    },
+    {
+      "id": "06-hono-edge",
+      "name": "Hono (Edge)",
+      "categoryId": "06-edge",
+      "category": "Edge",
+      "language": "typescript",
+      "pattern": "edge",
+      "port": "8787",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge"
+      ],
+      "repo": "https://github.com/yarova-ca/06-hono-edge",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/06-hono-edge"
+    },
+    {
+      "id": "06-nextjs-edge",
+      "name": "Next.js Edge",
+      "categoryId": "06-edge",
+      "category": "Edge",
+      "language": "typescript",
+      "pattern": "edge",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge"
+      ],
+      "repo": "https://github.com/yarova-ca/06-nextjs-edge",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/06-nextjs-edge"
+    },
+    {
+      "id": "06-remix-cloudflare",
+      "name": "Remix Cloudflare",
+      "categoryId": "06-edge",
+      "category": "Edge",
+      "language": "typescript",
+      "pattern": "edge",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge"
+      ],
+      "repo": "https://github.com/yarova-ca/06-remix-cloudflare",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/06-remix-cloudflare"
+    },
+    {
+      "id": "07-nextjs-app-router",
+      "name": "Next.js App Router",
+      "categoryId": "07-react-patterns",
+      "category": "React patterns",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge"
+      ],
+      "repo": "https://github.com/yarova-ca/07-nextjs-app-router",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/07-nextjs-app-router"
+    },
+    {
+      "id": "07-remix",
+      "name": "Remix (advanced)",
+      "categoryId": "07-react-patterns",
+      "category": "React patterns",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge"
+      ],
+      "repo": "https://github.com/yarova-ca/07-remix",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/07-remix"
+    },
+    {
+      "id": "07-sveltekit",
+      "name": "SvelteKit (advanced)",
+      "categoryId": "07-react-patterns",
+      "category": "React patterns",
+      "language": "typescript",
+      "pattern": "ssr",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge"
+      ],
+      "repo": "https://github.com/yarova-ca/07-sveltekit",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/07-sveltekit"
+    },
+    {
+      "id": "08-mf-rspack",
+      "name": "MF RSpack",
+      "categoryId": "08-micro-frontends",
+      "category": "Micro-frontends",
+      "language": "typescript",
+      "pattern": "mf",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf"
+      ],
+      "repo": "https://github.com/yarova-ca/08-mf-rspack",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/08-mf-rspack"
+    },
+    {
+      "id": "08-mf-webpack",
+      "name": "MF Webpack",
+      "categoryId": "08-micro-frontends",
+      "category": "Micro-frontends",
+      "language": "typescript",
+      "pattern": "mf",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf"
+      ],
+      "repo": "https://github.com/yarova-ca/08-mf-webpack",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/08-mf-webpack"
+    },
+    {
+      "id": "08-single-spa",
+      "name": "Single SPA",
+      "categoryId": "08-micro-frontends",
+      "category": "Micro-frontends",
+      "language": "typescript",
+      "pattern": "mf",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf"
+      ],
+      "repo": "https://github.com/yarova-ca/08-single-spa",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/08-single-spa"
+    },
+    {
+      "id": "09-expo",
+      "name": "Expo",
+      "categoryId": "09-mobile",
+      "category": "Mobile",
+      "language": "typescript",
+      "pattern": "mobile-rn",
+      "port": null,
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn"
+      ],
+      "repo": "https://github.com/yarova-ca/09-expo",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/09-expo"
+    },
+    {
+      "id": "09-ionic",
+      "name": "Ionic",
+      "categoryId": "09-mobile",
+      "category": "Mobile",
+      "language": "typescript",
+      "pattern": "mobile-rn",
+      "port": null,
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn"
+      ],
+      "repo": "https://github.com/yarova-ca/09-ionic",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/09-ionic"
+    },
+    {
+      "id": "09-react-native",
+      "name": "React Native",
+      "categoryId": "09-mobile",
+      "category": "Mobile",
+      "language": "typescript",
+      "pattern": "mobile-rn",
+      "port": null,
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn"
+      ],
+      "repo": "https://github.com/yarova-ca/09-react-native",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/09-react-native"
+    },
+    {
+      "id": "10-dotnet-maui",
+      "name": ".NET MAUI",
+      "categoryId": "10-cross-platform",
+      "category": "Cross-platform",
+      "language": "csharp",
+      "pattern": "mobile-cross",
+      "port": null,
+      "tier": 2,
+      "tags": [
+        "csharp",
+        "dotnet",
+        "mobile-cross",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/10-dotnet-maui",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/10-dotnet-maui"
+    },
+    {
+      "id": "10-flutter",
+      "name": "Flutter",
+      "categoryId": "10-cross-platform",
+      "category": "Cross-platform",
+      "language": "dart",
+      "pattern": "mobile-cross",
+      "port": null,
+      "tier": 1,
+      "tags": [
+        "dart",
+        "flutter",
+        "mobile-cross",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/10-flutter",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/10-flutter"
+    },
+    {
+      "id": "10-kmp",
+      "name": "Kotlin Multiplatform",
+      "categoryId": "10-cross-platform",
+      "category": "Cross-platform",
+      "language": "kotlin",
+      "pattern": "mobile-cross",
+      "port": null,
+      "tier": 2,
+      "tags": [
+        "kotlin",
+        "jvm",
+        "mobile-cross",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/10-kmp",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/10-kmp"
+    },
+    {
+      "id": "11-objc-uikit",
+      "name": "ObjC UIKit",
+      "categoryId": "11-native-ios",
+      "category": "Native iOS",
+      "language": "objc",
+      "pattern": "mobile-ios",
+      "port": null,
+      "tier": 2,
+      "tags": [
+        "objc",
+        "ios",
+        "mobile-ios",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/11-objc-uikit",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/11-objc-uikit"
+    },
+    {
+      "id": "11-swift-swiftui",
+      "name": "SwiftUI",
+      "categoryId": "11-native-ios",
+      "category": "Native iOS",
+      "language": "swift",
+      "pattern": "mobile-ios",
+      "port": null,
+      "tier": 1,
+      "tags": [
+        "swift",
+        "mobile-ios",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/11-swift-swiftui",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/11-swift-swiftui"
+    },
+    {
+      "id": "12-java-android",
+      "name": "Java Android",
+      "categoryId": "12-native-android",
+      "category": "Native Android",
+      "language": "java",
+      "pattern": "mobile-android",
+      "port": null,
+      "tier": 2,
+      "tags": [
+        "java",
+        "jvm",
+        "mobile-android",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/12-java-android",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/12-java-android"
+    },
+    {
+      "id": "12-kotlin-jetpack",
+      "name": "Kotlin Jetpack",
+      "categoryId": "12-native-android",
+      "category": "Native Android",
+      "language": "kotlin",
+      "pattern": "mobile-android",
+      "port": null,
+      "tier": 1,
+      "tags": [
+        "kotlin",
+        "jvm",
+        "mobile-cross",
+        "tier-2",
+        "mobile-android",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/12-kotlin-jetpack",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/12-kotlin-jetpack"
+    },
+    {
+      "id": "13-vite-pwa",
+      "name": "Vite PWA",
+      "categoryId": "13-pwa",
+      "category": "PWA",
+      "language": "typescript",
+      "pattern": "pwa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa"
+      ],
+      "repo": "https://github.com/yarova-ca/13-vite-pwa",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/13-vite-pwa"
+    },
+    {
+      "id": "13-workbox",
+      "name": "Workbox PWA",
+      "categoryId": "13-pwa",
+      "category": "PWA",
+      "language": "javascript",
+      "pattern": "pwa",
+      "port": "80",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "node",
+        "spa",
+        "tier-2",
+        "pwa"
+      ],
+      "repo": "https://github.com/yarova-ca/13-workbox",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/13-workbox"
+    },
+    {
+      "id": "14-bun",
+      "name": "Bun",
+      "categoryId": "14-nodejs",
+      "category": "Node.js",
+      "language": "typescript",
+      "pattern": "backend",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/14-bun",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/14-bun"
+    },
+    {
+      "id": "14-deno",
+      "name": "Deno / Oak",
+      "categoryId": "14-nodejs",
+      "category": "Node.js",
+      "language": "typescript",
+      "pattern": "backend",
+      "port": "8000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/14-deno",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/14-deno"
+    },
+    {
+      "id": "14-elysia",
+      "name": "Elysia",
+      "categoryId": "14-nodejs",
+      "category": "Node.js",
+      "language": "typescript",
+      "pattern": "backend",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/14-elysia",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/14-elysia"
+    },
+    {
+      "id": "14-express",
+      "name": "Express 5",
+      "categoryId": "14-nodejs",
+      "category": "Node.js",
+      "language": "typescript",
+      "pattern": "backend",
+      "port": "3000",
+      "tier": "1",
+      "tags": [
+        "javascript",
+        "typescript",
+        "nodejs",
+        "express",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/14-express",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/14-express"
+    },
+    {
+      "id": "14-fastify",
+      "name": "Fastify",
+      "categoryId": "14-nodejs",
+      "category": "Node.js",
+      "language": "typescript",
+      "pattern": "backend",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/14-fastify",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/14-fastify"
+    },
+    {
+      "id": "14-hono",
+      "name": "Hono",
+      "categoryId": "14-nodejs",
+      "category": "Node.js",
+      "language": "typescript",
+      "pattern": "backend",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/14-hono",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/14-hono"
+    },
+    {
+      "id": "14-nestjs",
+      "name": "NestJS",
+      "categoryId": "14-nodejs",
+      "category": "Node.js",
+      "language": "typescript",
+      "pattern": "backend",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/14-nestjs",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/14-nestjs"
+    },
+    {
+      "id": "15-django",
+      "name": "Django",
+      "categoryId": "15-python",
+      "category": "Python",
+      "language": "python",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 1,
+      "tags": [
+        "python",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/15-django",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/15-django"
+    },
+    {
+      "id": "15-fastapi",
+      "name": "FastAPI",
+      "categoryId": "15-python",
+      "category": "Python",
+      "language": "python",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": "1",
+      "tags": [
+        "python",
+        "fastapi",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/15-fastapi",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/15-fastapi"
+    },
+    {
+      "id": "15-flask",
+      "name": "Flask",
+      "categoryId": "15-python",
+      "category": "Python",
+      "language": "python",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "python",
+        "backend",
+        "tier-1",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/15-flask",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/15-flask"
+    },
+    {
+      "id": "15-starlette",
+      "name": "Starlette",
+      "categoryId": "15-python",
+      "category": "Python",
+      "language": "python",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "python",
+        "backend",
+        "tier-1",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/15-starlette",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/15-starlette"
+    },
+    {
+      "id": "16-chi",
+      "name": "Chi",
+      "categoryId": "16-go",
+      "category": "Go",
+      "language": "go",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "go",
+        "golang",
+        "spa",
+        "tier-2",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/16-chi",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/16-chi"
+    },
+    {
+      "id": "16-echo",
+      "name": "Echo",
+      "categoryId": "16-go",
+      "category": "Go",
+      "language": "go",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 1,
+      "tags": [
+        "go",
+        "golang",
+        "spa",
+        "tier-2",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/16-echo",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/16-echo"
+    },
+    {
+      "id": "16-fiber",
+      "name": "Fiber",
+      "categoryId": "16-go",
+      "category": "Go",
+      "language": "go",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "go",
+        "golang",
+        "spa",
+        "tier-2",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/16-fiber",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/16-fiber"
+    },
+    {
+      "id": "16-gin",
+      "name": "Gin",
+      "categoryId": "16-go",
+      "category": "Go",
+      "language": "go",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": "1",
+      "tags": [
+        "go",
+        "golang",
+        "gin",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/16-gin",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/16-gin"
+    },
+    {
+      "id": "17-micronaut",
+      "name": "Micronaut",
+      "categoryId": "17-java",
+      "category": "Java",
+      "language": "java",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "java",
+        "jvm",
+        "mobile-android",
+        "tier-2",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/17-micronaut",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/17-micronaut"
+    },
+    {
+      "id": "17-quarkus",
+      "name": "Quarkus",
+      "categoryId": "17-java",
+      "category": "Java",
+      "language": "java",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "java",
+        "jvm",
+        "mobile-android",
+        "tier-2",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/17-quarkus",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/17-quarkus"
+    },
+    {
+      "id": "17-spring-boot",
+      "name": "Spring Boot",
+      "categoryId": "17-java",
+      "category": "Java",
+      "language": "java",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 1,
+      "tags": [
+        "java",
+        "jvm",
+        "mobile-android",
+        "tier-2",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/17-spring-boot",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/17-spring-boot"
+    },
+    {
+      "id": "18-ktor",
+      "name": "Ktor",
+      "categoryId": "18-kotlin",
+      "category": "Kotlin",
+      "language": "kotlin",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 1,
+      "tags": [
+        "kotlin",
+        "jvm",
+        "mobile-cross",
+        "tier-2",
+        "mobile-android",
+        "tier-1",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/18-ktor",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/18-ktor"
+    },
+    {
+      "id": "18-spring-boot-kotlin",
+      "name": "Spring Boot Kotlin",
+      "categoryId": "18-kotlin",
+      "category": "Kotlin",
+      "language": "kotlin",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "kotlin",
+        "jvm",
+        "mobile-cross",
+        "tier-2",
+        "mobile-android",
+        "tier-1",
+        "backend"
+      ],
+      "repo": "https://github.com/yarova-ca/18-spring-boot-kotlin",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/18-spring-boot-kotlin"
+    },
+    {
+      "id": "19-aspnet-core",
+      "name": "ASP.NET Core",
+      "categoryId": "19-dotnet",
+      "category": ".NET",
+      "language": "csharp",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 1,
+      "tags": [
+        "csharp",
+        "dotnet",
+        "mobile-cross",
+        "tier-2",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/19-aspnet-core",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/19-aspnet-core"
+    },
+    {
+      "id": "19-minimal-apis",
+      "name": ".NET Minimal APIs",
+      "categoryId": "19-dotnet",
+      "category": ".NET",
+      "language": "csharp",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 1,
+      "tags": [
+        "csharp",
+        "dotnet",
+        "mobile-cross",
+        "tier-2",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/19-minimal-apis",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/19-minimal-apis"
+    },
+    {
+      "id": "20-actix-web",
+      "name": "Actix Web",
+      "categoryId": "20-rust",
+      "category": "Rust",
+      "language": "rust",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 1,
+      "tags": [
+        "rust",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/20-actix-web",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/20-actix-web"
+    },
+    {
+      "id": "20-axum",
+      "name": "Axum",
+      "categoryId": "20-rust",
+      "category": "Rust",
+      "language": "rust",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 1,
+      "tags": [
+        "rust",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/20-axum",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/20-axum"
+    },
+    {
+      "id": "21-phoenix",
+      "name": "Phoenix",
+      "categoryId": "21-elixir",
+      "category": "Elixir",
+      "language": "elixir",
+      "pattern": "backend",
+      "port": "4000",
+      "tier": 1,
+      "tags": [
+        "elixir",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/21-phoenix",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/21-phoenix"
+    },
+    {
+      "id": "22-rails",
+      "name": "Rails",
+      "categoryId": "22-ruby",
+      "category": "Ruby",
+      "language": "ruby",
+      "pattern": "backend",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "ruby",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/22-rails",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/22-rails"
+    },
+    {
+      "id": "22-sinatra",
+      "name": "Sinatra",
+      "categoryId": "22-ruby",
+      "category": "Ruby",
+      "language": "ruby",
+      "pattern": "backend",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "ruby",
+        "backend",
+        "tier-1",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/22-sinatra",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/22-sinatra"
+    },
+    {
+      "id": "23-laravel",
+      "name": "Laravel",
+      "categoryId": "23-php",
+      "category": "PHP",
+      "language": "php",
+      "pattern": "backend",
+      "port": "9000",
+      "tier": 1,
+      "tags": [
+        "php",
+        "backend",
+        "tier-1"
+      ],
+      "repo": "https://github.com/yarova-ca/23-laravel",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/23-laravel"
+    },
+    {
+      "id": "23-slim",
+      "name": "Slim",
+      "categoryId": "23-php",
+      "category": "PHP",
+      "language": "php",
+      "pattern": "backend",
+      "port": "9000",
+      "tier": 2,
+      "tags": [
+        "php",
+        "backend",
+        "tier-1",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/23-slim",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/23-slim"
+    },
+    {
+      "id": "23-symfony",
+      "name": "Symfony",
+      "categoryId": "23-php",
+      "category": "PHP",
+      "language": "php",
+      "pattern": "backend",
+      "port": "9000",
+      "tier": 1,
+      "tags": [
+        "php",
+        "backend",
+        "tier-1",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/23-symfony",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/23-symfony"
+    },
+    {
+      "id": "24-hummingbird",
+      "name": "Hummingbird",
+      "categoryId": "24-swift",
+      "category": "Swift",
+      "language": "swift",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "swift",
+        "mobile-ios",
+        "tier-1",
+        "backend",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/24-hummingbird",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/24-hummingbird"
+    },
+    {
+      "id": "24-vapor",
+      "name": "Vapor",
+      "categoryId": "24-swift",
+      "category": "Swift",
+      "language": "swift",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "swift",
+        "mobile-ios",
+        "tier-1",
+        "backend",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/24-vapor",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/24-vapor"
+    },
+    {
+      "id": "25-http4s",
+      "name": "http4s",
+      "categoryId": "25-scala",
+      "category": "Scala",
+      "language": "scala",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "scala",
+        "jvm",
+        "backend",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/25-http4s",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/25-http4s"
+    },
+    {
+      "id": "25-play",
+      "name": "Play Framework",
+      "categoryId": "25-scala",
+      "category": "Scala",
+      "language": "scala",
+      "pattern": "backend",
+      "port": "9000",
+      "tier": 2,
+      "tags": [
+        "scala",
+        "jvm",
+        "backend",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/25-play",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/25-play"
+    },
+    {
+      "id": "26-pedestal",
+      "name": "Pedestal",
+      "categoryId": "26-clojure",
+      "category": "Clojure",
+      "language": "clojure",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "clojure",
+        "jvm",
+        "backend",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/26-pedestal",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/26-pedestal"
+    },
+    {
+      "id": "26-ring",
+      "name": "Ring",
+      "categoryId": "26-clojure",
+      "category": "Clojure",
+      "language": "clojure",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "clojure",
+        "jvm",
+        "backend",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/26-ring",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/26-ring"
+    },
+    {
+      "id": "27-crow",
+      "name": "Crow",
+      "categoryId": "27-cpp",
+      "category": "C++",
+      "language": "cpp",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "cpp",
+        "c++",
+        "backend",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/27-crow",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/27-crow"
+    },
+    {
+      "id": "27-drogon",
+      "name": "Drogon",
+      "categoryId": "27-cpp",
+      "category": "C++",
+      "language": "cpp",
+      "pattern": "backend",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "cpp",
+        "c++",
+        "backend",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/27-drogon",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/27-drogon"
+    },
+    {
+      "id": "28-dotnet-grpc",
+      "name": ".NET gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "csharp",
+      "pattern": "grpc",
+      "port": "5000",
+      "tier": 1,
+      "tags": [
+        "csharp",
+        "dotnet",
+        "mobile-cross",
+        "tier-2",
+        "backend",
+        "tier-1",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-dotnet-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-dotnet-grpc"
+    },
+    {
+      "id": "28-go-grpc",
+      "name": "Go gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "go",
+      "pattern": "grpc",
+      "port": "50051",
+      "tier": 1,
+      "tags": [
+        "go",
+        "golang",
+        "spa",
+        "tier-2",
+        "backend",
+        "tier-1",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-go-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-go-grpc"
+    },
+    {
+      "id": "28-java-grpc",
+      "name": "Java gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "java",
+      "pattern": "grpc",
+      "port": "50051",
+      "tier": 1,
+      "tags": [
+        "java",
+        "jvm",
+        "mobile-android",
+        "tier-2",
+        "backend",
+        "tier-1",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-java-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-java-grpc"
+    },
+    {
+      "id": "28-kotlin-grpc",
+      "name": "Kotlin gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "kotlin",
+      "pattern": "grpc",
+      "port": "50051",
+      "tier": 2,
+      "tags": [
+        "kotlin",
+        "jvm",
+        "mobile-cross",
+        "tier-2",
+        "mobile-android",
+        "tier-1",
+        "backend",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-kotlin-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-kotlin-grpc"
+    },
+    {
+      "id": "28-node-grpc",
+      "name": "Node gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "typescript",
+      "pattern": "grpc",
+      "port": "50051",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-node-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-node-grpc"
+    },
+    {
+      "id": "28-php-grpc",
+      "name": "PHP gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "php",
+      "pattern": "grpc",
+      "port": "50051",
+      "tier": 2,
+      "tags": [
+        "php",
+        "backend",
+        "tier-1",
+        "tier-2",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-php-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-php-grpc"
+    },
+    {
+      "id": "28-python-grpc",
+      "name": "Python gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "python",
+      "pattern": "grpc",
+      "port": "50051",
+      "tier": 1,
+      "tags": [
+        "python",
+        "backend",
+        "tier-1",
+        "tier-2",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-python-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-python-grpc"
+    },
+    {
+      "id": "28-ruby-grpc",
+      "name": "Ruby gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "ruby",
+      "pattern": "grpc",
+      "port": "50051",
+      "tier": 2,
+      "tags": [
+        "ruby",
+        "backend",
+        "tier-1",
+        "tier-2",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-ruby-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-ruby-grpc"
+    },
+    {
+      "id": "28-rust-grpc",
+      "name": "Rust gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "rust",
+      "pattern": "grpc",
+      "port": "50051",
+      "tier": 1,
+      "tags": [
+        "rust",
+        "backend",
+        "tier-1",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-rust-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-rust-grpc"
+    },
+    {
+      "id": "28-swift-grpc",
+      "name": "Swift gRPC",
+      "categoryId": "28-grpc",
+      "category": "gRPC",
+      "language": "swift",
+      "pattern": "grpc",
+      "port": "50051",
+      "tier": 2,
+      "tags": [
+        "swift",
+        "mobile-ios",
+        "tier-1",
+        "backend",
+        "tier-2",
+        "grpc"
+      ],
+      "repo": "https://github.com/yarova-ca/28-swift-grpc",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/28-swift-grpc"
+    },
+    {
+      "id": "29-apollo",
+      "name": "Apollo GraphQL",
+      "categoryId": "29-graphql",
+      "category": "GraphQL",
+      "language": "typescript",
+      "pattern": "graphql",
+      "port": "4000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend",
+        "grpc",
+        "graphql"
+      ],
+      "repo": "https://github.com/yarova-ca/29-apollo",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/29-apollo"
+    },
+    {
+      "id": "29-async-graphql",
+      "name": "Async-GraphQL (Rust)",
+      "categoryId": "29-graphql",
+      "category": "GraphQL",
+      "language": "rust",
+      "pattern": "graphql",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "rust",
+        "backend",
+        "tier-1",
+        "grpc",
+        "graphql",
+        "tier-2"
+      ],
+      "repo": "https://github.com/yarova-ca/29-async-graphql",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/29-async-graphql"
+    },
+    {
+      "id": "29-gqlgen",
+      "name": "gqlgen (Go)",
+      "categoryId": "29-graphql",
+      "category": "GraphQL",
+      "language": "go",
+      "pattern": "graphql",
+      "port": "8080",
+      "tier": 1,
+      "tags": [
+        "go",
+        "golang",
+        "spa",
+        "tier-2",
+        "backend",
+        "tier-1",
+        "grpc",
+        "graphql"
+      ],
+      "repo": "https://github.com/yarova-ca/29-gqlgen",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/29-gqlgen"
+    },
+    {
+      "id": "29-graphql-ruby",
+      "name": "GraphQL Ruby",
+      "categoryId": "29-graphql",
+      "category": "GraphQL",
+      "language": "ruby",
+      "pattern": "graphql",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "ruby",
+        "backend",
+        "tier-1",
+        "tier-2",
+        "grpc",
+        "graphql"
+      ],
+      "repo": "https://github.com/yarova-ca/29-graphql-ruby",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/29-graphql-ruby"
+    },
+    {
+      "id": "29-graphql-yoga",
+      "name": "GraphQL Yoga",
+      "categoryId": "29-graphql",
+      "category": "GraphQL",
+      "language": "typescript",
+      "pattern": "graphql",
+      "port": "4000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend",
+        "grpc",
+        "graphql"
+      ],
+      "repo": "https://github.com/yarova-ca/29-graphql-yoga",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/29-graphql-yoga"
+    },
+    {
+      "id": "29-hot-chocolate",
+      "name": "Hot Chocolate (.NET)",
+      "categoryId": "29-graphql",
+      "category": "GraphQL",
+      "language": "csharp",
+      "pattern": "graphql",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "csharp",
+        "dotnet",
+        "mobile-cross",
+        "tier-2",
+        "backend",
+        "tier-1",
+        "grpc",
+        "graphql"
+      ],
+      "repo": "https://github.com/yarova-ca/29-hot-chocolate",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/29-hot-chocolate"
+    },
+    {
+      "id": "29-spring-graphql",
+      "name": "Spring GraphQL",
+      "categoryId": "29-graphql",
+      "category": "GraphQL",
+      "language": "java",
+      "pattern": "graphql",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "java",
+        "jvm",
+        "mobile-android",
+        "tier-2",
+        "backend",
+        "tier-1",
+        "grpc",
+        "graphql"
+      ],
+      "repo": "https://github.com/yarova-ca/29-spring-graphql",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/29-spring-graphql"
+    },
+    {
+      "id": "29-strawberry",
+      "name": "Strawberry (Python)",
+      "categoryId": "29-graphql",
+      "category": "GraphQL",
+      "language": "python",
+      "pattern": "graphql",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "python",
+        "backend",
+        "tier-1",
+        "tier-2",
+        "grpc",
+        "graphql"
+      ],
+      "repo": "https://github.com/yarova-ca/29-strawberry",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/29-strawberry"
+    },
+    {
+      "id": "30-ws-dotnet",
+      "name": "SignalR (.NET)",
+      "categoryId": "30-websocket",
+      "category": "WebSocket",
+      "language": "csharp",
+      "pattern": "websocket",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "csharp",
+        "dotnet",
+        "mobile-cross",
+        "tier-2",
+        "backend",
+        "tier-1",
+        "grpc",
+        "graphql",
+        "websocket"
+      ],
+      "repo": "https://github.com/yarova-ca/30-ws-dotnet",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/30-ws-dotnet"
+    },
+    {
+      "id": "30-ws-elixir",
+      "name": "Phoenix Channels",
+      "categoryId": "30-websocket",
+      "category": "WebSocket",
+      "language": "elixir",
+      "pattern": "websocket",
+      "port": "4000",
+      "tier": 1,
+      "tags": [
+        "elixir",
+        "backend",
+        "tier-1",
+        "websocket"
+      ],
+      "repo": "https://github.com/yarova-ca/30-ws-elixir",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/30-ws-elixir"
+    },
+    {
+      "id": "30-ws-go",
+      "name": "Gorilla WS (Go)",
+      "categoryId": "30-websocket",
+      "category": "WebSocket",
+      "language": "go",
+      "pattern": "websocket",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "go",
+        "golang",
+        "spa",
+        "tier-2",
+        "backend",
+        "tier-1",
+        "grpc",
+        "graphql",
+        "websocket"
+      ],
+      "repo": "https://github.com/yarova-ca/30-ws-go",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/30-ws-go"
+    },
+    {
+      "id": "30-ws-java",
+      "name": "Spring WebSocket",
+      "categoryId": "30-websocket",
+      "category": "WebSocket",
+      "language": "java",
+      "pattern": "websocket",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "java",
+        "jvm",
+        "mobile-android",
+        "tier-2",
+        "backend",
+        "tier-1",
+        "grpc",
+        "graphql",
+        "websocket"
+      ],
+      "repo": "https://github.com/yarova-ca/30-ws-java",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/30-ws-java"
+    },
+    {
+      "id": "30-ws-node",
+      "name": "ws (Node)",
+      "categoryId": "30-websocket",
+      "category": "WebSocket",
+      "language": "typescript",
+      "pattern": "websocket",
+      "port": "3000",
+      "tier": 1,
+      "tags": [
+        "javascript",
+        "typescript",
+        "node",
+        "ssr",
+        "tier-2",
+        "tier-1",
+        "spa",
+        "edge",
+        "mf",
+        "mobile-rn",
+        "pwa",
+        "backend",
+        "grpc",
+        "graphql",
+        "websocket"
+      ],
+      "repo": "https://github.com/yarova-ca/30-ws-node",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/30-ws-node"
+    },
+    {
+      "id": "30-ws-python",
+      "name": "FastAPI WS",
+      "categoryId": "30-websocket",
+      "category": "WebSocket",
+      "language": "python",
+      "pattern": "websocket",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "python",
+        "backend",
+        "tier-1",
+        "tier-2",
+        "grpc",
+        "graphql",
+        "websocket"
+      ],
+      "repo": "https://github.com/yarova-ca/30-ws-python",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/30-ws-python"
+    },
+    {
+      "id": "30-ws-ruby",
+      "name": "Action Cable",
+      "categoryId": "30-websocket",
+      "category": "WebSocket",
+      "language": "ruby",
+      "pattern": "websocket",
+      "port": "3000",
+      "tier": 2,
+      "tags": [
+        "ruby",
+        "backend",
+        "tier-1",
+        "tier-2",
+        "grpc",
+        "graphql",
+        "websocket"
+      ],
+      "repo": "https://github.com/yarova-ca/30-ws-ruby",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/30-ws-ruby"
+    },
+    {
+      "id": "30-ws-rust",
+      "name": "tokio-tungstenite",
+      "categoryId": "30-websocket",
+      "category": "WebSocket",
+      "language": "rust",
+      "pattern": "websocket",
+      "port": "8080",
+      "tier": 2,
+      "tags": [
+        "rust",
+        "backend",
+        "tier-1",
+        "grpc",
+        "graphql",
+        "tier-2",
+        "websocket"
+      ],
+      "repo": "https://github.com/yarova-ca/30-ws-rust",
+      "catalogRef": "https://backstage.yarova.ca/catalog/default/component/30-ws-rust"
+    }
+  ],
+  "buildAxes": [
+    {
+      "id": "BUILD_IMAGE",
+      "controls": "Builder + runtime base image",
+      "default": "node",
+      "values": [
+        "node",
+        "python",
+        "golang",
+        "java",
+        "dotnet",
+        "rust",
+        "elixir",
+        "ruby",
+        "php"
+      ],
+      "appliesTo": "all"
+    },
+    {
+      "id": "RUNTIME",
+      "controls": "Runtime base flavour",
+      "default": "alpine",
+      "values": [
+        "alpine",
+        "slim",
+        "fips"
+      ],
+      "appliesTo": "all"
+    },
+    {
+      "id": "PKG_MGR",
+      "controls": "Package manager + lockfile",
+      "default": "npm / pip",
+      "values": [
+        "npm",
+        "pnpm",
+        "yarn",
+        "bun",
+        "pip",
+        "poetry",
+        "uv"
+      ],
+      "appliesTo": "node, python"
+    },
+    {
+      "id": "BUILD_TOOL",
+      "controls": "TS compiler / bundler",
+      "default": "tsc",
+      "values": [
+        "tsc",
+        "esbuild",
+        "swc"
+      ],
+      "appliesTo": "node backends"
+    },
+    {
+      "id": "COMPLIANCE",
+      "controls": "Compliance profile baked in",
+      "default": "standard",
+      "values": [
+        "standard",
+        "hipaa",
+        "pci",
+        "pipeda",
+        "fips",
+        "soc2",
+        "cmmc",
+        "nerc"
+      ],
+      "appliesTo": "all API services"
+    },
+    {
+      "id": "OBSERVABILITY",
+      "controls": "Telemetry stack",
+      "default": "none",
+      "values": [
+        "none",
+        "otel",
+        "prometheus",
+        "datadog"
+      ],
+      "appliesTo": "all API services"
+    },
+    {
+      "id": "AUTH",
+      "controls": "Auth scheme",
+      "default": "all",
+      "values": [
+        "none",
+        "jwt",
+        "oauth2",
+        "apikey",
+        "all"
+      ],
+      "appliesTo": "all API services"
+    },
+    {
+      "id": "ORM",
+      "controls": "Database access layer",
+      "default": "prisma / sqlalchemy / gorm",
+      "values": [
+        "prisma",
+        "typeorm",
+        "drizzle",
+        "sqlalchemy",
+        "tortoise",
+        "gorm",
+        "none"
+      ],
+      "appliesTo": "all API services"
+    }
+  ],
+  "pipeline": [
+    {
+      "phase": 0,
+      "name": "Bootstrap",
+      "stages": [
+        "Branch protection",
+        "CODEOWNERS",
+        "OIDC trust",
+        "Registry access",
+        "Kyverno admission policy",
+        "Dependency update automation"
+      ]
+    },
+    {
+      "phase": 1,
+      "name": "Local Dev",
+      "stages": [
+        "IDE plugins",
+        "Pre-commit hooks"
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "PR Gate",
+      "stages": [
+        "Pre-commit (CI)",
+        "SCA",
+        "SAST",
+        "License scan",
+        "IaC scan",
+        "Secrets scan",
+        "CodeQL",
+        "Build on PR"
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Main Build",
+      "stages": [
+        "Build + push image",
+        "SBOM (syft)",
+        "Container scan (trivy)",
+        "Cosign sign",
+        "Test suite",
+        "Release",
+        "Notify"
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Registry",
+      "stages": [
+        "GHCR push",
+        "Tag latest + sha",
+        "Provenance"
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "Promotions",
+      "stages": [
+        "Promote dev to test",
+        "Promote test to staging",
+        "Promote staging to prod",
+        "Re-verify signatures"
+      ]
+    }
+  ],
+  "compliance": {
+    "standard": {
+      "label": "Standard",
+      "region": [
+        "all"
+      ],
+      "forces": {},
+      "runtime": "alpine"
+    },
+    "hipaa": {
+      "label": "HIPAA",
+      "region": [
+        "US",
+        "CA"
+      ],
+      "runtime": "fips",
+      "forces": {
+        "OBSERVABILITY": "audit logging",
+        "AUTH": "oauth2",
+        "data": "encryption at rest + in transit"
+      }
+    },
+    "pipeda": {
+      "label": "PIPEDA",
+      "region": [
+        "CA"
+      ],
+      "runtime": "alpine",
+      "forces": {
+        "data": "Canadian data residency",
+        "OBSERVABILITY": "access logging"
+      }
+    },
+    "pci": {
+      "label": "PCI-DSS",
+      "region": [
+        "all"
+      ],
+      "runtime": "fips",
+      "forces": {
+        "AUTH": "oauth2 + mfa",
+        "OBSERVABILITY": "audit logging",
+        "data": "tokenization"
+      }
+    },
+    "soc2": {
+      "label": "SOC 2",
+      "region": [
+        "all"
+      ],
+      "runtime": "alpine",
+      "forces": {
+        "OBSERVABILITY": "otel + audit trail",
+        "AUTH": "oauth2"
+      }
+    },
+    "fips": {
+      "label": "FIPS 140-3",
+      "region": [
+        "US",
+        "CA"
+      ],
+      "runtime": "fips",
+      "forces": {
+        "RUNTIME": "fips",
+        "crypto": "FIPS OpenSSL module"
+      }
+    },
+    "cmmc": {
+      "label": "CMMC",
+      "region": [
+        "US"
+      ],
+      "runtime": "fips",
+      "forces": {
+        "RUNTIME": "fips",
+        "AUTH": "oauth2 + mfa",
+        "OBSERVABILITY": "audit logging"
+      }
+    },
+    "nerc": {
+      "label": "NERC CIP",
+      "region": [
+        "US",
+        "CA"
+      ],
+      "runtime": "fips",
+      "forces": {
+        "OBSERVABILITY": "audit logging",
+        "AUTH": "oauth2 + mfa",
+        "network": "segmentation"
+      }
+    }
+  },
+  "clusters": [
+    {
+      "id": "aks",
+      "name": "Azure AKS",
+      "provider": "Microsoft",
+      "gitops": [
+        "argo",
+        "helm",
+        "kustomize"
+      ]
+    },
+    {
+      "id": "eks",
+      "name": "AWS EKS",
+      "provider": "Amazon",
+      "gitops": [
+        "argo",
+        "helm",
+        "kustomize"
+      ]
+    },
+    {
+      "id": "gke",
+      "name": "Google GKE",
+      "provider": "Google",
+      "gitops": [
+        "argo",
+        "helm",
+        "kustomize"
+      ]
+    },
+    {
+      "id": "openshift",
+      "name": "Red Hat OpenShift",
+      "provider": "Red Hat",
+      "gitops": [
+        "argo",
+        "helm",
+        "kustomize"
+      ]
+    }
+  ],
+  "verticals": [
+    "Financial Services",
+    "Healthcare",
+    "Government",
+    "Defense & Security",
+    "Energy & Resources",
+    "Technology",
+    "Telecom & Media",
+    "Retail & Commerce",
+    "Manufacturing",
+    "Transport & Logistics",
+    "Education",
+    "Real Estate & Construction",
+    "Agriculture",
+    "Professional Services",
+    "Nonprofit & Public Good"
+  ],
+  "industries": [
+    {
+      "id": "retail-banking",
+      "name": "Retail Banking",
+      "vertical": "Financial Services",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "investment-banking-capital-markets",
+      "name": "Investment Banking & Capital Markets",
+      "vertical": "Financial Services",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "insurance",
+      "name": "Insurance",
+      "vertical": "Financial Services",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "wealth-asset-management",
+      "name": "Wealth & Asset Management",
+      "vertical": "Financial Services",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "fintech-payments",
+      "name": "Fintech & Payments",
+      "vertical": "Financial Services",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "credit-unions-caisses",
+      "name": "Credit Unions & Caisses",
+      "vertical": "Financial Services",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "mortgage-real-estate-finance",
+      "name": "Mortgage & Real Estate Finance",
+      "vertical": "Financial Services",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "accounting-tax-technology",
+      "name": "Accounting & Tax Technology",
+      "vertical": "Financial Services",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "hospital-health-systems-it",
+      "name": "Hospital & Health Systems IT",
+      "vertical": "Healthcare",
+      "region": "CA",
+      "compliance": [
+        "hipaa",
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "digital-health-health-it",
+      "name": "Digital Health & Health IT",
+      "vertical": "Healthcare",
+      "region": "CA",
+      "compliance": [
+        "hipaa",
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "pharmaceutical-manufacturing",
+      "name": "Pharmaceutical Manufacturing",
+      "vertical": "Healthcare",
+      "region": "CA",
+      "compliance": [
+        "hipaa",
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "medical-devices-diagnostics",
+      "name": "Medical Devices & Diagnostics",
+      "vertical": "Healthcare",
+      "region": "CA",
+      "compliance": [
+        "hipaa",
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "biotechnology-genomics",
+      "name": "Biotechnology & Genomics",
+      "vertical": "Healthcare",
+      "region": "CA",
+      "compliance": [
+        "hipaa",
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "mental-health-teletherapy",
+      "name": "Mental Health & Teletherapy",
+      "vertical": "Healthcare",
+      "region": "CA",
+      "compliance": [
+        "hipaa",
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "long-term-care-home-health",
+      "name": "Long-Term Care & Home Health",
+      "vertical": "Healthcare",
+      "region": "CA",
+      "compliance": [
+        "hipaa",
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "clinical-research-trials",
+      "name": "Clinical Research & Trials",
+      "vertical": "Healthcare",
+      "region": "CA",
+      "compliance": [
+        "hipaa",
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "federal-government-it",
+      "name": "Federal Government IT",
+      "vertical": "Government",
+      "region": "CA",
+      "compliance": [
+        "pipeda",
+        "soc2",
+        "fips"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "provincial-government-it",
+      "name": "Provincial Government IT",
+      "vertical": "Government",
+      "region": "CA",
+      "compliance": [
+        "pipeda",
+        "soc2",
+        "fips"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "municipal-government-smart-cities",
+      "name": "Municipal Government & Smart Cities",
+      "vertical": "Government",
+      "region": "CA",
+      "compliance": [
+        "pipeda",
+        "soc2",
+        "fips"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "crown-corporations",
+      "name": "Crown Corporations",
+      "vertical": "Government",
+      "region": "CA",
+      "compliance": [
+        "pipeda",
+        "soc2",
+        "fips"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "indigenous-governments-services",
+      "name": "Indigenous Governments & Services",
+      "vertical": "Government",
+      "region": "CA",
+      "compliance": [
+        "pipeda",
+        "soc2",
+        "fips"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "public-safety-emergency-services",
+      "name": "Public Safety & Emergency Services",
+      "vertical": "Government",
+      "region": "CA",
+      "compliance": [
+        "pipeda",
+        "soc2",
+        "fips"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "defense-systems-dnd-caf",
+      "name": "Defense Systems (DND/CAF)",
+      "vertical": "Defense & Security",
+      "region": "CA",
+      "compliance": [
+        "cmmc",
+        "fips",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "border-security-cbsa",
+      "name": "Border Security & CBSA",
+      "vertical": "Defense & Security",
+      "region": "CA",
+      "compliance": [
+        "cmmc",
+        "fips",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "aerospace-defense-manufacturing",
+      "name": "Aerospace & Defense Manufacturing",
+      "vertical": "Defense & Security",
+      "region": "CA",
+      "compliance": [
+        "cmmc",
+        "fips",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "cybersecurity-products-services",
+      "name": "Cybersecurity Products & Services",
+      "vertical": "Defense & Security",
+      "region": "CA",
+      "compliance": [
+        "cmmc",
+        "fips",
+        "soc2"
+      ],
+      "cluster": "openshift"
+    },
+    {
+      "id": "oil-gas-upstream",
+      "name": "Oil & Gas Upstream",
+      "vertical": "Energy & Resources",
+      "region": "CA",
+      "compliance": [
+        "nerc",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "utilities-power-grid",
+      "name": "Utilities & Power Grid",
+      "vertical": "Energy & Resources",
+      "region": "CA",
+      "compliance": [
+        "nerc",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "renewable-energy",
+      "name": "Renewable Energy",
+      "vertical": "Energy & Resources",
+      "region": "CA",
+      "compliance": [
+        "nerc",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "mining-resources-technology",
+      "name": "Mining & Resources Technology",
+      "vertical": "Energy & Resources",
+      "region": "CA",
+      "compliance": [
+        "nerc",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "clean-technology-carbon-markets",
+      "name": "Clean Technology & Carbon Markets",
+      "vertical": "Energy & Resources",
+      "region": "CA",
+      "compliance": [
+        "nerc",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "enterprise-software-saas",
+      "name": "Enterprise Software & SaaS",
+      "vertical": "Technology",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "ai-ml-platforms",
+      "name": "AI & ML Platforms",
+      "vertical": "Technology",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "cloud-infrastructure-devops",
+      "name": "Cloud Infrastructure & DevOps",
+      "vertical": "Technology",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "cybersecurity-products",
+      "name": "Cybersecurity Products",
+      "vertical": "Technology",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "developer-tools-open-source",
+      "name": "Developer Tools & Open Source",
+      "vertical": "Technology",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "wireless-mobile-networks",
+      "name": "Wireless & Mobile Networks",
+      "vertical": "Telecom & Media",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "broadband-internet-services",
+      "name": "Broadband & Internet Services",
+      "vertical": "Telecom & Media",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "broadcast-media-streaming",
+      "name": "Broadcast Media & Streaming",
+      "vertical": "Telecom & Media",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "satellite-space-technology",
+      "name": "Satellite & Space Technology",
+      "vertical": "Telecom & Media",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "video-games-interactive",
+      "name": "Video Games & Interactive",
+      "vertical": "Telecom & Media",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "film-tv-production-technology",
+      "name": "Film & TV Production Technology",
+      "vertical": "Telecom & Media",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "digital-media-publishing",
+      "name": "Digital Media & Publishing",
+      "vertical": "Telecom & Media",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "e-commerce-online-retail",
+      "name": "E-commerce & Online Retail",
+      "vertical": "Retail & Commerce",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "eks"
+    },
+    {
+      "id": "grocery-consumer-goods",
+      "name": "Grocery & Consumer Goods",
+      "vertical": "Retail & Commerce",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "eks"
+    },
+    {
+      "id": "omnichannel-retail-pos-systems",
+      "name": "Omnichannel Retail & POS Systems",
+      "vertical": "Retail & Commerce",
+      "region": "CA",
+      "compliance": [
+        "pci",
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "eks"
+    },
+    {
+      "id": "automotive-ev-manufacturing",
+      "name": "Automotive & EV Manufacturing",
+      "vertical": "Manufacturing",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "aerospace-manufacturing",
+      "name": "Aerospace Manufacturing",
+      "vertical": "Manufacturing",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "industrial-automation-robotics",
+      "name": "Industrial Automation & Robotics",
+      "vertical": "Manufacturing",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "food-beverage-manufacturing-tech",
+      "name": "Food & Beverage Manufacturing Tech",
+      "vertical": "Manufacturing",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "air-transport-airports",
+      "name": "Air Transport & Airports",
+      "vertical": "Transport & Logistics",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "rail-transit",
+      "name": "Rail & Transit",
+      "vertical": "Transport & Logistics",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "trucking-freight-technology",
+      "name": "Trucking & Freight Technology",
+      "vertical": "Transport & Logistics",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "port-marine-technology",
+      "name": "Port & Marine Technology",
+      "vertical": "Transport & Logistics",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "supply-chain-3pl-technology",
+      "name": "Supply Chain & 3PL Technology",
+      "vertical": "Transport & Logistics",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "edtech-online-learning",
+      "name": "EdTech & Online Learning",
+      "vertical": "Education",
+      "region": "CA",
+      "compliance": [
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "higher-education-it",
+      "name": "Higher Education IT",
+      "vertical": "Education",
+      "region": "CA",
+      "compliance": [
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "k-12-education-technology",
+      "name": "K-12 Education Technology",
+      "vertical": "Education",
+      "region": "CA",
+      "compliance": [
+        "pipeda",
+        "soc2"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "commercial-real-estate-proptech",
+      "name": "Commercial Real Estate & PropTech",
+      "vertical": "Real Estate & Construction",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "residential-real-estate-technology",
+      "name": "Residential Real Estate Technology",
+      "vertical": "Real Estate & Construction",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "construction-technology-bim",
+      "name": "Construction Technology & BIM",
+      "vertical": "Real Estate & Construction",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "aks"
+    },
+    {
+      "id": "agritech-precision-agriculture",
+      "name": "AgriTech & Precision Agriculture",
+      "vertical": "Agriculture",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "food-processing-safety-technology",
+      "name": "Food Processing & Safety Technology",
+      "vertical": "Agriculture",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "farm-management-rural-technology",
+      "name": "Farm Management & Rural Technology",
+      "vertical": "Agriculture",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "legal-technology-law-firms",
+      "name": "Legal Technology & Law Firms",
+      "vertical": "Professional Services",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "eks"
+    },
+    {
+      "id": "hr-technology-staffing",
+      "name": "HR Technology & Staffing",
+      "vertical": "Professional Services",
+      "region": "CA",
+      "compliance": [
+        "soc2",
+        "pipeda"
+      ],
+      "cluster": "eks"
+    },
+    {
+      "id": "charities-foundations",
+      "name": "Charities & Foundations",
+      "vertical": "Nonprofit & Public Good",
+      "region": "CA",
+      "compliance": [
+        "pipeda"
+      ],
+      "cluster": "gke"
+    },
+    {
+      "id": "indigenous-services-ngos",
+      "name": "Indigenous Services & NGOs",
+      "vertical": "Nonprofit & Public Good",
+      "region": "CA",
+      "compliance": [
+        "pipeda"
+      ],
+      "cluster": "gke"
+    }
+  ],
+  "invariants": [
+    {
+      "id": "INV-01",
+      "rule": "COMPLIANCE=fips requires RUNTIME=fips",
+      "appliesTo": "all"
+    },
+    {
+      "id": "INV-02",
+      "rule": "Every main-build image is signed (cosign) before promotion",
+      "appliesTo": "all"
+    },
+    {
+      "id": "INV-03",
+      "rule": "Promotions re-verify signatures; they do not re-sign",
+      "appliesTo": "all"
+    },
+    {
+      "id": "INV-04",
+      "rule": "No image is promoted without SBOM + trivy scan",
+      "appliesTo": "all"
+    }
+  ]
+}
