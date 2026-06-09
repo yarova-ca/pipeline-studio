@@ -56,10 +56,10 @@ export function buildIndex(graph) {
 
   // image -> set of compliance ids it is rated for; compliance id -> rated images
   idx.imageRatedFor = {};
-  idx.imagesByCompliance = {};
+  idx.imagesByCompliance = {};       // cid -> [{id, rating}]
   for (const e of edges) if (e.type === "RATED_ON") {
     (idx.imageRatedFor[e.to] ||= new Set()).add(e.from);
-    (idx.imagesByCompliance[e.to] ||= []).push(e.from);
+    (idx.imagesByCompliance[e.to] ||= []).push({ id: e.from, rating: e.attrs?.rating });
   }
   // dockerfile template by framework key (byId is taken by the framework on id collision)
   idx.templateByFw = {};
@@ -84,6 +84,20 @@ const RATING_KEY = { fips: "FIPS", pci: "PCI-DSS", hipaa: "HIPAA", soc2: "SOC 2"
 const stripRef = (s) => String(s || "").replace(/^(url:|dir:)/, "");
 
 const cell = (value, state = "green", reason = "") => ({ value, state, reason });
+
+// pick the language-relevant part of a prose default like
+// "prisma (Node) / sqlalchemy (Python) / gorm (Go)"
+const LANG_WORD = { ts: "node", js: "node", py: "python", go: "go", rust: "rust",
+  java: "java", kotlin: "java", csharp: "dotnet", php: "php", ruby: "ruby", elixir: "elixir" };
+function langDefault(def, langId) {
+  if (!def || !String(def).includes("/")) return def;
+  const want = LANG_WORD[langId] || "";
+  for (const part of String(def).split("/")) {
+    const m = part.match(/^\s*([^(]+?)\s*\(([^)]+)\)/);
+    if (m && want && m[2].toLowerCase().includes(want)) return m[1].trim();
+  }
+  return String(def).split("/")[0].replace(/\(.*\)/, "").trim();
+}
 
 // requiredStandards: which compliance ids a lens demands, plus the raw regulatory text.
 function requiredStandards(idx, lens) {
@@ -122,7 +136,7 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
   const axes = {};
   for (const a of (idx.buildAxes || [])) {
     const key = a.id.toUpperCase().replace(/-/g, "_");
-    let value = baseAxes[key] != null ? baseAxes[key] : a.default;
+    let value = baseAxes[key] != null ? baseAxes[key] : langDefault(a.default, fw.languageId);
     let state = "green", reason = "";
     // a required standard that ships buildArgs forcing this axis
     for (const cid of reqStds) {
@@ -233,13 +247,14 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
   let baseImage = cell(tmpl?.runtimeFrom || "—", "green", "");
   for (const cid of reqStds) {
     const key = RATING_KEY[cid];
-    const rated = key && (idx.imagesByCompliance[cid] || []);
-    if (key && rated && rated.length) {
+    // ONLY images certified "Yes" for this standard qualify (Par/— do not)
+    const certified = key ? (idx.imagesByCompliance[cid] || []).filter((x) => /^yes$/i.test(String(x.rating).trim())) : [];
+    if (key && certified.length) {
       const cur = (tmpl?.runtimeFrom || "").toLowerCase();
-      const curRated = rated.some((iid) => cur.includes((idx.byId[iid]?.name || iid).split(/[ :]/)[0].toLowerCase()));
+      const curRated = certified.some((x) => cur.includes((idx.byId[x.id]?.name || x.id).split(/[ :]/)[0].toLowerCase()));
       if (!curRated) {
-        const suggest = idx.byId[rated[0]]?.name || rated[0];
-        baseImage = cell(suggest, "amber", `${cid.toUpperCase()} requires a rated base image — current ${tmpl?.runtimeFrom||'?'} is not ${key}-rated.`);
+        const suggest = idx.byId[certified[0].id]?.name || certified[0].id;
+        baseImage = cell(suggest, "amber", `${cid.toUpperCase()} requires a certified base image — current ${tmpl?.runtimeFrom||'?'} is not ${key}-certified.`);
       }
     }
   }
@@ -289,7 +304,10 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
       memory: fw.memory, concurrency: fw.concurrency, securityPosture: fw.securityPosture },
     lens: { industryId: lens.industryId || null, clusterId: clusterId,
       industry: lens.industryId ? (idx.byId[lens.industryId]?.name) : null,
-      requiredStandards: reqStds, regulatoryRequirements: rawReqs },
+      requiredStandards: reqStds, regulatoryRequirements: rawReqs,
+      guidance: lens.industryId ? (() => { const i = idx.byId[lens.industryId] || {};
+        return { dataSensitivity: i.dataSensitivity, regulators: i.regulators,
+          frameworkNotes: i.frameworkNotes, securityAuditRequirements: i.securityAuditRequirements }; })() : null },
     buildAxes: axes,
     compliance: complianceRows,
     pipeline, pipelineIsStandard, pipelineAdditions: pipelineAdds,
