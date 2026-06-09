@@ -49,6 +49,23 @@
   .cell.green{background:rgba(25,200,168,.13);color:var(--green)}
   .cell.amber{background:rgba(232,179,57,.15);color:var(--amber)}
   .cell.red{background:rgba(232,97,90,.15);color:var(--red)}
+  .cell::before{font-weight:700;margin-right:4px}
+  .cell.green::before{content:"\2713"}  /* ✓ */
+  .cell.amber::before{content:"\26A0"}  /* ⚠ */
+  .cell.red::before{content:"\2717"}    /* ✗ */
+  .badge{font-size:10px;border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:6px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,td.svc:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--lime);outline-offset:2px;border-radius:4px}
+  @media (max-width:760px){
+    header{padding:8px 12px}.lensbar{width:100%;margin-left:0}
+    .gridwrap{max-height:none;border:none}
+    table,tbody,tr,td{display:block;width:100%}
+    thead{display:none}
+    tbody tr{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;padding:6px 4px;background:var(--surface)}
+    td{border:none;padding:3px 10px;white-space:normal}
+    td::before{content:attr(data-label);color:var(--muted);font-size:10.5px;display:block;text-transform:uppercase;letter-spacing:.04em}
+    td.svc::before{content:""}
+    .kv{grid-template-columns:1fr}
+  }
   .pill{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:1px 8px;margin-right:4px}
   .tag{background:var(--surface2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;margin:0 4px 4px 0;display:inline-block;font-size:11.5px}
   .section{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
@@ -73,7 +90,7 @@
 </head>
 <body>
 <header>
-  <div class="brand" onclick="location.hash='#home'"><span class="ring"></span><b>pipeline studio</b></div>
+  <div class="brand" role="button" tabindex="0" aria-label="Home" onclick="location.hash='#home'" onkeydown="if(event.key==='Enter'){location.hash='#home'}"><span class="ring"></span><b>pipeline studio</b></div>
   <nav class="tabs" id="tabs">
     <button data-route="#map">Map</button>
     <button data-route="#guided">Guided</button>
@@ -83,14 +100,14 @@
     <button data-route="#home">Home</button>
   </nav>
   <div class="lensbar">
-    <input id="search" placeholder="search…" style="width:130px"/>
+    <input id="search" aria-label="Search the blueprint" placeholder="search…" style="width:130px"/>
     <span style="color:var(--muted);font-size:12px">Lens:</span>
-    <select id="lensIndustry"><option value="">Baseline</option></select>
-    <select id="lensCluster"><option value="">Cluster: all</option></select>
+    <select id="lensIndustry" aria-label="Industry lens"><option value="">Baseline</option></select>
+    <select id="lensCluster" aria-label="Cluster lens"><option value="">Cluster: all</option></select>
   </div>
 </header>
 <main id="app"><p class="sub">Loading blueprint…</p></main>
-<footer>Yarova · Pipeline Studio · Blueprint Navigator · one graph · real data · lenses on all.</footer>
+<footer>Yarova · Pipeline Studio · Blueprint Navigator · <span id="freshness"></span> · one graph · real data, traced to source.</footer>
 
 <script type="module">
 import { buildIndex, resolveBundle } from "./engine/resolve.mjs";
@@ -117,29 +134,53 @@ async function boot(){
     (IDX.industries||[]).filter(i=>i.verticalId===v.id).forEach(i=>{const o=document.createElement("option");o.value=i.id;o.textContent=i.name;og.appendChild(o);});
     if(og.children.length) li.appendChild(og);
   }
-  li.onchange=e=>{LENS.industryId=e.target.value;render();};
+  li.onchange=e=>{LENS.industryId=e.target.value;writeLens();};
   const lc=$("#lensCluster");
   (IDX.clusters||[]).forEach(cl=>{const o=document.createElement("option");o.value=cl.id;o.textContent="Cluster: "+(cl.name||cl.id);lc.appendChild(o);});
-  lc.onchange=e=>{LENS.clusterId=e.target.value;render();};
+  lc.onchange=e=>{LENS.clusterId=e.target.value;writeLens();};
   $("#search").oninput=e=>{ if(e.target.value.length>1){location.hash="#search/"+encodeURIComponent(e.target.value);} };
   $$("#tabs button").forEach(b=>b.onclick=()=>location.hash=b.dataset.route);
+  // freshness signal (trust)
+  const m=IDX.manifest||{};
+  const fr=$("#freshness"); if(fr) fr.textContent=`Blueprint v${m.schemaVersion||1} · ${(m.frameworkCount||(IDX.frameworks||[]).length)} frameworks`;
   window.addEventListener("hashchange",render);
-  render();
+  readLens(); render();
+}
+// lens persisted in the URL hash query — shareable links show the same data
+function curHash(){return location.hash.replace(/^#/,"");}
+function readLens(){
+  const q=curHash().split("?")[1]; if(!q) return;
+  const p=new URLSearchParams(q);
+  LENS.industryId=p.get("industry")||""; LENS.clusterId=p.get("cluster")||"";
+  const li=$("#lensIndustry"),lc=$("#lensCluster"); if(li)li.value=LENS.industryId; if(lc)lc.value=LENS.clusterId;
+}
+function writeLens(){
+  const base=curHash().split("?")[0]||"map";
+  const p=new URLSearchParams();
+  if(LENS.industryId)p.set("industry",LENS.industryId);
+  if(LENS.clusterId)p.set("cluster",LENS.clusterId);
+  const qs=p.toString();
+  location.hash="#"+base+(qs?("?"+qs):"");
 }
 
 function render(){
   if(!IDX) return;
-  const h=location.hash||"#home", app=$("#app");
-  $$("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.route==="#"+h.slice(1).split("/")[0]));
-  if(h.startsWith("#bundle/")) app.innerHTML=viewBundle(decodeURIComponent(h.split("/")[1]));
-  else if(h.startsWith("#search/")) app.innerHTML=viewSearch(decodeURIComponent(h.split("/")[1]));
-  else if(h.startsWith("#node/")) app.innerHTML=viewNode(decodeURIComponent(h.split("/")[1]));
-  else if(h==="#map") app.innerHTML=viewMap();
-  else if(h==="#guided") app.innerHTML=viewGuided();
-  else if(h==="#graph") app.innerHTML=viewGraph();
-  else if(h==="#coverage") app.innerHTML=viewCoverage();
-  else if(h==="#reference") app.innerHTML=viewReference();
+  readLens();
+  // preserve focus + caret across innerHTML rebuilds (fixes filter focus loss)
+  const ae=document.activeElement, aeId=ae&&ae.id, caret=ae&&ae.selectionStart;
+  const full=curHash(), route="#"+(full.split("?")[0]), arg=route.split("/")[1];
+  const app=$("#app");
+  $$("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.route==="#"+route.slice(1).split("/")[0]));
+  if(route.startsWith("#bundle/")) app.innerHTML=viewBundle(decodeURIComponent(arg));
+  else if(route.startsWith("#search/")) app.innerHTML=viewSearch(decodeURIComponent(arg));
+  else if(route.startsWith("#node/")) app.innerHTML=viewNode(decodeURIComponent(arg));
+  else if(route==="#map") app.innerHTML=viewMap();
+  else if(route==="#guided") app.innerHTML=viewGuided();
+  else if(route==="#graph") app.innerHTML=viewGraph();
+  else if(route==="#coverage") app.innerHTML=viewCoverage();
+  else if(route==="#reference") app.innerHTML=viewReference();
   else app.innerHTML=viewHome();
+  if(aeId){const el2=document.getElementById(aeId); if(el2){el2.focus(); if(caret!=null&&el2.setSelectionRange){try{el2.setSelectionRange(caret,caret);}catch(e){}}}}
 }
 
 function viewHome(){
@@ -183,10 +224,11 @@ function viewMap(){
   const langs=[...new Set(IDX.frameworks.map(f=>langName(f)))].sort();
   let rows=IDX.frameworks.filter(f=>(!mapFilter.category||catName(f)===mapFilter.category)&&(!mapFilter.language||langName(f)===mapFilter.language)&&(!mapFilter.q||(f.name||"").toLowerCase().includes(mapFilter.q.toLowerCase())||f.id.includes(mapFilter.q.toLowerCase())));
   rows.sort((a,b)=>((a[mapSort.col]>b[mapSort.col])?1:-1)*mapSort.dir);
+  const open=(id)=>`onclick="goBundle('${id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goBundle('${id}')}" role="button" tabindex="0"`;
   const body=rows.map(f=>{const x=fwRowCells(f);
-    return `<tr><td class="svc" onclick="location.hash='#bundle/${f.id}'">${esc(f.name)}</td>
-      <td>${esc(catName(f))}</td><td>${esc(langName(f))}</td><td>${esc(f.tier||"—")}</td>
-      <td>${c(x.comp)}</td><td>${c(x.runtime)}</td><td>${c(x.auth)}</td><td>${c(x.orm)}</td><td>${c(x.obs)}</td><td>${c(x.gaps)}</td></tr>`;}).join("");
+    return `<tr><td class="svc" ${open(f.id)}>${esc(f.name)}</td>
+      <td data-label="Category">${esc(catName(f))}</td><td data-label="Language">${esc(langName(f))}</td><td data-label="Tier">${esc(f.tier||"—")}</td>
+      <td data-label="Compliance">${c(x.comp)}</td><td data-label="Runtime">${c(x.runtime)}</td><td data-label="Auth">${c(x.auth)}</td><td data-label="ORM">${c(x.orm)}</td><td data-label="Observability">${c(x.obs)}</td><td data-label="Gaps">${c(x.gaps)}</td></tr>`;}).join("");
   const ind=LENS.industryId?IDX.byId[LENS.industryId]:null;
   const cov=ind?`Lens: ${esc(ind.name)} — required: ${(resolveBundle(IDX,rows[0]?.id,LENS).lens.requiredStandards||[]).join(", ")||"none mapped"}`:"Baseline — no industry lens";
   return `<h1>Map</h1>
@@ -194,7 +236,7 @@ function viewMap(){
   <div class="toolbar">
     <select onchange="setMF('category',this.value)"><option value="">All categories</option>${cats.map(x=>`<option ${x===mapFilter.category?'selected':''}>${esc(x)}</option>`).join("")}</select>
     <select onchange="setMF('language',this.value)"><option value="">All languages</option>${langs.map(x=>`<option ${x===mapFilter.language?'selected':''}>${esc(x)}</option>`).join("")}</select>
-    <input placeholder="filter…" value="${esc(mapFilter.q)}" oninput="setMF('q',this.value)" style="min-width:150px"/>
+    <input id="mapq" aria-label="Filter frameworks" placeholder="filter…" value="${esc(mapFilter.q)}" oninput="setMF('q',this.value)" style="min-width:150px"/>
     <span class="counter">${rows.length} of ${IDX.frameworks.length} · ${cov}</span>
   </div>
   <div class="gridwrap"><table><thead><tr>
@@ -204,6 +246,8 @@ function viewMap(){
 }
 window.setMF=(k,v)=>{mapFilter[k]=v;render();};
 window.sortMap=(col)=>{mapSort.dir=mapSort.col===col?-mapSort.dir:1;mapSort.col=col;render();};
+// keep the active lens on the URL when navigating to a bundle (shareable)
+window.goBundle=(id)=>{const p=new URLSearchParams();if(LENS.industryId)p.set("industry",LENS.industryId);if(LENS.clusterId)p.set("cluster",LENS.clusterId);const qs=p.toString();location.hash="#bundle/"+id+(qs?("?"+qs):"");};
 
 let guided={step:1,category:""};
 function viewGuided(){
@@ -221,14 +265,14 @@ function viewBundle(id){
   const b=resolveBundle(IDX,id,LENS);
   if(b.error) return `<div class="err">${esc(b.error)}</div>`;
   const f=b.framework, lens=b.lens;
-  const pipe=b.pipeline.map(p=>`<div style="margin-bottom:8px"><b>${esc(p.phase)}</b><br>${p.stages.map(s=>`<span class="tag" title="${esc(s.command||'')}">${esc(s.stage)}${s.tool?` · ${esc(s.tool)}`:''}</span>`).join("")}</div>`).join("")||'<span class="gap">⚠️ no pipeline rows for this framework</span>';
+  const pipe=b.pipeline.map(p=>`<div style="margin-bottom:8px"><b>${esc(p.phase)}</b><br>${p.stages.map(s=>`<span class="tag" title="${esc(s.command||'')}">${esc(s.stage)}${s.tool?` · ${esc(s.tool)}`:''}</span>`).join("")}</div>`).join("")||'<span class="sub">No pipeline data.</span>';
+  const pipeNote=b.pipelineIsStandard?'<p class="sub" style="margin:0 0 10px">Standard platform pipeline — this framework has no per-framework overrides.</p>':'';
   const comp=b.compliance.length?b.compliance.map(x=>x.ships
       ?`<div style="margin-bottom:8px"><span class="cell green">${esc(x.label)} — ships</span> <span class="pill">${esc((x.file||'').split('/').pop())}</span><br>${(x.requiredControls||[]).map(rc=>`<span class="tag">${esc(rc)}</span>`).join("")}${Object.keys(x.forcedBuildArgs||{}).length?`<div class="reason">forces ${Object.entries(x.forcedBuildArgs).map(([k,v])=>k+'='+v).join(', ')}</div>`:''}</div>`
-      :`<div style="margin-bottom:6px"><span class="cell red">${esc(x.label)} — ${esc(x.reason||'gap')}</span></div>`).join("")
-    :'<span class="sub">Pick an industry lens to see required regimes, or this framework has no required compliance at baseline.</span>';
-  const regs=(lens.regulatoryRequirements||[]).map(r=>`<span class="tag">${esc(r.text)}</span>`).join("");
-  const inv=b.invariants.length?b.invariants.map(i=>`<div>${c({value:i.id+" "+(i.rule||''),state:i.state,reason:i.reason})}</div>`).join(""):'<span class="sub">No FIPS-class invariant engaged by the current lens.</span>';
-  const axes=Object.entries(b.buildAxes).map(([k,v])=>kvRow(k,v)).join("");
+      :`<div style="margin-bottom:6px"><span class="cell red">${esc(x.label)}</span> <span class="reason">${esc(x.reason||'gap')}</span></div>`).join("")
+    :'<span class="sub">No required compliance at baseline. Pick an industry lens.</span>';
+  const inv=b.invariants.length?`<div class="kv">${b.invariants.map(i=>`<div class="k">${esc(i.id)} <span class="badge">${esc(i.controlClass||'')}</span></div><div>${c({value:i.rule||i.id,state:i.state,reason:i.reason})}</div>`).join("")}</div>`:'<span class="sub">No invariants.</span>';
+  const axes=Object.entries(b.buildAxes).map(([k,v])=>`<div class="k">${esc(k)}</div><div>${c(v)}<span class="badge">${esc(v.origin||'')}</span></div>`).join("");
   const drift=b.drift.length?b.drift.map(d=>`<div class="tag">${esc(d.axis)}: ships <b>${esc(d.shipped)}</b> vs blueprint default <b>${esc(d.blueprintDefault)}</b></div>`).join(""):'<span class="sub">No drift between shipped build args and blueprint defaults.</span>';
   const gaps=b.gaps.length?b.gaps.map(g=>`<div class="gap">⚠️ ${esc(g)}</div>`).join(""):'<span class="cell green">No gaps under the current lens.</span>';
   return `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px">
@@ -245,18 +289,18 @@ function viewBundle(id){
     <div class="k">Memory</div><div>${esc(f.memory||'—')}</div>
     <div class="k">Concurrency</div><div>${esc(f.concurrency||'—')}</div>
     <div class="k">Security posture</div><div>${esc(f.securityPosture||'—')}</div>
+    <div class="k">Source</div><div>${(f.sources||[]).map(s=>`<span class="badge">${esc(s)}</span>`).join("")||'<span class="sub">—</span>'}</div>
   </div></div></details>
 
   <details class="section"><summary>Compliance — required regimes (real shipped controls)</summary><div class="body">
-    <p class="sub" style="margin:0 0 10px">Rules this service must meet for the selected industry. Green = it ships them.</p>
-    ${regs?`<div style="margin-bottom:8px"><span class="sub">Regulatory requirements (from industry):</span><br>${regs}</div>`:''}
+    <p class="sub" style="margin:0 0 10px">Every rule the industry requires. Green = service ships it. Red = required but no control profile yet.</p>
     ${comp}</div></details>
 
   <details class="section"><summary>Build axes (per framework; lens forces shown amber)</summary><div class="body">
     <p class="sub" style="margin:0 0 10px">The Docker build knobs this service exposes. Amber = changed by the lens.</p><div class="kv">${axes}</div></div></details>
 
   <details class="section"><summary>CI pipeline — real per-framework stages + tools</summary><div class="body">
-    <p class="sub" style="margin:0 0 10px">The build/test/ship steps this service actually runs.</p>${pipe}
+    <p class="sub" style="margin:0 0 10px">The build/test/ship steps this service actually runs.</p>${pipeNote}${pipe}
     ${b.pipelineAdditions.length?`<div style="margin-top:10px"><span class="sub">Compliance pipeline additions:</span>${b.pipelineAdditions.map(a=>`<div class="reason">${esc(a.standard)}: ${Object.entries(a.phases).map(([k,v])=>k+' → '+v).join(' · ')}</div>`).join("")}</div>`:''}
   </div></details>
 
@@ -265,10 +309,11 @@ function viewBundle(id){
   </div></div></details>
 
   <details class="section"><summary>Libraries — real dependencies (${(b.libraries||[]).filter(l=>l.direct).length} direct)</summary><div class="body">
-    ${(b.libraries&&b.libraries.length)?b.libraries.filter(l=>l.direct).map(l=>`<span class="tag" title="${esc(l.ecosystem)}">${esc(l.name)}${l.version?` ${esc(l.version)}`:''}</span>`).join(""):'<span class="sub">No manifest libraries detected for this service.</span>'}
+    ${(b.libraries&&b.libraries.filter(l=>l.direct).length)?b.libraries.filter(l=>l.direct).map(l=>`<span class="tag" title="${esc(l.ecosystem)}">${esc(l.name)}${l.version?` ${esc(l.version)}`:''}</span>`).join(""):`<span class="sub">Client/compiled build — dependencies live in the repo manifest.${f.repo?` <a href="${esc(f.repo)}" target="_blank">View repo →</a>`:''}</span>`}
   </div></details>
 
-  <details class="section"><summary>Deploy · clusters · GitOps</summary><div class="body"><div class="kv">
+  <details class="section"><summary>Deploy · base image · clusters · GitOps</summary><div class="body"><div class="kv">
+    <div class="k">Recommended base image</div><div>${c(b.deploy.baseImage)}</div>
     <div class="k">Clusters</div><div>${b.deploy.clusters.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
     <div class="k">GitOps</div><div>${b.deploy.gitops.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
     <div class="k">Helm</div><div>${b.deploy.helm?'✅ ships helm chart':'—'}</div>
@@ -341,20 +386,28 @@ function viewNode(id){
 }
 
 function viewCoverage(){
-  const m=IDX.manifest||{};
-  // real per-dimension fill: % of frameworks that have a non-empty value
-  const fields=[["version","Version"],["maturity","Maturity"],["perf","Performance"],["memory","Memory"],["securityPosture","Security posture"],["concurrency","Concurrency"]];
   const fwc=IDX.frameworks.length;
-  const fillRows=fields.map(([f,label])=>{const n=IDX.frameworks.filter(x=>x[f]&&String(x[f]).trim()&&x[f]!=='—').length;const pct=Math.round(100*n/fwc);return `<tr><td>${label}</td><td>${n}/${fwc}</td><td><span class="bar"><i style="width:${pct}%"></i></span> ${pct}%</td></tr>`;}).join("");
-  const shippedPct=Math.round(100*IDX.frameworks.filter(x=>x.shipped&&(x.shipped.shippedCompliance||[]).length).length/fwc);
-  const helmPct=Math.round(100*IDX.frameworks.filter(x=>x.shipped&&x.shipped.helm).length/fwc);
-  return `<h1>Coverage &amp; gaps</h1><p class="sub">Real fill computed from the graph — not assumed.</p>
-   <div><span class="stat"><b>${m.edgeTotal||0}</b><span>edges</span></span>
-   <span class="stat"><b>${(m.merges&&m.merges.fwStageEdges)||0}</b><span>per-framework pipeline links</span></span>
-   <span class="stat"><b>${shippedPct}%</b><span>ship compliance configs</span></span>
-   <span class="stat"><b>${helmPct}%</b><span>ship helm chart</span></span></div>
-   <h2>Per-attribute fill</h2><div class="gridwrap"><table><thead><tr><th>Attribute</th><th>Filled</th><th>Coverage</th></tr></thead><tbody>${fillRows}</tbody></table></div>
-   <p class="sub" style="margin-top:14px">Per-framework compliance gaps appear on each Bundle under "Gaps".</p>`;
+  const usesStage=new Set(IDX.edges.filter(e=>e.type==='USES_STAGE').map(e=>e.from));
+  const withPipeline=IDX.frameworks.filter(f=>usesStage.has(f.id)).length;
+  const withLibs=IDX.frameworks.filter(f=>f.shipped&&(f.shipped.libraries||[]).length).length;
+  const withDetectedAxes=IDX.frameworks.filter(f=>f.shipped&&f.shipped.buildArgs&&Object.keys(f.shipped.buildArgs).length>2).length;
+  // industry compliance mapping reality
+  const stds=new Set((IDX.compliance||[]).map(c=>c.id));
+  const KEYS={pipeda:1,phipa:1,phia:1,hipaa:1,pci:1,"soc 2":1,soc2:1,fips:1,cmmc:1,nerc:1,"iso 27001":1,fedramp:1};
+  let totalReg=0,mappedReg=0;
+  for(const ind of (IDX.industries||[])) for(const r of (ind.mandatoryCompliance||[])){totalReg++;const t=String(r).toLowerCase();if(Object.keys(KEYS).some(k=>t.includes(k)))mappedReg++;}
+  const regPct=totalReg?Math.round(100*mappedReg/totalReg):0;
+  const row=(label,n,d)=>{const pct=Math.round(100*n/d);return `<tr><td>${label}</td><td>${n}/${d}</td><td><span class="bar"><i style="width:${pct}%"></i></span> ${pct}%</td></tr>`;};
+  return `<h1>Coverage &amp; gaps</h1>
+   <p class="sub">The REAL holes, computed from the graph — what is complete and what is not.</p>
+   <div class="gridwrap"><table><thead><tr><th>Dimension</th><th>Covered</th><th>Coverage</th></tr></thead><tbody>
+   ${row("Per-framework pipeline",withPipeline,fwc)}
+   ${row("Real library manifest",withLibs,fwc)}
+   ${row("Detected build axes (not just defaults)",withDetectedAxes,fwc)}
+   ${row("Industry regulators mapped to a control",mappedReg,totalReg)}
+   </tbody></table></div>
+   <p class="sub" style="margin-top:12px">${fwc-withPipeline} frameworks use the standard pipeline (no per-framework rows).
+   ${totalReg-mappedReg} of ${totalReg} regulatory requirements have no shipped control profile — shown as red gaps on each Bundle.</p>`;
 }
 
 function viewReference(){
@@ -366,7 +419,8 @@ function viewReference(){
 }
 
 function viewSearch(q){
-  q=q.toLowerCase();
+  q=(q||"").trim().toLowerCase();
+  if(q.length<2) return `<h1>Search</h1><p class="sub">Type at least 2 characters in the search box (top right).</p>`;
   const hits=[];
   for(const [t,arr] of Object.entries(IDX.nodes)) for(const n of (arr||[])){
     const hay=`${n.id} ${n.name||''} ${n.label||''}`.toLowerCase();
