@@ -279,6 +279,7 @@ function viewBundle(id){
     <h1 style="margin:0">${esc(f.name)}</h1>
     <span class="pill">${esc(f.category)}</span><span class="pill">${esc(f.language)}</span>${f.tier?`<span class="pill">${esc(f.tier)}</span>`:''}
     <span class="counter">Lens: ${lens.industry?esc(lens.industry):'Baseline'}${lens.clusterId?' · '+esc(lens.clusterId):''}</span></div>
+    ${b.gaps.length?`<div class="cell red" style="margin-bottom:10px">✗ ${b.gaps.length} gap${b.gaps.length>1?'s':''} under this lens — see Compliance + Gaps below.</div>`:(lens.industry?'<div class="cell green" style="margin-bottom:10px">✓ No gaps under this lens.</div>':'')}
 
   <details class="section" open><summary>Overview &amp; concepts</summary><div class="body">
     <p class="sub" style="margin:0 0 10px">What this framework is, and how it performs.</p><div class="kv">
@@ -292,8 +293,9 @@ function viewBundle(id){
     <div class="k">Source</div><div>${(f.sources||[]).map(s=>`<span class="badge">${esc(s)}</span>`).join("")||'<span class="sub">—</span>'}</div>
   </div></div></details>
 
-  <details class="section"><summary>Compliance — required regimes (real shipped controls)</summary><div class="body">
+  <details class="section" open><summary>Compliance — required regimes (real shipped controls)</summary><div class="body">
     <p class="sub" style="margin:0 0 10px">Every rule the industry requires. Green = service ships it. Red = required but no control profile yet.</p>
+    ${lens.guidance&&(lens.guidance.securityAuditRequirements||lens.guidance.frameworkNotes)?`<div style="margin:0 0 12px;padding:10px;border:1px solid var(--line);border-radius:8px"><b>What this industry requires</b>${lens.guidance.dataSensitivity?`<br><span class="sub">Data sensitivity:</span> ${(lens.guidance.dataSensitivity||[]).map(d=>`<span class="tag">${esc(d)}</span>`).join("")}`:''}${lens.guidance.securityAuditRequirements?`<br><span class="sub">Security/audit:</span> ${esc(lens.guidance.securityAuditRequirements)}`:''}${lens.guidance.frameworkNotes?`<br><span class="sub">Notes:</span> ${esc(lens.guidance.frameworkNotes)}`:''}</div>`:''}
     ${comp}</div></details>
 
   <details class="section"><summary>Build axes (per framework; lens forces shown amber)</summary><div class="body">
@@ -332,8 +334,8 @@ function viewBundle(id){
     <p class="sub" style="margin:0 0 10px">What this industry requires that the service does not yet ship.</p>${gaps}</div></details>
 
   <details class="section"><summary>Source + real code</summary><div class="body"><div class="kv">
-    <div class="k">Repo</div><div>${f.repo?`<a href="${esc(f.repo)}" target="_blank">${esc(f.repo)}</a>`:'—'}</div>
-    <div class="k">Backstage</div><div>${f.catalogRef?`<a href="${esc(f.catalogRef)}" target="_blank">View in Backstage →</a>`:'—'}</div>
+    <div class="k">Backstage (live catalog)</div><div>${f.catalogRef?`<a href="${esc(f.catalogRef)}" target="_blank">View in Backstage →</a>`:'—'}</div>
+    <div class="k">Repo</div><div>${f.repo?`<a href="${esc(f.repo)}" target="_blank">${esc(f.repo)}</a> <span class="sub">(private)</span>`:'—'}</div>
   </div></div></details>`;
 }
 
