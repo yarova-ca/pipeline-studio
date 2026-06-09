@@ -1,0 +1,43 @@
+[
+  {
+    "id": "observability-datadog",
+    "name": "datadog",
+    "axis": "OBSERVABILITY",
+    "serviceCount": 2,
+    "services": [
+      "14-express",
+      "15-fastapi"
+    ]
+  },
+  {
+    "id": "observability-none",
+    "name": "none",
+    "axis": "OBSERVABILITY",
+    "serviceCount": 3,
+    "services": [
+      "14-express",
+      "15-fastapi",
+      "16-gin"
+    ]
+  },
+  {
+    "id": "observability-otel",
+    "name": "otel",
+    "axis": "OBSERVABILITY",
+    "serviceCount": 1,
+    "services": [
+      "14-express"
+    ]
+  },
+  {
+    "id": "observability-prometheus",
+    "name": "prometheus",
+    "axis": "OBSERVABILITY",
+    "serviceCount": 3,
+    "services": [
+      "14-express",
+      "15-fastapi",
+      "16-gin"
+    ]
+  }
+]

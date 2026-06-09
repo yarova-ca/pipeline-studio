@@ -5,338 +5,328 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Pipeline Studio — Blueprint Navigator</title>
 <style>
-  :root {
-    --black: #0E0F11; --surface: #16171A; --surface2: #1d1f23;
-    --bone: #F4F3EF; --muted: #9aa0a6; --line: #2a2d31;
-    --teal: #19C8A8; --lime: #C6F24E;
-    --green: #19C8A8; --amber: #e8b339; --red: #e8615a;
-    --grad: linear-gradient(90deg, #19C8A8 0%, #C6F24E 100%);
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; background: var(--black); color: var(--bone);
-    font-family: Outfit, "Helvetica Neue", Arial, sans-serif; font-size: 15px;
-  }
-  a { color: var(--teal); text-decoration: none; }
-  code, .mono { font-family: "Geist Mono", ui-monospace, Menlo, monospace; }
-
-  header {
-    position: sticky; top: 0; z-index: 50; background: rgba(14,15,17,.92);
-    backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
-    padding: 12px 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
-  }
-  .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-  .ring { width: 22px; height: 22px; border-radius: 50%;
-    border: 3px solid transparent;
-    background: var(--grad) border-box; -webkit-mask:
-      linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor; mask-composite: exclude;
-    border-bottom-color: transparent; transform: rotate(-45deg); }
-  .brand b { font-weight: 700; font-size: 17px; }
-  .grad-text { background: var(--grad); -webkit-background-clip: text;
-    background-clip: text; color: transparent; }
-  nav.tabs { display: flex; gap: 4px; }
-  nav.tabs button { background: none; border: 1px solid var(--line); color: var(--muted);
-    padding: 6px 12px; border-radius: 7px; cursor: pointer; font: inherit; font-size: 13px; }
-  nav.tabs button.active { color: var(--black); background: var(--grad); border-color: transparent; font-weight: 600; }
-  .lensbar { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  select, .btn {
-    background: var(--surface2); color: var(--bone); border: 1px solid var(--line);
-    border-radius: 7px; padding: 6px 10px; font: inherit; font-size: 13px; cursor: pointer;
-  }
-  main { padding: 22px; max-width: 1500px; margin: 0 auto; }
-
-  h1 { font-size: 26px; margin: 0 0 4px; }
-  h2 { font-size: 19px; margin: 26px 0 10px; }
-  .sub { color: var(--muted); margin: 0 0 18px; }
-
-  /* Home */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 16px; margin-top: 18px; }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-    padding: 22px; cursor: pointer; transition: border-color .15s, transform .1s; }
-  .card:hover { border-color: var(--teal); transform: translateY(-2px); }
-  .card h3 { margin: 0 0 6px; font-size: 18px; }
-  .card p { color: var(--muted); margin: 0; font-size: 14px; }
-  .legend { display: flex; gap: 18px; margin: 16px 0; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
-  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
-  .dot.g { background: var(--green); } .dot.a { background: var(--amber); } .dot.r { background: var(--red); }
-
-  /* Map */
-  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
-  .counter { color: var(--muted); font-size: 13px; }
-  .gridwrap { overflow: auto; border: 1px solid var(--line); border-radius: 12px; max-height: 74vh; }
-  table { border-collapse: collapse; width: 100%; font-size: 13px; }
-  th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
-  thead th { position: sticky; top: 0; background: var(--surface2); cursor: pointer; z-index: 2; }
-  tbody tr:hover { background: var(--surface); }
-  td.svc { cursor: pointer; font-weight: 600; }
-  td.svc:hover { color: var(--teal); }
-  .cell { padding: 2px 8px; border-radius: 6px; font-size: 12px; display: inline-block; }
-  .cell.g { background: rgba(25,200,168,.13); color: var(--green); }
-  .cell.a { background: rgba(232,179,57,.15); color: var(--amber); }
-  .cell.r { background: rgba(232,97,90,.15); color: var(--red); }
-  .pill { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 20px; padding: 1px 8px; margin-right: 4px; }
-
-  /* Guided */
-  .steps { display: flex; gap: 8px; margin-bottom: 18px; }
-  .steps .s { flex: 1; height: 5px; border-radius: 3px; background: var(--surface2); }
-  .steps .s.on { background: var(--grad); }
-  .choices { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 12px; }
-  .choice { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; cursor: pointer; }
-  .choice:hover { border-color: var(--teal); }
-  .choice b { display: block; margin-bottom: 4px; }
-  .choice span { color: var(--muted); font-size: 13px; }
-
-  /* Bundle */
-  .bundle-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
-  .section { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
-  .section > summary { padding: 14px 16px; cursor: pointer; font-weight: 600; list-style: none;
-    display: flex; align-items: center; gap: 10px; background: var(--surface); }
-  .section > summary::-webkit-details-marker { display: none; }
-  .section > summary::before { content: "▸"; color: var(--teal); transition: transform .15s; }
-  .section[open] > summary::before { transform: rotate(90deg); }
-  .section .body { padding: 14px 16px; }
-  .kv { display: grid; grid-template-columns: 180px 1fr; gap: 6px 14px; }
-  .kv div.k { color: var(--muted); }
-  .reason { color: var(--amber); font-size: 12px; margin-top: 2px; }
-  .gap { color: var(--red); }
-  .tag { background: var(--surface2); border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; margin: 0 4px 4px 0; display: inline-block; font-size: 12px; }
-  .err { background: rgba(232,97,90,.12); border: 1px solid var(--red); color: var(--red);
-    padding: 18px; border-radius: 12px; }
-  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 30px; }
+  :root{--black:#0E0F11;--surface:#16171A;--surface2:#1d1f23;--bone:#F4F3EF;--muted:#9aa0a6;
+    --line:#2a2d31;--teal:#19C8A8;--lime:#C6F24E;--green:#19C8A8;--amber:#e8b339;--red:#e8615a;
+    --grad:linear-gradient(90deg,#19C8A8 0%,#C6F24E 100%);}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--black);color:var(--bone);font-family:Outfit,"Helvetica Neue",Arial,sans-serif;font-size:14.5px}
+  a{color:var(--teal);text-decoration:none;cursor:pointer}
+  code,.mono{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:12px}
+  header{position:sticky;top:0;z-index:50;background:rgba(14,15,17,.93);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);padding:10px 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:9px;cursor:pointer}
+  .ring{width:20px;height:20px;border-radius:50%;border:3px solid;border-color:var(--teal) var(--lime) var(--lime) var(--teal);
+    border-bottom-color:transparent;transform:rotate(-45deg)}
+  .brand b{font-weight:700;font-size:16px}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  nav.tabs{display:flex;gap:4px;flex-wrap:wrap}
+  nav.tabs button{background:none;border:1px solid var(--line);color:var(--muted);padding:6px 11px;border-radius:7px;cursor:pointer;font:inherit;font-size:12.5px}
+  nav.tabs button.active{color:var(--black);background:var(--grad);border-color:transparent;font-weight:600}
+  .lensbar{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  select,.btn,input{background:var(--surface2);color:var(--bone);border:1px solid var(--line);border-radius:7px;padding:6px 9px;font:inherit;font-size:12.5px;cursor:pointer}
+  input{cursor:text}
+  main{padding:20px;max-width:1560px;margin:0 auto}
+  h1{font-size:25px;margin:0 0 4px}h2{font-size:18px;margin:24px 0 10px}h3{font-size:15px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 16px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:16px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;cursor:pointer;transition:border-color .15s,transform .1s}
+  .card:hover{border-color:var(--teal);transform:translateY(-2px)}
+  .card p{color:var(--muted);margin:6px 0 0;font-size:13px}
+  .legend{display:flex;gap:16px;margin:14px 0;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .dot.g{background:var(--green)}.dot.a{background:var(--amber)}.dot.r{background:var(--red)}
+  .stat{display:inline-block;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin:0 8px 8px 0}
+  .stat b{font-size:20px;display:block}.stat span{color:var(--muted);font-size:12px}
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  .counter{color:var(--muted);font-size:12.5px}
+  .gridwrap{overflow:auto;border:1px solid var(--line);border-radius:12px;max-height:76vh}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th,td{padding:7px 9px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  thead th{position:sticky;top:0;background:var(--surface2);cursor:pointer;z-index:2}
+  tbody tr:hover{background:var(--surface)}
+  td.svc{cursor:pointer;font-weight:600}td.svc:hover{color:var(--teal)}
+  .cell{padding:2px 7px;border-radius:6px;font-size:11.5px;display:inline-block}
+  .cell.green{background:rgba(25,200,168,.13);color:var(--green)}
+  .cell.amber{background:rgba(232,179,57,.15);color:var(--amber)}
+  .cell.red{background:rgba(232,97,90,.15);color:var(--red)}
+  .pill{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:1px 8px;margin-right:4px}
+  .tag{background:var(--surface2);border:1px solid var(--line);border-radius:6px;padding:2px 7px;margin:0 4px 4px 0;display:inline-block;font-size:11.5px}
+  .section{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+  .section>summary{padding:13px 15px;cursor:pointer;font-weight:600;list-style:none;display:flex;align-items:center;gap:9px;background:var(--surface)}
+  .section>summary::-webkit-details-marker{display:none}
+  .section>summary::before{content:"▸";color:var(--teal);transition:transform .15s}
+  .section[open]>summary::before{transform:rotate(90deg)}
+  .section .body{padding:13px 15px}
+  .kv{display:grid;grid-template-columns:200px 1fr;gap:6px 14px}
+  .kv .k{color:var(--muted)}
+  .reason{color:var(--amber);font-size:11.5px;margin-top:2px}
+  .gap{color:var(--red)}
+  .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:11px}
+  .choice{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer}
+  .choice:hover{border-color:var(--teal)}.choice b{display:block;margin-bottom:3px}.choice span{color:var(--muted);font-size:12.5px}
+  .steps{display:flex;gap:8px;margin-bottom:16px}.steps .s{flex:1;height:5px;border-radius:3px;background:var(--surface2)}.steps .s.on{background:var(--grad)}
+  .err{background:rgba(232,97,90,.12);border:1px solid var(--red);color:var(--red);padding:18px;border-radius:12px}
+  .bar{height:7px;border-radius:4px;background:var(--surface2);overflow:hidden;display:inline-block;width:140px;vertical-align:middle}
+  .bar i{display:block;height:100%;background:var(--grad)}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:28px}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand" onclick="go('#home')">
-    <span class="ring"></span><b>pipeline studio</b>
-  </div>
+  <div class="brand" onclick="location.hash='#home'"><span class="ring"></span><b>pipeline studio</b></div>
   <nav class="tabs" id="tabs">
     <button data-route="#map">Map</button>
     <button data-route="#guided">Guided</button>
+    <button data-route="#graph">Graph</button>
+    <button data-route="#coverage">Coverage</button>
+    <button data-route="#reference">Reference</button>
     <button data-route="#home">Home</button>
   </nav>
   <div class="lensbar">
-    <span style="color:var(--muted);font-size:13px">Lens:</span>
-    <select id="lensIndustry"><option value="">Baseline (no industry)</option></select>
-    <select id="lensCluster"><option value="">Cluster: auto</option></select>
+    <input id="search" placeholder="search…" style="width:130px"/>
+    <span style="color:var(--muted);font-size:12px">Lens:</span>
+    <select id="lensIndustry"><option value="">Baseline</option></select>
+    <select id="lensCluster"><option value="">Cluster: all</option></select>
   </div>
 </header>
 <main id="app"><p class="sub">Loading blueprint…</p></main>
-<footer>Yarova · Pipeline Studio · Blueprint Navigator · one data file, three views, lenses on all.</footer>
+<footer>Yarova · Pipeline Studio · Blueprint Navigator · one graph · real data · lenses on all.</footer>
 
-<script>
-let DATA = null, LENS = { industry: "", cluster: "" };
-const $ = (s, r=document) => r.querySelector(s);
-const el = (h) => { const t=document.createElement("template"); t.innerHTML=h.trim(); return t.content.firstChild; };
-function go(hash){ location.hash = hash; }
+<script type="module">
+import { buildIndex, resolveBundle } from "./engine/resolve.mjs";
 
-// ── Bundle computation — the lens engine ────────────────────────────────────
-function industryById(id){ return DATA.industries.find(i=>i.id===id) || null; }
-function axisDefault(id){ const a=DATA.buildAxes.find(x=>x.id===id); return a?a.default:null; }
+let IDX=null, LENS={industryId:"",clusterId:""};
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=(s)=>String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const c=(cell)=>`<span class="cell ${cell.state}" title="${esc(cell.reason)}">${esc(cell.value)}</span>${cell.reason?`<div class="reason">${esc(cell.reason)}</div>`:""}`;
 
-// Returns {value, state:'g'|'a'|'r', reason} for an axis under the active lens.
-function resolveAxis(fw, axisId){
-  let value = axisDefault(axisId);
-  let state = "g", reason = "";
-  const ind = industryById(LENS.industry);
-
-  if (axisId === "COMPLIANCE") {
-    if (ind) { value = ind.compliance.map(c=>DATA.compliance[c]?.label||c).join(" + ");
-      state="a"; reason = `${ind.name} (${ind.vertical}) requires these regimes.`; }
-    else value = "standard";
+async function boot(){
+  let graph;
+  try{ graph=await (await fetch("graph.json")).json(); }
+  catch(e){ $("#app").innerHTML=`<div class="err">Blueprint data failed to load. Check graph.json.<br>${e}</div>`; return; }
+  IDX=buildIndex(graph);
+  // lens selectors
+  const li=$("#lensIndustry");
+  for(const v of IDX.verticals||[]){
+    const og=document.createElement("optgroup"); og.label=v.name||v.label||v.id;
+    (IDX.industries||[]).filter(i=>i.verticalId===v.id).forEach(i=>{const o=document.createElement("option");o.value=i.id;o.textContent=i.name;og.appendChild(o);});
+    if(og.children.length) li.appendChild(og);
   }
-  if (ind) {
-    // a compliance regime can force other axes
-    for (const c of ind.compliance) {
-      const f = DATA.compliance[c]?.forces || {};
-      if (f[axisId]) { value = f[axisId]; state="a"; reason = `Forced by ${DATA.compliance[c].label}.`; }
-    }
-  }
-  // gaps: ORM/Auth/Obs unknown per-framework -> baseline default is a soft value, not a gap.
-  if (value == null || value === "") { state="r"; value="not defined"; reason="Gap — not yet defined."; }
-  return { value, state, reason };
+  li.onchange=e=>{LENS.industryId=e.target.value;render();};
+  const lc=$("#lensCluster");
+  (IDX.clusters||[]).forEach(cl=>{const o=document.createElement("option");o.value=cl.id;o.textContent="Cluster: "+(cl.name||cl.id);lc.appendChild(o);});
+  lc.onchange=e=>{LENS.clusterId=e.target.value;render();};
+  $("#search").oninput=e=>{ if(e.target.value.length>1){location.hash="#search/"+encodeURIComponent(e.target.value);} };
+  $$("#tabs button").forEach(b=>b.onclick=()=>location.hash=b.dataset.route);
+  window.addEventListener("hashchange",render);
+  render();
 }
 
-function deployFor(fw){
-  const ind = industryById(LENS.industry);
-  let cluster = LENS.cluster || (ind ? ind.cluster : "");
-  if (!cluster) return { value: "any (AKS/EKS/GKE/OpenShift)", state:"g", reason:"" };
-  const c = DATA.clusters.find(x=>x.id===cluster);
-  return { value: c?c.name:cluster, state: ind&&!LENS.cluster?"a":"g",
-           reason: ind&&!LENS.cluster?`${ind.name} default cluster.`:"" };
+function render(){
+  if(!IDX) return;
+  const h=location.hash||"#home", app=$("#app");
+  $$("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.route==="#"+h.slice(1).split("/")[0]));
+  if(h.startsWith("#bundle/")) app.innerHTML=viewBundle(decodeURIComponent(h.split("/")[1]));
+  else if(h.startsWith("#search/")) app.innerHTML=viewSearch(decodeURIComponent(h.split("/")[1]));
+  else if(h.startsWith("#node/")) app.innerHTML=viewNode(decodeURIComponent(h.split("/")[1]));
+  else if(h==="#map") app.innerHTML=viewMap();
+  else if(h==="#guided") app.innerHTML=viewGuided();
+  else if(h==="#graph") app.innerHTML=viewGraph();
+  else if(h==="#coverage") app.innerHTML=viewCoverage();
+  else if(h==="#reference") app.innerHTML=viewReference();
+  else app.innerHTML=viewHome();
 }
 
-// Map columns
-const COLS = [
-  { key:"ci",    label:"CI",            get:fw=>({value:"7 phases", state:"g", reason:""}) },
-  { key:"comp",  label:"Compliance",    get:fw=>resolveAxis(fw,"COMPLIANCE") },
-  { key:"deploy",label:"Deploy",        get:fw=>deployFor(fw) },
-  { key:"auth",  label:"Auth",          get:fw=>resolveAxis(fw,"AUTH") },
-  { key:"orm",   label:"ORM",           get:fw=>resolveAxis(fw,"ORM") },
-  { key:"obs",   label:"Observability", get:fw=>resolveAxis(fw,"OBSERVABILITY") },
-  { key:"rt",    label:"Runtime",       get:fw=>resolveAxis(fw,"RUNTIME") },
-];
-
-// ── Views ───────────────────────────────────────────────────────────────────
 function viewHome(){
-  const m = DATA.meta;
-  return `
-  <h1>Pipeline Studio — <span class="grad-text">one-stop clarity</span></h1>
-  <p class="sub">${m.frameworkCount} frameworks · ${DATA.categories.length} categories ·
-     ${DATA.industries.length} industries · ${DATA.buildAxes.length} build axes · ${Object.keys(DATA.compliance).length} compliance regimes.</p>
-  <div class="legend">
-    <span><span class="dot g"></span>baseline</span>
-    <span><span class="dot a"></span>changed by lens (reason shown)</span>
-    <span><span class="dot r"></span>gap — not yet defined</span>
+  const m=IDX.manifest?.nodeCounts||{};
+  return `<h1>Pipeline Studio — <span class="grad-text">operational brain</span></h1>
+  <p class="sub">The complete, interconnected blueprint. Every framework, every dimension, real data, one stop.</p>
+  <div>
+    <span class="stat"><b>${m.frameworks||0}</b><span>frameworks</span></span>
+    <span class="stat"><b>${m.industries||0}</b><span>industries</span></span>
+    <span class="stat"><b>${m.compliance||0}</b><span>compliance regimes</span></span>
+    <span class="stat"><b>${m.stages||0}</b><span>pipeline stages</span></span>
+    <span class="stat"><b>${m.tools||0}</b><span>tools</span></span>
+    <span class="stat"><b>${m.invariants||0}</b><span>invariants</span></span>
+    <span class="stat"><b>${IDX.manifest?.edgeTotal||0}</b><span>graph edges</span></span>
   </div>
+  <div class="legend"><span><span class="dot g"></span>baseline / ships it</span><span><span class="dot a"></span>changed by lens (reason shown)</span><span><span class="dot r"></span>gap / required-but-missing</span></div>
   <div class="cards">
-    <div class="card" onclick="go('#map')"><h3>Explore the Map →</h3><p>Full visibility. Every framework, every axis, all at once. Filter + lens.</p></div>
-    <div class="card" onclick="go('#guided')"><h3>Guided setup →</h3><p>Three clicks to your exact bundle. One decision per screen.</p></div>
-    <div class="card" onclick="go('#map')"><h3>Browse a framework →</h3><p>Open the Map, click any service for its full depth.</p></div>
+    <div class="card" onclick="location.hash='#map'"><h3>Explore the Map →</h3><p>Full visibility. 105 frameworks × dimensions. Lens recolors per framework.</p></div>
+    <div class="card" onclick="location.hash='#guided'"><h3>Guided setup →</h3><p>One decision per screen. Category → framework → industry → full bundle.</p></div>
+    <div class="card" onclick="location.hash='#coverage'"><h3>Coverage + gaps →</h3><p>Real fill % per dimension. Where the blueprint is complete, where it is not.</p></div>
+    <div class="card" onclick="location.hash='#graph'"><h3>Graph explorer →</h3><p>Click any node, traverse its connections. The interconnection made visible.</p></div>
   </div>`;
 }
 
-let mapSort = { col:"id", dir:1 }, mapFilter = { category:"", language:"", q:"" };
+let mapSort={col:"id",dir:1},mapFilter={category:"",language:"",q:""};
+function fwRowCells(f){
+  const b=resolveBundle(IDX,f.id,LENS);
+  const shipped=(b.compliance||[]).filter(x=>x.ships).length;
+  const reqd=(b.compliance||[]).length;
+  const compCell=reqd?{value:`${shipped}/${reqd} ships`,state:shipped<reqd?"red":(LENS.industryId?"amber":"green"),reason:reqd&&shipped<reqd?"Some required regimes not shipped.":""}:{value:"baseline",state:"green",reason:""};
+  return {
+    comp:compCell,
+    runtime:b.buildAxes.runtime||{value:"—",state:"green"},
+    auth:b.authOrmObs.auth, orm:b.authOrmObs.orm, obs:b.authOrmObs.observability,
+    gaps:{value:String((b.gaps||[]).length),state:(b.gaps||[]).length?"red":"green",reason:(b.gaps||[]).slice(0,3).join("; ")},
+  };
+}
 function viewMap(){
-  const cats = [...new Set(DATA.frameworks.map(f=>f.category))].sort();
-  const langs = [...new Set(DATA.frameworks.map(f=>f.language))].sort();
-  let rows = DATA.frameworks.filter(f =>
-    (!mapFilter.category || f.category===mapFilter.category) &&
-    (!mapFilter.language || f.language===mapFilter.language) &&
-    (!mapFilter.q || f.name.toLowerCase().includes(mapFilter.q.toLowerCase()) || f.id.includes(mapFilter.q.toLowerCase())));
-  rows.sort((a,b)=> (a[mapSort.col]>b[mapSort.col]?1:-1)*mapSort.dir);
-
-  const head = `<tr><th onclick="sortMap('name')">Service</th><th onclick="sortMap('category')">Category</th>`+
-    COLS.map(c=>`<th>${c.label}</th>`).join("")+`</tr>`;
-  const body = rows.map(f=>{
-    const cells = COLS.map(c=>{ const r=c.get(f);
-      return `<td><span class="cell ${r.state}" title="${r.reason||''}">${r.value}</span></td>`; }).join("");
-    return `<tr><td class="svc" onclick="go('#bundle/${f.id}')">${f.name}</td><td>${f.category}</td>${cells}</tr>`;
-  }).join("");
-
-  const ind = industryById(LENS.industry);
-  const cov = ind ? `Lens: ${ind.name} — ${ind.compliance.map(c=>DATA.compliance[c].label).join(" + ")}` : "Baseline — no industry lens";
-  return `
-  <h1>Map</h1>
+  const cats=[...new Set(IDX.frameworks.map(f=>f.categoryId))].sort();
+  const langs=[...new Set(IDX.frameworks.map(f=>f.languageId))].sort();
+  let rows=IDX.frameworks.filter(f=>(!mapFilter.category||f.categoryId===mapFilter.category)&&(!mapFilter.language||f.languageId===mapFilter.language)&&(!mapFilter.q||(f.name||"").toLowerCase().includes(mapFilter.q.toLowerCase())||f.id.includes(mapFilter.q.toLowerCase())));
+  rows.sort((a,b)=>((a[mapSort.col]>b[mapSort.col])?1:-1)*mapSort.dir);
+  const body=rows.map(f=>{const x=fwRowCells(f);
+    return `<tr><td class="svc" onclick="location.hash='#bundle/${f.id}'">${esc(f.name)}</td>
+      <td>${esc(f.languageId)}</td><td>${esc(f.tier||"—")}</td>
+      <td>${c(x.comp)}</td><td>${c(x.runtime)}</td><td>${c(x.auth)}</td><td>${c(x.orm)}</td><td>${c(x.obs)}</td><td>${c(x.gaps)}</td></tr>`;}).join("");
+  const ind=LENS.industryId?IDX.byId[LENS.industryId]:null;
+  const cov=ind?`Lens: ${esc(ind.name)} — required: ${(resolveBundle(IDX,rows[0]?.id,LENS).lens.requiredStandards||[]).join(", ")||"none mapped"}`:"Baseline — no industry lens";
+  return `<h1>Map</h1>
   <div class="toolbar">
-    <select onchange="mapFilter.category=this.value;render()"><option value="">All categories</option>${cats.map(c=>`<option ${c===mapFilter.category?'selected':''}>${c}</option>`).join("")}</select>
-    <select onchange="mapFilter.language=this.value;render()"><option value="">All languages</option>${langs.map(l=>`<option ${l===mapFilter.language?'selected':''}>${l}</option>`).join("")}</select>
-    <input class="btn" placeholder="search…" value="${mapFilter.q}" oninput="mapFilter.q=this.value;render()" style="min-width:160px"/>
-    <span class="counter">${rows.length} of ${DATA.frameworks.length} · ${cov}</span>
+    <select onchange="setMF('category',this.value)"><option value="">All categories</option>${cats.map(x=>`<option ${x===mapFilter.category?'selected':''}>${esc(x)}</option>`).join("")}</select>
+    <select onchange="setMF('language',this.value)"><option value="">All languages</option>${langs.map(x=>`<option ${x===mapFilter.language?'selected':''}>${esc(x)}</option>`).join("")}</select>
+    <input placeholder="filter…" value="${esc(mapFilter.q)}" oninput="setMF('q',this.value)" style="min-width:150px"/>
+    <span class="counter">${rows.length} of ${IDX.frameworks.length} · ${cov}</span>
   </div>
-  <div class="gridwrap"><table><thead>${head}</thead><tbody>${body||`<tr><td colspan="9" style="color:var(--muted);padding:20px">0 of ${DATA.frameworks.length} — widen filters.</td></tr>`}</tbody></table></div>`;
+  <div class="gridwrap"><table><thead><tr>
+    <th onclick="sortMap('name')">Framework</th><th onclick="sortMap('languageId')">Lang</th><th onclick="sortMap('tier')">Tier</th>
+    <th>Compliance</th><th>Runtime</th><th>Auth</th><th>ORM</th><th>Observability</th><th>Gaps</th>
+  </tr></thead><tbody>${body||`<tr><td colspan="9" style="color:var(--muted);padding:18px">0 of ${IDX.frameworks.length} — widen filters.</td></tr>`}</tbody></table></div>`;
 }
-function sortMap(c){ mapSort.dir = (mapSort.col===c)? -mapSort.dir : 1; mapSort.col=c; render(); }
+window.setMF=(k,v)=>{mapFilter[k]=v;render();};
+window.sortMap=(col)=>{mapSort.dir=mapSort.col===col?-mapSort.dir:1;mapSort.col=col;render();};
 
-let guided = { step:1, category:"", framework:"" };
+let guided={step:1,category:""};
 function viewGuided(){
-  const bar = `<div class="steps">${[1,2,3].map(n=>`<div class="s ${guided.step>=n?'on':''}"></div>`).join("")}</div>`;
-  if (guided.step===1){
-    const cats = DATA.categories;
-    return `${bar}<h1>Pick a category</h1><p class="sub">Step 1 of 3.</p>
-      <div class="choices">${cats.map(c=>`<div class="choice" onclick="guided.category='${c.name}';guided.step=2;render()"><b>${c.name}</b><span>${DATA.frameworks.filter(f=>f.category===c.name).length} frameworks</span></div>`).join("")}</div>`;
-  }
-  if (guided.step===2){
-    const fws = DATA.frameworks.filter(f=>f.category===guided.category);
-    return `${bar}<h1>Pick a framework</h1><p class="sub">Step 2 of 3 · ${guided.category} · <a onclick="guided.step=1;render()">back</a></p>
-      <div class="choices">${fws.map(f=>`<div class="choice" onclick="go('#bundle/${f.id}')"><b>${f.name}</b><span>${f.language} · ${f.pattern}</span></div>`).join("")}</div>`;
-  }
-  return "";
+  const bar=`<div class="steps">${[1,2,3].map(n=>`<div class="s ${guided.step>=n?'on':''}"></div>`).join("")}</div>`;
+  if(guided.step===1){const cats=IDX.categories;
+    return `${bar}<h1>Pick a category</h1><p class="sub">Step 1 of 3.</p><div class="choices">${cats.map(ct=>`<div class="choice" onclick="gStep('${ct.id}')"><b>${esc(ct.name||ct.id)}</b><span>${IDX.frameworks.filter(f=>f.categoryId===ct.id).length} frameworks</span></div>`).join("")}</div>`;}
+  const fws=IDX.frameworks.filter(f=>f.categoryId===guided.category);
+  return `${bar}<h1>Pick a framework</h1><p class="sub">Step 2 of 3 · <a onclick="guided.step=1;render()">back</a> · then set industry in the lens (top right).</p>
+    <div class="choices">${fws.map(f=>`<div class="choice" onclick="location.hash='#bundle/${f.id}'"><b>${esc(f.name)}</b><span>${esc(f.languageId)} · ${esc(f.maturity||f.tier||'')}</span></div>`).join("")}</div>`;
 }
+window.gStep=(cat)=>{guided.category=cat;guided.step=2;render();};
 
-function kvRow(label, r){
-  return `<div class="k">${label}</div><div><span class="cell ${r.state}">${r.value}</span>${r.reason?`<div class="reason">${r.reason}</div>`:""}</div>`;
-}
+function kvRow(label,cell){return `<div class="k">${esc(label)}</div><div>${c(cell)}</div>`;}
 function viewBundle(id){
-  const fw = DATA.frameworks.find(f=>f.id===id);
-  if (!fw) return `<div class="err">Framework "${id}" not found.</div>`;
-  const ind = industryById(LENS.industry);
-  const ctx = ind ? `${ind.name} (${ind.vertical}, ${ind.region})` : "Baseline (no industry)";
-  const phases = DATA.pipeline.map(p=>`<div><b>Phase ${p.phase} — ${p.name}</b><br>${p.stages.map(s=>`<span class="tag">${s}</span>`).join("")}</div>`).join("<div style='height:8px'></div>");
-  return `
-  <div class="bundle-head">
-    <h1>${fw.name}</h1>
-    <span class="pill">${fw.category}</span><span class="pill">${fw.language}</span><span class="pill">${fw.pattern}</span>
-    ${fw.port?`<span class="pill">:${fw.port}</span>`:""}
-    <span class="counter">Lens: ${ctx}</span>
-  </div>
-  <details class="section" open><summary>Overview</summary><div class="body">
-    <div class="kv">
-      <div class="k">Language</div><div>${fw.language}</div>
-      <div class="k">Pattern</div><div>${fw.pattern}</div>
-      <div class="k">Port</div><div>${fw.port||"not applicable"}</div>
-      <div class="k">Tier</div><div>${fw.tier}</div>
-      <div class="k">Tags</div><div>${(fw.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-    </div></div></details>
+  const b=resolveBundle(IDX,id,LENS);
+  if(b.error) return `<div class="err">${esc(b.error)}</div>`;
+  const f=b.framework, lens=b.lens;
+  const pipe=b.pipeline.map(p=>`<div style="margin-bottom:8px"><b>${esc(p.phase)}</b><br>${p.stages.map(s=>`<span class="tag" title="${esc(s.command||'')}">${esc(s.stage)}${s.tool?` · ${esc(s.tool)}`:''}</span>`).join("")}</div>`).join("")||'<span class="gap">⚠️ no pipeline rows for this framework</span>';
+  const comp=b.compliance.length?b.compliance.map(x=>x.ships
+      ?`<div style="margin-bottom:8px"><span class="cell green">${esc(x.label)} — ships</span> <span class="pill">${esc((x.file||'').split('/').pop())}</span><br>${(x.requiredControls||[]).map(rc=>`<span class="tag">${esc(rc)}</span>`).join("")}${Object.keys(x.forcedBuildArgs||{}).length?`<div class="reason">forces ${Object.entries(x.forcedBuildArgs).map(([k,v])=>k+'='+v).join(', ')}</div>`:''}</div>`
+      :`<div style="margin-bottom:6px"><span class="cell red">${esc(x.label)} — ${esc(x.reason||'gap')}</span></div>`).join("")
+    :'<span class="sub">Pick an industry lens to see required regimes, or this framework has no required compliance at baseline.</span>';
+  const regs=(lens.regulatoryRequirements||[]).map(r=>`<span class="tag">${esc(r.text)}</span>`).join("");
+  const inv=b.invariants.length?b.invariants.map(i=>`<div>${c({value:i.id+" "+(i.rule||''),state:i.state,reason:i.reason})}</div>`).join(""):'<span class="sub">No FIPS-class invariant engaged by the current lens.</span>';
+  const axes=Object.entries(b.buildAxes).map(([k,v])=>kvRow(k,v)).join("");
+  const drift=b.drift.length?b.drift.map(d=>`<div class="tag">${esc(d.axis)}: ships <b>${esc(d.shipped)}</b> vs blueprint default <b>${esc(d.blueprintDefault)}</b></div>`).join(""):'<span class="sub">No drift between shipped build args and blueprint defaults.</span>';
+  const gaps=b.gaps.length?b.gaps.map(g=>`<div class="gap">⚠️ ${esc(g)}</div>`).join(""):'<span class="cell green">No gaps under the current lens.</span>';
+  return `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px">
+    <h1 style="margin:0">${esc(f.name)}</h1>
+    <span class="pill">${esc(f.category)}</span><span class="pill">${esc(f.language)}</span>${f.tier?`<span class="pill">tier ${esc(f.tier)}</span>`:''}
+    <span class="counter">Lens: ${lens.industry?esc(lens.industry):'Baseline'}${lens.clusterId?' · '+esc(lens.clusterId):''}</span></div>
 
-  <details class="section"><summary>CI pipeline — ${DATA.pipeline.length} phases</summary><div class="body">${phases}</div></details>
-
-  <details class="section"><summary>Build axes (under lens)</summary><div class="body"><div class="kv">
-    ${DATA.buildAxes.map(a=>kvRow(a.id, resolveAxis(fw, a.id))).join("")}
+  <details class="section" open><summary>Overview &amp; concepts</summary><div class="body"><div class="kv">
+    <div class="k">Version</div><div>${esc(f.version||'—')}</div>
+    <div class="k">License</div><div>${esc(f.license||'—')}</div>
+    <div class="k">Maturity</div><div>${esc(f.maturity||'—')}</div>
+    <div class="k">Performance</div><div>${esc(f.perf||'—')}</div>
+    <div class="k">Memory</div><div>${esc(f.memory||'—')}</div>
+    <div class="k">Concurrency</div><div>${esc(f.concurrency||'—')}</div>
+    <div class="k">Security posture</div><div>${esc(f.securityPosture||'—')}</div>
   </div></div></details>
 
-  <details class="section"><summary>Compliance</summary><div class="body"><div class="kv">
-    ${kvRow("Regimes", resolveAxis(fw,"COMPLIANCE"))}
-    ${ind?ind.compliance.map(c=>{const cc=DATA.compliance[c];return `<div class="k">${cc.label} forces</div><div>${Object.entries(cc.forces||{}).map(([k,v])=>`<span class="tag">${k}: ${v}</span>`).join("")||"—"}</div>`;}).join(""):'<div class="k">—</div><div>Pick an industry lens to see forced controls.</div>'}
-  </div></div></details>
+  <details class="section"><summary>Compliance — required regimes (real shipped controls)</summary><div class="body">
+    ${regs?`<div style="margin-bottom:8px"><span class="sub">Regulatory requirements (from industry):</span><br>${regs}</div>`:''}
+    ${comp}</div></details>
 
-  <details class="section"><summary>Deploy</summary><div class="body"><div class="kv">
-    ${kvRow("Cluster", deployFor(fw))}
-    <div class="k">GitOps</div><div><span class="tag">Argo CD</span><span class="tag">Helm</span><span class="tag">Kustomize</span></div>
-    <div class="k">Manifests</div><div>helm/ + kustomize/ ship in the repo</div>
-  </div></div></details>
+  <details class="section"><summary>Build axes (per framework; lens forces shown amber)</summary><div class="body"><div class="kv">${axes}</div></details></details>
 
-  <details class="section"><summary>Auth · ORM · Observability</summary><div class="body"><div class="kv">
-    ${kvRow("Auth", resolveAxis(fw,"AUTH"))}
-    ${kvRow("ORM", resolveAxis(fw,"ORM"))}
-    ${kvRow("Observability", resolveAxis(fw,"OBSERVABILITY"))}
-  </div></div></details>
-
-  <details class="section"><summary>Integrations</summary><div class="body">
-    <span class="gap">⚠️ Gap — external integrations (CRM, API gateway) not yet defined for this framework.</span>
+  <details class="section"><summary>CI pipeline — real per-framework stages + tools</summary><div class="body">${pipe}
+    ${b.pipelineAdditions.length?`<div style="margin-top:10px"><span class="sub">Compliance pipeline additions:</span>${b.pipelineAdditions.map(a=>`<div class="reason">${esc(a.standard)}: ${Object.entries(a.phases).map(([k,v])=>k+' → '+v).join(' · ')}</div>`).join("")}</div>`:''}
   </div></details>
 
+  <details class="section"><summary>Auth · ORM · Observability (shipped)</summary><div class="body"><div class="kv">
+    ${kvRow("Auth",b.authOrmObs.auth)}${kvRow("ORM",b.authOrmObs.orm)}${kvRow("Observability",b.authOrmObs.observability)}
+  </div></div></details>
+
+  <details class="section"><summary>Deploy · clusters · GitOps</summary><div class="body"><div class="kv">
+    <div class="k">Clusters</div><div>${b.deploy.clusters.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
+    <div class="k">GitOps</div><div>${b.deploy.gitops.map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
+    <div class="k">Helm</div><div>${b.deploy.helm?'✅ ships helm chart':'—'}</div>
+    <div class="k">Kustomize overlays</div><div>${(b.deploy.kustomizeOverlays||[]).map(x=>`<span class="tag">${esc(x)}</span>`).join("")||'—'}</div>
+  </div></div></details>
+
+  <details class="section"><summary>Integrations — per vertical (CRM, gateways, external systems)</summary><div class="body">
+    ${b.integrations&&b.integrations.length?b.integrations.map(g=>`<div style="margin-bottom:6px"><b>${esc(g.system)}</b> <span class="pill">${esc(g.category)}</span> <span class="pill">auth: ${esc(g.auth)}</span> <span class="pill">gw: ${esc(g.gateway)}</span><br><span class="sub">${esc(g.dataFlow)} · tools: ${esc((g.tools||[]).join(', '))}</span> <span class="cell amber">net-new</span></div>`).join(""):'<span class="sub">Pick an industry lens to see its vertical integrations. (Net-new dimension — seeded, pending founder data.)</span>'}
+  </div></details>
+
+  <details class="section"><summary>Invariants</summary><div class="body">${inv}</div></details>
+  <details class="section"><summary>Drift — blueprint vs shipped code</summary><div class="body">${drift}</div></details>
+  <details class="section"><summary>Gaps</summary><div class="body">${gaps}</div></details>
+
   <details class="section"><summary>Source + real code</summary><div class="body"><div class="kv">
-    <div class="k">Repo</div><div><a href="${fw.repo}" target="_blank">${fw.repo}</a></div>
-    <div class="k">Backstage</div><div><a href="${fw.catalogRef}" target="_blank">View in Backstage →</a></div>
+    <div class="k">Repo</div><div>${f.repo?`<a href="${esc(f.repo)}" target="_blank">${esc(f.repo)}</a>`:'—'}</div>
+    <div class="k">Backstage</div><div>${f.catalogRef?`<a href="${esc(f.catalogRef)}" target="_blank">View in Backstage →</a>`:'—'}</div>
   </div></div></details>`;
 }
 
-// ── Router ──────────────────────────────────────────────────────────────────
-function render(){
-  if (!DATA) return;
-  const h = location.hash || "#home";
-  const app = $("#app");
-  $$("#tabs button").forEach(b=>b.classList.toggle("active", b.dataset.route===("#"+h.slice(1).split("/")[0])));
-  if (h.startsWith("#bundle/")) app.innerHTML = viewBundle(h.split("/")[1]);
-  else if (h==="#map") app.innerHTML = viewMap();
-  else if (h==="#guided"){ if(guided.step>2)guided.step=1; app.innerHTML = viewGuided(); }
-  else app.innerHTML = viewHome();
+function viewGraph(){
+  const types=Object.keys(IDX.nodes);
+  return `<h1>Graph explorer</h1><p class="sub">Pick a node type, then a node, to traverse its connections.</p>
+   <div class="toolbar">${types.map(t=>`<button class="btn" onclick="location.hash='#node/'+pickFirst('${t}')">${t} (${(IDX.nodes[t]||[]).length})</button>`).join("")}</div>`;
 }
-function $$(s,r=document){ return [...r.querySelectorAll(s)]; }
+window.pickFirst=(t)=>(IDX.nodes[t]||[])[0]?.id||"";
+function viewNode(id){
+  const n=IDX.byId[id]; if(!n) return `<div class="err">node ${esc(id)} not found</div>`;
+  const out=IDX.edges.filter(e=>e.from===id), inc=IDX.edges.filter(e=>e.to===id);
+  const line=(e,dir)=>{const other=dir==='out'?e.to:e.from;const nn=IDX.byId[other];
+    return `<div><span class="pill">${esc(e.type)}</span> <a onclick="location.hash='#node/${encodeURIComponent(other)}'">${esc(nn?.name||nn?.label||other)}</a>${e.attrs&&Object.keys(e.attrs).length?` <span class="sub">${esc(Object.entries(e.attrs).slice(0,2).map(([k,v])=>k+'='+v).join(', '))}</span>`:''}</div>`;};
+  return `<h1>${esc(n.name||n.label||n.id)}</h1><p class="sub">type: ${esc(n._type)} · id: ${esc(n.id)}${IDX.byId[id]._type==='frameworks'?` · <a onclick="location.hash='#bundle/${esc(id)}'">open full bundle →</a>`:''}</p>
+   <h2>Outgoing (${out.length})</h2>${out.slice(0,200).map(e=>line(e,'out')).join("")||'<span class="sub">none</span>'}
+   <h2>Incoming (${inc.length})</h2>${inc.slice(0,200).map(e=>line(e,'in')).join("")||'<span class="sub">none</span>'}`;
+}
 
-async function boot(){
-  try {
-    DATA = await (await fetch("data.json")).json();
-  } catch(e){
-    $("#app").innerHTML = `<div class="err">Blueprint data failed to load. Check data.json.<br><br>${e}</div>`; return;
-  }
-  // populate lens selectors
-  const li = $("#lensIndustry");
-  DATA.verticals.forEach(v=>{
-    const og = el(`<optgroup label="${v}"></optgroup>`);
-    DATA.industries.filter(i=>i.vertical===v).forEach(i=> og.appendChild(el(`<option value="${i.id}">${i.name}</option>`)));
-    li.appendChild(og);
-  });
-  li.onchange = e=>{ LENS.industry=e.target.value; render(); };
-  const lc = $("#lensCluster");
-  DATA.clusters.forEach(c=> lc.appendChild(el(`<option value="${c.id}">Cluster: ${c.name}</option>`)));
-  lc.onchange = e=>{ LENS.cluster=e.target.value; render(); };
-  $$("#tabs button").forEach(b=> b.onclick=()=>go(b.dataset.route));
-  window.addEventListener("hashchange", render);
-  render();
+function viewCoverage(){
+  const m=IDX.manifest||{};
+  // real per-dimension fill: % of frameworks that have a non-empty value
+  const fields=[["version","Version"],["maturity","Maturity"],["perf","Performance"],["memory","Memory"],["securityPosture","Security posture"],["concurrency","Concurrency"]];
+  const fwc=IDX.frameworks.length;
+  const fillRows=fields.map(([f,label])=>{const n=IDX.frameworks.filter(x=>x[f]&&String(x[f]).trim()&&x[f]!=='—').length;const pct=Math.round(100*n/fwc);return `<tr><td>${label}</td><td>${n}/${fwc}</td><td><span class="bar"><i style="width:${pct}%"></i></span> ${pct}%</td></tr>`;}).join("");
+  const shippedPct=Math.round(100*IDX.frameworks.filter(x=>x.shipped&&(x.shipped.shippedCompliance||[]).length).length/fwc);
+  const helmPct=Math.round(100*IDX.frameworks.filter(x=>x.shipped&&x.shipped.helm).length/fwc);
+  return `<h1>Coverage &amp; gaps</h1><p class="sub">Real fill computed from the graph — not assumed.</p>
+   <div><span class="stat"><b>${m.edgeTotal||0}</b><span>edges</span></span>
+   <span class="stat"><b>${(m.merges&&m.merges.fwStageEdges)||0}</b><span>per-framework pipeline links</span></span>
+   <span class="stat"><b>${shippedPct}%</b><span>ship compliance configs</span></span>
+   <span class="stat"><b>${helmPct}%</b><span>ship helm chart</span></span></div>
+   <h2>Per-attribute fill</h2><div class="gridwrap"><table><thead><tr><th>Attribute</th><th>Filled</th><th>Coverage</th></tr></thead><tbody>${fillRows}</tbody></table></div>
+   <p class="sub" style="margin-top:14px">Per-framework compliance gaps appear on each Bundle under "Gaps".</p>`;
 }
+
+function viewReference(){
+  const inv=IDX.invariants||[], notes=IDX.conceptNotes||[];
+  return `<h1>Reference</h1>
+   <h2>Invariants (${inv.length})</h2><div class="gridwrap" style="max-height:40vh"><table><thead><tr><th>ID</th><th>Rule</th><th>Enforced by</th><th>If violated</th></tr></thead><tbody>
+   ${inv.map(i=>`<tr><td>${esc(i.id)}</td><td>${esc(i.rule||i.invariant||i.condition||'')}</td><td>${esc(i.enforcedBy||i.tool||'')}</td><td>${esc(i.ifViolated||'')}</td></tr>`).join("")}</tbody></table></div>
+   <h2>Concepts (${notes.length})</h2>${notes.map(n=>`<details class="section"><summary>${esc(n.title||n.id)}</summary><div class="body sub">${esc((n.body||'').slice(0,1200))}</div></details>`).join("")}`;
+}
+
+function viewSearch(q){
+  q=q.toLowerCase();
+  const hits=[];
+  for(const [t,arr] of Object.entries(IDX.nodes)) for(const n of (arr||[])){
+    const hay=`${n.id} ${n.name||''} ${n.label||''}`.toLowerCase();
+    if(hay.includes(q)) hits.push({t,n});
+  }
+  return `<h1>Search: ${esc(q)}</h1><p class="sub">${hits.length} matches</p>
+   ${hits.slice(0,300).map(h=>`<div><span class="pill">${esc(h.t)}</span> <a onclick="location.hash='${h.t==='frameworks'?'#bundle/':'#node/'}${encodeURIComponent(h.n.id)}'">${esc(h.n.name||h.n.label||h.n.id)}</a></div>`).join("")||'<span class="sub">no matches</span>'}`;
+}
+
 boot();
 </script>
 </body>

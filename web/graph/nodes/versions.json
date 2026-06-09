@@ -1,0 +1,2702 @@
+[
+  {
+    "id": "ubuntu-24-04",
+    "name": "ubuntu:24.04",
+    "label": "ubuntu:24.04",
+    "kind": "image",
+    "version": "24.04 LTS",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/ubuntu",
+      "label": "hub.docker.com"
+    },
+    "notes": "Builder stage — all non-FIPS frameworks",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "node-22-alpine",
+    "name": "node:22-alpine",
+    "label": "node:22-alpine",
+    "kind": "image",
+    "version": "22-alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/node",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — Node.js (non-FIPS)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "node-22-bookworm-slim",
+    "name": "node:22-bookworm-slim",
+    "label": "node:22-bookworm-slim",
+    "kind": "image",
+    "version": "22-bookworm-slim",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/node",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — Node.js (Debian slim)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "python-3-12-slim",
+    "name": "python:3.12-slim",
+    "label": "python:3.12-slim",
+    "kind": "image",
+    "version": "3.12-slim",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/python",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — Python (non-FIPS)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "golang-1-24-alpine",
+    "name": "golang:1.24-alpine",
+    "label": "golang:1.24-alpine",
+    "kind": "image",
+    "version": "1.24-alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/golang",
+      "label": "hub.docker.com"
+    },
+    "notes": "Builder — Go",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "gcr-io-distroless-static-debian12",
+    "name": "gcr.io/distroless/static-debian12",
+    "label": "gcr.io/distroless/static-debian12",
+    "kind": "image",
+    "version": "debian12",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/GoogleContainerTools/distroless",
+      "label": "github.com"
+    },
+    "notes": "Runtime — Go (distroless)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "eclipse-temurin-21-jre-alpine",
+    "name": "eclipse-temurin:21-jre-alpine",
+    "label": "eclipse-temurin:21-jre-alpine",
+    "kind": "image",
+    "version": "21-jre-alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/eclipse-temurin",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — Java/Kotlin (non-FIPS)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "gcr-io-distroless-java21-debian12",
+    "name": "gcr.io/distroless/java21-debian12",
+    "label": "gcr.io/distroless/java21-debian12",
+    "kind": "image",
+    "version": "java21-debian12",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/GoogleContainerTools/distroless",
+      "label": "github.com"
+    },
+    "notes": "Runtime — Java (distroless)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "mcr-microsoft-com-dotnet-aspnet-8-0-alpine",
+    "name": "mcr.microsoft.com/dotnet/aspnet:8.0-alpine",
+    "label": "mcr.microsoft.com/dotnet/aspnet:8.0-alpine",
+    "kind": "image",
+    "version": "8.0-alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/microsoft-dotnet-aspnet",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — .NET 8",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "nginx-alpine",
+    "name": "nginx:alpine",
+    "label": "nginx:alpine",
+    "kind": "image",
+    "version": "alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/nginx",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — static CSR/SSG serving",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "ruby-3-3-alpine",
+    "name": "ruby:3.3-alpine",
+    "label": "ruby:3.3-alpine",
+    "kind": "image",
+    "version": "3.3-alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/ruby",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — Ruby/Rails",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "php-8-3-fpm-alpine",
+    "name": "php:8.3-fpm-alpine",
+    "label": "php:8.3-fpm-alpine",
+    "kind": "image",
+    "version": "8.3-fpm-alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/php",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — PHP",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "oven-bun-1-1-alpine",
+    "name": "oven/bun:1.1-alpine",
+    "label": "oven/bun:1.1-alpine",
+    "kind": "image",
+    "version": "1.1-alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/r/oven/bun",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — Bun",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "denoland-deno-2-3-3",
+    "name": "denoland/deno:2.3.3",
+    "label": "denoland/deno:2.3.3",
+    "kind": "image",
+    "version": "2.3.3",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/r/denoland/deno",
+      "label": "hub.docker.com"
+    },
+    "notes": "Runtime — Deno / Fresh",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "swift-6-1-alpine",
+    "name": "swift:6.1-alpine",
+    "label": "swift:6.1-alpine",
+    "kind": "image",
+    "version": "6.1-alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/swift",
+      "label": "hub.docker.com"
+    },
+    "notes": "Builder — Swift",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "rust-1-87-alpine",
+    "name": "rust:1.87-alpine",
+    "label": "rust:1.87-alpine",
+    "kind": "image",
+    "version": "1.87-alpine",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/rust",
+      "label": "hub.docker.com"
+    },
+    "notes": "Builder — Rust",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "ubi9-nodejs-22-minimal",
+    "name": "ubi9/nodejs-22-minimal",
+    "label": "ubi9/nodejs-22-minimal",
+    "kind": "image",
+    "version": "ubi9",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://catalog.redhat.com/software/containers/search",
+      "label": "catalog.redhat.com"
+    },
+    "notes": "FIPS runtime — Node.js (UBI9)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "ubi9-python-311",
+    "name": "ubi9/python-311",
+    "label": "ubi9/python-311",
+    "kind": "image",
+    "version": "ubi9",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://catalog.redhat.com/software/containers/search",
+      "label": "catalog.redhat.com"
+    },
+    "notes": "FIPS runtime — Python (UBI9)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "ubi9-openjdk-21-runtime",
+    "name": "ubi9/openjdk-21-runtime",
+    "label": "ubi9/openjdk-21-runtime",
+    "kind": "image",
+    "version": "ubi9",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://catalog.redhat.com/software/containers/search",
+      "label": "catalog.redhat.com"
+    },
+    "notes": "FIPS runtime — Java (UBI9)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "ubi9-php-83",
+    "name": "ubi9/php-83",
+    "label": "ubi9/php-83",
+    "kind": "image",
+    "version": "ubi9",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://catalog.redhat.com/software/containers/search",
+      "label": "catalog.redhat.com"
+    },
+    "notes": "FIPS runtime — PHP (UBI9)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "ubi9-nginx-122",
+    "name": "ubi9/nginx-122",
+    "label": "ubi9/nginx-122",
+    "kind": "image",
+    "version": "ubi9",
+    "usedIn": [
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://catalog.redhat.com/software/containers/search",
+      "label": "catalog.redhat.com"
+    },
+    "notes": "FIPS runtime — Nginx/CSR (UBI9)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 30
+  },
+  {
+    "id": "next-js",
+    "name": "Next.js",
+    "label": "Next.js",
+    "kind": "framework",
+    "version": "16.2.6",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/vercel/next.js/releases",
+      "label": "github.com"
+    },
+    "notes": "SSR/Hybrid — React. Verified 2026-05-28 via npm registry.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "remix-react-router",
+    "name": "Remix / React Router",
+    "label": "Remix / React Router",
+    "kind": "framework",
+    "version": "React Router 7",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/remix-run/react-router/releases",
+      "label": "github.com"
+    },
+    "notes": "SSR/Hybrid — React form-first",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "nuxt",
+    "name": "Nuxt",
+    "label": "Nuxt",
+    "kind": "framework",
+    "version": "4.4",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/nuxt/nuxt/releases",
+      "label": "github.com"
+    },
+    "notes": "SSR/Hybrid — Vue",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "sveltekit",
+    "name": "SvelteKit",
+    "label": "SvelteKit",
+    "kind": "framework",
+    "version": "2.57",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/sveltejs/kit/releases",
+      "label": "github.com"
+    },
+    "notes": "SSR/Hybrid — Svelte",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "angular-ssr",
+    "name": "Angular SSR",
+    "label": "Angular SSR",
+    "kind": "framework",
+    "version": "20",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/angular/angular/releases",
+      "label": "github.com"
+    },
+    "notes": "SSR — Angular Universal",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "react",
+    "name": "React",
+    "label": "React",
+    "kind": "framework",
+    "version": "19",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/facebook/react/releases",
+      "label": "github.com"
+    },
+    "notes": "CSR/SPA",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "vue",
+    "name": "Vue",
+    "label": "Vue",
+    "kind": "framework",
+    "version": "3.5",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/vuejs/core/releases",
+      "label": "github.com"
+    },
+    "notes": "CSR/SPA",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "angular",
+    "name": "Angular",
+    "label": "Angular",
+    "kind": "framework",
+    "version": "20",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/angular/angular/releases",
+      "label": "github.com"
+    },
+    "notes": "CSR/SPA (CLI app)",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "solid-js",
+    "name": "Solid.js",
+    "label": "Solid.js",
+    "kind": "framework",
+    "version": "2.0",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/solidjs/solid/releases",
+      "label": "github.com"
+    },
+    "notes": "Streaming SSR + CSR",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "astro",
+    "name": "Astro",
+    "label": "Astro",
+    "kind": "framework",
+    "version": "6.3",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/withastro/astro/releases",
+      "label": "github.com"
+    },
+    "notes": "SSG + Islands",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "gatsby",
+    "name": "Gatsby",
+    "label": "Gatsby",
+    "kind": "framework",
+    "version": "5.13",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/gatsbyjs/gatsby/releases",
+      "label": "github.com"
+    },
+    "notes": "SSG — React + GraphQL",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "hugo",
+    "name": "Hugo",
+    "label": "Hugo",
+    "kind": "framework",
+    "version": "0.161",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/gohugoio/hugo/releases",
+      "label": "github.com"
+    },
+    "notes": "SSG — Go-based",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "eleventy",
+    "name": "Eleventy",
+    "label": "Eleventy",
+    "kind": "framework",
+    "version": "3.0",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/11ty/eleventy/releases",
+      "label": "github.com"
+    },
+    "notes": "SSG — JS-based",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "qwik",
+    "name": "Qwik",
+    "label": "Qwik",
+    "kind": "framework",
+    "version": "2.0",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/QwikDev/qwik/releases",
+      "label": "github.com"
+    },
+    "notes": "Islands / Resumable",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "fresh",
+    "name": "Fresh",
+    "label": "Fresh",
+    "kind": "framework",
+    "version": "2.3",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/denoland/fresh/releases",
+      "label": "github.com"
+    },
+    "notes": "Islands — Deno runtime",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "next-js-edge-runtime",
+    "name": "Next.js Edge Runtime",
+    "label": "Next.js Edge Runtime",
+    "kind": "framework",
+    "version": "16.2.6",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/vercel/next.js/releases",
+      "label": "github.com"
+    },
+    "notes": "Edge — V8 Isolate",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "hono",
+    "name": "Hono",
+    "label": "Hono",
+    "kind": "framework",
+    "version": "4.7",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/honojs/hono/releases",
+      "label": "github.com"
+    },
+    "notes": "Edge — multi-runtime",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "react-native",
+    "name": "React Native",
+    "label": "React Native",
+    "kind": "framework",
+    "version": "0.79",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/facebook/react-native/releases",
+      "label": "github.com"
+    },
+    "notes": "Mobile — RN cross-platform",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "flutter",
+    "name": "Flutter",
+    "label": "Flutter",
+    "kind": "framework",
+    "version": "3.44",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/flutter/flutter/releases",
+      "label": "github.com"
+    },
+    "notes": "Mobile — Dart cross-platform",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "express",
+    "name": "Express",
+    "label": "Express",
+    "kind": "framework",
+    "version": "5.0",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/expressjs/express/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Node.js",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "fastify",
+    "name": "Fastify",
+    "label": "Fastify",
+    "kind": "framework",
+    "version": "5.2",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/fastify/fastify/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Node.js",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "nestjs",
+    "name": "NestJS",
+    "label": "NestJS",
+    "kind": "framework",
+    "version": "11.0",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/nestjs/nest/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Node.js opinionated",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "deno-runtime",
+    "name": "Deno (runtime)",
+    "label": "Deno (runtime)",
+    "kind": "framework",
+    "version": "2.3",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/denoland/deno/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Deno runtime",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "elysia",
+    "name": "Elysia",
+    "label": "Elysia",
+    "kind": "framework",
+    "version": "1.2",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/elysiajs/elysia/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Bun-native",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "django",
+    "name": "Django",
+    "label": "Django",
+    "kind": "framework",
+    "version": "5.2",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/django/django/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Python batteries-included",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "fastapi",
+    "name": "FastAPI",
+    "label": "FastAPI",
+    "kind": "framework",
+    "version": "0.115",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/tiangolo/fastapi/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Python async API",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "flask",
+    "name": "Flask",
+    "label": "Flask",
+    "kind": "framework",
+    "version": "3.1",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/pallets/flask/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Python micro-framework",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "starlette",
+    "name": "Starlette",
+    "label": "Starlette",
+    "kind": "framework",
+    "version": "0.41",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/encode/starlette/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Python ASGI",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "gin",
+    "name": "Gin",
+    "label": "Gin",
+    "kind": "framework",
+    "version": "1.10",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/gin-gonic/gin/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Go",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "chi",
+    "name": "Chi",
+    "label": "Chi",
+    "kind": "framework",
+    "version": "5.2",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/go-chi/chi/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Go lightweight",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "echo",
+    "name": "Echo",
+    "label": "Echo",
+    "kind": "framework",
+    "version": "4.12",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/labstack/echo/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Go",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "spring-boot",
+    "name": "Spring Boot",
+    "label": "Spring Boot",
+    "kind": "framework",
+    "version": "3.4",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/spring-projects/spring-boot/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Java/Kotlin",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "quarkus",
+    "name": "Quarkus",
+    "label": "Quarkus",
+    "kind": "framework",
+    "version": "3.35",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/quarkusio/quarkus/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Java native/JVM",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "ktor",
+    "name": "Ktor",
+    "label": "Ktor",
+    "kind": "framework",
+    "version": "3.5",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/ktorio/ktor/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Kotlin",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "micronaut",
+    "name": "Micronaut",
+    "label": "Micronaut",
+    "kind": "framework",
+    "version": "5.0",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/micronaut-projects/micronaut-core/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Java/Kotlin/Groovy",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "asp-net-core",
+    "name": "ASP.NET Core",
+    "label": "ASP.NET Core",
+    "kind": "framework",
+    "version": "9.0",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/dotnet/aspnetcore/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — .NET",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "axum",
+    "name": "Axum",
+    "label": "Axum",
+    "kind": "framework",
+    "version": "0.8",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/tokio-rs/axum/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Rust async",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "actix-web",
+    "name": "Actix-web",
+    "label": "Actix-web",
+    "kind": "framework",
+    "version": "4.9",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/actix/actix-web/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Rust performance",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "phoenix",
+    "name": "Phoenix",
+    "label": "Phoenix",
+    "kind": "framework",
+    "version": "1.7",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/phoenixframework/phoenix/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Elixir",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "rails",
+    "name": "Rails",
+    "label": "Rails",
+    "kind": "framework",
+    "version": "8.0",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/rails/rails/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Ruby",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "symfony",
+    "name": "Symfony",
+    "label": "Symfony",
+    "kind": "framework",
+    "version": "7.2",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/symfony/symfony/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — PHP",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "slim",
+    "name": "Slim",
+    "label": "Slim",
+    "kind": "framework",
+    "version": "4.14",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/slimphp/Slim/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — PHP micro",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "vapor",
+    "name": "Vapor",
+    "label": "Vapor",
+    "kind": "framework",
+    "version": "4.121",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/vapor/vapor/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Swift",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "http4s",
+    "name": "http4s",
+    "label": "http4s",
+    "kind": "framework",
+    "version": "0.23",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/http4s/http4s/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — Scala functional",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "drogon",
+    "name": "Drogon",
+    "label": "Drogon",
+    "kind": "framework",
+    "version": "1.9.13",
+    "usedIn": [
+      "01",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/drogonframework/drogon/releases",
+      "label": "github.com"
+    },
+    "notes": "Backend — C++ async",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "solid-start",
+    "name": "Solid Start",
+    "label": "Solid Start",
+    "kind": "framework",
+    "version": "1.0",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/solidjs/solid-start/releases",
+      "label": "github.com"
+    },
+    "notes": "SSR — SolidJS meta-framework (Vinxi/Nitro)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "preact",
+    "name": "Preact",
+    "label": "Preact",
+    "kind": "framework",
+    "version": "10.25",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/preactjs/preact/releases",
+      "label": "github.com"
+    },
+    "notes": "CSR/SPA — 3 kB React-compatible virtual DOM",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "lit",
+    "name": "Lit",
+    "label": "Lit",
+    "kind": "framework",
+    "version": "3.2",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/lit/lit/releases",
+      "label": "github.com"
+    },
+    "notes": "CSR — Google Web Components library (6 kB)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "grpc-go",
+    "name": "grpc-go",
+    "label": "grpc-go",
+    "kind": "protocol",
+    "version": "1.63",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/grpc/grpc-go/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — gRPC Go (google.golang.org/grpc)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "grpc-java",
+    "name": "grpc-java",
+    "label": "grpc-java",
+    "kind": "protocol",
+    "version": "1.63",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/grpc/grpc-java/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — gRPC Java (Maven Central)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "grpcio",
+    "name": "grpcio",
+    "label": "grpcio",
+    "kind": "protocol",
+    "version": "1.63",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://pypi.org/project/grpcio/#history",
+      "label": "PyPI"
+    },
+    "notes": "Protocol — gRPC Python (C-core + asyncio)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "grpc-grpc-js",
+    "name": "@grpc/grpc-js",
+    "label": "@grpc/grpc-js",
+    "kind": "protocol",
+    "version": "1.10",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/grpc/grpc-node/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — gRPC Node.js pure JS",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "grpc-dotnet",
+    "name": "grpc-dotnet",
+    "label": "grpc-dotnet",
+    "kind": "protocol",
+    "version": "2.62",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/grpc/grpc-dotnet/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — gRPC .NET (Grpc.AspNetCore)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "tonic",
+    "name": "tonic",
+    "label": "tonic",
+    "kind": "protocol",
+    "version": "0.11",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/hyperium/tonic/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — gRPC Rust (Tokio)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "grpc-swift",
+    "name": "grpc-swift",
+    "label": "grpc-swift",
+    "kind": "protocol",
+    "version": "2.0",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/grpc/grpc-swift/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — gRPC Swift (SwiftNIO)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "grpc-kotlin",
+    "name": "grpc-kotlin",
+    "label": "grpc-kotlin",
+    "kind": "protocol",
+    "version": "1.4",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/grpc/grpc-kotlin/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — gRPC Kotlin (coroutines + Netty)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "connect-go",
+    "name": "connect-go",
+    "label": "connect-go",
+    "kind": "protocol",
+    "version": "0.5",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/connectrpc/connect-go/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — ConnectRPC Go (gRPC + HTTP/1.1 + browser)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "grpc-php",
+    "name": "grpc-php",
+    "label": "grpc-php",
+    "kind": "protocol",
+    "version": "1.63",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://packagist.org/packages/grpc/grpc",
+      "label": "Packagist"
+    },
+    "notes": "Protocol — gRPC PHP (C-core extension)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "apollo-server",
+    "name": "Apollo Server",
+    "label": "Apollo Server",
+    "kind": "protocol",
+    "version": "4.10",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/apollographql/apollo-server/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — GraphQL Node.js (Apollo ecosystem)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "graphql-yoga",
+    "name": "GraphQL Yoga",
+    "label": "GraphQL Yoga",
+    "kind": "protocol",
+    "version": "5.6",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/dotansimha/graphql-yoga/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — GraphQL Node.js multi-runtime (The Guild)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "strawberry",
+    "name": "Strawberry",
+    "label": "Strawberry",
+    "kind": "protocol",
+    "version": "0.235",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/strawberry-graphql/strawberry/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — GraphQL Python (code-first, type annotations)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "gqlgen",
+    "name": "gqlgen",
+    "label": "gqlgen",
+    "kind": "protocol",
+    "version": "0.17",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/99designs/gqlgen/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — GraphQL Go (SDL-first code generation)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "spring-for-graphql",
+    "name": "Spring for GraphQL",
+    "label": "Spring for GraphQL",
+    "kind": "protocol",
+    "version": "1.3",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/spring-projects/spring-graphql/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — GraphQL Java Spring (annotation-driven)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "hot-chocolate",
+    "name": "Hot Chocolate",
+    "label": "Hot Chocolate",
+    "kind": "protocol",
+    "version": "14",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/ChilliCream/graphql-platform/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — GraphQL .NET (ChilliCream platform)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "graphql-ruby",
+    "name": "graphql-ruby",
+    "label": "graphql-ruby",
+    "kind": "protocol",
+    "version": "2.3",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/rmosolgo/graphql-ruby/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — GraphQL Ruby (used by GitHub)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "async-graphql",
+    "name": "async-graphql",
+    "label": "async-graphql",
+    "kind": "protocol",
+    "version": "7.0",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/async-graphql/async-graphql/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — GraphQL Rust (derive macro, Tokio)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "ws",
+    "name": "ws",
+    "label": "ws",
+    "kind": "protocol",
+    "version": "8.17",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/websockets/ws/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — WebSocket Node.js (80M+ weekly npm downloads)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "gorilla-websocket",
+    "name": "gorilla/websocket",
+    "label": "gorilla/websocket",
+    "kind": "protocol",
+    "version": "1.5",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/gorilla/websocket/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — WebSocket Go (archived — use nhooyr for new projects)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "websockets-python",
+    "name": "websockets (Python)",
+    "label": "websockets (Python)",
+    "kind": "protocol",
+    "version": "12.0",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/python-websockets/websockets/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — WebSocket Python (asyncio, ASGI)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "java-websocket",
+    "name": "Java-WebSocket",
+    "label": "Java-WebSocket",
+    "kind": "protocol",
+    "version": "1.5",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/TooTallNate/Java-WebSocket/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — WebSocket Java (RFC 6455 — client + server)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "tokio-tungstenite",
+    "name": "tokio-tungstenite",
+    "label": "tokio-tungstenite",
+    "kind": "protocol",
+    "version": "0.23",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/snapview/tokio-tungstenite/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — WebSocket Rust (Tokio async)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "faye-websocket",
+    "name": "faye-websocket",
+    "label": "faye-websocket",
+    "kind": "protocol",
+    "version": "0.11",
+    "usedIn": [
+      "01",
+      "11",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/faye/faye-websocket-ruby/releases",
+      "label": "github.com"
+    },
+    "notes": "Protocol — WebSocket Ruby (EventMachine Rack)",
+    "lastVerified": "2026-05-29",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "renovate",
+    "name": "Renovate",
+    "label": "Renovate",
+    "kind": "tool",
+    "version": "v43",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/renovatebot/renovate/releases",
+      "label": "github.com"
+    },
+    "notes": "Dependency update automation. License: MIT.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "dependabot",
+    "name": "Dependabot",
+    "label": "Dependabot",
+    "kind": "tool",
+    "version": "built-in",
+    "usedIn": [
+      "04"
+    ],
+    "source": {
+      "url": "https://github.com/dependabot",
+      "label": "github.com"
+    },
+    "notes": "GitHub-native dep updates. No version pin.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "gitleaks",
+    "name": "gitleaks",
+    "label": "gitleaks",
+    "kind": "tool",
+    "version": "v8.21",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/gitleaks/gitleaks/releases",
+      "label": "github.com"
+    },
+    "notes": "Secret scan — pre-commit + CI. License: MIT.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "trufflehog",
+    "name": "truffleHog",
+    "label": "truffleHog",
+    "kind": "tool",
+    "version": "v3.80",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/trufflesecurity/trufflehog/releases",
+      "label": "github.com"
+    },
+    "notes": "Entropy-based secret scan. License: AGPL-3.0.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "hadolint",
+    "name": "hadolint",
+    "label": "hadolint",
+    "kind": "tool",
+    "version": "v2.12",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/hadolint/hadolint/releases",
+      "label": "github.com"
+    },
+    "notes": "Dockerfile linter. License: MIT.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "checkov",
+    "name": "checkov",
+    "label": "checkov",
+    "kind": "tool",
+    "version": "v3",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/bridgecrewio/checkov/releases",
+      "label": "github.com"
+    },
+    "notes": "IaC security scan. License: Apache 2.0.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "semgrep",
+    "name": "Semgrep",
+    "label": "Semgrep",
+    "kind": "tool",
+    "version": "v1.75",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/semgrep/semgrep/releases",
+      "label": "github.com"
+    },
+    "notes": "Multi-language SAST. License: LGPL-2.1.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "codeql",
+    "name": "CodeQL",
+    "label": "CodeQL",
+    "kind": "tool",
+    "version": "v2.19",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/github/codeql/releases",
+      "label": "github.com"
+    },
+    "notes": "GitHub SAST. Requires GitHub Actions.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "sonarqube",
+    "name": "SonarQube",
+    "label": "SonarQube",
+    "kind": "tool",
+    "version": "v10.5",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/SonarSource/sonarqube/releases",
+      "label": "github.com"
+    },
+    "notes": "Code quality + SAST. License: LGPL-3.0 (CE).",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "owasp-dependency-check",
+    "name": "OWASP Dependency-Check",
+    "label": "OWASP Dependency-Check",
+    "kind": "tool",
+    "version": "v10.0",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/jeremylong/DependencyCheck/releases",
+      "label": "github.com"
+    },
+    "notes": "SCA — NVD-based. License: Apache 2.0.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "osv-scanner",
+    "name": "osv-scanner",
+    "label": "osv-scanner",
+    "kind": "tool",
+    "version": "v1.8",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/google/osv-scanner/releases",
+      "label": "github.com"
+    },
+    "notes": "SCA — OSV database. License: Apache 2.0.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "trivy",
+    "name": "Trivy",
+    "label": "Trivy",
+    "kind": "tool",
+    "version": "v0.58",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/aquasecurity/trivy/releases",
+      "label": "github.com"
+    },
+    "notes": "Image + SCA scan. License: Apache 2.0.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "snyk",
+    "name": "Snyk",
+    "label": "Snyk",
+    "kind": "tool",
+    "version": "v1.1280",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/snyk/cli/releases",
+      "label": "github.com"
+    },
+    "notes": "SCA + container scan. License: Apache 2.0.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "fossa",
+    "name": "FOSSA",
+    "label": "FOSSA",
+    "kind": "tool",
+    "version": "v3",
+    "usedIn": [
+      "04"
+    ],
+    "source": {
+      "url": "https://github.com/fossas/fossa-cli/releases",
+      "label": "github.com"
+    },
+    "notes": "License compliance SCA. Commercial.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "grype",
+    "name": "grype",
+    "label": "grype",
+    "kind": "tool",
+    "version": "v0.87",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/anchore/grype/releases",
+      "label": "github.com"
+    },
+    "notes": "Container image CVE scan. License: Apache 2.0. Pin version — reproducible only if CI runner image is also locked.",
+    "lastVerified": "2026-06-05",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "syft",
+    "name": "syft",
+    "label": "syft",
+    "kind": "tool",
+    "version": "v1.21",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/anchore/syft/releases",
+      "label": "github.com"
+    },
+    "notes": "SBOM generator (SPDX + CycloneDX). License: Apache 2.0. Pin version — reproducible only if CI runner image is also locked.",
+    "lastVerified": "2026-06-05",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "cosign",
+    "name": "cosign",
+    "label": "cosign",
+    "kind": "tool",
+    "version": "v2.4",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/sigstore/cosign/releases",
+      "label": "github.com"
+    },
+    "notes": "Keyless image signing via Sigstore. License: Apache 2.0. Pin version — reproducible only if CI runner image is also locked.",
+    "lastVerified": "2026-06-05",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "slsa-github-generator",
+    "name": "slsa-github-generator",
+    "label": "slsa-github-generator",
+    "kind": "tool",
+    "version": "v2",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/slsa-framework/slsa-github-generator/releases",
+      "label": "github.com"
+    },
+    "notes": "SLSA L3 provenance. License: Apache 2.0.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "k6",
+    "name": "k6",
+    "label": "k6",
+    "kind": "tool",
+    "version": "v0.53",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/grafana/k6/releases",
+      "label": "github.com"
+    },
+    "notes": "Load testing. License: AGPL-3.0.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "kyverno",
+    "name": "Kyverno",
+    "label": "Kyverno",
+    "kind": "tool",
+    "version": "v1.13",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/kyverno/kyverno/releases",
+      "label": "github.com"
+    },
+    "notes": "K8s policy engine. License: Apache 2.0.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "pre-commit",
+    "name": "pre-commit",
+    "label": "pre-commit",
+    "kind": "tool",
+    "version": "v3.8",
+    "usedIn": [
+      "04",
+      "13"
+    ],
+    "source": {
+      "url": "https://github.com/pre-commit/pre-commit/releases",
+      "label": "github.com"
+    },
+    "notes": "Hook manager. License: MIT.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "alpine-linux",
+    "name": "Alpine Linux",
+    "label": "Alpine Linux",
+    "kind": "distro",
+    "version": "3.21",
+    "usedIn": [
+      "09",
+      "10",
+      "11"
+    ],
+    "source": {
+      "url": "https://alpinelinux.org/releases/",
+      "label": "alpinelinux.org"
+    },
+    "notes": "Container-optimized. musl libc. No shell by default.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "ubuntu-lts",
+    "name": "Ubuntu LTS",
+    "label": "Ubuntu LTS",
+    "kind": "distro",
+    "version": "24.04",
+    "usedIn": [
+      "09",
+      "10",
+      "11"
+    ],
+    "source": {
+      "url": "https://releases.ubuntu.com/",
+      "label": "releases.ubuntu.com"
+    },
+    "notes": "General purpose. glibc. LTS until 2029.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "debian",
+    "name": "Debian",
+    "label": "Debian",
+    "kind": "distro",
+    "version": "12 (Bookworm)",
+    "usedIn": [
+      "09",
+      "10",
+      "11"
+    ],
+    "source": {
+      "url": "https://www.debian.org/releases/",
+      "label": "www.debian.org"
+    },
+    "notes": "General purpose. glibc. LTS.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "rhel-ubi9",
+    "name": "RHEL / UBI9",
+    "label": "RHEL / UBI9",
+    "kind": "distro",
+    "version": "9",
+    "usedIn": [
+      "09",
+      "10",
+      "11"
+    ],
+    "source": {
+      "url": "https://access.redhat.com/articles/3078",
+      "label": "access.redhat.com"
+    },
+    "notes": "Enterprise. FIPS-capable. DISA STIG available.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "rocky-linux",
+    "name": "Rocky Linux",
+    "label": "Rocky Linux",
+    "kind": "distro",
+    "version": "9",
+    "usedIn": [
+      "09",
+      "10"
+    ],
+    "source": {
+      "url": "https://rockylinux.org/news",
+      "label": "rockylinux.org"
+    },
+    "notes": "RHEL-compatible. FIPS-capable.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "almalinux",
+    "name": "AlmaLinux",
+    "label": "AlmaLinux",
+    "kind": "distro",
+    "version": "9",
+    "usedIn": [
+      "09",
+      "10"
+    ],
+    "source": {
+      "url": "https://almalinux.org/blog/",
+      "label": "almalinux.org"
+    },
+    "notes": "RHEL-compatible. FIPS-capable.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "amazon-linux",
+    "name": "Amazon Linux",
+    "label": "Amazon Linux",
+    "kind": "distro",
+    "version": "2023",
+    "usedIn": [
+      "09",
+      "10"
+    ],
+    "source": {
+      "url": "https://aws.amazon.com/amazon-linux-2023/release-notes/",
+      "label": "aws.amazon.com"
+    },
+    "notes": "AWS-native. RHEL-based.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "azure-linux",
+    "name": "Azure Linux",
+    "label": "Azure Linux",
+    "kind": "distro",
+    "version": "3",
+    "usedIn": [
+      "09",
+      "10"
+    ],
+    "source": {
+      "url": "https://github.com/microsoft/azurelinux/releases",
+      "label": "github.com"
+    },
+    "notes": "Azure-native. FIPS-capable.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "fedora",
+    "name": "Fedora",
+    "label": "Fedora",
+    "kind": "distro",
+    "version": "42",
+    "usedIn": [
+      "09"
+    ],
+    "source": {
+      "url": "https://fedoraproject.org/wiki/Releases",
+      "label": "fedoraproject.org"
+    },
+    "notes": "Cutting-edge. Not for production containers.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "talos-linux",
+    "name": "Talos Linux",
+    "label": "Talos Linux",
+    "kind": "distro",
+    "version": "1.10",
+    "usedIn": [
+      "09"
+    ],
+    "source": {
+      "url": "https://github.com/siderolabs/talos/releases",
+      "label": "github.com"
+    },
+    "notes": "K8s-native. Immutable. API-only.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "bottlerocket",
+    "name": "Bottlerocket",
+    "label": "Bottlerocket",
+    "kind": "distro",
+    "version": "1.x",
+    "usedIn": [
+      "09",
+      "10"
+    ],
+    "source": {
+      "url": "https://github.com/bottlerocket-os/bottlerocket/releases",
+      "label": "github.com"
+    },
+    "notes": "AWS EKS node OS. Immutable.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "flatcar-container-linux",
+    "name": "Flatcar Container Linux",
+    "label": "Flatcar Container Linux",
+    "kind": "distro",
+    "version": "latest",
+    "usedIn": [
+      "09"
+    ],
+    "source": {
+      "url": "https://www.flatcar.org/releases",
+      "label": "www.flatcar.org"
+    },
+    "notes": "Immutable. Self-updating. Coreos successor.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "google-cos",
+    "name": "Google COS",
+    "label": "Google COS",
+    "kind": "distro",
+    "version": "auto-patched",
+    "usedIn": [
+      "09"
+    ],
+    "source": {
+      "url": "https://cloud.google.com/container-optimized-os/docs/release-notes",
+      "label": "cloud.google.com"
+    },
+    "notes": "GKE node OS only — not a Dockerfile FROM.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "wolfi-chainguard",
+    "name": "Wolfi / Chainguard",
+    "label": "Wolfi / Chainguard",
+    "kind": "distro",
+    "version": "rolling",
+    "usedIn": [
+      "09"
+    ],
+    "source": {
+      "url": "https://github.com/wolfi-dev/os/releases",
+      "label": "github.com"
+    },
+    "notes": "SLSA-aware. Zero CVE target. glibc + musl.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "distroless-google",
+    "name": "Distroless (Google)",
+    "label": "Distroless (Google)",
+    "kind": "distro",
+    "version": "rolling",
+    "usedIn": [
+      "09",
+      "11"
+    ],
+    "source": {
+      "url": "https://github.com/GoogleContainerTools/distroless",
+      "label": "github.com"
+    },
+    "notes": "No shell. No package manager. Minimal attack surface.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "scratch",
+    "name": "scratch",
+    "label": "scratch",
+    "kind": "distro",
+    "version": "N/A",
+    "usedIn": [
+      "09"
+    ],
+    "source": {
+      "url": "https://hub.docker.com/_/scratch",
+      "label": "hub.docker.com"
+    },
+    "notes": "Empty image. Use only for static binaries.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 90
+  },
+  {
+    "id": "fips-140-2",
+    "name": "FIPS 140-2",
+    "label": "FIPS 140-2",
+    "kind": "standard",
+    "version": "140-2",
+    "usedIn": [
+      "09",
+      "10",
+      "12"
+    ],
+    "source": {
+      "url": "https://csrc.nist.gov/publications/detail/fips/140/2/final",
+      "label": "csrc.nist.gov"
+    },
+    "notes": "Superseded by 140-3. NIST closes new submissions Sept 2026.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "fips-140-3",
+    "name": "FIPS 140-3",
+    "label": "FIPS 140-3",
+    "kind": "standard",
+    "version": "140-3",
+    "usedIn": [
+      "09",
+      "10",
+      "12"
+    ],
+    "source": {
+      "url": "https://csrc.nist.gov/publications/detail/fips/140/3/final",
+      "label": "csrc.nist.gov"
+    },
+    "notes": "Current standard. ISO/IEC 19790 aligned.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "fedramp-moderate",
+    "name": "FedRAMP Moderate",
+    "label": "FedRAMP Moderate",
+    "kind": "standard",
+    "version": "Moderate",
+    "usedIn": [
+      "10",
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://www.fedramp.gov/documents/",
+      "label": "www.fedramp.gov"
+    },
+    "notes": "US federal cloud. Requires FIPS + STIG base.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "fedramp-high",
+    "name": "FedRAMP High",
+    "label": "FedRAMP High",
+    "kind": "standard",
+    "version": "High",
+    "usedIn": [
+      "10",
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://www.fedramp.gov/documents/",
+      "label": "www.fedramp.gov"
+    },
+    "notes": "US federal cloud — higher sensitivity.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "cmmc-2-0",
+    "name": "CMMC 2.0",
+    "label": "CMMC 2.0",
+    "kind": "standard",
+    "version": "2.0",
+    "usedIn": [
+      "10",
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://www.acq.osd.mil/cmmc/documentation.html",
+      "label": "www.acq.osd.mil"
+    },
+    "notes": "DoD contractor cybersecurity maturity.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "hipaa",
+    "name": "HIPAA",
+    "label": "HIPAA",
+    "kind": "standard",
+    "version": "1996/2013 Omnibus",
+    "usedIn": [
+      "10",
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://www.hhs.gov/hipaa/for-professionals/index.html",
+      "label": "www.hhs.gov"
+    },
+    "notes": "US health data. No version number — law.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "pci-dss",
+    "name": "PCI DSS",
+    "label": "PCI DSS",
+    "kind": "standard",
+    "version": "4.0",
+    "usedIn": [
+      "10",
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://www.pcisecuritystandards.org/document_library/",
+      "label": "www.pcisecuritystandards.org"
+    },
+    "notes": "Payment card security. v4.0 mandatory from March 2025.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "soc-2-type-ii",
+    "name": "SOC 2 Type II",
+    "label": "SOC 2 Type II",
+    "kind": "standard",
+    "version": "Type II",
+    "usedIn": [
+      "10",
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://www.aicpa.org/interestareas/frc/assuranceadvisoryservices/aicpasoc2report.html",
+      "label": "www.aicpa.org"
+    },
+    "notes": "SaaS enterprise trust. Annual audit.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "sox-itgc",
+    "name": "SOX ITGC",
+    "label": "SOX ITGC",
+    "kind": "standard",
+    "version": "Sarbanes-Oxley",
+    "usedIn": [
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://www.sec.gov/spotlight/sarbanes-oxley.htm",
+      "label": "www.sec.gov"
+    },
+    "notes": "US public company financial controls. No version.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "iso-27001",
+    "name": "ISO 27001",
+    "label": "ISO 27001",
+    "kind": "standard",
+    "version": "2022",
+    "usedIn": [
+      "10",
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://www.iso.org/standard/27001.html",
+      "label": "www.iso.org"
+    },
+    "notes": "ISMS. 2022 revision current.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "cis-benchmarks",
+    "name": "CIS Benchmarks",
+    "label": "CIS Benchmarks",
+    "kind": "standard",
+    "version": "latest",
+    "usedIn": [
+      "10",
+      "12"
+    ],
+    "source": {
+      "url": "https://www.cisecurity.org/cis-benchmarks/",
+      "label": "www.cisecurity.org"
+    },
+    "notes": "Center for Internet Security. Linux + Docker configs.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "disa-stig",
+    "name": "DISA STIG",
+    "label": "DISA STIG",
+    "kind": "standard",
+    "version": "latest",
+    "usedIn": [
+      "09",
+      "10",
+      "12"
+    ],
+    "source": {
+      "url": "https://public.cyber.mil/stigs/downloads/",
+      "label": "public.cyber.mil"
+    },
+    "notes": "DoD hardening. Per-distro STIGs published separately.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "gdpr",
+    "name": "GDPR",
+    "label": "GDPR",
+    "kind": "standard",
+    "version": "2018",
+    "usedIn": [
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://gdpr-info.eu/",
+      "label": "gdpr-info.eu"
+    },
+    "notes": "EU data protection. Regulation — no version.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "pipeda-bill-c-27",
+    "name": "PIPEDA / Bill C-27",
+    "label": "PIPEDA / Bill C-27",
+    "kind": "standard",
+    "version": "2024",
+    "usedIn": [
+      "12",
+      "13",
+      "14"
+    ],
+    "source": {
+      "url": "https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/",
+      "label": "www.priv.gc.ca"
+    },
+    "notes": "Canadian privacy + proposed AIDA.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "nerc-cip",
+    "name": "NERC CIP",
+    "label": "NERC CIP",
+    "kind": "standard",
+    "version": "CIP-013-2",
+    "usedIn": [
+      "12",
+      "13",
+      "14"
+    ],
+    "source": {
+      "url": "https://www.nerc.com/pa/Stand/Pages/CIPStandards.aspx",
+      "label": "www.nerc.com"
+    },
+    "notes": "North American electric utility cybersecurity.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "slsa",
+    "name": "SLSA",
+    "label": "SLSA",
+    "kind": "standard",
+    "version": "L3",
+    "usedIn": [
+      "10",
+      "12",
+      "13"
+    ],
+    "source": {
+      "url": "https://slsa.dev/",
+      "label": "slsa.dev"
+    },
+    "notes": "Supply chain security framework. L3 = highest CI/CD.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "osfi-b-10",
+    "name": "OSFI B-10",
+    "label": "OSFI B-10",
+    "kind": "standard",
+    "version": "Jan 2024",
+    "usedIn": [
+      "14"
+    ],
+    "source": {
+      "url": "https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/technology-cyber-risk-management-guideline",
+      "label": "www.osfi-bsif.gc.ca"
+    },
+    "notes": "Canadian bank outsourcing + tech risk.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  },
+  {
+    "id": "itsg-33",
+    "name": "ITSG-33",
+    "label": "ITSG-33",
+    "kind": "standard",
+    "version": "Nov 2012",
+    "usedIn": [
+      "14"
+    ],
+    "source": {
+      "url": "https://www.cyber.gc.ca/en/guidance/it-security-risk-management-lifecycle-approach-itsg-33",
+      "label": "www.cyber.gc.ca"
+    },
+    "notes": "GC IT security risk management.",
+    "lastVerified": "2026-05-28",
+    "reviewCadenceDays": 365
+  }
+]

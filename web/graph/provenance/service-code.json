@@ -1,0 +1,5552 @@
+{
+  "_shipped.json#01-angular-ssr.sourceLocation": {
+    "source": "services/01-angular-ssr/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.name": {
+    "source": "services/01-angular-ssr/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.catalogTags": {
+    "source": "services/01-angular-ssr/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.dockerfileTargets": {
+    "source": "services/01-angular-ssr/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.buildArgs": {
+    "source": "services/01-angular-ssr/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.runtimeVariants": {
+    "source": "services/01-angular-ssr/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.workflows": {
+    "source": "services/01-angular-ssr/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.shippedCompliance": {
+    "source": "services/01-angular-ssr/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.helm": {
+    "source": "services/01-angular-ssr/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.kustomizeOverlays": {
+    "source": "services/01-angular-ssr/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-angular-ssr.middleware": {
+    "source": "services/01-angular-ssr/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.sourceLocation": {
+    "source": "services/01-nextjs/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.name": {
+    "source": "services/01-nextjs/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.catalogTags": {
+    "source": "services/01-nextjs/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.dockerfileTargets": {
+    "source": "services/01-nextjs/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.buildArgs": {
+    "source": "services/01-nextjs/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.runtimeVariants": {
+    "source": "services/01-nextjs/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.workflows": {
+    "source": "services/01-nextjs/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.shippedCompliance": {
+    "source": "services/01-nextjs/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.helm": {
+    "source": "services/01-nextjs/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.kustomizeOverlays": {
+    "source": "services/01-nextjs/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nextjs.middleware": {
+    "source": "services/01-nextjs/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.sourceLocation": {
+    "source": "services/01-nuxt/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.name": {
+    "source": "services/01-nuxt/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.catalogTags": {
+    "source": "services/01-nuxt/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.dockerfileTargets": {
+    "source": "services/01-nuxt/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.buildArgs": {
+    "source": "services/01-nuxt/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.runtimeVariants": {
+    "source": "services/01-nuxt/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.workflows": {
+    "source": "services/01-nuxt/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.shippedCompliance": {
+    "source": "services/01-nuxt/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.helm": {
+    "source": "services/01-nuxt/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.kustomizeOverlays": {
+    "source": "services/01-nuxt/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-nuxt.middleware": {
+    "source": "services/01-nuxt/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.sourceLocation": {
+    "source": "services/01-remix/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.name": {
+    "source": "services/01-remix/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.catalogTags": {
+    "source": "services/01-remix/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.dockerfileTargets": {
+    "source": "services/01-remix/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.buildArgs": {
+    "source": "services/01-remix/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.runtimeVariants": {
+    "source": "services/01-remix/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.workflows": {
+    "source": "services/01-remix/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.shippedCompliance": {
+    "source": "services/01-remix/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.helm": {
+    "source": "services/01-remix/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.kustomizeOverlays": {
+    "source": "services/01-remix/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-remix.middleware": {
+    "source": "services/01-remix/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.sourceLocation": {
+    "source": "services/01-solid-start/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.name": {
+    "source": "services/01-solid-start/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.catalogTags": {
+    "source": "services/01-solid-start/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.dockerfileTargets": {
+    "source": "services/01-solid-start/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.buildArgs": {
+    "source": "services/01-solid-start/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.runtimeVariants": {
+    "source": "services/01-solid-start/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.workflows": {
+    "source": "services/01-solid-start/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.shippedCompliance": {
+    "source": "services/01-solid-start/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.helm": {
+    "source": "services/01-solid-start/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.kustomizeOverlays": {
+    "source": "services/01-solid-start/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-solid-start.middleware": {
+    "source": "services/01-solid-start/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.sourceLocation": {
+    "source": "services/01-sveltekit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.name": {
+    "source": "services/01-sveltekit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.catalogTags": {
+    "source": "services/01-sveltekit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.dockerfileTargets": {
+    "source": "services/01-sveltekit/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.buildArgs": {
+    "source": "services/01-sveltekit/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.runtimeVariants": {
+    "source": "services/01-sveltekit/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.workflows": {
+    "source": "services/01-sveltekit/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.shippedCompliance": {
+    "source": "services/01-sveltekit/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.helm": {
+    "source": "services/01-sveltekit/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.kustomizeOverlays": {
+    "source": "services/01-sveltekit/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#01-sveltekit.middleware": {
+    "source": "services/01-sveltekit/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.sourceLocation": {
+    "source": "services/02-angular/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.name": {
+    "source": "services/02-angular/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.catalogTags": {
+    "source": "services/02-angular/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.dockerfileTargets": {
+    "source": "services/02-angular/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.buildArgs": {
+    "source": "services/02-angular/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.runtimeVariants": {
+    "source": "services/02-angular/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.workflows": {
+    "source": "services/02-angular/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.shippedCompliance": {
+    "source": "services/02-angular/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.helm": {
+    "source": "services/02-angular/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-angular.kustomizeOverlays": {
+    "source": "services/02-angular/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.sourceLocation": {
+    "source": "services/02-lit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.name": {
+    "source": "services/02-lit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.catalogTags": {
+    "source": "services/02-lit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.dockerfileTargets": {
+    "source": "services/02-lit/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.buildArgs": {
+    "source": "services/02-lit/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.runtimeVariants": {
+    "source": "services/02-lit/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.workflows": {
+    "source": "services/02-lit/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.shippedCompliance": {
+    "source": "services/02-lit/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.helm": {
+    "source": "services/02-lit/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.kustomizeOverlays": {
+    "source": "services/02-lit/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-lit.middleware": {
+    "source": "services/02-lit/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.sourceLocation": {
+    "source": "services/02-preact/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.name": {
+    "source": "services/02-preact/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.catalogTags": {
+    "source": "services/02-preact/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.dockerfileTargets": {
+    "source": "services/02-preact/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.buildArgs": {
+    "source": "services/02-preact/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.runtimeVariants": {
+    "source": "services/02-preact/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.workflows": {
+    "source": "services/02-preact/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.shippedCompliance": {
+    "source": "services/02-preact/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.helm": {
+    "source": "services/02-preact/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.kustomizeOverlays": {
+    "source": "services/02-preact/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-preact.middleware": {
+    "source": "services/02-preact/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.sourceLocation": {
+    "source": "services/02-react/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.name": {
+    "source": "services/02-react/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.catalogTags": {
+    "source": "services/02-react/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.dockerfileTargets": {
+    "source": "services/02-react/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.buildArgs": {
+    "source": "services/02-react/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.runtimeVariants": {
+    "source": "services/02-react/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.workflows": {
+    "source": "services/02-react/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.shippedCompliance": {
+    "source": "services/02-react/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.helm": {
+    "source": "services/02-react/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.kustomizeOverlays": {
+    "source": "services/02-react/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-react.middleware": {
+    "source": "services/02-react/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.sourceLocation": {
+    "source": "services/02-solidjs/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.name": {
+    "source": "services/02-solidjs/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.catalogTags": {
+    "source": "services/02-solidjs/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.dockerfileTargets": {
+    "source": "services/02-solidjs/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.buildArgs": {
+    "source": "services/02-solidjs/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.runtimeVariants": {
+    "source": "services/02-solidjs/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.workflows": {
+    "source": "services/02-solidjs/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.shippedCompliance": {
+    "source": "services/02-solidjs/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.helm": {
+    "source": "services/02-solidjs/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.kustomizeOverlays": {
+    "source": "services/02-solidjs/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-solidjs.middleware": {
+    "source": "services/02-solidjs/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.sourceLocation": {
+    "source": "services/02-svelte/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.name": {
+    "source": "services/02-svelte/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.catalogTags": {
+    "source": "services/02-svelte/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.dockerfileTargets": {
+    "source": "services/02-svelte/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.buildArgs": {
+    "source": "services/02-svelte/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.runtimeVariants": {
+    "source": "services/02-svelte/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.workflows": {
+    "source": "services/02-svelte/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.shippedCompliance": {
+    "source": "services/02-svelte/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.helm": {
+    "source": "services/02-svelte/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.kustomizeOverlays": {
+    "source": "services/02-svelte/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-svelte.middleware": {
+    "source": "services/02-svelte/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.sourceLocation": {
+    "source": "services/02-vue/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.name": {
+    "source": "services/02-vue/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.catalogTags": {
+    "source": "services/02-vue/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.dockerfileTargets": {
+    "source": "services/02-vue/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.buildArgs": {
+    "source": "services/02-vue/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.runtimeVariants": {
+    "source": "services/02-vue/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.workflows": {
+    "source": "services/02-vue/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.shippedCompliance": {
+    "source": "services/02-vue/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.helm": {
+    "source": "services/02-vue/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.kustomizeOverlays": {
+    "source": "services/02-vue/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#02-vue.middleware": {
+    "source": "services/02-vue/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.sourceLocation": {
+    "source": "services/03-astro/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.name": {
+    "source": "services/03-astro/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.catalogTags": {
+    "source": "services/03-astro/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.dockerfileTargets": {
+    "source": "services/03-astro/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.buildArgs": {
+    "source": "services/03-astro/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.runtimeVariants": {
+    "source": "services/03-astro/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.workflows": {
+    "source": "services/03-astro/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.shippedCompliance": {
+    "source": "services/03-astro/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.helm": {
+    "source": "services/03-astro/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-astro.kustomizeOverlays": {
+    "source": "services/03-astro/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.sourceLocation": {
+    "source": "services/03-eleventy/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.name": {
+    "source": "services/03-eleventy/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.catalogTags": {
+    "source": "services/03-eleventy/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.dockerfileTargets": {
+    "source": "services/03-eleventy/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.buildArgs": {
+    "source": "services/03-eleventy/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.runtimeVariants": {
+    "source": "services/03-eleventy/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.workflows": {
+    "source": "services/03-eleventy/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.shippedCompliance": {
+    "source": "services/03-eleventy/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.helm": {
+    "source": "services/03-eleventy/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.kustomizeOverlays": {
+    "source": "services/03-eleventy/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-eleventy.middleware": {
+    "source": "services/03-eleventy/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.sourceLocation": {
+    "source": "services/03-gatsby/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.name": {
+    "source": "services/03-gatsby/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.catalogTags": {
+    "source": "services/03-gatsby/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.dockerfileTargets": {
+    "source": "services/03-gatsby/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.buildArgs": {
+    "source": "services/03-gatsby/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.runtimeVariants": {
+    "source": "services/03-gatsby/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.workflows": {
+    "source": "services/03-gatsby/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.shippedCompliance": {
+    "source": "services/03-gatsby/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.helm": {
+    "source": "services/03-gatsby/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.kustomizeOverlays": {
+    "source": "services/03-gatsby/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-gatsby.middleware": {
+    "source": "services/03-gatsby/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.sourceLocation": {
+    "source": "services/03-hugo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.name": {
+    "source": "services/03-hugo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.catalogTags": {
+    "source": "services/03-hugo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.dockerfileTargets": {
+    "source": "services/03-hugo/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.buildArgs": {
+    "source": "services/03-hugo/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.runtimeVariants": {
+    "source": "services/03-hugo/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.workflows": {
+    "source": "services/03-hugo/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.shippedCompliance": {
+    "source": "services/03-hugo/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.helm": {
+    "source": "services/03-hugo/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#03-hugo.kustomizeOverlays": {
+    "source": "services/03-hugo/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.sourceLocation": {
+    "source": "services/04-astro/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.name": {
+    "source": "services/04-astro/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.catalogTags": {
+    "source": "services/04-astro/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.dockerfileTargets": {
+    "source": "services/04-astro/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.buildArgs": {
+    "source": "services/04-astro/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.runtimeVariants": {
+    "source": "services/04-astro/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.workflows": {
+    "source": "services/04-astro/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.shippedCompliance": {
+    "source": "services/04-astro/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.helm": {
+    "source": "services/04-astro/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.kustomizeOverlays": {
+    "source": "services/04-astro/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-astro.middleware": {
+    "source": "services/04-astro/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.sourceLocation": {
+    "source": "services/04-fresh/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.name": {
+    "source": "services/04-fresh/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.catalogTags": {
+    "source": "services/04-fresh/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.dockerfileTargets": {
+    "source": "services/04-fresh/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.buildArgs": {
+    "source": "services/04-fresh/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.runtimeVariants": {
+    "source": "services/04-fresh/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.workflows": {
+    "source": "services/04-fresh/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.shippedCompliance": {
+    "source": "services/04-fresh/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.helm": {
+    "source": "services/04-fresh/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#04-fresh.kustomizeOverlays": {
+    "source": "services/04-fresh/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.sourceLocation": {
+    "source": "services/05-qwik/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.name": {
+    "source": "services/05-qwik/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.catalogTags": {
+    "source": "services/05-qwik/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.dockerfileTargets": {
+    "source": "services/05-qwik/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.buildArgs": {
+    "source": "services/05-qwik/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.runtimeVariants": {
+    "source": "services/05-qwik/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.workflows": {
+    "source": "services/05-qwik/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.shippedCompliance": {
+    "source": "services/05-qwik/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.helm": {
+    "source": "services/05-qwik/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.kustomizeOverlays": {
+    "source": "services/05-qwik/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#05-qwik.middleware": {
+    "source": "services/05-qwik/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-hono-edge.sourceLocation": {
+    "source": "services/06-hono-edge/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-hono-edge.name": {
+    "source": "services/06-hono-edge/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-hono-edge.catalogTags": {
+    "source": "services/06-hono-edge/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-hono-edge.workflows": {
+    "source": "services/06-hono-edge/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-hono-edge.shippedCompliance": {
+    "source": "services/06-hono-edge/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-nextjs-edge.sourceLocation": {
+    "source": "services/06-nextjs-edge/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-nextjs-edge.name": {
+    "source": "services/06-nextjs-edge/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-nextjs-edge.catalogTags": {
+    "source": "services/06-nextjs-edge/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-nextjs-edge.workflows": {
+    "source": "services/06-nextjs-edge/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-nextjs-edge.shippedCompliance": {
+    "source": "services/06-nextjs-edge/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-remix-cloudflare.sourceLocation": {
+    "source": "services/06-remix-cloudflare/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-remix-cloudflare.name": {
+    "source": "services/06-remix-cloudflare/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-remix-cloudflare.catalogTags": {
+    "source": "services/06-remix-cloudflare/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-remix-cloudflare.workflows": {
+    "source": "services/06-remix-cloudflare/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#06-remix-cloudflare.shippedCompliance": {
+    "source": "services/06-remix-cloudflare/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.sourceLocation": {
+    "source": "services/07-nextjs-app-router/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.name": {
+    "source": "services/07-nextjs-app-router/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.catalogTags": {
+    "source": "services/07-nextjs-app-router/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.dockerfileTargets": {
+    "source": "services/07-nextjs-app-router/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.buildArgs": {
+    "source": "services/07-nextjs-app-router/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.runtimeVariants": {
+    "source": "services/07-nextjs-app-router/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.workflows": {
+    "source": "services/07-nextjs-app-router/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.shippedCompliance": {
+    "source": "services/07-nextjs-app-router/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.helm": {
+    "source": "services/07-nextjs-app-router/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.kustomizeOverlays": {
+    "source": "services/07-nextjs-app-router/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-nextjs-app-router.middleware": {
+    "source": "services/07-nextjs-app-router/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.sourceLocation": {
+    "source": "services/07-remix/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.name": {
+    "source": "services/07-remix/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.catalogTags": {
+    "source": "services/07-remix/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.dockerfileTargets": {
+    "source": "services/07-remix/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.buildArgs": {
+    "source": "services/07-remix/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.runtimeVariants": {
+    "source": "services/07-remix/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.workflows": {
+    "source": "services/07-remix/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.shippedCompliance": {
+    "source": "services/07-remix/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.helm": {
+    "source": "services/07-remix/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.kustomizeOverlays": {
+    "source": "services/07-remix/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-remix.middleware": {
+    "source": "services/07-remix/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.sourceLocation": {
+    "source": "services/07-sveltekit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.name": {
+    "source": "services/07-sveltekit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.catalogTags": {
+    "source": "services/07-sveltekit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.dockerfileTargets": {
+    "source": "services/07-sveltekit/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.buildArgs": {
+    "source": "services/07-sveltekit/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.runtimeVariants": {
+    "source": "services/07-sveltekit/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.workflows": {
+    "source": "services/07-sveltekit/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.shippedCompliance": {
+    "source": "services/07-sveltekit/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.helm": {
+    "source": "services/07-sveltekit/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.kustomizeOverlays": {
+    "source": "services/07-sveltekit/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#07-sveltekit.middleware": {
+    "source": "services/07-sveltekit/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.sourceLocation": {
+    "source": "services/08-mf-rspack/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.name": {
+    "source": "services/08-mf-rspack/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.catalogTags": {
+    "source": "services/08-mf-rspack/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.dockerfileTargets": {
+    "source": "services/08-mf-rspack/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.buildArgs": {
+    "source": "services/08-mf-rspack/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.runtimeVariants": {
+    "source": "services/08-mf-rspack/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.workflows": {
+    "source": "services/08-mf-rspack/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.shippedCompliance": {
+    "source": "services/08-mf-rspack/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.helm": {
+    "source": "services/08-mf-rspack/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-rspack.kustomizeOverlays": {
+    "source": "services/08-mf-rspack/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.sourceLocation": {
+    "source": "services/08-mf-webpack/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.name": {
+    "source": "services/08-mf-webpack/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.catalogTags": {
+    "source": "services/08-mf-webpack/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.dockerfileTargets": {
+    "source": "services/08-mf-webpack/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.buildArgs": {
+    "source": "services/08-mf-webpack/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.runtimeVariants": {
+    "source": "services/08-mf-webpack/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.workflows": {
+    "source": "services/08-mf-webpack/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.shippedCompliance": {
+    "source": "services/08-mf-webpack/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.helm": {
+    "source": "services/08-mf-webpack/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-mf-webpack.kustomizeOverlays": {
+    "source": "services/08-mf-webpack/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.sourceLocation": {
+    "source": "services/08-single-spa/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.name": {
+    "source": "services/08-single-spa/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.catalogTags": {
+    "source": "services/08-single-spa/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.dockerfileTargets": {
+    "source": "services/08-single-spa/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.buildArgs": {
+    "source": "services/08-single-spa/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.runtimeVariants": {
+    "source": "services/08-single-spa/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.workflows": {
+    "source": "services/08-single-spa/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.shippedCompliance": {
+    "source": "services/08-single-spa/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.helm": {
+    "source": "services/08-single-spa/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#08-single-spa.kustomizeOverlays": {
+    "source": "services/08-single-spa/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-expo.sourceLocation": {
+    "source": "services/09-expo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-expo.name": {
+    "source": "services/09-expo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-expo.catalogTags": {
+    "source": "services/09-expo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-expo.workflows": {
+    "source": "services/09-expo/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-expo.shippedCompliance": {
+    "source": "services/09-expo/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-ionic.sourceLocation": {
+    "source": "services/09-ionic/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-ionic.name": {
+    "source": "services/09-ionic/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-ionic.catalogTags": {
+    "source": "services/09-ionic/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-ionic.workflows": {
+    "source": "services/09-ionic/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-ionic.shippedCompliance": {
+    "source": "services/09-ionic/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-react-native.sourceLocation": {
+    "source": "services/09-react-native/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-react-native.name": {
+    "source": "services/09-react-native/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-react-native.catalogTags": {
+    "source": "services/09-react-native/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-react-native.workflows": {
+    "source": "services/09-react-native/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#09-react-native.shippedCompliance": {
+    "source": "services/09-react-native/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-dotnet-maui.sourceLocation": {
+    "source": "services/10-dotnet-maui/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-dotnet-maui.name": {
+    "source": "services/10-dotnet-maui/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-dotnet-maui.catalogTags": {
+    "source": "services/10-dotnet-maui/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-dotnet-maui.workflows": {
+    "source": "services/10-dotnet-maui/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-dotnet-maui.shippedCompliance": {
+    "source": "services/10-dotnet-maui/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-flutter.sourceLocation": {
+    "source": "services/10-flutter/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-flutter.name": {
+    "source": "services/10-flutter/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-flutter.catalogTags": {
+    "source": "services/10-flutter/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-flutter.workflows": {
+    "source": "services/10-flutter/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-flutter.shippedCompliance": {
+    "source": "services/10-flutter/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-kmp.sourceLocation": {
+    "source": "services/10-kmp/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-kmp.name": {
+    "source": "services/10-kmp/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-kmp.catalogTags": {
+    "source": "services/10-kmp/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-kmp.workflows": {
+    "source": "services/10-kmp/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#10-kmp.shippedCompliance": {
+    "source": "services/10-kmp/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-objc-uikit.sourceLocation": {
+    "source": "services/11-objc-uikit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-objc-uikit.name": {
+    "source": "services/11-objc-uikit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-objc-uikit.catalogTags": {
+    "source": "services/11-objc-uikit/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-objc-uikit.workflows": {
+    "source": "services/11-objc-uikit/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-objc-uikit.shippedCompliance": {
+    "source": "services/11-objc-uikit/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-swift-swiftui.sourceLocation": {
+    "source": "services/11-swift-swiftui/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-swift-swiftui.name": {
+    "source": "services/11-swift-swiftui/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-swift-swiftui.catalogTags": {
+    "source": "services/11-swift-swiftui/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-swift-swiftui.workflows": {
+    "source": "services/11-swift-swiftui/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#11-swift-swiftui.shippedCompliance": {
+    "source": "services/11-swift-swiftui/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-java-android.sourceLocation": {
+    "source": "services/12-java-android/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-java-android.name": {
+    "source": "services/12-java-android/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-java-android.catalogTags": {
+    "source": "services/12-java-android/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-java-android.workflows": {
+    "source": "services/12-java-android/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-java-android.shippedCompliance": {
+    "source": "services/12-java-android/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-kotlin-jetpack.sourceLocation": {
+    "source": "services/12-kotlin-jetpack/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-kotlin-jetpack.name": {
+    "source": "services/12-kotlin-jetpack/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-kotlin-jetpack.catalogTags": {
+    "source": "services/12-kotlin-jetpack/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-kotlin-jetpack.workflows": {
+    "source": "services/12-kotlin-jetpack/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#12-kotlin-jetpack.shippedCompliance": {
+    "source": "services/12-kotlin-jetpack/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.sourceLocation": {
+    "source": "services/13-vite-pwa/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.name": {
+    "source": "services/13-vite-pwa/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.catalogTags": {
+    "source": "services/13-vite-pwa/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.dockerfileTargets": {
+    "source": "services/13-vite-pwa/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.buildArgs": {
+    "source": "services/13-vite-pwa/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.runtimeVariants": {
+    "source": "services/13-vite-pwa/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.workflows": {
+    "source": "services/13-vite-pwa/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.shippedCompliance": {
+    "source": "services/13-vite-pwa/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.helm": {
+    "source": "services/13-vite-pwa/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.kustomizeOverlays": {
+    "source": "services/13-vite-pwa/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-vite-pwa.middleware": {
+    "source": "services/13-vite-pwa/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.sourceLocation": {
+    "source": "services/13-workbox/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.name": {
+    "source": "services/13-workbox/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.catalogTags": {
+    "source": "services/13-workbox/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.dockerfileTargets": {
+    "source": "services/13-workbox/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.buildArgs": {
+    "source": "services/13-workbox/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.runtimeVariants": {
+    "source": "services/13-workbox/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.workflows": {
+    "source": "services/13-workbox/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.shippedCompliance": {
+    "source": "services/13-workbox/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.helm": {
+    "source": "services/13-workbox/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.kustomizeOverlays": {
+    "source": "services/13-workbox/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#13-workbox.middleware": {
+    "source": "services/13-workbox/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.sourceLocation": {
+    "source": "services/14-bun/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.name": {
+    "source": "services/14-bun/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.catalogTags": {
+    "source": "services/14-bun/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.dockerfileTargets": {
+    "source": "services/14-bun/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.buildArgs": {
+    "source": "services/14-bun/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.runtimeVariants": {
+    "source": "services/14-bun/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.workflows": {
+    "source": "services/14-bun/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.shippedCompliance": {
+    "source": "services/14-bun/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.helm": {
+    "source": "services/14-bun/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.kustomizeOverlays": {
+    "source": "services/14-bun/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.middleware": {
+    "source": "services/14-bun/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-bun.ormDetected": {
+    "source": "services/14-bun/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.sourceLocation": {
+    "source": "services/14-deno/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.name": {
+    "source": "services/14-deno/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.catalogTags": {
+    "source": "services/14-deno/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.dockerfileTargets": {
+    "source": "services/14-deno/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.buildArgs": {
+    "source": "services/14-deno/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.runtimeVariants": {
+    "source": "services/14-deno/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.workflows": {
+    "source": "services/14-deno/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.shippedCompliance": {
+    "source": "services/14-deno/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.helm": {
+    "source": "services/14-deno/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.kustomizeOverlays": {
+    "source": "services/14-deno/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.middleware": {
+    "source": "services/14-deno/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-deno.ormDetected": {
+    "source": "services/14-deno/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.sourceLocation": {
+    "source": "services/14-elysia/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.name": {
+    "source": "services/14-elysia/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.catalogTags": {
+    "source": "services/14-elysia/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.dockerfileTargets": {
+    "source": "services/14-elysia/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.buildArgs": {
+    "source": "services/14-elysia/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.runtimeVariants": {
+    "source": "services/14-elysia/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.workflows": {
+    "source": "services/14-elysia/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.shippedCompliance": {
+    "source": "services/14-elysia/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.helm": {
+    "source": "services/14-elysia/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.kustomizeOverlays": {
+    "source": "services/14-elysia/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.middleware": {
+    "source": "services/14-elysia/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-elysia.ormDetected": {
+    "source": "services/14-elysia/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.sourceLocation": {
+    "source": "services/14-express/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.name": {
+    "source": "services/14-express/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.catalogTags": {
+    "source": "services/14-express/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.dockerfileTargets": {
+    "source": "services/14-express/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.buildArgs": {
+    "source": "services/14-express/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.runtimeVariants": {
+    "source": "services/14-express/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.workflows": {
+    "source": "services/14-express/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.shippedCompliance": {
+    "source": "services/14-express/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.helm": {
+    "source": "services/14-express/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.kustomizeOverlays": {
+    "source": "services/14-express/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.authOptionsAvailable": {
+    "source": "services/14-express/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.ormOptionsAvailable": {
+    "source": "services/14-express/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.observabilityOptionsAvailable": {
+    "source": "services/14-express/src/observability",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.middleware": {
+    "source": "services/14-express/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.ormDetected": {
+    "source": "services/14-express/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-express.observabilityDetected": {
+    "source": "services/14-express/src/observability",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.sourceLocation": {
+    "source": "services/14-fastify/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.name": {
+    "source": "services/14-fastify/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.catalogTags": {
+    "source": "services/14-fastify/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.dockerfileTargets": {
+    "source": "services/14-fastify/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.buildArgs": {
+    "source": "services/14-fastify/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.runtimeVariants": {
+    "source": "services/14-fastify/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.workflows": {
+    "source": "services/14-fastify/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.shippedCompliance": {
+    "source": "services/14-fastify/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.helm": {
+    "source": "services/14-fastify/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.kustomizeOverlays": {
+    "source": "services/14-fastify/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.middleware": {
+    "source": "services/14-fastify/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-fastify.ormDetected": {
+    "source": "services/14-fastify/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.sourceLocation": {
+    "source": "services/14-hono/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.name": {
+    "source": "services/14-hono/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.catalogTags": {
+    "source": "services/14-hono/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.dockerfileTargets": {
+    "source": "services/14-hono/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.buildArgs": {
+    "source": "services/14-hono/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.runtimeVariants": {
+    "source": "services/14-hono/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.workflows": {
+    "source": "services/14-hono/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.shippedCompliance": {
+    "source": "services/14-hono/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.helm": {
+    "source": "services/14-hono/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.kustomizeOverlays": {
+    "source": "services/14-hono/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.middleware": {
+    "source": "services/14-hono/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-hono.ormDetected": {
+    "source": "services/14-hono/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.sourceLocation": {
+    "source": "services/14-nestjs/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.name": {
+    "source": "services/14-nestjs/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.catalogTags": {
+    "source": "services/14-nestjs/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.dockerfileTargets": {
+    "source": "services/14-nestjs/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.buildArgs": {
+    "source": "services/14-nestjs/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.runtimeVariants": {
+    "source": "services/14-nestjs/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.workflows": {
+    "source": "services/14-nestjs/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.shippedCompliance": {
+    "source": "services/14-nestjs/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.helm": {
+    "source": "services/14-nestjs/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.kustomizeOverlays": {
+    "source": "services/14-nestjs/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.middleware": {
+    "source": "services/14-nestjs/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#14-nestjs.ormDetected": {
+    "source": "services/14-nestjs/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.sourceLocation": {
+    "source": "services/15-django/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.name": {
+    "source": "services/15-django/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.catalogTags": {
+    "source": "services/15-django/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.dockerfileTargets": {
+    "source": "services/15-django/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.buildArgs": {
+    "source": "services/15-django/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.runtimeVariants": {
+    "source": "services/15-django/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.workflows": {
+    "source": "services/15-django/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.shippedCompliance": {
+    "source": "services/15-django/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.helm": {
+    "source": "services/15-django/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.kustomizeOverlays": {
+    "source": "services/15-django/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.middleware": {
+    "source": "services/15-django/api/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-django.ormDetected": {
+    "source": "services/15-django/api/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.sourceLocation": {
+    "source": "services/15-fastapi/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.name": {
+    "source": "services/15-fastapi/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.catalogTags": {
+    "source": "services/15-fastapi/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.dockerfileTargets": {
+    "source": "services/15-fastapi/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.buildArgs": {
+    "source": "services/15-fastapi/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.runtimeVariants": {
+    "source": "services/15-fastapi/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.workflows": {
+    "source": "services/15-fastapi/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.shippedCompliance": {
+    "source": "services/15-fastapi/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.helm": {
+    "source": "services/15-fastapi/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.kustomizeOverlays": {
+    "source": "services/15-fastapi/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.authOptionsAvailable": {
+    "source": "services/15-fastapi/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.ormOptionsAvailable": {
+    "source": "services/15-fastapi/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.observabilityOptionsAvailable": {
+    "source": "services/15-fastapi/src/observability",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.middleware": {
+    "source": "services/15-fastapi/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.ormDetected": {
+    "source": "services/15-fastapi/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-fastapi.observabilityDetected": {
+    "source": "services/15-fastapi/src/observability",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.sourceLocation": {
+    "source": "services/15-flask/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.name": {
+    "source": "services/15-flask/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.catalogTags": {
+    "source": "services/15-flask/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.dockerfileTargets": {
+    "source": "services/15-flask/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.buildArgs": {
+    "source": "services/15-flask/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.runtimeVariants": {
+    "source": "services/15-flask/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.workflows": {
+    "source": "services/15-flask/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.shippedCompliance": {
+    "source": "services/15-flask/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.helm": {
+    "source": "services/15-flask/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.kustomizeOverlays": {
+    "source": "services/15-flask/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.middleware": {
+    "source": "services/15-flask/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-flask.ormDetected": {
+    "source": "services/15-flask/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.sourceLocation": {
+    "source": "services/15-starlette/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.name": {
+    "source": "services/15-starlette/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.catalogTags": {
+    "source": "services/15-starlette/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.dockerfileTargets": {
+    "source": "services/15-starlette/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.buildArgs": {
+    "source": "services/15-starlette/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.runtimeVariants": {
+    "source": "services/15-starlette/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.workflows": {
+    "source": "services/15-starlette/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.shippedCompliance": {
+    "source": "services/15-starlette/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.helm": {
+    "source": "services/15-starlette/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.kustomizeOverlays": {
+    "source": "services/15-starlette/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.middleware": {
+    "source": "services/15-starlette/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#15-starlette.ormDetected": {
+    "source": "services/15-starlette/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.sourceLocation": {
+    "source": "services/16-chi/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.name": {
+    "source": "services/16-chi/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.catalogTags": {
+    "source": "services/16-chi/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.dockerfileTargets": {
+    "source": "services/16-chi/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.buildArgs": {
+    "source": "services/16-chi/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.runtimeVariants": {
+    "source": "services/16-chi/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.workflows": {
+    "source": "services/16-chi/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.shippedCompliance": {
+    "source": "services/16-chi/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.helm": {
+    "source": "services/16-chi/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.kustomizeOverlays": {
+    "source": "services/16-chi/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.middleware": {
+    "source": "services/16-chi/internal/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-chi.ormDetected": {
+    "source": "services/16-chi/internal/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.sourceLocation": {
+    "source": "services/16-echo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.name": {
+    "source": "services/16-echo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.catalogTags": {
+    "source": "services/16-echo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.dockerfileTargets": {
+    "source": "services/16-echo/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.buildArgs": {
+    "source": "services/16-echo/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.runtimeVariants": {
+    "source": "services/16-echo/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.workflows": {
+    "source": "services/16-echo/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.shippedCompliance": {
+    "source": "services/16-echo/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.helm": {
+    "source": "services/16-echo/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.kustomizeOverlays": {
+    "source": "services/16-echo/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.middleware": {
+    "source": "services/16-echo/internal/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-echo.ormDetected": {
+    "source": "services/16-echo/internal/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.sourceLocation": {
+    "source": "services/16-fiber/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.name": {
+    "source": "services/16-fiber/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.catalogTags": {
+    "source": "services/16-fiber/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.dockerfileTargets": {
+    "source": "services/16-fiber/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.buildArgs": {
+    "source": "services/16-fiber/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.runtimeVariants": {
+    "source": "services/16-fiber/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.workflows": {
+    "source": "services/16-fiber/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.shippedCompliance": {
+    "source": "services/16-fiber/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.helm": {
+    "source": "services/16-fiber/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.kustomizeOverlays": {
+    "source": "services/16-fiber/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.middleware": {
+    "source": "services/16-fiber/internal/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-fiber.ormDetected": {
+    "source": "services/16-fiber/internal/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.sourceLocation": {
+    "source": "services/16-gin/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.name": {
+    "source": "services/16-gin/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.catalogTags": {
+    "source": "services/16-gin/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.dockerfileTargets": {
+    "source": "services/16-gin/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.buildArgs": {
+    "source": "services/16-gin/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.runtimeVariants": {
+    "source": "services/16-gin/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.workflows": {
+    "source": "services/16-gin/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.shippedCompliance": {
+    "source": "services/16-gin/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.helm": {
+    "source": "services/16-gin/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.kustomizeOverlays": {
+    "source": "services/16-gin/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.authOptionsAvailable": {
+    "source": "services/16-gin/internal/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.ormOptionsAvailable": {
+    "source": "services/16-gin/internal/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.observabilityOptionsAvailable": {
+    "source": "services/16-gin/internal/observability",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.middleware": {
+    "source": "services/16-gin/internal/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.ormDetected": {
+    "source": "services/16-gin/internal/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#16-gin.observabilityDetected": {
+    "source": "services/16-gin/internal/observability",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.sourceLocation": {
+    "source": "services/17-micronaut/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.name": {
+    "source": "services/17-micronaut/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.catalogTags": {
+    "source": "services/17-micronaut/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.dockerfileTargets": {
+    "source": "services/17-micronaut/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.buildArgs": {
+    "source": "services/17-micronaut/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.runtimeVariants": {
+    "source": "services/17-micronaut/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.workflows": {
+    "source": "services/17-micronaut/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.shippedCompliance": {
+    "source": "services/17-micronaut/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.helm": {
+    "source": "services/17-micronaut/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-micronaut.kustomizeOverlays": {
+    "source": "services/17-micronaut/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.sourceLocation": {
+    "source": "services/17-quarkus/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.name": {
+    "source": "services/17-quarkus/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.catalogTags": {
+    "source": "services/17-quarkus/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.dockerfileTargets": {
+    "source": "services/17-quarkus/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.buildArgs": {
+    "source": "services/17-quarkus/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.runtimeVariants": {
+    "source": "services/17-quarkus/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.workflows": {
+    "source": "services/17-quarkus/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.shippedCompliance": {
+    "source": "services/17-quarkus/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.helm": {
+    "source": "services/17-quarkus/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-quarkus.kustomizeOverlays": {
+    "source": "services/17-quarkus/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.sourceLocation": {
+    "source": "services/17-spring-boot/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.name": {
+    "source": "services/17-spring-boot/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.catalogTags": {
+    "source": "services/17-spring-boot/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.dockerfileTargets": {
+    "source": "services/17-spring-boot/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.buildArgs": {
+    "source": "services/17-spring-boot/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.runtimeVariants": {
+    "source": "services/17-spring-boot/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.workflows": {
+    "source": "services/17-spring-boot/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.shippedCompliance": {
+    "source": "services/17-spring-boot/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.helm": {
+    "source": "services/17-spring-boot/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#17-spring-boot.kustomizeOverlays": {
+    "source": "services/17-spring-boot/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.sourceLocation": {
+    "source": "services/18-ktor/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.name": {
+    "source": "services/18-ktor/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.catalogTags": {
+    "source": "services/18-ktor/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.dockerfileTargets": {
+    "source": "services/18-ktor/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.buildArgs": {
+    "source": "services/18-ktor/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.runtimeVariants": {
+    "source": "services/18-ktor/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.workflows": {
+    "source": "services/18-ktor/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.shippedCompliance": {
+    "source": "services/18-ktor/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.helm": {
+    "source": "services/18-ktor/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-ktor.kustomizeOverlays": {
+    "source": "services/18-ktor/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.sourceLocation": {
+    "source": "services/18-spring-boot-kotlin/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.name": {
+    "source": "services/18-spring-boot-kotlin/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.catalogTags": {
+    "source": "services/18-spring-boot-kotlin/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.dockerfileTargets": {
+    "source": "services/18-spring-boot-kotlin/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.buildArgs": {
+    "source": "services/18-spring-boot-kotlin/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.runtimeVariants": {
+    "source": "services/18-spring-boot-kotlin/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.workflows": {
+    "source": "services/18-spring-boot-kotlin/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.shippedCompliance": {
+    "source": "services/18-spring-boot-kotlin/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.helm": {
+    "source": "services/18-spring-boot-kotlin/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#18-spring-boot-kotlin.kustomizeOverlays": {
+    "source": "services/18-spring-boot-kotlin/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.sourceLocation": {
+    "source": "services/19-aspnet-core/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.name": {
+    "source": "services/19-aspnet-core/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.catalogTags": {
+    "source": "services/19-aspnet-core/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.dockerfileTargets": {
+    "source": "services/19-aspnet-core/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.buildArgs": {
+    "source": "services/19-aspnet-core/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.runtimeVariants": {
+    "source": "services/19-aspnet-core/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.workflows": {
+    "source": "services/19-aspnet-core/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.shippedCompliance": {
+    "source": "services/19-aspnet-core/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.helm": {
+    "source": "services/19-aspnet-core/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.kustomizeOverlays": {
+    "source": "services/19-aspnet-core/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-aspnet-core.middleware": {
+    "source": "services/19-aspnet-core/app/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.sourceLocation": {
+    "source": "services/19-minimal-apis/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.name": {
+    "source": "services/19-minimal-apis/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.catalogTags": {
+    "source": "services/19-minimal-apis/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.dockerfileTargets": {
+    "source": "services/19-minimal-apis/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.buildArgs": {
+    "source": "services/19-minimal-apis/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.runtimeVariants": {
+    "source": "services/19-minimal-apis/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.workflows": {
+    "source": "services/19-minimal-apis/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.shippedCompliance": {
+    "source": "services/19-minimal-apis/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.helm": {
+    "source": "services/19-minimal-apis/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.kustomizeOverlays": {
+    "source": "services/19-minimal-apis/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#19-minimal-apis.middleware": {
+    "source": "services/19-minimal-apis/app/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.sourceLocation": {
+    "source": "services/20-actix-web/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.name": {
+    "source": "services/20-actix-web/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.catalogTags": {
+    "source": "services/20-actix-web/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.dockerfileTargets": {
+    "source": "services/20-actix-web/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.buildArgs": {
+    "source": "services/20-actix-web/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.runtimeVariants": {
+    "source": "services/20-actix-web/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.workflows": {
+    "source": "services/20-actix-web/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.shippedCompliance": {
+    "source": "services/20-actix-web/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.helm": {
+    "source": "services/20-actix-web/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.kustomizeOverlays": {
+    "source": "services/20-actix-web/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.middleware": {
+    "source": "services/20-actix-web/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-actix-web.ormDetected": {
+    "source": "services/20-actix-web/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.sourceLocation": {
+    "source": "services/20-axum/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.name": {
+    "source": "services/20-axum/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.catalogTags": {
+    "source": "services/20-axum/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.dockerfileTargets": {
+    "source": "services/20-axum/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.buildArgs": {
+    "source": "services/20-axum/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.runtimeVariants": {
+    "source": "services/20-axum/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.workflows": {
+    "source": "services/20-axum/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.shippedCompliance": {
+    "source": "services/20-axum/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.helm": {
+    "source": "services/20-axum/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.kustomizeOverlays": {
+    "source": "services/20-axum/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.middleware": {
+    "source": "services/20-axum/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#20-axum.ormDetected": {
+    "source": "services/20-axum/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.sourceLocation": {
+    "source": "services/21-phoenix/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.name": {
+    "source": "services/21-phoenix/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.catalogTags": {
+    "source": "services/21-phoenix/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.dockerfileTargets": {
+    "source": "services/21-phoenix/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.buildArgs": {
+    "source": "services/21-phoenix/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.runtimeVariants": {
+    "source": "services/21-phoenix/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.workflows": {
+    "source": "services/21-phoenix/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.shippedCompliance": {
+    "source": "services/21-phoenix/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.helm": {
+    "source": "services/21-phoenix/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#21-phoenix.kustomizeOverlays": {
+    "source": "services/21-phoenix/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.sourceLocation": {
+    "source": "services/22-rails/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.name": {
+    "source": "services/22-rails/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.catalogTags": {
+    "source": "services/22-rails/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.dockerfileTargets": {
+    "source": "services/22-rails/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.buildArgs": {
+    "source": "services/22-rails/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.runtimeVariants": {
+    "source": "services/22-rails/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.workflows": {
+    "source": "services/22-rails/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.shippedCompliance": {
+    "source": "services/22-rails/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.helm": {
+    "source": "services/22-rails/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-rails.kustomizeOverlays": {
+    "source": "services/22-rails/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.sourceLocation": {
+    "source": "services/22-sinatra/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.name": {
+    "source": "services/22-sinatra/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.catalogTags": {
+    "source": "services/22-sinatra/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.dockerfileTargets": {
+    "source": "services/22-sinatra/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.buildArgs": {
+    "source": "services/22-sinatra/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.runtimeVariants": {
+    "source": "services/22-sinatra/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.workflows": {
+    "source": "services/22-sinatra/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.shippedCompliance": {
+    "source": "services/22-sinatra/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.helm": {
+    "source": "services/22-sinatra/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.kustomizeOverlays": {
+    "source": "services/22-sinatra/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#22-sinatra.ormDetected": {
+    "source": "services/22-sinatra/app/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.sourceLocation": {
+    "source": "services/23-laravel/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.name": {
+    "source": "services/23-laravel/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.catalogTags": {
+    "source": "services/23-laravel/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.dockerfileTargets": {
+    "source": "services/23-laravel/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.buildArgs": {
+    "source": "services/23-laravel/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.runtimeVariants": {
+    "source": "services/23-laravel/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.workflows": {
+    "source": "services/23-laravel/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.shippedCompliance": {
+    "source": "services/23-laravel/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.helm": {
+    "source": "services/23-laravel/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-laravel.kustomizeOverlays": {
+    "source": "services/23-laravel/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.sourceLocation": {
+    "source": "services/23-slim/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.name": {
+    "source": "services/23-slim/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.catalogTags": {
+    "source": "services/23-slim/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.dockerfileTargets": {
+    "source": "services/23-slim/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.buildArgs": {
+    "source": "services/23-slim/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.runtimeVariants": {
+    "source": "services/23-slim/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.workflows": {
+    "source": "services/23-slim/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.shippedCompliance": {
+    "source": "services/23-slim/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.helm": {
+    "source": "services/23-slim/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.kustomizeOverlays": {
+    "source": "services/23-slim/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-slim.middleware": {
+    "source": "services/23-slim/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.sourceLocation": {
+    "source": "services/23-symfony/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.name": {
+    "source": "services/23-symfony/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.catalogTags": {
+    "source": "services/23-symfony/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.dockerfileTargets": {
+    "source": "services/23-symfony/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.buildArgs": {
+    "source": "services/23-symfony/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.runtimeVariants": {
+    "source": "services/23-symfony/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.workflows": {
+    "source": "services/23-symfony/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.shippedCompliance": {
+    "source": "services/23-symfony/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.helm": {
+    "source": "services/23-symfony/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#23-symfony.kustomizeOverlays": {
+    "source": "services/23-symfony/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.sourceLocation": {
+    "source": "services/24-hummingbird/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.name": {
+    "source": "services/24-hummingbird/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.catalogTags": {
+    "source": "services/24-hummingbird/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.dockerfileTargets": {
+    "source": "services/24-hummingbird/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.buildArgs": {
+    "source": "services/24-hummingbird/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.runtimeVariants": {
+    "source": "services/24-hummingbird/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.workflows": {
+    "source": "services/24-hummingbird/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.shippedCompliance": {
+    "source": "services/24-hummingbird/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.helm": {
+    "source": "services/24-hummingbird/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-hummingbird.kustomizeOverlays": {
+    "source": "services/24-hummingbird/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.sourceLocation": {
+    "source": "services/24-vapor/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.name": {
+    "source": "services/24-vapor/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.catalogTags": {
+    "source": "services/24-vapor/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.dockerfileTargets": {
+    "source": "services/24-vapor/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.buildArgs": {
+    "source": "services/24-vapor/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.runtimeVariants": {
+    "source": "services/24-vapor/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.workflows": {
+    "source": "services/24-vapor/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.shippedCompliance": {
+    "source": "services/24-vapor/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.helm": {
+    "source": "services/24-vapor/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#24-vapor.kustomizeOverlays": {
+    "source": "services/24-vapor/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.sourceLocation": {
+    "source": "services/25-http4s/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.name": {
+    "source": "services/25-http4s/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.catalogTags": {
+    "source": "services/25-http4s/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.dockerfileTargets": {
+    "source": "services/25-http4s/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.buildArgs": {
+    "source": "services/25-http4s/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.runtimeVariants": {
+    "source": "services/25-http4s/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.workflows": {
+    "source": "services/25-http4s/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.shippedCompliance": {
+    "source": "services/25-http4s/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.helm": {
+    "source": "services/25-http4s/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-http4s.kustomizeOverlays": {
+    "source": "services/25-http4s/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.sourceLocation": {
+    "source": "services/25-play/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.name": {
+    "source": "services/25-play/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.catalogTags": {
+    "source": "services/25-play/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.dockerfileTargets": {
+    "source": "services/25-play/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.buildArgs": {
+    "source": "services/25-play/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.runtimeVariants": {
+    "source": "services/25-play/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.workflows": {
+    "source": "services/25-play/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.shippedCompliance": {
+    "source": "services/25-play/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.helm": {
+    "source": "services/25-play/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#25-play.kustomizeOverlays": {
+    "source": "services/25-play/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.sourceLocation": {
+    "source": "services/26-pedestal/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.name": {
+    "source": "services/26-pedestal/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.catalogTags": {
+    "source": "services/26-pedestal/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.dockerfileTargets": {
+    "source": "services/26-pedestal/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.buildArgs": {
+    "source": "services/26-pedestal/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.runtimeVariants": {
+    "source": "services/26-pedestal/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.workflows": {
+    "source": "services/26-pedestal/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.shippedCompliance": {
+    "source": "services/26-pedestal/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.helm": {
+    "source": "services/26-pedestal/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-pedestal.kustomizeOverlays": {
+    "source": "services/26-pedestal/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.sourceLocation": {
+    "source": "services/26-ring/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.name": {
+    "source": "services/26-ring/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.catalogTags": {
+    "source": "services/26-ring/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.dockerfileTargets": {
+    "source": "services/26-ring/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.buildArgs": {
+    "source": "services/26-ring/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.runtimeVariants": {
+    "source": "services/26-ring/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.workflows": {
+    "source": "services/26-ring/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.shippedCompliance": {
+    "source": "services/26-ring/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.helm": {
+    "source": "services/26-ring/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#26-ring.kustomizeOverlays": {
+    "source": "services/26-ring/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.sourceLocation": {
+    "source": "services/27-crow/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.name": {
+    "source": "services/27-crow/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.catalogTags": {
+    "source": "services/27-crow/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.dockerfileTargets": {
+    "source": "services/27-crow/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.buildArgs": {
+    "source": "services/27-crow/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.runtimeVariants": {
+    "source": "services/27-crow/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.workflows": {
+    "source": "services/27-crow/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.shippedCompliance": {
+    "source": "services/27-crow/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.helm": {
+    "source": "services/27-crow/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-crow.kustomizeOverlays": {
+    "source": "services/27-crow/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.sourceLocation": {
+    "source": "services/27-drogon/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.name": {
+    "source": "services/27-drogon/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.catalogTags": {
+    "source": "services/27-drogon/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.dockerfileTargets": {
+    "source": "services/27-drogon/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.buildArgs": {
+    "source": "services/27-drogon/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.runtimeVariants": {
+    "source": "services/27-drogon/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.workflows": {
+    "source": "services/27-drogon/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.shippedCompliance": {
+    "source": "services/27-drogon/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.helm": {
+    "source": "services/27-drogon/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#27-drogon.kustomizeOverlays": {
+    "source": "services/27-drogon/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.sourceLocation": {
+    "source": "services/28-dotnet-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.name": {
+    "source": "services/28-dotnet-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.catalogTags": {
+    "source": "services/28-dotnet-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.dockerfileTargets": {
+    "source": "services/28-dotnet-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.buildArgs": {
+    "source": "services/28-dotnet-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.runtimeVariants": {
+    "source": "services/28-dotnet-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.workflows": {
+    "source": "services/28-dotnet-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.shippedCompliance": {
+    "source": "services/28-dotnet-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.helm": {
+    "source": "services/28-dotnet-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-dotnet-grpc.kustomizeOverlays": {
+    "source": "services/28-dotnet-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.sourceLocation": {
+    "source": "services/28-go-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.name": {
+    "source": "services/28-go-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.catalogTags": {
+    "source": "services/28-go-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.dockerfileTargets": {
+    "source": "services/28-go-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.buildArgs": {
+    "source": "services/28-go-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.runtimeVariants": {
+    "source": "services/28-go-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.workflows": {
+    "source": "services/28-go-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.shippedCompliance": {
+    "source": "services/28-go-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.helm": {
+    "source": "services/28-go-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.kustomizeOverlays": {
+    "source": "services/28-go-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.middleware": {
+    "source": "services/28-go-grpc/internal/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-go-grpc.ormDetected": {
+    "source": "services/28-go-grpc/internal/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.sourceLocation": {
+    "source": "services/28-java-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.name": {
+    "source": "services/28-java-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.catalogTags": {
+    "source": "services/28-java-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.dockerfileTargets": {
+    "source": "services/28-java-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.buildArgs": {
+    "source": "services/28-java-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.runtimeVariants": {
+    "source": "services/28-java-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.workflows": {
+    "source": "services/28-java-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.shippedCompliance": {
+    "source": "services/28-java-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.helm": {
+    "source": "services/28-java-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-java-grpc.kustomizeOverlays": {
+    "source": "services/28-java-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.sourceLocation": {
+    "source": "services/28-kotlin-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.name": {
+    "source": "services/28-kotlin-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.catalogTags": {
+    "source": "services/28-kotlin-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.dockerfileTargets": {
+    "source": "services/28-kotlin-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.buildArgs": {
+    "source": "services/28-kotlin-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.runtimeVariants": {
+    "source": "services/28-kotlin-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.workflows": {
+    "source": "services/28-kotlin-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.shippedCompliance": {
+    "source": "services/28-kotlin-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.helm": {
+    "source": "services/28-kotlin-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-kotlin-grpc.kustomizeOverlays": {
+    "source": "services/28-kotlin-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.sourceLocation": {
+    "source": "services/28-node-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.name": {
+    "source": "services/28-node-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.catalogTags": {
+    "source": "services/28-node-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.dockerfileTargets": {
+    "source": "services/28-node-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.buildArgs": {
+    "source": "services/28-node-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.runtimeVariants": {
+    "source": "services/28-node-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.workflows": {
+    "source": "services/28-node-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.shippedCompliance": {
+    "source": "services/28-node-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.helm": {
+    "source": "services/28-node-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.kustomizeOverlays": {
+    "source": "services/28-node-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.middleware": {
+    "source": "services/28-node-grpc/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-node-grpc.ormDetected": {
+    "source": "services/28-node-grpc/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.sourceLocation": {
+    "source": "services/28-php-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.name": {
+    "source": "services/28-php-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.catalogTags": {
+    "source": "services/28-php-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.dockerfileTargets": {
+    "source": "services/28-php-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.buildArgs": {
+    "source": "services/28-php-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.runtimeVariants": {
+    "source": "services/28-php-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.workflows": {
+    "source": "services/28-php-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.shippedCompliance": {
+    "source": "services/28-php-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.helm": {
+    "source": "services/28-php-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.kustomizeOverlays": {
+    "source": "services/28-php-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.middleware": {
+    "source": "services/28-php-grpc/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-php-grpc.ormDetected": {
+    "source": "services/28-php-grpc/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.sourceLocation": {
+    "source": "services/28-python-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.name": {
+    "source": "services/28-python-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.catalogTags": {
+    "source": "services/28-python-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.dockerfileTargets": {
+    "source": "services/28-python-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.buildArgs": {
+    "source": "services/28-python-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.runtimeVariants": {
+    "source": "services/28-python-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.workflows": {
+    "source": "services/28-python-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.shippedCompliance": {
+    "source": "services/28-python-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.helm": {
+    "source": "services/28-python-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.kustomizeOverlays": {
+    "source": "services/28-python-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.middleware": {
+    "source": "services/28-python-grpc/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-python-grpc.ormDetected": {
+    "source": "services/28-python-grpc/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.sourceLocation": {
+    "source": "services/28-ruby-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.name": {
+    "source": "services/28-ruby-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.catalogTags": {
+    "source": "services/28-ruby-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.dockerfileTargets": {
+    "source": "services/28-ruby-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.buildArgs": {
+    "source": "services/28-ruby-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.runtimeVariants": {
+    "source": "services/28-ruby-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.workflows": {
+    "source": "services/28-ruby-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.shippedCompliance": {
+    "source": "services/28-ruby-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.helm": {
+    "source": "services/28-ruby-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-ruby-grpc.kustomizeOverlays": {
+    "source": "services/28-ruby-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.sourceLocation": {
+    "source": "services/28-rust-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.name": {
+    "source": "services/28-rust-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.catalogTags": {
+    "source": "services/28-rust-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.dockerfileTargets": {
+    "source": "services/28-rust-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.buildArgs": {
+    "source": "services/28-rust-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.runtimeVariants": {
+    "source": "services/28-rust-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.workflows": {
+    "source": "services/28-rust-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.shippedCompliance": {
+    "source": "services/28-rust-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.helm": {
+    "source": "services/28-rust-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.kustomizeOverlays": {
+    "source": "services/28-rust-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.middleware": {
+    "source": "services/28-rust-grpc/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-rust-grpc.ormDetected": {
+    "source": "services/28-rust-grpc/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.sourceLocation": {
+    "source": "services/28-swift-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.name": {
+    "source": "services/28-swift-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.catalogTags": {
+    "source": "services/28-swift-grpc/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.dockerfileTargets": {
+    "source": "services/28-swift-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.buildArgs": {
+    "source": "services/28-swift-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.runtimeVariants": {
+    "source": "services/28-swift-grpc/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.workflows": {
+    "source": "services/28-swift-grpc/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.shippedCompliance": {
+    "source": "services/28-swift-grpc/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.helm": {
+    "source": "services/28-swift-grpc/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#28-swift-grpc.kustomizeOverlays": {
+    "source": "services/28-swift-grpc/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.sourceLocation": {
+    "source": "services/29-apollo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.name": {
+    "source": "services/29-apollo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.catalogTags": {
+    "source": "services/29-apollo/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.dockerfileTargets": {
+    "source": "services/29-apollo/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.buildArgs": {
+    "source": "services/29-apollo/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.runtimeVariants": {
+    "source": "services/29-apollo/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.workflows": {
+    "source": "services/29-apollo/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.shippedCompliance": {
+    "source": "services/29-apollo/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.helm": {
+    "source": "services/29-apollo/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.kustomizeOverlays": {
+    "source": "services/29-apollo/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.middleware": {
+    "source": "services/29-apollo/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-apollo.ormDetected": {
+    "source": "services/29-apollo/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.sourceLocation": {
+    "source": "services/29-async-graphql/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.name": {
+    "source": "services/29-async-graphql/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.catalogTags": {
+    "source": "services/29-async-graphql/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.dockerfileTargets": {
+    "source": "services/29-async-graphql/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.buildArgs": {
+    "source": "services/29-async-graphql/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.runtimeVariants": {
+    "source": "services/29-async-graphql/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.workflows": {
+    "source": "services/29-async-graphql/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.shippedCompliance": {
+    "source": "services/29-async-graphql/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.helm": {
+    "source": "services/29-async-graphql/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.kustomizeOverlays": {
+    "source": "services/29-async-graphql/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.middleware": {
+    "source": "services/29-async-graphql/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-async-graphql.ormDetected": {
+    "source": "services/29-async-graphql/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.sourceLocation": {
+    "source": "services/29-gqlgen/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.name": {
+    "source": "services/29-gqlgen/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.catalogTags": {
+    "source": "services/29-gqlgen/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.dockerfileTargets": {
+    "source": "services/29-gqlgen/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.buildArgs": {
+    "source": "services/29-gqlgen/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.runtimeVariants": {
+    "source": "services/29-gqlgen/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.workflows": {
+    "source": "services/29-gqlgen/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.shippedCompliance": {
+    "source": "services/29-gqlgen/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.helm": {
+    "source": "services/29-gqlgen/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.kustomizeOverlays": {
+    "source": "services/29-gqlgen/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.middleware": {
+    "source": "services/29-gqlgen/internal/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-gqlgen.ormDetected": {
+    "source": "services/29-gqlgen/internal/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.sourceLocation": {
+    "source": "services/29-graphql-ruby/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.name": {
+    "source": "services/29-graphql-ruby/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.catalogTags": {
+    "source": "services/29-graphql-ruby/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.dockerfileTargets": {
+    "source": "services/29-graphql-ruby/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.buildArgs": {
+    "source": "services/29-graphql-ruby/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.runtimeVariants": {
+    "source": "services/29-graphql-ruby/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.workflows": {
+    "source": "services/29-graphql-ruby/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.shippedCompliance": {
+    "source": "services/29-graphql-ruby/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.helm": {
+    "source": "services/29-graphql-ruby/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-ruby.kustomizeOverlays": {
+    "source": "services/29-graphql-ruby/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.sourceLocation": {
+    "source": "services/29-graphql-yoga/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.name": {
+    "source": "services/29-graphql-yoga/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.catalogTags": {
+    "source": "services/29-graphql-yoga/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.dockerfileTargets": {
+    "source": "services/29-graphql-yoga/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.buildArgs": {
+    "source": "services/29-graphql-yoga/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.runtimeVariants": {
+    "source": "services/29-graphql-yoga/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.workflows": {
+    "source": "services/29-graphql-yoga/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.shippedCompliance": {
+    "source": "services/29-graphql-yoga/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.helm": {
+    "source": "services/29-graphql-yoga/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.kustomizeOverlays": {
+    "source": "services/29-graphql-yoga/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.middleware": {
+    "source": "services/29-graphql-yoga/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-graphql-yoga.ormDetected": {
+    "source": "services/29-graphql-yoga/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.sourceLocation": {
+    "source": "services/29-hot-chocolate/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.name": {
+    "source": "services/29-hot-chocolate/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.catalogTags": {
+    "source": "services/29-hot-chocolate/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.dockerfileTargets": {
+    "source": "services/29-hot-chocolate/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.buildArgs": {
+    "source": "services/29-hot-chocolate/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.runtimeVariants": {
+    "source": "services/29-hot-chocolate/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.workflows": {
+    "source": "services/29-hot-chocolate/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.shippedCompliance": {
+    "source": "services/29-hot-chocolate/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.helm": {
+    "source": "services/29-hot-chocolate/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-hot-chocolate.kustomizeOverlays": {
+    "source": "services/29-hot-chocolate/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.sourceLocation": {
+    "source": "services/29-spring-graphql/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.name": {
+    "source": "services/29-spring-graphql/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.catalogTags": {
+    "source": "services/29-spring-graphql/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.dockerfileTargets": {
+    "source": "services/29-spring-graphql/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.buildArgs": {
+    "source": "services/29-spring-graphql/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.runtimeVariants": {
+    "source": "services/29-spring-graphql/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.workflows": {
+    "source": "services/29-spring-graphql/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.shippedCompliance": {
+    "source": "services/29-spring-graphql/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.helm": {
+    "source": "services/29-spring-graphql/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-spring-graphql.kustomizeOverlays": {
+    "source": "services/29-spring-graphql/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.sourceLocation": {
+    "source": "services/29-strawberry/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.name": {
+    "source": "services/29-strawberry/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.catalogTags": {
+    "source": "services/29-strawberry/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.dockerfileTargets": {
+    "source": "services/29-strawberry/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.buildArgs": {
+    "source": "services/29-strawberry/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.runtimeVariants": {
+    "source": "services/29-strawberry/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.workflows": {
+    "source": "services/29-strawberry/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.shippedCompliance": {
+    "source": "services/29-strawberry/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.helm": {
+    "source": "services/29-strawberry/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.kustomizeOverlays": {
+    "source": "services/29-strawberry/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.middleware": {
+    "source": "services/29-strawberry/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#29-strawberry.ormDetected": {
+    "source": "services/29-strawberry/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.sourceLocation": {
+    "source": "services/30-ws-dotnet/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.name": {
+    "source": "services/30-ws-dotnet/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.catalogTags": {
+    "source": "services/30-ws-dotnet/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.dockerfileTargets": {
+    "source": "services/30-ws-dotnet/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.buildArgs": {
+    "source": "services/30-ws-dotnet/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.runtimeVariants": {
+    "source": "services/30-ws-dotnet/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.workflows": {
+    "source": "services/30-ws-dotnet/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.shippedCompliance": {
+    "source": "services/30-ws-dotnet/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.helm": {
+    "source": "services/30-ws-dotnet/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-dotnet.kustomizeOverlays": {
+    "source": "services/30-ws-dotnet/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.sourceLocation": {
+    "source": "services/30-ws-elixir/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.name": {
+    "source": "services/30-ws-elixir/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.catalogTags": {
+    "source": "services/30-ws-elixir/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.dockerfileTargets": {
+    "source": "services/30-ws-elixir/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.buildArgs": {
+    "source": "services/30-ws-elixir/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.runtimeVariants": {
+    "source": "services/30-ws-elixir/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.workflows": {
+    "source": "services/30-ws-elixir/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.shippedCompliance": {
+    "source": "services/30-ws-elixir/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.helm": {
+    "source": "services/30-ws-elixir/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-elixir.kustomizeOverlays": {
+    "source": "services/30-ws-elixir/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.sourceLocation": {
+    "source": "services/30-ws-go/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.name": {
+    "source": "services/30-ws-go/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.catalogTags": {
+    "source": "services/30-ws-go/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.dockerfileTargets": {
+    "source": "services/30-ws-go/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.buildArgs": {
+    "source": "services/30-ws-go/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.runtimeVariants": {
+    "source": "services/30-ws-go/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.workflows": {
+    "source": "services/30-ws-go/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.shippedCompliance": {
+    "source": "services/30-ws-go/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.helm": {
+    "source": "services/30-ws-go/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.kustomizeOverlays": {
+    "source": "services/30-ws-go/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.middleware": {
+    "source": "services/30-ws-go/internal/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-go.ormDetected": {
+    "source": "services/30-ws-go/internal/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.sourceLocation": {
+    "source": "services/30-ws-java/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.name": {
+    "source": "services/30-ws-java/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.catalogTags": {
+    "source": "services/30-ws-java/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.dockerfileTargets": {
+    "source": "services/30-ws-java/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.buildArgs": {
+    "source": "services/30-ws-java/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.runtimeVariants": {
+    "source": "services/30-ws-java/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.workflows": {
+    "source": "services/30-ws-java/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.shippedCompliance": {
+    "source": "services/30-ws-java/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.helm": {
+    "source": "services/30-ws-java/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-java.kustomizeOverlays": {
+    "source": "services/30-ws-java/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.sourceLocation": {
+    "source": "services/30-ws-node/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.name": {
+    "source": "services/30-ws-node/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.catalogTags": {
+    "source": "services/30-ws-node/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.dockerfileTargets": {
+    "source": "services/30-ws-node/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.buildArgs": {
+    "source": "services/30-ws-node/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.runtimeVariants": {
+    "source": "services/30-ws-node/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.workflows": {
+    "source": "services/30-ws-node/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.shippedCompliance": {
+    "source": "services/30-ws-node/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.helm": {
+    "source": "services/30-ws-node/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.kustomizeOverlays": {
+    "source": "services/30-ws-node/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.middleware": {
+    "source": "services/30-ws-node/src/middleware",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-node.ormDetected": {
+    "source": "services/30-ws-node/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.sourceLocation": {
+    "source": "services/30-ws-python/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.name": {
+    "source": "services/30-ws-python/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.catalogTags": {
+    "source": "services/30-ws-python/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.dockerfileTargets": {
+    "source": "services/30-ws-python/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.buildArgs": {
+    "source": "services/30-ws-python/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.runtimeVariants": {
+    "source": "services/30-ws-python/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.workflows": {
+    "source": "services/30-ws-python/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.shippedCompliance": {
+    "source": "services/30-ws-python/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.helm": {
+    "source": "services/30-ws-python/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.kustomizeOverlays": {
+    "source": "services/30-ws-python/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.middleware": {
+    "source": "services/30-ws-python/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-python.ormDetected": {
+    "source": "services/30-ws-python/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.sourceLocation": {
+    "source": "services/30-ws-ruby/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.name": {
+    "source": "services/30-ws-ruby/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.catalogTags": {
+    "source": "services/30-ws-ruby/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.dockerfileTargets": {
+    "source": "services/30-ws-ruby/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.buildArgs": {
+    "source": "services/30-ws-ruby/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.runtimeVariants": {
+    "source": "services/30-ws-ruby/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.workflows": {
+    "source": "services/30-ws-ruby/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.shippedCompliance": {
+    "source": "services/30-ws-ruby/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.helm": {
+    "source": "services/30-ws-ruby/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-ruby.kustomizeOverlays": {
+    "source": "services/30-ws-ruby/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.sourceLocation": {
+    "source": "services/30-ws-rust/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.name": {
+    "source": "services/30-ws-rust/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.catalogTags": {
+    "source": "services/30-ws-rust/catalog-info.yaml",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.dockerfileTargets": {
+    "source": "services/30-ws-rust/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.buildArgs": {
+    "source": "services/30-ws-rust/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.runtimeVariants": {
+    "source": "services/30-ws-rust/Dockerfile",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.workflows": {
+    "source": "services/30-ws-rust/.github/workflows",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.shippedCompliance": {
+    "source": "services/30-ws-rust/compliance",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.helm": {
+    "source": "services/30-ws-rust/helm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.kustomizeOverlays": {
+    "source": "services/30-ws-rust/kustomize/overlays",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.middleware": {
+    "source": "services/30-ws-rust/src/auth",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "_shipped.json#30-ws-rust.ormDetected": {
+    "source": "services/30-ws-rust/src/db",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "authOptions.json#auth-all.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/auth + Dockerfile ARG AUTH",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "authOptions.json#auth-all.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/auth/all",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "authOptions.json#auth-apikey.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/auth + Dockerfile ARG AUTH",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "authOptions.json#auth-apikey.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/auth/apikey",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "authOptions.json#auth-jwt.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/auth + Dockerfile ARG AUTH",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "authOptions.json#auth-jwt.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/auth/jwt",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "authOptions.json#auth-none.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/auth + Dockerfile ARG AUTH",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "authOptions.json#auth-none.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/auth/none",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-gorm.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm + Dockerfile ARG ORM",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-gorm.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm/gorm",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-none.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm + Dockerfile ARG ORM",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-none.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm/none",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-prisma.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm + Dockerfile ARG ORM",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-prisma.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm/prisma",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-sqlalchemy.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm + Dockerfile ARG ORM",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-sqlalchemy.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm/sqlalchemy",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-sqlx.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm + Dockerfile ARG ORM",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "ormOptions.json#orm-sqlx.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/orm/sqlx",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "observabilityOptions.json#observability-datadog.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/observability + Dockerfile ARG OBSERVABILITY",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "observabilityOptions.json#observability-datadog.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/observability/datadog",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "observabilityOptions.json#observability-none.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/observability + Dockerfile ARG OBSERVABILITY",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "observabilityOptions.json#observability-none.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/observability/none",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "observabilityOptions.json#observability-otel.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/observability + Dockerfile ARG OBSERVABILITY",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "observabilityOptions.json#observability-otel.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/observability/otel",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "observabilityOptions.json#observability-prometheus.services": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/observability + Dockerfile ARG OBSERVABILITY",
+    "sourceType": "service-code",
+    "confidence": "high"
+  },
+  "observabilityOptions.json#observability-prometheus.name": {
+    "source": "/mnt/c/Users/RohithY/yarova/pipeline-studio/services/*/src(or internal)/observability/prometheus",
+    "sourceType": "service-code",
+    "confidence": "high"
+  }
+}

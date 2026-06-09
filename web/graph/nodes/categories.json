@@ -1,0 +1,302 @@
+[
+  {
+    "id": "c1",
+    "num": 1,
+    "name": "Frontend — SSR / Hybrid",
+    "label": "Frontend — SSR / Hybrid",
+    "deviceId": "frontend-web",
+    "device": "Frontend Web",
+    "description": "Server renders HTML per request. Frameworks handle both server and client logic.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c2",
+    "num": 2,
+    "name": "Frontend — CSR / SPA",
+    "label": "Frontend — CSR / SPA",
+    "deviceId": "frontend-web",
+    "device": "Frontend Web",
+    "description": "Browser renders all HTML. Server sends JS bundle only. No server-rendered HTML.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c3",
+    "num": 3,
+    "name": "Frontend — SSG",
+    "label": "Frontend — SSG",
+    "deviceId": "frontend-web",
+    "device": "Frontend Web",
+    "description": "All pages pre-built at compile time. Served as static files. No runtime server needed.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c4",
+    "num": 4,
+    "name": "Frontend — Islands Architecture",
+    "label": "Frontend — Islands Architecture",
+    "deviceId": "frontend-web",
+    "device": "Frontend Web",
+    "description": "Mostly static HTML with isolated interactive JS \"islands\". Only island components hydrate.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c5",
+    "num": 5,
+    "name": "Frontend — Resumability",
+    "label": "Frontend — Resumability",
+    "deviceId": "frontend-web",
+    "device": "Frontend Web",
+    "description": "Serializes server state into HTML. Browser resumes — not re-executes — on load. Zero hydration cost.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c6",
+    "num": 6,
+    "name": "Frontend — Edge Rendering",
+    "label": "Frontend — Edge Rendering",
+    "deviceId": "frontend-web",
+    "device": "Frontend Web",
+    "description": "Renders HTML at CDN edge nodes worldwide. Sub-60ms TTFB. No origin server round-trip.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c7",
+    "num": 7,
+    "name": "Frontend — Streaming SSR",
+    "label": "Frontend — Streaming SSR",
+    "deviceId": "frontend-web",
+    "device": "Frontend Web",
+    "description": "Sends HTML in chunks as it is generated. Browser renders above-the-fold before full page is ready.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c8",
+    "num": 8,
+    "name": "Frontend — Micro-frontends",
+    "label": "Frontend — Micro-frontends",
+    "deviceId": "frontend-web",
+    "device": "Frontend Web",
+    "description": "Multiple independently deployed frontend apps composed into one page. Different teams own different sections.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c9",
+    "num": 9,
+    "name": "Mobile — Cross-platform JS",
+    "label": "Mobile — Cross-platform JS",
+    "deviceId": "mobile",
+    "device": "Mobile",
+    "description": "JS/TS codebase targets iOS and Android. Bridges to native APIs via JS runtime.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c10",
+    "num": 10,
+    "name": "Mobile — Cross-platform non-JS",
+    "label": "Mobile — Cross-platform non-JS",
+    "deviceId": "mobile",
+    "device": "Mobile",
+    "description": "Non-JS language compiles to native iOS and Android. No JS runtime on device.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c11",
+    "num": 11,
+    "name": "Mobile — Native iOS",
+    "label": "Mobile — Native iOS",
+    "deviceId": "mobile",
+    "device": "Mobile",
+    "description": "Apple-native SDKs only. Maximum platform API access, best performance on iOS hardware.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c12",
+    "num": 12,
+    "name": "Mobile — Native Android",
+    "label": "Mobile — Native Android",
+    "deviceId": "mobile",
+    "device": "Mobile",
+    "description": "Android-native SDKs only. Maximum platform API access, best performance on Android hardware.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c13",
+    "num": 13,
+    "name": "Mobile — PWA",
+    "label": "Mobile — PWA",
+    "deviceId": "mobile",
+    "device": "Mobile",
+    "description": "Web app installable on device via browser. Offline via Service Worker. No app store required.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c14",
+    "num": 14,
+    "name": "Backend — Node.js / Deno / Bun",
+    "label": "Backend — Node.js / Deno / Bun",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "JS/TS server-side runtimes. Node.js: npm ecosystem. Deno: secure by default. Bun: fast all-in-one.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c15",
+    "num": 15,
+    "name": "Backend — Python",
+    "label": "Backend — Python",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "Python server frameworks. Best for ML/AI integrations and data science teams.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c16",
+    "num": 16,
+    "name": "Backend — Go",
+    "label": "Backend — Go",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "Go HTTP frameworks. Go's goroutines and static binary make it ideal for high-throughput APIs.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c17",
+    "num": 17,
+    "name": "Backend — Java",
+    "label": "Backend — Java",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "JVM-based Java frameworks. Enterprise-grade, strong typing, large corporate adoption.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c18",
+    "num": 18,
+    "name": "Backend — Kotlin",
+    "label": "Backend — Kotlin",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "Kotlin server frameworks. Coroutines for async. JVM interop. JetBrains tooling.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c19",
+    "num": 19,
+    "name": "Backend — .NET / C#",
+    "label": "Backend — .NET / C#",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "Microsoft .NET runtime. Cross-platform since .NET Core. Native AOT available in .NET 8+.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c20",
+    "num": 20,
+    "name": "Backend — Rust",
+    "label": "Backend — Rust",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "Rust HTTP frameworks. No GC, borrow checker. Highest throughput and memory safety without runtime overhead.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c21",
+    "num": 21,
+    "name": "Backend — Elixir",
+    "label": "Backend — Elixir",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "BEAM VM — actor model, per-process GC, fault-tolerant by design. Best for real-time + concurrent systems.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c22",
+    "num": 22,
+    "name": "Backend — Ruby",
+    "label": "Backend — Ruby",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "Ruby HTTP frameworks. Rails: convention over configuration. Sinatra: micro-framework.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c23",
+    "num": 23,
+    "name": "Backend — PHP",
+    "label": "Backend — PHP",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "PHP server frameworks. Share-nothing process model. Powers 40% of the web.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c24",
+    "num": 24,
+    "name": "Backend — Swift",
+    "label": "Backend — Swift",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "Swift server frameworks. ARC memory model. No GC pauses. Ideal when team is already Swift/iOS.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c25",
+    "num": 25,
+    "name": "Backend — Scala",
+    "label": "Backend — Scala",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "Scala JVM frameworks. Functional + OOP. Strong type system. Used in high-scale data + finance.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c26",
+    "num": 26,
+    "name": "Backend — Clojure",
+    "label": "Backend — Clojure",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "Clojure JVM — Lisp on the JVM. Immutable data, STM concurrency. REPL-driven development.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c27",
+    "num": 27,
+    "name": "Backend — C++",
+    "label": "Backend — C++",
+    "deviceId": "backend",
+    "device": "Backend",
+    "description": "C++ HTTP frameworks. Manual memory management. Highest possible throughput. Used in HFT, game servers, system APIs.",
+    "verified": "Data verified: 2026-05-26 · Check releases before adopting"
+  },
+  {
+    "id": "c28",
+    "num": 28,
+    "name": "Protocol — gRPC",
+    "label": "Protocol — gRPC",
+    "deviceId": "protocol",
+    "device": "Protocol",
+    "description": "Google Remote Procedure Call. HTTP/2 + Protocol Buffers. Binary wire format. Strong typing via .proto schema. Streaming RPC (unary, server, client, bidirectional). Default port 50051.",
+    "verified": "Data verified: 2026-05-29 · Check releases before adopting"
+  },
+  {
+    "id": "c29",
+    "num": 29,
+    "name": "Protocol — GraphQL",
+    "label": "Protocol — GraphQL",
+    "deviceId": "protocol",
+    "device": "Protocol",
+    "description": "Query language for APIs. Single endpoint POST /graphql. Client specifies exact shape of data. Schema-first with SDL. Introspection built-in. N+1 solved via DataLoader.",
+    "verified": "Data verified: 2026-05-29 · Check releases before adopting"
+  },
+  {
+    "id": "c30",
+    "num": 30,
+    "name": "Protocol — WebSocket",
+    "label": "Protocol — WebSocket",
+    "deviceId": "protocol",
+    "device": "Protocol",
+    "description": "Full-duplex persistent TCP connection over HTTP Upgrade. Real-time bidirectional messaging. Endpoint: ws://host/ws (wss:// for TLS). RFC 6455. No polling — server pushes events.",
+    "verified": "Data verified: 2026-05-29 · Check releases before adopting"
+  }
+]

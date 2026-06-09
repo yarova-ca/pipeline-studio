@@ -1,0 +1,2202 @@
+{
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-01-namespaces-resourcequota-limitrange.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.installNote": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-02-storageclass.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-03-rbac-clusterroles-rolebindings-serviceaccounts.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-04-cert-manager.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-05-ingress-nginx.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-06-kyverno-policies.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-07-network-policies.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-08-falco.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.installNote": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-09-pod-security-admission-psa.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-10-argocd.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-11-argo-rollouts.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-12-external-secrets-operator-eso.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-13-ghcr-pull-secret.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-14-postgresql-cloudnativepg-cnpg.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-15-pgbouncer-connection-pooler.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-16-redis-sentinel-ha.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-17-prometheus-grafana.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.installNote": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-18-alertmanager.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-19-loki-promtail.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-20-tempo-distributed-tracing.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-21-trivy-operator.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-22-velero-cluster-backup.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-23-externaldns.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-24-cluster-autoscaler.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.installNote": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-25-postgresql-backup-cnpg-wal-archival.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-26-opencost.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-27-terraform-cluster-provisioning.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.installNote": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-28-terraform-state-backend-s3-gcs.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.installNote": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-29-grafana-datasources-loki-tempo.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.num": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.layer": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.status": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.what": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.why": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.installCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.installNote": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.wiredTo": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.verifyCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.verifyExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.healthCommand": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.healthExpected": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.failures": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusterComponents.json#comp-30-backstage-developer-portal.decision": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#eks.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#eks.cloud": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#eks.defaultStorageClass": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#eks.secretIdentity": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#eks.evidence": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#gke.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#gke.cloud": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#gke.defaultStorageClass": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#gke.secretIdentity": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#gke.evidence": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#aks.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#aks.cloud": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#aks.defaultStorageClass": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#aks.secretIdentity": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#aks.evidence": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#openshift.name": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#openshift.cloud": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "clusters.json#openshift.evidence": {
+    "source": "legacy/19-cluster-setup.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argocd.name": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argocd.role": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argocd.what": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argocd.installCommand": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argocd.version": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argocd.syncInterval": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argocd.watchesPaths": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argocd.decisionChosen": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argocd.decisionRejected": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argo-rollouts.name": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argo-rollouts.role": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argo-rollouts.what": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argo-rollouts.installCommand": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argo-rollouts.version": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argo-rollouts.decisionChosen": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#argo-rollouts.decisionRejected": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#helm.name": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#helm.role": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#helm.what": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#helm.fullCommand": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#helm.flagsNote": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#kustomize.name": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#kustomize.role": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#kustomize.what": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#kustomize.overlayPaths": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#kustomize.promotionField": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#flux.name": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#flux.role": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#flux.status": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#flux.what": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "gitopsTools.json#flux.whyRejected": {
+    "source": "legacy/19-cluster-setup.html;legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#00-getting-started.title": {
+    "source": "legacy/00-getting-started.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#00-getting-started.body": {
+    "source": "legacy/00-getting-started.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#02-pipeline-schema.title": {
+    "source": "legacy/02-pipeline-schema.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#02-pipeline-schema.body": {
+    "source": "legacy/02-pipeline-schema.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#03-stage-types.title": {
+    "source": "legacy/03-stage-types.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#03-stage-types.body": {
+    "source": "legacy/03-stage-types.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#16-maintainability-runbook.title": {
+    "source": "legacy/16-maintainability-runbook.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#16-maintainability-runbook.body": {
+    "source": "legacy/16-maintainability-runbook.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#20-local-dev.title": {
+    "source": "legacy/20-local-dev.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#20-local-dev.body": {
+    "source": "legacy/20-local-dev.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#22-add-a-service.title": {
+    "source": "legacy/22-add-a-service.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#22-add-a-service.body": {
+    "source": "legacy/22-add-a-service.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#24-debugging.title": {
+    "source": "legacy/24-debugging.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#24-debugging.body": {
+    "source": "legacy/24-debugging.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#deploy-environments.title": {
+    "source": "legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#deploy-environments.body": {
+    "source": "legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#deploy-promotion-flow.title": {
+    "source": "legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#deploy-promotion-flow.body": {
+    "source": "legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#deploy-rollback-options.title": {
+    "source": "legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#deploy-rollback-options.body": {
+    "source": "legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#deploy-gitops-watch.title": {
+    "source": "legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  },
+  "conceptNotes.json#deploy-gitops-watch.body": {
+    "source": "legacy/23-deployment.html",
+    "sourceType": "legacy",
+    "confidence": "high"
+  }
+}
