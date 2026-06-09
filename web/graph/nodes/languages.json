@@ -51,8 +51,8 @@
   },
   {
     "id": "js",
-    "name": "JS",
-    "label": "JS"
+    "name": "JavaScript",
+    "label": "JavaScript"
   },
   {
     "id": "kotlin",
@@ -96,7 +96,7 @@
   },
   {
     "id": "ts",
-    "name": "TS",
-    "label": "TS"
+    "name": "TypeScript",
+    "label": "TypeScript"
   }
 ]
