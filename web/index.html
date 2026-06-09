@@ -100,6 +100,10 @@ const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=(s)=>String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const c=(cell)=>`<span class="cell ${cell.state}" title="${esc(cell.reason)}">${esc(cell.value)}</span>${cell.reason?`<div class="reason">${esc(cell.reason)}</div>`:""}`;
+// readable-name resolvers — never show a raw id on screen
+const nameOf=(id)=>{const n=IDX&&IDX.byId&&IDX.byId[id];return n?(n.name||n.label||id):id;};
+const catName=(f)=>nameOf(f.categoryId)||f.category||f.categoryId;
+const langName=(f)=>nameOf(f.languageId)||f.languages||f.languageId;
 
 async function boot(){
   let graph;
@@ -174,17 +178,19 @@ function fwRowCells(f){
   };
 }
 function viewMap(){
-  const cats=[...new Set(IDX.frameworks.map(f=>f.categoryId))].sort();
-  const langs=[...new Set(IDX.frameworks.map(f=>f.languageId))].sort();
-  let rows=IDX.frameworks.filter(f=>(!mapFilter.category||f.categoryId===mapFilter.category)&&(!mapFilter.language||f.languageId===mapFilter.language)&&(!mapFilter.q||(f.name||"").toLowerCase().includes(mapFilter.q.toLowerCase())||f.id.includes(mapFilter.q.toLowerCase())));
+  // dropdowns list readable NAMES; filter matches by name under the hood
+  const cats=[...new Set(IDX.frameworks.map(f=>catName(f)))].sort();
+  const langs=[...new Set(IDX.frameworks.map(f=>langName(f)))].sort();
+  let rows=IDX.frameworks.filter(f=>(!mapFilter.category||catName(f)===mapFilter.category)&&(!mapFilter.language||langName(f)===mapFilter.language)&&(!mapFilter.q||(f.name||"").toLowerCase().includes(mapFilter.q.toLowerCase())||f.id.includes(mapFilter.q.toLowerCase())));
   rows.sort((a,b)=>((a[mapSort.col]>b[mapSort.col])?1:-1)*mapSort.dir);
   const body=rows.map(f=>{const x=fwRowCells(f);
     return `<tr><td class="svc" onclick="location.hash='#bundle/${f.id}'">${esc(f.name)}</td>
-      <td>${esc(f.languageId)}</td><td>${esc(f.tier||"—")}</td>
+      <td>${esc(catName(f))}</td><td>${esc(langName(f))}</td><td>${esc(f.tier||"—")}</td>
       <td>${c(x.comp)}</td><td>${c(x.runtime)}</td><td>${c(x.auth)}</td><td>${c(x.orm)}</td><td>${c(x.obs)}</td><td>${c(x.gaps)}</td></tr>`;}).join("");
   const ind=LENS.industryId?IDX.byId[LENS.industryId]:null;
   const cov=ind?`Lens: ${esc(ind.name)} — required: ${(resolveBundle(IDX,rows[0]?.id,LENS).lens.requiredStandards||[]).join(", ")||"none mapped"}`:"Baseline — no industry lens";
   return `<h1>Map</h1>
+  <p class="sub">Every framework × its dimensions. Pick an industry in the lens (top right) to recolor by what that industry requires.</p>
   <div class="toolbar">
     <select onchange="setMF('category',this.value)"><option value="">All categories</option>${cats.map(x=>`<option ${x===mapFilter.category?'selected':''}>${esc(x)}</option>`).join("")}</select>
     <select onchange="setMF('language',this.value)"><option value="">All languages</option>${langs.map(x=>`<option ${x===mapFilter.language?'selected':''}>${esc(x)}</option>`).join("")}</select>
@@ -192,9 +198,9 @@ function viewMap(){
     <span class="counter">${rows.length} of ${IDX.frameworks.length} · ${cov}</span>
   </div>
   <div class="gridwrap"><table><thead><tr>
-    <th onclick="sortMap('name')">Framework</th><th onclick="sortMap('languageId')">Lang</th><th onclick="sortMap('tier')">Tier</th>
+    <th onclick="sortMap('name')">Framework</th><th>Category</th><th>Language</th><th onclick="sortMap('tier')">Tier</th>
     <th>Compliance</th><th>Runtime</th><th>Auth</th><th>ORM</th><th>Observability</th><th>Gaps</th>
-  </tr></thead><tbody>${body||`<tr><td colspan="9" style="color:var(--muted);padding:18px">0 of ${IDX.frameworks.length} — widen filters.</td></tr>`}</tbody></table></div>`;
+  </tr></thead><tbody>${body||`<tr><td colspan="10" style="color:var(--muted);padding:18px">0 of ${IDX.frameworks.length} — widen filters.</td></tr>`}</tbody></table></div>`;
 }
 window.setMF=(k,v)=>{mapFilter[k]=v;render();};
 window.sortMap=(col)=>{mapSort.dir=mapSort.col===col?-mapSort.dir:1;mapSort.col=col;render();};
@@ -206,7 +212,7 @@ function viewGuided(){
     return `${bar}<h1>Pick a category</h1><p class="sub">Step 1 of 3.</p><div class="choices">${cats.map(ct=>`<div class="choice" onclick="gStep('${ct.id}')"><b>${esc(ct.name||ct.id)}</b><span>${IDX.frameworks.filter(f=>f.categoryId===ct.id).length} frameworks</span></div>`).join("")}</div>`;}
   const fws=IDX.frameworks.filter(f=>f.categoryId===guided.category);
   return `${bar}<h1>Pick a framework</h1><p class="sub">Step 2 of 3 · <a onclick="guided.step=1;render()">back</a> · then set industry in the lens (top right).</p>
-    <div class="choices">${fws.map(f=>`<div class="choice" onclick="location.hash='#bundle/${f.id}'"><b>${esc(f.name)}</b><span>${esc(f.languageId)} · ${esc(f.maturity||f.tier||'')}</span></div>`).join("")}</div>`;
+    <div class="choices">${fws.map(f=>`<div class="choice" onclick="location.hash='#bundle/${f.id}'"><b>${esc(f.name)}</b><span>${esc(langName(f))} · ${esc(f.maturity||f.tier||'')}</span></div>`).join("")}</div>`;
 }
 window.gStep=(cat)=>{guided.category=cat;guided.step=2;render();};
 
@@ -227,10 +233,11 @@ function viewBundle(id){
   const gaps=b.gaps.length?b.gaps.map(g=>`<div class="gap">⚠️ ${esc(g)}</div>`).join(""):'<span class="cell green">No gaps under the current lens.</span>';
   return `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px">
     <h1 style="margin:0">${esc(f.name)}</h1>
-    <span class="pill">${esc(f.category)}</span><span class="pill">${esc(f.language)}</span>${f.tier?`<span class="pill">tier ${esc(f.tier)}</span>`:''}
+    <span class="pill">${esc(f.category)}</span><span class="pill">${esc(f.language)}</span>${f.tier?`<span class="pill">${esc(f.tier)}</span>`:''}
     <span class="counter">Lens: ${lens.industry?esc(lens.industry):'Baseline'}${lens.clusterId?' · '+esc(lens.clusterId):''}</span></div>
 
-  <details class="section" open><summary>Overview &amp; concepts</summary><div class="body"><div class="kv">
+  <details class="section" open><summary>Overview &amp; concepts</summary><div class="body">
+    <p class="sub" style="margin:0 0 10px">What this framework is, and how it performs.</p><div class="kv">
     <div class="k">Version</div><div>${esc(f.version||'—')}</div>
     <div class="k">License</div><div>${esc(f.license||'—')}</div>
     <div class="k">Maturity</div><div>${esc(f.maturity||'—')}</div>
@@ -241,12 +248,15 @@ function viewBundle(id){
   </div></div></details>
 
   <details class="section"><summary>Compliance — required regimes (real shipped controls)</summary><div class="body">
+    <p class="sub" style="margin:0 0 10px">Rules this service must meet for the selected industry. Green = it ships them.</p>
     ${regs?`<div style="margin-bottom:8px"><span class="sub">Regulatory requirements (from industry):</span><br>${regs}</div>`:''}
     ${comp}</div></details>
 
-  <details class="section"><summary>Build axes (per framework; lens forces shown amber)</summary><div class="body"><div class="kv">${axes}</div></details></details>
+  <details class="section"><summary>Build axes (per framework; lens forces shown amber)</summary><div class="body">
+    <p class="sub" style="margin:0 0 10px">The Docker build knobs this service exposes. Amber = changed by the lens.</p><div class="kv">${axes}</div></div></details>
 
-  <details class="section"><summary>CI pipeline — real per-framework stages + tools</summary><div class="body">${pipe}
+  <details class="section"><summary>CI pipeline — real per-framework stages + tools</summary><div class="body">
+    <p class="sub" style="margin:0 0 10px">The build/test/ship steps this service actually runs.</p>${pipe}
     ${b.pipelineAdditions.length?`<div style="margin-top:10px"><span class="sub">Compliance pipeline additions:</span>${b.pipelineAdditions.map(a=>`<div class="reason">${esc(a.standard)}: ${Object.entries(a.phases).map(([k,v])=>k+' → '+v).join(' · ')}</div>`).join("")}</div>`:''}
   </div></details>
 
@@ -269,9 +279,12 @@ function viewBundle(id){
     ${b.integrations&&b.integrations.length?b.integrations.map(g=>`<div style="margin-bottom:6px"><b>${esc(g.system)}</b> <span class="pill">${esc(g.category)}</span> <span class="pill">auth: ${esc(g.auth)}</span> <span class="pill">gw: ${esc(g.gateway)}</span><br><span class="sub">${esc(g.dataFlow)} · tools: ${esc((g.tools||[]).join(', '))}</span> <span class="cell amber">net-new</span></div>`).join(""):'<span class="sub">Pick an industry lens to see its vertical integrations. (Net-new dimension — seeded, pending founder data.)</span>'}
   </div></details>
 
-  <details class="section"><summary>Invariants</summary><div class="body">${inv}</div></details>
-  <details class="section"><summary>Drift — blueprint vs shipped code</summary><div class="body">${drift}</div></details>
-  <details class="section"><summary>Gaps</summary><div class="body">${gaps}</div></details>
+  <details class="section"><summary>Invariants</summary><div class="body">
+    <p class="sub" style="margin:0 0 10px">Hard rules that must hold. Red = violated under this lens.</p>${inv}</div></details>
+  <details class="section"><summary>Drift — blueprint vs shipped code</summary><div class="body">
+    <p class="sub" style="margin:0 0 10px">Where the running code differs from the blueprint default.</p>${drift}</div></details>
+  <details class="section"><summary>Gaps</summary><div class="body">
+    <p class="sub" style="margin:0 0 10px">What this industry requires that the service does not yet ship.</p>${gaps}</div></details>
 
   <details class="section"><summary>Source + real code</summary><div class="body"><div class="kv">
     <div class="k">Repo</div><div>${f.repo?`<a href="${esc(f.repo)}" target="_blank">${esc(f.repo)}</a>`:'—'}</div>
@@ -279,20 +292,52 @@ function viewBundle(id){
   </div></div></details>`;
 }
 
+// plain-English heading for each relationship, by direction
+const REL_OUT={USES_STAGE:"Runs these pipeline stages",USES_TOOL:"Uses these tools",
+  FORCES:"Forces these build settings",REQUIRES:"Requires these compliance regimes",
+  RATED_ON:"Rated for these compliance regimes",BUILDS_IMAGE:"Builds on these images",
+  DEPLOYS_TO:"Deploys to these clusters",HAS_COMPONENT:"Includes these components",
+  USES_GITOPS:"Uses these GitOps tools",IN_CATEGORY:"Belongs to category",
+  USES_LANGUAGE:"Written in",ON_DEVICE:"Runs on device",PINNED_AT:"Pinned at version",
+  CONTAINS:"Contains",GUARDS_STAGE:"Guards these stages",HAS_INTEGRATION:"Connects to these systems",
+  USES_GATEWAY:"Behind these API gateways",USES_AUTH:"Authenticates with",DEPENDS_ON_LIB:"Depends on libraries"};
+const REL_IN={USES_STAGE:"Used by these frameworks",REQUIRES:"Required by these industries",
+  RATED_ON:"Standards rating this image",BUILDS_IMAGE:"Frameworks building on this",
+  DEPLOYS_TO:"Frameworks deploying here",HAS_COMPONENT:"Clusters including this",
+  CONTAINS:"Part of",HAS_INTEGRATION:"Verticals using this",DEPENDS_ON_LIB:"Frameworks depending on this",
+  IN_CATEGORY:"Frameworks in this category",USES_LANGUAGE:"Frameworks in this language"};
+
+const TYPE_LABEL={frameworks:"Frameworks",categories:"Categories",languages:"Languages",
+  industries:"Industries",verticals:"Verticals",compliance:"Compliance regimes",stages:"Pipeline stages",
+  tools:"Tools",images:"Base images",clusters:"Clusters",clusterComponents:"Cluster components",
+  invariants:"Invariants",versions:"Versions",integrations:"Integrations",libraries:"Libraries",buildAxes:"Build axes"};
 function viewGraph(){
-  const types=Object.keys(IDX.nodes);
-  return `<h1>Graph explorer</h1><p class="sub">Pick a node type, then a node, to traverse its connections.</p>
-   <div class="toolbar">${types.map(t=>`<button class="btn" onclick="location.hash='#node/'+pickFirst('${t}')">${t} (${(IDX.nodes[t]||[]).length})</button>`).join("")}</div>`;
+  const types=Object.keys(IDX.nodes).filter(t=>(IDX.nodes[t]||[]).length);
+  return `<h1>Connections</h1><p class="sub">Pick anything to see how it connects to the rest of the platform — in plain language.</p>
+   <div class="toolbar">${types.map(t=>`<button class="btn" onclick="location.hash='#node/'+pickFirst('${t}')">${esc(TYPE_LABEL[t]||t)} (${(IDX.nodes[t]||[]).length})</button>`).join("")}</div>`;
 }
 window.pickFirst=(t)=>(IDX.nodes[t]||[])[0]?.id||"";
 function viewNode(id){
-  const n=IDX.byId[id]; if(!n) return `<div class="err">node ${esc(id)} not found</div>`;
+  const n=IDX.byId[id]; if(!n) return `<div class="err">"${esc(id)}" not found</div>`;
+  const group=(edges,dirMap,getOther)=>{
+    const by={};
+    for(const e of edges){(by[e.type]||=[]).push(e);}
+    return Object.entries(by).map(([type,es])=>{
+      const heading=dirMap[type]||type.replace(/_/g,' ').toLowerCase();
+      const items=es.slice(0,80).map(e=>{const o=getOther(e);const nn=IDX.byId[o];
+        const isFw=nn&&nn._type==='frameworks';
+        const attr=e.attrs&&(e.attrs.tool||e.attrs.value||e.attrs.version);
+        return `<span class="tag"><a onclick="location.hash='${isFw?'#bundle/':'#node/'}${encodeURIComponent(o)}'">${esc(nn?nn.name||nn.label||o:o)}</a>${attr?` <span class="sub">${esc(attr)}</span>`:''}</span>`;}).join("");
+      return `<div style="margin-bottom:10px"><h3>${esc(heading)} (${es.length})</h3>${items}</div>`;
+    }).join("");
+  };
   const out=IDX.edges.filter(e=>e.from===id), inc=IDX.edges.filter(e=>e.to===id);
-  const line=(e,dir)=>{const other=dir==='out'?e.to:e.from;const nn=IDX.byId[other];
-    return `<div><span class="pill">${esc(e.type)}</span> <a onclick="location.hash='#node/${encodeURIComponent(other)}'">${esc(nn?.name||nn?.label||other)}</a>${e.attrs&&Object.keys(e.attrs).length?` <span class="sub">${esc(Object.entries(e.attrs).slice(0,2).map(([k,v])=>k+'='+v).join(', '))}</span>`:''}</div>`;};
-  return `<h1>${esc(n.name||n.label||n.id)}</h1><p class="sub">type: ${esc(n._type)} · id: ${esc(n.id)}${IDX.byId[id]._type==='frameworks'?` · <a onclick="location.hash='#bundle/${esc(id)}'">open full bundle →</a>`:''}</p>
-   <h2>Outgoing (${out.length})</h2>${out.slice(0,200).map(e=>line(e,'out')).join("")||'<span class="sub">none</span>'}
-   <h2>Incoming (${inc.length})</h2>${inc.slice(0,200).map(e=>line(e,'in')).join("")||'<span class="sub">none</span>'}`;
+  const typeName=TYPE_LABEL[n._type]||n._type;
+  return `<h1>${esc(n.name||n.label||n.id)}</h1>
+   <p class="sub">${esc(typeName)}${n._type==='frameworks'?` · <a onclick="location.hash='#bundle/${esc(id)}'">open full bundle →</a>`:''}</p>
+   ${group(out,REL_OUT,e=>e.to)||''}
+   ${inc.length?`<hr style="border-color:var(--line);margin:18px 0"/>${group(inc,REL_IN,e=>e.from)}`:''}
+   ${!out.length&&!inc.length?'<span class="sub">No connections recorded.</span>':''}`;
 }
 
 function viewCoverage(){

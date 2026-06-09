@@ -211,8 +211,14 @@ export function resolveBundle(idx, frameworkId, lens = {}) {
     }
   }
 
+  // resolve readable names — never display raw ids
+  const categoryName = idx.byId[fw.categoryId]?.name || idx.byId[fw.categoryId]?.label || fw.category || fw.categoryId;
+  const languageName = idx.byId[fw.languageId]?.name || idx.byId[fw.languageId]?.label || fw.languages || fw.languageId;
+
   return {
-    framework: { id: fw.id, name: fw.name, category: fw.categoryId, language: fw.languageId,
+    framework: { id: fw.id, name: fw.name,
+      category: categoryName, categoryId: fw.categoryId,
+      language: languageName, languageId: fw.languageId,
       tier: fw.tier, repo: shipped.sourceLocation, catalogRef: shipped.catalogRef,
       version: fw.version, license: fw.license, maturity: fw.maturity, perf: fw.perf,
       memory: fw.memory, concurrency: fw.concurrency, securityPosture: fw.securityPosture },
