@@ -290,7 +290,7 @@
   }
 
   .file-path {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 10.5px;
     color: var(--text-sec);
     overflow: hidden;
@@ -310,14 +310,14 @@
     transition: background .1s;
   }
   .cwf-copy:hover { background: var(--surface); }
-  .cwf-copy.done { background: #ebfbee; border-color: #2da44e; color: #1a7f37; }
+  .cwf-copy.done { background: rgba(25,200,168,.12); border-color: #19C8A8; color: #19C8A8; }
 
   .file-pre {
     flex: 1;
     overflow: auto;
     margin: 0;
     padding: 16px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     line-height: 1.55;
     color: var(--text);

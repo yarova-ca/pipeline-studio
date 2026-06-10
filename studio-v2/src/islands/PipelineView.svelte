@@ -10,11 +10,11 @@
   import type { ToolVersionKey } from '../lib/tools';
 
   const TABS = [
-    { id: 0, label: '0', sublabel: 'Bootstrap',  color: '#6e7681' },
-    { id: 1, label: '1', sublabel: 'Local / Dev', color: '#adb5bd' },
-    { id: 2, label: '2', sublabel: 'PR Gate',     color: '#ff8787' },
-    { id: 3, label: '3', sublabel: 'Main Build',  color: '#74c0fc' },
-    { id: 4, label: '4', sublabel: 'Promotions',  color: '#ffa94d' },
+    { id: 0, label: '0', sublabel: 'Bootstrap',  color: 'rgba(244,243,239,.55)' },
+    { id: 1, label: '1', sublabel: 'Local / Dev', color: 'rgba(244,243,239,.55)' },
+    { id: 2, label: '2', sublabel: 'PR Gate',     color: '#FFB800' },
+    { id: 3, label: '3', sublabel: 'Main Build',  color: '#5DE5CD' },
+    { id: 4, label: '4', sublabel: 'Promotions',  color: '#FFB800' },
   ];
 
   const PHASE_CLASS: Record<string, string> = {
@@ -478,15 +478,15 @@
   }
   .s-box.wide { width: 100%; }
   .s-box:hover { border-color: var(--accent); box-shadow: 0 1px 4px rgba(9,105,218,.18); }
-  .s-box.sel   { border-color: var(--accent); background: #f0f7ff; box-shadow: 0 2px 8px rgba(9,105,218,.2); }
+  .s-box.sel   { border-color: var(--accent); background: rgba(25,200,168,.10); box-shadow: 0 2px 8px rgba(9,105,218,.2); }
 
   /* Phase colour left border */
-  .s-box.phase-f { border-left: 3px solid #adb5bd; }
-  .s-box.phase-s { border-left: 3px solid #ff8787; }
-  .s-box.phase-b { border-left: 3px solid #74c0fc; }
+  .s-box.phase-f { border-left: 3px solid rgba(244,243,239,.55); }
+  .s-box.phase-s { border-left: 3px solid #FFB800; }
+  .s-box.phase-b { border-left: 3px solid #5DE5CD; }
   .s-box.phase-g { border-left: 3px solid #69db7c; }
-  .s-box.phase-o { border-left: 3px solid #ffa94d; }
-  .s-box.phase-v { border-left: 3px solid #da77f2; }
+  .s-box.phase-o { border-left: 3px solid #FFB800; }
+  .s-box.phase-v { border-left: 3px solid #C6F24E; }
 
   .s-badge { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
   .s-title { font-size: 11.5px; font-weight: 500; color: var(--text); line-height: 1.3; }
@@ -494,8 +494,8 @@
   .inv-row { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
   .inv {
     font-size: 9px;
-    background: #f0f7ff;
-    border: 1px solid #b6d4fe;
+    background: rgba(25,200,168,.10);
+    border: 1px solid rgba(25,200,168,.20);
     color: var(--accent);
     border-radius: 3px;
     padding: 1px 4px;
@@ -506,7 +506,7 @@
   /* Phase 0 cards */
   .p0-card {
     border: 1px solid var(--border);
-    border-left: 4px solid #6e7681;
+    border-left: 4px solid rgba(244,243,239,.55);
     border-radius: 6px;
     padding: 14px 16px;
     background: var(--bg);
@@ -526,11 +526,11 @@
     background: var(--bg);
     margin-bottom: 8px;
   }
-  .local-card.phase-f { border-left: 3px solid #adb5bd; }
+  .local-card.phase-f { border-left: 3px solid rgba(244,243,239,.55); }
   .s-desc { font-size: 11.5px; color: var(--text-sec); margin: 4px 0 8px; }
   .local-setup {
     display: block;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     background: var(--surface);
     border: 1px solid var(--border);
@@ -585,11 +585,11 @@
     margin-right: 6px;
     color: var(--muted);
   }
-  .sdp-badge.phase-s { background: #fff5f5; border-color: #ffa8a8; color: #c92a2a; }
-  .sdp-badge.phase-b { background: #e8f4fd; border-color: #74c0fc; color: #1971c2; }
-  .sdp-badge.phase-g { background: #ebfbee; border-color: #8ce99a; color: #2b8a3e; }
-  .sdp-badge.phase-o { background: #fff9db; border-color: #ffd43b; color: #a64d00; }
-  .sdp-badge.phase-v { background: #f8f0fc; border-color: #cc5de8; color: #862e9c; }
+  .sdp-badge.phase-s { background: rgba(255,184,0,.10); border-color: #FFB800; color: #FFB800; }
+  .sdp-badge.phase-b { background: rgba(25,200,168,.12); border-color: #5DE5CD; color: #19C8A8; }
+  .sdp-badge.phase-g { background: rgba(25,200,168,.12); border-color: #9CEDC7; color: #14A88E; }
+  .sdp-badge.phase-o { background: rgba(255,184,0,.12); border-color: #FFB800; color: #a64d00; }
+  .sdp-badge.phase-v { background: rgba(198,242,78,.10); border-color: #C6F24E; color: #C6F24E; }
 
   .sdp-title { font-size: 14px; font-weight: 600; }
   .sdp-close {
@@ -610,13 +610,13 @@
   .sdp-fail .sdp-val { color: var(--danger); }
   .sdp-lbl { color: var(--muted); font-size: 10px; font-weight: 500; padding-top: 2px; }
   .sdp-val { color: var(--text); word-break: break-word; }
-  .sdp-val code { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; }
+  .sdp-val code { font-family: var(--font-mono); font-size: 10.5px; }
 
   .sdp-warn {
     margin: 10px 0;
     padding: 8px 10px;
-    background: #fff9db;
-    border: 1px solid #ffe066;
+    background: rgba(255,184,0,.12);
+    border: 1px solid #FFB800;
     border-radius: 4px;
     font-size: 11.5px; color: #7c4b00;
   }
@@ -635,7 +635,7 @@
   }
   .sdp-list li + li { margin-top: 4px; }
   .sdp-incident { font-size: 10px; color: var(--muted); display: block; margin-top: 2px; }
-  .sdp-verified { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text-sec); }
+  .sdp-verified { font-size: 11px; font-family: var(--font-mono); color: var(--text-sec); }
   .sdp-note { font-size: 9.5px; color: var(--muted); margin-left: 6px; font-family: inherit; }
 
   /* Discipline chips */
@@ -654,11 +654,11 @@
     border: 1px solid;
     letter-spacing: .03em;
   }
-  .disc-s { background: #fff5f5; border-color: #ffa8a8; color: #c92a2a; }
-  .disc-q { background: #e8f4fd; border-color: #74c0fc; color: #1971c2; }
-  .disc-c { background: #f8f0fc; border-color: #cc5de8; color: #862e9c; }
+  .disc-s { background: rgba(255,184,0,.10); border-color: #FFB800; color: #FFB800; }
+  .disc-q { background: rgba(25,200,168,.12); border-color: #5DE5CD; color: #19C8A8; }
+  .disc-c { background: rgba(198,242,78,.10); border-color: #C6F24E; color: #C6F24E; }
   .disc-p { background: var(--surface); border-color: var(--border); color: var(--muted); }
-  .disc-r { background: #ebfbee; border-color: #8ce99a; color: #2b8a3e; }
+  .disc-r { background: rgba(25,200,168,.12); border-color: #9CEDC7; color: #14A88E; }
 
   .sdp-runtime {
     font-size: 10px;

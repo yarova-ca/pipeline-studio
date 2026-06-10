@@ -170,7 +170,7 @@
 <details
   bind:open
   id="why-panel"
-  style="background:#f5f9ff;border-bottom:1px solid #d0e8ff;font-size:11.5px;color:#24292f"
+  style="background:rgba(25,200,168,.08);border-bottom:1px solid rgba(25,200,168,.18);font-size:11.5px;color:#F4F3EF"
 >
   <summary class="why-summary">
     <span class="why-chevron" class:open>{open ? '▾' : '▸'}</span>
@@ -230,7 +230,7 @@
     padding: 7px 20px;
     font-weight: 600;
     font-size: 11px;
-    color: #0969da;
+    color: #19C8A8;
     text-transform: uppercase;
     letter-spacing: .06em;
     list-style: none;
@@ -240,14 +240,14 @@
     user-select: none;
   }
   .why-summary::-webkit-details-marker { display: none; }
-  .why-summary:hover { background: #e8f4fd; }
+  .why-summary:hover { background: rgba(25,200,168,.12); }
 
   .why-chevron { font-size: 10px; }
   .why-count {
     margin-left: auto;
     font-size: 10px;
     font-weight: 500;
-    color: #57606a;
+    color: rgba(244,243,239,.55);
     text-transform: none;
     letter-spacing: 0;
   }
@@ -260,8 +260,8 @@
   }
 
   .why-card {
-    background: white;
-    border: 1px solid #d0d7de;
+    background: #1C1F28;
+    border: 1px solid rgba(244,243,239,.14);
     border-radius: 6px;
     padding: 10px 12px;
     font-size: 11px;
@@ -279,13 +279,13 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .06em;
-    color: #57606a;
+    color: rgba(244,243,239,.55);
   }
   .why-card-pick {
     margin-left: auto;
     font-size: 10.5px;
     font-weight: 600;
-    color: #0969da;
+    color: #19C8A8;
     background: rgba(9,105,218,.08);
     border: 1px solid rgba(9,105,218,.2);
     border-radius: 4px;
@@ -300,9 +300,9 @@
   }
   .why-cap {
     font-size: 9.5px;
-    color: #1a7f37;
-    background: #dafbe1;
-    border: 1px solid #82e59d;
+    color: #19C8A8;
+    background: rgba(25,200,168,.12);
+    border: 1px solid #9CEDC7;
     border-radius: 3px;
     padding: 1px 6px;
   }
@@ -324,13 +324,13 @@
     height: fit-content;
     margin-top: 1px;
   }
-  .why-row-lbl.pick    { background: #dafbe1; color: #1a7f37; border: 1px solid #82e59d; }
-  .why-row-lbl.avoid   { background: #ffebe9; color: #cf222e; border: 1px solid #ffc9c9; }
-  .why-row-lbl.tradeoff{ background: #f3f0ff; color: #6741d9; border: 1px solid #d0bfff; }
-  .why-row-lbl.cost    { background: #fff8c5; color: #9a6700; border: 1px solid #d4a72c; }
+  .why-row-lbl.pick    { background: rgba(25,200,168,.12); color: #19C8A8; border: 1px solid #9CEDC7; }
+  .why-row-lbl.avoid   { background: rgba(255,184,0,.10); color: #FFB800; border: 1px solid rgba(255,184,0,.22); }
+  .why-row-lbl.tradeoff{ background: rgba(198,242,78,.10); color: #C6F24E; border: 1px solid rgba(198,242,78,.22); }
+  .why-row-lbl.cost    { background: rgba(255,184,0,.14); color: #FFB800; border: 1px solid #FFB800; }
   .why-row-val {
     font-size: 11px;
-    color: #24292f;
+    color: #F4F3EF;
     line-height: 1.45;
   }
 

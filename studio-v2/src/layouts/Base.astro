@@ -7,8 +7,8 @@ interface Props {
   description?: string;
 }
 const {
-  title = 'DevSecOps Pipeline Studio',
-  description = 'Interactive DevSecOps pipeline generator. Configure your stack and generate Dockerfiles, GitHub Actions workflows, and Kubernetes manifests.'
+  title = 'Yarova Studio',
+  description = 'Yarova Studio — pick a framework and industry; the whole pipeline, compliance, image, cluster and platform resolve into one stack, with every option choosable and real code generated.'
 } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -17,14 +17,15 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0969da" />
+    <meta name="theme-color" content="#0E0F11" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
 
-    <!-- Fonts -->
+    <!-- Fonts — Yarova brand trio -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
@@ -43,6 +44,10 @@ const {
     <!-- 3-column layout: sidebar | main | toc -->
     <div id="app-shell">
       <aside id="sidebar">
+        <a class="yv-brand" href="/" aria-label="Yarova Studio — home">
+          <img class="yv-wordmark" src="/yarova-logo.png" alt="Yarova" />
+          <span class="yv-tool">Studio</span>
+        </a>
         <slot name="sidebar" />
       </aside>
 
@@ -70,11 +75,23 @@ const {
     top: 0;
     height: 100vh;
     overflow-y: auto;
-    background: #1b1f24;
-    color: #cdd9e5;
+    background: var(--surface-1);
+    border-right: 1px solid var(--border);
+    color: var(--text-sec);
     padding: var(--sp-3) 0;
     scrollbar-width: thin;
-    scrollbar-color: #444c56 transparent;
+    scrollbar-color: var(--surface-3) transparent;
+  }
+  .yv-brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 16px 16px; margin-bottom: 6px;
+    border-bottom: 1px solid var(--border); text-decoration: none;
+  }
+  .yv-wordmark { height: 26px; width: auto; display: block; }
+  .yv-tool {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--muted);
+    border-left: 1px solid var(--border-hover); padding-left: 10px;
   }
 
   .main-col {

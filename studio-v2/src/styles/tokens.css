@@ -1,27 +1,54 @@
-/* Design tokens ported from v1 :root. Single source of truth for color,
-   typography, spacing, shadow, z-index. Replace ad-hoc inline styles by
-   referencing these. */
+/* Yarova brand tokens — dark. Single source of truth for color, type, space.
+   Mirrors yarova.ca/src/styles/global.css + brand/BRAND-SYSTEM.md.
+   #0E0F11 canvas · #F4F3EF bone · teal #19C8A8 → lime #C6F24E · gold #FFB800.
+   Variable NAMES kept stable so app.css keeps working; only VALUES are brand. */
 :root {
-  /* Surfaces */
-  --bg: #ffffff;
-  --surface: #f6f8fa;
-  --border: #d0d7de;
-  --border-subtle: #e6eaef;
+  /* Surfaces — brand dark ramp */
+  --bg: #0E0F11;
+  --surface: #1C1F28;
+  --surface-0: #0E0F11;
+  --surface-1: #13151B;
+  --surface-2: #1C1F28;
+  --surface-3: #252A36;
+  --border: rgba(244,243,239,.10);
+  --border-subtle: rgba(244,243,239,.06);
+  --border-hover: rgba(244,243,239,.16);
 
-  /* Text */
-  --text: #1a1e23;
-  --text-sec: #3d444d;
-  --muted: #57606a;
+  /* Text — bone at alpha */
+  --text: #F4F3EF;
+  --text-sec: rgba(244,243,239,.72);
+  --muted: rgba(244,243,239,.55);
 
   /* Brand */
-  --accent: #0969da;
-  --success: #1a7f37;
-  --warn: #9a6700;
-  --danger: #cf222e;
+  --teal: #19C8A8;
+  --lime: #C6F24E;
+  --gold: #FFB800;
+  --accent: #19C8A8;
+  --accent-hover: #14A88E;
+  --accent-press: #0F8A75;
+  --success: #19C8A8;
+  --warn: #FFB800;
+  --danger: #FFB800;            /* brand has no coral — gold carries urgency */
+  --gradient: linear-gradient(135deg, #19C8A8 0%, #C6F24E 100%);
+  --wash-teal: rgba(25,200,168,.07);
+  --wash-teal-2: rgba(25,200,168,.16);
+  --wash-gold: rgba(255,184,0,.08);
+
+  /* sidebar palette */
+  --sb: var(--surface-1);
+  --sb-text: var(--text-sec);
+  --sb-border: var(--border);
+  --sb-hover: var(--surface-3);
+  --sb-active: var(--teal);
 
   /* Code */
-  --code-bg: #161b22;
-  --code-text: #e6edf3;
+  --code-bg: #0a0b0d;
+  --code-text: #C6F24E;
+
+  /* Fonts — brand trio */
+  --font-display: "Bricolage Grotesque", Outfit, system-ui, sans-serif;
+  --font-sans: Outfit, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, Menlo, monospace;
 
   /* Typography scale */
   --fs-xs: 10.5px;
@@ -45,13 +72,14 @@
   --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
   --sp-5: 20px; --sp-6: 24px; --sp-7: 32px; --sp-8: 48px;
 
-  /* Radius */
-  --r: 6px; --r-sm: 4px; --r-lg: 10px;
+  /* Radius — brand is rounder */
+  --r: 12px; --r-sm: 8px; --r-lg: 16px;
 
-  /* Elevation */
-  --sh-1: 0 1px 3px rgba(27,31,36,.07), 0 1px 2px rgba(27,31,36,.04);
-  --sh-2: 0 3px 10px rgba(27,31,36,.09), 0 1px 4px rgba(27,31,36,.05);
-  --sh-3: 0 8px 24px rgba(27,31,36,.12), 0 2px 6px rgba(27,31,36,.06);
+  /* Elevation — dark */
+  --sh-1: 0 1px 0 rgba(255,255,255,.03) inset, 0 6px 18px rgba(0,0,0,.28);
+  --sh-2: 0 1px 0 rgba(255,255,255,.04) inset, 0 10px 26px rgba(0,0,0,.38);
+  --sh-3: 0 14px 40px rgba(0,0,0,.5);
+  --ease: cubic-bezier(.22,1,.36,1);
 
   /* Z-index ladder */
   --z-base: 1;
@@ -66,9 +94,15 @@
 * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
 html { scroll-behavior: smooth }
 body {
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: var(--font-sans);
   font-size: var(--fs-md);
   line-height: var(--lh-base);
+  letter-spacing: -.005em;
   color: var(--text);
-  background: var(--bg);
+  background:
+    radial-gradient(1100px 520px at 12% -8%, rgba(25,200,168,.10), transparent 60%),
+    radial-gradient(900px 480px at 88% 2%, rgba(198,242,78,.06), transparent 55%),
+    var(--bg);
+  -webkit-font-smoothing: antialiased;
 }
+h1,h2,h3 { font-family: var(--font-display); letter-spacing: -.02em; }

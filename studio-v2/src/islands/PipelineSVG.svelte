@@ -48,19 +48,19 @@
   const COL_W = 175, NODE_W = 148, NODE_H = 34, ROW_H = 44, TOP = 56, LEFT = 14;
 
   const COLS = [
-    { phase: 0, label: 'Phase 0 · Bootstrap',  fill: '#f1f3f5', stroke: '#adb5bd', stages: [
+    { phase: 0, label: 'Phase 0 · Bootstrap',  fill: '#1C1F28', stroke: 'rgba(244,243,239,.55)', stages: [
       { id: 'p0g1', label: 'Gate 1 Identity',   sub: 'OIDC trust',   critical: false },
       { id: 'p0g2', label: 'Gate 2 Protection', sub: 'branch rules', critical: false },
       { id: 'p0g3', label: 'Gate 3 Secrets',    sub: 'pinned tools', critical: false },
     ]},
-    { phase: 1, label: 'Phase 1 · Developer',  fill: '#f1f3f5', stroke: '#adb5bd', stages: [
+    { phase: 1, label: 'Phase 1 · Developer',  fill: '#1C1F28', stroke: 'rgba(244,243,239,.55)', stages: [
       { id: 'l1',    label: 'IDE Hints',         sub: 'L1',   critical: false },
       { id: 'l2',    label: 'Pre-commit',        sub: 'L2',   critical: false },
       { id: 'l3',    label: 'Lint + Format',     sub: 'L3',   critical: false },
       { id: 'l4',    label: 'Secret Scan',       sub: 'L4',   critical: false },
       { id: 'gitpush', label: 'git push',        sub: '',     critical: false },
     ]},
-    { phase: 2, label: 'Phase 2 · PR Gate',    fill: '#fff0f0', stroke: '#ffc9c9', stages: [
+    { phase: 2, label: 'Phase 2 · PR Gate',    fill: 'rgba(255,184,0,.10)', stroke: 'rgba(255,184,0,.22)', stages: [
       { id: 's1',    label: 'Hooks (re-run)',    sub: 'S1',   critical: false },
       { id: 's2',    label: 'SCA',              sub: 'S2',   critical: false, parallel: true },
       { id: 's3',    label: 'SAST',             sub: 'S3',   critical: false, parallel: true },
@@ -71,7 +71,7 @@
       { id: 's8apr', label: 'SBOM',             sub: 'S8a',  critical: false },
       { id: 's7pr',  label: 'Scan',             sub: 'S7',   critical: false },
     ]},
-    { phase: 3, label: 'Phase 3 · Main Build', fill: '#e7f5ff', stroke: '#a5d8ff', stages: [
+    { phase: 3, label: 'Phase 3 · Main Build', fill: 'rgba(25,200,168,.12)', stroke: '#a5d8ff', stages: [
       { id: 's0',    label: 'Auth',             sub: 'S0',   critical: false },
       { id: 's2m',   label: 'SCA',              sub: 'S2',   critical: false, parallel: true },
       { id: 's3m',   label: 'SAST',             sub: 'S3',   critical: false, parallel: true },
@@ -88,7 +88,7 @@
       { id: 's11',   label: 'Perf',             sub: 'S11',  critical: false },
       { id: 's10',   label: 'SLSA Provenance',  sub: 'S10',  critical: true  },
     ]},
-    { phase: 4, label: 'Phase 4 · Promotions', fill: '#fff4e6', stroke: '#ffd8a8', stages: [
+    { phase: 4, label: 'Phase 4 · Promotions', fill: 'rgba(255,184,0,.12)', stroke: 'rgba(255,184,0,.22)', stages: [
       { id: 's12',   label: 'Notify',           sub: 'S12',  critical: false },
       { id: 's13',   label: 'Promote :latest',  sub: 'S13',  critical: true  },
       { id: 'p1',    label: 'Deploy → dev',     sub: 'P1',   critical: true  },
@@ -165,16 +165,16 @@
   }
 
   function fillForStage(stageId: string, colFill: string, critical: boolean): string {
-    if ($activeStageName === stageId) return '#fff0f0';
-    if (decidedNodeIds.has(stageId)) return '#e8f5e9';
-    if (critical) return '#fff8f8';
+    if ($activeStageName === stageId) return 'rgba(255,184,0,.10)';
+    if (decidedNodeIds.has(stageId)) return 'rgba(25,200,168,.12)';
+    if (critical) return 'rgba(255,184,0,.08)';
     return colFill;
   }
 
   function strokeForStage(stageId: string, colStroke: string, critical: boolean): string {
-    if ($activeStageName === stageId) return '#cf222e';
-    if (decidedNodeIds.has(stageId)) return '#2da44e';
-    if (critical) return '#cf222e';
+    if ($activeStageName === stageId) return '#FFB800';
+    if (decidedNodeIds.has(stageId)) return '#19C8A8';
+    if (critical) return '#FFB800';
     return colStroke;
   }
 
@@ -207,7 +207,7 @@
         <path
           d={path}
           fill="none"
-          stroke={kind === 'critical' ? '#cf222e' : '#adb5bd'}
+          stroke={kind === 'critical' ? '#FFB800' : 'rgba(244,243,239,.55)'}
           stroke-width={kind === 'critical' ? 1.5 : 1}
           stroke-dasharray={kind === 'critical' ? '' : '3 2'}
           opacity="0.7"
@@ -238,16 +238,16 @@
             {#if stage.parallel}
               <line x1={p.x + 4} y1={p.y} x2={p.x + 4} y2={p.y + p.h} stroke={col.stroke} stroke-width="2" />
             {/if}
-            <text x={p.x + 8} y={p.y + 13} font-size="10" font-weight="600" fill="#24292f" font-family="system-ui, sans-serif">
+            <text x={p.x + 8} y={p.y + 13} font-size="10" font-weight="600" fill="#F4F3EF" font-family="system-ui, sans-serif">
               {stage.label}
             </text>
             {#if stage.sub}
-              <text x={p.x + 8} y={p.y + 26} font-size="8.5" fill="#57606a" font-family="JetBrains Mono, monospace">
+              <text x={p.x + 8} y={p.y + 26} font-size="8.5" fill="rgba(244,243,239,.55)" font-family="JetBrains Mono, monospace">
                 {stage.sub}
               </text>
             {/if}
             {#if stage.critical}
-              <rect x={p.x + p.w - 8} y={p.y + 2} width={6} height={p.h - 4} rx={2} fill="#cf222e" opacity="0.7" />
+              <rect x={p.x + p.w - 8} y={p.y + 2} width={6} height={p.h - 4} rx={2} fill="#FFB800" opacity="0.7" />
             {/if}
             <!-- Tool label pill — shows currently picked tool for decision-driven nodes -->
             {#if getNodeToolLabel(stage.id)}
@@ -259,7 +259,7 @@
                 width={pillW}
                 height={9}
                 rx={3}
-                fill="#0969da"
+                fill="#19C8A8"
                 opacity="0.85"
               />
               <text
@@ -290,7 +290,7 @@
     overflow-x: auto;
     border: 1px solid var(--border);
     border-radius: 8px;
-    background: #fafbfc;
+    background: #13151B;
     padding: 12px;
   }
 
@@ -313,7 +313,7 @@
     border: 1.5px solid;
     flex-shrink: 0;
   }
-  .leg-dot.red   { background: #fff8f8; border-color: #cf222e; }
-  .leg-dot.green { background: #e8f5e9; border-color: #2da44e; }
+  .leg-dot.red   { background: rgba(255,184,0,.08); border-color: #FFB800; }
+  .leg-dot.green { background: rgba(25,200,168,.12); border-color: #19C8A8; }
   .leg-muted { color: var(--muted); margin-left: auto; font-style: italic; }
 </style>
