@@ -7,6 +7,7 @@ import svelte from '@astrojs/svelte';
 // "drop the file on a static host" property.
 export default defineConfig({
   output: 'static',
+  outDir: './build',
   integrations: [svelte()],
   build: {
     inlineStylesheets: 'auto'   // small CSS gets inlined; big CSS stays a file
