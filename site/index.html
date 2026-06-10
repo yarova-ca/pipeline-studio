@@ -323,6 +323,21 @@
   .gencopy{background:none;border:1px solid var(--hair2);color:var(--ink2);border-radius:7px;font-size:10.5px;padding:2px 9px;cursor:pointer;font-family:var(--fmono,monospace)}
   .gencopy:hover{border-color:var(--teal);color:var(--teal)}
   .gencode{margin:0;padding:11px;max-height:320px;overflow:auto;font-family:var(--fmono,monospace);font-size:11px;line-height:1.5;color:#cfe8df;white-space:pre;tab-size:2}
+  /* decision cards — every decision: question + answer + lens verdict + options */
+  .dcard{border:1px solid var(--hair);border-left:3px solid var(--hair2);border-radius:12px;padding:10px 13px;margin-bottom:9px;background:var(--panel)}
+  .dcard.amber{border-left-color:var(--gold);box-shadow:0 0 0 1px rgba(255,184,0,.18)}
+  .dcard.red{border-left-color:#e8615a;box-shadow:0 0 0 1px rgba(232,97,90,.2)}
+  .dcard.teal{border-left-color:var(--teal)}
+  .dcard.dim{opacity:.6}
+  .dq{font-size:12px;color:var(--ink2);font-weight:600}
+  .da{display:flex;align-items:center;gap:9px;margin-top:3px;flex-wrap:wrap}
+  .dans{font-size:14.5px;font-weight:700;font-family:var(--fdisplay);letter-spacing:-.01em}
+  .dv{font-size:9px;text-transform:uppercase;letter-spacing:.09em;font-family:var(--fmono);padding:2px 8px;border-radius:20px;border:1px solid currentColor}
+  .dv.amber{color:var(--gold)} .dv.red{color:#e8615a} .dv.teal{color:var(--teal)}
+  .dwhy{font-size:11.5px;color:var(--ink3);margin-top:5px;line-height:1.45}
+  .dopts{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+  .dopt{font-size:10px;border:1px solid var(--hair);border-radius:20px;padding:2px 9px;color:var(--ink3);font-family:var(--fmono)}
+  .dopt.on{border-color:var(--teal);color:var(--teal);background:rgba(25,200,168,.08)}
 
   /* selectable option rows in resolver panels */
   .opt{position:relative;display:flex;flex-direction:column;gap:3px;padding:11px 13px;margin-bottom:8px;
@@ -918,6 +933,61 @@ function codeFile(name,text){
 window.copyCode=(id,btn)=>{const el=document.getElementById(id);if(!el)return;
   navigator.clipboard.writeText(el.textContent).then(()=>{if(btn){const t=btn.textContent;btn.textContent='copied ✓';setTimeout(()=>btn.textContent=t,1200);}});};
 
+// ── decision journey: every real decision = options + lens verdict + answer ──
+const REGIME_TO_STD={'fips-140-3':['fips','fedramp'],'fedramp-mod':['fedramp'],'fedramp-high':['fedramp'],'pci-dss-4':['pci'],'hipaa':['hipaa'],'pipeda':['pipeda'],'soc2-typeii':['soc2'],'iso27001':['iso27001'],'cmmc-l2':['cmmc'],'nerc-cip':['nerccip']};
+function reqStds(s){const out=new Set();for(const id of (s.regimes||[])){(REGIME_TO_STD[id]||[]).forEach(x=>out.add(x));}return out;}
+function axisValues(arg){const a=(G.nodes.buildAxes||[]).find(x=>x.arg===arg||x.id===arg);return a&&a.validValues?a.validValues:[];}
+function decisionCard(d){
+  const vc={forced:'amber',gap:'red',required:'teal',recommended:'teal',you:'teal',set:'',off:'dim'};
+  const cls=vc[d.verdict]||'';
+  const opts=(d.options||[]).slice(0,7).map(o=>`<span class="dopt${(''+o).toLowerCase()===(''+d.answer).toLowerCase()?' on':''}">${esc(o)}</span>`).join('');
+  return `<div class="dcard ${cls}"><div class="dq">${esc(d.q)}</div>`+
+    `<div class="da"><span class="dans">${esc(d.answer)}</span>${(d.verdict&&d.verdict!=='set')?`<span class="dv ${cls}">${esc(d.verdict)}</span>`:''}</div>`+
+    `${d.why?`<div class="dwhy">${esc(d.why)}</div>`:''}${opts?`<div class="dopts">${opts}</div>`:''}</div>`;
+}
+function decisionsFor(s){
+  const sh=(s.fw.shipped)||{}, ba=sh.buildArgs||{}, mw=sh.middleware||{};
+  const stds=reqStds(s);
+  const compByStd={}; (sh.shippedCompliance||[]).forEach(c=>compByStd[c.standard]=c);
+  let rtForced=null, rtWhy='';
+  for(const std of stds){const c=compByStd[std]; if(c&&c.buildArgs&&c.buildArgs.RUNTIME){rtForced=c.buildArgs.RUNTIME; rtWhy=std.toUpperCase()+' forces RUNTIME='+c.buildArgs.RUNTIME+' (services/'+(s.fw.serviceSlug||s.fw.id)+'/compliance/'+std+'.yaml).';}}
+  const reqAuth=stds.has('pci')||stds.has('hipaa')||((s.rq?.requiredAuthIds||[]).length>0);
+  const needAudit=stds.has('hipaa')||stds.has('pci');
+  const needObs=stds.has('soc2')||stds.has('hipaa')||stds.has('pci')||stds.has('fedramp');
+  const D={deps:[],build:[],compliance:[],ci:[],gitops:[],cluster:[],platform:[]};
+  // dependencies
+  D.deps.push({q:'Package manager',answer:nameById('pkgBuildDeep',s.pkg),options:(s.fw.pkgMgr||'').split(/[,/]+/).map(x=>x.trim()).filter(Boolean),verdict:s.pkgUser?'you':'set',why:'Frozen-lockfile install in CI.'});
+  if(s.fw.buildTool)D.deps.push({q:'Build tool',answer:s.fw.buildTool,options:[],verdict:'set',why:''});
+  // build / image
+  if(ba.BUILD_IMAGE)D.build.push({q:'Build image (compile stage)',answer:ba.BUILD_IMAGE,options:axisValues('BUILD_IMAGE'),verdict:'set',why:'Builder layer — discarded from the final image.'});
+  const rtAns=rtForced||ba.RUNTIME||s.base;
+  D.build.push({q:'Runtime variant',answer:rtAns,options:sh.runtimeVariants||['alpine','fips'],verdict:rtForced?'forced':'set',why:rtForced?rtWhy:'Shipped default runtime base.'});
+  const tgt=(rtAns==='fips')?'runtime-fips':'runtime';
+  D.build.push({q:'Dockerfile target',answer:tgt,options:(sh.dockerfileTargets||[]).filter(t=>/^runtime|^base-(alpine|fips|slim)/.test(t)),verdict:rtForced?'forced':'set',why:'Final image stage built.'});
+  // compliance
+  for(const id of (s.regimes||[])){
+    const std=(REGIME_TO_STD[id]||[])[0], c=std&&compByStd[std];
+    D.compliance.push({q:nameById('complianceProfiles',id),answer:c?'profile shipped':'no shipped profile',options:[],verdict:c?'required':'gap',
+      why:c?('Forces '+((c.buildArgs&&Object.keys(c.buildArgs).length)?Object.entries(c.buildArgs).map(([k,v])=>k+'='+v).join(', '):'controls only')+'. Controls: '+((c.requiredControls||[]).slice(0,4).join(', ')||'—')+'.'):'Required by industry, but the service ships no profile for it.'});
+  }
+  // platform middleware
+  D.platform.push({q:'Auth',answer:mw.auth?nameById('authDeep',s.auth):'none',options:(G.nodes.authDeep||[]).map(a=>a.name),verdict:mw.auth?(reqAuth?'required':'set'):(reqAuth?'gap':'off'),why:reqAuth?(mw.auth?'Required by compliance — present.':'Required by '+[...stds].join('/')+' — MISSING.'):'Auth middleware shipped.'});
+  D.platform.push({q:'Audit logging',answer:mw.audit?'on':'off',options:['on','off'],verdict:mw.audit?(needAudit?'required':'set'):(needAudit?'gap':'off'),why:needAudit?(mw.audit?'Required and present.':'HIPAA/PCI require immutable audit logs — OFF in this service.'):'Not enabled.'});
+  D.platform.push({q:'RBAC',answer:mw.rbac?'on':'off',options:['on','off'],verdict:mw.rbac?'set':'off',why:'Role-based access control middleware.'});
+  D.platform.push({q:'Circuit breaker',answer:mw.circuitBreaker?'on':'off',options:['on','off'],verdict:mw.circuitBreaker?'set':'off',why:'Resilience on downstream calls.'});
+  D.platform.push({q:'Observability',answer:sh.observabilityDetected?'enabled (logs + metrics)':'none',options:(G.nodes.observabilityDeep||[]).map(o=>o.name),verdict:sh.observabilityDetected?(needObs?'required':'set'):(needObs?'gap':'off'),why:sh.observabilityDetected?'Detected: structured logs + Prometheus metrics.':(needObs?'Audit/telemetry required by compliance — none detected.':'None detected.')});
+  D.platform.push({q:'ORM / data layer',answer:sh.ormDetected?(sh.ormName||'detected'):'none (raw SQL / no DB)',options:(s.ormList||[]).map(o=>o.name),verdict:'set',why:''});
+  // ci — the real shipped workflows
+  for(const w of (sh.workflows||[]))D.ci.push({q:w.name||w.file,answer:'enabled',options:[],verdict:'set',why:(w.jobs||[]).length?'Jobs: '+(w.jobs||[]).join(', '):''});
+  // gitops / deploy
+  if(sh.helm)D.gitops.push({q:'Helm values',answer:(sh.helmValuesFiles||[]).length+' env files',options:sh.helmValuesFiles||[],verdict:'set',why:'Per-environment values shipped.'});
+  if(sh.kustomizeOverlays)D.gitops.push({q:'Kustomize overlays',answer:(sh.kustomizeOverlays||[]).join(' / '),options:sh.kustomizeOverlays,verdict:'set',why:'Per-environment patches.'});
+  // cluster
+  D.cluster.push({q:'Deploy cluster',answer:nameById('clusters',s.cluster),options:(G.nodes.clusters||[]).map(c=>c.name),verdict:s.clusterUser?'you':(s.clusterReq?'recommended':'set'),why:s.rq?(s.clusterReq?s.rq.name+' recommends it.':'Default cluster.'):'Default cluster.'});
+  return D;
+}
+const decBlock=(arr)=>arr&&arr.length?grp('decisions — options · lens · answer')+arr.map(decisionCard).join(''):'';
+
 function renderResolver(){
   const s=resolveStack();
   const rdBase=(G.nodes.runtimeDeep||[]).find(x=>x.id===s.base);
@@ -936,6 +1006,11 @@ function renderResolver(){
   const genGit=grp('Generated files')+codeFile('helm/values-prod.yaml',GF.helm)+codeFile('kustomize/base/kustomization.yaml',GF.kbase)+codeFile('kustomize/base/deployment.yaml',GF.kdeploy);
   const genCluster=grp('Generated manifests')+Object.entries(GF.deploy||{}).map(([n,c])=>codeFile(n,c)).join('');
 
+  // every real decision for this service+lens, grouped by stage
+  const DEC=decisionsFor(s);
+  const decDeps=decBlock(DEC.deps), decBuild=decBlock(DEC.build), decComp=decBlock(DEC.compliance),
+        decCI=decBlock(DEC.ci), decGit=decBlock(DEC.gitops), decCluster=decBlock(DEC.cluster), decPlat=decBlock(DEC.platform);
+
   // 0 Repository — switch within the same category, all 106 in the top picker
   const sib=(G.nodes.frameworks||[]).filter(f=>f.categoryId===s.fw.categoryId);
   P.push(rpanel(0,'#19C8A8','01','Repository',rtag('you','you starred this'),
@@ -947,7 +1022,7 @@ function renderResolver(){
   const pkgReq=new Set(), pkgRec=new Set([s.pkgDef]);
   P.push(rpanel(1,'#2FCD9D','02','Dependencies',rtag(s.pkgUser?'you':'rec',s.pkgUser?'your choice':'recommended default'),
     esc(nameById('pkgBuildDeep',s.pkg)),`Package manager + build tool for ${esc(LANG_HUMAN[s.lang]||s.lang)}. Lockfile committed; CI uses frozen install.`,
-    grp(`package managers (${s.pkgList.length})`)+
+    decDeps+grp(`package managers (${s.pkgList.length})`)+
     s.pkgList.map(p=>opt('pkg',p.id,p.name,p.lockfile?String(p.lockfile).split('.')[0]:'',ostate(p.id,s.pkg,pkgReq,pkgRec),`openPkg('${p.id}')`)).join('')+
     (s.btList.length?grp(`build tools (${s.btList.length})`)+s.btList.map(p=>opt('buildtool',p.id,p.name,p.what?String(p.what).slice(0,40):'',ostate(p.id,s.buildtool,new Set(),new Set()),`openPkg('${p.id}')`)).join(''):''),ch('deps')));
 
@@ -955,7 +1030,7 @@ function renderResolver(){
   P.push(rpanel(2,'#44D292','03','CI/CD pipeline',rtag('same','same for every framework'),
     `${(G.nodes.stages||[]).length}-stage pipeline`,'Standard platform pipeline. Your choices flow in as build args:',
     `<div class="rchips"><span class="chip">AUTH=${esc(s.auth.replace('auth-',''))}</span><span class="chip">ORM=${esc(s.orm.replace('orm-',''))}</span><span class="chip">RUNTIME=${esc(s.base)}</span><span class="chip">PKG=${esc(s.pkg)}</span></div>`+
-    grp('phases')+(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>card('#44D292',p.label||p.name,p.trigger||'',`goCol(1)`,'',null)).join('')+genCI,ch('pipe')));
+    decCI+grp('phases')+(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>card('#44D292',p.label||p.name,p.trigger||'',`goCol(1)`,'',null)).join('')+genCI,ch('pipe')));
 
   // 3 Compliance — ALL 26, what applies vs what does not
   const reqSet=new Set(s.regimes);
@@ -972,27 +1047,27 @@ function renderResolver(){
   }
   P.push(rpanel(3,'#5AD886','04','Compliance',s.rq?rtag('req',`${s.regimes.length} of ${allC.length} apply`):rtag('def','no industry'),
     s.rq?`${s.regimes.length} of ${allC.length} apply`:'Pick an industry',
-    s.rq?`${esc(s.rq.name)} mandates the gold ones. Each forces controls into the pipeline.`:'Compliance depends on the industry you serve.',compBody,ch('comp')));
+    s.rq?`${esc(s.rq.name)} mandates the gold ones. Each forces controls into the pipeline.`:'Compliance depends on the industry you serve.',decComp+compBody,ch('comp')));
 
   // 4 Image & registry — every base image, choosable
   const runAll=(G.nodes.runtimeDeep||[]);
   P.push(rpanel(4,'#70DD7B','05','Image & registry',rtag(s.baseTag,s.baseTag==='req'?'required by industry':s.baseTag==='you'?'your choice':'framework default'),
     esc(baseName),esc(s.baseWhy)+' Built, signed (cosign) + SBOM, pushed to GHCR.',
-    grp(`base image (${runAll.length})`)+
+    decBuild+grp(`base image (${runAll.length})`)+
     runAll.map(r=>opt('runtime',r.id,r.name,`${r.baseOs||''}${r.fipsCertified==='yes'?' · FIPS':''}`,ostate(r.id,s.base,reqRun,new Set()),`openDeep('runtimeDeep','${r.id}')`)).join('')+
     grp('registry')+card('#70DD7B','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null)+genImg,ch('img')));
 
   // 5 GitOps — info
   P.push(rpanel(5,'#85E270','06','GitOps delivery',rtag('same','same for every framework'),
     'Argo CD + Helm + Kustomize','Git declares desired state. Argo CD syncs it to the cluster.',
-    grp(`tools (${(G.nodes.gitopsTools||[]).length})`)+(G.nodes.gitopsTools||[]).map(t=>card('#85E270',t.name,`${t.role||''} · open detail`,`openGitops('${t.id}')`,'',null)).join('')+genGit,ch('gitops')));
+    decGit+grp(`tools (${(G.nodes.gitopsTools||[]).length})`)+(G.nodes.gitopsTools||[]).map(t=>card('#85E270',t.name,`${t.role||''} · open detail`,`openGitops('${t.id}')`,'',null)).join('')+genGit,ch('gitops')));
 
   // 6 Cluster — every cluster, choosable
   const [ct,ctx]=pickTag(s.clusterUser,s.clusterReq);
   const clReq=new Set(s.rq?.recommendedClusterIds||[]);
   P.push(rpanel(6,'#9BE864','07','Deploy cluster',rtag(ct,ctx),
     esc(nameById('clusters',s.cluster)),s.rq?`${esc(s.rq.name)} recommends the gold ones. ${(G.nodes.clusterComponents||[]).length} platform components run here.`:`${(G.nodes.clusterComponents||[]).length} platform components.`,
-    grp(`clusters (${(G.nodes.clusters||[]).length})`)+
+    decCluster+grp(`clusters (${(G.nodes.clusters||[]).length})`)+
     (G.nodes.clusters||[]).map(c=>opt('cluster',c.id,c.name,c.cloud||'',ostate(c.id,s.cluster,clReq,new Set()),`openCluster('${c.id}')`)).join('')+
     `<div class="sub" style="margin-top:8px">Hub-and-spoke: one Argo CD → every cluster.</div>`+genCluster,ch('cluster')));
 
@@ -1001,7 +1076,7 @@ function renderResolver(){
   const authReqS=new Set(s.rq?.requiredAuthIds||[]), obsReqS=new Set(s.rq?.requiredObservabilityIds||[]), ormRec=new Set([s.ormDef]);
   P.push(rpanel(7,'#B0ED59','08','Platform',rtag(at,'auth: '+atx),
     esc(nameById('authDeep',s.auth)),'Auth, observability and database layer — pick any:',
-    grp(`auth (${(G.nodes.authDeep||[]).length})`)+
+    decPlat+grp(`auth (${(G.nodes.authDeep||[]).length})`)+
     (G.nodes.authDeep||[]).map(a=>opt('auth',a.id,a.name,'',ostate(a.id,s.auth,authReqS,new Set()),`openDeep('authDeep','${a.id}')`)).join('')+
     grp(`observability (${(G.nodes.observabilityDeep||[]).length})`)+
     (G.nodes.observabilityDeep||[]).map(o=>opt('obs',o.id,o.name,'',ostate(o.id,s.obs,obsReqS,new Set()),`openDeep('observabilityDeep','${o.id}')`)).join('')+
