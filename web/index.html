@@ -261,6 +261,12 @@ function viewGuided(){
 window.gStep=(cat)=>{guided.category=cat;guided.step=2;render();};
 
 function kvRow(label,cell){return `<div class="k">${esc(label)}</div><div>${c(cell)}</div>`;}
+function listOrText(v){if(!v)return"";if(Array.isArray(v))return v.map(x=>`<span class="tag">${esc(x)}</span>`).join("");if(typeof v==="object")return Object.entries(v).map(([k,val])=>`<div><span class="sub">${esc(k)}:</span> ${Array.isArray(val)?val.map(x=>`<span class="tag">${esc(x)}</span>`).join(""):esc(val)}</div>`).join("");return esc(v);}
+function guidanceBlock(g){if(!g||(!g.securityAuditRequirements&&!g.frameworkNotes&&!g.dataSensitivity))return"";
+  return `<div style="margin:0 0 12px;padding:10px;border:1px solid var(--line);border-radius:8px"><b>What this industry requires</b>`+
+    (g.dataSensitivity?`<div><span class="sub">Data sensitivity:</span> ${listOrText(g.dataSensitivity)}</div>`:"")+
+    (g.securityAuditRequirements?`<div><span class="sub">Security/audit:</span> ${listOrText(g.securityAuditRequirements)}</div>`:"")+
+    (g.frameworkNotes?`<div><span class="sub">Notes:</span> ${esc(g.frameworkNotes)}</div>`:"")+`</div>`;}
 function viewBundle(id){
   const b=resolveBundle(IDX,id,LENS);
   if(b.error) return `<div class="err">${esc(b.error)}</div>`;
@@ -295,7 +301,7 @@ function viewBundle(id){
 
   <details class="section" open><summary>Compliance — required regimes (real shipped controls)</summary><div class="body">
     <p class="sub" style="margin:0 0 10px">Every rule the industry requires. Green = service ships it. Red = required but no control profile yet.</p>
-    ${lens.guidance&&(lens.guidance.securityAuditRequirements||lens.guidance.frameworkNotes)?`<div style="margin:0 0 12px;padding:10px;border:1px solid var(--line);border-radius:8px"><b>What this industry requires</b>${lens.guidance.dataSensitivity?`<br><span class="sub">Data sensitivity:</span> ${(lens.guidance.dataSensitivity||[]).map(d=>`<span class="tag">${esc(d)}</span>`).join("")}`:''}${lens.guidance.securityAuditRequirements?`<br><span class="sub">Security/audit:</span> ${esc(lens.guidance.securityAuditRequirements)}`:''}${lens.guidance.frameworkNotes?`<br><span class="sub">Notes:</span> ${esc(lens.guidance.frameworkNotes)}`:''}</div>`:''}
+    ${guidanceBlock(lens.guidance)}
     ${comp}</div></details>
 
   <details class="section"><summary>Build axes (per framework; lens forces shown amber)</summary><div class="body">

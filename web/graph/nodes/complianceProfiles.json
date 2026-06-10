@@ -1,0 +1,911 @@
+[
+  {
+    "id": "pipeda",
+    "name": "PIPEDA",
+    "fullName": "Personal Information Protection and Electronic Documents Act",
+    "region": "CA",
+    "appliesToVerticals": ["saas", "fintech", "ecommerce", "healthtech", "edtech", "insurance", "marketing", "telecom"],
+    "forces": {
+      "runtime": "any-patched-distro",
+      "auth": "consent-gated-access + RBAC",
+      "observability": "access-audit-log (actor, action, resource, request-id, ts)",
+      "data": "PII field-level encryption + masking (name, email, phone, address, SIN)",
+      "network": "X-Data-Residency: CA header; TLS 1.2+ in transit"
+    },
+    "requiredControls": [
+      "Meaningful consent capture before collection/use/disclosure (10 fair information principles)",
+      "Breach reporting to OPC and affected individuals when real risk of significant harm (RROSH)",
+      "Breach record-keeping for ALL breaches regardless of harm threshold",
+      "Right of access and correction workflow with 30-day response SLA",
+      "Encryption at rest (AES-256) and in transit (TLS 1.2+)",
+      "Data minimization and purpose limitation enforced at API layer",
+      "Accountability: designated Privacy Officer and documented privacy program"
+    ],
+    "auditRetention": "Breach records: minimum 24 months from determination. Consent + access logs: retain for life of relationship plus limitation period (commonly 7 years).",
+    "dataResidency": "No hard residency mandate, but cross-border transfer requires comparable-protection contracts and transparency; Canadian region strongly recommended.",
+    "howToMeet": [
+      "Deploy a consent gate middleware: block POST/PUT/PATCH lacking X-Consent: granted, return 451.",
+      "Implement field-level masking in the logger for name/email/phone/address/SIN before any sink.",
+      "Stand up an OPC breach-notification runbook with RROSH assessment template and 72h internal trigger.",
+      "Build access/correction request API backed by an immutable audit trail (e.g. append-only Postgres + S3 Object Lock).",
+      "Pin TLS 1.2+ (prefer 1.3) and AES-256 at-rest via KMS-managed keys in a Canadian region."
+    ],
+    "regulator": "Office of the Privacy Commissioner of Canada (OPC)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "phipa",
+    "name": "PHIPA",
+    "fullName": "Personal Health Information Protection Act (Ontario)",
+    "region": "CA",
+    "appliesToVerticals": ["healthtech", "hospital", "ehr", "pharmacy", "insurance", "telehealth"],
+    "forces": {
+      "runtime": "auditd-capable distro (Debian 12 / Ubuntu 24.04 / RHEL UBI 9)",
+      "auth": "RBAC + break-glass with mandatory justification",
+      "observability": "PHI access audit log (who accessed which record, when, why)",
+      "data": "PHI encryption at rest + masking (MRN, diagnosis, DOB, patientName)",
+      "network": "Canadian/Ontario region; no PHI egress without lockbox/agreement"
+    },
+    "requiredControls": [
+      "Audit log of every PHI access including agent identity, record, purpose, timestamp",
+      "Lockbox support: individual can withhold/withdraw consent for specific HIC sharing",
+      "Health Information Custodian (HIC) and electronic service provider (ESP/agent) agreements",
+      "Breach notification to individual and IPC Ontario at first reasonable opportunity",
+      "Mandatory IPC statistical reporting of PHI breaches annually (since 2018)",
+      "Role-based minimum-necessary access; break-glass logged and reviewed",
+      "De-identification standard for secondary use / research"
+    ],
+    "auditRetention": "PHI and access logs: minimum 10 years after last service or, for minors, 10 years past age of majority (aligns with Ontario medical records retention).",
+    "dataResidency": "Ontario/Canada strongly required; PHI hosted by ESP must remain under HIC control with written agreement and no unauthorized foreign access.",
+    "howToMeet": [
+      "Run auditd + app-level PHI access log keyed by clinician ID, record ID, and access reason.",
+      "Implement lockbox flags on patient records that hard-block downstream disclosure APIs.",
+      "Sign HIC/ESP agreements and pin hosting to a Canadian region (ca-central-1 / Canada Central).",
+      "Wire an IPC Ontario breach runbook with first-reasonable-opportunity notification trigger.",
+      "Mask MRN/diagnosis/DOB/patientName in all logs and enforce minimum-necessary RBAC."
+    ],
+    "regulator": "Information and Privacy Commissioner of Ontario (IPC)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "pipa-ab",
+    "name": "PIPA-AB",
+    "fullName": "Personal Information Protection Act (Alberta)",
+    "region": "CA",
+    "appliesToVerticals": ["saas", "retail", "fintech", "healthtech", "insurance"],
+    "forces": {
+      "runtime": "any-patched-distro",
+      "auth": "consent + RBAC",
+      "observability": "access + breach audit log",
+      "data": "PII encryption + masking",
+      "network": "TLS 1.2+; residency-aware logging"
+    },
+    "requiredControls": [
+      "Mandatory breach notification to Alberta OIPC where real risk of significant harm exists",
+      "OIPC determines whether affected individuals must be notified (unique to Alberta)",
+      "Consent for collection/use/disclosure with opt-out for non-sensitive secondary use",
+      "Reasonable safeguards proportional to sensitivity",
+      "Access and correction rights with statutory response timelines",
+      "Cross-border transfer notice to individuals when PI handled outside Canada"
+    ],
+    "auditRetention": "Breach assessment records retained to evidence OIPC reporting; PI retained only as long as reasonable for legal/business purpose, then destroyed (recommend 7 years for commercial records).",
+    "dataResidency": "No strict residency, but must disclose to individuals if PI is stored/processed outside Canada and by whom.",
+    "howToMeet": [
+      "Implement RROSH assessment and report breaches to Alberta OIPC (note: OIPC, not the org, decides on individual notice).",
+      "Add a cross-border transfer disclosure to the privacy notice naming foreign processors.",
+      "Enforce consent capture and opt-out for secondary uses at the collection API.",
+      "Encrypt PI at rest/in transit and mask identifiers in logs.",
+      "Build access/correction request handling with statutory SLA tracking."
+    ],
+    "regulator": "Office of the Information and Privacy Commissioner of Alberta",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "pipa-bc",
+    "name": "PIPA-BC",
+    "fullName": "Personal Information Protection Act (British Columbia)",
+    "region": "CA",
+    "appliesToVerticals": ["saas", "retail", "fintech", "healthtech", "publicsector-contractor"],
+    "forces": {
+      "runtime": "any-patched-distro",
+      "auth": "consent + RBAC",
+      "observability": "access audit log",
+      "data": "PII encryption + masking",
+      "network": "Canada-preferred residency; TLS 1.2+"
+    },
+    "requiredControls": [
+      "Consent (express/implied/deemed) for collection, use, disclosure",
+      "Reasonable security arrangements against unauthorized access",
+      "Access and correction rights with 30-business-day response",
+      "Privacy Officer designation and complaint process",
+      "Historic data-residency sensitivity from FIPPA legacy for public-sector contracts",
+      "Breach handling per BC OIPC guidance (mandatory notification added via 2025 amendments)"
+    ],
+    "auditRetention": "PI retained at least one year if used to make a decision about an individual; commercial records recommend 7 years. Breach records retained to evidence OIPC compliance.",
+    "dataResidency": "Private sector: Canada-preferred. Public-sector contracts under FIPPA historically required BC/Canada storage; confirm contract clauses.",
+    "howToMeet": [
+      "Capture and version consent records tied to each collection purpose.",
+      "Add 30-business-day access/correction request workflow with audit trail.",
+      "For public-sector contracts, pin storage and processing to a Canadian region and document it.",
+      "Designate a Privacy Officer and publish a complaints channel.",
+      "Implement BC OIPC breach-notification trigger per 2025 mandatory-reporting amendments."
+    ],
+    "regulator": "Office of the Information and Privacy Commissioner for British Columbia",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "law25-quebec",
+    "name": "Law25-Quebec",
+    "fullName": "Quebec Law 25 (Act to modernize legislative provisions respecting protection of personal information)",
+    "region": "CA",
+    "appliesToVerticals": ["saas", "fintech", "ecommerce", "adtech", "healthtech", "insurance"],
+    "forces": {
+      "runtime": "any-patched-distro",
+      "auth": "consent (explicit for sensitive) + RBAC + privacy-by-default",
+      "observability": "confidentiality-incident register + access log",
+      "data": "PII encryption, automated-decision flagging, de-indexing/portability",
+      "network": "cross-border transfer impact assessment (PIA) required"
+    },
+    "requiredControls": [
+      "Privacy by default: highest-confidentiality settings enabled without user action",
+      "Explicit, separate consent for sensitive personal information",
+      "Confidentiality Incident (breach) notification to CAI and individuals on serious risk of harm",
+      "Maintain a confidentiality incident register for ALL incidents",
+      "Privacy Impact Assessment (PIA) before any cross-border transfer or new system",
+      "Automated decision-making transparency + right to human review",
+      "Right to data portability (in force) and de-indexing/erasure",
+      "Designated Privacy Officer (default: highest authority) published publicly"
+    ],
+    "auditRetention": "Confidentiality incident register: indefinite/long-term to evidence CAI compliance (recommend 7+ years). PI destroyed or anonymized once purpose fulfilled.",
+    "dataResidency": "Quebec/Canada strongly favored; any transfer outside Quebec requires a documented PIA assessing adequacy of protection.",
+    "howToMeet": [
+      "Default all privacy/visibility settings to most protective; require opt-in to loosen.",
+      "Separate explicit consent capture for sensitive PI categories at the API.",
+      "Stand up a confidentiality incident register and CAI notification runbook (serious-risk trigger).",
+      "Run and archive a PIA before any cross-border data transfer or new processing system.",
+      "Expose automated-decision flags and a human-review request path; implement portability + de-indexing endpoints."
+    ],
+    "regulator": "Commission d'accès à l'information du Québec (CAI)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "pci-dss-4",
+    "name": "PCI-DSS-4",
+    "fullName": "Payment Card Industry Data Security Standard v4.0.1",
+    "region": "global",
+    "appliesToVerticals": ["fintech", "ecommerce", "retail", "payments", "saas"],
+    "forces": {
+      "runtime": "minimal-footprint (Distroless/Wolfi) — PCI 6.3.3 no unnecessary software",
+      "auth": "MFA for all CDE access (12.x), phishing-resistant where possible",
+      "observability": "immutable audit trail, FIM, daily log review, 12-month retention",
+      "data": "PAN truncation/tokenization, strong cryptography, no storage of SAD",
+      "network": "segmented CDE, default-deny, TLS 1.2+ (prefer 1.3), WAF/payment-page integrity"
+    },
+    "requiredControls": [
+      "Render PAN unreadable (truncation, tokenization, or strong crypto) — never store SAD after auth",
+      "MFA for ALL access into the CDE (v4.0 expanded from admin-only)",
+      "Network segmentation isolating the cardholder data environment",
+      "File integrity monitoring (FIM) and change-detection on critical files",
+      "Client-side script integrity + payment-page tamper detection (6.4.3, 11.6.1) — mandatory since 31 Mar 2025",
+      "Targeted risk analysis (TRA) for any control frequency the org defines",
+      "Quarterly ASV external scans + annual penetration testing",
+      "Automated log review mechanisms (v4 future-dated requirement now in force)"
+    ],
+    "auditRetention": "Audit logs: minimum 12 months, with at least 3 months immediately available for analysis (Req 10.5.1).",
+    "dataResidency": "No geographic mandate; residency follows acquirer/issuer contracts and applicable privacy law (e.g. Canadian region for PIPEDA overlap).",
+    "howToMeet": [
+      "Tokenize PAN at ingest; ensure SAD (CVV, full track, PIN) is never persisted post-authorization.",
+      "Deploy Distroless/Wolfi images and remove all non-essential packages to pass 6.3.3.",
+      "Enforce MFA on every CDE entry point and segment the CDE with default-deny network policy.",
+      "Add 6.4.3/11.6.1 payment-page script inventory + SRI + change alerting (now mandatory).",
+      "Centralize immutable logs (12-month retention), run FIM, schedule ASV quarterly scans + annual pentest."
+    ],
+    "regulator": "PCI Security Standards Council (enforced via acquiring banks / card brands)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "hipaa",
+    "name": "HIPAA",
+    "fullName": "Health Insurance Portability and Accountability Act (Privacy + Security Rules)",
+    "region": "US",
+    "appliesToVerticals": ["healthtech", "hospital", "ehr", "pharmacy", "insurance", "telehealth"],
+    "forces": {
+      "runtime": "auditd-capable distro (Debian 12 / Ubuntu 24.04 / RHEL UBI 9)",
+      "auth": "unique user IDs, RBAC, automatic logoff, MFA (2025 NPRM trend)",
+      "observability": "PHI access audit controls + integrity monitoring",
+      "data": "ePHI encryption at rest + in transit, PHI masking in logs",
+      "network": "transmission security (TLS), segmentation, BAA-backed cloud"
+    },
+    "requiredControls": [
+      "Administrative, Physical, and Technical safeguards per Security Rule §164.312",
+      "Access control with unique user identification and automatic logoff",
+      "Audit controls recording ePHI access and activity",
+      "Integrity controls + transmission security (encryption in transit)",
+      "Encryption at rest as an addressable-but-effectively-required safeguard",
+      "Business Associate Agreements (BAA) with every vendor touching ePHI",
+      "Breach notification to individuals, HHS, and media (60-day rule) on unsecured PHI",
+      "Annual risk analysis and risk management documentation"
+    ],
+    "auditRetention": "HIPAA documentation (policies, risk analyses, BAAs, audit logs): retain 6 years from creation or last effective date (§164.316(b)(2)).",
+    "dataResidency": "No US-only mandate; offshore handling permitted under a compliant BAA, though many covered entities contractually restrict to US.",
+    "howToMeet": [
+      "Sign BAAs with all ePHI-handling vendors before any data flows.",
+      "Enable auditd + app-level PHI access logging; mask SSN/MRN/diagnosis/DOB in logs.",
+      "Encrypt ePHI at rest (AES-256) and in transit (TLS 1.2+) with KMS-managed keys.",
+      "Run an annual Security Rule risk analysis and remediate to a documented risk-management plan.",
+      "Stand up a 60-day breach-notification runbook covering individuals, HHS OCR, and media thresholds."
+    ],
+    "regulator": "US Department of Health and Human Services, Office for Civil Rights (HHS OCR)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "soc1",
+    "name": "SOC1",
+    "fullName": "SOC 1 (SSAE 18 / ISAE 3402) Report on Controls Relevant to Financial Reporting",
+    "region": "global",
+    "appliesToVerticals": ["fintech", "payroll", "saas", "payments", "lending", "insurance"],
+    "forces": {
+      "runtime": "change-controlled, hardened images",
+      "auth": "RBAC + segregation of duties on financially-relevant systems",
+      "observability": "immutable audit log of changes affecting financial data",
+      "data": "integrity controls over transaction processing (ICFR)",
+      "network": "controlled access to financial-reporting systems"
+    },
+    "requiredControls": [
+      "Defined control objectives tied to user entities' internal control over financial reporting (ICFR)",
+      "Segregation of duties between development, deployment, and financial operations",
+      "Change management with approvals and traceability for financial systems",
+      "Logical access controls and access reviews on financial-data systems",
+      "Type II covers operating effectiveness over a 6–12 month observation period",
+      "Complementary User Entity Controls (CUECs) documented for clients"
+    ],
+    "auditRetention": "Control evidence and report period documentation retained ≥7 years to align with SOX/financial audit cycles.",
+    "dataResidency": "No residency mandate; driven by user-entity contracts and overlapping privacy regimes.",
+    "howToMeet": [
+      "Define control objectives mapped to client ICFR (e.g. completeness/accuracy of transaction processing).",
+      "Enforce segregation of duties and approval gates on all financially-relevant deploys.",
+      "Maintain immutable change logs and quarterly logical-access reviews.",
+      "Run a Type II observation window of 6–12 months with auditor evidence collection.",
+      "Document CUECs so client auditors can rely on the report."
+    ],
+    "regulator": "AICPA framework; attested by an independent CPA firm (no government regulator)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "soc2-typeii",
+    "name": "SOC2-TypeII",
+    "fullName": "SOC 2 Type II (SSAE 18) Trust Services Criteria Report",
+    "region": "global",
+    "appliesToVerticals": ["saas", "fintech", "healthtech", "platform", "devtools", "data"],
+    "forces": {
+      "runtime": "hardened, patched, change-controlled images",
+      "auth": "MFA + RBAC + least privilege + periodic access reviews",
+      "observability": "centralized immutable logging, monitoring, alerting",
+      "data": "encryption at rest/in transit, data classification, secure disposal",
+      "network": "segmentation, default-deny, vulnerability management"
+    },
+    "requiredControls": [
+      "Security (Common Criteria) mandatory; Availability/Confidentiality/Processing Integrity/Privacy optional",
+      "Type II tests operating effectiveness over a 3–12 month period (commonly 6–12)",
+      "MFA, least-privilege RBAC, and documented quarterly access reviews",
+      "Change management, vulnerability management, and incident response programs",
+      "Centralized immutable audit logging with monitoring and alerting",
+      "Vendor risk management and annual risk assessment",
+      "Encryption at rest and in transit with documented key management"
+    ],
+    "auditRetention": "Control evidence retained for the audit period plus ≥1 year; most orgs keep 7 years. Audit logs commonly retained ≥1 year (security incidents longer).",
+    "dataResidency": "No mandate; region selection driven by customer contracts and overlapping privacy law (Canadian region for PIPEDA/PHIPA clients).",
+    "howToMeet": [
+      "Select the Common Criteria plus relevant TSCs (typically Availability + Confidentiality).",
+      "Enforce MFA, least-privilege RBAC, and run quarterly access reviews with evidence.",
+      "Centralize immutable logs with monitoring/alerting and a tested incident-response runbook.",
+      "Operate change/vuln management programs and an annual risk assessment.",
+      "Run a 6–12 month Type II observation window and remediate exceptions before report issuance."
+    ],
+    "regulator": "AICPA framework; attested by an independent CPA firm (no government regulator)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "iso27001",
+    "name": "ISO27001",
+    "fullName": "ISO/IEC 27001:2022 Information Security Management System",
+    "region": "global",
+    "appliesToVerticals": ["saas", "fintech", "healthtech", "manufacturing", "government", "platform"],
+    "forces": {
+      "runtime": "hardened images under documented config management",
+      "auth": "access control policy, MFA, least privilege (Annex A 5.15–5.18, 8.5)",
+      "observability": "logging + monitoring (A.8.15, A.8.16)",
+      "data": "classification, cryptography, data masking (A.8.10–8.12, 8.24)",
+      "network": "network security + segregation (A.8.20–8.22)"
+    },
+    "requiredControls": [
+      "ISMS with documented scope, risk assessment, and risk treatment plan (Statement of Applicability)",
+      "Annex A 2022: 93 controls across 4 themes (Organizational, People, Physical, Technological)",
+      "Leadership commitment, security objectives, and internal audit program",
+      "Threat intelligence, secure development, and config management (new 2022 controls)",
+      "Logging, monitoring, and information-deletion controls",
+      "Management review and continual improvement cycle",
+      "Mandatory transition to 2022 revision completed (2013 certs expired Oct 2025)"
+    ],
+    "auditRetention": "Certification cycle: 3 years with annual surveillance audits. ISMS records and risk documentation retained ≥3 years (recommend full cert cycle + 1).",
+    "dataResidency": "No mandate; residency handled as a risk-treatment decision within the ISMS scope.",
+    "howToMeet": [
+      "Define ISMS scope, run a risk assessment, and produce a Statement of Applicability against the 93 Annex A controls.",
+      "Implement 2022 control additions: threat intel, secure coding, config management, data masking.",
+      "Operate logging/monitoring and information-deletion controls across in-scope systems.",
+      "Run internal audits and a management review before the Stage 2 certification audit.",
+      "Maintain annual surveillance evidence and continual-improvement records through the 3-year cycle."
+    ],
+    "regulator": "Accredited certification body (e.g. BSI, Schellman); ISO/IEC standard, no government regulator",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "iso27017",
+    "name": "ISO27017",
+    "fullName": "ISO/IEC 27017:2015 Code of Practice for Cloud Services Security",
+    "region": "global",
+    "appliesToVerticals": ["saas", "cloud", "platform", "fintech", "healthtech"],
+    "forces": {
+      "runtime": "cloud-hardened images with shared-responsibility clarity",
+      "auth": "cloud IAM, tenant isolation, admin operational security",
+      "observability": "cloud monitoring, customer-accessible logs",
+      "data": "VM/storage encryption, secure return/removal of customer assets",
+      "network": "virtual network segregation, tenant isolation"
+    },
+    "requiredControls": [
+      "Extends ISO 27001/27002 with 7 cloud-specific controls + cloud-context guidance",
+      "Clear shared-responsibility allocation between cloud provider and customer",
+      "Segregation in virtual computing environments (tenant isolation)",
+      "Virtual machine hardening and administrator operational security",
+      "Customer monitoring of cloud service activity (provider must enable)",
+      "Alignment of security management for virtual and physical networks",
+      "Removal/return of customer assets on contract termination"
+    ],
+    "auditRetention": "Follows ISO 27001 cycle: 3-year certification, annual surveillance; records ≥3 years.",
+    "dataResidency": "No mandate; provider must disclose data locations so customers can meet their own residency obligations.",
+    "howToMeet": [
+      "Publish a shared-responsibility matrix mapping each control to provider vs customer.",
+      "Implement strong tenant isolation and VM hardening baselines in the virtual environment.",
+      "Expose customer-accessible monitoring/logging of their cloud service usage.",
+      "Define and test secure asset return/deletion on offboarding.",
+      "Certify alongside ISO 27001 with the 27017 cloud controls in the Statement of Applicability."
+    ],
+    "regulator": "Accredited certification body; ISO/IEC standard (typically certified together with ISO 27001)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "fedramp-mod",
+    "name": "FedRAMP-Mod",
+    "fullName": "FedRAMP Moderate Baseline (NIST SP 800-53 Rev 5)",
+    "region": "US",
+    "appliesToVerticals": ["govtech", "saas", "cloud", "defense-adjacent"],
+    "forces": {
+      "runtime": "FIPS-validated crypto, hardened CIS-benchmarked images, US-based ops",
+      "auth": "PIV/CAC or phishing-resistant MFA, RBAC, least privilege",
+      "observability": "continuous monitoring (ConMon), SIEM, monthly scans",
+      "data": "FIPS 140-3 encryption at rest/in transit, US data residency",
+      "network": "boundary protection, TIC/zero-trust, US-only access"
+    },
+    "requiredControls": [
+      "~323 NIST 800-53 Rev 5 controls at the Moderate impact level",
+      "FIPS 140-2/140-3 validated cryptographic modules for all crypto",
+      "Continuous Monitoring (ConMon): monthly vulnerability scans + POA&M management",
+      "US persons supporting the system; US-based data centers",
+      "Authorization to Operate (ATO) via Agency or the FedRAMP PMO (post-2024 modernization: rev5 + automation)",
+      "Incident reporting to US-CERT/CISA within 1 hour for confirmed incidents",
+      "Annual assessment by an accredited 3PAO"
+    ],
+    "auditRetention": "Audit records retained ≥90 days online and ≥1 year archived (AU-11); many agencies require 3 years. Authorization package maintained for the life of the ATO.",
+    "dataResidency": "US data residency required; data and processing must remain within the US, supported by US persons.",
+    "howToMeet": [
+      "Deploy in a FedRAMP-authorized US cloud region with FIPS 140-3 validated crypto end-to-end.",
+      "Implement the Moderate control set; build an SSP, SAP, SAR, and POA&M with a 3PAO.",
+      "Stand up ConMon: monthly scans, POA&M tracking, and SIEM-backed continuous monitoring.",
+      "Enforce phishing-resistant MFA (PIV/CAC or FIDO2) and US-persons access restrictions.",
+      "Pursue Agency or PMO ATO and maintain 1-hour CISA incident reporting."
+    ],
+    "regulator": "FedRAMP PMO (GSA) + authorizing federal agency",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "fedramp-high",
+    "name": "FedRAMP-High",
+    "fullName": "FedRAMP High Baseline (NIST SP 800-53 Rev 5)",
+    "region": "US",
+    "appliesToVerticals": ["govtech", "defense", "law-enforcement", "healthcare-federal"],
+    "forces": {
+      "runtime": "FIPS-validated crypto, STIG/CIS-hardened images, US-citizen ops where required",
+      "auth": "PIV/CAC + phishing-resistant MFA, strict least privilege, JIT access",
+      "observability": "real-time ConMon, full SIEM, automated POA&M",
+      "data": "FIPS 140-3 encryption, US residency, strict data-loss prevention",
+      "network": "hardened boundary, micro-segmentation, GovCloud isolation"
+    },
+    "requiredControls": [
+      "~410 NIST 800-53 Rev 5 controls at the High impact level (loss = catastrophic)",
+      "Used for the most sensitive unclassified data (law enforcement, emergency services, financial, health)",
+      "Typically deployed in AWS GovCloud / Azure Government / equivalent isolated regions",
+      "FIPS 140-3 validated cryptography mandatory throughout",
+      "Enhanced continuous monitoring with tighter POA&M remediation timelines",
+      "Stringent personnel screening and US-citizen support requirements",
+      "1-hour CISA incident reporting and annual 3PAO assessment"
+    ],
+    "auditRetention": "Audit records ≥90 days online, ≥1 year archived (often 3+ years for High). Authorization package maintained for the ATO lifetime.",
+    "dataResidency": "US data residency in isolated government cloud regions (GovCloud/Azure Gov); US-citizen support commonly required.",
+    "howToMeet": [
+      "Deploy in AWS GovCloud / Azure Government with full FIPS 140-3 validated crypto.",
+      "Implement the High control set (~410 controls) with STIG-hardened images.",
+      "Run real-time ConMon with automated POA&M and tighter remediation SLAs.",
+      "Enforce US-citizen support, personnel screening, and JIT least-privilege access.",
+      "Engage a 3PAO for the High assessment and maintain 1-hour CISA reporting."
+    ],
+    "regulator": "FedRAMP PMO (GSA) + authorizing federal agency",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "fips-140-3",
+    "name": "FIPS-140-3",
+    "fullName": "FIPS 140-3 (Security Requirements for Cryptographic Modules)",
+    "region": "US",
+    "appliesToVerticals": ["govtech", "defense", "fintech", "healthcare-federal", "cloud"],
+    "forces": {
+      "runtime": "FIPS-validated OpenSSL/crypto module; RHEL UBI 9 / Amazon Linux 2023 / Oracle Linux 9",
+      "auth": "FIPS-approved algorithms for all key exchange and authentication",
+      "observability": "crypto self-test logging, module-state monitoring",
+      "data": "FIPS-approved ciphers only (AES, SHA-2/3, RSA/ECDSA approved curves)",
+      "network": "TLS limited to FIPS-approved cipher suites"
+    },
+    "requiredControls": [
+      "Use only CMVP-validated cryptographic modules (validation certificate on the NIST CMVP list)",
+      "FIPS-approved algorithms only: AES, SHA-2/SHA-3, RSA-2048+, ECDSA P-256/384, approved DRBGs",
+      "Power-on self-tests (POST) and conditional self-tests with documented failure handling",
+      "Module enters an error state and halts crypto on self-test failure",
+      "Based on ISO/IEC 19790:2012 (FIPS 140-3 supersedes 140-2; 140-2 modules sunset)",
+      "Avoid musl-based distros (Alpine/Wolfi) lacking FIPS-validated OpenSSL"
+    ],
+    "auditRetention": "Validation certificate and module documentation retained for the operational life of the module; crypto self-test logs retained per overlapping regime (≥1 year).",
+    "dataResidency": "Not a residency standard; applied alongside FedRAMP/CMMC which impose US residency.",
+    "howToMeet": [
+      "Select a base image with CMVP-validated OpenSSL FIPS provider (RHEL UBI 9 / Amazon Linux 2023 / Oracle Linux 9).",
+      "Enable FIPS mode at the OS and runtime; restrict TLS to FIPS-approved cipher suites only.",
+      "Add a startup check that fatally exits if the OpenSSL FIPS provider is not active.",
+      "Restrict all crypto to FIPS-approved algorithms and validated DRBGs.",
+      "Verify the exact module version against the NIST CMVP validated-modules list before shipping."
+    ],
+    "regulator": "NIST Cryptographic Module Validation Program (CMVP), joint US NIST / Canada CCCS",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "cmmc-l2",
+    "name": "CMMC-L2",
+    "fullName": "Cybersecurity Maturity Model Certification Level 2 (NIST SP 800-171 Rev 2)",
+    "region": "US",
+    "appliesToVerticals": ["defense", "manufacturing", "aerospace", "govtech-contractor"],
+    "forces": {
+      "runtime": "FIPS-validated crypto, hardened images, CUI-marked data handling",
+      "auth": "MFA, RBAC, least privilege, session lock (800-171 3.1/3.5)",
+      "observability": "audit + accountability (3.3), log review, FIM",
+      "data": "FIPS-validated encryption of CUI at rest/in transit (3.13)",
+      "network": "boundary protection, no unauthorized egress (3.13)"
+    },
+    "requiredControls": [
+      "110 controls from NIST SP 800-171 Rev 2 across 14 families",
+      "Protects Controlled Unclassified Information (CUI) in the defense supply chain",
+      "MFA, audit logging, FIPS-validated cryptography, and incident response",
+      "Level 2 final rule (32 CFR) effective Dec 2024; 48 CFR DFARS rule phasing into contracts through 2025–2028",
+      "Triennial third-party assessment by a C3PAO (for prioritized CUI) + annual affirmation",
+      "Supplier Performance Risk System (SPRS) score posting",
+      "DFARS 252.204-7012 incident reporting to DoD within 72 hours"
+    ],
+    "auditRetention": "Audit logs retained ≥90 days active and ≥1 year (3.3.1); assessment evidence retained for the 3-year certification cycle. SSP/POA&M maintained continuously.",
+    "dataResidency": "CUI must be handled within the US or a US-controlled environment; cloud must meet FedRAMP Moderate equivalency.",
+    "howToMeet": [
+      "Implement all 110 NIST 800-171 controls; produce an SSP and POA&M, post the SPRS score.",
+      "Use FIPS-validated crypto for CUI at rest/in transit and a FedRAMP-Moderate-equivalent cloud.",
+      "Enforce MFA, least privilege, audit logging (≥1 year), and FIM in the CUI enclave.",
+      "Set NO_EGRESS / boundary controls and mark/segregate CUI explicitly.",
+      "Engage a C3PAO for the triennial assessment and file the annual affirmation + 72-hour DoD incident reporting."
+    ],
+    "regulator": "US Department of Defense (DoD CIO) via DFARS; assessed by C3PAOs accredited by the Cyber AB",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "nerc-cip",
+    "name": "NERC-CIP",
+    "fullName": "NERC Critical Infrastructure Protection Standards (CIP-002 through CIP-014)",
+    "region": "US",
+    "appliesToVerticals": ["energy", "utilities", "grid-operations", "ot"],
+    "forces": {
+      "runtime": "OT/IT-boundary-aware, hardened images, baseline config control (CIP-010)",
+      "auth": "electronic access controls, MFA for interactive remote access (CIP-005)",
+      "observability": "security event monitoring + logging (CIP-007)",
+      "data": "BES Cyber System Information protection (CIP-011)",
+      "network": "Electronic Security Perimeter, no unauthorized egress (CIP-005)"
+    },
+    "requiredControls": [
+      "Categorize BES Cyber Systems as High/Medium/Low impact (CIP-002)",
+      "Electronic Security Perimeter and Intermediate System for remote access (CIP-005)",
+      "System security management: ports/services, patching, malware, logging (CIP-007)",
+      "Configuration change management and vulnerability assessments (CIP-010)",
+      "Incident reporting to E-ISAC and CISA (CIP-008)",
+      "Personnel & training, physical security, and supply-chain risk (CIP-004/006/013)",
+      "Recovery plans for BES Cyber Systems (CIP-009)"
+    ],
+    "auditRetention": "Compliance evidence retained for 3 calendar years (or since last audit, whichever is longer); security event logs retained ≥90 days minimum per CIP-007.",
+    "dataResidency": "No explicit residency, but BES Cyber System Information access and OT systems are tightly geofenced within North American grid operator control.",
+    "howToMeet": [
+      "Categorize BES Cyber Systems and define the Electronic Security Perimeter (CIP-005).",
+      "Enforce OT/IT boundary controls, NO_EGRESS, and MFA for interactive remote access via an Intermediate System.",
+      "Implement CIP-007 system hardening, patch management, malware prevention, and event logging.",
+      "Run CIP-010 configuration baselines, change management, and vulnerability assessments.",
+      "Maintain CIP-008 incident response with E-ISAC/CISA reporting and CIP-009 recovery plans."
+    ],
+    "regulator": "North American Electric Reliability Corporation (NERC), overseen by FERC (US) and provincial bodies (Canada)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "gdpr",
+    "name": "GDPR",
+    "fullName": "General Data Protection Regulation (EU 2016/679)",
+    "region": "EU",
+    "appliesToVerticals": ["saas", "ecommerce", "adtech", "fintech", "healthtech", "any-eu-data"],
+    "forces": {
+      "runtime": "any-patched-distro with privacy-by-design defaults",
+      "auth": "RBAC, least privilege, consent/legal-basis enforcement",
+      "observability": "processing records (Art 30), breach evidence",
+      "data": "encryption/pseudonymization, DSAR/erasure tooling, data classification",
+      "network": "EU/adequacy transfer controls (SCCs/adequacy), TLS 1.2+"
+    },
+    "requiredControls": [
+      "Lawful basis for every processing activity (consent, contract, legitimate interest, etc.)",
+      "Data subject rights: access, rectification, erasure, portability, objection (1-month SLA)",
+      "Records of processing activities (Article 30)",
+      "Breach notification to supervisory authority within 72 hours of awareness",
+      "Data Protection Impact Assessment (DPIA) for high-risk processing",
+      "Privacy by design and by default (Article 25); DPO where required",
+      "International transfer mechanism: adequacy decision or SCCs + transfer impact assessment",
+      "Pseudonymization/encryption as Article 32 security measures"
+    ],
+    "auditRetention": "Records of processing kept while processing continues; breach records retained to evidence compliance (recommend 3–7 years). Personal data only as long as necessary, then erased.",
+    "dataResidency": "No strict EU-residency mandate, but transfers outside the EEA require an adequacy decision or SCCs + a transfer impact assessment.",
+    "howToMeet": [
+      "Map every processing activity to a lawful basis and maintain Article 30 records.",
+      "Build DSAR tooling for access/erasure/portability with a 1-month response SLA.",
+      "Stand up a 72-hour supervisory-authority breach-notification runbook.",
+      "Apply SCCs + transfer impact assessment for any non-adequate-country transfer.",
+      "Implement encryption/pseudonymization and run DPIAs for high-risk processing."
+    ],
+    "regulator": "National Data Protection Authorities coordinated via the European Data Protection Board (EDPB)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "ccpa",
+    "name": "CCPA",
+    "fullName": "California Consumer Privacy Act, as amended by CPRA",
+    "region": "US",
+    "appliesToVerticals": ["saas", "ecommerce", "adtech", "retail", "fintech"],
+    "forces": {
+      "runtime": "any-patched-distro",
+      "auth": "RBAC + identity verification for consumer requests",
+      "observability": "request handling audit log",
+      "data": "opt-out / Do-Not-Sell-or-Share signals (GPC), sensitive-PI limits",
+      "network": "TLS 1.2+; Global Privacy Control honoring at the edge"
+    },
+    "requiredControls": [
+      "Consumer rights: know, delete, correct, opt-out of sale/sharing, limit sensitive PI use",
+      "Honor Global Privacy Control (GPC) browser signal as a valid opt-out",
+      "Notice at collection + clear 'Do Not Sell or Share My Personal Information' link",
+      "45-day response window (extendable to 90) for consumer requests",
+      "Reasonable security procedures (CPRA private right of action for breaches)",
+      "Data Processing Agreements with service providers/contractors",
+      "Risk assessments and cybersecurity audits (CPPA regulations phasing in 2026–2028)"
+    ],
+    "auditRetention": "Records of consumer requests and responses retained ≥24 months (CCPA recordkeeping requirement). Personal information retained only as disclosed.",
+    "dataResidency": "No residency mandate; applies to California residents' data regardless of where processed.",
+    "howToMeet": [
+      "Implement GPC honoring at the edge/CDN as an automatic opt-out of sale/sharing.",
+      "Add 'Do Not Sell or Share' + notice-at-collection and a verified consumer-request flow.",
+      "Track all requests with a ≥24-month audit log and a 45-day (max 90) SLA.",
+      "Sign DPAs with every service provider/contractor handling consumer PI.",
+      "Limit sensitive-PI use and prepare for CPPA risk-assessment/cyber-audit rules phasing in."
+    ],
+    "regulator": "California Privacy Protection Agency (CPPA) + California Attorney General",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "glba",
+    "name": "GLBA",
+    "fullName": "Gramm-Leach-Bliley Act (Safeguards Rule + Privacy Rule)",
+    "region": "US",
+    "appliesToVerticals": ["fintech", "banking", "lending", "insurance", "wealth", "mortgage"],
+    "forces": {
+      "runtime": "hardened images, encryption-capable runtime",
+      "auth": "MFA for systems accessing customer financial info, RBAC",
+      "observability": "monitoring/logging of access to customer information",
+      "data": "encryption of customer financial info at rest/in transit, secure disposal",
+      "network": "access controls, segmentation, change management"
+    },
+    "requiredControls": [
+      "Safeguards Rule: written information security program with a Qualified Individual",
+      "Encryption of customer information in transit and at rest",
+      "MFA for any individual accessing customer information systems",
+      "Continuous monitoring or annual pentest + biannual vulnerability assessment",
+      "Service-provider oversight and secure data disposal",
+      "Incident response plan + notify FTC of breaches affecting 500+ consumers within 30 days",
+      "Privacy Rule: annual privacy notices and opt-out of nonpublic info sharing"
+    ],
+    "auditRetention": "Security program documentation and risk assessments retained ≥5 years (aligns with financial recordkeeping); breach records to evidence FTC reporting.",
+    "dataResidency": "No residency mandate; driven by overlapping financial regulations and contracts.",
+    "howToMeet": [
+      "Appoint a Qualified Individual and maintain a written information security program.",
+      "Encrypt customer financial info at rest/in transit and enforce MFA on all access.",
+      "Run continuous monitoring or annual pentest + biannual vulnerability scans.",
+      "Establish service-provider oversight, secure disposal, and an incident-response plan.",
+      "Add a 30-day FTC breach-notification trigger for incidents affecting 500+ consumers."
+    ],
+    "regulator": "US Federal Trade Commission (FTC) + federal banking regulators (OCC, FDIC, Federal Reserve)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "sox",
+    "name": "SOX",
+    "fullName": "Sarbanes-Oxley Act (Sections 302, 404, 802)",
+    "region": "US",
+    "appliesToVerticals": ["fintech", "public-company", "saas-public", "banking", "enterprise"],
+    "forces": {
+      "runtime": "change-controlled, immutable build pipeline",
+      "auth": "segregation of duties, RBAC, no self-approval on financial systems",
+      "observability": "immutable audit trail of changes to financial-reporting systems",
+      "data": "integrity controls over financial data (ICFR)",
+      "network": "controlled access to financial-reporting infrastructure"
+    },
+    "requiredControls": [
+      "Section 404: management + auditor assessment of internal control over financial reporting (ICFR)",
+      "Section 302: executive certification of financial report accuracy",
+      "Section 802: criminal penalties for altering/destroying records",
+      "IT general controls (ITGC): access, change management, and operations over financial systems",
+      "Segregation of duties — no single actor can both build and deploy financial changes",
+      "Immutable, tamper-evident audit logs of financial-system changes",
+      "Annual external auditor attestation"
+    ],
+    "auditRetention": "Section 802: audit work papers and records retained 7 years; many financial records retained 7 years. ITGC evidence retained for the fiscal-year audit cycle.",
+    "dataResidency": "No residency mandate; driven by overlapping regulations and corporate policy.",
+    "howToMeet": [
+      "Implement segregation of duties so no actor can both author and approve financial deploys.",
+      "Enforce change management with approvals and immutable, tamper-evident audit logs.",
+      "Map ITGCs (access, change, operations) to ICFR control objectives.",
+      "Retain audit work papers and financial records for 7 years (Section 802).",
+      "Support management/auditor ICFR testing with quarterly access reviews and evidence collection."
+    ],
+    "regulator": "US Securities and Exchange Commission (SEC) + PCAOB (auditor oversight)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "ffiec",
+    "name": "FFIEC",
+    "fullName": "Federal Financial Institutions Examination Council IT Examination Guidance",
+    "region": "US",
+    "appliesToVerticals": ["banking", "fintech", "credit-union", "lending", "payments"],
+    "forces": {
+      "runtime": "hardened images, patch/vuln management",
+      "auth": "layered/MFA authentication, RBAC, privileged access management",
+      "observability": "continuous monitoring, SIEM, threat intelligence",
+      "data": "encryption at rest/in transit, secure backup, integrity controls",
+      "network": "segmentation, DDoS resilience, secure remote access"
+    },
+    "requiredControls": [
+      "Risk-based information security program aligned to FFIEC IT Handbook booklets",
+      "Cybersecurity controls per the Architecture, Infrastructure & Operations + Information Security booklets",
+      "Layered authentication / MFA proportional to transaction risk",
+      "Business continuity and resilience (BCM booklet) including RTO/RPO testing",
+      "Third-party / vendor risk management",
+      "Incident response and timely notification to the primary federal regulator (36-hour rule for banks)",
+      "Board and senior management oversight of IT risk"
+    ],
+    "auditRetention": "Examination and risk-program evidence retained ≥5 years (financial recordkeeping norms); log retention per Information Security booklet (≥1 year typical).",
+    "dataResidency": "No residency mandate; cross-border processing subject to vendor-risk and regulator scrutiny.",
+    "howToMeet": [
+      "Build a risk-based InfoSec program mapped to FFIEC IT Handbook booklets.",
+      "Enforce layered/MFA authentication scaled to transaction risk and PAM for privileged access.",
+      "Operate continuous monitoring/SIEM with threat intelligence and a tested incident-response plan.",
+      "Run BCM with measured RTO/RPO and third-party risk management.",
+      "Add a 36-hour computer-security-incident notification trigger to the primary federal regulator."
+    ],
+    "regulator": "FFIEC member agencies (OCC, FDIC, Federal Reserve, NCUA, CFPB)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "osfi-b13",
+    "name": "OSFI-B13",
+    "fullName": "OSFI Guideline B-13: Technology and Cyber Risk Management",
+    "region": "CA",
+    "appliesToVerticals": ["banking", "insurance", "fintech-frfi", "wealth", "pensions"],
+    "forces": {
+      "runtime": "hardened images, secure SDLC, change management",
+      "auth": "MFA, identity & access management, privileged access controls",
+      "observability": "security monitoring, threat detection, logging",
+      "data": "encryption, data classification, integrity and confidentiality controls",
+      "network": "secure architecture, segmentation, resilience"
+    },
+    "requiredControls": [
+      "Technology and cyber risk governance with accountable senior management",
+      "Technology operations, asset management, and secure system development lifecycle",
+      "Cyber security: identify, defend, detect, respond, recover (NIST-aligned)",
+      "Third-party / cloud risk management (interacts with Guideline B-10)",
+      "Resilience: incident, problem, and change management with RTO/RPO objectives",
+      "Reporting of technology/cyber incidents to OSFI within 24 hours (Incident Reporting Advisory)",
+      "Effective since Jan 2024 for federally regulated financial institutions (FRFIs)"
+    ],
+    "auditRetention": "Technology/cyber risk and incident records retained ≥7 years to align with Canadian financial recordkeeping; logs per security monitoring program (≥1 year).",
+    "dataResidency": "No absolute residency mandate, but OSFI expects FRFIs to retain control, access, and oversight; Canadian region strongly preferred for supervisory access.",
+    "howToMeet": [
+      "Establish technology/cyber risk governance with documented senior accountability.",
+      "Implement secure SDLC, asset management, MFA, IAM, and privileged access controls.",
+      "Operate security monitoring/threat detection mapped to identify-defend-detect-respond-recover.",
+      "Manage cloud/third-party risk per B-10 and define tested RTO/RPO resilience objectives.",
+      "Add a 24-hour OSFI technology/cyber incident reporting runbook; prefer Canadian hosting."
+    ],
+    "regulator": "Office of the Superintendent of Financial Institutions (OSFI), Canada",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "osfi-b10",
+    "name": "OSFI-B10",
+    "fullName": "OSFI Guideline B-10: Third-Party Risk Management",
+    "region": "CA",
+    "appliesToVerticals": ["banking", "insurance", "fintech-frfi", "wealth", "pensions"],
+    "forces": {
+      "runtime": "vendor-hardened images, supply-chain assurance",
+      "auth": "vendor access governance, RBAC over third-party integrations",
+      "observability": "third-party monitoring, concentration-risk dashboards",
+      "data": "data-handling clauses, encryption, subcontractor controls",
+      "network": "secure integration, exit/portability planning"
+    },
+    "requiredControls": [
+      "Risk-based, principles-based third-party risk management lifecycle",
+      "Criticality assessment of each third-party arrangement",
+      "Contractual provisions: audit rights, sub-contracting, data location, business continuity",
+      "Ongoing monitoring of third-party performance and risk (incl. concentration risk)",
+      "Exit strategy and portability for critical arrangements",
+      "Cloud and technology service-provider oversight (links to B-13)",
+      "Effective since May 2024 for FRFIs"
+    ],
+    "auditRetention": "Third-party arrangement records, due diligence, and monitoring evidence retained for the life of the contract plus ≥7 years.",
+    "dataResidency": "OSFI expects clarity on data location and the ability to access/audit; Canadian data location preferred for critical/material arrangements.",
+    "howToMeet": [
+      "Build a third-party inventory with criticality/materiality ratings.",
+      "Embed audit rights, data-location, sub-contracting, and continuity clauses in every critical contract.",
+      "Stand up ongoing third-party monitoring including concentration-risk dashboards.",
+      "Define documented exit and portability strategies for critical providers.",
+      "Align cloud TPRM with B-13 controls and prefer Canadian data location for material arrangements."
+    ],
+    "regulator": "Office of the Superintendent of Financial Institutions (OSFI), Canada",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "fintrac-pcmltfa",
+    "name": "FINTRAC-PCMLTFA",
+    "fullName": "FINTRAC obligations under the Proceeds of Crime (Money Laundering) and Terrorist Financing Act",
+    "region": "CA",
+    "appliesToVerticals": ["fintech", "banking", "crypto", "money-services", "payments", "lending", "insurance"],
+    "forces": {
+      "runtime": "auditable transaction-processing runtime",
+      "auth": "RBAC + identity verification (KYC) controls",
+      "observability": "immutable transaction + report audit trail",
+      "data": "KYC/beneficial-ownership records, secure long-term retention",
+      "network": "secure reporting channel to FINTRAC (F2R)"
+    },
+    "requiredControls": [
+      "Know Your Client (KYC): verify identity of clients per prescribed methods",
+      "Report Large Cash Transactions (LCTR ≥ CAD 10,000), Large Virtual Currency Transactions (LVCTR ≥ CAD 10,000), EFTs",
+      "Suspicious Transaction Reports (STR) filed as soon as practicable",
+      "Maintain a compliance program: officer, policies, risk assessment, training, biennial effectiveness review",
+      "Beneficial ownership and politically-exposed-person (PEP) determinations",
+      "Ongoing monitoring and record-keeping of business relationships",
+      "Travel rule for electronic funds and virtual currency transfers"
+    ],
+    "auditRetention": "Records (client ID, transaction, account, reports) retained 5 years from creation / end of relationship (some account records 5 years after closure) per PCMLTFA.",
+    "dataResidency": "No absolute residency mandate, but records must be retrievable within 30 days for FINTRAC examination; Canadian storage strongly preferred.",
+    "howToMeet": [
+      "Implement KYC identity verification and beneficial-ownership/PEP determination at onboarding.",
+      "Automate LCTR/LVCTR/EFT and STR generation and submit via FINTRAC F2R.",
+      "Maintain an immutable transaction and report audit trail with 5-year retention.",
+      "Run a documented compliance program with an officer, risk assessment, training, and biennial effectiveness review.",
+      "Ensure records are retrievable within 30 days for examination; prefer Canadian hosting."
+    ],
+    "regulator": "Financial Transactions and Reports Analysis Centre of Canada (FINTRAC)",
+    "sourceType": "authored",
+    "confidence": "high"
+  },
+  {
+    "id": "soci",
+    "name": "SOCI",
+    "fullName": "Security of Critical Infrastructure Act 2018 (Australia)",
+    "region": "global",
+    "appliesToVerticals": ["energy", "telecom", "data-centres", "financial-services", "healthcare", "water", "transport"],
+    "forces": {
+      "runtime": "hardened images, critical-asset protection",
+      "auth": "access governance over critical infrastructure assets",
+      "observability": "incident detection + mandatory reporting pipeline",
+      "data": "asset register, protected information handling",
+      "network": "segmentation, supply-chain hazard controls"
+    },
+    "requiredControls": [
+      "Register of Critical Infrastructure Assets ownership/operator reporting",
+      "Critical Infrastructure Risk Management Program (CIRMP) across cyber, personnel, supply-chain, physical hazards",
+      "Mandatory cyber incident reporting to the Australian Signals Directorate (ASD/ACSC): 12 hours for critical, 72 hours for other significant incidents",
+      "Enhanced cyber security obligations for Systems of National Significance (SoNS)",
+      "Government assistance / last-resort intervention powers acknowledgment",
+      "Annual board-approved CIRMP attestation"
+    ],
+    "auditRetention": "CIRMP and annual attestation records retained ≥6 years (aligns with Australian corporate recordkeeping); incident records retained to evidence reporting.",
+    "dataResidency": "No strict residency, but critical-asset and protected information handling is geofenced to authorized operators; sovereign-control expectations apply for SoNS.",
+    "howToMeet": [
+      "Register applicable critical infrastructure assets and maintain the asset register.",
+      "Build a CIRMP covering cyber, personnel, supply-chain, and physical hazards.",
+      "Stand up incident reporting to ASD/ACSC with 12-hour (critical) / 72-hour (significant) triggers.",
+      "For SoNS, implement enhanced obligations and vulnerability assessments.",
+      "Produce an annual board-approved CIRMP attestation."
+    ],
+    "regulator": "Cyber and Infrastructure Security Centre (CISC), Department of Home Affairs, Australia",
+    "sourceType": "authored",
+    "confidence": "medium"
+  },
+  {
+    "id": "dora",
+    "name": "DORA",
+    "fullName": "Digital Operational Resilience Act (EU Regulation 2022/2554)",
+    "region": "EU",
+    "appliesToVerticals": ["banking", "insurance", "fintech", "crypto", "payments", "investment", "ict-providers"],
+    "forces": {
+      "runtime": "resilient, change-controlled, tested runtime",
+      "auth": "ICT access controls, MFA, identity management",
+      "observability": "ICT incident detection, classification, and reporting",
+      "data": "ICT risk-managed data integrity, backup, recovery",
+      "network": "resilience testing, segmentation, third-party ICT oversight"
+    },
+    "requiredControls": [
+      "ICT risk management framework with board accountability",
+      "ICT-related incident classification and reporting to competent authorities (initial within hours, intermediate, final)",
+      "Digital operational resilience testing, incl. threat-led penetration testing (TLPT) for significant entities",
+      "ICT third-party risk management with a register of information on all ICT providers",
+      "Oversight framework for Critical ICT Third-Party Providers (CTPPs) by the ESAs",
+      "Information sharing on cyber threats among financial entities",
+      "Applies since 17 January 2025 across the EU financial sector"
+    ],
+    "auditRetention": "ICT incident records, resilience-testing results, and the register of information retained ≥5 years to align with EU financial recordkeeping and supervisory access.",
+    "dataResidency": "No strict EU-residency mandate, but supervisory access, exit strategies, and CTPP oversight effectively constrain offshoring of critical ICT functions.",
+    "howToMeet": [
+      "Implement a board-owned ICT risk management framework mapped to DORA's five pillars.",
+      "Build ICT incident classification + tiered reporting (initial/intermediate/final) to the competent authority.",
+      "Run digital operational resilience testing, including TLPT for significant entities.",
+      "Maintain the register of information on all ICT third-party providers and embed exit strategies.",
+      "Prepare for ESA oversight of Critical ICT Third-Party Providers and join threat-sharing arrangements."
+    ],
+    "regulator": "European Supervisory Authorities (EBA, ESMA, EIOPA) + national competent authorities",
+    "sourceType": "authored",
+    "confidence": "high"
+  }
+]
