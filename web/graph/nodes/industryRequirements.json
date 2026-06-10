@@ -7,10 +7,62 @@
     "requiredAuth": "OIDC/OAuth2 + phishing-resistant MFA (FIDO2/WebAuthn) for all privileged and customer access; mTLS service-to-service; hardware-backed keys for signing",
     "requiredObservability": "Full immutable audit logging (WORM) with 7-year retention; SIEM ingestion (e.g. Splunk/Sentinel) with 90-day hot + 7yr cold; tamper-evident logs; transaction-level traceability; 30-min SLA on incident detection",
     "requiredDataControls": "AES-256 at rest + TLS 1.3 in transit; field-level encryption + tokenization for PAN/PII; HSM/KMS with BYOK; Canadian data residency (in-region) for regulated workloads; key rotation <=1yr; DLP on egress",
-    "mandatoryRegimes": ["OSFI B-13 (Technology & Cyber Risk)", "OSFI B-10 (Third-Party Risk)", "OSFI E-21 (Operational Resilience)", "FINTRAC / PCMLTFA (AML/ATF)", "PIPEDA", "PCI-DSS v4.0.1", "Quebec Law 25", "FCAC market conduct"],
+    "mandatoryRegimes": [
+      "OSFI B-13 (Technology & Cyber Risk)",
+      "OSFI B-10 (Third-Party Risk)",
+      "OSFI E-21 (Operational Resilience)",
+      "FINTRAC / PCMLTFA (AML/ATF)",
+      "PIPEDA",
+      "PCI-DSS v4.0.1",
+      "Quebec Law 25",
+      "FCAC market conduct"
+    ],
     "recommendedCluster": "Dedicated regulated-tier cluster in Canadian region (e.g. ca-central-1 / Canada Central); private networking, no public ingress; SOC 2 Type II + ISO 27001 substrate; isolated from non-regulated tenants",
-    "keyRisks": ["AML/sanctions screening gaps triggering FINTRAC penalties", "OSFI technology incident reporting breach (24-72hr notification)", "Cross-border data transfer without adequacy / consent", "Payment fraud and account takeover", "Third-party/concentration risk (B-10)", "Insider trading / data exfiltration"],
-    "notes": "OSFI B-13 is the anchor: report material tech/cyber incidents within 24 hours. B-10 mandates third-party risk inventory and concentration limits. FINTRAC requires STR/LCTR filing and a documented AML program. Canada-first: prefer Canadian region residency; cross-border requires PIPEDA-compliant transparency + Law 25 transfer assessment for Quebec data."
+    "keyRisks": [
+      "AML/sanctions screening gaps triggering FINTRAC penalties",
+      "OSFI technology incident reporting breach (24-72hr notification)",
+      "Cross-border data transfer without adequacy / consent",
+      "Payment fraud and account takeover",
+      "Third-party/concentration risk (B-10)",
+      "Insider trading / data exfiltration"
+    ],
+    "notes": "OSFI B-13 is the anchor: report material tech/cyber incidents within 24 hours. B-10 mandates third-party risk inventory and concentration limits. FINTRAC requires STR/LCTR filing and a documented AML program. Canada-first: prefer Canadian region residency; cross-border requires PIPEDA-compliant transparency + Law 25 transfer assessment for Quebec data.",
+    "requiredAuthIds": [
+      "auth-oauth2-mfa",
+      "auth-oidc",
+      "auth-mtls",
+      "auth-all"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-elastic",
+      "observability-grafana-stack"
+    ],
+    "requiredRegimeIds": [
+      "osfi-b13",
+      "osfi-b10",
+      "fintrac-pcmltfa",
+      "pipeda",
+      "pci-dss-4",
+      "law25-quebec",
+      "soc2-typeii",
+      "iso27001",
+      "glba",
+      "sox",
+      "ffiec",
+      "dora",
+      "fips-140-3"
+    ],
+    "recommendedClusterIds": [
+      "openshift",
+      "eks"
+    ],
+    "recommendedRuntimeIds": [
+      "fips",
+      "ubi-micro",
+      "distroless"
+    ]
   },
   {
     "id": "healthcare-and-life-sciences",
@@ -20,10 +72,55 @@
     "requiredAuth": "OIDC + MFA for all PHI access; role-based + attribute-based access control (least privilege); break-glass with mandatory justification logging; provincial EHR federation (e.g. SAML to provincial IAM)",
     "requiredObservability": "Full audit trail of every PHI access (who/what/when/why) with 10-year minimum retention; access-disclosure logging per PHIPA; anomaly detection on bulk PHI reads; consent-event logging",
     "requiredDataControls": "AES-256 at rest + TLS 1.3; PHI segregation; de-identification/pseudonymization for analytics; strict Canadian residency (PHIPA/provincial law often prohibits US storage); KMS with BYOK; data minimization; secure disposal",
-    "mandatoryRegimes": ["PHIPA (Ontario)", "PIPEDA", "Provincial health privacy acts (HIA Alberta, PHIA Manitoba/NS, FOIP, BC PIPA/E-Health Act)", "Quebec Law 25 + Act respecting health and social services information", "Health Canada / SOR (medical devices, SaMD)", "GCP/ICH for clinical trials", "FDA 21 CFR Part 11 (if US trials)"],
+    "mandatoryRegimes": [
+      "PHIPA (Ontario)",
+      "PIPEDA",
+      "Provincial health privacy acts (HIA Alberta, PHIA Manitoba/NS, FOIP, BC PIPA/E-Health Act)",
+      "Quebec Law 25 + Act respecting health and social services information",
+      "Health Canada / SOR (medical devices, SaMD)",
+      "GCP/ICH for clinical trials",
+      "FDA 21 CFR Part 11 (if US trials)"
+    ],
     "recommendedCluster": "Canadian-resident, single-tenant or strongly isolated cluster with HITRUST/SOC 2 controls; provincial residency where required (e.g. BC data must stay in Canada under prior FIPPA rules, now relaxed but verify); no cross-border PHI flow without consent",
-    "keyRisks": ["PHI breach mandatory notification (IPC/OIPC + affected individuals)", "Unauthorized secondary use of health data", "Cross-border storage violating provincial residency rules", "De-identification re-identification attacks", "Clinical trial data integrity (Part 11 / GCP)", "Ransomware on hospital/EHR systems"],
-    "notes": "PHIPA governs Ontario; each province has its own health privacy statute, so residency and consent rules vary. Quebec's health information act (2023) adds strict rules. De-identification per PHIPA is the safe path for analytics. Canada-first: default to Canadian residency and provincial alignment; treat any US transfer as high-risk requiring legal review."
+    "keyRisks": [
+      "PHI breach mandatory notification (IPC/OIPC + affected individuals)",
+      "Unauthorized secondary use of health data",
+      "Cross-border storage violating provincial residency rules",
+      "De-identification re-identification attacks",
+      "Clinical trial data integrity (Part 11 / GCP)",
+      "Ransomware on hospital/EHR systems"
+    ],
+    "notes": "PHIPA governs Ontario; each province has its own health privacy statute, so residency and consent rules vary. Quebec's health information act (2023) adds strict rules. De-identification per PHIPA is the safe path for analytics. Canada-first: default to Canadian residency and provincial alignment; treat any US transfer as high-risk requiring legal review.",
+    "requiredAuthIds": [
+      "auth-oidc",
+      "auth-oauth2-mfa",
+      "auth-saml",
+      "auth-all"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-elastic"
+    ],
+    "requiredRegimeIds": [
+      "phipa",
+      "pipeda",
+      "law25-quebec",
+      "hipaa",
+      "pipa-bc",
+      "pipa-ab",
+      "soc2-typeii",
+      "iso27001"
+    ],
+    "recommendedClusterIds": [
+      "openshift",
+      "aks"
+    ],
+    "recommendedRuntimeIds": [
+      "fips",
+      "ubi-micro",
+      "distroless"
+    ]
   },
   {
     "id": "government-and-public-sector",
@@ -33,10 +130,56 @@
     "requiredAuth": "GC-approved IAM (e.g. credential broker / Sign-In Canada / provincial IDP) + MFA; PKI for PROTECTED data; zero-trust per ITSG-33; mandatory account recertification",
     "requiredObservability": "Centralized audit logging per ITSG-33 AU controls; SIEM with min 2-year retention (longer for records-management obligations); continuous monitoring; security event reporting to CCCS",
     "requiredDataControls": "Encryption per CSE-approved algorithms (CNSA/ITSP.40.111); Canadian residency mandatory for PROTECTED B and above; data sovereignty; CSE/CCCS cloud guardrails; key management under GC control",
-    "mandatoryRegimes": ["Privacy Act (federal)", "PIPEDA (where applicable)", "ITSG-33 / ITSP.40.x (CSE security controls)", "GC Cloud Guardrails", "Protected A/B/C classification (ITSP.40.111)", "Provincial FOIP/FIPPA", "Directive on Service and Digital (TBS)", "Quebec Law 25 (provincial bodies)"],
+    "mandatoryRegimes": [
+      "Privacy Act (federal)",
+      "PIPEDA (where applicable)",
+      "ITSG-33 / ITSP.40.x (CSE security controls)",
+      "GC Cloud Guardrails",
+      "Protected A/B/C classification (ITSP.40.111)",
+      "Provincial FOIP/FIPPA",
+      "Directive on Service and Digital (TBS)",
+      "Quebec Law 25 (provincial bodies)"
+    ],
     "recommendedCluster": "GC-assessed cloud (Protected B Medium-Integrity-Medium-Availability) in Canadian region; FedRAMP/CCCS-assessed; dedicated landing zone with GC guardrails; segregated from commercial tenants",
-    "keyRisks": ["PROTECTED data residency or sovereignty violation", "Inadequate ITSG-33 control implementation blocking ATO", "FOIP/access-to-information mishandling", "Supply-chain compromise of GC systems", "Citizen PII breach and Privacy Commissioner findings", "Records retention/disposition non-compliance"],
-    "notes": "ITSG-33 is the controls catalogue (NIST 800-53 aligned). PROTECTED B is the common bar for citizen data and requires Canadian residency + CCCS-assessed cloud. TBS Directive on Service and Digital mandates cloud-first with guardrails. Canada-first by definition; sovereignty is non-negotiable for PB+."
+    "keyRisks": [
+      "PROTECTED data residency or sovereignty violation",
+      "Inadequate ITSG-33 control implementation blocking ATO",
+      "FOIP/access-to-information mishandling",
+      "Supply-chain compromise of GC systems",
+      "Citizen PII breach and Privacy Commissioner findings",
+      "Records retention/disposition non-compliance"
+    ],
+    "notes": "ITSG-33 is the controls catalogue (NIST 800-53 aligned). PROTECTED B is the common bar for citizen data and requires Canadian residency + CCCS-assessed cloud. TBS Directive on Service and Digital mandates cloud-first with guardrails. Canada-first by definition; sovereignty is non-negotiable for PB+.",
+    "requiredAuthIds": [
+      "auth-oidc",
+      "auth-oauth2-mfa",
+      "auth-saml",
+      "auth-mtls",
+      "auth-all"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-elastic"
+    ],
+    "requiredRegimeIds": [
+      "pipeda",
+      "law25-quebec",
+      "iso27001",
+      "fedramp-mod",
+      "fedramp-high",
+      "fips-140-3",
+      "soc2-typeii"
+    ],
+    "recommendedClusterIds": [
+      "openshift",
+      "aks"
+    ],
+    "recommendedRuntimeIds": [
+      "fips",
+      "ubi-micro",
+      "ubi-minimal"
+    ]
   },
   {
     "id": "defense-and-intelligence",
@@ -46,10 +189,49 @@
     "requiredAuth": "PKI / smart-card (DND PKI) + hardware MFA; air-gapped or cross-domain-solution-mediated access for classified; strict need-to-know with compartmentalization; continuous adjudication of clearances",
     "requiredObservability": "Full audit on all classified-system access with indefinite/long retention; cross-domain transfer logging; insider-threat monitoring (UAM); air-gap integrity monitoring; CCCS incident reporting",
     "requiredDataControls": "CSE-approved cryptography (CNSA 2.0 / post-quantum migration in progress); strict Canadian sovereignty; classified data never on commercial cloud without accreditation; CDS for any cross-domain flow; controlled goods handling",
-    "mandatoryRegimes": ["ITSG-33 (high baseline)", "Security of Information Act", "Controlled Goods Program (CGP)", "Canadian Industrial Security Directorate (CISD/Contract Security Program)", "ITAR / EAR (US-origin tech)", "NATO security policy (where applicable)", "CSE/CCCS classified handling directives"],
+    "mandatoryRegimes": [
+      "ITSG-33 (high baseline)",
+      "Security of Information Act",
+      "Controlled Goods Program (CGP)",
+      "Canadian Industrial Security Directorate (CISD/Contract Security Program)",
+      "ITAR / EAR (US-origin tech)",
+      "NATO security policy (where applicable)",
+      "CSE/CCCS classified handling directives"
+    ],
     "recommendedCluster": "Accredited classified enclave (air-gapped or CDS-mediated); DND/CAF-approved on-prem or sovereign cloud; no commercial multi-tenant; physically and logically isolated; TEMPEST considerations for SECRET+",
-    "keyRisks": ["Spillage of classified data to lower-classification networks", "ITAR/Controlled Goods export violation", "Foreign-ownership-control-influence (FOCI) on suppliers", "Insider threat / espionage", "Supply-chain implant in defense systems", "Post-quantum cryptographic exposure"],
-    "notes": "This vertical is sovereignty-absolute: classified workloads do not run on commercial cloud without formal accreditation. Controlled Goods Program governs physical/logical access to controlled tech. ITAR applies to US-origin components and restricts foreign-person access. CNSA 2.0 / PQC migration is active in 2026. Canada-first and Canada-only for classified."
+    "keyRisks": [
+      "Spillage of classified data to lower-classification networks",
+      "ITAR/Controlled Goods export violation",
+      "Foreign-ownership-control-influence (FOCI) on suppliers",
+      "Insider threat / espionage",
+      "Supply-chain implant in defense systems",
+      "Post-quantum cryptographic exposure"
+    ],
+    "notes": "This vertical is sovereignty-absolute: classified workloads do not run on commercial cloud without formal accreditation. Controlled Goods Program governs physical/logical access to controlled tech. ITAR applies to US-origin components and restricts foreign-person access. CNSA 2.0 / PQC migration is active in 2026. Canada-first and Canada-only for classified.",
+    "requiredAuthIds": [
+      "auth-mtls",
+      "auth-oidc",
+      "auth-all"
+    ],
+    "requiredObservabilityIds": [
+      "observability-elastic",
+      "observability-prometheus",
+      "observability-otel"
+    ],
+    "requiredRegimeIds": [
+      "fedramp-high",
+      "fips-140-3",
+      "cmmc-l2",
+      "iso27001",
+      "soc2-typeii"
+    ],
+    "recommendedClusterIds": [
+      "openshift"
+    ],
+    "recommendedRuntimeIds": [
+      "fips",
+      "ubi-micro"
+    ]
   },
   {
     "id": "energy-and-environment",
@@ -59,10 +241,52 @@
     "requiredAuth": "OIDC + MFA for IT; strict IT/OT separation; jump-host + privileged access management for OT/ICS; no shared credentials on control systems; vendor remote access brokered and recorded",
     "requiredObservability": "Full audit on control systems and IT; OT network monitoring (e.g. Claroty/Dragos); 3-year+ retention for critical infrastructure; CER/NERC CIP event logging; mandatory cyber incident reporting under critical-infra rules",
     "requiredDataControls": "Encryption at rest + in transit for IT/business data; OT segmentation (Purdue model / IEC 62443 zones); SCADA data integrity; Canadian residency for critical-infrastructure operational data; secure historian",
-    "mandatoryRegimes": ["NERC CIP (bulk electric system)", "CER (Canada Energy Regulator) cybersecurity / OEDIT", "Critical Cyber Systems Protection Act (CCSPA / Bill C-26)", "IEC 62443 (OT security)", "PIPEDA", "Provincial energy regulators (e.g. OEB, AUC, BCUC)", "Environmental reporting (ECCC / GHGRP)"],
+    "mandatoryRegimes": [
+      "NERC CIP (bulk electric system)",
+      "CER (Canada Energy Regulator) cybersecurity / OEDIT",
+      "Critical Cyber Systems Protection Act (CCSPA / Bill C-26)",
+      "IEC 62443 (OT security)",
+      "PIPEDA",
+      "Provincial energy regulators (e.g. OEB, AUC, BCUC)",
+      "Environmental reporting (ECCC / GHGRP)"
+    ],
     "recommendedCluster": "Segregated IT cluster in Canadian region for business workloads; OT kept on isolated, air-gapped-leaning networks; CCSPA-designated operators need documented cyber security program; SOC 2 substrate",
-    "keyRisks": ["ICS/SCADA compromise causing physical outage", "NERC CIP violation with monetary penalties", "CCSPA non-compliance once in force (designated critical operators)", "Ransomware crossing IT/OT boundary (Colonial-style)", "GHG/environmental misreporting", "Nation-state targeting of grid"],
-    "notes": "Bill C-26 / CCSPA designates critical cyber systems (energy, telecom, finance, transport) and mandates a cyber security program plus incident reporting to CCCS. NERC CIP applies to the bulk electric system spanning the Canada-US grid. IEC 62443 is the OT security standard. Canada-first: critical-infra operational data should stay in Canada."
+    "keyRisks": [
+      "ICS/SCADA compromise causing physical outage",
+      "NERC CIP violation with monetary penalties",
+      "CCSPA non-compliance once in force (designated critical operators)",
+      "Ransomware crossing IT/OT boundary (Colonial-style)",
+      "GHG/environmental misreporting",
+      "Nation-state targeting of grid"
+    ],
+    "notes": "Bill C-26 / CCSPA designates critical cyber systems (energy, telecom, finance, transport) and mandates a cyber security program plus incident reporting to CCCS. NERC CIP applies to the bulk electric system spanning the Canada-US grid. IEC 62443 is the OT security standard. Canada-first: critical-infra operational data should stay in Canada.",
+    "requiredAuthIds": [
+      "auth-oidc",
+      "auth-oauth2-mfa",
+      "auth-mtls",
+      "auth-all"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-elastic"
+    ],
+    "requiredRegimeIds": [
+      "nerc-cip",
+      "soci",
+      "iso27001",
+      "soc2-typeii",
+      "pipeda"
+    ],
+    "recommendedClusterIds": [
+      "openshift",
+      "eks"
+    ],
+    "recommendedRuntimeIds": [
+      "fips",
+      "ubi-micro",
+      "distroless"
+    ]
   },
   {
     "id": "technology",
@@ -72,10 +296,53 @@
     "requiredAuth": "OIDC/OAuth2 + MFA (TOTP min, WebAuthn preferred); SSO with SCIM provisioning; short-lived tokens; secrets in vault (not env); least-privilege IAM with regular access reviews",
     "requiredObservability": "Centralized structured logging + distributed tracing (OpenTelemetry); SIEM/observability stack (e.g. Datadog/Grafana); 1-year audit log retention minimum; SLO-based alerting; security event monitoring",
     "requiredDataControls": "TLS 1.3 + AES-256; tenant isolation (logical or physical); customer-managed keys option (BYOK); data residency choice incl Canadian region; secrets rotation; DLP for source/IP",
-    "mandatoryRegimes": ["PIPEDA", "Quebec Law 25", "SOC 2 Type II (market expectation)", "ISO 27001 / 27017 / 27018", "GDPR (if EU customers)", "PCI-DSS (if payments)", "CASL (anti-spam)"],
+    "mandatoryRegimes": [
+      "PIPEDA",
+      "Quebec Law 25",
+      "SOC 2 Type II (market expectation)",
+      "ISO 27001 / 27017 / 27018",
+      "GDPR (if EU customers)",
+      "PCI-DSS (if payments)",
+      "CASL (anti-spam)"
+    ],
     "recommendedCluster": "Multi-region Kubernetes with Canadian-region option for Canada-first customers; SOC 2 + ISO 27001 controls; logical multi-tenancy with hardened isolation; offer single-tenant for regulated buyers",
-    "keyRisks": ["Multi-tenant data leakage / IDOR", "Supply-chain attack (dependency/CI-CD compromise)", "Secrets exposure in repos/logs", "Account takeover via weak SSO config", "Vendor lock-in undermining data portability", "CASL violation on transactional/marketing email"],
-    "notes": "SOC 2 Type II and ISO 27001 are de-facto entry requirements to sell B2B in Canada. Law 25 applies to any org handling Quebec residents' data and adds breach reporting, privacy-by-default, and transfer assessments. CASL is uniquely Canadian and strict on consent. Offer Canadian residency to win regulated customers."
+    "keyRisks": [
+      "Multi-tenant data leakage / IDOR",
+      "Supply-chain attack (dependency/CI-CD compromise)",
+      "Secrets exposure in repos/logs",
+      "Account takeover via weak SSO config",
+      "Vendor lock-in undermining data portability",
+      "CASL violation on transactional/marketing email"
+    ],
+    "notes": "SOC 2 Type II and ISO 27001 are de-facto entry requirements to sell B2B in Canada. Law 25 applies to any org handling Quebec residents' data and adds breach reporting, privacy-by-default, and transfer assessments. CASL is uniquely Canadian and strict on consent. Offer Canadian residency to win regulated customers.",
+    "requiredAuthIds": [
+      "auth-oauth2",
+      "auth-oidc",
+      "auth-jwt",
+      "auth-oauth2-mfa"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-datadog",
+      "observability-grafana-stack"
+    ],
+    "requiredRegimeIds": [
+      "soc2-typeii",
+      "iso27001",
+      "gdpr",
+      "ccpa",
+      "pipeda"
+    ],
+    "recommendedClusterIds": [
+      "eks",
+      "gke"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "alpine",
+      "wolfi"
+    ]
   },
   {
     "id": "telecommunications",
@@ -85,10 +352,52 @@
     "requiredAuth": "OIDC + MFA for subscriber-data and network-management access; PAM for network elements; lawful-intercept systems on isolated, tightly-controlled access; SIM/eSIM provisioning security",
     "requiredObservability": "CDR and network event logging; subscriber-access audit with multi-year retention; SIEM with OT/network monitoring; CCSPA incident reporting; lawful-intercept audit segregation",
     "requiredDataControls": "Encryption of subscriber PII + traffic metadata; CPNI-equivalent confidentiality; Canadian residency for subscriber data; secure storage of lawful-intercept data; network segmentation (5G core isolation)",
-    "mandatoryRegimes": ["Telecommunications Act + CRTC rules", "Critical Cyber Systems Protection Act (CCSPA / Bill C-26 — telecom is designated)", "PIPEDA", "Quebec Law 25", "Lawful access (e.g. solicitor-general / court orders)", "CCCS / CSE security guidance (incl Huawei/ZTE 5G restrictions)", "CASL"],
+    "mandatoryRegimes": [
+      "Telecommunications Act + CRTC rules",
+      "Critical Cyber Systems Protection Act (CCSPA / Bill C-26 — telecom is designated)",
+      "PIPEDA",
+      "Quebec Law 25",
+      "Lawful access (e.g. solicitor-general / court orders)",
+      "CCCS / CSE security guidance (incl Huawei/ZTE 5G restrictions)",
+      "CASL"
+    ],
     "recommendedCluster": "Carrier-grade segregated infrastructure; subscriber data in Canadian region; 5G core on isolated network slices; CCSPA cyber security program; supplier restrictions on high-risk vendors",
-    "keyRisks": ["Network compromise enabling mass surveillance/outage", "CCSPA non-compliance (telecom is a designated sector)", "Subscriber PII breach at scale", "High-risk-vendor (Huawei/ZTE) equipment exposure", "SS7/Diameter signaling attacks", "Lawful-intercept system misuse"],
-    "notes": "Telecom is explicitly named under Bill C-26 / CCSPA as a critical cyber system; designated operators must run a documented cyber security program and report incidents to CCCS. Canada banned Huawei/ZTE from 5G/4G networks. CRTC governs service obligations. Canada-first: subscriber data resides in Canada."
+    "keyRisks": [
+      "Network compromise enabling mass surveillance/outage",
+      "CCSPA non-compliance (telecom is a designated sector)",
+      "Subscriber PII breach at scale",
+      "High-risk-vendor (Huawei/ZTE) equipment exposure",
+      "SS7/Diameter signaling attacks",
+      "Lawful-intercept system misuse"
+    ],
+    "notes": "Telecom is explicitly named under Bill C-26 / CCSPA as a critical cyber system; designated operators must run a documented cyber security program and report incidents to CCCS. Canada banned Huawei/ZTE from 5G/4G networks. CRTC governs service obligations. Canada-first: subscriber data resides in Canada.",
+    "requiredAuthIds": [
+      "auth-oidc",
+      "auth-oauth2-mfa",
+      "auth-mtls",
+      "auth-all"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-grafana-stack",
+      "observability-elastic"
+    ],
+    "requiredRegimeIds": [
+      "soci",
+      "iso27001",
+      "soc2-typeii",
+      "pipeda",
+      "gdpr"
+    ],
+    "recommendedClusterIds": [
+      "openshift",
+      "eks"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "ubi-micro"
+    ]
   },
   {
     "id": "retail-and-commerce",
@@ -98,10 +407,52 @@
     "requiredAuth": "OIDC/OAuth2 + MFA for admin/back-office; customer auth with passwordless/MFA option; PCI-scoped systems behind strict access controls; POS terminal hardening",
     "requiredObservability": "Transaction + access audit logging; PCI-DSS log retention (min 1 year, 3 months immediately available); fraud monitoring; cardholder-data-environment (CDE) logging segregation; SIEM",
     "requiredDataControls": "PAN tokenization + AES-256; PCI-DSS scope minimization (never store CVV); TLS 1.3 at checkout; PII encryption; Canadian residency option for customer data; consent management for marketing",
-    "mandatoryRegimes": ["PCI-DSS v4.0.1", "PIPEDA", "Quebec Law 25", "CASL (marketing/loyalty email)", "Consumer protection acts (provincial)", "Competition Act (pricing/advertising)", "Payment Card Networks rules (Interac/Visa/MC)"],
+    "mandatoryRegimes": [
+      "PCI-DSS v4.0.1",
+      "PIPEDA",
+      "Quebec Law 25",
+      "CASL (marketing/loyalty email)",
+      "Consumer protection acts (provincial)",
+      "Competition Act (pricing/advertising)",
+      "Payment Card Networks rules (Interac/Visa/MC)"
+    ],
     "recommendedCluster": "PCI-scoped CDE isolated from general workloads; Canadian-region option for customer PII; tokenization service; SOC 2 substrate; CDN/WAF at edge for bot/fraud defense",
-    "keyRisks": ["Cardholder data breach (Magecart/skimming)", "PCI-DSS v4 non-compliance after 2025 mandatory date", "Loyalty/account takeover and credential stuffing", "CASL violation on marketing consent", "Bot-driven inventory/checkout abuse", "Deceptive pricing under Competition Act"],
-    "notes": "PCI-DSS v4.0.1 future-dated requirements became mandatory March 31, 2025 (incl client-side script monitoring for skimming). Tokenize PAN to shrink scope. CASL governs all commercial electronic messages incl loyalty. Canada-first: offer Canadian residency for customer PII and keep Interac flows compliant."
+    "keyRisks": [
+      "Cardholder data breach (Magecart/skimming)",
+      "PCI-DSS v4 non-compliance after 2025 mandatory date",
+      "Loyalty/account takeover and credential stuffing",
+      "CASL violation on marketing consent",
+      "Bot-driven inventory/checkout abuse",
+      "Deceptive pricing under Competition Act"
+    ],
+    "notes": "PCI-DSS v4.0.1 future-dated requirements became mandatory March 31, 2025 (incl client-side script monitoring for skimming). Tokenize PAN to shrink scope. CASL governs all commercial electronic messages incl loyalty. Canada-first: offer Canadian residency for customer PII and keep Interac flows compliant.",
+    "requiredAuthIds": [
+      "auth-oauth2",
+      "auth-oidc",
+      "auth-oauth2-mfa",
+      "auth-jwt"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-datadog"
+    ],
+    "requiredRegimeIds": [
+      "pci-dss-4",
+      "pipeda",
+      "law25-quebec",
+      "gdpr",
+      "ccpa",
+      "soc2-typeii"
+    ],
+    "recommendedClusterIds": [
+      "eks",
+      "gke"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "alpine"
+    ]
   },
   {
     "id": "manufacturing-and-industrial",
@@ -111,10 +462,49 @@
     "requiredAuth": "OIDC + MFA for IT/ERP/MES; strict IT/OT separation; PAM and brokered remote access for plant-floor/OT; no default vendor credentials on PLCs; jump hosts for maintenance",
     "requiredObservability": "IT audit logging + OT network monitoring (Dragos/Claroty/Nozomi); 1-3 year retention; production-line event logging; supply-chain traceability; anomaly detection on OT protocols (Modbus/OPC-UA)",
     "requiredDataControls": "Encryption of IP/CAD/PLM data; OT segmentation per IEC 62443 / Purdue; secure historian; IP exfiltration DLP; Canadian residency for sensitive trade-secret data; backup integrity",
-    "mandatoryRegimes": ["IEC 62443 (OT security)", "PIPEDA", "Quebec Law 25", "Controlled Goods Program (if defense/dual-use)", "ITAR/EAR (if US-origin tech)", "Product safety / CSA standards", "Environmental (ECCC) where applicable"],
+    "mandatoryRegimes": [
+      "IEC 62443 (OT security)",
+      "PIPEDA",
+      "Quebec Law 25",
+      "Controlled Goods Program (if defense/dual-use)",
+      "ITAR/EAR (if US-origin tech)",
+      "Product safety / CSA standards",
+      "Environmental (ECCC) where applicable"
+    ],
     "recommendedCluster": "Segregated IT cluster for ERP/MES in Canadian region; OT on isolated networks with one-way data diodes to historian; SOC 2 substrate; IP-sensitive workloads single-tenant",
-    "keyRisks": ["OT/ICS ransomware halting production", "Trade-secret/IP theft (CAD, process recipes)", "Supply-chain compromise via vendor remote access", "Legacy PLC vulnerabilities with no patch path", "Dual-use export control violation", "Safety-system tampering"],
-    "notes": "IEC 62443 is the governing OT security framework; segment using zones/conduits and the Purdue model. Manufacturers handling dual-use or defense components fall under Controlled Goods and possibly ITAR. IP theft is the dominant data risk. Canada-first: keep trade-secret data resident in Canada and isolate OT."
+    "keyRisks": [
+      "OT/ICS ransomware halting production",
+      "Trade-secret/IP theft (CAD, process recipes)",
+      "Supply-chain compromise via vendor remote access",
+      "Legacy PLC vulnerabilities with no patch path",
+      "Dual-use export control violation",
+      "Safety-system tampering"
+    ],
+    "notes": "IEC 62443 is the governing OT security framework; segment using zones/conduits and the Purdue model. Manufacturers handling dual-use or defense components fall under Controlled Goods and possibly ITAR. IP theft is the dominant data risk. Canada-first: keep trade-secret data resident in Canada and isolate OT.",
+    "requiredAuthIds": [
+      "auth-oidc",
+      "auth-oauth2-mfa",
+      "auth-mtls"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-grafana-stack"
+    ],
+    "requiredRegimeIds": [
+      "iso27001",
+      "soc2-typeii",
+      "pipeda",
+      "cmmc-l2"
+    ],
+    "recommendedClusterIds": [
+      "eks",
+      "openshift"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "ubi-micro"
+    ]
   },
   {
     "id": "media-and-entertainment",
@@ -124,10 +514,51 @@
     "requiredAuth": "OIDC + MFA for production/asset systems; DRM-tied entitlement auth for distribution; vendor/freelancer access time-boxed; MFA on MAM/DAM and editorial CMS",
     "requiredObservability": "Asset-access and content-movement audit logging; watermarking/forensic tracing on pre-release; 1-year+ retention; piracy/leak detection; CDN access logs",
     "requiredDataControls": "Encryption of master/pre-release assets; DRM (Widevine/PlayReady/FairPlay) for distribution; forensic watermarking; access-controlled MAM; Canadian residency option for subscriber data; geo-fencing rights",
-    "mandatoryRegimes": ["Copyright Act", "PIPEDA", "Quebec Law 25", "CASL", "CRTC / Online Streaming Act (Bill C-11)", "Canadian content (CanCon) obligations", "MPA content-security best practices (TPN)", "GDPR (if EU subscribers)"],
+    "mandatoryRegimes": [
+      "Copyright Act",
+      "PIPEDA",
+      "Quebec Law 25",
+      "CASL",
+      "CRTC / Online Streaming Act (Bill C-11)",
+      "Canadian content (CanCon) obligations",
+      "MPA content-security best practices (TPN)",
+      "GDPR (if EU subscribers)"
+    ],
     "recommendedCluster": "Content-secure cluster aligned to TPN (Trusted Partner Network) controls; pre-release assets isolated and watermarked; Canadian-region option for subscriber PII; CDN with token-auth and DRM at edge",
-    "keyRisks": ["Pre-release content leak / piracy", "Subscriber PII breach at scale", "DRM bypass and unauthorized redistribution", "Rights/geo-fencing violation", "CanCon / Online Streaming Act non-compliance", "CASL violation on subscriber communications"],
-    "notes": "Content security follows MPA/TPN best practices (least the studios accept). Bill C-11 (Online Streaming Act) brings streamers under CRTC with CanCon contribution obligations in 2026. Forensic watermarking + DRM are the core technical controls. Canada-first: subscriber data residency and CanCon compliance."
+    "keyRisks": [
+      "Pre-release content leak / piracy",
+      "Subscriber PII breach at scale",
+      "DRM bypass and unauthorized redistribution",
+      "Rights/geo-fencing violation",
+      "CanCon / Online Streaming Act non-compliance",
+      "CASL violation on subscriber communications"
+    ],
+    "notes": "Content security follows MPA/TPN best practices (least the studios accept). Bill C-11 (Online Streaming Act) brings streamers under CRTC with CanCon contribution obligations in 2026. Forensic watermarking + DRM are the core technical controls. Canada-first: subscriber data residency and CanCon compliance.",
+    "requiredAuthIds": [
+      "auth-oauth2",
+      "auth-oidc",
+      "auth-jwt"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-datadog",
+      "observability-grafana-stack"
+    ],
+    "requiredRegimeIds": [
+      "gdpr",
+      "ccpa",
+      "pipeda",
+      "soc2-typeii"
+    ],
+    "recommendedClusterIds": [
+      "eks",
+      "gke"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "alpine"
+    ]
   },
   {
     "id": "education",
@@ -137,10 +568,48 @@
     "requiredAuth": "OIDC/SAML + MFA for staff/faculty; SSO federation (e.g. provincial/institutional IDP); student auth with MFA option; parental-consent flows for minors; LMS access controls",
     "requiredObservability": "Access audit on student records (SIS/LMS); 1-3 year retention; FOIP/FIPPA disclosure logging; anomaly detection on bulk record access; consent-event logging for minors",
     "requiredDataControls": "Encryption of student PII/records; data minimization; Canadian residency (many provincial K-12/post-secondary rules and FIPPA require it); de-identification for analytics; restricted EdTech vendor data sharing",
-    "mandatoryRegimes": ["PIPEDA (private institutions)", "Provincial FOIP/FIPPA (public institutions, e.g. BC, Alberta, Ontario FIPPA/MFIPPA)", "Quebec Law 25 + education-sector rules", "Provincial education acts", "PHIPA (campus health services)", "COPPA (if US minors)"],
+    "mandatoryRegimes": [
+      "PIPEDA (private institutions)",
+      "Provincial FOIP/FIPPA (public institutions, e.g. BC, Alberta, Ontario FIPPA/MFIPPA)",
+      "Quebec Law 25 + education-sector rules",
+      "Provincial education acts",
+      "PHIPA (campus health services)",
+      "COPPA (if US minors)"
+    ],
     "recommendedCluster": "Canadian-resident cluster for student records; FIPPA-aligned where the institution is public; SOC 2 substrate; isolated EdTech integrations with vetted data-sharing agreements",
-    "keyRisks": ["Student PII / records breach", "EdTech vendor over-collection and secondary use", "Cross-border storage violating provincial FIPPA residency", "Minor data handling without proper consent", "Research data integrity and IP", "Ransomware on school boards/universities"],
-    "notes": "Public institutions are governed by provincial FOIP/FIPPA which historically restricted personal data storage to Canada (BC/NS relaxed but verify per province). Quebec Law 25 applies to education bodies. EdTech vendor governance is the recurring weak point. Canada-first: default to Canadian residency for student records."
+    "keyRisks": [
+      "Student PII / records breach",
+      "EdTech vendor over-collection and secondary use",
+      "Cross-border storage violating provincial FIPPA residency",
+      "Minor data handling without proper consent",
+      "Research data integrity and IP",
+      "Ransomware on school boards/universities"
+    ],
+    "notes": "Public institutions are governed by provincial FOIP/FIPPA which historically restricted personal data storage to Canada (BC/NS relaxed but verify per province). Quebec Law 25 applies to education bodies. EdTech vendor governance is the recurring weak point. Canada-first: default to Canadian residency for student records.",
+    "requiredAuthIds": [
+      "auth-oidc",
+      "auth-saml",
+      "auth-oauth2"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-grafana-stack"
+    ],
+    "requiredRegimeIds": [
+      "pipeda",
+      "gdpr",
+      "soc2-typeii",
+      "law25-quebec"
+    ],
+    "recommendedClusterIds": [
+      "eks",
+      "gke"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "alpine"
+    ]
   },
   {
     "id": "transportation-and-logistics",
@@ -150,10 +619,49 @@
     "requiredAuth": "OIDC + MFA for TMS/WMS and operations; PAM for fleet/telematics and signaling systems; driver/operator credential management; vendor access brokered for connected vehicles",
     "requiredObservability": "Shipment + access audit logging; telematics event logging; 1-3 year retention; OT monitoring for rail/port control systems; CCSPA incident reporting (transport is designated); chain-of-custody traceability",
     "requiredDataControls": "Encryption of shipment, customs, and PII data; telematics/location data protection; Canadian residency for critical-infra operational data; secure EDI/API; customs data integrity",
-    "mandatoryRegimes": ["Critical Cyber Systems Protection Act (CCSPA / Bill C-26 — transport designated)", "Transport Canada regulations (TDG, aviation/marine/rail security)", "PIPEDA", "Quebec Law 25", "CBSA customs / ACI (Advance Commercial Info)", "C-TPAT / PIP (trusted trader)", "IMO/IATA security where applicable"],
+    "mandatoryRegimes": [
+      "Critical Cyber Systems Protection Act (CCSPA / Bill C-26 — transport designated)",
+      "Transport Canada regulations (TDG, aviation/marine/rail security)",
+      "PIPEDA",
+      "Quebec Law 25",
+      "CBSA customs / ACI (Advance Commercial Info)",
+      "C-TPAT / PIP (trusted trader)",
+      "IMO/IATA security where applicable"
+    ],
     "recommendedCluster": "Segregated IT cluster in Canadian region for ops/customer data; OT (rail/port/ATC-adjacent) isolated; CCSPA cyber security program for designated operators; SOC 2 substrate",
-    "keyRisks": ["OT compromise of rail/port/fleet control systems", "CCSPA non-compliance (transport is a designated sector)", "Cargo/customs data manipulation and theft", "Telematics/location-data privacy breach", "Supply-chain disruption via vendor compromise", "Dangerous-goods (TDG) data integrity"],
-    "notes": "Transportation is a designated critical sector under Bill C-26 / CCSPA — designated operators must maintain a cyber security program and report incidents. Transport Canada governs TDG and modal security. CBSA ACI mandates advance electronic cargo data. Canada-first: keep critical-infra operational data resident in Canada."
+    "keyRisks": [
+      "OT compromise of rail/port/fleet control systems",
+      "CCSPA non-compliance (transport is a designated sector)",
+      "Cargo/customs data manipulation and theft",
+      "Telematics/location-data privacy breach",
+      "Supply-chain disruption via vendor compromise",
+      "Dangerous-goods (TDG) data integrity"
+    ],
+    "notes": "Transportation is a designated critical sector under Bill C-26 / CCSPA — designated operators must maintain a cyber security program and report incidents. Transport Canada governs TDG and modal security. CBSA ACI mandates advance electronic cargo data. Canada-first: keep critical-infra operational data resident in Canada.",
+    "requiredAuthIds": [
+      "auth-oidc",
+      "auth-oauth2-mfa",
+      "auth-mtls"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-grafana-stack"
+    ],
+    "requiredRegimeIds": [
+      "soci",
+      "iso27001",
+      "soc2-typeii",
+      "pipeda"
+    ],
+    "recommendedClusterIds": [
+      "eks",
+      "openshift"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "ubi-micro"
+    ]
   },
   {
     "id": "real-estate-and-construction",
@@ -163,10 +671,48 @@
     "requiredAuth": "OIDC + MFA for transaction/escrow and document systems; role-based access to deal data; MFA on wire/trust-account approvals; vendor access scoped for BIM/project portals",
     "requiredObservability": "Audit logging on transactions, trust accounts, and document access; 7-year retention for financial/trust records; wire-fraud anomaly detection; access logs on sensitive deal rooms",
     "requiredDataControls": "Encryption of PII, financial, and deal data; trust-account segregation; document integrity (e-signature audit); Canadian residency for client PII; secure BIM/CAD storage; DLP on deal exfiltration",
-    "mandatoryRegimes": ["PIPEDA", "Quebec Law 25", "FINTRAC / PCMLTFA (real estate is a reporting sector for AML)", "Provincial real estate acts + RECO/regulators", "Consumer protection acts", "Building codes / safety (CSA, provincial)", "Tarion/HCRA (Ontario new-home)"],
+    "mandatoryRegimes": [
+      "PIPEDA",
+      "Quebec Law 25",
+      "FINTRAC / PCMLTFA (real estate is a reporting sector for AML)",
+      "Provincial real estate acts + RECO/regulators",
+      "Consumer protection acts",
+      "Building codes / safety (CSA, provincial)",
+      "Tarion/HCRA (Ontario new-home)"
+    ],
     "recommendedCluster": "Canadian-region cluster for client PII and financial data; SOC 2 substrate; isolated deal-room/document store with strong access control; trust-account systems segregated",
-    "keyRisks": ["Real-estate wire/escrow fraud (BEC)", "FINTRAC AML obligations missed (real estate is a reporting entity)", "Client PII and financial-data breach", "Deal-data leakage / insider misuse", "Title/document forgery", "Construction IP (BIM/design) theft"],
-    "notes": "Real estate brokers and developers are FINTRAC reporting entities under PCMLTFA — must conduct client ID verification, keep records, and file STRs. Business-email-compromise wire fraud is the dominant active threat. Canada-first: keep client PII and trust-account data resident in Canada; align to provincial real estate regulators."
+    "keyRisks": [
+      "Real-estate wire/escrow fraud (BEC)",
+      "FINTRAC AML obligations missed (real estate is a reporting entity)",
+      "Client PII and financial-data breach",
+      "Deal-data leakage / insider misuse",
+      "Title/document forgery",
+      "Construction IP (BIM/design) theft"
+    ],
+    "notes": "Real estate brokers and developers are FINTRAC reporting entities under PCMLTFA — must conduct client ID verification, keep records, and file STRs. Business-email-compromise wire fraud is the dominant active threat. Canada-first: keep client PII and trust-account data resident in Canada; align to provincial real estate regulators.",
+    "requiredAuthIds": [
+      "auth-oauth2",
+      "auth-oidc",
+      "auth-jwt"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus"
+    ],
+    "requiredRegimeIds": [
+      "pipeda",
+      "law25-quebec",
+      "soc2-typeii",
+      "gdpr"
+    ],
+    "recommendedClusterIds": [
+      "eks",
+      "gke"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "alpine"
+    ]
   },
   {
     "id": "agriculture",
@@ -176,10 +722,47 @@
     "requiredAuth": "OIDC + MFA for farm-management and supply-chain platforms; device auth for IoT/precision-ag sensors; PAM for equipment telematics; scoped grower/vendor access",
     "requiredObservability": "Audit logging on farm data and traceability events; 1-3 year retention; IoT device telemetry monitoring; food-traceability event logging (lot/batch); anomaly detection on data feeds",
     "requiredDataControls": "Encryption of farm/agronomic and PII data; grower data-ownership controls; Canadian residency option (food-security sensitivity); IoT data integrity; secure equipment OTA; traceability data immutability",
-    "mandatoryRegimes": ["PIPEDA", "Quebec Law 25", "Safe Food for Canadians Act/Regulations (SFCR — CFIA traceability)", "CFIA food-safety standards", "Pest Control Products Act (PMRA)", "Environmental (ECCC, provincial)", "Plant/animal health regs"],
+    "mandatoryRegimes": [
+      "PIPEDA",
+      "Quebec Law 25",
+      "Safe Food for Canadians Act/Regulations (SFCR — CFIA traceability)",
+      "CFIA food-safety standards",
+      "Pest Control Products Act (PMRA)",
+      "Environmental (ECCC, provincial)",
+      "Plant/animal health regs"
+    ],
     "recommendedCluster": "Canadian-region cluster for grower data and traceability; SOC 2 substrate; IoT ingest isolated with device identity; immutable traceability ledger; offer grower data-ownership guarantees",
-    "keyRisks": ["Food-traceability gap violating SFCR (recall failure)", "Grower data exploitation / ownership disputes", "Precision-ag IoT compromise (equipment, sensors)", "Supply-chain contamination data integrity", "Biosecurity data breach", "Climate/yield data manipulation"],
-    "notes": "SFCR (Safe Food for Canadians Regulations) mandates traceability one-step-forward/one-step-back and recall capability enforced by CFIA. Grower data ownership and sovereignty is an emerging trust issue in AgTech. Canada-first: keep grower data and traceability records resident in Canada given food-security sensitivity."
+    "keyRisks": [
+      "Food-traceability gap violating SFCR (recall failure)",
+      "Grower data exploitation / ownership disputes",
+      "Precision-ag IoT compromise (equipment, sensors)",
+      "Supply-chain contamination data integrity",
+      "Biosecurity data breach",
+      "Climate/yield data manipulation"
+    ],
+    "notes": "SFCR (Safe Food for Canadians Regulations) mandates traceability one-step-forward/one-step-back and recall capability enforced by CFIA. Grower data ownership and sovereignty is an emerging trust issue in AgTech. Canada-first: keep grower data and traceability records resident in Canada given food-security sensitivity.",
+    "requiredAuthIds": [
+      "auth-oidc",
+      "auth-oauth2",
+      "auth-jwt"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus"
+    ],
+    "requiredRegimeIds": [
+      "pipeda",
+      "soc2-typeii",
+      "iso27001"
+    ],
+    "recommendedClusterIds": [
+      "eks",
+      "gke"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "alpine"
+    ]
   },
   {
     "id": "legal-and-professional-services",
@@ -189,10 +772,49 @@
     "requiredAuth": "OIDC + MFA for all matter/client access; strict ethical-wall (information-barrier) access controls; PAM for document management; client-matter scoped permissions; MFA on trust-account approvals",
     "requiredObservability": "Audit logging on all client/matter document access; 7-10 year retention (limitation + records rules); ethical-wall breach detection; trust-account audit trail; anomaly detection on bulk document export",
     "requiredDataControls": "Encryption of privileged/client data; solicitor-client privilege protection; information barriers enforced technically; Canadian residency strongly preferred (privilege + law-society guidance); DLP on document exfiltration; secure disposal",
-    "mandatoryRegimes": ["PIPEDA", "Quebec Law 25", "FINTRAC / PCMLTFA (legal counsel — note SCC carve-out, but law-society AML rules apply)", "Law Society rules (per province — confidentiality, trust accounting)", "Solicitor-client privilege (common law)", "Limitations Acts (records retention)"],
+    "mandatoryRegimes": [
+      "PIPEDA",
+      "Quebec Law 25",
+      "FINTRAC / PCMLTFA (legal counsel — note SCC carve-out, but law-society AML rules apply)",
+      "Law Society rules (per province — confidentiality, trust accounting)",
+      "Solicitor-client privilege (common law)",
+      "Limitations Acts (records retention)"
+    ],
     "recommendedCluster": "Canadian-region cluster for privileged data; SOC 2 + ISO 27001 substrate; single-tenant or strongly isolated; technical ethical walls; vendor with law-society-aligned cloud guidance",
-    "keyRisks": ["Privileged/client-confidential data breach", "Ethical-wall (conflict) breach via shared access", "Trust-account fraud or accounting failure", "Cross-border storage waiving or weakening privilege", "AML obligations under law-society client-ID rules", "Insider exfiltration of matter data"],
-    "notes": "FINTRAC's direct application to legal counsel was struck by the SCC (2015), but provincial law societies impose equivalent client-ID and trust-accounting AML rules. Solicitor-client privilege favors Canadian residency to avoid foreign-disclosure exposure. Law-society cloud guidance (e.g. LSO/LSBC) is the operative standard. Canada-first."
+    "keyRisks": [
+      "Privileged/client-confidential data breach",
+      "Ethical-wall (conflict) breach via shared access",
+      "Trust-account fraud or accounting failure",
+      "Cross-border storage waiving or weakening privilege",
+      "AML obligations under law-society client-ID rules",
+      "Insider exfiltration of matter data"
+    ],
+    "notes": "FINTRAC's direct application to legal counsel was struck by the SCC (2015), but provincial law societies impose equivalent client-ID and trust-accounting AML rules. Solicitor-client privilege favors Canadian residency to avoid foreign-disclosure exposure. Law-society cloud guidance (e.g. LSO/LSBC) is the operative standard. Canada-first.",
+    "requiredAuthIds": [
+      "auth-oidc",
+      "auth-oauth2-mfa",
+      "auth-saml"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus",
+      "observability-elastic"
+    ],
+    "requiredRegimeIds": [
+      "pipeda",
+      "law25-quebec",
+      "soc2-typeii",
+      "iso27001",
+      "gdpr"
+    ],
+    "recommendedClusterIds": [
+      "openshift",
+      "aks"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "ubi-micro"
+    ]
   },
   {
     "id": "non-profit-and-social",
@@ -202,9 +824,46 @@
     "requiredAuth": "OIDC/OAuth2 + MFA for staff and donor/case-management systems; role-based access to beneficiary data; MFA on financial/grant systems; volunteer access scoped and time-boxed",
     "requiredObservability": "Audit logging on donor and beneficiary records; 7-year retention for charitable financial records (CRA); access logging on sensitive case files; anomaly detection on donor-data export",
     "requiredDataControls": "Encryption of donor PII, payment, and beneficiary data; vulnerable-population data minimization; Canadian residency option; PCI scope for donations; consent management; secure disposal of case records",
-    "mandatoryRegimes": ["PIPEDA", "Quebec Law 25", "CRA charitable registration + Income Tax Act reporting", "CASL (fundraising email)", "PCI-DSS (donation processing)", "Provincial charity/fundraising regulations", "PHIPA (if health/social services delivered)"],
+    "mandatoryRegimes": [
+      "PIPEDA",
+      "Quebec Law 25",
+      "CRA charitable registration + Income Tax Act reporting",
+      "CASL (fundraising email)",
+      "PCI-DSS (donation processing)",
+      "Provincial charity/fundraising regulations",
+      "PHIPA (if health/social services delivered)"
+    ],
     "recommendedCluster": "Canadian-region cluster for donor and beneficiary data; SOC 2 substrate (or cost-appropriate equivalent); PCI-scoped donation path isolated; strong access control on vulnerable-population records",
-    "keyRisks": ["Donor PII / payment-card breach", "Vulnerable-population (beneficiary) data exposure", "CRA compliance / charitable-status risk on financial records", "CASL violation on fundraising communications", "Under-resourced security posture (common in sector)", "Grant/financial fraud"],
-    "notes": "Charities are PIPEDA-covered for commercial activities and must keep CRA-mandated financial records (typically 6 years after the tax year, longer for some). Beneficiary data for vulnerable populations demands extra minimization and access control. CASL applies to fundraising. Canada-first: keep donor and beneficiary data resident in Canada; isolate PCI donation flows."
+    "keyRisks": [
+      "Donor PII / payment-card breach",
+      "Vulnerable-population (beneficiary) data exposure",
+      "CRA compliance / charitable-status risk on financial records",
+      "CASL violation on fundraising communications",
+      "Under-resourced security posture (common in sector)",
+      "Grant/financial fraud"
+    ],
+    "notes": "Charities are PIPEDA-covered for commercial activities and must keep CRA-mandated financial records (typically 6 years after the tax year, longer for some). Beneficiary data for vulnerable populations demands extra minimization and access control. CASL applies to fundraising. Canada-first: keep donor and beneficiary data resident in Canada; isolate PCI donation flows.",
+    "requiredAuthIds": [
+      "auth-oauth2",
+      "auth-oidc",
+      "auth-jwt"
+    ],
+    "requiredObservabilityIds": [
+      "observability-otel",
+      "observability-prometheus"
+    ],
+    "requiredRegimeIds": [
+      "pipeda",
+      "gdpr",
+      "soc2-typeii"
+    ],
+    "recommendedClusterIds": [
+      "eks",
+      "gke"
+    ],
+    "recommendedRuntimeIds": [
+      "distroless",
+      "alpine"
+    ]
   }
 ]
