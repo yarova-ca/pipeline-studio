@@ -1,8 +1,0 @@
-site_name: Python gRPC
-site_description: Runnable service starter for Python gRPC.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

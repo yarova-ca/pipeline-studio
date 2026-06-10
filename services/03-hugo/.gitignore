@@ -1,8 +1,0 @@
-# .gitignore
-
-.env
-.env.local
-.env.*.local
-public/
-resources/
-.hugo_build.lock

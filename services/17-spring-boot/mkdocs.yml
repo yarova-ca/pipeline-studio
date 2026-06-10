@@ -1,8 +1,0 @@
-site_name: Spring Boot
-site_description: Runnable service starter for Spring Boot.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

@@ -1,8 +1,0 @@
-site_name: Angular SSR
-site_description: Runnable service starter for Angular SSR.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

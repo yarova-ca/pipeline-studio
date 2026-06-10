@@ -1,8 +1,0 @@
-site_name: Play Framework
-site_description: Runnable service starter for Play Framework.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

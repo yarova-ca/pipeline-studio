@@ -1,8 +1,0 @@
-site_name: Spring Boot Kotlin
-site_description: Runnable service starter for Spring Boot Kotlin.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

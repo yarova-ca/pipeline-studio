@@ -1,8 +1,0 @@
-site_name: SvelteKit
-site_description: Runnable service starter for SvelteKit.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

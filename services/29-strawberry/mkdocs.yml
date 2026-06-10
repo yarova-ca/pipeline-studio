@@ -1,8 +1,0 @@
-site_name: Strawberry (Python)
-site_description: Runnable service starter for Strawberry (Python).
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

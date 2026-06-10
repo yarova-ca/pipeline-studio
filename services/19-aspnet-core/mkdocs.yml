@@ -1,8 +1,0 @@
-site_name: ASP.NET Core
-site_description: Runnable service starter for ASP.NET Core.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

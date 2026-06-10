@@ -1,8 +1,0 @@
-site_name: Laravel
-site_description: Runnable service starter for Laravel.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

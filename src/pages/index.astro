@@ -1,0 +1,536 @@
+---
+import Base from '../layouts/Base.astro';
+import ConfigBar from '../islands/ConfigBar.svelte';
+import PipelineView from '../islands/PipelineView.svelte';
+import PipelineSVG from '../islands/PipelineSVG.svelte';
+import WhyPanel from '../islands/WhyPanel.svelte';
+import FileViewer from '../islands/FileViewer.svelte';
+import ReferenceTabs from '../islands/ReferenceTabs.svelte';
+import DecisionMap from '../islands/DecisionMap.svelte';
+import { INVARIANTS } from '../lib/invariants';
+import { COMPLIANCE_CONTROL_MAP } from '../lib/compliance';
+import { CATALOG, CATALOG_TIERS, CATALOG_SHAPES } from '../lib/catalog';
+
+const complianceEntries = Object.entries(COMPLIANCE_CONTROL_MAP);
+
+// Group catalog by language for display
+const catalogByLang = CATALOG.reduce((acc, entry) => {
+  if (!acc[entry.lang]) acc[entry.lang] = [];
+  acc[entry.lang].push(entry);
+  return acc;
+}, {} as Record<string, typeof CATALOG>);
+
+const langOrder = ['JS', 'TS', 'Node', 'Bun', 'Python', 'Go', 'Java', 'Kotlin', '.NET', 'Rust', 'Ruby', 'PHP', 'Elixir', 'Swift', 'Dart'];
+const sortedLangs = langOrder.filter(l => catalogByLang[l]);
+const prodCount = CATALOG.filter(c => c.tier === 'production').length;
+const totalCount = CATALOG.length;
+---
+
+<Base title="Yarova Studio">
+
+  <!-- Config bar — sticky top, full width -->
+  <div slot="config-bar" id="config-bar-wrapper">
+    <ConfigBar client:only="svelte" />
+  </div>
+
+  <!-- Sidebar — phase nav + invariants reference -->
+  <nav slot="sidebar" id="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-hdr">Pipeline Phases</div>
+      <ul class="nav-list">
+        <li><a href="#phase-0" class="nav-item">Phase 0 — Bootstrap</a></li>
+        <li><a href="#phase-1" class="nav-item">Phase 1 — Local / Dev</a></li>
+        <li><a href="#phase-2" class="nav-item">Phase 2 — PR Gate</a></li>
+        <li><a href="#phase-3" class="nav-item">Phase 3 — Main Build</a></li>
+        <li><a href="#phase-4" class="nav-item">Phase 4 — Promotions</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-hdr">Decisions</div>
+      <ul class="nav-list">
+        <li><a href="#decision-map" class="nav-item">Decision Map</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-hdr">Output Files</div>
+      <ul class="nav-list">
+        <li><a href="#file-viewer" class="nav-item">Generated Files</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-hdr">Knowledge Base</div>
+      <ul class="nav-list">
+        <li><a href="#reference" class="nav-item">Setup Guides</a></li>
+        <li><a href="#reference" class="nav-item">Tool Versions</a></li>
+        <li><a href="#reference" class="nav-item">Tested Matrix</a></li>
+        <li><a href="#reference" class="nav-item">Glossary</a></li>
+        <li><a href="#reference" class="nav-item">Tradeoffs</a></li>
+        <li><a href="#reference" class="nav-item">Maintain</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-hdr">Security</div>
+      <ul class="nav-list">
+        <li><a href="#invariants" class="nav-item">20 Invariants</a></li>
+        <li><a href="#compliance" class="nav-item">Compliance Map</a></li>
+      </ul>
+    </div>
+    <div class="nav-section">
+      <div class="nav-hdr">Reference</div>
+      <ul class="nav-list">
+        <li><a href="#svg-diagram" class="nav-item">Pipeline Diagram</a></li>
+        <li><a href="#catalog" class="nav-item">Framework Catalog</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- TOC (right panel) -->
+  <div slot="toc" id="toc-content">
+    <div class="toc-hdr">On this page</div>
+    <ul class="toc-list">
+      <li><a href="#pipeline">Pipeline flow</a></li>
+      <li><a href="#svg-diagram">Pipeline diagram</a></li>
+      <li><a href="#decision-map">Decision map</a></li>
+      <li><a href="#file-viewer">Generated files</a></li>
+      <li><a href="#invariants">Invariants</a></li>
+      <li><a href="#compliance">Compliance</a></li>
+      <li><a href="#catalog">Framework catalog</a></li>
+    </ul>
+  </div>
+
+  <!-- ── Main content ──────────────────────────────────────────────────── -->
+  <div id="main-content">
+
+    <!-- Hero / intro -->
+    <section class="hero" id="pipeline">
+      <h1 class="hero-title">Yarova Studio</h1>
+      <p class="hero-sub">
+        Select your stack, CI system, and registry above.
+        The pipeline, files, and compliance map update instantly.
+      </p>
+      <div class="hero-stats">
+        <span class="hero-stat"><strong>{prodCount}</strong> production-ready stacks</span>
+        <span class="hero-stat-sep">·</span>
+        <span class="hero-stat"><strong>5</strong> pipeline phases</span>
+        <span class="hero-stat-sep">·</span>
+        <span class="hero-stat"><strong>20</strong> security invariants</span>
+        <span class="hero-stat-sep">·</span>
+        <span class="hero-stat"><strong>12</strong> compliance frameworks</span>
+      </div>
+    </section>
+
+    <!-- Why panel — tradeoffs for current picks (collapsed by default) -->
+    <WhyPanel client:only="svelte" />
+
+    <!-- Interactive pipeline view -->
+    <section class="section-block">
+      <PipelineView client:load />
+    </section>
+
+    <!-- Master SVG pipeline diagram -->
+    <section class="section-block" id="svg-diagram">
+      <div class="section-hdr">
+        <h2 class="section-title">Master Pipeline Diagram</h2>
+        <p class="section-sub">All stages, all phases. Critical path in red. Stages lit green when your decisions affect them. Click any stage to highlight it.</p>
+      </div>
+      <div style="padding: 16px 24px 24px;">
+        <PipelineSVG client:load />
+      </div>
+    </section>
+
+    <!-- Decision map -->
+    <section class="section-block" id="decision-map">
+      <DecisionMap client:load />
+    </section>
+
+    <!-- Invariants reference -->
+    <section class="section-block" id="invariants">
+      <div class="section-hdr">
+        <h2 class="section-title">20 Pipeline Invariants</h2>
+        <p class="section-sub">Rules that must hold for every release. Each maps to the stage that enforces it.</p>
+      </div>
+      <div class="inv-table-wrap">
+        <table class="inv-table">
+          <thead>
+            <tr><th>ID</th><th>Rule</th><th>Enforced by</th><th>Real incident</th></tr>
+          </thead>
+          <tbody>
+            {INVARIANTS.map((inv) => (
+              <tr>
+                <td class="inv-id">{inv.id}</td>
+                <td>{inv.text}</td>
+                <td class="inv-stage">{inv.enforced}</td>
+                <td class="inv-inc">{inv.incident}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Compliance map -->
+    <section class="section-block" id="compliance">
+      <div class="section-hdr">
+        <h2 class="section-title">Compliance Control Map</h2>
+        <p class="section-sub">Which pipeline invariants satisfy which auditor controls, per framework.</p>
+      </div>
+      <div class="comp-grid">
+        {complianceEntries.map(([fwKey, controls]) => (
+          <div class="comp-card">
+            <div class="comp-fw">{fwKey.toUpperCase()}</div>
+            <table class="comp-table">
+              <thead>
+                <tr><th>Control</th><th>Title</th><th>Invariants</th></tr>
+              </thead>
+              <tbody>
+                {(controls ?? []).map((c) => (
+                  <tr>
+                    <td class="ctl-id">{c.control}</td>
+                    <td>{c.title}</td>
+                    <td class="ctl-inv">{c.satisfiedBy.join(', ')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Generated files viewer -->
+    <section class="section-block" id="file-viewer">
+      <div class="section-hdr">
+        <h2 class="section-title">Generated Files</h2>
+        <p class="section-sub">
+          All files update as you change the config above.
+          Select a file from the list, read it, copy it, drop it in your repo.
+          All files are production-ready — not illustrative templates.
+        </p>
+      </div>
+      <div style="padding: 16px 24px 24px;">
+        <FileViewer client:load />
+      </div>
+    </section>
+
+    <!-- Reference tabs: Setup Guides, Versions, Tested Matrix, Mistakes, Glossary, Tradeoffs, Maintain -->
+    <section class="section-block" id="reference">
+      <div class="section-hdr">
+        <h2 class="section-title">Reference</h2>
+        <p class="section-sub">Setup guides · Tool versions · Tested combinations · Common mistakes · Glossary · Tradeoffs · Maintain</p>
+      </div>
+      <ReferenceTabs client:load />
+    </section>
+
+    <!-- Framework catalog -->
+    <section class="section-block" id="catalog">
+      <div class="section-hdr">
+        <h2 class="section-title">Framework Catalog</h2>
+        <p class="section-sub">
+          <strong>{prodCount} production-ready</strong> stacks out of {totalCount} total.
+          Production = full Dockerfile + CI workflow generated. Coming soon = listed, use closest sister framework.
+        </p>
+      </div>
+      <div class="cat-tier-legend">
+        {Object.entries(CATALOG_TIERS).map(([tier, t]) => (
+          <span class="cat-tier-chip" style={`background:${t.bg};color:${t.color};border:1px solid ${t.color}40`}>
+            {t.label}
+          </span>
+        ))}
+      </div>
+      <div class="cat-grid">
+        {sortedLangs.map(lang => (
+          <div class="cat-lang-group">
+            <div class="cat-lang-hdr">{lang}</div>
+            <div class="cat-entries">
+              {catalogByLang[lang].map(entry => {
+                const tier = CATALOG_TIERS[entry.tier];
+                const shape = CATALOG_SHAPES[entry.shape];
+                return (
+                  <div class="cat-entry" title={entry.note}>
+                    <span class="cat-entry-label">{entry.label}</span>
+                    <span class="cat-shape-badge" title={shape?.label}>{shape?.icon}</span>
+                    <span
+                      class="cat-tier-dot"
+                      style={`background:${tier.color};`}
+                      title={tier.label}
+                    ></span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+  </div>
+</Base>
+
+<style>
+  /* Config bar wrapper */
+  #config-bar-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky, 50);
+    width: 100%;
+  }
+
+  /* Sidebar nav */
+  #sidebar-nav { padding: 12px 0; }
+  .nav-section { margin-bottom: 20px; }
+  .nav-hdr {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #768390;
+    padding: 0 16px 6px;
+  }
+  .nav-list { list-style: none; margin: 0; padding: 0; }
+  .nav-item {
+    display: block;
+    padding: 5px 16px;
+    font-size: 12px;
+    color: #adbac7;
+    text-decoration: none;
+    border-radius: 0;
+    transition: background .1s, color .1s;
+  }
+  .nav-item:hover { background: rgba(255,255,255,.06); color: #cdd9e5; }
+
+  /* TOC */
+  #toc-content { padding: 4px 0; }
+  .toc-hdr {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .toc-list { list-style: none; margin: 0; padding: 0; }
+  .toc-list a {
+    display: block;
+    font-size: 11.5px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 4px 0;
+  }
+  .toc-list a:hover { color: var(--accent); }
+
+  /* Main content */
+  #main-content { min-height: 100vh; }
+
+  /* Hero */
+  .hero {
+    padding: 28px 28px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .hero-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .hero-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* Sections */
+  .section-block {
+    border-bottom: 1px solid var(--border);
+  }
+  .section-hdr {
+    padding: 20px 24px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .section-sub {
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  /* Invariants table */
+  .inv-table-wrap { padding: 16px 24px 24px; overflow-x: auto; }
+  .inv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .inv-table th {
+    text-align: left;
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .inv-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+  }
+  .inv-table tr:last-child td { border-bottom: none; }
+  .inv-id {
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .inv-stage { color: var(--text-sec); white-space: nowrap; }
+  .inv-inc   { color: var(--muted); font-style: italic; }
+
+  /* Compliance grid */
+  .comp-grid {
+    padding: 16px 24px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 14px;
+  }
+  .comp-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .comp-fw {
+    background: var(--surface);
+    padding: 8px 12px;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    letter-spacing: .04em;
+  }
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .comp-table th {
+    text-align: left;
+    background: var(--bg);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .comp-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .ctl-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--text-sec);
+    white-space: nowrap;
+  }
+  .ctl-inv {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  /* Hero stats */
+  .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .hero-stat strong { color: var(--text); }
+  .hero-stat-sep { color: var(--border); }
+
+  /* Catalog tier legend */
+  .cat-tier-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 24px 0;
+  }
+  .cat-tier-chip {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: .04em;
+  }
+
+  /* Catalog grid */
+  .cat-grid {
+    padding: 14px 24px 28px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .cat-lang-group {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .cat-lang-hdr {
+    background: var(--surface);
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .cat-entries {
+    padding: 6px 8px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .cat-entry {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 4px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--text);
+    transition: background .1s;
+  }
+  .cat-entry:hover { background: var(--surface); }
+  .cat-entry-label { flex: 1; }
+  .cat-shape-badge {
+    font-size: 10px;
+    opacity: .6;
+  }
+  .cat-tier-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+</style>

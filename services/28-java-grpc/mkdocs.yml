@@ -1,8 +1,0 @@
-site_name: Java gRPC
-site_description: Runnable service starter for Java gRPC.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

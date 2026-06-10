@@ -1,5 +1,0 @@
-cloud        = "aks"
-cluster_name = "pipeline-prod"
-region       = "eastus"
-environment  = "prod"
-# Prod: Standard_D8s_v3 nodes (8 vCPU, 32GB)

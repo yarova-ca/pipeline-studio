@@ -1,8 +1,0 @@
-site_name: Vite PWA
-site_description: Runnable service starter for Vite PWA.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

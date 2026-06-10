@@ -1,8 +1,0 @@
-site_name: SvelteKit (advanced)
-site_description: Runnable service starter for SvelteKit (advanced).
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

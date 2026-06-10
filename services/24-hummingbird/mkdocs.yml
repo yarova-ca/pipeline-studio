@@ -1,8 +1,0 @@
-site_name: Hummingbird
-site_description: Runnable service starter for Hummingbird.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

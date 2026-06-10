@@ -1,8 +1,0 @@
-site_name: Single SPA
-site_description: Runnable service starter for Single SPA.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

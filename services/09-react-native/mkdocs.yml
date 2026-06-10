@@ -1,8 +1,0 @@
-site_name: React Native
-site_description: Runnable service starter for React Native.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

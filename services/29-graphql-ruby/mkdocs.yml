@@ -1,8 +1,0 @@
-site_name: GraphQL Ruby
-site_description: Runnable service starter for GraphQL Ruby.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

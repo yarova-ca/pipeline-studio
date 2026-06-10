@@ -1,8 +1,0 @@
-site_name: FastAPI WS
-site_description: Runnable service starter for FastAPI WS.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

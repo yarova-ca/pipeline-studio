@@ -1,8 +1,0 @@
-site_name: .NET gRPC
-site_description: Runnable service starter for .NET gRPC.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

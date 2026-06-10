@@ -1,8 +1,0 @@
-site_name: Next.js Edge
-site_description: Runnable service starter for Next.js Edge.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

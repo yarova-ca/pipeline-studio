@@ -1,8 +1,0 @@
-site_name: GraphQL Yoga
-site_description: Runnable service starter for GraphQL Yoga.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

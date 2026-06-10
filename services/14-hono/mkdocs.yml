@@ -1,8 +1,0 @@
-site_name: Hono
-site_description: Runnable service starter for Hono.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

@@ -1,5 +1,0 @@
-blank_issues_enabled: true
-contact_links:
-  - name: Pipeline Studio docs
-    url: https://github.com/yarova-ca/pipeline-studio
-    about: Reference docs + runnable service starters for all 106 frameworks. Use pipeline-setup templates to track CI/CD setup and service-scaffold templates to track service implementation.

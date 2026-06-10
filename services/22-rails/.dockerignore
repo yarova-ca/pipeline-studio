@@ -1,9 +1,0 @@
-.git/
-.env
-vendor/bundle/
-.bundle/
-log/
-tmp/
-spec/
-test/
-.env.example

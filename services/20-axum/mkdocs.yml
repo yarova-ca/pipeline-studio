@@ -1,8 +1,0 @@
-site_name: Axum
-site_description: Runnable service starter for Axum.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

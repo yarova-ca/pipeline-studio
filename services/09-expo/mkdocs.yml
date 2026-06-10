@@ -1,8 +1,0 @@
-site_name: Expo
-site_description: Runnable service starter for Expo.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

@@ -1,8 +1,0 @@
-site_name: Remix Cloudflare
-site_description: Runnable service starter for Remix Cloudflare.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

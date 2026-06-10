@@ -1,8 +1,0 @@
-site_name: Slim
-site_description: Runnable service starter for Slim.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

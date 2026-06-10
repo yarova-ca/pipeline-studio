@@ -1,8 +1,0 @@
-site_name: Deno / Oak
-site_description: Runnable service starter for Deno / Oak.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

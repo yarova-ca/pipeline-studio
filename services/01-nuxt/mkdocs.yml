@@ -1,8 +1,0 @@
-site_name: Nuxt 3
-site_description: Runnable service starter for Nuxt 3.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

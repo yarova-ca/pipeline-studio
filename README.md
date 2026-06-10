@@ -1,74 +1,80 @@
-# pipeline-studio
+# Pipeline Studio v2 (Astro)
 
-Platform engineering reference and runnable service starters for all 106 frameworks.
+Migration target. Lives alongside the legacy `../index.html` until parity is
+reached; nothing in the legacy app is touched.
 
-Covers every language group, industry vertical, compliance standard, and deployment axis.
+## Stack
 
----
+- **Astro 4** — static-first; emits a single `dist/index.html` so we keep the
+  "drop on any static host" property of v1
+- **Svelte 4** islands for the interactive zones (config bar, decision map,
+  pipeline SVG, file viewer). Pure-static panels (invariants, glossary,
+  catalog, compliance reference) ship zero JS
+- **TypeScript** everywhere (strict) — kills the "two decision-node maps
+  drift" class of bugs that plagued v1
+- **Vitest** for generator snapshot tests — every emitted Dockerfile /
+  workflow YAML / deploy manifest gets a fixture per stack
 
-## What is in this repo
-
-| Directory | What it contains |
-|---|---|
-| `*.html` | Reference docs — 17 pages across 7 topic pillars |
-| `services/` | 106 runnable service starters — health endpoints, Dockerfiles, tests |
-| `workflow-templates/` | GitHub Actions workflow templates per framework |
-| `dockerfiles/` | Standalone Dockerfile reference files |
-| `scripts/` | Generators and build scripts |
-| `studio-v2/` | Next-generation Astro-based doc app |
-
----
-
-## HTML docs — 7 pillars
-
-Open `index.html` to start. Every page is self-contained.
-
-| Pillar | Pages |
-|---|---|
-| 1 — Start Here | index.html |
-| 2 — Frameworks & Services | 01-framework-catalog, 17-feature-matrix |
-| 3 — Build & Runtime | 09-linux-distros, 11-dockerfile-catalog, 15-version-registry |
-| 4 — Pipeline & Tools | 02-pipeline-schema, 03-stage-types, 04-tool-catalog, 13-pipeline-build-catalog |
-| 5 — Compliance & Security | 05-invariants, 10-linux-compliance, 12-compliance-variations |
-| 6 — Industry Verticals | 06-industry-schema, 07-canada-schema, 08-canada-market, 14-canada-industry-catalog |
-| 7 — Operations | 16-maintainability-runbook |
-
----
-
-## Services — what each service contains
+## Layout
 
 ```
-services/14-express/
-├── src/            app code
-├── tests/          health endpoint assertions
-├── Dockerfile      multi-stage — RUNTIME=alpine|slim|fips
-├── package.json
-└── tsconfig.json
+src/
+├── pages/index.astro             entry shell
+├── layouts/Base.astro            site-wide chrome, head, scripts
+├── components/                   .astro files (zero JS unless marked)
+├── islands/                      .svelte files (hydrated, interactive)
+├── lib/                          typed data layer (ported from v1 monolith)
+├── generators/                   pure functions emit file contents
+└── styles/                       tokens + component CSS
+
+vendor/                           dropping ground for code copied from
+                                  yarova.ca (responsive layout, theme, …)
 ```
 
-Every service has: hello world route + 4 health endpoints (`/health`, `/health/live`, `/health/ready`) + passing tests.
+## Status
 
----
+- [x] Scaffold + dirs
+- [x] package.json (Astro + Svelte + Vitest)
+- [x] astro.config.mjs (static output)
+- [x] tsconfig (strict + path aliases)
+- [x] `lib/phases.ts` — `PHASE_DEFS` ported, typed; `STAGE_TO_PHASE_TAB`
+      derived (no longer duplicated)
+- [x] `lib/decisions.ts` — `DECISION_DEFS`, `DECISION_REQUIRED`,
+      `DECISION_OPTIONAL`, `DECISION_AFFECTS_NODES` ported, typed
+- [x] `lib/invariants.ts` — 20 invariants + `INVARIANT_DEPENDS_ON`
+- [x] `lib/compliance.ts` — `COMPLIANCE_CONTROL_MAP` for 7 frameworks
+- [x] `lib/types.ts` — shared `Stage`, `Decision`, `Invariant`, `Framework`,
+      `ComplianceKey` types
+- [ ] `lib/catalog.ts` — 102-framework catalog (port pending)
+- [ ] `lib/industries.ts` — 11 industries with suggested compliance pairs
+- [ ] `generators/dockerfile.ts` — port from v1 (8 backend langs)
+- [ ] `generators/workflow.ts` — port from v1 (6 CI systems)
+- [ ] `generators/deploy-kustomize.ts` — base + overlays + ArgoCD app
+- [ ] `generators/deploy-helm.ts` — Chart + values + per-env values
+- [ ] Layout / responsive — pending yarova.ca code drop into `vendor/`
+- [ ] Components (Phase tabs, Config bar, Cluster prereqs, …)
+- [ ] Islands (Config bar Svelte, Decision map, Pipeline SVG, Files viewer)
+- [ ] Vitest snapshot tests for every generator × stack
+- [ ] Parity sweep + cutover
 
-## GitHub issue templates
+## To unblock me (Claude in next session)
 
-Two template sets — use both together for a complete service.
+Drop these into `vendor/from-yarova/`:
+- Base layout (header, footer, responsive container)
+- Tailwind / token config (if used)
+- Mobile nav pattern
+- Any shared button/card components worth reusing
+- Theme (light/dark? brand colors?)
 
-| Template set | Purpose |
-|---|---|
-| `pipeline-setup/` | Track CI/CD pipeline setup (6 phases, all tools, all compliance) |
-| `service-scaffold/` | Track runnable service implementation (app + Dockerfile + tests) |
+Or paste them in chat — I'll wire them into `layouts/Base.astro` and the
+component scaffold.
 
----
-
-## Build a service locally
+## Build / dev
 
 ```bash
-cd services/14-express
+cd studio-v2
 npm install
-npm run dev       # → http://localhost:3000
-npm test          # → 4 passing
-docker build --build-arg RUNTIME=alpine -t 14-express:local .
+npm run dev      # http://localhost:4321
+npm run build    # → dist/index.html (single static asset)
+npm run check    # astro check + tsc --noEmit
 ```
-
-RUNTIME options: `alpine` (default) | `slim` | `fips`

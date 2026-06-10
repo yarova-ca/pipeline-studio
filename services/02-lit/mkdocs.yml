@@ -1,8 +1,0 @@
-site_name: Lit
-site_description: Runnable service starter for Lit.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

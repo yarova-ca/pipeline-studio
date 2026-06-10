@@ -1,4 +1,0 @@
-cloud        = "eks"
-cluster_name = "pipeline-test"
-region       = "us-east-1"
-environment  = "test"

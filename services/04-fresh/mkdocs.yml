@@ -1,8 +1,0 @@
-site_name: Fresh (Deno)
-site_description: Runnable service starter for Fresh (Deno).
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

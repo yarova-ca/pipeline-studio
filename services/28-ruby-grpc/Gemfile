@@ -1,5 +1,0 @@
-source "https://rubygems.org"
-gem "grpc", "~> 1.63"
-gem "grpc-tools", "~> 1.63"
-gem "logger", "~> 1.6"
-gem "prometheus-client", "~> 4.0"

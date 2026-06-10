@@ -1,8 +1,0 @@
-# .gitignore
-
-.env
-.env.local
-.env.*.local
-vendor/
-.phpunit.result.cache
-*.cache

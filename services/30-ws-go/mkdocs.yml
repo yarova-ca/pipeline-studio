@@ -1,8 +1,0 @@
-site_name: Gorilla WS (Go)
-site_description: Runnable service starter for Gorilla WS (Go).
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

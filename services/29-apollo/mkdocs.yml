@@ -1,8 +1,0 @@
-site_name: Apollo GraphQL
-site_description: Runnable service starter for Apollo GraphQL.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

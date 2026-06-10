@@ -1,8 +1,0 @@
-# CloudNativePG operator must be installed before the Cluster resource.
-# Operator: a Kubernetes controller that manages PostgreSQL lifecycle.
-# Install: kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/releases/cnpg-1.23.0.yaml
-# OR use Helm: helm upgrade --install cnpg-system cnpg/cloudnative-pg -n cnpg-system --create-namespace
-
-# This file documents the expected CRDs after operator install.
-# Verify: kubectl get crd | grep postgresql
-# Expected output includes: clusters.postgresql.cnpg.io, poolers.postgresql.cnpg.io, backups.postgresql.cnpg.io

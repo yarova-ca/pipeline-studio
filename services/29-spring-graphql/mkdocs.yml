@@ -1,8 +1,0 @@
-site_name: Spring GraphQL
-site_description: Runnable service starter for Spring GraphQL.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

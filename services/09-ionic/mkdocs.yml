@@ -1,8 +1,0 @@
-site_name: Ionic
-site_description: Runnable service starter for Ionic.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

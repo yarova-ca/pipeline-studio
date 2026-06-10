@@ -1,4 +1,6 @@
 node_modules/
-package-lock.json
-build-results.log
-scripts/__pycache__/
+dist/
+.astro/
+.DS_Store
+*.log
+.wrangler/

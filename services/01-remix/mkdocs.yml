@@ -1,8 +1,0 @@
-site_name: Remix
-site_description: Runnable service starter for Remix.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

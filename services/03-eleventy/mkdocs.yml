@@ -1,8 +1,0 @@
-site_name: Eleventy
-site_description: Runnable service starter for Eleventy.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

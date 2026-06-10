@@ -1,8 +1,0 @@
-site_name: SwiftUI
-site_description: Runnable service starter for SwiftUI.
-
-plugins:
-  - techdocs-core
-
-nav:
-  - Home: index.md

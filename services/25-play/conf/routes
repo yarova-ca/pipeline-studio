@@ -1,4 +1,0 @@
-GET  /              controllers.HealthController.hello
-GET  /health        controllers.HealthController.health
-GET  /health/live   controllers.HealthController.liveness
-GET  /health/ready  controllers.HealthController.readiness
