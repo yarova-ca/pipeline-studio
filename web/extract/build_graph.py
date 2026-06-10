@@ -345,6 +345,10 @@ def main():
         "invariants": invariants, "versions": versions, "conceptNotes": load("conceptNotes"),
         "integrations": load("integrations"), "apiGateways": load("apiGateways"),
         "libraries": libraries,
+        "authDeep": load("authDeep"), "ormDeep": load("ormDeep"),
+        "observabilityDeep": load("observabilityDeep"), "runtimeDeep": load("runtimeDeep"),
+        "pkgBuildDeep": load("pkgBuildDeep"), "complianceProfiles": load("complianceProfiles"),
+        "industryRequirements": load("industryRequirements"),
     }
     bundle = {"nodes": node_bundle, "edges": edges, "pipelines": fw_pipelines, "manifest": manifest}
     json.dump(bundle, open(os.path.join(ROOT, "web", "graph.json"), "w"))
