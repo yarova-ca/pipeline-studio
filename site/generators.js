@@ -254,6 +254,34 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \\
   CMD wget -qO- http://127.0.0.1:${port}${healthPath} >/dev/null 2>&1 || exit 1
 CMD ${JSON.stringify(startParts)}`;
   }
+  if (beGroup === "nodejs" || beGroup === "bun" || beGroup === "deno") {
+    const nsetup = pm.dockerSetup ? pm.dockerSetup + "\n" : "RUN corepack enable 2>/dev/null || true\n";
+    const ncopy = pm.dockerCopy ?? "COPY package*.json ./";
+    return `# syntax=docker/dockerfile:1.9
+# Node API (${be.label ?? "Node"}) \u2192 distroless/nodejs22:nonroot
+
+FROM ${builder} AS deps
+WORKDIR /app
+${nsetup}${ncopy}
+RUN ${pm.installCmd || "npm ci --ignore-scripts"}
+
+FROM ${builder} AS builder
+WORKDIR /app
+${nsetup}COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build --if-present
+
+FROM gcr.io/distroless/nodejs22-debian12:nonroot AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=${port}
+COPY --from=builder --chown=nonroot:nonroot /app ./
+USER nonroot
+EXPOSE ${port}
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \\
+  CMD ["node", "-e", "fetch('http://127.0.0.1:${port}${healthPath}').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+CMD ["${startCmd || "dist/index.js"}"]`;
+  }
   if (feKey === "mobile" || feKey === "mobile-expo") {
     return `# Mobile stack (${fe.label}) does not use containers.
 # Build artifact is an APK/IPA via EAS Build or React Native CLI.

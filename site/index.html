@@ -316,6 +316,13 @@
   .rconn{position:absolute;right:-10px;top:64px;z-index:4;font-size:17px;color:var(--accent,var(--teal));opacity:.85;
     text-shadow:0 0 12px var(--accent,var(--teal))}
   .rchips{margin-top:2px}
+  /* generated real-code files */
+  .genfile{border:1px solid var(--hair);border-radius:12px;margin:8px 0;overflow:hidden;background:#0a0b0d}
+  .genhead{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;background:var(--surface2,#1C1F28);border-bottom:1px solid var(--hair)}
+  .genname{font-family:var(--fmono,monospace);font-size:11px;color:var(--lime)}
+  .gencopy{background:none;border:1px solid var(--hair2);color:var(--ink2);border-radius:7px;font-size:10.5px;padding:2px 9px;cursor:pointer;font-family:var(--fmono,monospace)}
+  .gencopy:hover{border-color:var(--teal);color:var(--teal)}
+  .gencode{margin:0;padding:11px;max-height:320px;overflow:auto;font-family:var(--fmono,monospace);font-size:11px;line-height:1.5;color:#cfe8df;white-space:pre;tab-size:2}
 
   /* selectable option rows in resolver panels */
   .opt{position:relative;display:flex;flex-direction:column;gap:3px;padding:11px 13px;margin-bottom:8px;
@@ -407,6 +414,7 @@
 </aside>
 
 <script type="module">
+import * as GEN from "./generators.js";
 let G=null, LENS={vertical:""}, REQ=null;
 let RA=new Set(),RO=new Set(),RG=new Set(),RC=new Set(),RT=new Set();
 const $=(s,r=document)=>r.querySelector(s);
@@ -859,6 +867,57 @@ function rpanel(idx,accent,n,name,tagHtml,valHtml,whyHtml,bodyHtml,changed){
 }
 const grp=(t)=>`<div class="grp">${esc(t)}</div>`;
 
+// ── real-code generators (bundled studio-v2 generators.js) ──────────────────
+let CFID=0;
+const FE_KEYS=new Set(['nextjs','react','vue','angular','svelte','nuxt','remix','react-vite','gatsby','vue-vite','astro','solid','solid-vite','qwik','tanstack','preact-vite','lit','redwood','fresh','mobile','mobile-expo']);
+const BE_LIST=['nodejs-express','nodejs-fastify','nodejs-nest','nodejs-hono','nodejs-koa','python-fastapi','python-django','python-flask','python-litestar','python-starlette','java-spring','java-quarkus','java-micronaut','java-javalin','go-gin','go-echo','go-chi','go-stdlib','go-fiber','rust-axum','rust-actix','rust-rocket','rust-warp','ruby-rails','ruby-sinatra','php-laravel','php-symfony','php-slim','elixir-phoenix','elixir-live','kotlin-ktor','bun-elysia','deno-fresh-api','swift-vapor'];
+const LANG_GROUP={ts:'nodejs',js:'nodejs',py:'python',go:'go',rust:'rust',java:'java',kotlin:'kotlin',php:'php',ruby:'ruby',elixir:'elixir',swift:'swift',csharp:'dotnet'};
+function fwToKeys(fw){
+  const short=(fw.id||'').replace(/^\d+-/,'');
+  if(FE_KEYS.has(short))return{feKey:short,beKey:'none'};
+  let be=BE_LIST.find(k=>k.split('-')[1]===short)||BE_LIST.find(k=>k.endsWith('-'+short));
+  if(!be){const g=LANG_GROUP[fw.languageId]||'nodejs';be=BE_LIST.find(k=>k.startsWith(g+'-'))||'nodejs-express';}
+  return{feKey:'none',beKey:be};
+}
+const PKG_MAP={gomod:'go'};
+const REGIME_TO_COMP={'pci-dss-4':'pci','hipaa':'hipaa','fedramp-mod':'fedramp','fedramp-high':'fedramp','soc2-typeii':'soc2','gdpr':'gdpr','iso27001':'iso27001','cmmc-l2':'cmmc','nerc-cip':'nerccip','fips-140-3':'fedramp'};
+function industryToCompliance(rq){
+  if(!rq)return['none','none'];const ks=[];
+  for(const id of (rq.requiredRegimeIds||[])){const c=REGIME_TO_COMP[id];if(c&&!ks.includes(c))ks.push(c);}
+  return[ks[0]||'none',ks[1]||'none'];
+}
+function buildConfig(s){
+  const k=fwToKeys(s.fw), comp=industryToCompliance(s.rq);
+  return{feKey:k.feKey,beKey:k.beKey,ciKey:'github-actions',regKey:'ghcr',
+    compliance:comp[0],compliance2:comp[1],industry:s.rq?s.rq.id:'',
+    cd:'argocd',gitops:'same-repo',scanner:'trivy',signing:'cosign',sbom:'syft',
+    baseimage:s.base,pkgMgr:(PKG_MAP[s.pkg]||s.pkg),appName:s.fw.serviceSlug||s.fw.id,
+    port:(s.tmpl&&s.tmpl.port)?String(s.tmpl.port):undefined};
+}
+function genFiles(cfg){
+  const safe=(fn)=>{try{const v=fn();return v==null?'':v;}catch(e){return '';}};
+  return{
+    dockerfile:safe(()=>GEN.generateDockerfile(cfg)),
+    dockerignore:safe(()=>GEN.generateDockerIgnore(cfg)),
+    prwf:safe(()=>GEN.generatePRWorkflow(cfg)),
+    mainwf:safe(()=>GEN.generateMainWorkflow(cfg)),
+    helm:safe(()=>GEN.generateHelmValues(cfg,'prod')),
+    kbase:safe(()=>GEN.generateBaseKustomization(cfg)),
+    kdeploy:safe(()=>GEN.generateBaseDeployment(cfg)),
+    precommit:safe(()=>GEN.generatePreCommitConfig(cfg)),
+    deploy:safe(()=>GEN.generateDeploy(cfg))||{},
+  };
+}
+function codeFile(name,text){
+  if(!text||typeof text!=='string')return'';
+  const id='cf'+(CFID++);
+  return `<div class="genfile"><div class="genhead"><span class="genname">${esc(name)}</span>`+
+    `<button class="gencopy" onclick="copyCode('${id}',this)">copy</button></div>`+
+    `<pre class="gencode" id="${id}">${esc(text)}</pre></div>`;
+}
+window.copyCode=(id,btn)=>{const el=document.getElementById(id);if(!el)return;
+  navigator.clipboard.writeText(el.textContent).then(()=>{if(btn){const t=btn.textContent;btn.textContent='copied ✓';setTimeout(()=>btn.textContent=t,1200);}});};
+
 function renderResolver(){
   const s=resolveStack();
   const rdBase=(G.nodes.runtimeDeep||[]).find(x=>x.id===s.base);
@@ -868,6 +927,14 @@ function renderResolver(){
     img:s.base,gitops:'std',cluster:s.cluster,plat:`${s.auth}|${s.obs}|${s.orm}`,integ:s.integ.length+':'+RS.industry};
   const ch=(k)=>LASTR[k]!=null&&LASTR[k]!==cur[k];
   const P=[];
+
+  // real-code files for the current cursor — regenerated live on every change
+  CFID=0;
+  const CFG=buildConfig(s), GF=genFiles(CFG);
+  const genCI=grp('Generated files — copy & ship')+codeFile('.github/workflows/main.yml',GF.mainwf)+codeFile('.github/workflows/pr.yml',GF.prwf)+codeFile('.pre-commit-config.yaml',GF.precommit);
+  const genImg=grp('Generated files')+codeFile('Dockerfile',GF.dockerfile)+codeFile('.dockerignore',GF.dockerignore);
+  const genGit=grp('Generated files')+codeFile('helm/values-prod.yaml',GF.helm)+codeFile('kustomize/base/kustomization.yaml',GF.kbase)+codeFile('kustomize/base/deployment.yaml',GF.kdeploy);
+  const genCluster=grp('Generated manifests')+Object.entries(GF.deploy||{}).map(([n,c])=>codeFile(n,c)).join('');
 
   // 0 Repository — switch within the same category, all 106 in the top picker
   const sib=(G.nodes.frameworks||[]).filter(f=>f.categoryId===s.fw.categoryId);
@@ -888,7 +955,7 @@ function renderResolver(){
   P.push(rpanel(2,'#44D292','03','CI/CD pipeline',rtag('same','same for every framework'),
     `${(G.nodes.stages||[]).length}-stage pipeline`,'Standard platform pipeline. Your choices flow in as build args:',
     `<div class="rchips"><span class="chip">AUTH=${esc(s.auth.replace('auth-',''))}</span><span class="chip">ORM=${esc(s.orm.replace('orm-',''))}</span><span class="chip">RUNTIME=${esc(s.base)}</span><span class="chip">PKG=${esc(s.pkg)}</span></div>`+
-    grp('phases')+(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>card('#44D292',p.label||p.name,p.trigger||'',`goCol(1)`,'',null)).join(''),ch('pipe')));
+    grp('phases')+(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>card('#44D292',p.label||p.name,p.trigger||'',`goCol(1)`,'',null)).join('')+genCI,ch('pipe')));
 
   // 3 Compliance — ALL 26, what applies vs what does not
   const reqSet=new Set(s.regimes);
@@ -913,12 +980,12 @@ function renderResolver(){
     esc(baseName),esc(s.baseWhy)+' Built, signed (cosign) + SBOM, pushed to GHCR.',
     grp(`base image (${runAll.length})`)+
     runAll.map(r=>opt('runtime',r.id,r.name,`${r.baseOs||''}${r.fipsCertified==='yes'?' · FIPS':''}`,ostate(r.id,s.base,reqRun,new Set()),`openDeep('runtimeDeep','${r.id}')`)).join('')+
-    grp('registry')+card('#70DD7B','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null),ch('img')));
+    grp('registry')+card('#70DD7B','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null)+genImg,ch('img')));
 
   // 5 GitOps — info
   P.push(rpanel(5,'#85E270','06','GitOps delivery',rtag('same','same for every framework'),
     'Argo CD + Helm + Kustomize','Git declares desired state. Argo CD syncs it to the cluster.',
-    grp(`tools (${(G.nodes.gitopsTools||[]).length})`)+(G.nodes.gitopsTools||[]).map(t=>card('#85E270',t.name,`${t.role||''} · open detail`,`openGitops('${t.id}')`,'',null)).join(''),ch('gitops')));
+    grp(`tools (${(G.nodes.gitopsTools||[]).length})`)+(G.nodes.gitopsTools||[]).map(t=>card('#85E270',t.name,`${t.role||''} · open detail`,`openGitops('${t.id}')`,'',null)).join('')+genGit,ch('gitops')));
 
   // 6 Cluster — every cluster, choosable
   const [ct,ctx]=pickTag(s.clusterUser,s.clusterReq);
@@ -927,7 +994,7 @@ function renderResolver(){
     esc(nameById('clusters',s.cluster)),s.rq?`${esc(s.rq.name)} recommends the gold ones. ${(G.nodes.clusterComponents||[]).length} platform components run here.`:`${(G.nodes.clusterComponents||[]).length} platform components.`,
     grp(`clusters (${(G.nodes.clusters||[]).length})`)+
     (G.nodes.clusters||[]).map(c=>opt('cluster',c.id,c.name,c.cloud||'',ostate(c.id,s.cluster,clReq,new Set()),`openCluster('${c.id}')`)).join('')+
-    `<div class="sub" style="margin-top:8px">Hub-and-spoke: one Argo CD → every cluster.</div>`,ch('cluster')));
+    `<div class="sub" style="margin-top:8px">Hub-and-spoke: one Argo CD → every cluster.</div>`+genCluster,ch('cluster')));
 
   // 7 Platform — auth, observability, ORM, all choosable
   const [at,atx]=pickTag(s.authUser,s.authReq);
