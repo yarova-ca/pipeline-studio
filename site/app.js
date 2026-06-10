@@ -557,6 +557,57 @@ function decisionsFor(s){
 }
 const decBlock=(arr)=>arr&&arr.length?grp('decisions — options · lens · answer')+arr.map(decisionCard).join(''):'';
 
+// ── command progression — authored templates (ONE place) + derived ──────────
+const SCAFFOLD={
+  nextjs:'npx create-next-app@latest {app} --typescript --app --eslint',
+  react:'npm create vite@latest {app} -- --template react-ts','react-vite':'npm create vite@latest {app} -- --template react-ts',
+  vue:'npm create vue@latest {app}','vue-vite':'npm create vite@latest {app} -- --template vue-ts',
+  angular:'npx -p @angular/cli ng new {app} --routing --style=scss',svelte:'npx sv create {app}',
+  nuxt:'npx nuxi@latest init {app}',remix:'npx create-remix@latest {app}',astro:'npm create astro@latest {app}',
+  solid:'npm create solid@latest {app}','solid-vite':'npm create vite@latest {app} -- --template solid-ts',
+  qwik:'npm create qwik@latest {app}',gatsby:'npx create-gatsby@latest {app}','preact-vite':'npm create vite@latest {app} -- --template preact-ts',
+  tanstack:'npm create @tanstack/router@latest {app}',fresh:'deno run -A -r https://fresh.deno.dev {app}',redwood:'npx create-redwood-app@latest {app}',
+  'nodejs-express':'mkdir {app} && cd {app} && npm init -y && npm i express && npm i -D typescript @types/express tsx',
+  'nodejs-fastify':'mkdir {app} && cd {app} && npm init -y && npm i fastify','nodejs-nest':'npx @nestjs/cli new {app}',
+  'nodejs-hono':'npm create hono@latest {app}','nodejs-koa':'mkdir {app} && cd {app} && npm init -y && npm i koa',
+  'python-fastapi':'mkdir {app} && cd {app} && python -m venv .venv && . .venv/bin/activate && pip install "fastapi[standard]"',
+  'python-django':'pip install django && django-admin startproject {app}','python-flask':'mkdir {app} && cd {app} && python -m venv .venv && . .venv/bin/activate && pip install flask',
+  'python-litestar':'mkdir {app} && cd {app} && pip install litestar uvicorn','python-starlette':'mkdir {app} && cd {app} && pip install starlette uvicorn',
+  'go-gin':'mkdir {app} && cd {app} && go mod init {app} && go get github.com/gin-gonic/gin',
+  'go-echo':'mkdir {app} && cd {app} && go mod init {app} && go get github.com/labstack/echo/v4',
+  'go-fiber':'mkdir {app} && cd {app} && go mod init {app} && go get github.com/gofiber/fiber/v2',
+  'go-chi':'mkdir {app} && cd {app} && go mod init {app} && go get github.com/go-chi/chi/v5','go-stdlib':'mkdir {app} && cd {app} && go mod init {app}',
+  'rust-axum':'cargo new {app} && cd {app} && cargo add axum tokio --features tokio/full','rust-actix':'cargo new {app} && cd {app} && cargo add actix-web','rust-rocket':'cargo new {app} && cd {app} && cargo add rocket',
+  'ruby-rails':'gem install rails && rails new {app} --api','ruby-sinatra':'mkdir {app} && cd {app} && bundle init && bundle add sinatra',
+  'php-laravel':'composer create-project laravel/laravel {app}','php-symfony':'composer create-project symfony/skeleton {app}',
+  'kotlin-ktor':'# Scaffold at start.ktor.io, or the IntelliJ Ktor plugin','elixir-phoenix':'mix archive.install hex phx_new && mix phx.new {app}','bun-elysia':'bun create elysia {app}',
+};
+const INSTALL={npm:'npm ci',pnpm:'pnpm install --frozen-lockfile',yarn:'yarn install --immutable',bun:'bun install --frozen-lockfile',pip:'pip install -r requirements.txt',poetry:'poetry install',uv:'uv sync --frozen',go:'go mod download',cargo:'cargo fetch',maven:'mvn -q dependency:resolve',gradle:'./gradlew dependencies',bundler:'bundle install',composer:'composer install --no-dev',dotnet:'dotnet restore'};
+function scaffoldCmd(s){
+  const k=fwToKeys(s.fw), key=k.feKey!=='none'?k.feKey:k.beKey;
+  let t=SCAFFOLD[key];
+  if(!t){const g=LANG_GROUP[s.lang]||'nodejs'; t=SCAFFOLD[BE_LIST.find(x=>x.startsWith(g+'-'))]||SCAFFOLD['nodejs-express'];}
+  return t.replace(/\{app\}/g,s.fw.serviceSlug||'my-app');
+}
+function commandsFor(s){
+  const app=s.fw.serviceSlug||'my-app', port=(s.tmpl&&s.tmpl.port)||'8080', reg='ghcr.io/yarova-ca/'+app;
+  const stds=reqStds(s), shippedComp=(s.fw.shipped&&s.fw.shipped.shippedCompliance)||[], ba=(s.fw.shipped&&s.fw.shipped.buildArgs)||{};
+  let rt=ba.RUNTIME||'alpine';
+  for(const std of stds){const c=shippedComp.find(x=>x.standard===std); if(c&&c.buildArgs&&c.buildArgs.RUNTIME)rt=c.buildArgs.RUNTIME;}
+  const tgt=rt==='fips'?'runtime-fips':'runtime';
+  return {
+    scaffold:[{label:'Scaffold the service',cmd:scaffoldCmd(s)}],
+    deps:[{label:'Install dependencies (frozen lockfile)',cmd:INSTALL[(PKG_MAP[s.pkg]||s.pkg)]||'npm ci'}],
+    docker:[{label:'Build the image',cmd:`docker build -t ${reg}:dev --target ${tgt} .`},{label:'Run it locally',cmd:`docker run --rm -p ${port}:${port} ${reg}:dev`}],
+    registry:[{label:'Log in to GHCR',cmd:'echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin'},{label:'Push the image',cmd:`docker push ${reg}:$(git rev-parse --short HEAD)`},{label:'Sign it (cosign, keyless)',cmd:`cosign sign --yes ${reg}@$DIGEST`},{label:'Attach an SBOM',cmd:`syft ${reg}:dev -o spdx-json > sbom.spdx.json`}],
+    gitops:[{label:'Helm — install / upgrade',cmd:`helm upgrade --install ${app} ./helm -n prod --create-namespace -f helm/values-prod.yaml`},{label:'Kustomize — render + apply',cmd:'kustomize build kustomize/overlays/prod | kubectl apply -f -'},{label:'Argo CD — register the app',cmd:`argocd app create ${app} --repo https://github.com/yarova-ca/${app}.git --path kustomize/overlays/prod --dest-server https://kubernetes.default.svc --dest-namespace prod --sync-policy automated`}],
+    cluster:[{label:'Point kubectl at the cluster',cmd:`kubectl config use-context ${s.cluster}`},{label:'Verify the rollout',cmd:`kubectl rollout status deploy/${app} -n prod`}],
+  };
+}
+function cmdBlock(title,arr){ if(!arr||!arr.length)return'';
+  return grp(title)+arr.map((c,i)=>{const id='cmd'+(CFID++);
+    return `<div class="cmd"><div class="cmdlabel"><span><span class="cmdn">${i+1}</span>${esc(c.label)}</span><button class="gencopy" onclick="copyCode('${id}',this)">copy</button></div><pre class="cmdcode" id="${id}">${esc(c.cmd)}</pre></div>`;}).join(''); }
+
 function renderResolver(){
   const s=resolveStack();
   const rdBase=(G.nodes.runtimeDeep||[]).find(x=>x.id===s.base);
@@ -579,13 +630,18 @@ function renderResolver(){
   const DEC=decisionsFor(s);
   const decDeps=decBlock(DEC.deps), decBuild=decBlock(DEC.build), decComp=decBlock(DEC.compliance),
         decCI=decBlock(DEC.ci), decGit=decBlock(DEC.gitops), decCluster=decBlock(DEC.cluster), decPlat=decBlock(DEC.platform);
+  // run-these commands for this service+lens
+  const CMD=commandsFor(s);
+  const cmdScaffold=cmdBlock('commands — scaffold',CMD.scaffold), cmdDeps=cmdBlock('commands — install',CMD.deps),
+        cmdDocker=cmdBlock('commands — build & run',CMD.docker), cmdReg=cmdBlock('commands — push · sign · sbom',CMD.registry),
+        cmdGitops=cmdBlock('commands — deploy',CMD.gitops), cmdCluster=cmdBlock('commands — cluster',CMD.cluster);
 
   // 0 Repository — switch within the same category, all 106 in the top picker
   const sib=(G.nodes.frameworks||[]).filter(f=>f.categoryId===s.fw.categoryId);
   P.push(rpanel(0,'#19C8A8','01','Repository',rtag('you','you starred this'),
     esc(s.fw.name),`${esc(LANG_HUMAN[s.lang]||s.lang)} · ${esc(s.fw.maturity||'')} · ${esc(s.fw.license||'')} · git ${esc(s.fw.serviceSlug||s.fw.id)}`,
     grp(`alternatives in ${esc(nameById('categories',s.fw.categoryId))} (${sib.length}) — all 106 in the top picker`)+
-    sib.map(f=>opt('fw',f.id,f.name,(f.languages||[]).join('/'),ostate(f.id,s.fw.id),`openFw('${f.id}')`)).join(''),ch('repo')));
+    sib.map(f=>opt('fw',f.id,f.name,(f.languages||[]).join('/'),ostate(f.id,s.fw.id),`openFw('${f.id}')`)).join('')+cmdScaffold,ch('repo')));
 
   // 1 Dependencies — every package manager for the language, choosable
   const pkgReq=new Set(), pkgRec=new Set([s.pkgDef]);
@@ -593,7 +649,7 @@ function renderResolver(){
     esc(nameById('pkgBuildDeep',s.pkg)),`Package manager + build tool for ${esc(LANG_HUMAN[s.lang]||s.lang)}. Lockfile committed; CI uses frozen install.`,
     decDeps+grp(`package managers (${s.pkgList.length})`)+
     s.pkgList.map(p=>opt('pkg',p.id,p.name,p.lockfile?String(p.lockfile).split('.')[0]:'',ostate(p.id,s.pkg,pkgReq,pkgRec),`openPkg('${p.id}')`)).join('')+
-    (s.btList.length?grp(`build tools (${s.btList.length})`)+s.btList.map(p=>opt('buildtool',p.id,p.name,p.what?String(p.what).slice(0,40):'',ostate(p.id,s.buildtool,new Set(),new Set()),`openPkg('${p.id}')`)).join(''):''),ch('deps')));
+    (s.btList.length?grp(`build tools (${s.btList.length})`)+s.btList.map(p=>opt('buildtool',p.id,p.name,p.what?String(p.what).slice(0,40):'',ostate(p.id,s.buildtool,new Set(),new Set()),`openPkg('${p.id}')`)).join(''):'')+cmdDeps,ch('deps')));
 
   // 2 CI/CD pipeline — same for all; ARGs resolved from your picks
   P.push(rpanel(2,'#44D292','03','CI/CD pipeline',rtag('same','same for every framework'),
@@ -624,12 +680,12 @@ function renderResolver(){
     esc(baseName),esc(s.baseWhy)+' Built, signed (cosign) + SBOM, pushed to GHCR.',
     decBuild+grp(`base image (${runAll.length})`)+
     runAll.map(r=>opt('runtime',r.id,r.name,`${r.baseOs||''}${r.fipsCertified==='yes'?' · FIPS':''}`,ostate(r.id,s.base,reqRun,new Set()),`openDeep('runtimeDeep','${r.id}')`)).join('')+
-    grp('registry')+card('#70DD7B','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null)+genImg,ch('img')));
+    grp('registry')+card('#70DD7B','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null)+genImg+cmdDocker+cmdReg,ch('img')));
 
   // 5 GitOps — info
   P.push(rpanel(5,'#85E270','06','GitOps delivery',rtag('same','same for every framework'),
     'Argo CD + Helm + Kustomize','Git declares desired state. Argo CD syncs it to the cluster.',
-    decGit+grp(`tools (${(G.nodes.gitopsTools||[]).length})`)+(G.nodes.gitopsTools||[]).map(t=>card('#85E270',t.name,`${t.role||''} · open detail`,`openGitops('${t.id}')`,'',null)).join('')+genGit,ch('gitops')));
+    decGit+grp(`tools (${(G.nodes.gitopsTools||[]).length})`)+(G.nodes.gitopsTools||[]).map(t=>card('#85E270',t.name,`${t.role||''} · open detail`,`openGitops('${t.id}')`,'',null)).join('')+genGit+cmdGitops,ch('gitops')));
 
   // 6 Cluster — every cluster, choosable
   const [ct,ctx]=pickTag(s.clusterUser,s.clusterReq);
@@ -638,7 +694,7 @@ function renderResolver(){
     esc(nameById('clusters',s.cluster)),s.rq?`${esc(s.rq.name)} recommends the gold ones. ${(G.nodes.clusterComponents||[]).length} platform components run here.`:`${(G.nodes.clusterComponents||[]).length} platform components.`,
     decCluster+grp(`clusters (${(G.nodes.clusters||[]).length})`)+
     (G.nodes.clusters||[]).map(c=>opt('cluster',c.id,c.name,c.cloud||'',ostate(c.id,s.cluster,clReq,new Set()),`openCluster('${c.id}')`)).join('')+
-    `<div class="sub" style="margin-top:8px">Hub-and-spoke: one Argo CD → every cluster.</div>`+genCluster,ch('cluster')));
+    `<div class="sub" style="margin-top:8px">Hub-and-spoke: one Argo CD → every cluster.</div>`+genCluster+cmdCluster,ch('cluster')));
 
   // 7 Platform — auth, observability, ORM, all choosable
   const [at,atx]=pickTag(s.authUser,s.authReq);
