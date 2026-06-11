@@ -343,6 +343,12 @@
   .cmdlabel{display:flex;align-items:center;justify-content:space-between;padding:6px 11px;font-size:11px;color:var(--ink2);background:var(--surface2,#1C1F28);border-bottom:1px solid var(--hair)}
   .cmdcode{margin:0;padding:9px 11px;overflow:auto;font-family:var(--fmono,monospace);font-size:11.5px;line-height:1.5;color:var(--lime);white-space:pre-wrap;word-break:break-word}
   .cmdn{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--hair2);font-size:9px;margin-right:7px;color:var(--ink3)}
+  /* filters + applicability legend */
+  .filterhint{display:flex;flex-direction:column;justify-content:center;font-size:11.5px;color:var(--ink2);line-height:1.5;padding-left:6px;border-left:1px solid var(--hair);max-width:340px}
+  .filterhint b{font-family:var(--fdisplay);font-size:14px;color:var(--ink)}
+  .applegend{display:flex;align-items:center;gap:7px;margin-left:auto}
+  .lg{font-size:9.5px;font-family:var(--fmono);text-transform:uppercase;letter-spacing:.07em;padding:3px 9px;border-radius:20px;border:1px solid currentColor}
+  .lg.gold{color:var(--gold)} .lg.teal{color:var(--teal)} .lg.dim{color:var(--ink3)} .lg.red{color:#e8615a}
 
   /* selectable option rows in resolver panels */
   .opt{position:relative;display:flex;flex-direction:column;gap:3px;padding:11px 13px;margin-bottom:8px;

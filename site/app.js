@@ -374,7 +374,7 @@ window.openRegistry=()=>openDrawer('GHCR — ghcr.io/yarova-ca',
 // Every stage shows ALL its options, marked applies/recommended/chosen/available.
 // Click any option = pick it; the whole path reflows.
 let MODE='catalog';
-const RS={fw:null,industry:'financial-services',pkg:null,buildtool:null,orm:null,auth:null,obs:null,runtime:null,cluster:null,region:null};
+const RS={fw:null,industry:'financial-services',category:'',complianceFocus:'',pkg:null,buildtool:null,orm:null,auth:null,obs:null,runtime:null,cluster:null,region:null};
 let LASTR={};
 const LANG_DEFPKG={ts:'pnpm',js:'pnpm',py:'uv',go:'gomod',rust:'cargo',java:'maven',kotlin:'gradle',php:'composer',ruby:'bundler',csharp:'gomod',elixir:'gomod'};
 const LANG_ORM={ts:'orm-prisma',js:'orm-prisma',py:'orm-sqlalchemy',go:'orm-gorm',rust:'orm-sqlx'};
@@ -721,29 +721,31 @@ function renderResolver(){
   observeColumns();
 }
 
+// the top bar = FILTERS. the per-axis choices (pkg, auth, orm, base, cluster)
+// live INSIDE the framework's flow as decision options — pick them there.
+function filteredFrameworks(){
+  let list=G.nodes.frameworks||[];
+  if(RS.category)list=list.filter(f=>f.categoryId===RS.category);
+  if(RS.complianceFocus){const std=(REGIME_TO_STD[RS.complianceFocus]||[RS.complianceFocus])[0];
+    list=list.filter(f=>((f.shipped&&f.shipped.shippedCompliance)||[]).some(c=>c.standard===std));}
+  return list;
+}
 function renderBuilder(){
   const s=resolveStack();
   const opt=(arr,val,fn)=>arr.map(o=>`<option value="${esc(o.id)}" ${o.id===val?'selected':''}>${esc(fn?fn(o):(o.name||o.id))}</option>`).join('');
-  const regions=G.nodes.regions||[];
+  const cats=[...(G.nodes.categories||[])].sort((a,b)=>(parseInt(a.id.replace(/\D/g,''))||0)-(parseInt(b.id.replace(/\D/g,''))||0));
+  const fwList=filteredFrameworks();
   $("#builder").innerHTML=`
-    <div class="pick lead"><label>Framework — git repo</label><select id="pFw">${opt(G.nodes.frameworks||[],s.fw.id)}</select></div>
-    <div class="pick lead"><label>Industry</label><select id="pInd"><option value="">— none —</option>${opt(G.nodes.verticals||[],RS.industry)}</select></div>
-    <div class="pick"><label>Package manager</label><select id="pPkg">${opt(s.pkgList,s.pkg)}</select></div>
-    <div class="pick"><label>ORM / data</label><select id="pOrm">${opt(s.ormList,s.orm)}</select></div>
-    <div class="pick"><label>Auth</label><select id="pAuth">${opt(G.nodes.authDeep||[],s.auth)}</select></div>
-    <div class="pick"><label>Observability</label><select id="pObs">${opt(G.nodes.observabilityDeep||[],s.obs)}</select></div>
-    <div class="pick"><label>Base image</label><select id="pRun">${opt(G.nodes.runtimeDeep||[],s.base)}</select></div>
-    <div class="pick"><label>Deploy cluster</label><select id="pCl">${opt(G.nodes.clusters||[],s.cluster)}</select></div>
-    ${regions.length?`<div class="pick"><label>Region</label><select id="pRegion"><option value="">— any (Canada-first) —</option>${opt(regions,RS.region)}</select></div>`:''}`;
+    <div class="pick"><label>Filter · category</label><select id="pCat"><option value="">All categories</option>${opt(cats,RS.category)}</select></div>
+    <div class="pick"><label>Filter · compliance</label><select id="pComp"><option value="">Any</option>${opt(G.nodes.complianceProfiles||[],RS.complianceFocus)}</select></div>
+    <div class="pick lead"><label>Framework — the service (${fwList.length})</label><select id="pFw">${opt(fwList,s.fw.id)}</select></div>
+    <div class="pick lead"><label>Lens · industry</label><select id="pInd"><option value="">— none —</option>${opt(G.nodes.verticals||[],RS.industry)}</select></div>
+    <div class="filterhint"><b>${esc(s.fw.name)}</b> — its own build journey below, left to right.<br>Decisions · commands · files. Pick any option inside to change it.</div>
+    <div class="applegend"><span class="lg gold">applies / forced</span><span class="lg teal">available</span><span class="lg dim">not here</span><span class="lg red">gap</span></div>`;
+  $("#pCat").onchange=e=>{RS.category=e.target.value;const l=filteredFrameworks();if(l.length&&!l.some(f=>f.id===RS.fw)){RS.fw=l[0].id;RS.pkg=RS.orm=RS.buildtool=null;}refreshBuild();};
+  $("#pComp").onchange=e=>{RS.complianceFocus=e.target.value;const l=filteredFrameworks();if(l.length&&!l.some(f=>f.id===RS.fw)){RS.fw=l[0].id;RS.pkg=RS.orm=RS.buildtool=null;}refreshBuild();};
   $("#pFw").onchange=e=>pickAxis('fw',e.target.value);
   $("#pInd").onchange=e=>pickAxis('industry',e.target.value);
-  $("#pPkg").onchange=e=>pickAxis('pkg',e.target.value);
-  $("#pOrm").onchange=e=>pickAxis('orm',e.target.value);
-  $("#pAuth").onchange=e=>pickAxis('auth',e.target.value);
-  $("#pObs").onchange=e=>pickAxis('obs',e.target.value);
-  $("#pRun").onchange=e=>pickAxis('runtime',e.target.value);
-  $("#pCl").onchange=e=>pickAxis('cluster',e.target.value);
-  const pr=$("#pRegion");if(pr)pr.onchange=e=>pickAxis('region',e.target.value);
 }
 function refreshBuild(){renderBuilder();renderResolver();}
 window.setMode=(m)=>{
