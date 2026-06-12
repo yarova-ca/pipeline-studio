@@ -19,18 +19,18 @@ var PKG_MANAGERS = {
   dotnet: { installCmd: "dotnet restore", dockerSetup: "", dockerCopy: "COPY *.csproj ./" }
 };
 var FRONTEND_STACKS = {
-  nextjs: { label: "Next.js 15", staticOutput: false, outputDir: ".next", port: "3000", healthPath: "/api/health", buildCmd: "npm run build" },
+  nextjs: { label: "Next.js", staticOutput: false, outputDir: ".next", port: "3000", healthPath: "/api/health", buildCmd: "npm run build" },
   react: { label: "React SPA", staticOutput: true, outputDir: "build", port: "80" },
-  vue: { label: "Vue 3", staticOutput: true, outputDir: "dist", port: "80" },
-  angular: { label: "Angular 18", staticOutput: true, outputDir: "dist/app", port: "80", buildCmd: "ng build" },
+  vue: { label: "Vue", staticOutput: true, outputDir: "dist", port: "80" },
+  angular: { label: "Angular", staticOutput: true, outputDir: "dist/app", port: "80", buildCmd: "ng build" },
   svelte: { label: "SvelteKit", staticOutput: false, outputDir: "build", port: "3000", healthPath: "/api/health" },
-  nuxt: { label: "Nuxt 3", staticOutput: false, outputDir: ".output", port: "3000", healthPath: "/api/health" },
+  nuxt: { label: "Nuxt", staticOutput: false, outputDir: ".output", port: "3000", healthPath: "/api/health" },
   mobile: { label: "React Native (bare)", staticOutput: false, outputDir: "N/A" },
-  remix: { label: "Remix 2", staticOutput: false, outputDir: "build", port: "3000", healthPath: "/api/health" },
+  remix: { label: "Remix", staticOutput: false, outputDir: "build", port: "3000", healthPath: "/api/health" },
   "react-vite": { label: "React + Vite", staticOutput: true, outputDir: "dist", port: "80" },
-  gatsby: { label: "Gatsby 5", staticOutput: true, outputDir: "public", port: "80" },
+  gatsby: { label: "Gatsby", staticOutput: true, outputDir: "public", port: "80" },
   "vue-vite": { label: "Vue 3 + Vite", staticOutput: true, outputDir: "dist", port: "80" },
-  astro: { label: "Astro 4", staticOutput: true, outputDir: "dist", port: "3000", healthPath: "/" },
+  astro: { label: "Astro", staticOutput: true, outputDir: "dist", port: "3000", healthPath: "/" },
   "mobile-expo": { label: "Expo (managed)", staticOutput: false, outputDir: "N/A" },
   solid: { label: "SolidStart", staticOutput: false, outputDir: ".output", port: "3000", healthPath: "/api/health" },
   "solid-vite": { label: "Solid + Vite", staticOutput: true, outputDir: "dist", port: "80" },
@@ -71,9 +71,9 @@ var BACKEND_STACKS = {
   "rust-actix": { label: "Actix-web", port: "8080", startCmd: "/app", healthPath: "/health", buildCmd: "cargo build --release" },
   "rust-rocket": { label: "Rocket", port: "8000", startCmd: "/app", healthPath: "/health", buildCmd: "cargo build --release" },
   "rust-warp": { label: "Warp", port: "8080", startCmd: "/app", healthPath: "/health", buildCmd: "cargo build --release" },
-  "ruby-rails": { label: "Rails 7", port: "3000", startCmd: "bundle exec puma -C config/puma.rb", healthPath: "/health", buildCmd: "bundle exec rake assets:precompile" },
+  "ruby-rails": { label: "Rails", port: "3000", startCmd: "bundle exec puma -C config/puma.rb", healthPath: "/health", buildCmd: "bundle exec rake assets:precompile" },
   "ruby-sinatra": { label: "Sinatra", port: "4567", startCmd: "bundle exec ruby app.rb", healthPath: "/health" },
-  "php-laravel": { label: "Laravel 11", port: "8000", startCmd: "php artisan serve --host=0.0.0.0", healthPath: "/health" },
+  "php-laravel": { label: "Laravel", port: "8000", startCmd: "php artisan serve --host=0.0.0.0", healthPath: "/health" },
   "php-symfony": { label: "Symfony 7", port: "8000", startCmd: "php -S 0.0.0.0:8000 public/index.php", healthPath: "/health" },
   "php-slim": { label: "Slim 4", port: "8000", startCmd: "php -S 0.0.0.0:8000 public/index.php", healthPath: "/health" },
   "nodejs-koa": { label: "Koa", port: "3000", startCmd: "node src/index.js", healthPath: "/health" },
@@ -151,13 +151,36 @@ function baseNote(group, choice) {
 `;
   return BASE_NOTES[choice] ? BASE_NOTES[choice] + "\n" : "";
 }
+var GROUP_TOOLCHAIN = {
+  nodejs: { builder: "node:22-alpine", runtime: "gcr.io/distroless/nodejs22-debian12:nonroot" },
+  bun: { builder: "oven/bun:1-alpine", runtime: "oven/bun:1-alpine" },
+  deno: { builder: "denoland/deno:alpine", runtime: "denoland/deno:alpine" },
+  go: { builder: "golang:1.23-alpine", runtime: "gcr.io/distroless/static-debian12:nonroot" },
+  python: { builder: "python:3.12-slim", runtime: "gcr.io/distroless/python3-debian12:nonroot" },
+  java: { builder: "maven:3.9-eclipse-temurin-21", runtime: "gcr.io/distroless/java21-debian12:nonroot" },
+  kotlin: { builder: "gradle:8-jdk21", runtime: "gcr.io/distroless/java21-debian12:nonroot" },
+  rust: { builder: "rust:1.83-slim", runtime: "gcr.io/distroless/cc-debian12:nonroot" },
+  ruby: { builder: "ruby:3.3-slim", runtime: "ruby:3.3-slim" },
+  php: { builder: "composer:2", runtime: "php:8.3-fpm-alpine" },
+  dotnet: { builder: "mcr.microsoft.com/dotnet/sdk:8.0", runtime: "mcr.microsoft.com/dotnet/aspnet:8.0" },
+  elixir: { builder: "elixir:1.17-alpine", runtime: "alpine:3.21" },
+  swift: { builder: "swift:6.0", runtime: "swift:6.0-slim" }
+};
+function userFor(baseimage, fallback) {
+  if (!baseimage) return fallback;
+  if (/^(fips|ubi-micro|ubi-minimal)$/.test(baseimage)) return "1001";
+  if (baseimage === "scratch") return "";
+  return fallback;
+}
 function generateDockerfile(config) {
   const feKey = config.feKey;
   const beKey = config.beKey;
   const fe = FRONTEND_STACKS[feKey] ?? FRONTEND_STACKS["nextjs"];
   const be = BACKEND_STACKS[beKey] ?? BACKEND_STACKS["none"];
-  const builder = be.builder ?? fe.builder ?? NODE_BUILDER;
-  const runtime = be.runtime ?? fe.runtime ?? NODE_DISTROLESS;
+  const groupKey = beGroupFromKey(beKey);
+  const chain = GROUP_TOOLCHAIN[groupKey];
+  const builder = be.builder ?? (beKey !== "none" && chain ? chain.builder : fe.builder ?? NODE_BUILDER);
+  const runtime = be.runtime ?? (beKey !== "none" && chain ? chain.runtime : fe.runtime ?? NODE_DISTROLESS);
   const beGroup = beGroupFromKey(beKey);
   const pm = PKG_MANAGERS[config.pkgMgr] ?? PKG_MANAGERS["npm"];
   const port = config.port ?? be.port ?? fe.port ?? "8080";
@@ -175,11 +198,14 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux ${be.buildCmd ?? 'go build -ldflags="-s -w" -o app ./cmd/...'}
 
-${baseNote("go", config.baseimage)}FROM ${runtimeFor("go", config.baseimage, runtime + ":nonroot")} AS runtime
+${baseNote("go", config.baseimage)}FROM ${runtimeFor("go", config.baseimage, runtime)} AS runtime
 COPY --from=builder /app/app /app
-USER nonroot
+${(() => {
+      const u = userFor(config.baseimage, "nonroot");
+      return u ? `USER ${u}` : "# scratch: no user database - runs as uid 0 of an EMPTY image";
+    })()}
 EXPOSE ${port}
-CMD ["${startCmd || "/app"}"]`;
+CMD ["/app"]`;
   }
   if (beGroup === "python") {
     const pkgMgrKey = config.pkgMgr;
@@ -197,10 +223,10 @@ FROM ${builder || PYTHON_BUILDER} AS builder
 WORKDIR /app
 ${pm.dockerSetup ? pm.dockerSetup + "\n" : ""}${installLayer}
 
-${baseNote("python", config.baseimage)}FROM ${runtimeFor("python", config.baseimage, runtime + ":nonroot")} AS runtime
+${baseNote("python", config.baseimage)}FROM ${runtimeFor("python", config.baseimage, runtime)} AS runtime
 WORKDIR /app
 ${runtimeCopy}
-USER nonroot
+USER ${userFor(config.baseimage, "nonroot") || "nonroot"}
 EXPOSE ${port}
 ${buildPythonCmd(startCmd)}`;
   }
@@ -215,7 +241,7 @@ RUN mvn dependency:go-offline -q
 COPY src ./src
 RUN ${be.buildCmd ?? "mvn package -DskipTests -q"}
 
-FROM ${runtime}:nonroot AS runtime
+FROM ${runtime} AS runtime
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 USER nonroot
@@ -319,12 +345,12 @@ ${baseNote("nodejs", config.baseimage)}FROM ${runtimeFor("nodejs", config.baseim
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=${port}
-COPY --from=builder --chown=nonroot:nonroot /app ./
-USER nonroot
+COPY --from=builder --chown=${userFor(config.baseimage, "nonroot") || "nonroot"}:0 /app ./
+USER ${userFor(config.baseimage, "nonroot") || "nonroot"}
 EXPOSE ${port}
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \\
   CMD ["node", "-e", "fetch('http://127.0.0.1:${port}${healthPath}').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
-CMD ["${startCmd || "dist/index.js"}"]`;
+CMD [${JSON.stringify((startCmd || "dist/index.js").split(" ")).slice(1, -1)}]`;
   }
   if (feKey === "mobile" || feKey === "mobile-expo") {
     return `# Mobile stack (${fe.label}) does not use containers.
@@ -357,10 +383,10 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-COPY --from=builder --chown=nonroot:nonroot /app/.next/standalone ./
-COPY --from=builder --chown=nonroot:nonroot /app/.next/static ./.next/static
-COPY --from=builder --chown=nonroot:nonroot /app/public ./public
-USER nonroot
+COPY --from=builder --chown=${userFor(config.baseimage, "nonroot") || "nonroot"}:0 /app/.next/standalone ./
+COPY --from=builder --chown=${userFor(config.baseimage, "nonroot") || "nonroot"}:0 /app/.next/static ./.next/static
+COPY --from=builder --chown=${userFor(config.baseimage, "nonroot") || "nonroot"}:0 /app/public ./public
+USER ${userFor(config.baseimage, "nonroot") || "nonroot"}
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \\
   CMD ["node", "-e", "fetch('http://127.0.0.1:3000${healthPath}').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
@@ -474,12 +500,9 @@ function buildRegMeta(regKey) {
         uses: ${TV.awsEcrLogin}
         with:
           mask-password: true`,
-        promoteCmd: `aws ecr batch-check-layer-availability \\
-            --repository-name myapp \\
-            --layer-digests \${{ needs.build.outputs.image-digest }}
-          docker buildx imagetools create \\
-            --tag \${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.\${{ vars.AWS_REGION }}.amazonaws.com/myapp:latest \\
-            \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}`
+        promoteCmd: `aws ecr describe-images \\
+          --repository-name myapp \\
+          --image-ids imageDigest=\${{ needs.build.outputs.image-digest }}`
       };
     case "gar":
       return {
@@ -640,7 +663,7 @@ function getScanStepsGHA(cfg, imageArg) {
             -v /var/run/docker.sock:/var/run/docker.sock \\
             anchore/grype:v0.85.0 \\
             ${isPR ? "myapp:pr-${{ github.sha }}" : "${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}"} \\
-            --severity critical --fail-on critical \\
+            --fail-on critical \\
             --output sarif > grype.sarif
       - uses: ${TV.codeqlUploadSarif}
         if: always()
@@ -650,6 +673,7 @@ function getScanStepsGHA(cfg, imageArg) {
       return `      - name: Container scan \u2014 Snyk
         uses: snyk/actions/docker@master
         with:
+          args: --sarif-file-output=snyk.sarif
           ${isPR ? "image: myapp:pr-${{ github.sha }}" : "image: ${{ needs.build.outputs.image-ref }}@${{ needs.build.outputs.image-digest }}"}
           args: --severity-threshold=high --file=Dockerfile
         env:
@@ -718,6 +742,7 @@ function getSBOMStepsGHA(cfg, phase) {
         with:
           name: sbom-${isPR ? "pr-" : "spdx-"}\${{ github.sha }}
           path: sbom.cdx.json`;
+    case "cdxgen":
     case "cyclonedx":
       return `      - name: SBOM generation \u2014 CycloneDX
         run: |
@@ -731,10 +756,10 @@ function getSBOMStepsGHA(cfg, phase) {
       return `      - name: SBOM + in-toto attestation \u2014 SLSA
         uses: ${TV.cosignInstaller}
       - run: |
-          ${isPR ? "" : "# "}cosign attest --yes \\
-            --predicate sbom.spdx.json \\
-            --type spdxjson \\
-            ${imageRef}
+${isPR ? `          cosign attest --yes \\
+            --predicate sbom.spdx.json --type spdxjson \\
+            ${imageRef}` : `          # attest runs in the sign job after push (needs the registry digest)
+          echo "SBOM ready for attestation"`}
       - uses: ${TV.actionUploadArtifact}
         with:
           name: sbom-${isPR ? "pr-" : "spdx-"}\${{ github.sha }}
@@ -762,8 +787,13 @@ function getSBOMStepsGHA(cfg, phase) {
           path: sbom.spdx.json`;
   }
 }
+function sbomFileFor(sbom) {
+  if (sbom === "trivy" || sbom === "cyclonedx" || sbom === "cdxgen") return { file: "sbom.cdx.json", type: "cyclonedx" };
+  return { file: "sbom.spdx.json", type: "spdxjson" };
+}
 function getSignStepsGHA(cfg) {
   switch (cfg.signing) {
+    case "notation":
     case "notary2":
       return `      - name: Install Notation
         run: |
@@ -793,7 +823,7 @@ function getSignStepsGHA(cfg) {
         run: |
           cosign attest --yes \\
             --rekor-url https://rekor.sigstore.dev \\
-            --predicate sbom.spdx.json \\
+            --predicate ${sbomFileFor(cfg.sbom).file} \\
             --type spdxjson \\
             \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
           cosign sign --yes \\
@@ -806,7 +836,7 @@ function getSignStepsGHA(cfg) {
             \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}
       - run: |
           cosign attest --yes --rekor-url https://rekor.sigstore.dev \\
-            --predicate sbom.spdx.json --type spdxjson \\
+            --predicate ${sbomFileFor(cfg.sbom).file} --type ${sbomFileFor(cfg.sbom).type} \\
             \${{ needs.build.outputs.image-ref }}@\${{ needs.build.outputs.image-digest }}`;
   }
 }

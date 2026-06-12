@@ -253,7 +253,7 @@
    "setup": "Deploy Harbor (Helm), create robot account, store its token as a CI secret",
    "residency": "Wherever YOU run it — full control",
    "id": "harbor",
-   "login": "docker login $HARBOR_HOST -u robot$ci -p $HARBOR_TOKEN",
+   "login": "docker login $HARBOR_HOST -u 'robot$ci' -p $HARBOR_TOKEN",
    "host": "$HARBOR_HOST/apps"
   },
   {
@@ -612,7 +612,52 @@
   {
    "term": "Flux",
    "full": "",
-   "def": "A GitOps tool by Weaveworks. Continuously syncs cluster state to match a git repository. Pulls changes (vs ArgoCD push). Supports Kustomize and Helm. CNCF graduated."
+   "def": "A GitOps controller that pulls desired state from Git and applies it to the cluster — same pull model as Argo CD, but without Argo's built-in UI."
+  },
+  {
+   "term": "container",
+   "full": "",
+   "def": "A sealed box holding your app and everything it needs, so it runs identically on any computer. Docker is the tool that builds and runs them."
+  },
+  {
+   "term": "registry",
+   "full": "",
+   "def": "The warehouse where container images are stored and versioned. CI pushes images in; clusters pull images out. GHCR, ECR and Harbor are registries."
+  },
+  {
+   "term": "cluster",
+   "full": "",
+   "def": "A group of machines that run your containers together, managed by Kubernetes. It restarts crashed apps and spreads load automatically."
+  },
+  {
+   "term": "CI",
+   "full": "Continuous Integration",
+   "def": "Robots that build and test every code change automatically, before it can be merged. GitHub Actions is the CI used here."
+  },
+  {
+   "term": "ORM",
+   "full": "Object-Relational Mapper",
+   "def": "A library that lets your code talk to the database using normal objects instead of hand-written SQL. Prisma and GORM are ORMs."
+  },
+  {
+   "term": "MFA",
+   "full": "Multi-Factor Authentication",
+   "def": "A second proof beyond the password — a phone prompt, code, or security key. Stops stolen-password logins."
+  },
+  {
+   "term": "FIPS",
+   "full": "FIPS 140-3",
+   "def": "A US/Canada government standard for validated encryption modules. Regulated industries must run crypto that passed this validation."
+  },
+  {
+   "term": "lockfile",
+   "full": "",
+   "def": "The exact, frozen list of every dependency version your project uses. It makes every install identical — on your laptop and in CI."
+  },
+  {
+   "term": "middleware",
+   "full": "",
+   "def": "Code that runs on every request before your logic — checking sign-in, writing audit logs, counting metrics."
   }
  ],
  "scenes": {
@@ -1311,7 +1356,7 @@
     ],
     [
      "Tests run on every update PR",
-     "you fix真 breaks they catch"
+     "you fix what they catch"
     ],
     [
      "Base images rebuilt on schedule (Scene 8 workflow)",
@@ -1635,5 +1680,23 @@
   "Edge functions (Cloudflare Workers, Lambda@Edge)",
   "Data / ML services",
   "Games"
- ]
+ ],
+ "industryPlain": {
+  "financial-services": "Banks, lenders, money apps — the heaviest money-movement rules in Canada.",
+  "healthcare-and-life-sciences": "Hospitals, clinics, health apps — patient data has its own provincial laws.",
+  "government-and-public-sector": "Serving government — citizen data must stay sovereign and classified-safe.",
+  "defense-and-intelligence": "Defence work — classified data, security clearances, export controls.",
+  "energy-and-environment": "Power, pipelines, utilities — systems that move physical things safely.",
+  "technology": "Software companies and SaaS — the lightest rulebook; B2B buyers ask for SOC 2.",
+  "telecommunications": "Networks and carriers — critical infrastructure with privacy duties.",
+  "retail-and-commerce": "Stores and e-commerce — the moment you take cards, card rules apply.",
+  "manufacturing-and-industrial": "Factories and industrial systems — uptime and supply-chain security.",
+  "media-and-entertainment": "Content, streaming, games-adjacent — piracy and audience privacy.",
+  "education": "Schools and ed-tech — students' records are protected data.",
+  "transportation-and-logistics": "Moving people and goods — control systems and critical infrastructure.",
+  "real-estate-and-construction": "Property and building — wire-fraud is the classic attack here.",
+  "agriculture": "Farms and food chains — traceability rules for recalls.",
+  "legal-and-professional-services": "Law and consulting firms — client confidentiality above all.",
+  "non-profit-and-social": "Charities and NGOs — donor trust and donation card data."
+ }
 }

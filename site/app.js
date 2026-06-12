@@ -1,12 +1,13 @@
 import * as GEN from "./generators.js";
 let G=null, K={}, LENS={vertical:""}, REQ=null;
 // the user's decisions — made explicitly, persisted, never pre-made
-const DECIDED=JSON.parse(localStorage.getItem('ys-decided')||'{}');
+const DECIDED=(()=>{try{const v=JSON.parse(localStorage.getItem('ys-decided')||'{}');
+  return (v&&typeof v==='object'&&!Array.isArray(v))?v:{};}catch(e){return {};}})();
 function decide(scene){DECIDED[scene]=true;localStorage.setItem('ys-decided',JSON.stringify(DECIDED));}
 
 let RA=new Set(),RO=new Set(),RG=new Set(),RC=new Set(),RT=new Set();
 const $=(s,r=document)=>r.querySelector(s);
-const esc=(s)=>String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc=(s)=>String(s==null?"":s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const stripTags=(s)=>String(s==null?"":s).replace(/<[^>]*>/g,"").trim();
 const by=(arr,k)=>{const m={};(arr||[]).forEach(x=>{(m[x[k]]||=[]).push(x)});return m;};
 const lensOn=()=>!!LENS.vertical;
@@ -31,7 +32,7 @@ function st(required, universal){
 
 // ── building blocks ─────────────────────────────────────────────────────────
 const CAT_COLOR=(cid)=>{const n=parseInt((cid||'').replace(/\D/g,''))||0;
-  if(n<=8)return'var(--teal)'; if(n<=13)return'var(--violet)'; if(n<=27)return'var(--lime)'; return'var(--cyan)';};
+  if(n<=8)return'#0B7A66'; if(n<=13)return'#6D28D9'; if(n<=27)return'#3F6212'; return'#0E7490';};
 
 function card(accent,title,meta,onclick,state,chip){
   const cls=`card${state?' '+state:''}`;
@@ -490,13 +491,17 @@ function ostate(id,chosenId,reqSet,recSet){
 }
 window.pickAxis=(axis,id)=>{
   RS[axis]=id;
-  if(axis==='industry'&&id){decide('s1');localStorage.setItem('ys-industry',id);}
+  if(axis==='industry'&&id){
+    const hadProgress=Object.keys(DECIDED).some(k=>/^s([2-9]|1[0-8])$/.test(k));
+    decide('s1');localStorage.setItem('ys-industry',id);
+    if(hadProgress)RS._industryChanged=nameById('verticals',id);
+  }
   if(axis==='industry'){RS.auth=null;RS.obs=null;RS.cluster=null;RS.runtime=null;}
   if(axis==='fw'){RS.pkg=null;RS.buildtool=null;RS.orm=null;}
   refreshBuild();
 };
 function rtag(kind,txt){return `<span class="rtag ${kind}">${esc(txt)}</span>`;}
-function pickTag(user,req){return user?['you','your choice']:req?['req','required by industry']:['def','default'];}
+
 function rpanel(idx,accent,n,name,tagHtml,valHtml,whyHtml,bodyHtml,changed){
   const sn=String(idx+1);
   const sc=(K.scenes||{})[sn]||{}, st=(K.sceneStd||{})[sn]||{};
@@ -577,14 +582,6 @@ window.copyCode=(id,btn)=>{const el=document.getElementById(id);if(!el)return;
 const REGIME_TO_STD={'fips-140-3':['fips','fedramp'],'fedramp-mod':['fedramp'],'fedramp-high':['fedramp'],'pci-dss-4':['pci'],'hipaa':['hipaa'],'pipeda':['pipeda'],'soc2-typeii':['soc2'],'iso27001':['iso27001'],'cmmc-l2':['cmmc'],'nerc-cip':['nerccip']};
 function reqStds(s){const out=new Set();for(const id of (s.regimes||[])){(REGIME_TO_STD[id]||[]).forEach(x=>out.add(x));}return out;}
 function axisValues(arg){const a=(G.nodes.buildAxes||[]).find(x=>x.arg===arg||x.id===arg);return a&&a.validValues?a.validValues:[];}
-function decisionCard(d){
-  const vc={forced:'amber',gap:'red',required:'teal',recommended:'teal',you:'teal',set:'',off:'dim'};
-  const cls=vc[d.verdict]||'';
-  const opts=(d.options||[]).slice(0,7).map(o=>`<span class="dopt${(''+o).toLowerCase()===(''+d.answer).toLowerCase()?' on':''}">${esc(o)}</span>`).join('');
-  return `<div class="dcard ${cls}"><div class="dq">${esc(d.q)}${d.disc?` <span class="disc ${d.disc.toLowerCase()}">${d.disc}</span>`:''}</div>`+
-    `<div class="da"><span class="dans">${esc(d.answer)}</span>${(d.verdict&&d.verdict!=='set')?`<span class="dv ${cls}">${esc(d.verdict)}</span>`:''}</div>`+
-    `${d.why?`<div class="dwhy">${esc(d.why)}</div>`:''}${opts?`<div class="dopts">${opts}</div>`:''}</div>`;
-}
 function decisionsFor(s){
   const sh=(s.fw.shipped)||{}, ba=sh.buildArgs||{}, mw=sh.middleware||{};
   const stds=reqStds(s);
@@ -626,7 +623,6 @@ function decisionsFor(s){
   D.cluster.push({q:'Deploy cluster',answer:nameById('clusters',s.cluster),options:(G.nodes.clusters||[]).map(c=>c.name),verdict:s.clusterUser?'you':(s.clusterReq?'recommended':'set'),why:s.rq?(s.clusterReq?s.rq.name+' recommends it.':'Default cluster.'):'Default cluster.'});
   return D;
 }
-const decBlock=(arr)=>arr&&arr.length?grp('decisions — options · lens · answer')+arr.map(decisionCard).join(''):'';
 
 // ── command progression — authored templates (ONE place) + derived ──────────
 const SCAFFOLD={
@@ -658,7 +654,15 @@ function scaffoldCmd(s){
   const k=fwToKeys(s.fw), key=k.feKey!=='none'?k.feKey:k.beKey;
   let t=SCAFFOLD[key];
   if(!t){const g=LANG_GROUP[s.lang]||'nodejs'; t=SCAFFOLD[BE_LIST.find(x=>x.startsWith(g+'-'))]||SCAFFOLD['nodejs-express'];}
-  return t.replace(/\{app\}/g,s.fw.serviceSlug||'my-app');
+  t=t.replace(/\{app\}/g,s.fw.serviceSlug||'my-app');
+  // bare npm-init templates follow the CHOSEN package manager — one tool, no mixed commands
+  const pkg=(PKG_MAP[s.pkg]||s.pkg);
+  if(/^(pnpm|yarn|bun)$/.test(pkg)){
+    t=t.replace(/\bnpm init -y\b/g,pkg==='yarn'?'yarn init -y':pkg+' init')
+       .replace(/\bnpm i -D\b/g,pkg==='yarn'?'yarn add -D':pkg+' add -D')
+       .replace(/\bnpm i\b/g,pkg==='yarn'?'yarn add':pkg+' add');
+  }
+  return t;
 }
 function commandsFor(s){
   const app=s.fw.serviceSlug||'my-app', port=(s.tmpl&&s.tmpl.port)||'8080';
@@ -1139,7 +1143,9 @@ function renderResolver(){
     `<div class="scenenote">Retiring a service: freeze writes → archive data per your retention rules (the rulebook) → keep the audit evidence (Scene 13 export) → tear down compute → keep the DNS tombstone 90 days.</div>`,ch('evolve')));
 
   LASTR=cur;
-  $("#track").innerHTML=P.join('');
+  const tr=$("#track"),keep=tr?tr.scrollLeft:0;
+  tr.innerHTML=P.join('');
+  tr.scrollLeft=keep;
   observeColumns();
 }
 
@@ -1177,6 +1183,9 @@ window.setMode=(m)=>{
   if(g)g.hidden=(m!=='guided');
   if(tr)tr.style.display=(m==='guided')?'none':'';
   ['hero','builder','stackbar','lensInfo'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display=(m==='guided')?'none':'';});
+  const lensEl=document.querySelector('.lens'),legEl=document.querySelector('.legend');
+  if(lensEl)lensEl.style.display=(m==='guided')?'none':'';
+  if(legEl&&m==='guided')legEl.style.display='none';
   if(m==='guided'){document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('on',b.dataset.m==='guided'));renderGuided();return;}
   document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
   const build=m==='build';
@@ -1229,19 +1238,22 @@ function juriLine(rq){
 function gOptions(axis){
   const s=resolveStack();
   if(axis==='industry')return (G.nodes.industryRequirements||[]).map(r=>({id:r.id,name:r.name,
-    plain:firstSentence((r.keyRisks||[])[0]||'')+' is the risk this rulebook exists to stop.',
-    juri:juriLine(r), node:'industryRequirements', rec:false, req:false}));
+    plain:(K.industryPlain||{})[r.id]||firstSentence((r.keyRisks||[])[0]||''),
+    juri:juriLine(r)+`<div style="margin-top:6px"><b>the classic attack here:</b> ${esc(firstSentence((r.keyRisks||[])[0]||''))}</div>`,
+    node:'industryRequirements', rec:false, req:false}));
   if(axis==='fw')return (G.nodes.frameworks||[]).map(f=>({id:f.id,name:f.name,
     plain:`${LANG_HUMAN[f.languageId]||f.languageId} · ${firstSentence(f.whenToUse||'')}`,
     node:'frameworks',rec:false}));
   if(axis==='pkg')return (G.nodes.pkgBuildDeep||[]).filter(p=>p.kind==='pkg-mgr'&&langMatch(p.language,s.lang)).map(p=>({id:p.id,name:p.name,
     plain:firstSentence(p.what||''),node:'pkgBuildDeep',rec:p.id===s.pkgDef}));
-  if(axis==='auth')return (G.nodes.authDeep||[]).map(a=>({id:a.id,name:a.name,
-    plain:firstSentence(a.what||''),node:'authDeep',req:(s.rq?.requiredAuthIds||[]).includes(a.id)}));
+  if(axis==='auth'){const req=new Set(s.rq?.requiredAuthIds||[]);
+    return [...(G.nodes.authDeep||[])].sort((a,b)=>(req.has(b.id)?1:0)-(req.has(a.id)?1:0))
+      .map(a=>({id:a.id,name:a.name,plain:firstSentence(a.what||''),node:'authDeep',req:req.has(a.id)}));}
   if(axis==='orm')return ormsFor(s.lang).map(o=>({id:o.id,name:o.name,
     plain:firstSentence(o.what||''),node:'ormDeep',rec:o.id===s.ormDef}));
-  if(axis==='obs')return (G.nodes.observabilityDeep||[]).map(o=>({id:o.id,name:o.name,
-    plain:firstSentence(o.what||''),node:'observabilityDeep',req:(s.rq?.requiredObservabilityIds||[]).includes(o.id)}));
+  if(axis==='obs'){const req=new Set(s.rq?.requiredObservabilityIds||[]);
+    return [...(G.nodes.observabilityDeep||[])].sort((a,b)=>(req.has(b.id)?1:0)-(req.has(a.id)?1:0))
+      .map(o=>({id:o.id,name:o.name,plain:firstSentence(o.what||''),node:'observabilityDeep',req:req.has(o.id)}));}
   if(axis==='runtime')return (G.nodes.runtimeDeep||[]).map(r=>({id:r.id,name:r.name,
     plain:`${r.baseOs||''} · ${r.sizeMb?r.sizeMb+' MB':''}${r.fipsCertified==='yes'?' · FIPS-validated':''}`,
     node:'runtimeDeep',req:(s.rq?.recommendedRuntimeIds||[]).includes(r.id)}));
@@ -1270,18 +1282,23 @@ window.gPick=(axis,id)=>{
   const st=(K.guided.steps||[]).find(x=>x.axis===axis)||(K.guided.steps||[])[GSTEP];
   if(st){decide('g'+st.axis);decide('s'+st.scene);}  // lights the scene ✓ on the flow rail
   renderGuided();
+  const n=document.querySelector('.gnext');if(n&&!n.disabled)n.focus();
 };
-window.startGuided=()=>{GSTEP=0;setMode('guided');};
+window.startGuided=(resume)=>{GSTEP=resume?Math.min((K.guided.steps||[]).length,parseInt(localStorage.getItem('ys-gstep')||'0')||0):0;setMode('guided');};
 window.gJump=(i)=>{GSTEP=i;GNAV={platform:null,category:null,all:false};renderGuided();$('#guided').scrollTop=0;};
 window.gNav=(k,v)=>{GNAV[k]=v;if(k==='platform'){GNAV.category=null;GNAV.all=false;}renderGuided();$('#guided').scrollTop=0;};
-window.gGo=(d)=>{GSTEP=Math.max(0,Math.min((K.guided.steps||[]).length,GSTEP+d));GNAV={platform:null,category:null,all:false};renderGuided();
+window.gGo=(d)=>{GSTEP=Math.max(0,Math.min((K.guided.steps||[]).length,GSTEP+d));localStorage.setItem('ys-gstep',String(GSTEP));GNAV={platform:null,category:null,all:false};renderGuided();
   $('#guided').scrollTop=0;};
 window.gUseRec=()=>{
   const st=(K.guided.steps||[])[GSTEP];if(!st)return;
-  const opts=gOptions(st.axis);const rec=opts.find(o=>o.req)||opts.find(o=>o.rec)||opts[0];
-  if(rec)gPick(st.axis,rec.id);
-  if(st.pair){const p2=gOptions(st.pair);const r2=p2.find(o=>o.rec)||p2[0];if(r2)pickAxis(st.pair,r2.id);}
+  const opts=gOptions(st.axis);const rec=opts.find(o=>o.req)||opts.find(o=>o.rec);
+  if(!rec)return; // no honest recommendation exists — the link is hidden in that case
+  gPick(st.axis,rec.id);
+  if(st.pair){const p2=gOptions(st.pair);const r2=p2.find(o=>o.req)||p2.find(o=>o.rec);if(r2)pickAxis(st.pair,r2.id);}
+  gGo(1);
 };
+function gHasRec(st){const o=gOptions(st.axis);return o.some(x=>x.req||x.rec);}
+function gChosenName(st){const o=gOptions(st.axis).find(x=>x.id===RS[st.axis]);return o?o.name:'';}
 function renderGuided(){
   const steps=(K.guided&&K.guided.steps)||[];
   const total=steps.length+1; // + review
@@ -1329,17 +1346,18 @@ function renderGuided(){
   }
   el.innerHTML=`<div class="gwrap">
     <div class="gtop"><button class="gback" onclick="${GSTEP===0?"setMode('catalog');showWelcome()":'gGo(-1)'}">← back</button>
-      <span class="gcount">decision ${GSTEP+1} of ${total} · scene ${st.scene}</span></div>
+      <span class="gcount">decision ${GSTEP+1} of ${total}</span></div>
     <div class="gprog"><i style="width:${Math.round((GSTEP)/total*100)}%"></i></div>
+    ${RS._industryChanged?`<div class="forcenote">🔶 Industry changed to <b>${esc(RS._industryChanged)}</b> — the rulebook re-derived sign-in, observability, base image and cluster. Review them as you continue.${(RS._industryChanged='')&&''}</div>`:''}
     <h2 class="gq">${esc(st.title)}</h2>
     <p class="gwhy">${linkify(st.why)}</p>
     ${filter}
     <div id="gcards">${(st.axis==='fw'&&!GNAV.all)?cascade:opts.map(o=>gCard(st.axis,o)).join('')}</div>
     ${pairHtml}
     <div class="gfoot">
-      ${picked?`<div class="gcons">✓ Locked in. <b>${esc(st.consequence)}</b></div>`:''}
+      ${picked?`<div class="gcons">✓ Locked in: <b>${esc(gChosenName(st))}</b>. ${esc(st.consequence)}</div>`:''}
       <button class="gnext" ${picked?'':'disabled'} onclick="gGo(1)">Continue →</button>
-      <button class="gskip" onclick="gUseRec()">use the recommended and continue</button>
+      ${gHasRec(st)?`<button class="gskip" onclick="gUseRec()">use the recommended and continue</button>`:''}
     </div>
   </div>`;
   if(picked){} // continue enabled
@@ -1349,8 +1367,10 @@ window.gFilter=(v)=>{v=v.toLowerCase();
 function gReview(total){
   const s=resolveStack();
   const steps=(K.guided&&K.guided.steps)||[];
-  const row=(label,axis,val)=>`<div class="grev"><span class="k2">${esc(label)}</span><b>${esc(val)}</b>
-    <button onclick="gJump(${steps.findIndex(x=>x.axis===axis)})">change</button></div>`;
+  const PLAIN_ECHO={'GHCR':'GitHub’s image warehouse','Amazon ECR':'AWS’s image warehouse','Google Artifact Registry':'Google Cloud’s image warehouse','Azure ACR':'Azure’s image warehouse','Harbor':'your own self-hosted warehouse','EKS':'Kubernetes on AWS','GKE':'Kubernetes on Google Cloud','AKS':'Kubernetes on Azure','OpenShift':'Red Hat’s hardened Kubernetes','pnpm':'fast installs, strict dependencies','npm':'Node’s built-in installer','cosign (Sigstore)':'keyless tamper-proof seal','syft':'the standard ingredient-list tool'};
+  const row=(label,axis,val)=>{const echo=PLAIN_ECHO[String(val).split(' + ')[0]]||'';
+    return `<div class="grev"><span class="k2">${esc(label)}</span><div><b>${esc(val)}</b>${echo?`<div class="sub">${esc(echo)}</div>`:''}</div>
+    <button onclick="gJump(${steps.findIndex(x=>x.axis===axis)})">change</button></div>`;};
   const CFG=buildConfig(s),GF=genFiles(CFG);
   const files=[['Dockerfile',GF.dockerfile],['.github/workflows/main.yml',GF.mainwf],['.github/workflows/pr.yml',GF.prwf],['helm/values-prod.yaml',GF.helm],['.pre-commit-config.yaml',GF.precommit]];
   CFID=0;
@@ -1358,8 +1378,8 @@ function gReview(total){
     <div class="gtop"><button class="gback" onclick="gGo(-1)">← back</button>
       <span class="gcount">decision ${total} of ${total} · review</span></div>
     <div class="gprog"><i style="width:100%"></i></div>
-    <h2 class="gq">Your build — every decision, made by you</h2>
-    <p class="gwhy">Change anything. Then take your real files — they follow your choices exactly.</p>
+    <h2 class="gq">Your build — every decision, yours to change</h2>
+    <p class="gwhy">Change anything below. The files further down follow your choices exactly.</p>
     ${row('built for','industry',RS.industry?nameById('verticals',RS.industry):'—')}
     ${row('framework','fw',s.fw.name)}
     ${row('packages','pkg',nameById('pkgBuildDeep',s.pkg))}
@@ -1370,6 +1390,10 @@ function gReview(total){
     ${row('image warehouse','registry',(K.registries||[]).find(r=>r.id===RS.registry)?.name||'GHCR')}
     ${row('proof of origin','signer',((K.signers||[]).find(x=>x.id===RS.signer)?.name||'cosign')+' + '+((K.sbomTools||[]).find(x=>x.id===RS.sbom)?.name||'syft'))}
     ${row('runs on','cluster',nameById('clusters',s.cluster))}
+    <h2 class="gq" style="font-size:21px;margin-top:30px">Before you can use this — one-time installs</h2>
+    <div class="scenenote">You need three tools on your computer (each is a 2-minute install):<br>
+    <b>git</b> (saves code history) — git-scm.com/downloads · <b>Node 22</b> (runs JavaScript) — nodejs.org · <b>Docker Desktop</b> (builds containers) — docker.com/get-started.<br>
+    Then: create a new repo on github.com → run the scaffold command from Decision 2 → put each file below at its shown path → commit and push. The workflows run on your first push.</div>
     <h2 class="gq" style="font-size:21px;margin-top:30px">Your real files — generated from those choices</h2>
     ${files.map(([n,c])=>fileAcc(n,c)).join('')}
     <div class="gfoot">
@@ -1383,13 +1407,15 @@ function showWelcome(){
   const has=Object.keys(DECIDED).length>0;
   w.hidden=false;
   const r=$('#wresume');
-  if(r){r.hidden=!has; if(has)r.innerHTML=`You have a build in progress — <button onclick="hideWelcome();startGuided()">resume it →</button>`;}
+  if(r){r.hidden=!has; if(has)r.innerHTML=`You have a build in progress — <button onclick="hideWelcome();startGuided(true)">resume it →</button>`;}
 }
 window.hideWelcome=()=>{const w=$('#welcome');if(w)w.hidden=true;};
 
 async function boot(){
   try{ const [g,k]=await Promise.all([fetch("graph.json"),fetch("knowledge.json")]);
-    G=await g.json(); K=k.ok?await k.json():{}; }
+    G=await g.json();
+    if(!k.ok)throw new Error('knowledge.json failed to load ('+k.status+')');
+    K=await k.json(); }
   catch(e){ $("#track").innerHTML=`<div class="err">Could not load graph.json.<br>${e}</div>`; return; }
   const lv=$("#lensV");
   for(const v of (G.nodes.verticals||[])){const o=document.createElement("option");o.value=v.id;o.textContent=v.name||v.id;lv.appendChild(o);}
