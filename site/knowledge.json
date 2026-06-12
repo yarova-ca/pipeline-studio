@@ -2,7 +2,7 @@
  "_meta": {
   "sourceType": "authored",
   "what": "Authored knowledge layer for the 13-scene platform: CI tool alternatives, signers, SBOM tools, registries, frontend observability, SRE pack, scene notes. graph.json stays the extracted truth; this file is the curated truth.",
-  "updated": "2026-06-11"
+  "updated": "2026-06-12"
  },
  "ciAlternatives": [
   {
@@ -680,6 +680,31 @@
    "plain": "The close of the story: every rule from Scene 1, checked. Met, forced, or gap. Release when the gaps are closed — and you can show an auditor exactly why.",
    "youHave": "a service you can defend in an audit",
    "next": "ship it"
+  },
+  "14": {
+   "plain": "Software rots quietly. Every week, small updates arrive — libraries, base images. A robot opens the update PRs; you review and merge while they're still small.",
+   "youHave": "a service that stays current in small, safe steps",
+   "next": "upgrade the platform underneath"
+  },
+  "15": {
+   "plain": "The platform under you moves too — Kubernetes versions retire on a schedule whether you act or not. Upgrade staging first, soak, then prod, on YOUR calendar.",
+   "youHave": "a platform upgraded on your terms, never the provider's deadline",
+   "next": "protect what's running"
+  },
+  "16": {
+   "plain": "Certificates expire. Secrets age. Disks fail. Rotation is automated — but a backup you never restored is a wish, not a backup. Drill the restore.",
+   "youHave": "automated rotation + a restore you have actually proven",
+   "next": "be ready when it breaks anyway"
+  },
+  "17": {
+   "plain": "Something will break at 2am. The difference between a blip and a disaster is a calm, written path: page → acknowledge → mitigate → learn, blamelessly.",
+   "youHave": "an on-call that follows a runbook, not adrenaline",
+   "next": "keep the whole thing worth running"
+  },
+  "18": {
+   "plain": "Every quarter, look up: what's reaching end-of-life, what's bleeding money, what should retire. Evolving on purpose is what keeps the platform young.",
+   "youHave": "a stack with no surprise end-of-life and no zombie spend",
+   "next": "back to Scene 14 — the loop continues"
   }
  },
  "appImpl": {
@@ -781,5 +806,673 @@
     }
    ]
   }
- }
+ },
+ "sceneStd": {
+  "1": {
+   "who": "The founder or product owner",
+   "when": "Before the repo exists",
+   "prereqs": [
+    "Nothing installed — just the decision"
+   ],
+   "skipWhen": "Never. Even an internal tool has a user and rules.",
+   "threat": "Building to the wrong rules. Retrofitting compliance after launch costs 10–100× and can mean fines.",
+   "rejected": {
+    "path": "“Pick the rules later, build first”",
+    "why": "Scenes 4, 6, 7 and 10 are SHAPED by these rules — later means rebuilding them."
+   },
+   "doneWhen": "Your industry chip shows in the stack bar, and the rulebook lists your regimes.",
+   "breaks": [
+    {
+     "symptom": "Wrong industry discovered after launch",
+     "fix": "Re-run Scenes 4–13 against the new rulebook; the audit shows exactly what changes."
+    }
+   ],
+   "time": "5 minutes",
+   "cost": "Free",
+   "docs": "https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/"
+  },
+  "2": {
+   "who": "The tech lead, with the team",
+   "when": "After Scene 1, before any code",
+   "prereqs": [
+    "The rulebook from Scene 1"
+   ],
+   "skipWhen": "Never — even ‘no framework’ is a framework choice with consequences.",
+   "threat": "Hype-driven choice. A dead-end framework means a full rewrite in 18 months.",
+   "rejected": {
+    "path": "Build framework-free from scratch",
+    "why": "You re-implement routing, auth and security alone — and fail the audits the framework community already passed."
+   },
+   "doneWhen": "The scaffold command for your pick runs successfully in Scene 3.",
+   "breaks": [
+    {
+     "symptom": "Framework goes unmaintained later",
+     "fix": "Scene 18 catches it at the quarterly EOL review; plan the migration there."
+    }
+   ],
+   "time": "1–2 hours of honest comparison",
+   "cost": "Free",
+   "docs": "dynamic:framework"
+  },
+  "3": {
+   "who": "Any developer",
+   "when": "Day one of the project",
+   "prereqs": [
+    "git installed",
+    "A GitHub account",
+    "The language runtime (Node 22 / Python 3.12 / Go 1.23)"
+   ],
+   "skipWhen": "Never. The lockfile and branch protection born here protect every later scene.",
+   "threat": "Typosquatted packages — one mistyped scaffold name installs an attacker's code (supply-chain attack).",
+   "rejected": {
+    "path": "Create folders and files by hand",
+    "why": "Hand-rolled projects drift: no lockfile, no hygiene, no two alike."
+   },
+   "doneWhen": "The repo exists on GitHub, main is protected, and the lockfile is committed.",
+   "breaks": [
+    {
+     "symptom": "npx fails with engine error",
+     "fix": "Your Node is too old — install 22 LTS, re-run."
+    },
+    {
+     "symptom": "Push rejected",
+     "fix": "That's branch protection working — open a PR instead."
+    }
+   ],
+   "time": "15 minutes",
+   "cost": "Free",
+   "docs": "https://docs.github.com/en/repositories"
+  },
+  "4": {
+   "who": "The application developers",
+   "when": "The first real coding days",
+   "prereqs": [
+    "Scene 3 done",
+    "Your identity provider's issuer URL + audience (or dev defaults)"
+   ],
+   "skipWhen": "Auth may be ‘none’ ONLY for an internal prototype with zero personal data — and the audit will say so.",
+   "threat": "Broken authentication — the OWASP #1. Account takeover, and breaches you can't even see without audit logs.",
+   "rejected": {
+    "path": "Write your own auth/crypto",
+    "why": "OIDC is a verified protocol; home-made auth fails real attacks and real audits."
+   },
+   "doneWhen": "A login round-trips locally and /metrics returns live numbers.",
+   "breaks": [
+    {
+     "symptom": "401 on every request",
+     "fix": "JWKS URL or issuer env is wrong — print the env, compare with your IdP."
+    },
+    {
+     "symptom": "No metrics",
+     "fix": "The /metrics route isn't mounted — wire metricsText() to a route."
+    }
+   ],
+   "time": "Half a day to two days",
+   "cost": "Libraries free; managed IdPs (Auth0/Entra) bill per user",
+   "docs": "https://openid.net/developers/how-connect-works/"
+  },
+  "5": {
+   "who": "Every developer, every day",
+   "when": "From the first commit on",
+   "prereqs": [
+    "Scene 3 done",
+    "pre-commit installed (pipx install pre-commit)"
+   ],
+   "skipWhen": "Hooks: never — they cost seconds. Heavy scans stay in CI, not here.",
+   "threat": "A committed secret. Leaked keys are scraped and abused within minutes of reaching GitHub.",
+   "rejected": {
+    "path": "“CI will catch it”",
+    "why": "By the time CI sees a pushed secret, it is already public history."
+   },
+   "doneWhen": "A commit containing a fake secret is BLOCKED on your machine.",
+   "breaks": [
+    {
+     "symptom": "Hooks feel slow",
+     "fix": "Scope them to changed files; heavy checks belong in Scene 7."
+    },
+    {
+     "symptom": "False-positive secret",
+     "fix": "Add a scoped allowlist entry in the gitleaks config — never disable the hook."
+    }
+   ],
+   "time": "30 minutes once",
+   "cost": "Free",
+   "docs": "https://pre-commit.com"
+  },
+  "6": {
+   "who": "Developer + platform engineer",
+   "when": "Once the app runs locally",
+   "prereqs": [
+    "Docker running (docker version answers)",
+    "Scene 5 build passes"
+   ],
+   "skipWhen": "Only for serverless-zip deploys with no containers anywhere — rare on this platform.",
+   "threat": "A bloated, vulnerable base image — every extra package is attack surface you now own.",
+   "rejected": {
+    "path": "One fat ubuntu image for everything",
+    "why": "10× the size, hundreds of CVE findings, slow pulls — for zero benefit."
+   },
+   "doneWhen": "docker run answers on /health from the sealed container.",
+   "breaks": [
+    {
+     "symptom": "Works locally, dies in the container",
+     "fix": "Port or env var missing — compare ENV/EXPOSE with your local run."
+    },
+    {
+     "symptom": "Crash on alpine only",
+     "fix": "glibc-vs-musl issue — switch to slim or distroless."
+    }
+   ],
+   "time": "1–3 hours",
+   "cost": "Free",
+   "docs": "https://docs.docker.com/build/"
+  },
+  "7": {
+   "who": "Platform sets the gates; every dev lives under them",
+   "when": "Before the second contributor joins",
+   "prereqs": [
+    "Repo on GitHub",
+    "Scene 5 hooks (the gates mirror them)"
+   ],
+   "skipWhen": "A solo throwaway may drop DAST. Secrets and dependency scans: never.",
+   "threat": "One malicious or careless PR reaching main unreviewed — that's how most real breaches start.",
+   "rejected": {
+    "path": "Trust-based merging, no gates",
+    "why": "One bad merge is a prod incident with no evidence trail for the audit."
+   },
+   "doneWhen": "A test PR with a seeded fake secret fails the gate, red.",
+   "breaks": [
+    {
+     "symptom": "Flaky gate",
+     "fix": "Pin the tool versions; rerun; never mark the gate optional."
+    },
+    {
+     "symptom": "Slow queue",
+     "fix": "Cache dependencies; run gates in parallel."
+    }
+   ],
+   "time": "Half a day once",
+   "cost": "GitHub-hosted minutes are free for public repos; private repos bill past the free tier",
+   "docs": "https://docs.github.com/en/actions"
+  },
+  "8": {
+   "who": "Platform / release engineer",
+   "when": "First merge to main",
+   "prereqs": [
+    "Registry account + role for your pick (see the registries below)",
+    "Scene 7 green"
+   ],
+   "skipWhen": "Never for anything that deploys. Unsigned images are unverifiable.",
+   "threat": "Tampering between build and deploy. Signing + SBOM close the supply-chain gap.",
+   "rejected": {
+    "path": "Push images from a laptop",
+    "why": "Untraceable artifacts: no provenance, no signature, no audit answer to ‘where did this image come from?’"
+   },
+   "doneWhen": "cosign verify (or notation verify) passes against the pushed digest.",
+   "breaks": [
+    {
+     "symptom": "Push returns 403",
+     "fix": "Login/role wrong — re-run the registry's login command; check the OIDC role."
+    },
+    {
+     "symptom": "Keyless signing fails in CI",
+     "fix": "The workflow needs permissions: id-token: write."
+    }
+   ],
+   "time": "1–2 hours",
+   "cost": "Registry storage — free tiers exist (GHCR free for public)",
+   "docs": "https://docs.sigstore.dev"
+  },
+  "9": {
+   "who": "Platform + app dev together",
+   "when": "Before the first deploy",
+   "prereqs": [
+    "Scene 8 image in the registry",
+    "helm + kustomize CLIs installed"
+   ],
+   "skipWhen": "A single-env hobby project can use raw manifests — until the second environment appears.",
+   "threat": "Snowflake environments — config drift nobody can see or reproduce.",
+   "rejected": {
+    "path": "kubectl edit on the live cluster",
+    "why": "Untracked changes vanish on the next sync and skip every review."
+   },
+   "doneWhen": "kustomize build renders cleanly for every environment.",
+   "breaks": [
+    {
+     "symptom": "Prod differs from staging mysteriously",
+     "fix": "diff the overlays — the drift is visible in Git, fix it there."
+    },
+    {
+     "symptom": "Helm schema error",
+     "fix": "helm lint; check values types against the chart."
+    }
+   ],
+   "time": "2–4 hours first time",
+   "cost": "Free",
+   "docs": "https://kustomize.io"
+  },
+  "10": {
+   "who": "Platform team owns it; developers consume it",
+   "when": "Once manifests exist",
+   "prereqs": [
+    "A cluster (or create it right here)",
+    "argocd CLI + access",
+    "Scene 9 manifests in Git"
+   ],
+   "skipWhen": "Only when there is no cluster at all (pure serverless).",
+   "threat": "Manual deploys: nobody knows who changed what; drift accumulates silently.",
+   "rejected": {
+    "path": "CI runs kubectl apply with cluster credentials",
+    "why": "Cluster creds in CI = huge blast radius, and nothing reconciles drift afterwards."
+   },
+   "doneWhen": "The Argo app reports Synced + Healthy.",
+   "breaks": [
+    {
+     "symptom": "ImagePullBackOff",
+     "fix": "Registry pull secret missing — wire it per the registry setup in Scene 8."
+    },
+    {
+     "symptom": "Endless OutOfSync",
+     "fix": "An immutable field or hook loops — check argocd app diff."
+    }
+   ],
+   "time": "Cluster: 15–40 min. App onboarding: 30 min.",
+   "cost": "The cluster is the real cost — roughly $150–300+/month for 3 small nodes",
+   "docs": "https://argo-cd.readthedocs.io"
+  },
+  "11": {
+   "who": "SRE / on-call, with the devs",
+   "when": "The day the service goes live",
+   "prereqs": [
+    "Scene 10 running",
+    "Prometheus stack installed (it's in the Scene 10 components)"
+   ],
+   "skipWhen": "Alerts: never. Full tracing can wait at very small scale — say so in the audit.",
+   "threat": "Silent failure — users discover the outage before you do.",
+   "rejected": {
+    "path": "Grep the logs when someone complains",
+    "why": "No SLO, no paging, no early warning — and complaints arrive after the damage."
+   },
+   "doneWhen": "A test alert fires and reaches your channel/phone.",
+   "breaks": [
+    {
+     "symptom": "Alert storm",
+     "fix": "Switch to burn-rate alerts (the SLO starter above) — page on budget burn, not every blip."
+    },
+    {
+     "symptom": "No metrics scraped",
+     "fix": "Check the scrape annotations/ServiceMonitor on the deployment."
+    }
+   ],
+   "time": "Half a day",
+   "cost": "OSS stack free; SaaS observability bills per GB ingested",
+   "docs": "https://sre.google/sre-book/monitoring-distributed-systems/"
+  },
+  "12": {
+   "who": "App dev + the partner's integration team",
+   "when": "When the product needs the outside world",
+   "prereqs": [
+    "Gateway credentials per integration",
+    "A sandbox environment from the partner"
+   ],
+   "skipWhen": "Only if the service truly talks to nothing external — rare and usually temporary.",
+   "threat": "A third-party breach reaching you through over-scoped, never-rotated credentials.",
+   "rejected": {
+    "path": "Direct point-to-point calls from app code",
+    "why": "No throttle, no audit, no single place to rotate or cut access."
+   },
+   "doneWhen": "A sandbox call round-trips through the gateway with scoped credentials.",
+   "breaks": [
+    {
+     "symptom": "mTLS handshake fails",
+     "fix": "A cert expired — rotate it; Scene 16 automates this."
+    },
+    {
+     "symptom": "Rate-limited",
+     "fix": "Honour the partner's limits — add backoff at the gateway."
+    }
+   ],
+   "time": "Days per integration — the partner sets the pace",
+   "cost": "Per-partner; gateways have free tiers",
+   "docs": "https://owasp.org/API-Security/"
+  },
+  "13": {
+   "who": "Founder/lead signs; an auditor reads",
+   "when": "Before first real users",
+   "prereqs": [
+    "Scenes 1–12 done honestly"
+   ],
+   "skipWhen": "Never for a regulated industry. For a hobby, it's still 30 free minutes of truth.",
+   "threat": "Shipping with silent gaps — found later by an auditor, or worse, by a breach.",
+   "rejected": {
+    "path": "“We'll audit after launch”",
+    "why": "Evidence captured while building is cheap; reconstructing it later costs 10×."
+   },
+   "doneWhen": "Zero red gaps — or every gap has an owner and a date.",
+   "breaks": [
+    {
+     "symptom": "A gap can't be closed now",
+     "fix": "Document the compensating control + owner + date; that line IS audit language."
+    }
+   ],
+   "time": "1–2 hours",
+   "cost": "Free",
+   "docs": "https://www.cisa.gov/secure-by-design"
+  },
+  "14": {
+   "who": "The whole team; a robot opens the PRs",
+   "when": "Weekly, forever",
+   "prereqs": [
+    "Renovate or Dependabot enabled",
+    "Tests you trust (they are the safety net)"
+   ],
+   "skipWhen": "Never — rot compounds. Pausing for a release week is fine; stopping is not.",
+   "threat": "A known-CVE dependency sitting unpatched — the Equifax pattern.",
+   "rejected": {
+    "path": "Big quarterly upgrade parties",
+    "why": "Ninety small, safe merges beat one risky big-bang every time."
+   },
+   "doneWhen": "This week's update PRs are merged or consciously triaged.",
+   "breaks": [
+    {
+     "symptom": "An update PR breaks the build",
+     "fix": "That's the system working — read the changelog, adapt, or pin with a dated TODO."
+    },
+    {
+     "symptom": "Lockfile conflicts pile up",
+     "fix": "Let the bot rebase: re-run it; merge oldest first."
+    }
+   ],
+   "time": "30 minutes a week",
+   "cost": "Free",
+   "docs": "https://docs.renovatebot.com"
+  },
+  "15": {
+   "who": "Platform team, in a maintenance window",
+   "when": "Quarterly, or when the provider announces EOL",
+   "prereqs": [
+    "Scene 14 current (small deltas upgrade safely)",
+    "A staging cluster",
+    "Fresh backups (Scene 16)"
+   ],
+   "skipWhen": "Never — Kubernetes versions retire on the provider's calendar whether you act or not.",
+   "threat": "A forced emergency upgrade at end-of-life, with zero test time.",
+   "rejected": {
+    "path": "Pin versions forever",
+    "why": "Patches stop arriving, and managed providers force-upgrade control planes anyway."
+   },
+   "doneWhen": "Staging upgraded + one week soak, then prod by the same path.",
+   "breaks": [
+    {
+     "symptom": "Removed APIs break charts",
+     "fix": "Run pluto detect-files BEFORE upgrading; fix manifests first."
+    },
+    {
+     "symptom": "Addon incompatible",
+     "fix": "Upgrade order: control plane → nodes → addons; check each addon's matrix."
+    }
+   ],
+   "time": "Half to two days, quarterly",
+   "cost": "Possible node-replacement hours",
+   "docs": "https://kubernetes.io/releases/"
+  },
+  "16": {
+   "who": "Platform/SRE; automation does the rotating",
+   "when": "Set up once; drill quarterly",
+   "prereqs": [
+    "cert-manager + External Secrets installed (Scene 10 components)",
+    "A backup target (object storage bucket)"
+   ],
+   "skipWhen": "Never. Expiry does not negotiate.",
+   "threat": "An expired certificate taking prod down — or a backup that turns out unrestorable mid-disaster.",
+   "rejected": {
+    "path": "Manual annual renewals on a calendar reminder",
+    "why": "Humans forget; certificates don't."
+   },
+   "doneWhen": "A restore DRILL succeeded into a scratch namespace this quarter.",
+   "breaks": [
+    {
+     "symptom": "Backups silently failing",
+     "fix": "Alert on the backup job itself — a missing backup is a page, not a surprise."
+    },
+    {
+     "symptom": "Secret rotated but pods use the old one",
+     "fix": "Add a reloader so deployments restart on secret change."
+    }
+   ],
+   "time": "A day to set up; 2-hour drill each quarter",
+   "cost": "Object storage for backups",
+   "docs": "https://cert-manager.io/docs/"
+  },
+  "17": {
+   "who": "The on-call rotation — eventually everyone",
+   "when": "Before the first real incident, not after",
+   "prereqs": [
+    "Scene 11 alerts live",
+    "A paging tool wired",
+    "Runbooks linked FROM the alerts"
+   ],
+   "skipWhen": "Never in production. The 2am page is a when, not an if.",
+   "threat": "Chaos during an incident multiplies the damage — and for Financial Services, the OSFI 24-hour reporting clock is already running.",
+   "rejected": {
+    "path": "Hero debugging live in prod",
+    "why": "Untracked mid-incident changes are how incident #1 births incident #2."
+   },
+   "doneWhen": "One game-day completed: page → acknowledge → mitigate → blameless postmortem.",
+   "breaks": [
+    {
+     "symptom": "An alert fires with no runbook",
+     "fix": "Mitigate, then write the runbook the same day — that alert now has an owner."
+    },
+    {
+     "symptom": "The same incident repeats",
+     "fix": "The postmortem actions weren't done — they go on the board with owners, now."
+    }
+   ],
+   "time": "A day for the process + quarterly game-days",
+   "cost": "Paging tools have free tiers",
+   "docs": "https://sre.google/sre-book/managing-incidents/"
+  },
+  "18": {
+   "who": "Lead + finance, together",
+   "when": "Quarterly, half a day",
+   "prereqs": [
+    "The version pins this studio tracks",
+    "A cost dashboard from your cloud"
+   ],
+   "skipWhen": "Never past the first year — entropy and spend only grow.",
+   "threat": "Running end-of-life software you can no longer patch — and zombie services bleeding money.",
+   "rejected": {
+    "path": "Keep everything running forever",
+    "why": "Every running thing is attack surface plus spend; sunset is a feature."
+   },
+   "doneWhen": "This quarter's review done: EOL list empty or planned; top-3 cost actions taken.",
+   "breaks": [
+    {
+     "symptom": "Something hits EOL with no upgrade path",
+     "fix": "Isolate it (network policy), plan the replacement, set the date."
+    },
+    {
+     "symptom": "Orphan resources accumulating",
+     "fix": "Tag everything; sweep untagged monthly."
+    }
+   ],
+   "time": "Half a day, quarterly",
+   "cost": "This scene SAVES money",
+   "docs": "https://endoflife.date"
+  }
+ },
+ "act3": {
+  "14": {
+   "auto": [
+    [
+     "Renovate opens update PRs",
+     "you review + merge"
+    ],
+    [
+     "Tests run on every update PR",
+     "you fix真 breaks they catch"
+    ],
+    [
+     "Base images rebuilt on schedule (Scene 8 workflow)",
+     "you watch the scan deltas"
+    ]
+   ],
+   "commands": [
+    {
+     "label": "See this week's update PRs",
+     "cmd": "gh pr list --label dependencies --state open",
+     "expect": "the open update PRs, oldest first"
+    },
+    {
+     "label": "Check what's outdated right now",
+     "cmd": "npm outdated || pip list --outdated || go list -u -m all",
+     "expect": "current vs latest versions, per package"
+    }
+   ]
+  },
+  "15": {
+   "auto": [
+    [
+     "Provider patches the control plane within a minor",
+     "you choose WHEN minors/majors happen"
+    ],
+    [
+     "Argo re-syncs apps after node rotation",
+     "you run the upgrade order"
+    ]
+   ],
+   "commands": [
+    {
+     "label": "Find removed APIs before upgrading",
+     "cmd": "pluto detect-files -d kustomize/",
+     "expect": "a table of deprecated/removed APIs (empty = safe)"
+    },
+    {
+     "label": "Upgrade the cluster (your provider)",
+     "cmd": "eksctl upgrade cluster --name prod --approve   # or: gcloud container clusters upgrade / az aks upgrade",
+     "expect": "control plane on the next minor"
+    },
+    {
+     "label": "Then nodes, then addons",
+     "cmd": "eksctl upgrade nodegroup --cluster prod --name ng-1",
+     "expect": "nodes rotated to the new version"
+    }
+   ]
+  },
+  "16": {
+   "auto": [
+    [
+     "cert-manager renews certificates",
+     "you alert if renewal fails"
+    ],
+    [
+     "External Secrets syncs rotated secrets",
+     "you add a reloader for pods"
+    ],
+    [
+     "Velero takes scheduled backups",
+     "you DRILL the restore quarterly"
+    ]
+   ],
+   "commands": [
+    {
+     "label": "Check certificate health",
+     "cmd": "kubectl get certificates -A",
+     "expect": "READY True on every cert"
+    },
+    {
+     "label": "Take a backup now",
+     "cmd": "velero backup create pre-drill --include-namespaces prod",
+     "expect": "Backup request \"pre-drill\" submitted"
+    },
+    {
+     "label": "THE DRILL — restore into scratch",
+     "cmd": "velero restore create --from-backup pre-drill --namespace-mappings prod:drill",
+     "expect": "the app comes up in the drill namespace"
+    }
+   ]
+  },
+  "17": {
+   "sev": [
+    [
+     "SEV1",
+     "users down / data at risk",
+     "page now, all hands, 24h regulator clock may start"
+    ],
+    [
+     "SEV2",
+     "degraded, workaround exists",
+     "page on-call, fix in hours"
+    ],
+    [
+     "SEV3",
+     "minor, no user impact",
+     "ticket, fix this week"
+    ]
+   ],
+   "runbook": [
+    "Acknowledge the page (stop the escalation).",
+    "Open the linked runbook — follow it, don't improvise.",
+    "Mitigate FIRST (rollback/scale/failover). Root cause comes later.",
+    "Note times + actions in the incident channel as you go.",
+    "Declare resolved; schedule the blameless postmortem within 48h.",
+    "Postmortem: timeline, causes, action items WITH owners."
+   ],
+   "commands": [
+    {
+     "label": "Roll back fast (GitOps way)",
+     "cmd": "git revert HEAD && git push   # Argo syncs the rollback",
+     "expect": "previous version live within the sync interval"
+    },
+    {
+     "label": "Or pause sync and roll back direct",
+     "cmd": "argocd app set APP --sync-policy none && kubectl rollout undo deploy/APP -n prod",
+     "expect": "deployment rolled back; re-enable sync after"
+    }
+   ]
+  },
+  "18": {
+   "auto": [
+    [
+     "This studio pins every version (148 tracked)",
+     "you review the EOL list quarterly"
+    ],
+    [
+     "Cloud bills tag by resource",
+     "you act on the top 3 costs"
+    ]
+   ],
+   "commands": [
+    {
+     "label": "Check a component's end-of-life",
+     "cmd": "open https://endoflife.date/kubernetes   # one page per major product",
+     "expect": "dates — plan upgrades BEFORE the red ones"
+    },
+    {
+     "label": "Find untagged (orphan) cloud resources",
+     "cmd": "aws resourcegroupstaggingapi get-resources --tags-per-page 100 | jq '.ResourceTagMappingList[] | select(.Tags==[])'",
+     "expect": "resources nobody owns — candidates to sweep"
+    }
+   ]
+  }
+ },
+ "maintCalendar": [
+  [
+   "Weekly",
+   "Merge/triage update PRs (S14) · scan alert noise (S11)"
+  ],
+  [
+   "Monthly",
+   "Base-image rebuild lands (S8 auto) · sweep orphan resources (S18)"
+  ],
+  [
+   "Quarterly",
+   "K8s upgrade (S15) · restore DRILL (S16) · game-day (S17) · EOL + cost review (S18) · access review (rulebook)"
+  ],
+  [
+   "Annually",
+   "Pen-test (PCI/OSFI rulebooks) · full DR failover · postmortem-actions audit"
+  ]
+ ]
 }

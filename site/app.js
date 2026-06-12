@@ -61,18 +61,23 @@ const STAGES_CATALOG=[
 // the 13 scenes — reality's order, locked with the founder
 const STAGES_BUILD=[
   ['who','1 · Who it’s for','#19C8A8'],
-  ['fw','2 · Framework','#23CB9F'],
-  ['scaffold','3 · Scaffold','#2FCD9D'],
-  ['app','4 · Write the app','#3BD096'],
-  ['local','5 · Local loop','#44D292'],
-  ['image','6 · Containerize','#52D58C'],
-  ['pr','7 · PR gate','#5AD886'],
-  ['main','8 · Build → registry','#6ADA80'],
-  ['declare','9 · Declare deploy','#7CDF78'],
-  ['cluster','10 · GitOps → cluster','#8FE46E'],
-  ['observe','11 · Run + observe','#A3E863'],
-  ['connect','12 · Connect','#B4EE58'],
-  ['signoff','13 · Sign-off','#C6F24E'],
+  ['fw','2 · Framework','#21CAA1'],
+  ['scaffold','3 · Scaffold','#2ACD9A'],
+  ['app','4 · Write the app','#33CF93'],
+  ['local','5 · Local loop','#3CD18C'],
+  ['image','6 · Containerize','#45D385'],
+  ['pr','7 · PR gate','#4ED67E'],
+  ['main','8 · Build → registry','#58D877'],
+  ['declare','9 · Declare deploy','#62DA70'],
+  ['cluster','10 · GitOps → cluster','#6CDC69'],
+  ['observe','11 · Run + observe','#77DF62'],
+  ['connect','12 · Connect','#82E15B'],
+  ['signoff','13 · Sign-off','#8DE354'],
+  ['update','14 · Update loop','#98E64E'],
+  ['upgrade','15 · Upgrade','#A3E847'],
+  ['protect','16 · Protect','#AEEA41'],
+  ['respond','17 · Respond','#B9EC3B'],
+  ['evolve','18 · Evolve & retire','#C6F24E'],
 ];
 let STAGES=STAGES_CATALOG;
 
@@ -265,6 +270,11 @@ function heroCounts(){
       {c:'SRE: signals · SLOs',req:lens},
       {c:'integrations',req:lens},
       {c:'audit + release',req:lens},
+      {c:'weekly · auto-PRs'},
+      {c:'quarterly · k8s'},
+      {c:'certs · backups · drills'},
+      {c:'the 2am runbook'},
+      {c:'EOL · cost · sunset'},
     ];
   }
   return [
@@ -482,13 +492,27 @@ window.pickAxis=(axis,id)=>{
 function rtag(kind,txt){return `<span class="rtag ${kind}">${esc(txt)}</span>`;}
 function pickTag(user,req){return user?['you','your choice']:req?['req','required by industry']:['def','default'];}
 function rpanel(idx,accent,n,name,tagHtml,valHtml,whyHtml,bodyHtml,changed){
-  const sc=(K.scenes||{})[String(idx+1)];
-  const plain=sc?`<div class="plain"><span class="plainlabel">in plain words</span>${esc(sc.plain)}</div>`:'';
-  const youhave=sc?`<div class="youhave"><b>✓ You now have:</b> ${esc(sc.youHave)}${sc.next?` <span class="nexthint">· Next: ${esc(sc.next)} →</span>`:''}</div>`:'';
+  const sn=String(idx+1);
+  const sc=(K.scenes||{})[sn]||{}, st=(K.sceneStd||{})[sn]||{};
+  const plain=sc.plain?`<div class="plain"><span class="plainlabel">in plain words</span>${esc(sc.plain)}</div>`:'';
+  // Q3 who/when/prereqs — before you start
+  const pre=(st.who||st.prereqs)?`<div class="prereq"><div class="krow"><span class="kk">who · when</span><span class="kvv">${esc(st.who||'')} — ${esc(st.when||'')}</span></div>${(st.prereqs&&st.prereqs.length)?`<div class="krow"><span class="kk">before you start</span><span class="kvv">${st.prereqs.map(esc).join(' · ')}</span></div>`:''}</div>`:'';
+  // Q6 threat
+  const threat=st.threat?`<div class="threat"><span class="tlabel">the threat this stops</span>${esc(st.threat)}</div>`:'';
+  // Q4b rejected + Q2b skip
+  const rej=st.rejected?`<div class="rejected"><b>The road not taken:</b> ${esc(st.rejected.path)}<div class="sub">Why not: ${esc(st.rejected.why)}</div></div>`:'';
+  const skip=st.skipWhen?`<div class="skipwhen"><b>Skip when:</b> ${esc(st.skipWhen)}</div>`:'';
+  // Q9 done when + Q10 breaks
+  const done=st.doneWhen?`<div class="donewhen"><span class="dlabel">✓ done when</span>${esc(st.doneWhen)}</div>`:'';
+  const brk=(st.breaks&&st.breaks.length)?`<div class="breaks"><span class="blabel">when it breaks</span>${st.breaks.map(b=>`<div class="brow"><span class="bsym">${esc(b.symptom)}</span><span class="bfix">→ ${esc(b.fix)}</span></div>`).join('')}</div>`:'';
+  // Q11+12 meta strip
+  const docsUrl=st.docs==='dynamic:framework'?'':st.docs;
+  const meta=(st.time||st.cost||st.docs)?`<div class="metastrip"><span class="mt">⏱ ${esc(st.time||'')}</span><span class="mt">💲 ${esc(st.cost||'')}</span>${docsUrl?`<a class="mt" href="${esc(docsUrl)}" target="_blank" rel="noopener">official docs ↗</a>`:''}<span class="mt sub">verified ${esc((K._meta||{}).updated||'')}</span></div>`:'';
+  const youhave=sc.youHave?`<div class="youhave"><b>✓ You now have:</b> ${esc(sc.youHave)}${sc.next?` <span class="nexthint">· Next: ${esc(sc.next)} →</span>`:''}</div>`:'';
   return `<section class="col rcol${changed?' changed':''}" id="col-${idx}" style="--accent:${accent}">
     <div class="rhead">${tagHtml}<div class="n" style="color:${accent}">${esc(n)} · ${esc(name)}</div>
       <div class="rval">${valHtml}</div><div class="rwhy">${whyHtml}</div></div>
-    <div class="colbody">${plain}${bodyHtml}${youhave}</div>${idx<12?'<div class="rconn">→</div>':''}</section>`;
+    <div class="colbody">${plain}${pre}${threat}${bodyHtml}${rej}${skip}${done}${brk}${meta}${youhave}</div>${idx<17?'<div class="rconn">→</div>':''}</section>`;
 }
 const grp=(t)=>`<div class="grp">${esc(t)}</div>`;
 
@@ -673,7 +697,15 @@ function discTag(text){const d=discipline(text);return `<span class="disc ${d.to
 function kval(v){ if(v==null||v==='')return''; if(Array.isArray(v))return v.join(', '); if(typeof v==='object')return Object.entries(v).map(([k,x])=>`${k}: ${x}`).join('  ·  '); return String(v); }
 const langName=(l)=>LANG_HUMAN[l]||l;
 // one clean line for a collapsed row — a complete sentence, never a mid-word cut
-function firstSentence(t){t=stripTags(String(t||''));const i=t.indexOf('. ');if(i>0&&i<150)return t.slice(0,i+1);if(t.length<=150)return t;const sp=t.lastIndexOf(' ',147);return t.slice(0,sp>60?sp:147)+'.';}
+function firstSentence(t){t=stripTags(String(t||''));
+  let i=-1,from=0;
+  while(true){const j=t.indexOf('. ',from);if(j<0)break;
+    const back=t.slice(Math.max(0,j-4),j+1);
+    if(/(e\.g|i\.e|etc|vs|cf)\.$/.test(back)){from=j+2;continue;}
+    i=j;break;}
+  if(i>0&&i<150)return t.slice(0,i+1);
+  if(t.length<=150)return t;
+  const sp=t.lastIndexOf(' ',147);return t.slice(0,sp>60?sp:147)+'…';}
 function essence(node,o){
   if(node==='runtimeDeep')return `${o.baseOs||''} · ${o.sizeMb?o.sizeMb+' MB':''} · ${o.fipsCertified==='yes'?'FIPS':'no FIPS'}`;
   if(node==='clusters')return `${o.cloud||''} · ${o.secretIdentity||''}`;
@@ -810,7 +842,7 @@ function renderResolver(){
   const baseName=rdBase?rdBase.name:s.base;
   const reqRun=new Set([...(s.rq?.recommendedRuntimeIds||[])]);
   const cur={who:RS.industry||'',fw:s.fw.id,scaffold:s.pkg,app:`${s.auth}|${s.orm}|${s.obs}`,local:s.buildtool||'',
-    img:s.base,pr:'pr',main:'main',declare:'d',cluster:s.cluster,observe:s.obs,connect:s.integ.length+':'+RS.industry,signoff:s.regimes.join(',')};
+    img:s.base,pr:'pr',main:'main',declare:'d',cluster:s.cluster,observe:s.obs,connect:s.integ.length+':'+RS.industry,signoff:s.regimes.join(','),update:'u',upgrade:s.cluster,protect:'p',respond:RS.industry||'',evolve:'e'};
   const ch=(k)=>LASTR[k]!=null&&LASTR[k]!==cur[k];
   const P=[];
 
@@ -1043,6 +1075,50 @@ function renderResolver(){
     (rqSel?rulebook:'')+
     `<button class="gencopy" style="margin-bottom:10px" onclick="copyAudit(this)">copy the audit</button>`+
     grp('the audit — every decision, traced to its scene')+checklistBlock(s,DEC),ch('signoff')));
+
+
+  // ════ ACT III — keep it alive ════════════════════════════════════════════
+  const A3=K.act3||{};
+  const avu=(rows)=>rows&&rows.length?grp('the platform does · you do')+`<table class="mx"><thead><tr><th>the platform does</th><th>you do</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table>`:'';
+  const a3cmds=(n,title)=>cmdBlock(title||'commands',((A3[n]||{}).commands)||[]);
+
+  // SCENE 14 · Update loop
+  P.push(rpanel(13,'#98E64E','SCENE 14','Update loop',rtag('same','weekly, forever'),
+    'small, safe, weekly','A robot opens the update PRs; you merge while they are small.',
+    avu((A3['14']||{}).auto)+a3cmds('14','commands — the weekly pass')+
+    grp('files (1)')+fileAcc('renovate.json',JSON.stringify({"$schema":"https://docs.renovatebot.com/renovate-schema.json","extends":["config:recommended",":semanticCommitsDisabled"],"schedule":["before 9am on monday"],"packageRules":[{"matchUpdateTypes":["minor","patch"],"groupName":"weekly minors"},{"matchUpdateTypes":["major"],"dependencyDashboardApproval":true}],"vulnerabilityAlerts":{"labels":["security"],"schedule":["at any time"]}},null,2)),ch('update')));
+
+  // SCENE 15 · Upgrade
+  P.push(rpanel(14,'#A3E847','SCENE 15','Upgrade the platform',rqSel?rtag('req','on YOUR calendar'):rtag('same','quarterly'),
+    esc(nameById('clusters',s.cluster))+' · quarterly','Kubernetes minors retire on the provider’s schedule. Staging first, soak, then prod.',
+    avu((A3['15']||{}).auto)+
+    grp('the order — never improvise it')+`<div class="runbook"><ol><li>Read the release notes for the next minor.</li><li>pluto detect — fix removed APIs in your manifests first.</li><li>Upgrade STAGING control plane → nodes → addons.</li><li>Soak one week — watch Scene 11 signals.</li><li>Prod by the exact same path.</li></ol></div>`+
+    a3cmds('15','commands — upgrade')+
+    grp('what else upgrades on this cadence')+`<div class="scenenote">Argo CD + the ${ (G.nodes.clusterComponents||[]).length } cluster components (Scene 10) upgrade by Helm, same staging-first path. Framework majors (e.g. Next 15→16) ride Scene 14 as major-update PRs gated by the dashboard.</div>`,ch('upgrade')));
+
+  // SCENE 16 · Protect
+  P.push(rpanel(15,'#AEEA41','SCENE 16','Protect',rtag('same','expiry does not negotiate'),
+    'rotate · back up · DRILL','Certificates renew themselves; backups happen on schedule; the restore is only real once you have drilled it.',
+    avu((A3['16']||{}).auto)+a3cmds('16','commands — protect + the drill')+
+    grp('files (1)')+fileAcc('velero-schedule.yaml','apiVersion: velero.io/v1\nkind: Schedule\nmetadata:\n  name: prod-nightly\n  namespace: velero\nspec:\n  schedule: "0 3 * * *"   # 3am nightly\n  template:\n    includedNamespaces: [prod]\n    ttl: 720h   # keep 30 days\n'),ch('protect')));
+
+  // SCENE 17 · Respond
+  const sev=((A3['17']||{}).sev)||[];
+  P.push(rpanel(16,'#B9EC3B','SCENE 17','Respond',rqSel?rtag('req','the regulator clock is real'):rtag('same','when, not if'),
+    'page → mitigate → learn','Calm beats clever at 2am. The path is written before the pager fires.',
+    grp('severity — agree on it BEFORE the incident')+`<table class="mx"><thead><tr><th>level</th><th>meaning</th><th>response</th></tr></thead><tbody>${sev.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table>`+
+    grp('the 2am runbook')+`<div class="runbook"><ol>${(((A3['17']||{}).runbook)||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`+
+    a3cmds('17','commands — roll back fast')+
+    grp('files (1)')+fileAcc('postmortem-template.md','# Postmortem — <incident title>\n\nBlameless. We fix systems, not people.\n\n## Impact\nWho/what was affected, for how long.\n\n## Timeline (UTC)\n- 02:13 page fired (alert: ...)\n- 02:15 acknowledged\n- 02:31 mitigated by ...\n- 03:02 resolved\n\n## Causes\nWhat allowed this (not "who").\n\n## What went well / what hurt\n\n## Action items\n- [ ] item — owner — due date\n')+
+    (rqSel&&myStds.length?`<div class="forcenote">🔶 Your rulebook: ${esc(s.rq.name)} — check incident-reporting duties (e.g. OSFI B-13: report material incidents within 24h).</div>`:''),ch('respond')));
+
+  // SCENE 18 · Evolve & retire
+  P.push(rpanel(17,'#C6F24E','SCENE 18','Evolve & retire',rtag('same','quarterly, half a day'),
+    'EOL · cost · sunset','Look up every quarter: what dies soon, what bleeds money, what should retire with dignity.',
+    avu((A3['18']||{}).auto)+a3cmds('18','commands — the quarterly look')+
+    grp('the maintenance calendar — the whole of Act III on one card')+
+    `<table class="mx"><thead><tr><th>cadence</th><th>what happens</th></tr></thead><tbody>${(K.maintCalendar||[]).map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table>`+
+    `<div class="scenenote">Retiring a service: freeze writes → archive data per your retention rules (the rulebook) → keep the audit evidence (Scene 13 export) → tear down compute → keep the DNS tombstone 90 days.</div>`,ch('evolve')));
 
   LASTR=cur;
   $("#track").innerHTML=P.join('');
