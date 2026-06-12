@@ -1,0 +1,4 @@
+# Always revalidate — the browser asks "changed?" and gets a fast 304 if not.
+# Why: plain filenames (app.js) were being heuristically cached for days.
+/*
+  Cache-Control: no-cache
