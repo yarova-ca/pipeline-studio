@@ -1184,7 +1184,7 @@ async function boot(){
   if(hh.get('scene')){
     if(hh.get('industry')&&(G.nodes.industryRequirements||[]).some(r=>r.id===hh.get('industry')))RS.industry=hh.get('industry');
     setMode('build');
-    const n=Math.min(13,Math.max(1,+hh.get('scene')||1));
+    const n=Math.min(STAGES_BUILD.length,Math.max(1,+hh.get('scene')||1));
     setTimeout(()=>goCol(n-1),350);
   }
 }
