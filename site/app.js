@@ -608,6 +608,24 @@ function cmdBlock(title,arr){ if(!arr||!arr.length)return'';
   return grp(title)+arr.map((c,i)=>{const id='cmd'+(CFID++);
     return `<div class="cmd"><div class="cmdlabel"><span><span class="cmdn">${i+1}</span>${esc(c.label)}</span><button class="gencopy" onclick="copyCode('${id}',this)">copy</button></div><pre class="cmdcode" id="${id}">${esc(c.cmd)}</pre></div>`;}).join(''); }
 
+// ── rich knowledge cards: show ALL options, full info each, applies/available ─
+const KFIELDS={
+  pkgBuildDeep:[['what','what it is'],['lockfile','lockfile'],['speedNote','speed'],['whenToPick','pick when'],['whenNot','avoid when'],['tradeoffVs','trade-off vs']],
+  runtimeDeep:[['what','what it is'],['baseOs','distro / kernel base'],['sizeMb','size (MB)'],['shell','shell'],['fipsCertified','FIPS validated'],['attackSurface','attack surface'],['whenToPick','pick when'],['whenNot','avoid when'],['complianceFit','compliance fit']],
+  authDeep:[['what','what it is'],['howItWorks','how it works'],['whenToPick','pick when'],['whenNot','avoid when'],['complianceFit','compliance fit']],
+  observabilityDeep:[['what','what it is'],['pillars','pillars'],['cost','cost'],['whenToPick','pick when'],['whenNot','avoid when']],
+  ormDeep:[['what','what it is'],['typeSafety','type safety'],['perf','performance'],['whenToPick','pick when'],['whenNot','avoid when'],['tradeoffVs','trade-off vs']],
+  clusters:[['cloud','cloud'],['secretIdentity','workload identity'],['defaultStorageClass','storage class'],['evidence','notes']],
+};
+function kval(v){ if(v==null||v==='')return''; if(Array.isArray(v))return v.join(', '); if(typeof v==='object')return Object.entries(v).slice(0,4).map(([k,x])=>`${k}: ${x}`).join(' · '); return String(v); }
+function richCard(node,axis,o,state,tag){
+  const rows=(KFIELDS[node]||[]).map(([k,l])=>{const v=kval(o[k]);return v?`<div class="krow"><span class="kk">${esc(l)}</span><span class="kvv">${esc(v.length>180?v.slice(0,180)+'…':v)}</span></div>`:'';}).join('');
+  return `<div class="kcard ${state}" tabindex="0" role="button" aria-pressed="${state==='chosen'}" onclick="pickAxis('${axis}','${o.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickAxis('${axis}','${o.id}')}">`+
+    `<div class="khead"><b>${esc(o.name)}</b>${tag?`<span class="ktag ${state}">${esc(tag)}</span>`:''}${state==='chosen'?'<span class="kchk">✓ selected</span>':''}`+
+    `<button class="kmore" tabindex="-1" onclick="event.stopPropagation();openDeep('${node}','${o.id}')">full knowledge →</button></div>${rows}</div>`;
+}
+const langName=(l)=>LANG_HUMAN[l]||l;
+
 function renderResolver(){
   const s=resolveStack();
   const rdBase=(G.nodes.runtimeDeep||[]).find(x=>x.id===s.base);
@@ -648,7 +666,7 @@ function renderResolver(){
   P.push(rpanel(1,'#2FCD9D','02','Dependencies',rtag(s.pkgUser?'you':'rec',s.pkgUser?'your choice':'recommended default'),
     esc(nameById('pkgBuildDeep',s.pkg)),`Package manager + build tool for ${esc(LANG_HUMAN[s.lang]||s.lang)}. Lockfile committed; CI uses frozen install.`,
     decDeps+grp(`package managers (${s.pkgList.length})`)+
-    s.pkgList.map(p=>opt('pkg',p.id,p.name,p.lockfile?String(p.lockfile).split('.')[0]:'',ostate(p.id,s.pkg,pkgReq,pkgRec),`openPkg('${p.id}')`)).join('')+
+    (G.nodes.pkgBuildDeep||[]).filter(p=>p.kind==='pkg-mgr').map(p=>{const fit=langMatch(p.language,s.lang);return richCard('pkgBuildDeep','pkg',p,p.id===s.pkg?'chosen':(fit?'fit':'dim'),p.id===s.pkg?'selected':(fit?'applies · '+langName(s.lang):'other language'));}).join('')+
     (s.btList.length?grp(`build tools (${s.btList.length})`)+s.btList.map(p=>opt('buildtool',p.id,p.name,p.what?String(p.what).slice(0,40):'',ostate(p.id,s.buildtool,new Set(),new Set()),`openPkg('${p.id}')`)).join(''):'')+cmdDeps,ch('deps')));
 
   // 2 CI/CD pipeline — same for all; ARGs resolved from your picks
@@ -679,7 +697,7 @@ function renderResolver(){
   P.push(rpanel(4,'#70DD7B','05','Image & registry',rtag(s.baseTag,s.baseTag==='req'?'required by industry':s.baseTag==='you'?'your choice':'framework default'),
     esc(baseName),esc(s.baseWhy)+' Built, signed (cosign) + SBOM, pushed to GHCR.',
     decBuild+grp(`base image (${runAll.length})`)+
-    runAll.map(r=>opt('runtime',r.id,r.name,`${r.baseOs||''}${r.fipsCertified==='yes'?' · FIPS':''}`,ostate(r.id,s.base,reqRun,new Set()),`openDeep('runtimeDeep','${r.id}')`)).join('')+
+    runAll.map(r=>{const req=reqRun.has(r.id);return richCard('runtimeDeep','runtime',r,r.id===s.base?'chosen':(req?'req':'avail'),r.id===s.base?'selected':(req?'recommended · lens':'available'));}).join('')+
     grp('registry')+card('#70DD7B','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null)+genImg+cmdDocker+cmdReg,ch('img')));
 
   // 5 GitOps — info
@@ -693,7 +711,7 @@ function renderResolver(){
   P.push(rpanel(6,'#9BE864','07','Deploy cluster',rtag(ct,ctx),
     esc(nameById('clusters',s.cluster)),s.rq?`${esc(s.rq.name)} recommends the gold ones. ${(G.nodes.clusterComponents||[]).length} platform components run here.`:`${(G.nodes.clusterComponents||[]).length} platform components.`,
     decCluster+grp(`clusters (${(G.nodes.clusters||[]).length})`)+
-    (G.nodes.clusters||[]).map(c=>opt('cluster',c.id,c.name,c.cloud||'',ostate(c.id,s.cluster,clReq,new Set()),`openCluster('${c.id}')`)).join('')+
+    (G.nodes.clusters||[]).map(c=>{const req=clReq.has(c.id);return richCard('clusters','cluster',c,c.id===s.cluster?'chosen':(req?'req':'avail'),c.id===s.cluster?'selected':(req?'recommended · lens':'available'));}).join('')+
     `<div class="sub" style="margin-top:8px">Hub-and-spoke: one Argo CD → every cluster.</div>`+genCluster+cmdCluster,ch('cluster')));
 
   // 7 Platform — auth, observability, ORM, all choosable
@@ -702,11 +720,11 @@ function renderResolver(){
   P.push(rpanel(7,'#B0ED59','08','Platform',rtag(at,'auth: '+atx),
     esc(nameById('authDeep',s.auth)),'Auth, observability and database layer — pick any:',
     decPlat+grp(`auth (${(G.nodes.authDeep||[]).length})`)+
-    (G.nodes.authDeep||[]).map(a=>opt('auth',a.id,a.name,'',ostate(a.id,s.auth,authReqS,new Set()),`openDeep('authDeep','${a.id}')`)).join('')+
+    (G.nodes.authDeep||[]).map(a=>{const req=authReqS.has(a.id);return richCard('authDeep','auth',a,a.id===s.auth?'chosen':(req?'req':'avail'),a.id===s.auth?'selected':(req?'required · lens':'available'));}).join('')+
     grp(`observability (${(G.nodes.observabilityDeep||[]).length})`)+
-    (G.nodes.observabilityDeep||[]).map(o=>opt('obs',o.id,o.name,'',ostate(o.id,s.obs,obsReqS,new Set()),`openDeep('observabilityDeep','${o.id}')`)).join('')+
+    (G.nodes.observabilityDeep||[]).map(o=>{const req=obsReqS.has(o.id);return richCard('observabilityDeep','obs',o,o.id===s.obs?'chosen':(req?'req':'avail'),o.id===s.obs?'selected':(req?'required · lens':'available'));}).join('')+
     grp(`ORM for ${esc(LANG_HUMAN[s.lang]||s.lang)} (${s.ormList.length})`)+
-    s.ormList.map(o=>opt('orm',o.id,o.name,'',ostate(o.id,s.orm,new Set(),ormRec),`openDeep('ormDeep','${o.id}')`)).join(''),ch('plat')));
+    (G.nodes.ormDeep||[]).map(o=>{const fit=(o.language||o.languages||[]).some(L=>langMatch(L,s.lang))||o.id==='orm-none';return richCard('ormDeep','orm',o,o.id===s.orm?'chosen':(fit?'fit':'dim'),o.id===s.orm?'selected':(fit?'fits '+langName(s.lang):'other language'));}).join(''),ch('plat')));
 
   // 8 Integrations — info, by industry
   let intBody,intVal,intTag;
