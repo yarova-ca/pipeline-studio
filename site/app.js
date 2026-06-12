@@ -289,7 +289,8 @@ function renderHero(){
     </div>`
   ).join('');
 }
-window.goCol=(i)=>{const c=$(`#col-${i}`);if(c)c.scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'});};
+window.goCol=(i)=>{const c=$(`#col-${i}`);if(c)c.scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'});
+  if(MODE==='build'){const h=new URLSearchParams(location.hash.slice(1));h.set('scene',String(i+1));if(RS.industry)h.set('industry',RS.industry);history.replaceState(null,'','#'+h.toString());}};
 function observeColumns(){
   const nodes=[...document.querySelectorAll('.hnode')];
   const obs=new IntersectionObserver((ents)=>{
@@ -411,7 +412,7 @@ window.openRegistry=()=>openDrawer('GHCR — ghcr.io/yarova-ca',
 // Every stage shows ALL its options, marked applies/recommended/chosen/available.
 // Click any option = pick it; the whole path reflows.
 let MODE='catalog';
-const RS={fw:null,industry:'financial-services',category:'',complianceFocus:'',pkg:null,buildtool:null,orm:null,auth:null,obs:null,runtime:null,cluster:null,region:null};
+const RS={fw:null,industry:'financial-services',category:'',complianceFocus:'',pkg:null,buildtool:null,orm:null,auth:null,obs:null,runtime:null,cluster:null,region:null,registry:'ghcr',signer:'cosign',sbom:'syft'};
 let LASTR={};
 const LANG_DEFPKG={ts:'pnpm',js:'pnpm',py:'uv',go:'gomod',rust:'cargo',java:'maven',kotlin:'gradle',php:'composer',ruby:'bundler',csharp:'gomod',elixir:'gomod'};
 const LANG_ORM={ts:'orm-prisma',js:'orm-prisma',py:'orm-sqlalchemy',go:'orm-gorm',rust:'orm-sqlx'};
@@ -481,10 +482,13 @@ window.pickAxis=(axis,id)=>{
 function rtag(kind,txt){return `<span class="rtag ${kind}">${esc(txt)}</span>`;}
 function pickTag(user,req){return user?['you','your choice']:req?['req','required by industry']:['def','default'];}
 function rpanel(idx,accent,n,name,tagHtml,valHtml,whyHtml,bodyHtml,changed){
+  const sc=(K.scenes||{})[String(idx+1)];
+  const plain=sc?`<div class="plain"><span class="plainlabel">in plain words</span>${esc(sc.plain)}</div>`:'';
+  const youhave=sc?`<div class="youhave"><b>✓ You now have:</b> ${esc(sc.youHave)}${sc.next?` <span class="nexthint">· Next: ${esc(sc.next)} →</span>`:''}</div>`:'';
   return `<section class="col rcol${changed?' changed':''}" id="col-${idx}" style="--accent:${accent}">
     <div class="rhead">${tagHtml}<div class="n" style="color:${accent}">${esc(n)} · ${esc(name)}</div>
       <div class="rval">${valHtml}</div><div class="rwhy">${whyHtml}</div></div>
-    <div class="colbody">${bodyHtml}</div>${idx<12?'<div class="rconn">→</div>':''}</section>`;
+    <div class="colbody">${plain}${bodyHtml}${youhave}</div>${idx<12?'<div class="rconn">→</div>':''}</section>`;
 }
 const grp=(t)=>`<div class="grp">${esc(t)}</div>`;
 
@@ -509,9 +513,9 @@ function industryToCompliance(rq){
 }
 function buildConfig(s){
   const k=fwToKeys(s.fw), comp=industryToCompliance(s.rq);
-  return{feKey:k.feKey,beKey:k.beKey,ciKey:'github-actions',regKey:'ghcr',
+  return{feKey:k.feKey,beKey:k.beKey,ciKey:'github-actions',regKey:RS.registry||'ghcr',
     compliance:comp[0],compliance2:comp[1],industry:s.rq?s.rq.id:'',
-    cd:'argocd',gitops:'same-repo',scanner:'trivy',signing:'cosign',sbom:'syft',
+    cd:'argocd',gitops:'same-repo',scanner:'trivy',signing:RS.signer||'cosign',sbom:RS.sbom||'syft',
     baseimage:s.base,pkgMgr:(PKG_MAP[s.pkg]||s.pkg),appName:s.fw.serviceSlug||s.fw.id,
     port:(s.tmpl&&s.tmpl.port)?String(s.tmpl.port):undefined};
 }
@@ -627,23 +631,25 @@ function scaffoldCmd(s){
   return t.replace(/\{app\}/g,s.fw.serviceSlug||'my-app');
 }
 function commandsFor(s){
-  const app=s.fw.serviceSlug||'my-app', port=(s.tmpl&&s.tmpl.port)||'8080', reg='ghcr.io/yarova-ca/'+app;
+  const app=s.fw.serviceSlug||'my-app', port=(s.tmpl&&s.tmpl.port)||'8080';
+  const regMeta=(K.registries||[]).find(r=>r.id===(RS.registry||'ghcr'))||{};
+  const regHost=regMeta.host||'ghcr.io/yarova-ca', regName=regMeta.name||'GHCR', regLogin=regMeta.login||'docker login';
   const stds=reqStds(s), shippedComp=(s.fw.shipped&&s.fw.shipped.shippedCompliance)||[], ba=(s.fw.shipped&&s.fw.shipped.buildArgs)||{};
   let rt=ba.RUNTIME||'alpine';
   for(const std of stds){const c=shippedComp.find(x=>x.standard===std); if(c&&c.buildArgs&&c.buildArgs.RUNTIME)rt=c.buildArgs.RUNTIME;}
   const tgt=rt==='fips'?'runtime-fips':'runtime';
   return {
-    scaffold:[{label:'Scaffold the service',cmd:scaffoldCmd(s)}],
-    deps:[{label:'Install dependencies (frozen lockfile)',cmd:INSTALL[(PKG_MAP[s.pkg]||s.pkg)]||'npm ci'}],
-    docker:[{label:'Build the image',cmd:`docker build -t ${reg}:dev --target ${tgt} .`},{label:'Run it locally',cmd:`docker run --rm -p ${port}:${port} ${reg}:dev`}],
-    registry:[{label:'Log in to GHCR',cmd:'echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin'},{label:'Push the image',cmd:`docker push ${reg}:$(git rev-parse --short HEAD)`},{label:'Sign it (cosign, keyless)',cmd:`cosign sign --yes ${reg}@$DIGEST`},{label:'Attach an SBOM',cmd:`syft ${reg}:dev -o spdx-json > sbom.spdx.json`}],
-    gitops:[{label:'Helm — install / upgrade',cmd:`helm upgrade --install ${app} ./helm -n prod --create-namespace -f helm/values-prod.yaml`},{label:'Kustomize — render + apply',cmd:'kustomize build kustomize/overlays/prod | kubectl apply -f -'},{label:'Argo CD — register the app',cmd:`argocd app create ${app} --repo https://github.com/yarova-ca/${app}.git --path kustomize/overlays/prod --dest-server https://kubernetes.default.svc --dest-namespace prod --sync-policy automated`}],
-    cluster:[{label:'Point kubectl at the cluster',cmd:`kubectl config use-context ${s.cluster}`},{label:'Verify the rollout',cmd:`kubectl rollout status deploy/${app} -n prod`}],
+    scaffold:[{label:'Scaffold the service',cmd:scaffoldCmd(s),expect:'a new folder with the project files inside'}],
+    deps:[{label:'Install dependencies (frozen lockfile)',cmd:INSTALL[(PKG_MAP[s.pkg]||s.pkg)]||'npm ci',expect:'packages install with zero version drift'}],
+    docker:[{label:'Build the image',cmd:`docker build -t ${regHost}/${app}:dev --target ${tgt} .`,expect:'ends with: naming to '+regHost+'/'+app+':dev'},{label:'Run it locally',cmd:`docker run --rm -p ${port}:${port} ${regHost}/${app}:dev`,expect:'the app answers on http://localhost:'+port}],
+    registry:[{label:'Log in to '+regName,cmd:regLogin,expect:'Login Succeeded'},{label:'Push the image',cmd:`docker push ${regHost}/${app}:$(git rev-parse --short HEAD)`,expect:'layers pushed; digest printed'},{label:'Sign it ('+(RS.signer||'cosign')+')',cmd:(RS.signer==='notation'?`notation sign ${regHost}/${app}@$DIGEST`:`cosign sign --yes ${regHost}/${app}@$DIGEST`),expect:'signature stored alongside the image'},{label:'Attach an SBOM ('+(RS.sbom||'syft')+')',cmd:(RS.sbom==='cdxgen'?'cdxgen -o sbom.cdx.json':RS.sbom==='trivy'?`trivy image --format spdx-json -o sbom.json ${regHost}/${app}:dev`:`syft ${regHost}/${app}:dev -o spdx-json > sbom.spdx.json`),expect:'an SBOM file — the ingredient list'}],
+    gitops:[{label:'Helm — install / upgrade',cmd:`helm upgrade --install ${app} ./helm -n prod --create-namespace -f helm/values-prod.yaml`,expect:'STATUS: deployed'},{label:'Kustomize — render + apply',cmd:'kustomize build kustomize/overlays/prod | kubectl apply -f -',expect:'deployment.apps/'+app+' created'},{label:'Argo CD — register the app',cmd:`argocd app create ${app} --repo https://github.com/yarova-ca/${app}.git --path kustomize/overlays/prod --dest-server https://kubernetes.default.svc --dest-namespace prod --sync-policy automated`,expect:"application '"+app+"' created"}],
+    cluster:[{label:'Point kubectl at the cluster',cmd:`kubectl config use-context ${s.cluster}`,expect:'Switched to context'},{label:'Verify the rollout',cmd:`kubectl rollout status deploy/${app} -n prod`,expect:'deployment "'+app+'" successfully rolled out'}],
   };
 }
 function cmdBlock(title,arr){ if(!arr||!arr.length)return'';
   return grp(title)+arr.map((c,i)=>{const id='cmd'+(CFID++);
-    return `<div class="cmd"><div class="cmdlabel"><span><span class="cmdn">${i+1}</span>${esc(c.label)}</span><button class="gencopy" onclick="copyCode('${id}',this)">copy</button></div><pre class="cmdcode" id="${id}">${esc(c.cmd)}</pre></div>`;}).join(''); }
+    return `<div class="cmd"><div class="cmdlabel"><span><span class="cmdn">${i+1}</span>${esc(c.label)}</span><button class="gencopy" onclick="copyCode('${id}',this)">copy</button></div><pre class="cmdcode" id="${id}">${esc(c.cmd)}</pre>${c.expect?`<div class="expect">you'll see: ${esc(c.expect)}</div>`:''}</div>`;}).join(''); }
 
 // ── rich knowledge cards: show ALL options, full info each, applies/available ─
 // full knowledge, inline in the flow — nothing summarized away.
@@ -715,13 +721,65 @@ function checklistBlock(s,DEC){
   (DEC.build||[]).filter(d=>d.verdict==='forced').forEach(d=>items.push({area:'Security · build',q:`${d.q} → ${d.answer}`,state:'forced',note:d.why}));
   (DEC.platform||[]).filter(d=>/Auth|Audit|RBAC|Observability/.test(d.q)).forEach(d=>items.push({area:'Security · platform',q:`${d.q}: ${d.answer}`,state:d.verdict==='gap'?'gap':(d.verdict==='required'?'ok':'note'),note:d.why}));
   if(!items.length)return'<div class="sub">Pick an industry to generate the checklist.</div>';
+  const SCENE_OF={'Compliance':[1,'Scene 1'],'Security · build':[6,'Scene 6'],'Security · platform':[4,'Scene 4']};
   const ic={ok:'✓',gap:'✗',forced:'🔒',note:'•'};
   const byArea={}; items.forEach(i=>{(byArea[i.area]||=[]).push(i);});
   const gaps=items.filter(i=>i.state==='gap').length;
   return `<div class="sub" style="margin-bottom:8px">${items.length} decisions · <b style="color:${gaps?'#e8615a':'var(--teal)'}">${gaps} open gap${gaps===1?'':'s'}</b> for ${esc(s.rq?s.rq.name:'this stack')}.</div>`+
     Object.entries(byArea).map(([area,arr])=>grp(area)+arr.map(i=>
-      `<div class="chk ${i.state}"><span class="chki">${ic[i.state]}</span><div><div class="chkq">${esc(i.q)}</div>${i.note?`<div class="chkn">${esc(stripTags(i.note))}</div>`:''}</div></div>`).join('')).join('');
+      `<div class="chk ${i.state}"><span class="chki">${ic[i.state]}</span><div><div class="chkq">${esc(i.q)}</div>${i.note?`<div class="chkn">${esc(stripTags(i.note))}</div>`:''}</div>${SCENE_OF[area]?`<button class="scjump" onclick="goCol(${SCENE_OF[area][0]-1})">${SCENE_OF[area][1]} →</button>`:''}</div>`).join('')).join('');
 }
+
+// ── emitted SRE files: real, droppable starters built from your stack ───────
+function alertRulesYaml(s){
+  const app=s.fw.serviceSlug||'app';
+  return `# Prometheus alert rules — starter pack for ${app}
+# Drop into your rule files; tune thresholds to your SLO.
+groups:
+- name: ${app}-golden-signals
+  rules:
+  - alert: HighErrorRate
+    expr: sum(rate(http_requests_total{job="${app}",status=~"5.."}[5m])) / sum(rate(http_requests_total{job="${app}"}[5m])) > 0.01
+    for: 5m
+    labels: {severity: page}
+    annotations: {summary: ">1% of requests are failing for 5m"}
+  - alert: HighLatencyP99
+    expr: histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job="${app}"}[5m])) by (le)) > 1
+    for: 5m
+    labels: {severity: page}
+    annotations: {summary: "p99 latency above 1s for 5m"}
+  - alert: PodCrashLooping
+    expr: increase(kube_pod_container_status_restarts_total{namespace="prod",pod=~"${app}.*"}[10m]) > 3
+    for: 0m
+    labels: {severity: page}
+    annotations: {summary: "pod restarting repeatedly"}
+  - alert: DeploymentReplicasUnavailable
+    expr: kube_deployment_status_replicas_unavailable{deployment="${app}",namespace="prod"} > 0
+    for: 5m
+    labels: {severity: ticket}
+    annotations: {summary: "desired replicas not available for 5m"}
+  - alert: PVCAlmostFull
+    expr: kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes > 0.85
+    for: 10m
+    labels: {severity: ticket}
+    annotations: {summary: "volume above 85% capacity"}
+`;}
+function dashboardJson(s){
+  const app=s.fw.serviceSlug||'app';
+  const panel=(title,expr,x,y)=>({title,type:'timeseries',gridPos:{h:8,w:12,x,y},targets:[{expr,refId:'A'}]});
+  return JSON.stringify({title:app+' — golden signals',uid:app+'-golden',tags:['yarova-studio','golden-signals'],time:{from:'now-6h',to:'now'},panels:[
+    panel('Latency p99 (s)','histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job="'+app+'"}[5m])) by (le))',0,0),
+    panel('Traffic (req/s)','sum(rate(http_requests_total{job="'+app+'"}[5m]))',12,0),
+    panel('Errors (% 5xx)','100 * sum(rate(http_requests_total{job="'+app+'",status=~"5.."}[5m])) / sum(rate(http_requests_total{job="'+app+'"}[5m]))',0,8),
+    panel('Saturation (CPU vs limit)','sum(rate(container_cpu_usage_seconds_total{pod=~"'+app+'.*"}[5m])) / sum(kube_pod_container_resource_limits{resource="cpu",pod=~"'+app+'.*"})',12,8)
+  ]},null,2);}
+window.copyAudit=(btn)=>{const el=document.querySelector('#col-12 .colbody');if(!el)return;
+  navigator.clipboard.writeText(el.innerText).then(()=>{const t=btn.textContent;btn.textContent='copied ✓';setTimeout(()=>btn.textContent=t,1200);});};
+window.openGlossary=()=>{
+  const terms=(K.glossary||[]);
+  openDrawer('Glossary — every term, plainly',
+    `<div class="sub" style="margin-bottom:10px">${terms.length} terms. No prior knowledge assumed.</div>`+
+    terms.map(t=>`<div class="gterm"><b>${esc(t.term)}</b>${t.full?` <span class="sub">(${esc(t.full)})</span>`:''}<div class="gdef">${esc(t.def)}</div></div>`).join(''));};
 
 // ── the 13 scenes: reality's order, full coverage, live lens ─────────────────
 function industryMatrix(kind){
@@ -739,10 +797,12 @@ function industryMatrix(kind){
   return `<table class="mx"><thead><tr><th>industry</th><th>${TITLES[kind]||kind}</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 const sceneNote=(n)=>K.sceneNotes&&K.sceneNotes[n]?`<div class="scenenote">${esc(K.sceneNotes[n])}</div>`:'';
-function altRow(o,extra){
-  const fields=[['what','what'],['pick','pick when'],['avoid','avoid when'],['tradeoff','trade-off'],['setup','setup'],['command','command'],['format','format'],['residency','residency'],['license','license']];
+function altRow(o,extra,axis,chosenId){
+  const fields=[['what','what'],['pick','pick when'],['avoid','avoid when'],['tradeoff','trade-off'],['setup','setup'],['login','login command'],['command','command'],['format','format'],['residency','residency'],['license','license']];
   const rows=fields.map(([k,l])=>o[k]?`<div class="krow"><span class="kk">${esc(l)}</span><span class="kvv">${esc(o[k])}</span></div>`:'').join('');
-  return `<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc(o.name)}</span><span class="am">${esc(firstSentence(o.what||o.pick||''))}</span>${extra||''}</summary><div class="accbody">${rows}</div></details>`;
+  const chosen=axis&&o.id===chosenId;
+  const sel=axis?`<button class="aselect${chosen?' on':''}" onclick="event.preventDefault();event.stopPropagation();pickAxis('${axis}','${o.id}')">${chosen?'✓ selected':'select'}</button>`:'';
+  return `<details class="acc ${chosen?'chosen':'fit'}"${chosen?' open':''}><summary><span class="caret">▸</span><span class="an">${esc(o.name)}</span><span class="am">${esc(firstSentence(o.what||o.pick||''))}</span>${extra||''}${sel}</summary><div class="accbody">${rows}</div></details>`;
 }
 function renderResolver(){
   const s=resolveStack();
@@ -857,7 +917,10 @@ function renderResolver(){
     grp(`backend observability wiring (${(G.nodes.observabilityDeep||[]).length})`)+
     orderOpts(G.nodes.observabilityDeep||[],s.obs,obsReqS).map(o=>{const req=obsReqS.has(o.id);return accRow('observabilityDeep','obs',o,o.id===s.obs?'chosen':(req?'req':'avail'),o.id===s.obs?'selected':(req?'rulebook requires':'available'),o.id===s.obs);}).join('')+
     grp(`frontend observability (${(K.frontendObservability||[]).length})`)+
-    (K.frontendObservability||[]).map(o=>altRow(o)).join(''),ch('app')));
+    (K.frontendObservability||[]).map(o=>altRow(o)).join('')+
+    (()=>{const g=LANG_GROUP[s.lang]||'nodejs';const snips=(K.appImpl||{})[g]||(K.appImpl||{}).nodejs||[];
+      return snips.length?grp(`write this code — starters for ${langName(s.lang)} (${snips.length})`)+
+        snips.map(sn=>`<div class="sub" style="margin:2px 0 4px">${esc(sn.what)}</div>`+fileAcc(sn.file,sn.code)).join(''):'';})(),ch('app')));
 
   // ── SCENE 5 · Local dev loop ──────────────────────────────────────────────
   const p1=phaseScene('phase-1');
@@ -902,9 +965,9 @@ function renderResolver(){
     'sign · SBOM · push','The merge builds the image, signs it, attaches the SBOM, and pushes it.',
     grp(`main build — ${esc(p3.ph?p3.ph.trigger:'on merge')}`)+p3.rows+p3.adds+
     (pReg.rows?grp('registry stage')+pReg.rows+pReg.adds:'')+
-    grp(`signers (${(K.signers||[]).length})`)+(K.signers||[]).map(o=>altRow(o)).join('')+
-    grp(`SBOM tools (${(K.sbomTools||[]).length})`)+(K.sbomTools||[]).map(o=>altRow(o)).join('')+
-    grp(`registries — all ${(K.registries||[]).length}, with setup`)+(K.registries||[]).map(o=>altRow(o,o.oidc?'<span class="ktag fit">OIDC — no stored secrets</span>':'')).join('')+
+    grp(`signers (${(K.signers||[]).length}) — your choice flows into main.yml`)+(K.signers||[]).map(o=>altRow(o,'','signer',RS.signer)).join('')+
+    grp(`SBOM tools (${(K.sbomTools||[]).length}) — your choice flows into main.yml`)+(K.sbomTools||[]).map(o=>altRow(o,'','sbom',RS.sbom)).join('')+
+    grp(`registries — all ${(K.registries||[]).length}; your choice rewrites the workflow + commands`)+(K.registries||[]).map(o=>altRow(o,o.oidc?'<span class="ktag fit">OIDC — no stored secrets</span>':'','registry',RS.registry)).join('')+
     grp('files (1)')+fileAcc('.github/workflows/main.yml',GF.mainwf)+
     ciCmds,ch('main')));
 
@@ -934,6 +997,9 @@ function renderResolver(){
     grp(`clusters (${(G.nodes.clusters||[]).length})`)+
     (G.nodes.clusters||[]).map(c=>{const req=clReq.has(c.id);return accRow('clusters','cluster',c,c.id===s.cluster?'chosen':(req?'req':'avail'),c.id===s.cluster?'selected':(req?'rulebook recommends':'available'),c.id===s.cluster);}).join('')+
     grp('what each industry gets — cluster')+industryMatrix('clusters')+
+    grp(`create the cluster — ${esc(nameById('clusters',s.cluster))} (${((K.clusterProvision||{})[s.cluster]||{}).tool||''})`)+
+    cmdBlock('commands — provision',(((K.clusterProvision||{})[s.cluster]||{}).commands)||[])+
+    `<details class="acc"><summary><span class="caret">▸</span><span class="an">How the other clusters are created</span><span class="am">eksctl · gcloud · az · openshift-install</span></summary><div class="accbody">${Object.entries(K.clusterProvision||{}).filter(([id])=>id!==s.cluster).map(([id,v])=>`<div class="krow"><span class="kk">${esc(nameById('clusters',id))}</span><span class="kvv">${esc((v.commands[0]||{}).cmd||'')}</span></div>`).join('')}</div></details>`+
     grp(`inside the cluster — ${comps.length} components, stacked`)+compBlocks+
     grp(`manifests (${Object.keys(GF.deploy||{}).length})`)+Object.entries(GF.deploy||{}).map(([n,c])=>fileAcc(n,c)).join('')+
     cmdGitops+cmdCluster,ch('cluster')));
@@ -950,12 +1016,20 @@ function renderResolver(){
     grp(`backend stacks (${(G.nodes.observabilityDeep||[]).length}) — full knowledge`)+
     orderOpts(G.nodes.observabilityDeep||[],s.obs,obsReqS).map(o=>{const req=obsReqS.has(o.id);return accRow('observabilityDeep','obs',o,o.id===s.obs?'chosen':(req?'req':'avail'),o.id===s.obs?'selected':(req?'rulebook requires':'available'),false);}).join('')+
     grp('what each industry requires — observability')+industryMatrix('obs')+
-    `<div class="scenenote">${esc(sre.retentionNote||'')}</div>`,ch('observe')));
+    `<div class="scenenote">${esc(sre.retentionNote||'')}</div>`+
+    grp('files (2) — drop into your repo')+
+    fileAcc('observability/alert-rules.yaml',alertRulesYaml(s))+
+    fileAcc('observability/dashboard.json',dashboardJson(s)),ch('observe')));
 
   // ── SCENE 12 · Connect ───────────────────────────────────────────────────
   let intBody;
   if(rqSel){const bc=by(s.integ,'category');
-    intBody=s.integ.length?Object.entries(bc).map(([c,a])=>grp(c)+a.map(g=>card('#B4EE58',g.externalSystem,`auth ${g.authOption||''} · ${g.apiGateway||''}`,`openIntegration('${g.id}')`,'',null)).join('')).join(''):'<div class="sub">No catalogued integrations for this industry yet.</div>';
+    intBody=s.integ.length?Object.entries(bc).map(([c,a])=>grp(c)+a.map(g=>
+      `<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc(g.externalSystem)}</span><span class="am">auth ${esc(g.authOption||'')} · via ${esc(g.apiGateway||'')}</span></summary><div class="accbody">`+
+      (g.dataFlow?`<div class="krow"><span class="kk">data flow</span><span class="kvv">${esc(stripTags(g.dataFlow))}</span></div>`:'')+
+      (g.tools?`<div class="krow"><span class="kk">tools</span><span class="kvv">${esc(Array.isArray(g.tools)?g.tools.join(', '):stripTags(g.tools))}</span></div>`:'')+
+      `<div class="krow"><span class="kk">gateway</span><span class="kvv">${esc(g.apiGateway||'')} — the guarded front door this call goes through</span></div>`+
+      `<div style="margin-top:6px"><button class="kmore" onclick="openIntegration('${g.id}')">full record →</button></div></div></details>`).join('')).join(''):'<div class="sub">No catalogued integrations for this industry yet.</div>';
   } else intBody='<div class="sub">Pick an industry in Scene 1 to see its integrations.</div>';
   P.push(rpanel(11,'#B4EE58','SCENE 12','Connect',rqSel?rtag('req',`${s.integ.length} systems`):rtag('def','no industry'),
     rqSel?`${s.integ.length} integrations`:'Pick an industry',
@@ -967,7 +1041,8 @@ function renderResolver(){
   P.push(rpanel(12,'#C6F24E','SCENE 13','Sign-off',rqSel?rtag('req','release gate'):rtag('def','no industry'),
     'the audit','Every rule from Scene 1 — met, forced, or gap. Release when the gaps are closed.',
     (rqSel?rulebook:'')+
-    grp('the audit — every decision, traced')+checklistBlock(s,DEC),ch('signoff')));
+    `<button class="gencopy" style="margin-bottom:10px" onclick="copyAudit(this)">copy the audit</button>`+
+    grp('the audit — every decision, traced to its scene')+checklistBlock(s,DEC),ch('signoff')));
 
   LASTR=cur;
   $("#track").innerHTML=P.join('');
@@ -1028,5 +1103,13 @@ async function boot(){
   if(h.get('lens')&&(G.nodes.verticals||[]).some(v=>v.id===h.get('lens'))){lv.value=h.get('lens');setLens(h.get('lens'));}
   lv.onchange=e=>{setLens(e.target.value);location.hash=e.target.value?`lens=${e.target.value}`:'';renderLensInfo();renderHero();renderBoard();};
   renderHero();renderLensInfo();renderBoard();
+  // deep link: #scene=N&industry=id opens build mode at that scene with that lens
+  const hh=new URLSearchParams(location.hash.slice(1));
+  if(hh.get('scene')){
+    if(hh.get('industry')&&(G.nodes.industryRequirements||[]).some(r=>r.id===hh.get('industry')))RS.industry=hh.get('industry');
+    setMode('build');
+    const n=Math.min(13,Math.max(1,+hh.get('scene')||1));
+    setTimeout(()=>goCol(n-1),350);
+  }
 }
 boot();

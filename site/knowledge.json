@@ -1,84 +1,785 @@
 {
-  "_meta": {"sourceType": "authored", "what": "Authored knowledge layer for the 13-scene platform: CI tool alternatives, signers, SBOM tools, registries, frontend observability, SRE pack, scene notes. graph.json stays the extracted truth; this file is the curated truth.", "updated": "2026-06-11"},
-
-  "ciAlternatives": [
-    {"slot": "SAST", "what": "Static analysis — finds vulnerable code patterns without running the app", "options": [
-      {"name": "CodeQL", "license": "Free on GitHub repos", "pick": "GitHub-hosted code — deepest dataflow analysis, zero infra", "avoid": "Non-GitHub forges (paid) or air-gapped runners", "tradeoff": "vs Semgrep: deeper taint tracking, slower scans, GitHub-bound"},
-      {"name": "Semgrep", "license": "OSS engine, paid cloud", "pick": "Fast custom rules, any CI, monorepos", "avoid": "You need cross-function taint flow on the free tier", "tradeoff": "vs CodeQL: minutes faster, rules are simpler but shallower"},
-      {"name": "SonarQube", "license": "OSS Community + paid", "pick": "Quality gates + security in one dashboard, self-hosted mandates", "avoid": "You only want security findings — heavier to run", "tradeoff": "vs both: adds maintainability metrics, needs its own server"}
-    ]},
-    {"slot": "SCA", "what": "Dependency scanning — known CVEs in the libraries you import", "options": [
-      {"name": "Dependabot", "license": "Free on GitHub", "pick": "Default on GitHub — alerts + auto-PRs with zero setup", "avoid": "Monorepos needing grouped, scheduled updates", "tradeoff": "vs Renovate: simpler, far less configurable"},
-      {"name": "Renovate", "license": "OSS", "pick": "Grouped updates, schedules, monorepos, any forge", "avoid": "You want zero config files", "tradeoff": "vs Dependabot: more power, more config to own"},
-      {"name": "Trivy", "license": "Apache 2.0", "pick": "One scanner for deps + images + IaC in CI", "avoid": "You need auto-fix PRs (it only reports)", "tradeoff": "vs Snyk: free and local, no fix suggestions"},
-      {"name": "Snyk", "license": "Paid (free tier)", "pick": "Fix PRs + reachability analysis + dev-friendly UI", "avoid": "Budget-zero or fully air-gapped", "tradeoff": "vs Trivy: better fixes, costs money, cloud-dependent"}
-    ]},
-    {"slot": "Secrets", "what": "Secret scanning — credentials committed into the repo", "options": [
-      {"name": "Gitleaks", "license": "MIT", "pick": "Fast regex+entropy scan in pre-commit AND CI", "avoid": "You need verified-secret checks (it flags patterns only)", "tradeoff": "vs TruffleHog: lighter, no live credential verification"},
-      {"name": "TruffleHog", "license": "AGPL/paid", "pick": "Verifies if found secrets are LIVE against providers", "avoid": "Air-gapped CI (verification calls out)", "tradeoff": "vs Gitleaks: fewer false positives, slower, heavier"},
-      {"name": "GitHub Push Protection", "license": "Free public / GHAS private", "pick": "Blocks the push itself — secrets never land", "avoid": "Non-GitHub remotes", "tradeoff": "vs both: earliest gate, GitHub-only, fixed patterns"}
-    ]},
-    {"slot": "IaC scan", "what": "Infrastructure-as-code scanning — misconfigured Terraform/K8s/Docker", "options": [
-      {"name": "Checkov", "license": "Apache 2.0", "pick": "Widest coverage: Terraform, K8s, Docker, Helm, ARM", "avoid": "You want graph-aware Terraform-only depth", "tradeoff": "vs tfsec: broader targets, noisier defaults"},
-      {"name": "Trivy (config)", "license": "Apache 2.0", "pick": "Already using Trivy — one tool, one report format", "avoid": "Deep policy customisation needs", "tradeoff": "vs Checkov: fewer built-in policies, simpler ops"},
-      {"name": "KICS", "license": "Apache 2.0", "pick": "Checkmarx-backed query library, many platforms", "avoid": "Smallest-footprint pipelines", "tradeoff": "vs Checkov: comparable coverage, less community momentum"}
-    ]},
-    {"slot": "License scan", "what": "License compliance — what licenses your dependencies carry", "options": [
-      {"name": "license-checker / pip-licenses", "license": "OSS", "pick": "Per-ecosystem CLI, free, runs anywhere", "avoid": "You need org-wide policy + legal workflows", "tradeoff": "vs FOSSA: free but per-language and report-only"},
-      {"name": "FOSSA", "license": "Paid", "pick": "Org policy engine, legal reporting, attribution docs", "avoid": "Single small service on a budget", "tradeoff": "vs CLIs: complete governance, costs real money"}
-    ]},
-    {"slot": "DAST", "what": "Dynamic testing — attacks the RUNNING app like an outsider", "options": [
-      {"name": "OWASP ZAP", "license": "Apache 2.0", "pick": "Free baseline scan of a deployed preview env", "avoid": "No running environment exists in CI", "tradeoff": "vs Nuclei: full proxy/spider, slower, heavier"},
-      {"name": "Nuclei", "license": "MIT", "pick": "Fast template-based checks on known CVE patterns", "avoid": "You need authenticated, stateful crawling", "tradeoff": "vs ZAP: seconds-fast, template-bound depth"}
-    ]}
-  ],
-
-  "signers": [
-    {"name": "cosign (Sigstore)", "pick": "Keyless signing via CI OIDC — no key management at all", "avoid": "Policy mandates long-lived org keys outside Sigstore", "tradeoff": "vs Notation: zero key ops, depends on Sigstore infra", "command": "cosign sign --yes $IMAGE@$DIGEST"},
-    {"name": "Notation (CNCF)", "pick": "Enterprise PKI — sign with your own certificate chain", "avoid": "You don't run a PKI and don't want to", "tradeoff": "vs cosign: your keys your control, you own rotation", "command": "notation sign $IMAGE@$DIGEST"}
-  ],
-
-  "sbomTools": [
-    {"name": "syft", "format": "SPDX + CycloneDX", "pick": "Default: fast, accurate, pairs with cosign attest", "avoid": "—", "command": "syft $IMAGE -o spdx-json > sbom.spdx.json"},
-    {"name": "cdxgen", "format": "CycloneDX", "pick": "CycloneDX-first orgs and OWASP toolchains", "avoid": "SPDX-mandated environments", "command": "cdxgen -o sbom.cdx.json"},
-    {"name": "trivy sbom", "format": "SPDX + CycloneDX", "pick": "Already running Trivy — one tool fewer", "avoid": "—", "command": "trivy image --format spdx-json -o sbom.json $IMAGE"}
-  ],
-
-  "registries": [
-    {"name": "GHCR", "oidc": true, "pick": "GitHub Actions default — GITHUB_TOKEN auth, zero stored secrets", "setup": "No OIDC setup needed; enable branch protection + secret scanning", "residency": "GitHub-managed (US/global)"},
-    {"name": "Amazon ECR", "oidc": true, "pick": "Deploying into AWS/EKS — same-cloud pulls, IAM-native", "setup": "Create repo with scanOnPush; add OIDC provider + IAM role for the repo", "residency": "Your AWS region (ca-central-1 for Canada)"},
-    {"name": "Google Artifact Registry", "oidc": true, "pick": "GKE deployments — workload-identity pulls", "setup": "gcloud artifacts repositories create + Workload Identity Federation for GitHub", "residency": "Your GCP region"},
-    {"name": "Azure ACR", "oidc": true, "pick": "AKS deployments — managed-identity pulls", "setup": "az acr create + federated credential for the GitHub repo", "residency": "Your Azure region (Canada Central)"},
-    {"name": "Harbor", "oidc": false, "pick": "Self-hosted mandate — on-prem, air-gapped, sovereignty", "setup": "Deploy Harbor (Helm), create robot account, store its token as a CI secret", "residency": "Wherever YOU run it — full control"},
-    {"name": "Quay.io", "oidc": false, "pick": "Red Hat ecosystem, built-in Clair scanning", "setup": "Create robot account; token as CI secret", "residency": "Red Hat-managed"},
-    {"name": "Docker Hub", "oidc": false, "pick": "Public OSS images with the widest reach", "avoid": "Private enterprise images (rate limits, weaker controls)", "setup": "Access token as CI secret", "residency": "Docker-managed (US)"},
-    {"name": "JFrog Artifactory", "oidc": false, "pick": "One registry for containers + npm + maven + generic artifacts", "setup": "Repo + access token; optional OIDC on paid tiers", "residency": "Self-hosted or JFrog cloud region"},
-    {"name": "Nexus Repository", "oidc": false, "pick": "Existing Nexus shop — keep one artifact store", "setup": "Docker-hosted repo + user token as CI secret", "residency": "Self-hosted"}
-  ],
-
-  "frontendObservability": [
-    {"name": "Sentry", "what": "Error tracking + session replay for the browser", "pick": "Default for FE errors — source-mapped stack traces, releases", "avoid": "Strict data-residency without self-hosting (or use their EU/self-host)", "tradeoff": "vs Faro: richer errors/replay, separate backend from your metrics"},
-    {"name": "web-vitals", "what": "Google's library for LCP/INP/CLS — real-user performance", "pick": "Always — 2KB, feeds Core Web Vitals to any backend", "avoid": "—", "tradeoff": "Numbers only; pair with an error tracker"},
-    {"name": "OpenTelemetry Web", "what": "OTel SDK for the browser — traces from click to backend", "pick": "You already run OTel server-side and want ONE pipeline end-to-end", "avoid": "Quick setups — browser OTel is still maturing", "tradeoff": "vs Sentry: unified vendor-neutral traces, weaker error UX"},
-    {"name": "Grafana Faro", "what": "Grafana's FE SDK — logs, errors, vitals into Loki/Tempo", "pick": "Grafana LGTM stack shops — FE lands in the same dashboards", "avoid": "Non-Grafana backends", "tradeoff": "vs Sentry: one stack, younger product"},
-    {"name": "Datadog RUM", "what": "Real-user monitoring in Datadog", "pick": "Already paying Datadog — FE joins your APM traces", "avoid": "Cost-sensitive (RUM sessions add up fast)", "tradeoff": "vs OSS: turnkey, per-session pricing"}
-  ],
-
-  "sre": {
-    "goldenSignals": [
-      {"signal": "Latency", "measure": "p50/p95/p99 request duration", "alertWhen": "p99 > SLO for 5m"},
-      {"signal": "Traffic", "measure": "requests/sec per route", "alertWhen": "drops 50% vs 1h baseline"},
-      {"signal": "Errors", "measure": "5xx rate as % of requests", "alertWhen": "> 1% for 5m (tighten per SLO)"},
-      {"signal": "Saturation", "measure": "CPU/memory vs limits, queue depth", "alertWhen": "> 80% of limit for 10m"}
-    ],
-    "sloStarter": "Availability SLO 99.9% monthly (43m error budget). Burn-rate alerts: page at 14.4x/1h, ticket at 6x/6h. Why 99.9: one nine cheaper than your dependencies' composite.",
-    "alertPack": ["Pod crash-looping (restarts > 3 in 10m)", "Deployment replicas unavailable > 5m", "Certificate expiry < 14 days", "PVC > 85% full", "Error-budget burn > 14.4x over 1h"],
-    "retentionNote": "Log/audit retention is regime-driven — see the rulebook: PCI 1yr (3m hot), HIPAA 6yr, OSFI/B-13 7yr, SOC 2 1yr typical-evidence window defined in your policy."
+ "_meta": {
+  "sourceType": "authored",
+  "what": "Authored knowledge layer for the 13-scene platform: CI tool alternatives, signers, SBOM tools, registries, frontend observability, SRE pack, scene notes. graph.json stays the extracted truth; this file is the curated truth.",
+  "updated": "2026-06-11"
+ },
+ "ciAlternatives": [
+  {
+   "slot": "SAST",
+   "what": "Static analysis — finds vulnerable code patterns without running the app",
+   "options": [
+    {
+     "name": "CodeQL",
+     "license": "Free on GitHub repos",
+     "pick": "GitHub-hosted code — deepest dataflow analysis, zero infra",
+     "avoid": "Non-GitHub forges (paid) or air-gapped runners",
+     "tradeoff": "vs Semgrep: deeper taint tracking, slower scans, GitHub-bound"
+    },
+    {
+     "name": "Semgrep",
+     "license": "OSS engine, paid cloud",
+     "pick": "Fast custom rules, any CI, monorepos",
+     "avoid": "You need cross-function taint flow on the free tier",
+     "tradeoff": "vs CodeQL: minutes faster, rules are simpler but shallower"
+    },
+    {
+     "name": "SonarQube",
+     "license": "OSS Community + paid",
+     "pick": "Quality gates + security in one dashboard, self-hosted mandates",
+     "avoid": "You only want security findings — heavier to run",
+     "tradeoff": "vs both: adds maintainability metrics, needs its own server"
+    }
+   ]
   },
-
-  "sceneNotes": {
-    "3": "Scaffold + git rules are the SAME for every industry — branch protection, CODEOWNERS, signed commits. Regulated industries only ADD reviewers/evidence on top.",
-    "5": "The local loop is the SAME for every industry. Pre-commit hooks are universal hygiene; no regime changes them.",
-    "9": "Helm/Kustomize structure is the SAME for every industry. What changes per industry is the VALUES (replicas, regions, network policy) — not the mechanism."
+  {
+   "slot": "SCA",
+   "what": "Dependency scanning — known CVEs in the libraries you import",
+   "options": [
+    {
+     "name": "Dependabot",
+     "license": "Free on GitHub",
+     "pick": "Default on GitHub — alerts + auto-PRs with zero setup",
+     "avoid": "Monorepos needing grouped, scheduled updates",
+     "tradeoff": "vs Renovate: simpler, far less configurable"
+    },
+    {
+     "name": "Renovate",
+     "license": "OSS",
+     "pick": "Grouped updates, schedules, monorepos, any forge",
+     "avoid": "You want zero config files",
+     "tradeoff": "vs Dependabot: more power, more config to own"
+    },
+    {
+     "name": "Trivy",
+     "license": "Apache 2.0",
+     "pick": "One scanner for deps + images + IaC in CI",
+     "avoid": "You need auto-fix PRs (it only reports)",
+     "tradeoff": "vs Snyk: free and local, no fix suggestions"
+    },
+    {
+     "name": "Snyk",
+     "license": "Paid (free tier)",
+     "pick": "Fix PRs + reachability analysis + dev-friendly UI",
+     "avoid": "Budget-zero or fully air-gapped",
+     "tradeoff": "vs Trivy: better fixes, costs money, cloud-dependent"
+    }
+   ]
+  },
+  {
+   "slot": "Secrets",
+   "what": "Secret scanning — credentials committed into the repo",
+   "options": [
+    {
+     "name": "Gitleaks",
+     "license": "MIT",
+     "pick": "Fast regex+entropy scan in pre-commit AND CI",
+     "avoid": "You need verified-secret checks (it flags patterns only)",
+     "tradeoff": "vs TruffleHog: lighter, no live credential verification"
+    },
+    {
+     "name": "TruffleHog",
+     "license": "AGPL/paid",
+     "pick": "Verifies if found secrets are LIVE against providers",
+     "avoid": "Air-gapped CI (verification calls out)",
+     "tradeoff": "vs Gitleaks: fewer false positives, slower, heavier"
+    },
+    {
+     "name": "GitHub Push Protection",
+     "license": "Free public / GHAS private",
+     "pick": "Blocks the push itself — secrets never land",
+     "avoid": "Non-GitHub remotes",
+     "tradeoff": "vs both: earliest gate, GitHub-only, fixed patterns"
+    }
+   ]
+  },
+  {
+   "slot": "IaC scan",
+   "what": "Infrastructure-as-code scanning — misconfigured Terraform/K8s/Docker",
+   "options": [
+    {
+     "name": "Checkov",
+     "license": "Apache 2.0",
+     "pick": "Widest coverage: Terraform, K8s, Docker, Helm, ARM",
+     "avoid": "You want graph-aware Terraform-only depth",
+     "tradeoff": "vs tfsec: broader targets, noisier defaults"
+    },
+    {
+     "name": "Trivy (config)",
+     "license": "Apache 2.0",
+     "pick": "Already using Trivy — one tool, one report format",
+     "avoid": "Deep policy customisation needs",
+     "tradeoff": "vs Checkov: fewer built-in policies, simpler ops"
+    },
+    {
+     "name": "KICS",
+     "license": "Apache 2.0",
+     "pick": "Checkmarx-backed query library, many platforms",
+     "avoid": "Smallest-footprint pipelines",
+     "tradeoff": "vs Checkov: comparable coverage, less community momentum"
+    }
+   ]
+  },
+  {
+   "slot": "License scan",
+   "what": "License compliance — what licenses your dependencies carry",
+   "options": [
+    {
+     "name": "license-checker / pip-licenses",
+     "license": "OSS",
+     "pick": "Per-ecosystem CLI, free, runs anywhere",
+     "avoid": "You need org-wide policy + legal workflows",
+     "tradeoff": "vs FOSSA: free but per-language and report-only"
+    },
+    {
+     "name": "FOSSA",
+     "license": "Paid",
+     "pick": "Org policy engine, legal reporting, attribution docs",
+     "avoid": "Single small service on a budget",
+     "tradeoff": "vs CLIs: complete governance, costs real money"
+    }
+   ]
+  },
+  {
+   "slot": "DAST",
+   "what": "Dynamic testing — attacks the RUNNING app like an outsider",
+   "options": [
+    {
+     "name": "OWASP ZAP",
+     "license": "Apache 2.0",
+     "pick": "Free baseline scan of a deployed preview env",
+     "avoid": "No running environment exists in CI",
+     "tradeoff": "vs Nuclei: full proxy/spider, slower, heavier"
+    },
+    {
+     "name": "Nuclei",
+     "license": "MIT",
+     "pick": "Fast template-based checks on known CVE patterns",
+     "avoid": "You need authenticated, stateful crawling",
+     "tradeoff": "vs ZAP: seconds-fast, template-bound depth"
+    }
+   ]
   }
+ ],
+ "signers": [
+  {
+   "name": "cosign (Sigstore)",
+   "pick": "Keyless signing via CI OIDC — no key management at all",
+   "avoid": "Policy mandates long-lived org keys outside Sigstore",
+   "tradeoff": "vs Notation: zero key ops, depends on Sigstore infra",
+   "command": "cosign sign --yes $IMAGE@$DIGEST",
+   "id": "cosign"
+  },
+  {
+   "name": "Notation (CNCF)",
+   "pick": "Enterprise PKI — sign with your own certificate chain",
+   "avoid": "You don't run a PKI and don't want to",
+   "tradeoff": "vs cosign: your keys your control, you own rotation",
+   "command": "notation sign $IMAGE@$DIGEST",
+   "id": "notation"
+  }
+ ],
+ "sbomTools": [
+  {
+   "name": "syft",
+   "format": "SPDX + CycloneDX",
+   "pick": "Default: fast, accurate, pairs with cosign attest",
+   "avoid": "—",
+   "command": "syft $IMAGE -o spdx-json > sbom.spdx.json",
+   "id": "syft"
+  },
+  {
+   "name": "cdxgen",
+   "format": "CycloneDX",
+   "pick": "CycloneDX-first orgs and OWASP toolchains",
+   "avoid": "SPDX-mandated environments",
+   "command": "cdxgen -o sbom.cdx.json",
+   "id": "cdxgen"
+  },
+  {
+   "name": "trivy sbom",
+   "format": "SPDX + CycloneDX",
+   "pick": "Already running Trivy — one tool fewer",
+   "avoid": "—",
+   "command": "trivy image --format spdx-json -o sbom.json $IMAGE",
+   "id": "trivy"
+  }
+ ],
+ "registries": [
+  {
+   "name": "GHCR",
+   "oidc": true,
+   "pick": "GitHub Actions default — GITHUB_TOKEN auth, zero stored secrets",
+   "setup": "No OIDC setup needed; enable branch protection + secret scanning",
+   "residency": "GitHub-managed (US/global)",
+   "id": "ghcr",
+   "login": "echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin",
+   "host": "ghcr.io/yarova-ca"
+  },
+  {
+   "name": "Amazon ECR",
+   "oidc": true,
+   "pick": "Deploying into AWS/EKS — same-cloud pulls, IAM-native",
+   "setup": "Create repo with scanOnPush; add OIDC provider + IAM role for the repo",
+   "residency": "Your AWS region (ca-central-1 for Canada)",
+   "id": "ecr",
+   "login": "aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com",
+   "host": "$AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com"
+  },
+  {
+   "name": "Google Artifact Registry",
+   "oidc": true,
+   "pick": "GKE deployments — workload-identity pulls",
+   "setup": "gcloud artifacts repositories create + Workload Identity Federation for GitHub",
+   "residency": "Your GCP region",
+   "id": "gar",
+   "login": "gcloud auth configure-docker $REGION-docker.pkg.dev",
+   "host": "$REGION-docker.pkg.dev/$PROJECT/apps"
+  },
+  {
+   "name": "Azure ACR",
+   "oidc": true,
+   "pick": "AKS deployments — managed-identity pulls",
+   "setup": "az acr create + federated credential for the GitHub repo",
+   "residency": "Your Azure region (Canada Central)",
+   "id": "acr",
+   "login": "az acr login --name $ACR_NAME",
+   "host": "$ACR_NAME.azurecr.io"
+  },
+  {
+   "name": "Harbor",
+   "oidc": false,
+   "pick": "Self-hosted mandate — on-prem, air-gapped, sovereignty",
+   "setup": "Deploy Harbor (Helm), create robot account, store its token as a CI secret",
+   "residency": "Wherever YOU run it — full control",
+   "id": "harbor",
+   "login": "docker login $HARBOR_HOST -u robot$ci -p $HARBOR_TOKEN",
+   "host": "$HARBOR_HOST/apps"
+  },
+  {
+   "name": "Quay.io",
+   "oidc": false,
+   "pick": "Red Hat ecosystem, built-in Clair scanning",
+   "setup": "Create robot account; token as CI secret",
+   "residency": "Red Hat-managed",
+   "id": "quay",
+   "login": "docker login quay.io -u $QUAY_ROBOT -p $QUAY_TOKEN",
+   "host": "quay.io/yarova"
+  },
+  {
+   "name": "Docker Hub",
+   "oidc": false,
+   "pick": "Public OSS images with the widest reach",
+   "avoid": "Private enterprise images (rate limits, weaker controls)",
+   "setup": "Access token as CI secret",
+   "residency": "Docker-managed (US)",
+   "id": "dockerhub",
+   "login": "docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN",
+   "host": "docker.io/yarova"
+  },
+  {
+   "name": "JFrog Artifactory",
+   "oidc": false,
+   "pick": "One registry for containers + npm + maven + generic artifacts",
+   "setup": "Repo + access token; optional OIDC on paid tiers",
+   "residency": "Self-hosted or JFrog cloud region",
+   "id": "jfrog",
+   "login": "docker login $JFROG_REGISTRY -u $JFROG_USER -p $JFROG_TOKEN",
+   "host": "$JFROG_REGISTRY/apps"
+  },
+  {
+   "name": "Nexus Repository",
+   "oidc": false,
+   "pick": "Existing Nexus shop — keep one artifact store",
+   "setup": "Docker-hosted repo + user token as CI secret",
+   "residency": "Self-hosted",
+   "id": "nexus",
+   "login": "docker login $NEXUS_HOST -u $NEXUS_USER -p $NEXUS_TOKEN",
+   "host": "$NEXUS_HOST/apps"
+  }
+ ],
+ "frontendObservability": [
+  {
+   "name": "Sentry",
+   "what": "Error tracking + session replay for the browser",
+   "pick": "Default for FE errors — source-mapped stack traces, releases",
+   "avoid": "Strict data-residency without self-hosting (or use their EU/self-host)",
+   "tradeoff": "vs Faro: richer errors/replay, separate backend from your metrics"
+  },
+  {
+   "name": "web-vitals",
+   "what": "Google's library for LCP/INP/CLS — real-user performance",
+   "pick": "Always — 2KB, feeds Core Web Vitals to any backend",
+   "avoid": "—",
+   "tradeoff": "Numbers only; pair with an error tracker"
+  },
+  {
+   "name": "OpenTelemetry Web",
+   "what": "OTel SDK for the browser — traces from click to backend",
+   "pick": "You already run OTel server-side and want ONE pipeline end-to-end",
+   "avoid": "Quick setups — browser OTel is still maturing",
+   "tradeoff": "vs Sentry: unified vendor-neutral traces, weaker error UX"
+  },
+  {
+   "name": "Grafana Faro",
+   "what": "Grafana's FE SDK — logs, errors, vitals into Loki/Tempo",
+   "pick": "Grafana LGTM stack shops — FE lands in the same dashboards",
+   "avoid": "Non-Grafana backends",
+   "tradeoff": "vs Sentry: one stack, younger product"
+  },
+  {
+   "name": "Datadog RUM",
+   "what": "Real-user monitoring in Datadog",
+   "pick": "Already paying Datadog — FE joins your APM traces",
+   "avoid": "Cost-sensitive (RUM sessions add up fast)",
+   "tradeoff": "vs OSS: turnkey, per-session pricing"
+  }
+ ],
+ "sre": {
+  "goldenSignals": [
+   {
+    "signal": "Latency",
+    "measure": "p50/p95/p99 request duration",
+    "alertWhen": "p99 > SLO for 5m"
+   },
+   {
+    "signal": "Traffic",
+    "measure": "requests/sec per route",
+    "alertWhen": "drops 50% vs 1h baseline"
+   },
+   {
+    "signal": "Errors",
+    "measure": "5xx rate as % of requests",
+    "alertWhen": "> 1% for 5m (tighten per SLO)"
+   },
+   {
+    "signal": "Saturation",
+    "measure": "CPU/memory vs limits, queue depth",
+    "alertWhen": "> 80% of limit for 10m"
+   }
+  ],
+  "sloStarter": "Availability SLO 99.9% monthly (43m error budget). Burn-rate alerts: page at 14.4x/1h, ticket at 6x/6h. Why 99.9: one nine cheaper than your dependencies' composite.",
+  "alertPack": [
+   "Pod crash-looping (restarts > 3 in 10m)",
+   "Deployment replicas unavailable > 5m",
+   "Certificate expiry < 14 days",
+   "PVC > 85% full",
+   "Error-budget burn > 14.4x over 1h"
+  ],
+  "retentionNote": "Log/audit retention is regime-driven — see the rulebook: PCI 1yr (3m hot), HIPAA 6yr, OSFI/B-13 7yr, SOC 2 1yr typical-evidence window defined in your policy."
+ },
+ "sceneNotes": {
+  "3": "Scaffold + git rules are the SAME for every industry — branch protection, CODEOWNERS, signed commits. Regulated industries only ADD reviewers/evidence on top.",
+  "5": "The local loop is the SAME for every industry. Pre-commit hooks are universal hygiene; no regime changes them.",
+  "9": "Helm/Kustomize structure is the SAME for every industry. What changes per industry is the VALUES (replicas, regions, network policy) — not the mechanism."
+ },
+ "glossary": [
+  {
+   "term": "SBOM",
+   "full": "Software Bill of Materials",
+   "def": "A machine-readable inventory of every library, OS package, and dependency inside a container image. Like an ingredients list for software."
+  },
+  {
+   "term": "SLSA",
+   "full": "Supply chain Levels for Software Artifacts",
+   "def": "A security framework defining integrity levels for the build process. Level 3 requires an isolated build job with signed provenance. Pronounced \"salsa\"."
+  },
+  {
+   "term": "DAST",
+   "full": "Dynamic Application Security Testing",
+   "def": "A scanner that attacks your running application like an external attacker. Sends malicious HTTP inputs and checks for vulnerable responses. OWASP ZAP is the most common open-source DAST tool."
+  },
+  {
+   "term": "SAST",
+   "full": "Static Application Security Testing",
+   "def": "A scanner that reads source code without running it to find security bug patterns. Semgrep and CodeQL are examples. Catches injection, hardcoded secrets, OWASP Top 10."
+  },
+  {
+   "term": "SCA",
+   "full": "Software Composition Analysis",
+   "def": "Scans package manifests (package.json, go.mod, requirements.txt) for known CVEs in open-source dependencies. The \"dependency audit\" category of security scanning."
+  },
+  {
+   "term": "IaC Scan",
+   "full": "Infrastructure-as-Code Scan",
+   "def": "Scans Dockerfile, Kubernetes YAML, and Terraform files for security misconfigurations. Checkov is the most common open-source tool. Maps findings to CIS benchmarks."
+  },
+  {
+   "term": "CVE",
+   "full": "Common Vulnerabilities and Exposures",
+   "def": "A public database entry for a known security vulnerability. Format: CVE-YEAR-NUMBER. Severity rated by CVSS score. CRITICAL = 9.0+, HIGH = 7.0–8.9, MEDIUM = 4.0–6.9."
+  },
+  {
+   "term": "CVSS",
+   "full": "Common Vulnerability Scoring System",
+   "def": "A 0–10 score for vulnerability severity. CRITICAL ≥9.0. HIGH 7.0–8.9. MEDIUM 4.0–6.9. LOW 0.1–3.9. Informational = 0."
+  },
+  {
+   "term": "distroless",
+   "full": "",
+   "def": "A minimal container base image containing only the application runtime — no shell, no package manager, no OS tools. Created by Google. Dramatically smaller attack surface than Alpine or Debian."
+  },
+  {
+   "term": "keyless signing",
+   "full": "",
+   "def": "Signing without a stored private key. The signing key is derived from a short-lived OIDC identity token. The key exists only for the duration of the signing operation — nothing persists."
+  },
+  {
+   "term": "Sigstore",
+   "full": "",
+   "def": "An open-source project providing free infrastructure for signing software artifacts. Components: cosign (signing tool), Rekor (transparency log), Fulcio (certificate authority for OIDC-based certs)."
+  },
+  {
+   "term": "Rekor",
+   "full": "",
+   "def": "A public, append-only transparency log for software signing events. Every cosign signing operation creates an immutable entry. Anyone can verify when and how an artifact was signed."
+  },
+  {
+   "term": "OIDC",
+   "full": "OpenID Connect",
+   "def": "An authentication protocol that lets a service (like a CI runner) prove its identity without a stored password. The CI provider issues a short-lived signed token that the registry IAM policy trusts."
+  },
+  {
+   "term": "SARIF",
+   "full": "Static Analysis Results Interchange Format",
+   "def": "A JSON standard for reporting security scan results. GitHub Security tab reads SARIF files natively. Every scanner in this pipeline outputs SARIF format."
+  },
+  {
+   "term": "SPDX",
+   "full": "Software Package Data Exchange",
+   "def": "An ISO standard for describing software packages and their licenses. SPDX-JSON is the machine-readable format used for SBOMs in this pipeline. Each package gets an SPDX license identifier."
+  },
+  {
+   "term": "PURL",
+   "full": "Package URL",
+   "def": "A standard identifier for software packages across all ecosystems. Format: pkg:TYPE/NAMESPACE/NAME@VERSION. Example: pkg:npm/%40angular/core@17.0.0. Used in SBOMs."
+  },
+  {
+   "term": "OSV",
+   "full": "Open Source Vulnerabilities",
+   "def": "A vulnerability database for open-source software, maintained by Google. More comprehensive for open-source than NVD alone. Used by Trivy and dependency-review-action."
+  },
+  {
+   "term": "multi-stage build",
+   "full": "",
+   "def": "A Dockerfile pattern with multiple FROM stages. The builder stage compiles the code. The runtime stage copies only the compiled output — discarding all build tools. Result: smaller, more secure final image."
+  },
+  {
+   "term": "pre-commit",
+   "full": "",
+   "def": "A framework for managing and running git commit hooks. The same hooks run locally (before each commit) and in CI (to catch --no-verify bypasses). Hook list stored in .pre-commit-config.yaml."
+  },
+  {
+   "term": "admission control",
+   "full": "",
+   "def": "A Kubernetes mechanism that intercepts API requests before they are persisted. Kyverno and OPA Gatekeeper act as admission controllers to enforce policies at pod deploy time."
+  },
+  {
+   "term": "Kyverno",
+   "full": "",
+   "def": "A Kubernetes policy engine that enforces rules at pod admission. Used in this pipeline to verify cosign signatures before any pod starts. Configured as fail-closed (I-20)."
+  },
+  {
+   "term": "canary rollout",
+   "full": "",
+   "def": "A deployment pattern where new code receives a small % of traffic (e.g., 5%) while the rest stays on old code. Traffic shifts to 100% if error rate stays low. Rolls back automatically if error rate spikes."
+  },
+  {
+   "term": "OWASP Top 10",
+   "full": "",
+   "def": "The 10 most critical web application security risks, published annually by OWASP. Includes injection, broken access control, XSS, cryptographic failures. SAST tools check code for these patterns."
+  },
+  {
+   "term": "Semgrep",
+   "full": "",
+   "def": "A fast open-source SAST tool that matches code patterns using rule files written in YAML. 1200+ security rules available. Used in S3 for OWASP Top-10 scanning across all language stacks."
+  },
+  {
+   "term": "Trivy",
+   "full": "",
+   "def": "An open-source vulnerability scanner by Aqua Security. Scans container images, SBOMs, and filesystems for CVEs. Supports SARIF output. Default tool for container scanning in this pipeline."
+  },
+  {
+   "term": "Checkov",
+   "full": "",
+   "def": "An open-source IaC scanner by Bridgecrew. Checks Dockerfile, K8s YAML, Terraform against 2000+ security rules. Maps every finding to a CIS benchmark or CVE identifier."
+  },
+  {
+   "term": "Gitleaks",
+   "full": "",
+   "def": "An open-source secret scanner. Detects API keys, passwords, private keys in git history and staged files using regex patterns for 150+ secret types. Runs in pre-commit and in CI."
+  },
+  {
+   "term": "FOSSA",
+   "full": "",
+   "def": "A commercial license compliance tool. Scans dependency trees to detect open-source licenses conflicting with commercial use. Used in S3b. Blocks GPL/AGPL in commercial projects."
+  },
+  {
+   "term": "Syft",
+   "full": "",
+   "def": "An open-source SBOM generator by Anchore. Reads container images and filesystems, identifies every package, and produces SBOMs in SPDX-JSON or CycloneDX format. Used in S8a."
+  },
+  {
+   "term": "k6",
+   "full": "",
+   "def": "An open-source load testing tool written in Go. Test scripts are written in JavaScript. Measures p50/p95/p99 latency, throughput (req/s), and error rate under simulated concurrent load."
+  },
+  {
+   "term": "Falco",
+   "full": "",
+   "def": "An open-source runtime security tool. Uses eBPF to monitor syscalls inside running containers. Alerts when containers do unexpected things: spawn shells, write outside expected paths, make unusual network connections."
+  },
+  {
+   "term": "eBPF",
+   "full": "Extended Berkeley Packet Filter",
+   "def": "A Linux kernel technology that runs sandboxed programs in the kernel for observability and security. Falco uses it to monitor container syscalls without modifying the kernel or containers."
+  },
+  {
+   "term": "Codecov",
+   "full": "",
+   "def": "A code coverage reporting service. Tracks test coverage percentage over time and comments on PRs when coverage decreases. Enforces Invariant I-9."
+  },
+  {
+   "term": "Dependabot",
+   "full": "",
+   "def": "A GitHub service that automatically creates PRs to update outdated dependencies. Paired with branch protection (I-15), it keeps CVE counts low without manual effort."
+  },
+  {
+   "term": "Renovate",
+   "full": "",
+   "def": "An open-source alternative to Dependabot. Supports more package managers and more configuration options. Creates automatic update PRs for dependencies and GitHub Actions versions."
+  },
+  {
+   "term": "CSR",
+   "full": "Client-Side Rendering",
+   "def": "All HTML is built in the browser using JavaScript. The server returns an empty shell HTML + JS bundle. Frameworks: React SPA, Vue + Vite, Angular. Runtime image: nginx (static file server, no Node.js). Port: 80."
+  },
+  {
+   "term": "SSR",
+   "full": "Server-Side Rendering",
+   "def": "HTML is built on the server on every request. The server runs JavaScript to produce HTML before sending to the browser. Frameworks: Remix, SvelteKit. Runtime image: Node.js or distroless/nodejs. Port: 3000+."
+  },
+  {
+   "term": "SSG",
+   "full": "Static Site Generation",
+   "def": "HTML is built at CI build time, not at request time. The server returns pre-built HTML files. Frameworks: Gatsby, Astro (default). Runtime image: nginx. Port: 80. No server attack surface at runtime."
+  },
+  {
+   "term": "ISR",
+   "full": "Incremental Static Regeneration",
+   "def": "Next.js feature. Pages are pre-built at build time (SSG), then re-generated in the background after a revalidation period. Combines SSG speed with near-real-time content updates. Requires a running Node.js server."
+  },
+  {
+   "term": "attestation",
+   "full": "",
+   "def": "A cryptographic statement attached to a container image in the registry. Created by cosign. Contains machine-readable data (like an SBOM or SLSA provenance) plus a signature that proves the CI system produced it. Stored as OCI artifact (.att suffix)."
+  },
+  {
+   "term": "in-toto",
+   "full": "",
+   "def": "The standard file format for SLSA provenance attestations. File extension: .intoto.jsonl. Contains a signed envelope with: builder identity, source commit, build steps, and output digest. Verifiable with slsa-verifier."
+  },
+  {
+   "term": "multi-arch",
+   "full": "",
+   "def": "A container image that contains binaries for multiple CPU architectures (linux/amd64 + linux/arm64). Built with docker buildx --platform. Required when deploying to ARM nodes (AWS Graviton, Apple Silicon dev machines)."
+  },
+  {
+   "term": "buildx",
+   "full": "",
+   "def": "Docker CLI plugin that extends docker build with multi-platform support, layer cache export, and BuildKit features. Required for linux/amd64 + linux/arm64 cross-compilation in CI. Enabled by docker/setup-buildx-action@v3."
+  },
+  {
+   "term": "QEMU",
+   "full": "Quick Emulator",
+   "def": "A processor emulator used in multi-arch builds to run ARM binaries on amd64 CI runners. Required when cross-compiling languages that do not support native cross-compilation (non-Go). Installed by docker/setup-qemu-action@v3."
+  },
+  {
+   "term": "AST",
+   "full": "Abstract Syntax Tree",
+   "def": "A tree representation of source code structure used by SAST tools. Semgrep parses code into ASTs to apply pattern-matching security rules without executing the code."
+  },
+  {
+   "term": "fetch-depth:0",
+   "full": "",
+   "def": "A Git checkout option that fetches the full commit history instead of only the latest commit. Required by Gitleaks to scan all historical commits for leaked secrets."
+  },
+  {
+   "term": "Argo Rollouts",
+   "full": "",
+   "def": "A Kubernetes controller that extends Deployments with canary, blue-green, and analysis-based promotion. Used in Phase 4 for progressive delivery with automatic error-rate rollback."
+  },
+  {
+   "term": "Flux",
+   "full": "",
+   "def": "A GitOps tool by Weaveworks. Continuously syncs cluster state to match a git repository. Pulls changes (vs ArgoCD push). Supports Kustomize and Helm. CNCF graduated."
+  }
+ ],
+ "scenes": {
+  "1": {
+   "plain": "Every product is built FOR someone. Pick who — a bank, a hospital, a store. That choice writes the rulebook every later step must obey.",
+   "youHave": "the rulebook — the rules your service must follow",
+   "next": "pick the tool you'll build with"
+  },
+  "2": {
+   "plain": "A framework is a ready-made foundation so you don't build from zero. Pick the one that fits what you're making.",
+   "youHave": "your foundation chosen, with its strengths and limits known",
+   "next": "create the project"
+  },
+  "3": {
+   "plain": "Scaffolding creates your project's folder and files in one command. The repo (your project's shared home with history) is born here, with safety rules on it.",
+   "youHave": "a real project on GitHub that rejects unsafe changes",
+   "next": "write the actual app"
+  },
+  "4": {
+   "plain": "Now you write the app itself — and three things go IN the code: sign-in (auth), talking to the database (ORM), and self-reporting (observability: logs, metrics, traces).",
+   "youHave": "an app that authenticates, stores data, and reports its own health",
+   "next": "a fast loop to work in"
+  },
+  "5": {
+   "plain": "The loop you live in: run the app, see changes instantly, and every save gets auto-checked for mistakes and leaked passwords before it leaves your machine.",
+   "youHave": "a dev loop that catches problems before anyone else sees them",
+   "next": "pack the app into a container"
+  },
+  "6": {
+   "plain": "A container is a sealed box holding your app and everything it needs, so it runs the same on any computer. This step picks the box and writes its recipe (Dockerfile).",
+   "youHave": "a container image — your app, sealed and portable",
+   "next": "guard the main branch"
+  },
+  "7": {
+   "plain": "Before any change joins the main code, robots inspect it: tests, code scans, secret leaks, bad licenses. A PR (pull request — a proposed change) only passes clean.",
+   "youHave": "a gate that blocks bad code automatically",
+   "next": "build and publish for real"
+  },
+  "8": {
+   "plain": "When a change is accepted, the real build runs: the container is built, signed (tamper-proof seal), gets an ingredient list (SBOM), and is pushed to the registry (the image warehouse).",
+   "youHave": "a signed, traceable image in the warehouse",
+   "next": "declare what should run"
+  },
+  "9": {
+   "plain": "You never deploy by hand. You write DOWN what should run — in Git. Helm and Kustomize are the two ways to write per-environment settings (dev vs prod).",
+   "youHave": "your desired state written down, reviewable like code",
+   "next": "let the robot make it real"
+  },
+  "10": {
+   "plain": "A controller (Argo CD) constantly compares what Git says vs what the cluster (the machines that run containers) actually runs — and fixes the difference. One controller, every cluster.",
+   "youHave": "your app running in the cluster, kept in sync automatically",
+   "next": "watch it live"
+  },
+  "11": {
+   "plain": "Running is not done. Watch four signals — speed, traffic, errors, fullness — and let alerts wake you only when the user experience is truly at risk.",
+   "youHave": "eyes on the service: dashboards, alerts, an error budget",
+   "next": "connect to the outside world"
+  },
+  "12": {
+   "plain": "Real services talk to others — payments, identity, government systems. Each connection goes through a gateway (a guarded front door) with its own sign-in.",
+   "youHave": "your industry's external connections, mapped and guarded",
+   "next": "prove it all"
+  },
+  "13": {
+   "plain": "The close of the story: every rule from Scene 1, checked. Met, forced, or gap. Release when the gaps are closed — and you can show an auditor exactly why.",
+   "youHave": "a service you can defend in an audit",
+   "next": "ship it"
+  }
+ },
+ "appImpl": {
+  "nodejs": [
+   {
+    "file": "src/observability.ts",
+    "what": "Structured logs + metrics + traces — the app reports itself",
+    "code": "import pino from 'pino';\nimport client from 'prom-client';\nimport { NodeSDK } from '@opentelemetry/sdk-node';\nimport { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';\n\n// logs: one JSON line per event - machines can read them\nexport const log = pino({ level: process.env.LOG_LEVEL ?? 'info' });\n\n// metrics: counters/histograms scraped at /metrics\nclient.collectDefaultMetrics();\nexport const httpDuration = new client.Histogram({\n  name: 'http_request_duration_seconds',\n  help: 'request duration',\n  labelNames: ['method', 'route', 'status'],\n});\nexport const metricsText = () => client.register.metrics();\n\n// traces: follow one request across services\nnew NodeSDK({ instrumentations: [getNodeAutoInstrumentations()] }).start();"
+   },
+   {
+    "file": "src/auth.ts",
+    "what": "Verify the caller's token on every protected request",
+    "code": "import { jwtVerify, createRemoteJWKSet } from 'jose';\n\nconst JWKS = createRemoteJWKSet(new URL(process.env.OIDC_JWKS_URL!));\n\n// returns the user claims, or throws 401\nexport async function requireUser(authHeader?: string) {\n  const token = authHeader?.replace(/^Bearer /, '');\n  if (!token) throw Object.assign(new Error('missing token'), { status: 401 });\n  const { payload } = await jwtVerify(token, JWKS, {\n    issuer: process.env.OIDC_ISSUER,\n    audience: process.env.OIDC_AUDIENCE,\n  });\n  return payload; // { sub, email, roles, ... }\n}"
+   },
+   {
+    "file": "src/web-vitals.ts",
+    "what": "Frontend: real-user speed numbers sent to your backend",
+    "code": "import { onLCP, onINP, onCLS } from 'web-vitals';\n\nconst send = (m: { name: string; value: number }) =>\n  navigator.sendBeacon('/api/vitals', JSON.stringify(m));\n\nonLCP(send); onINP(send); onCLS(send);"
+   }
+  ],
+  "python": [
+   {
+    "file": "app/observability.py",
+    "what": "Structured logs + metrics + traces",
+    "code": "import structlog\nfrom prometheus_client import Counter, Histogram, generate_latest\nfrom opentelemetry.instrumentation.fastapi import FastAPIInstrumentor\n\nlog = structlog.get_logger()\nhttp_duration = Histogram('http_request_duration_seconds', 'request duration', ['method', 'route', 'status'])\n\ndef metrics_text():\n    return generate_latest()\n\n# call once at startup: FastAPIInstrumentor.instrument_app(app)"
+   },
+   {
+    "file": "app/auth.py",
+    "what": "Verify the caller's token",
+    "code": "import os, jwt\nfrom jwt import PyJWKClient\nfrom fastapi import HTTPException, Header\n\n_jwks = PyJWKClient(os.environ['OIDC_JWKS_URL'])\n\ndef require_user(authorization: str = Header(None)):\n    if not authorization:\n        raise HTTPException(401, 'missing token')\n    token = authorization.removeprefix('Bearer ')\n    key = _jwks.get_signing_key_from_jwt(token).key\n    return jwt.decode(token, key, algorithms=['RS256'],\n                      audience=os.environ['OIDC_AUDIENCE'],\n                      issuer=os.environ['OIDC_ISSUER'])"
+   }
+  ],
+  "go": [
+   {
+    "file": "internal/obs/obs.go",
+    "what": "Structured logs + metrics",
+    "code": "package obs\n\nimport (\n\t\"log/slog\"\n\t\"os\"\n\n\t\"github.com/prometheus/client_golang/prometheus\"\n\t\"github.com/prometheus/client_golang/prometheus/promauto\"\n)\n\nvar Log = slog.New(slog.NewJSONHandler(os.Stdout, nil))\n\nvar HTTPDuration = promauto.NewHistogramVec(prometheus.HistogramOpts{\n\tName: \"http_request_duration_seconds\",\n\tHelp: \"request duration\",\n}, []string{\"method\", \"route\", \"status\"})"
+   }
+  ]
+ },
+ "clusterProvision": {
+  "eks": {
+   "tool": "eksctl",
+   "commands": [
+    {
+     "label": "Create the cluster",
+     "cmd": "eksctl create cluster --name prod --region ca-central-1 --nodes 3 --node-type m6i.large --with-oidc",
+     "expect": "~15 min; ends with 'EKS cluster \"prod\" is ready'"
+    },
+    {
+     "label": "Point kubectl at it",
+     "cmd": "aws eks update-kubeconfig --name prod --region ca-central-1",
+     "expect": "Added new context to kubeconfig"
+    }
+   ]
+  },
+  "gke": {
+   "tool": "gcloud",
+   "commands": [
+    {
+     "label": "Create the cluster (autopilot)",
+     "cmd": "gcloud container clusters create-auto prod --region northamerica-northeast1",
+     "expect": "~7 min; kubeconfig entry generated"
+    },
+    {
+     "label": "Point kubectl at it",
+     "cmd": "gcloud container clusters get-credentials prod --region northamerica-northeast1",
+     "expect": "kubeconfig entry generated for prod"
+    }
+   ]
+  },
+  "aks": {
+   "tool": "az",
+   "commands": [
+    {
+     "label": "Create the cluster",
+     "cmd": "az aks create -g prod-rg -n prod --node-count 3 --enable-oidc-issuer --enable-workload-identity",
+     "expect": "~10 min; JSON description of the cluster"
+    },
+    {
+     "label": "Point kubectl at it",
+     "cmd": "az aks get-credentials -g prod-rg -n prod",
+     "expect": "Merged \"prod\" as current context"
+    }
+   ]
+  },
+  "openshift": {
+   "tool": "openshift-install / ARO",
+   "commands": [
+    {
+     "label": "Managed on Azure (ARO)",
+     "cmd": "az aro create -g prod-rg -n prod --vnet aro-vnet --master-subnet master --worker-subnet worker",
+     "expect": "~35 min; cluster JSON with consoleProfile URL"
+    },
+    {
+     "label": "Self-managed (IPI)",
+     "cmd": "openshift-install create cluster --dir=prod --log-level=info",
+     "expect": "~40 min; kubeadmin password printed at the end"
+    }
+   ]
+  }
+ }
 }

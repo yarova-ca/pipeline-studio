@@ -107,6 +107,50 @@ function buildPythonCmd(startCmd) {
   }
   return `CMD ["${entry}", ${rest.map((a) => `"${a}"`).join(", ")}]`;
 }
+var RUNTIME_BASE = {
+  nodejs: {
+    alpine: "node:22-alpine",
+    slim: "node:22-bookworm-slim",
+    distroless: "gcr.io/distroless/nodejs22-debian12:nonroot",
+    fips: "registry.access.redhat.com/ubi9/nodejs-22",
+    "ubi-minimal": "registry.access.redhat.com/ubi9/nodejs-22-minimal",
+    "ubi-micro": "registry.access.redhat.com/ubi9/nodejs-22-minimal",
+    wolfi: "cgr.dev/chainguard/node:latest"
+  },
+  go: {
+    scratch: "scratch",
+    alpine: "alpine:3.21",
+    distroless: "gcr.io/distroless/static-debian12:nonroot",
+    fips: "registry.access.redhat.com/ubi9-micro",
+    "ubi-micro": "registry.access.redhat.com/ubi9-micro",
+    "ubi-minimal": "registry.access.redhat.com/ubi9-minimal",
+    wolfi: "cgr.dev/chainguard/static:latest"
+  },
+  python: {
+    slim: "python:3.12-slim",
+    alpine: "python:3.12-alpine",
+    distroless: "gcr.io/distroless/python3-debian12:nonroot",
+    fips: "registry.access.redhat.com/ubi9/python-312",
+    "ubi-minimal": "registry.access.redhat.com/ubi9/python-312-minimal",
+    wolfi: "cgr.dev/chainguard/python:latest"
+  }
+};
+var BASE_NOTES = {
+  fips: "# FIPS base: run on a FIPS-enabled host (fips=1 kernel) for validated crypto",
+  "ubi-micro": "# ubi-micro has no language runtime - minimal runtime image used instead"
+};
+function runtimeFor(group, choice, fallback) {
+  if (!choice) return fallback;
+  const m = RUNTIME_BASE[group];
+  return m && m[choice] ? m[choice] : fallback;
+}
+function baseNote(group, choice) {
+  if (!choice) return "";
+  const m = RUNTIME_BASE[group];
+  if (m && !m[choice]) return `# note: '${choice}' base not offered for ${group} - platform default kept
+`;
+  return BASE_NOTES[choice] ? BASE_NOTES[choice] + "\n" : "";
+}
 function generateDockerfile(config) {
   const feKey = config.feKey;
   const beKey = config.beKey;
@@ -131,7 +175,7 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux ${be.buildCmd ?? 'go build -ldflags="-s -w" -o app ./cmd/...'}
 
-FROM ${runtime}:nonroot AS runtime
+${baseNote("go", config.baseimage)}FROM ${runtimeFor("go", config.baseimage, runtime + ":nonroot")} AS runtime
 COPY --from=builder /app/app /app
 USER nonroot
 EXPOSE ${port}
@@ -153,7 +197,7 @@ FROM ${builder || PYTHON_BUILDER} AS builder
 WORKDIR /app
 ${pm.dockerSetup ? pm.dockerSetup + "\n" : ""}${installLayer}
 
-FROM ${runtime}:nonroot AS runtime
+${baseNote("python", config.baseimage)}FROM ${runtimeFor("python", config.baseimage, runtime + ":nonroot")} AS runtime
 WORKDIR /app
 ${runtimeCopy}
 USER nonroot
@@ -271,7 +315,7 @@ ${nsetup}COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build --if-present
 
-FROM gcr.io/distroless/nodejs22-debian12:nonroot AS runtime
+${baseNote("nodejs", config.baseimage)}FROM ${runtimeFor("nodejs", config.baseimage, "gcr.io/distroless/nodejs22-debian12:nonroot")} AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=${port}
@@ -307,7 +351,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-FROM ${runtime} AS runtime
+${baseNote("nodejs", config.baseimage)}FROM ${runtimeFor("nodejs", config.baseimage, runtime)} AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -368,7 +412,7 @@ ${pmSetup}COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN ${fe.buildCmd ?? "npm run build"}
 
-FROM gcr.io/distroless/nodejs22-debian12:nonroot AS runtime
+${baseNote("nodejs", config.baseimage)}FROM ${runtimeFor("nodejs", config.baseimage, "gcr.io/distroless/nodejs22-debian12:nonroot")} AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=${ssrPort}
