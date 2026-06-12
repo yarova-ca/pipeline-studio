@@ -1,5 +1,5 @@
 import * as GEN from "./generators.js";
-let G=null, LENS={vertical:""}, REQ=null;
+let G=null, K={}, LENS={vertical:""}, REQ=null;
 let RA=new Set(),RO=new Set(),RG=new Set(),RC=new Set(),RT=new Set();
 const $=(s,r=document)=>r.querySelector(s);
 const esc=(s)=>String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -58,16 +58,21 @@ const STAGES_CATALOG=[
   ['connect','Integrations','#B0ED59'],
   ['reference','Reference','#C6F24E'],
 ];
+// the 13 scenes — reality's order, locked with the founder
 const STAGES_BUILD=[
-  ['repo','Framework','#19C8A8'],
-  ['deps','Dependencies','#2FCD9D'],
-  ['image','Container image','#44D292'],
-  ['ci','CI/CD pipeline','#5AD886'],
-  ['governance','Compliance','#70DD7B'],
-  ['gitops','Registry → GitOps','#85E270'],
-  ['runtime','Cluster','#9BE864'],
-  ['platform','Platform','#B0ED59'],
-  ['signoff','Checklist','#C6F24E'],
+  ['who','1 · Who it’s for','#19C8A8'],
+  ['fw','2 · Framework','#23CB9F'],
+  ['scaffold','3 · Scaffold','#2FCD9D'],
+  ['app','4 · Write the app','#3BD096'],
+  ['local','5 · Local loop','#44D292'],
+  ['image','6 · Containerize','#52D58C'],
+  ['pr','7 · PR gate','#5AD886'],
+  ['main','8 · Build → registry','#6ADA80'],
+  ['declare','9 · Declare deploy','#7CDF78'],
+  ['cluster','10 · GitOps → cluster','#8FE46E'],
+  ['observe','11 · Run + observe','#A3E863'],
+  ['connect','12 · Connect','#B4EE58'],
+  ['signoff','13 · Sign-off','#C6F24E'],
 ];
 let STAGES=STAGES_CATALOG;
 
@@ -247,15 +252,19 @@ function heroCounts(){
   if(MODE==='build'){
     const lens=!!RS.industry;
     return [
+      {c:'16 industries · 26 regimes',req:lens},
       {c:(n.frameworks||[]).length+' to pick from'},
-      {c:(n.pkgBuildDeep||[]).length+' managers + tools'},
-      {c:(n.runtimeDeep||[]).length+' runtimes · '+(n.images||[]).length+' images',req:lens},
-      {c:(n.stages||[]).length+' stages · '+(n.tools||[]).length+' tools'},
-      {c:lens?'apply vs not':'26 regimes',req:lens},
-      {c:'push · sign · sync'},
-      {c:(n.clusters||[]).length+' clusters',req:lens},
-      {c:'auth · obs · ORM',req:lens},
-      {c:'sign-off',req:lens},
+      {c:'repo + 13 managers'},
+      {c:'auth · ORM · observability',req:lens},
+      {c:'build tools + hooks'},
+      {c:(n.runtimeDeep||[]).length+' runtimes',req:lens},
+      {c:'every scan, all tools'},
+      {c:'sign · SBOM · 9 registries'},
+      {c:'Helm + Kustomize'},
+      {c:(n.clusters||[]).length+' clusters · '+(n.clusterComponents||[]).length+' comps',req:lens},
+      {c:'SRE: signals · SLOs',req:lens},
+      {c:'integrations',req:lens},
+      {c:'audit + release',req:lens},
     ];
   }
   return [
@@ -475,7 +484,7 @@ function rpanel(idx,accent,n,name,tagHtml,valHtml,whyHtml,bodyHtml,changed){
   return `<section class="col rcol${changed?' changed':''}" id="col-${idx}" style="--accent:${accent}">
     <div class="rhead">${tagHtml}<div class="n" style="color:${accent}">${esc(n)} · ${esc(name)}</div>
       <div class="rval">${valHtml}</div><div class="rwhy">${whyHtml}</div></div>
-    <div class="colbody">${bodyHtml}</div>${idx<8?'<div class="rconn">→</div>':''}</section>`;
+    <div class="colbody">${bodyHtml}</div>${idx<12?'<div class="rconn">→</div>':''}</section>`;
 }
 const grp=(t)=>`<div class="grp">${esc(t)}</div>`;
 
@@ -689,7 +698,7 @@ function renderStackBar(s,DEC){
   const gaps=[...(DEC.compliance||[]),...(DEC.platform||[])].filter(d=>d.verdict==='gap').length;
   const rt=(G.nodes.runtimeDeep||[]).find(r=>r.id===s.base);
   const short=(t)=>String(t||'').split(' (')[0].split(' — ')[0];
-  const chips=[[0,s.fw.name],[1,short(nameById('pkgBuildDeep',s.pkg))],[4,short(rt?rt.name:s.base)],[5,'Argo CD'],[6,short(nameById('clusters',s.cluster))],[7,short(nameById('authDeep',s.auth))],[7,short(nameById('observabilityDeep',s.obs))],[7,short(nameById('ormDeep',s.orm))]];
+  const chips=[[0,RS.industry?short(nameById('verticals',RS.industry)):'no industry'],[1,s.fw.name],[2,short(nameById('pkgBuildDeep',s.pkg))],[3,short(nameById('authDeep',s.auth))],[3,short(nameById('ormDeep',s.orm))],[3,short(nameById('observabilityDeep',s.obs))],[5,short(rt?rt.name:s.base)],[9,short(nameById('clusters',s.cluster))]];
   el.innerHTML=`<span class="sblabel">your stack</span>`+
     chips.map(([i,n])=>`<button class="sbchip" onclick="goCol(${i})">${esc(n)}</button>`).join('<span class="sbsep">›</span>')+
     `<span class="sbhealth ${gaps?'bad':'good'}">${s.rq?s.regimes.length+' regimes · '+gaps+' gap'+(gaps===1?'':'s'):'no industry lens'}</span>`;
@@ -714,185 +723,251 @@ function checklistBlock(s,DEC){
       `<div class="chk ${i.state}"><span class="chki">${ic[i.state]}</span><div><div class="chkq">${esc(i.q)}</div>${i.note?`<div class="chkn">${esc(stripTags(i.note))}</div>`:''}</div></div>`).join('')).join('');
 }
 
+// ── the 13 scenes: reality's order, full coverage, live lens ─────────────────
+function industryMatrix(kind){
+  const rows=(G.nodes.industryRequirements||[]).map(r=>{
+    let v='';
+    if(kind==='regimes')v=(r.requiredRegimeIds||[]).length+' — '+(r.requiredRegimeIds||[]).slice(0,4).map(id=>nameById('complianceProfiles',id)).join(', ')+((r.requiredRegimeIds||[]).length>4?'…':'');
+    if(kind==='auth')v=(r.requiredAuthIds||[]).map(id=>nameById('authDeep',id).split(' (')[0]).join(' · ');
+    if(kind==='obs')v=(r.requiredObservabilityIds||[]).map(id=>nameById('observabilityDeep',id).split(' —')[0].split(' (')[0]).join(' · ');
+    if(kind==='runtime')v=(r.recommendedRuntimeIds||[]).join(' · ');
+    if(kind==='clusters')v=(r.recommendedClusterIds||[]).map(id=>nameById('clusters',id)).join(' · ');
+    const sel=r.id===RS.industry;
+    return `<tr class="${sel?'sel':''}" onclick="pickAxis('industry','${r.id}')"><td>${esc(r.name)}</td><td>${esc(v||'—')}</td></tr>`;
+  }).join('');
+  const TITLES={regimes:'regimes that apply',auth:'auth required',obs:'observability required',runtime:'base image',clusters:'recommended cluster'};
+  return `<table class="mx"><thead><tr><th>industry</th><th>${TITLES[kind]||kind}</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+const sceneNote=(n)=>K.sceneNotes&&K.sceneNotes[n]?`<div class="scenenote">${esc(K.sceneNotes[n])}</div>`:'';
+function altRow(o,extra){
+  const fields=[['what','what'],['pick','pick when'],['avoid','avoid when'],['tradeoff','trade-off'],['setup','setup'],['command','command'],['format','format'],['residency','residency'],['license','license']];
+  const rows=fields.map(([k,l])=>o[k]?`<div class="krow"><span class="kk">${esc(l)}</span><span class="kvv">${esc(o[k])}</span></div>`:'').join('');
+  return `<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc(o.name)}</span><span class="am">${esc(firstSentence(o.what||o.pick||''))}</span>${extra||''}</summary><div class="accbody">${rows}</div></details>`;
+}
 function renderResolver(){
   const s=resolveStack();
   const rdBase=(G.nodes.runtimeDeep||[]).find(x=>x.id===s.base);
   const baseName=rdBase?rdBase.name:s.base;
   const reqRun=new Set([...(s.rq?.recommendedRuntimeIds||[])]);
-  const cur={repo:s.fw.id,deps:`${s.pkg}|${s.buildtool}`,pipe:`${s.auth}|${s.orm}|${s.base}`,comp:s.regimes.join(','),
-    img:s.base,gitops:'std',cluster:s.cluster,plat:`${s.auth}|${s.obs}|${s.orm}`,integ:s.integ.length+':'+RS.industry};
+  const cur={who:RS.industry||'',fw:s.fw.id,scaffold:s.pkg,app:`${s.auth}|${s.orm}|${s.obs}`,local:s.buildtool||'',
+    img:s.base,pr:'pr',main:'main',declare:'d',cluster:s.cluster,observe:s.obs,connect:s.integ.length+':'+RS.industry,signoff:s.regimes.join(',')};
   const ch=(k)=>LASTR[k]!=null&&LASTR[k]!==cur[k];
   const P=[];
 
-  // real-code files for the current cursor — named rows, expand to the complete file
   CFID=0;
   const CFG=buildConfig(s), GF=genFiles(CFG);
-  const genCI=grp('files (3)')+fileAcc('.github/workflows/main.yml',GF.mainwf,true)+fileAcc('.github/workflows/pr.yml',GF.prwf)+fileAcc('.pre-commit-config.yaml',GF.precommit);
-  const genImg=grp('files (2)')+fileAcc('Dockerfile',GF.dockerfile,true)+fileAcc('.dockerignore',GF.dockerignore);
-  const genGit=grp('files (3)')+fileAcc('helm/values-prod.yaml',GF.helm)+fileAcc('kustomize/base/kustomization.yaml',GF.kbase)+fileAcc('kustomize/base/deployment.yaml',GF.kdeploy);
-  const deployEntries=Object.entries(GF.deploy||{});
-  const genCluster=grp(`manifests (${deployEntries.length})`)+deployEntries.map(([n,c])=>fileAcc(n,c)).join('');
-
-  // decisions: consumed by the checklist + the forced-runtime callout (no duplicate card walls)
   const DEC=decisionsFor(s);
   const forced=(DEC.build||[]).filter(d=>d.verdict==='forced');
   const forcedNote=forced.length?`<div class="forcenote">🔒 ${forced.map(d=>`<b>${esc(d.q)}</b> → ${esc(d.answer)}`).join(' · ')}<div class="sub">${esc(stripTags(forced[0].why||''))}</div></div>`:'';
   renderStackBar(s,DEC);
-  // run-these commands for this service+lens
   const CMD=commandsFor(s);
   const cmdScaffold=cmdBlock('commands — scaffold',CMD.scaffold), cmdDeps=cmdBlock('commands — install',CMD.deps),
-        cmdDocker=cmdBlock('commands — build & run',CMD.docker), cmdReg=cmdBlock('commands — push · sign · sbom',CMD.registry),
+        cmdDocker=cmdBlock('commands — build & run locally',CMD.docker),
         cmdGitops=cmdBlock('commands — deploy',CMD.gitops), cmdCluster=cmdBlock('commands — cluster',CMD.cluster);
 
-  // 0 Repository — switch within the same category, all 106 in the top picker
-  const sib=(G.nodes.frameworks||[]).filter(f=>f.categoryId===s.fw.categoryId);
-  P.push(rpanel(0,'#19C8A8','01','Repository',rtag('you','you starred this'),
-    esc(s.fw.name),`${esc(LANG_HUMAN[s.lang]||s.lang)} · ${esc(s.fw.maturity||'')} · ${esc(s.fw.license||'')} · git ${esc(s.fw.serviceSlug||s.fw.id)}`,
-    cmdScaffold+
-    grp('about this framework')+kcardRO('frameworks',s.fw,langName(s.lang),`openFw('${s.fw.id}')`)+
-    libBlock(s)+
-    grp(`alternatives in ${esc(nameById('categories',s.fw.categoryId))} (${sib.length})`)+
-    sib.filter(f=>f.id!==s.fw.id).map(f=>opt('fw',f.id,f.name,(f.languages||[]).join('/'),ostate(f.id,s.fw.id),`openFw('${f.id}')`)).join(''),ch('repo')));
-
-  // 1 Dependencies — every package manager for the language, choosable
-  const pkgReq=new Set(), pkgRec=new Set([s.pkgDef]);
-  P.push(rpanel(1,'#2FCD9D','02','Dependencies',rtag(s.pkgUser?'you':'rec',s.pkgUser?'your choice':'recommended default'),
-    esc(nameById('pkgBuildDeep',s.pkg)),`Package manager + build tool for ${esc(LANG_HUMAN[s.lang]||s.lang)}. Lockfile committed; CI uses frozen install.`,
-    cmdDeps+
-    (()=>{const all=(G.nodes.pkgBuildDeep||[]).filter(p=>p.kind==='pkg-mgr');
-      const fits=all.filter(p=>langMatch(p.language,s.lang)), others=all.filter(p=>!langMatch(p.language,s.lang));
-      return grp(`package managers for ${langName(s.lang)} (${fits.length})`)+
-        fits.map(p=>accRow('pkgBuildDeep','pkg',p,p.id===s.pkg?'chosen':'fit',p.id===s.pkg?'selected':'applies',p.id===s.pkg)).join('')+
-        grp(`other languages (${others.length})`)+
-        others.map(p=>accRow('pkgBuildDeep','pkg',p,'dim','not here',false)).join('');})()+
-    (s.btList.length?grp(`build tools (${s.btList.length})`)+
-      s.btList.map(p=>accRow('pkgBuildDeep','buildtool',p,p.id===s.buildtool?'chosen':'fit',p.id===s.buildtool?'selected':'applies',false)).join(''):''),ch('deps')));
-
-  // 2 Container image — Docker first: images, build, runtime (pipeline builds THIS)
-  const runAll=(G.nodes.runtimeDeep||[]);
-  P.push(rpanel(2,'#44D292','03','Container image',rtag(s.baseTag,s.baseTag==='req'?'required by industry':s.baseTag==='you'?'your choice':'framework default'),
-    esc(baseName),esc(s.baseWhy)+' The CI/CD pipeline (next stage) builds exactly this image.',
-    forcedNote+cmdDocker+
-    grp(`base image — every option (${runAll.length})`)+
-    runAll.map(r=>{const req=reqRun.has(r.id);return accRow('runtimeDeep','runtime',r,r.id===s.base?'chosen':(req?'req':'avail'),r.id===s.base?'selected':(req?'lens recommends':'available'),r.id===s.base);}).join('')+
-    genImg,ch('img')));
-
-  // 3 CI/CD pipeline — every phase, every stage, every tool, lens additions
+  // shared joins
+  const allC=(G.nodes.complianceProfiles||[]);
+  const reqSet=new Set(s.regimes);
+  const shComp={};((s.fw.shipped&&s.fw.shipped.shippedCompliance)||[]).forEach(c=>{shComp[c.standard]=c;});
+  const stdOf=(id)=>(REGIME_TO_STD[id]||[])[0];
   const toolsByStage={};(G.nodes.tools||[]).forEach(t=>{(toolsByStage[t.stage]||=[]).push(t);});
   const stByPhase={};(G.nodes.stages||[]).forEach(st=>{(stByPhase[st.phaseId]||=[]).push(st);});
+  const phases=(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0));
   const deltaSrc=((G.pipelines||[]).find(p=>p.complianceDeltas&&p.complianceDeltas.length)||{}).complianceDeltas||[];
   const myStds=[...reqStds(s)];
   const myDeltas=deltaSrc.filter(d=>myStds.some(std=>String(d.standardId||d.standard||'').toLowerCase().includes(std)));
   const stageRow=(st)=>{const tools=toolsByStage[st.name]||[];
     const d=(st.type||'').toLowerCase().includes('sec')?'DevSecOps':discipline(st.name+' '+tools.map(t=>t.tool).join(' '));
-    const toolNames=tools.map(t=>t.tool).join(' · ')||'process stage';
+    const toolNames=tools.map(t=>t.tool).join(' · ')||'process step';
     const body=tools.length?tools.map(t=>
       `<div class="krow"><span class="kk">tool</span><span class="kvv"><b>${esc(t.tool)}</b> · ${esc(t.license||'')}${/yes/i.test(t.mandatory||'')?' · mandatory':''}</span></div>`+
       (t.whenToUse?`<div class="krow"><span class="kk">use when</span><span class="kvv">${esc(stripTags(t.whenToUse))}</span></div>`:'')+
       (t.whenNot?`<div class="krow"><span class="kk">skip when</span><span class="kvv">${esc(stripTags(t.whenNot))}</span></div>`:'')+
       (t.output?`<div class="krow"><span class="kk">output</span><span class="kvv">${esc(t.output)}${t.ciIntegration?' · '+esc(t.ciIntegration):''}</span></div>`:'')+
       (t.primaryTradeoff?`<div class="krow"><span class="kk">trade-off</span><span class="kvv">${esc(stripTags(t.primaryTradeoff))}</span></div>`:'')
-    ).join('<div style="height:8px"></div>'):'<div class="sub">Process stage — enforced by pipeline configuration, no external tool.</div>';
+    ).join('<div style="height:8px"></div>'):'<div class="sub">Process step — enforced by configuration, no external tool.</div>';
     return `<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc(st.name)}</span><span class="am">${esc(toolNames)}</span><span class="disc ${d.toLowerCase()}">${d}</span></summary><div class="accbody">${body}</div></details>`;};
-  const ciBody=(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>{
-    const sts=(stByPhase[p.id]||[]);
-    const adds=myDeltas.map(d=>{const txt=(d.phases||{})[p.phaseNum||('Phase '+p.order)]||(d.phases||{})[p.name];
+  const phaseScene=(pid)=>{const ph=phases.find(p=>p.id===pid);if(!ph)return{rows:'',adds:''};
+    const rows=(stByPhase[pid]||[]).map(stageRow).join('');
+    const adds=myDeltas.map(d=>{const txt=(d.phases||{})[ph.phaseNum||('Phase '+ph.order)]||(d.phases||{})[ph.name];
       return txt?`<div class="forcenote" style="margin-top:6px">🔶 <b>${esc(d.standard||d.standardId)}</b> adds: ${esc(stripTags(txt))}</div>`:'';}).join('');
-    return grp(`${p.label||p.name} — ${p.trigger||''} (${sts.length} stages)`)+sts.map(stageRow).join('')+adds;
-  }).join('');
-  const wfRows=((s.fw.shipped&&s.fw.shipped.workflows)||[]).map(w=>{const d=discipline((w.name||'')+' '+(w.jobs||[]).join(' '));
-    return `<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc((w.name||w.file).replace(/ — .*$/,''))}</span><span class="am">${esc((w.jobs||[]).join(', '))}</span><span class="disc ${d.toLowerCase()}">${d}</span></summary><div class="accbody"><div class="krow"><span class="kk">file</span><span class="kvv">${esc(w.file)}</span></div><div class="krow"><span class="kk">jobs</span><span class="kvv">${esc((w.jobs||[]).join(', '))}</span></div></div></details>`;}).join('');
+    return {rows,adds,ph};};
+  const slotBlock=(slot)=>grp(`${slot.slot} — ${slot.what}`)+slot.options.map(o=>altRow(o)).join('');
+
+  // ── SCENE 1 · Who it's for ────────────────────────────────────────────────
+  const ind=(G.nodes.industryRequirements||[]);
+  const rqSel=s.rq;
+  const rulebook=rqSel?`<div class="rulebook"><div class="rbt">THE RULEBOOK — born here, enforced in every scene</div>
+    <div class="krow"><span class="kk">regimes</span><span class="kvv">${(rqSel.requiredRegimeIds||[]).length} apply: ${esc((rqSel.requiredRegimeIds||[]).map(id=>nameById('complianceProfiles',id)).join(', '))}</span></div>
+    <div class="krow"><span class="kk">auth bar</span><span class="kvv">${esc(firstSentence(rqSel.requiredAuth))} <i>(bites in Scene 4)</i></span></div>
+    <div class="krow"><span class="kk">observability bar</span><span class="kvv">${esc(firstSentence(rqSel.requiredObservability))} <i>(Scenes 4 & 11)</i></span></div>
+    <div class="krow"><span class="kk">data & residency</span><span class="kvv">${esc(firstSentence(rqSel.requiredDataControls))} <i>(Scenes 6 & 10)</i></span></div>
+    <div class="krow"><span class="kk">image bar</span><span class="kvv">${esc((rqSel.recommendedRuntimeIds||[]).join(' · '))} <i>(Scene 6)</i></span></div>
+    <div class="krow"><span class="kk">cluster bar</span><span class="kvv">${esc((rqSel.recommendedClusterIds||[]).map(id=>nameById('clusters',id)).join(' · '))} <i>(Scene 10)</i></span></div>
+    </div>`:'<div class="sub">Pick your industry — the rulebook is written here, before any code.</div>';
+  P.push(rpanel(0,'#19C8A8','SCENE 1','Who it’s for',rqSel?rtag('req','the rulebook'):rtag('def','pick below'),
+    rqSel?esc(rqSel.name):'Pick the industry',
+    'Before any code exists, the customer decides the rules. Every scene below reads this rulebook.',
+    rulebook+
+    grp('pick your industry (16)')+ind.map(r=>{const sel=r.id===RS.industry;
+      return `<div class="irow ${sel?'sel':''}" tabindex="0" role="button" onclick="pickAxis('industry','${r.id}')" onkeydown="if(event.key==='Enter'){pickAxis('industry','${r.id}')}"><b>${esc(r.name)}</b><span class="am">${(r.requiredRegimeIds||[]).length} regimes · ${esc(firstSentence((r.keyRisks||[])[0]||''))}</span>${sel?'<span class="kchk">✓ selected</span>':''}</div>`;}).join('')+
+    grp('the full picture — every industry, its regimes')+industryMatrix('regimes'),ch('who')));
+
+  // ── SCENE 2 · Pick the framework ──────────────────────────────────────────
+  const sib=(G.nodes.frameworks||[]).filter(f=>f.categoryId===s.fw.categoryId);
+  P.push(rpanel(1,'#23CB9F','SCENE 2','Pick the framework',rtag('you','your choice'),
+    esc(s.fw.name),`${esc(LANG_HUMAN[s.lang]||s.lang)} · ${esc(s.fw.maturity||'')} · ${esc(s.fw.license||'')}`,
+    grp('about this framework')+kcardRO('frameworks',s.fw,langName(s.lang),`openFw('${s.fw.id}')`)+
+    libBlock(s)+
+    grp(`alternatives in ${esc(nameById('categories',s.fw.categoryId))} (${sib.length-1}) — all ${(G.nodes.frameworks||[]).length} in the top picker`)+
+    sib.filter(f=>f.id!==s.fw.id).map(f=>opt('fw',f.id,f.name,(f.languages||[]).join('/'),ostate(f.id,s.fw.id),`openFw('${f.id}')`)).join(''),ch('fw')));
+
+  // ── SCENE 3 · Scaffold the repo ───────────────────────────────────────────
+  const p0=phaseScene('phase-0');
+  P.push(rpanel(2,'#2FCD9D','SCENE 3','Scaffold the repo',rtag(s.pkgUser?'you':'rec',s.pkgUser?'your choice':'recommended'),
+    esc(nameById('pkgBuildDeep',s.pkg)),'The repo is born: scaffold, lockfile, branch protection, CODEOWNERS.',
+    cmdScaffold+cmdDeps+
+    grp(`package managers for ${langName(s.lang)} — the lockfile is born here`)+
+    (()=>{const all=(G.nodes.pkgBuildDeep||[]).filter(p=>p.kind==='pkg-mgr');
+      const fits=all.filter(p=>langMatch(p.language,s.lang)), others=all.filter(p=>!langMatch(p.language,s.lang));
+      return fits.map(p=>accRow('pkgBuildDeep','pkg',p,p.id===s.pkg?'chosen':'fit',p.id===s.pkg?'selected':'applies',p.id===s.pkg)).join('')+
+        grp(`other languages (${others.length})`)+others.map(p=>accRow('pkgBuildDeep','pkg',p,'dim','not here',false)).join('');})()+
+    grp(`repo rules — ${esc(p0.ph?p0.ph.trigger:'once, at setup')}`)+p0.rows+p0.adds+
+    sceneNote('3'),ch('scaffold')));
+
+  // ── SCENE 4 · Write the app ───────────────────────────────────────────────
+  const authReqS=new Set(s.rq?.requiredAuthIds||[]), obsReqS=new Set(s.rq?.requiredObservabilityIds||[]);
+  const mw=(s.fw.shipped&&s.fw.shipped.middleware)||{};
+  const needAudit=myStds.some(x=>['hipaa','pci'].includes(x));
+  const mwCell=(label,on,gap)=>`<span class="mw ${on?'on':(gap?'gapped':'')}">${on?'✓':(gap?'✗':'—')} ${label}${gap?' · gap':''}</span>`;
+  const orderOpts=(arr,chosenId,reqS,fitFn)=>[...arr].sort((a,b)=>{const w=(o)=>o.id===chosenId?0:(reqS&&reqS.has(o.id)?1:(fitFn&&fitFn(o)?2:3));return w(a)-w(b);});
+  const fitOrm=(o)=>(o.language||o.languages||[]).some(L=>langMatch(L,s.lang))||o.id==='orm-none';
+  P.push(rpanel(3,'#3BD096','SCENE 4','Write the app',rqSel?rtag('req','rulebook bites here'):rtag('def','app code'),
+    esc(nameById('authDeep',s.auth).split(' (')[0]),
+    'Auth, data layer and observability are CODE, written into the app now — not deployment config.',
+    grp('shipped middleware — this service today')+`<div class="mwstrip">`+
+      mwCell('auth',mw.auth,!mw.auth&&authReqS.size>0)+mwCell('audit log',mw.audit,!mw.audit&&needAudit)+
+      mwCell('RBAC',mw.rbac,false)+mwCell('circuit breaker',mw.circuitBreaker,false)+
+      `<span class="mw ${s.fw.shipped&&s.fw.shipped.observabilityDetected?'on':''}">${s.fw.shipped&&s.fw.shipped.observabilityDetected?'✓':'—'} observability</span></div>`+
+    grp(`auth (${(G.nodes.authDeep||[]).length})`)+
+    orderOpts(G.nodes.authDeep||[],s.auth,authReqS).map(a=>{const req=authReqS.has(a.id);return accRow('authDeep','auth',a,a.id===s.auth?'chosen':(req?'req':'avail'),a.id===s.auth?'selected':(req?'rulebook requires':'available'),a.id===s.auth);}).join('')+
+    grp('what each industry requires — auth')+industryMatrix('auth')+
+    grp(`ORM / data layer (${(G.nodes.ormDeep||[]).length})`)+
+    orderOpts(G.nodes.ormDeep||[],s.orm,null,fitOrm).map(o=>{const fit=fitOrm(o);return accRow('ormDeep','orm',o,o.id===s.orm?'chosen':(fit?'fit':'dim'),o.id===s.orm?'selected':(fit?'fits '+langName(s.lang):'other language'),o.id===s.orm);}).join('')+
+    grp(`backend observability wiring (${(G.nodes.observabilityDeep||[]).length})`)+
+    orderOpts(G.nodes.observabilityDeep||[],s.obs,obsReqS).map(o=>{const req=obsReqS.has(o.id);return accRow('observabilityDeep','obs',o,o.id===s.obs?'chosen':(req?'req':'avail'),o.id===s.obs?'selected':(req?'rulebook requires':'available'),o.id===s.obs);}).join('')+
+    grp(`frontend observability (${(K.frontendObservability||[]).length})`)+
+    (K.frontendObservability||[]).map(o=>altRow(o)).join(''),ch('app')));
+
+  // ── SCENE 5 · Local dev loop ──────────────────────────────────────────────
+  const p1=phaseScene('phase-1');
+  const devCmds=cmdBlock('commands — the loop',[
+    {label:'Run the dev server',cmd:(s.lang==='py'?'uvicorn app:app --reload':s.lang==='go'?'go run ./...':s.lang==='rust'?'cargo run':'npm run dev')},
+    {label:'Production build',cmd:(s.lang==='py'?'# no build step — Python ships source':s.lang==='go'?'go build ./...':s.lang==='rust'?'cargo build --release':'npm run build')},
+    {label:'Install the git hooks',cmd:'pre-commit install'}]);
+  P.push(rpanel(4,'#44D292','SCENE 5','Local dev loop',rtag('same','same for every industry'),
+    s.buildtool?esc(nameById('pkgBuildDeep',s.buildtool)):'build + hooks',
+    'The inner loop: build tool runs dev/build; hooks catch problems before they reach a PR.',
+    devCmds+
+    (s.btList.length?grp(`build tools for ${langName(s.lang)} (${s.btList.length}) — invoked via your package scripts`)+
+      s.btList.map(p=>accRow('pkgBuildDeep','buildtool',p,p.id===s.buildtool?'chosen':'fit',p.id===s.buildtool?'selected':'applies',p.id===s.buildtool)).join(''):'')+
+    grp(`hooks on every commit — ${esc(p1.ph?p1.ph.trigger:'on git commit')}`)+p1.rows+p1.adds+
+    grp('files (1)')+fileAcc('.pre-commit-config.yaml',GF.precommit,true)+
+    sceneNote('5'),ch('local')));
+
+  // ── SCENE 6 · Containerize ────────────────────────────────────────────────
+  const runAll=(G.nodes.runtimeDeep||[]);
+  P.push(rpanel(5,'#52D58C','SCENE 6','Containerize',rtag(s.baseTag,s.baseTag==='req'?'rulebook forces this':s.baseTag==='you'?'your choice':'framework default'),
+    esc(baseName),esc(s.baseWhy)+' The compliance thread bites again here.',
+    forcedNote+cmdDocker+
+    grp(`base image — every option (${runAll.length})`)+
+    runAll.map(r=>{const req=reqRun.has(r.id);return accRow('runtimeDeep','runtime',r,r.id===s.base?'chosen':(req?'req':'avail'),r.id===s.base?'selected':(req?'rulebook recommends':'available'),r.id===s.base);}).join('')+
+    grp('what each industry gets — base image')+industryMatrix('runtime')+
+    grp('files (2)')+fileAcc('Dockerfile',GF.dockerfile,true)+fileAcc('.dockerignore',GF.dockerignore),ch('img')));
+
+  // ── SCENE 7 · PR gate ─────────────────────────────────────────────────────
+  const p2=phaseScene('phase-2');
+  P.push(rpanel(6,'#5AD886','SCENE 7','PR gate',rtag('same','every PR, every framework'),
+    `${(stByPhase['phase-2']||[]).length} gates`,
+    'Nothing unreviewed or unscanned reaches main. Every gate, every tool — and its alternatives.',
+    grp(`the gates — ${esc(p2.ph?p2.ph.trigger:'on every PR push')}`)+p2.rows+p2.adds+
+    grp('files (1)')+fileAcc('.github/workflows/pr.yml',GF.prwf)+
+    grp('the market — alternatives for every slot')+
+    (K.ciAlternatives||[]).map(slotBlock).join(''),ch('pr')));
+
+  // ── SCENE 8 · Main build → registry ───────────────────────────────────────
+  const p3=phaseScene('phase-3'); const pReg=phaseScene('registry');
   const ciCmds=cmdBlock('commands — what the pipeline runs',[...CMD.deps,CMD.docker[0],...CMD.registry]);
-  P.push(rpanel(3,'#5AD886','04','CI/CD pipeline',rtag('same','same for every framework'),
-    `${(G.nodes.stages||[]).length} stages · ${(G.nodes.tools||[]).length} tools`,'Every phase, stage and tool. Your choices flow in as build args:',
-    `<div class="rchips"><span class="chip">AUTH=${esc(s.auth.replace('auth-',''))}</span><span class="chip">ORM=${esc(s.orm.replace('orm-',''))}</span><span class="chip">RUNTIME=${esc(s.base)}</span><span class="chip">PKG=${esc(s.pkg)}</span></div>`+
-    ciBody+
-    grp(`this service's workflows (${((s.fw.shipped&&s.fw.shipped.workflows)||[]).length})`)+wfRows+
-    genCI+ciCmds+
-    grp('then the image lands in the registry')+card('#5AD886','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null),ch('pipe')));
+  P.push(rpanel(7,'#6ADA80','SCENE 8','Main build → registry',rtag('same','on merge to main'),
+    'sign · SBOM · push','The merge builds the image, signs it, attaches the SBOM, and pushes it.',
+    grp(`main build — ${esc(p3.ph?p3.ph.trigger:'on merge')}`)+p3.rows+p3.adds+
+    (pReg.rows?grp('registry stage')+pReg.rows+pReg.adds:'')+
+    grp(`signers (${(K.signers||[]).length})`)+(K.signers||[]).map(o=>altRow(o)).join('')+
+    grp(`SBOM tools (${(K.sbomTools||[]).length})`)+(K.sbomTools||[]).map(o=>altRow(o)).join('')+
+    grp(`registries — all ${(K.registries||[]).length}, with setup`)+(K.registries||[]).map(o=>altRow(o,o.oidc?'<span class="ktag fit">OIDC — no stored secrets</span>':'')).join('')+
+    grp('files (1)')+fileAcc('.github/workflows/main.yml',GF.mainwf)+
+    ciCmds,ch('main')));
 
-  // 3 Compliance — three clean groups: enforced / needs profile / not required
-  const reqSet=new Set(s.regimes);
-  const allC=(G.nodes.complianceProfiles||[]);
-  const shComp={};((s.fw.shipped&&s.fw.shipped.shippedCompliance)||[]).forEach(c=>shComp[c.standard]=c);
-  const stdOf=(id)=>(REGIME_TO_STD[id]||[])[0];
-  const enforced=[...reqSet].filter(id=>shComp[stdOf(id)]);
-  const needsProfile=[...reqSet].filter(id=>!shComp[stdOf(id)]);
-  const notReq=allC.filter(c=>!reqSet.has(c.id));
-  const profileLine=(id)=>{const c=shComp[stdOf(id)],p=allC.find(x=>x.id===id);
-    const fb=c.buildArgs&&Object.keys(c.buildArgs).length?Object.entries(c.buildArgs).map(([k,v])=>k+'='+v).join(', '):'';
-    return `<details class="acc req" open><summary><span class="caret">▸</span><span class="an">${esc(p?p.name:id)}</span><span class="am">${esc(p?(p.fullName||''):'')}</span><span class="ktag req">enforced</span></summary><div class="accbody">`+
-      (fb?`<div class="krow"><span class="kk">forces</span><span class="kvv">${esc(fb)}</span></div>`:'')+
-      ((c.requiredControls||[]).length?`<div class="krow"><span class="kk">controls</span><span class="kvv">${esc(c.requiredControls.join(', '))}</span></div>`:'')+
-      `<div class="krow"><span class="kk">profile</span><span class="kvv">${esc(c.file||'')}</span></div>`+
-      `<div style="margin-top:6px"><button class="kmore" onclick="openProfile('${id}')">full record →</button></div></div></details>`;};
-  let compBody;
-  if(s.rq){
-    compBody=`<div class="compstat"><span class="cs">${s.regimes.length} of ${allC.length} apply</span><span class="cs good">${enforced.length} enforced by this service</span><span class="cs ${needsProfile.length?'bad':'good'}">${needsProfile.length} need profiles</span></div>`+
-      grp(`enforced by this service (${enforced.length})`)+enforced.map(profileLine).join('')+
-      (needsProfile.length?grp(`required — profiles to add (${needsProfile.length})`)+
-        `<details class="acc gap"><summary><span class="caret">▸</span><span class="an">${needsProfile.length} regimes need a compliance profile</span><span class="am">${esc(needsProfile.map(id=>nameById('complianceProfiles',id)).join(' · '))}</span><span class="ktag gap">gap</span></summary><div class="accbody"><div class="sub" style="margin-bottom:6px">${esc(s.rq.name)} requires these, and this service ships no profile for them yet. Each links to its full record:</div>${needsProfile.map(id=>`<button class="kmore" style="margin:0 6px 6px 0" onclick="openProfile('${id}')">${esc(nameById('complianceProfiles',id))} →</button>`).join('')}</div></details>`:'')+
-      grp(`not required for ${esc(s.rq.name)} (${notReq.length})`)+
-      `<details class="acc dim"><summary><span class="caret">▸</span><span class="an">${notReq.length} other regimes</span><span class="am">available if you expand into other industries</span></summary><div class="accbody">${notReq.map(c=>`<button class="kmore" style="margin:0 6px 6px 0" onclick="openProfile('${c.id}')">${esc(c.name)} →</button>`).join('')}</div></details>`;
-  } else {
-    compBody=grp(`all regimes (${allC.length}) — pick an industry to see which apply`)+
-      allC.map(c=>`<details class="acc"><summary><span class="caret">▸</span><span class="an">${esc(c.name)}</span><span class="am">${esc(c.fullName||'')}</span></summary><div class="accbody"><button class="kmore" onclick="openProfile('${c.id}')">full record →</button></div></details>`).join('');
-  }
-  P.push(rpanel(4,'#70DD7B','05','Compliance',s.rq?rtag('req',`${s.regimes.length} of ${allC.length} apply`):rtag('def','no industry'),
-    s.rq?`${s.regimes.length} of ${allC.length} apply`:'Pick an industry',
-    s.rq?`${esc(s.rq.name)} mandates these. The enforced ones already ship controls in this service.`:'Compliance depends on the industry you serve.',compBody,ch('comp')));
+  // ── SCENE 9 · Declare the deployment ─────────────────────────────────────
+  const gtools=(G.nodes.gitopsTools||[]);
+  const helmKust=gtools.filter(t=>/helm|kustomize/i.test(t.name));
+  P.push(rpanel(8,'#7CDF78','SCENE 9','Declare the deployment',rtag('same','Git is the truth'),
+    'Helm + Kustomize','What runs is what Git says. Values per environment; overlays patch per env.',
+    grp('the mechanisms')+helmKust.map(t=>`<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc(t.name)}</span><span class="am">${esc(t.role||'')}</span></summary><div class="accbody">${t.what?`<div class="krow"><span class="kk">what</span><span class="kvv">${esc(stripTags(t.what))}</span></div>`:''}${t.decisionChosen?`<div class="krow"><span class="kk">decision</span><span class="kvv">${esc(t.decisionChosen)}</span></div>`:''}</div></details>`).join('')+
+    `<div class="sub" style="margin:8px 0">This service ships ${((s.fw.shipped&&s.fw.shipped.helmValuesFiles)||[]).length} Helm values files and overlays for ${esc(((s.fw.shipped&&s.fw.shipped.kustomizeOverlays)||[]).join(' / '))}.</div>`+
+    grp('files (3)')+fileAcc('helm/values-prod.yaml',GF.helm,true)+fileAcc('kustomize/base/kustomization.yaml',GF.kbase)+fileAcc('kustomize/base/deployment.yaml',GF.kdeploy)+
+    sceneNote('9'),ch('declare')));
 
-  // 5 GitOps — info
-  P.push(rpanel(5,'#85E270','06','GitOps delivery',rtag('same','same for every framework'),
-    'Argo CD + Helm + Kustomize','Git declares desired state. Argo CD syncs it to the cluster.',
-    grp(`tools (${(G.nodes.gitopsTools||[]).length})`)+(G.nodes.gitopsTools||[]).map(t=>`<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc(t.name)}</span><span class="am">${esc(t.role||'')}${t.version?' · v'+esc(t.version):''}</span></summary><div class="accbody">${t.what?`<div class="krow"><span class="kk">what</span><span class="kvv">${esc(stripTags(t.what))}</span></div>`:''}${t.syncInterval?`<div class="krow"><span class="kk">sync interval</span><span class="kvv">${esc(t.syncInterval)}</span></div>`:''}${t.decisionChosen?`<div class="krow"><span class="kk">decision</span><span class="kvv">${esc(t.decisionChosen)}</span></div>`:''}<div style="margin-top:6px"><button class="kmore" onclick="openGitops('${t.id}')">full record →</button></div></div></details>`).join('')+
-    `<div class="sub" style="margin:8px 0">This service ships ${((s.fw.shipped&&s.fw.shipped.helmValuesFiles)||[]).length} Helm values files and ${((s.fw.shipped&&s.fw.shipped.kustomizeOverlays)||[]).length} Kustomize overlays (${esc(((s.fw.shipped&&s.fw.shipped.kustomizeOverlays)||[]).join(' / '))}).</div>`+
-    genGit+cmdGitops,ch('gitops')));
-
-  // 6 Cluster — every cluster, choosable
-  const [ct,ctx]=pickTag(s.clusterUser,s.clusterReq);
+  // ── SCENE 10 · GitOps sync → cluster ─────────────────────────────────────
   const clReq=new Set(s.rq?.recommendedClusterIds||[]);
-  P.push(rpanel(6,'#9BE864','07','Deploy cluster',rtag(ct,ctx),
-    esc(nameById('clusters',s.cluster)),s.rq?`${esc(s.rq.name)} recommends the gold ones. ${(G.nodes.clusterComponents||[]).length} platform components run here.`:`${(G.nodes.clusterComponents||[]).length} platform components.`,
+  const comps=[...(G.nodes.clusterComponents||[])].sort((a,b)=>(a.num||'').localeCompare(b.num||''));
+  const layers=by(comps,'layer');
+  const argo=gtools.find(t=>/argo ?cd/i.test(t.name))||gtools[0];
+  const layerOrder=['Foundation','Networking','Security','Storage','Observability','Delivery','Scaling','Platform'];
+  const layerKeys=Object.keys(layers).sort((a,b)=>{const ia=layerOrder.indexOf(a),ib=layerOrder.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib);});
+  const compBlocks=layerKeys.map(L=>`<details class="acc"><summary><span class="caret">▸</span><span class="an">Layer — ${esc(L)}</span><span class="am">${layers[L].length} components</span></summary><div class="accbody">`+
+    layers[L].map(c=>`<div class="compline"><b>${esc(c.num)}. ${esc(c.name)}</b><div class="sub">${esc(firstSentence(c.what||''))}</div>${c.installCommand?`<pre class="cmdcode" style="margin-top:4px">${esc(c.installCommand)}</pre>`:''}${c.verifyCommand?`<div class="krow"><span class="kk">verify</span><span class="kvv">${esc(c.verifyCommand)}</span></div>`:''}</div>`).join('<div style="height:10px"></div>')+`</div></details>`).join('');
+  P.push(rpanel(9,'#8FE46E','SCENE 10','GitOps sync → cluster',rqSel?rtag('req','rulebook shapes the cluster'):rtag('def','pick a cluster'),
+    esc(nameById('clusters',s.cluster)),
+    (argo?esc(argo.name):'Argo CD')+' watches Git and syncs every cluster — hub-and-spoke, one controller.',
+    (argo?grp('the controller')+`<details class="acc fit" open><summary><span class="caret">▸</span><span class="an">${esc(argo.name)}</span><span class="am">${esc(argo.role||'')} · v${esc(argo.version||'')}</span></summary><div class="accbody">${argo.what?`<div class="krow"><span class="kk">what</span><span class="kvv">${esc(stripTags(argo.what))}</span></div>`:''}${argo.syncInterval?`<div class="krow"><span class="kk">sync interval</span><span class="kvv">${esc(argo.syncInterval)}</span></div>`:''}${argo.decisionChosen?`<div class="krow"><span class="kk">decision</span><span class="kvv">${esc(argo.decisionChosen)} — ${esc(firstSentence(argo.decisionRejected||''))}</span></div>`:''}</div></details>`:'')+
     grp(`clusters (${(G.nodes.clusters||[]).length})`)+
-    (G.nodes.clusters||[]).map(c=>{const req=clReq.has(c.id);return accRow('clusters','cluster',c,c.id===s.cluster?'chosen':(req?'req':'avail'),c.id===s.cluster?'selected':(req?'lens recommends':'available'),c.id===s.cluster);}).join('')+
-    `<div class="sub" style="margin-top:8px">Hub-and-spoke: one Argo CD → every cluster.</div>`+genCluster+cmdCluster,ch('cluster')));
+    (G.nodes.clusters||[]).map(c=>{const req=clReq.has(c.id);return accRow('clusters','cluster',c,c.id===s.cluster?'chosen':(req?'req':'avail'),c.id===s.cluster?'selected':(req?'rulebook recommends':'available'),c.id===s.cluster);}).join('')+
+    grp('what each industry gets — cluster')+industryMatrix('clusters')+
+    grp(`inside the cluster — ${comps.length} components, stacked`)+compBlocks+
+    grp(`manifests (${Object.keys(GF.deploy||{}).length})`)+Object.entries(GF.deploy||{}).map(([n,c])=>fileAcc(n,c)).join('')+
+    cmdGitops+cmdCluster,ch('cluster')));
 
-  // 7 Platform — auth, observability, ORM, all choosable
-  const [at,atx]=pickTag(s.authUser,s.authReq);
-  const authReqS=new Set(s.rq?.requiredAuthIds||[]), obsReqS=new Set(s.rq?.requiredObservabilityIds||[]), ormRec=new Set([s.ormDef]);
-  P.push(rpanel(7,'#B0ED59','08','Platform',rtag(at,'auth: '+atx),
-    esc(nameById('authDeep',s.auth)),'Auth, observability and database layer — pick any:',
-    (()=>{const mw=(s.fw.shipped&&s.fw.shipped.middleware)||{};
-      const needAudit=[...reqStds(s)].some(x=>['hipaa','pci'].includes(x));
-      const cell=(label,on,gap)=>`<span class="mw ${on?'on':(gap?'gapped':'')}">${on?'✓':(gap?'✗':'—')} ${label}${gap?' · gap':''}</span>`;
-      return grp('shipped middleware — this service')+`<div class="mwstrip">`+
-        cell('auth',mw.auth,!mw.auth&&authReqS.size>0)+cell('audit log',mw.audit,!mw.audit&&needAudit)+
-        cell('RBAC',mw.rbac,false)+cell('circuit breaker',mw.circuitBreaker,false)+
-        `<span class="mw ${s.fw.shipped&&s.fw.shipped.observabilityDetected?'on':''}">${s.fw.shipped&&s.fw.shipped.observabilityDetected?'✓':'—'} observability</span></div>`;})()+
-    (()=>{const order=(arr,chosenId,reqS,fitFn)=>[...arr].sort((a,b)=>{
-        const w=(o)=>o.id===chosenId?0:(reqS&&reqS.has(o.id)?1:(fitFn&&fitFn(o)?2:3));return w(a)-w(b);});
-      const auth=order(G.nodes.authDeep||[],s.auth,authReqS);
-      const obs=order(G.nodes.observabilityDeep||[],s.obs,obsReqS);
-      const fitOrm=(o)=>(o.language||o.languages||[]).some(L=>langMatch(L,s.lang))||o.id==='orm-none';
-      const orm=order(G.nodes.ormDeep||[],s.orm,null,fitOrm);
-      return grp(`auth (${auth.length})`)+
-        auth.map(a=>{const req=authReqS.has(a.id);return accRow('authDeep','auth',a,a.id===s.auth?'chosen':(req?'req':'avail'),a.id===s.auth?'selected':(req?'lens requires':'available'),a.id===s.auth);}).join('')+
-        grp(`observability (${obs.length})`)+
-        obs.map(o=>{const req=obsReqS.has(o.id);return accRow('observabilityDeep','obs',o,o.id===s.obs?'chosen':(req?'req':'avail'),o.id===s.obs?'selected':(req?'lens requires':'available'),o.id===s.obs);}).join('')+
-        grp(`ORM / data layer (${orm.length})`)+
-        orm.map(o=>{const fit=fitOrm(o);return accRow('ormDeep','orm',o,o.id===s.orm?'chosen':(fit?'fit':'dim'),o.id===s.orm?'selected':(fit?'fits '+langName(s.lang):'other language'),o.id===s.orm);}).join('');})(),ch('plat')));
+  // ── SCENE 11 · Run + observe (SRE) ───────────────────────────────────────
+  const sre=K.sre||{};
+  const gs=(sre.goldenSignals||[]).map(g=>`<tr><td><b>${esc(g.signal)}</b></td><td>${esc(g.measure)}</td><td>${esc(g.alertWhen)}</td></tr>`).join('');
+  P.push(rpanel(10,'#A3E863','SCENE 11','Run + observe',rqSel?rtag('req','retention is regime-driven'):rtag('def','SRE'),
+    esc(nameById('observabilityDeep',s.obs).split(' —')[0]),
+    'The service is live. Watch the four golden signals; alert on the budget, not the noise.',
+    grp('the four golden signals')+`<table class="mx"><thead><tr><th>signal</th><th>measure</th><th>alert when</th></tr></thead><tbody>${gs}</tbody></table>`+
+    grp('SLO starter')+`<div class="scenenote">${esc(sre.sloStarter||'')}</div>`+
+    grp('alert starter pack')+`<div class="accbody" style="border:0;padding:0">${(sre.alertPack||[]).map(a=>`<div class="krow"><span class="kk">alert</span><span class="kvv">${esc(a)}</span></div>`).join('')}</div>`+
+    grp(`backend stacks (${(G.nodes.observabilityDeep||[]).length}) — full knowledge`)+
+    orderOpts(G.nodes.observabilityDeep||[],s.obs,obsReqS).map(o=>{const req=obsReqS.has(o.id);return accRow('observabilityDeep','obs',o,o.id===s.obs?'chosen':(req?'req':'avail'),o.id===s.obs?'selected':(req?'rulebook requires':'available'),false);}).join('')+
+    grp('what each industry requires — observability')+industryMatrix('obs')+
+    `<div class="scenenote">${esc(sre.retentionNote||'')}</div>`,ch('observe')));
 
-  // 8 Integrations — info, by industry
-  let intBody,intVal,intTag;
-  if(s.rq){intTag=rtag('req',`${s.integ.length} systems`);intVal=`${s.integ.length} integrations`;
-    intBody=s.integ.length?(()=>{const bc=by(s.integ,'category');return Object.entries(bc).map(([c,a])=>grp(c)+a.map(g=>card('#C6F24E',g.externalSystem,`auth ${g.authOption||''} · ${g.apiGateway||''}`,`openIntegration('${g.id}')`,'',null)).join('')).join('');})():'<div class="sub">No catalogued integrations for this industry yet.</div>';}
-  else{intTag=rtag('def','no industry');intVal='Pick an industry';intBody='<div class="sub">Select an industry to see its integrations.</div>';}
-  P.push(rpanel(8,'#C6F24E','09','Decision checklist',
-    s.rq?rtag('req','compliance + security'):rtag('def','no industry'),
-    s.rq?'final sign-off':'pick an industry',
-    s.rq?`Everything you must decide for ${esc(s.rq.name)} — compliance + security, in one list.`:'Pick an industry to generate the checklist.',
-    grp('checklist — compliance & security')+checklistBlock(s,DEC)+grp(`integrations (${s.integ.length})`)+intBody,ch('integ')));
+  // ── SCENE 12 · Connect ───────────────────────────────────────────────────
+  let intBody;
+  if(rqSel){const bc=by(s.integ,'category');
+    intBody=s.integ.length?Object.entries(bc).map(([c,a])=>grp(c)+a.map(g=>card('#B4EE58',g.externalSystem,`auth ${g.authOption||''} · ${g.apiGateway||''}`,`openIntegration('${g.id}')`,'',null)).join('')).join(''):'<div class="sub">No catalogued integrations for this industry yet.</div>';
+  } else intBody='<div class="sub">Pick an industry in Scene 1 to see its integrations.</div>';
+  P.push(rpanel(11,'#B4EE58','SCENE 12','Connect',rqSel?rtag('req',`${s.integ.length} systems`):rtag('def','no industry'),
+    rqSel?`${s.integ.length} integrations`:'Pick an industry',
+    'The external systems this industry actually talks to — each through a gateway, with auth.',
+    intBody+
+    grp(`gateways (${(G.nodes.apiGateways||[]).length})`)+(G.nodes.apiGateways||[]).map(a=>`<span class="chip">${esc(a.name||a.id)}</span>`).join(''),ch('connect')));
+
+  // ── SCENE 13 · Sign-off ──────────────────────────────────────────────────
+  P.push(rpanel(12,'#C6F24E','SCENE 13','Sign-off',rqSel?rtag('req','release gate'):rtag('def','no industry'),
+    'the audit','Every rule from Scene 1 — met, forced, or gap. Release when the gaps are closed.',
+    (rqSel?rulebook:'')+
+    grp('the audit — every decision, traced')+checklistBlock(s,DEC),ch('signoff')));
 
   LASTR=cur;
   $("#track").innerHTML=P.join('');
@@ -943,7 +1018,8 @@ window.setMode=(m)=>{
 };
 
 async function boot(){
-  try{ G=await (await fetch("graph.json")).json(); }
+  try{ const [g,k]=await Promise.all([fetch("graph.json"),fetch("knowledge.json")]);
+    G=await g.json(); K=k.ok?await k.json():{}; }
   catch(e){ $("#track").innerHTML=`<div class="err">Could not load graph.json.<br>${e}</div>`; return; }
   const lv=$("#lensV");
   for(const v of (G.nodes.verticals||[])){const o=document.createElement("option");o.value=v.id;o.textContent=v.name||v.id;lv.appendChild(o);}

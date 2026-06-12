@@ -530,6 +530,28 @@
   .opt.chosen,details.acc.chosen{box-shadow:0 0 0 1px #0B7A66,var(--sh-1)}
   .ktag.chosen,.kchk,.optflag.chosen{color:var(--teal)}
 
+  /* 13-scene components: industry matrix, rulebook, industry rows, components */
+  .mx{width:100%;border-collapse:collapse;font-size:12px;margin:4px 0 8px;background:#fff;border:1px solid var(--hair);border-radius:10px;overflow:hidden}
+  .mx th{font-family:var(--fmono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);text-align:left;padding:7px 10px;background:var(--surface);border-bottom:1px solid var(--hair)}
+  .mx td{padding:6px 10px;border-bottom:1px solid var(--hair);color:var(--ink2);vertical-align:top;line-height:1.45}
+  .mx tbody tr{cursor:pointer}
+  .mx tbody tr:hover{background:var(--surface)}
+  .mx tr.sel{background:rgba(25,200,168,.10)}
+  .mx tr.sel td:first-child{color:var(--teal);font-weight:700}
+  .mx tr:last-child td{border-bottom:0}
+  .rulebook{border:1px solid rgba(25,200,168,.45);border-radius:14px;padding:13px 15px;background:rgba(25,200,168,.06);margin-bottom:12px}
+  .rulebook .rbt{font-family:var(--fmono);font-size:10px;letter-spacing:.12em;color:var(--teal);margin-bottom:8px}
+  .rulebook .krow{grid-template-columns:140px 1fr}
+  .rulebook i{color:var(--ink3);font-style:normal;font-size:10.5px}
+  .irow{display:flex;align-items:center;gap:10px;border:1px solid var(--hair);border-left:3px solid var(--hair2);border-radius:11px;padding:9px 12px;margin-bottom:6px;cursor:pointer;background:#fff;box-shadow:var(--sh-1)}
+  .irow:hover{border-color:#19C8A8}
+  .irow.sel{border-color:#0B7A66;border-left-color:#0B7A66;background:rgba(25,200,168,.07);box-shadow:0 0 0 1px #0B7A66}
+  .irow b{font-size:13px;font-family:var(--fdisplay);white-space:nowrap}
+  .irow .am{font-size:11px;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .scenenote{border:1px dashed var(--hair2);border-radius:11px;padding:9px 12px;font-size:12px;color:var(--ink2);margin:8px 0;background:var(--surface)}
+  .compline b{font-size:12.5px}
+  .compline .cmdcode{background:#0E0F11;border-radius:8px;color:#C6F24E;padding:7px 10px;font-size:10.5px}
+
   /* readable type: body text in Outfit, mono only for code + micro-labels */
   .accbody .krow{grid-template-columns:130px 1fr}
   .accbody .krow .kvv,.kcard .krow .kvv{font-family:var(--fbody);font-size:12.5px;line-height:1.55}
