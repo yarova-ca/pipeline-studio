@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Yarova Studio</title>
+<meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -451,6 +452,84 @@
   .cs{font-size:11.5px;font-family:var(--fmono);border:1px solid var(--hair2);border-radius:20px;padding:4px 12px;color:var(--ink2)}
   .cs.good{border-color:rgba(25,200,168,.4);color:var(--teal)}
   .cs.bad{border-color:rgba(232,97,90,.5);color:#e8615a}
+  /* ════════════════════════════════════════════════════════════════════
+     YAROVA LIGHT THEME — canonical (yarova-brand/tokens/light.css + BRAND-SYSTEM-LIGHT.md)
+     Light-only product: surfaces flip, brand teal/lime stay shapes-only,
+     ALL text accents use ink-teal #0B7A66 (AA on white). Lime never text.
+     ════════════════════════════════════════════════════════════════════ */
+  :root{
+    --bg0:#FFFFFF;--bg1:#F7F6F2;
+    --panel:#FFFFFF;--glass:rgba(14,15,17,.04);
+    --hair:rgba(14,15,17,.10);--hair2:rgba(14,15,17,.20);
+    --ink:#0E0F11;--ink2:rgba(14,15,17,.68);--ink3:rgba(14,15,17,.56);
+    --bone:#0E0F11;--muted:rgba(14,15,17,.56);
+    --surface:#F7F6F2;--surface2:#EFEEE9;--line:rgba(14,15,17,.10);
+    --teal:#0B7A66;            /* text-safe accent; raw #19C8A8 stays for shapes */
+    --gold:#B45309;--amber:#B45309;--red:#B42318;
+    --sh-1:0 1px 2px rgba(14,15,17,.06);--sh-2:0 4px 14px rgba(14,15,17,.08);--sh-3:0 10px 30px rgba(14,15,17,.10);
+  }
+  body{background:
+    radial-gradient(1100px 520px at 12% -8%,rgba(25,200,168,.08),transparent 60%),
+    radial-gradient(900px 480px at 88% 2%,rgba(198,242,78,.08),transparent 55%),
+    var(--bg0);color:var(--ink)}
+  header{background:rgba(255,255,255,.92);border-bottom:1px solid var(--hair)}
+  .hero{background:var(--bg1);border-bottom:1px solid var(--hair)}
+  .hnode .dotn{background:#fff;box-shadow:0 0 0 4px var(--bg1)}
+  .hnode.active{background:var(--wash-teal,rgba(25,200,168,.10))}
+  .hnode.active .dotn{color:#fff}
+  .builder,.stackbar,.lensinfo{background:#fff;border-bottom:1px solid var(--hair)}
+  .lensinfo{background:rgba(180,83,9,.05)}
+  .lensinfo b{color:var(--gold)}
+  .stackbar{background:rgba(25,200,168,.05)}
+  .col{background:none;border-right:1px solid var(--hair)}
+  .colhead{background:rgba(255,255,255,.95);border-bottom:1px solid var(--hair)}
+  .rhead .n,.colhead .n{color:var(--teal)!important}
+  .card,.kcard,.dcard,details.acc,.opt,.chk,.layer,.hubwrap{
+    background:#fff;box-shadow:var(--sh-1)}
+  .card:hover,details.acc[open]{box-shadow:var(--sh-2)}
+  .card.req{box-shadow:0 0 0 1px rgba(180,83,9,.35),var(--sh-2);animation:cardIn .4s var(--ease) both}
+  .card.req b,.chip.req,.ktag.req,.optflag.applies,.dv.amber{color:var(--gold)}
+  .chip.req{border-color:rgba(180,83,9,.45);background:rgba(180,83,9,.07)}
+  .forcenote{border-color:rgba(180,83,9,.35);background:rgba(180,83,9,.05)}
+  .forcenote b{color:var(--gold)}
+  details.acc.gap,.chk.gap{border-left-color:var(--red)}
+  .ktag.gap,.chk.gap .chki,.cs.bad,.sbhealth.bad,.lg.red,.dv.red,.err{color:var(--red)}
+  .cs.bad{border-color:rgba(180,35,24,.4)}
+  .mw.gapped{border-color:rgba(180,35,24,.45);color:var(--red)}
+  .disc.devops{color:var(--teal)} .disc.devsecops{color:var(--gold)} .disc.sre{color:#096552}
+  .mode.on{background:rgba(25,200,168,.14);color:var(--ink);box-shadow:0 0 0 1px rgba(25,200,168,.45)}
+  select{background:#fff;border:1px solid var(--hair2);color:var(--ink)}
+  select:hover{border-color:#19C8A8;box-shadow:0 0 0 3px rgba(25,200,168,.15)}
+  .drawer{background:#fff;border-left:1px solid var(--hair);box-shadow:-24px 0 64px rgba(14,15,17,.14)}
+  .drawer .dh{background:rgba(255,255,255,.95);border-bottom:1px solid var(--hair)}
+  .scrim{background:rgba(14,15,17,.28)}
+  .kv .k{color:var(--ink3)}
+  /* code stays on dark — readable, and lime/teal code colors remain valid there */
+  details.facc{background:#0E0F11;box-shadow:var(--sh-1)}
+  details.facc summary{background:#1C1F28}
+  details.facc summary .genname{color:#C6F24E}
+  details.facc summary .sub,.cmdlabel{color:rgba(244,243,239,.62)}
+  details.facc .gencopy,.cmd .gencopy{color:rgba(244,243,239,.7);border-color:rgba(244,243,239,.25)}
+  details.facc .gencopy:hover,.cmd .gencopy:hover{color:#C6F24E;border-color:#C6F24E}
+  .cmd{background:#0E0F11;box-shadow:var(--sh-1)}
+  .cmdlabel{background:#1C1F28;border-bottom:1px solid rgba(244,243,239,.1)}
+  .cmdn{border-color:rgba(244,243,239,.3);color:rgba(244,243,239,.6)}
+  pre.cmd{background:#0E0F11}
+  /* glows off — light uses elevation */
+  .colhead .bar{box-shadow:none}
+  .hnode .dotn{box-shadow:0 0 0 4px var(--bg1)}
+  @keyframes reqGlow{0%,100%{box-shadow:0 0 0 1px rgba(180,83,9,.3),var(--sh-2)}50%{box-shadow:0 0 0 1px rgba(180,83,9,.45),var(--sh-2)}}
+  .col:not(:last-child)::after{opacity:.25}
+  .rhead{background:linear-gradient(180deg,rgba(247,246,242,.96),transparent);border-bottom:1px solid var(--hair)}
+  .rval{color:var(--ink)} .rwhy{color:var(--ink2)}
+  .rtag{border-color:var(--hair2);color:var(--ink3)}
+  .rtag.req{border-color:rgba(180,83,9,.5);background:rgba(180,83,9,.07);color:var(--gold)}
+  .rtag.def{border-color:rgba(11,122,102,.4);background:rgba(25,200,168,.08);color:var(--teal)}
+  .rtag.you,.rtag.same{border-color:rgba(11,122,102,.35);color:var(--teal);background:none}
+  @keyframes flashHead{0%{background:rgba(180,83,9,0)}22%{background:rgba(180,83,9,.12)}100%{background:linear-gradient(180deg,rgba(247,246,242,.96),transparent)}}
+  .opt.chosen,details.acc.chosen{box-shadow:0 0 0 1px #0B7A66,var(--sh-1)}
+  .ktag.chosen,.kchk,.optflag.chosen{color:var(--teal)}
+
   /* readable type: body text in Outfit, mono only for code + micro-labels */
   .accbody .krow{grid-template-columns:130px 1fr}
   .accbody .krow .kvv,.kcard .krow .kvv{font-family:var(--fbody);font-size:12.5px;line-height:1.55}
@@ -514,7 +593,7 @@
 <body>
 <header>
   <div class="brand" onclick="location.reload()" aria-label="Yarova Studio — reload">
-    <img class="wordmark" src="yarova-logo.png" alt="Yarova" />
+    <img class="wordmark" src="yarova-logo-light.png" alt="Yarova" />
     <span class="toolname">Studio</span>
   </div>
   <div class="modes" role="tablist" aria-label="View mode">

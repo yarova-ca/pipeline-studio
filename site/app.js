@@ -164,14 +164,14 @@ function colClusters(){
     return {c,x:cx+Math.cos(ang)*120,y:cy+Math.sin(ang)*46};});
   let svg=`<svg viewBox="0 0 360 150" width="100%" height="150" role="img" aria-label="Argo CD hub connected to clusters">`;
   for(const p of pts){const on=RC.has(p.c.id);
-    svg+=`<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="${on?'#FFB800':'rgba(244,243,239,.14)'}" stroke-width="${on?2:1}"/>`;}
+    svg+=`<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="${on?'#B45309':'rgba(14,15,17,.15)'}" stroke-width="${on?2:1}"/>`;}
   for(const p of pts){const on=RC.has(p.c.id);
     svg+=`<g style="cursor:pointer" onclick="openCluster('${p.c.id}')">
-      <circle cx="${p.x}" cy="${p.y}" r="22" fill="${on?'rgba(255,184,0,.14)':'#1C1F28'}" stroke="${on?'#FFB800':'#19C8A8'}" stroke-width="${on?2:1.2}"/>
-      <text x="${p.x}" y="${p.y+4}" text-anchor="middle" fill="${on?'#FFB800':'rgba(244,243,239,.62)'}" font-size="11" font-family="Outfit">${esc(p.c.name||p.c.id)}</text></g>`;}
-  svg+=`<circle cx="${cx}" cy="${cy}" r="26" fill="rgba(198,242,78,.14)" stroke="#C6F24E" stroke-width="1.6"/>
-    <text x="${cx}" y="${cy-2}" text-anchor="middle" fill="#C6F24E" font-size="11" font-family="Outfit">Argo CD</text>
-    <text x="${cx}" y="${cy+11}" text-anchor="middle" fill="rgba(244,243,239,.55)" font-size="9" font-family="Outfit">hub</text></svg>`;
+      <circle cx="${p.x}" cy="${p.y}" r="22" fill="${on?'rgba(180,83,9,.10)':'#FFFFFF'}" stroke="${on?'#B45309':'#0B7A66'}" stroke-width="${on?2:1.2}"/>
+      <text x="${p.x}" y="${p.y+4}" text-anchor="middle" fill="${on?'#B45309':'rgba(14,15,17,.68)'}" font-size="11" font-family="Outfit">${esc(p.c.name||p.c.id)}</text></g>`;}
+  svg+=`<circle cx="${cx}" cy="${cy}" r="26" fill="rgba(25,200,168,.12)" stroke="#0B7A66" stroke-width="1.6"/>
+    <text x="${cx}" y="${cy-2}" text-anchor="middle" fill="#0B7A66" font-size="11" font-family="Outfit">Argo CD</text>
+    <text x="${cx}" y="${cy+11}" text-anchor="middle" fill="rgba(14,15,17,.56)" font-size="9" font-family="Outfit">hub</text></svg>`;
   let h=`<div class="hubwrap">${svg}<div class="sub">Hub-and-spoke: one Argo CD controller syncs every cluster.${lensOn()?` Recommended for ${esc(REQ?.name)}: <span style="color:var(--amber)">${[...RC].map(x=>esc(x)).join(', ')}</span>.`:''}</div></div>`;
   // layered rail of 30 components
   const order=['Foundation','Networking','Security','Storage','Observability','Delivery','Scaling','Platform'];
