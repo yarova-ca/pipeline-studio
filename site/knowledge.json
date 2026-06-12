@@ -1577,5 +1577,63 @@
     "consequence": "Sets the provisioning commands and where Argo CD deploys."
    }
   ]
- }
+ },
+ "platformPlain": {
+  "frontend-web": {
+   "name": "A web app",
+   "plain": "What users see and click in a browser."
+  },
+  "mobile": {
+   "name": "A mobile app",
+   "plain": "Installs on phones — App Store and Play Store."
+  },
+  "backend": {
+   "name": "A backend service",
+   "plain": "The API and logic behind apps — no screen of its own."
+  },
+  "protocol": {
+   "name": "A real-time / protocol service",
+   "plain": "Live connections and typed APIs — gRPC, GraphQL, WebSocket."
+  }
+ },
+ "catPlain": {
+  "c1": "Pages render on the server first — fast first paint and SEO; the browser takes over after.",
+  "c2": "The browser builds everything — instant app feel after load; SEO needs extra work.",
+  "c3": "Pages are pre-built at publish time — unbeatably fast for content that rarely changes.",
+  "c4": "Mostly static pages with small interactive islands — content sites that need a little app.",
+  "c5": "No hydration replay at all — the page resumes where the server left off; fastest interactivity.",
+  "c6": "Renders at the CDN edge, close to every user — lowest latency worldwide.",
+  "c7": "The server streams HTML as it's ready — users see content before the page finishes.",
+  "c8": "Many teams ship one site as independent pieces — for large orgs, not small apps.",
+  "c9": "One JavaScript codebase, real iOS + Android apps — the common cross-platform path.",
+  "c10": "One codebase, not JavaScript (Dart/Kotlin/C#) — native-feel performance.",
+  "c11": "Swift, Apple's tools only — the deepest iOS experience.",
+  "c12": "Kotlin, Google's tools only — the deepest Android experience.",
+  "c13": "A website that installs like an app — no app store, one codebase, some limits.",
+  "c14": "JavaScript/TypeScript on the server — your web team's language, end to end.",
+  "c15": "Python — fast to write, the data/AI ecosystem next door.",
+  "c16": "Go — small fast binaries, effortless concurrency; the cloud-native default.",
+  "c17": "Java — the enterprise workhorse: mature, staffed, audited everywhere.",
+  "c18": "Kotlin on the JVM — Java's ecosystem with a modern language.",
+  "c19": ".NET / C# — Microsoft's stack; first-class on Azure and in enterprises.",
+  "c20": "Rust — maximum speed and safety; steeper learning curve, no garbage collector.",
+  "c21": "Elixir — millions of cheap live connections; built for always-on systems.",
+  "c22": "Ruby — developer happiness and speed-to-market; Rails carries whole products.",
+  "c23": "PHP — runs most of the web; modern frameworks are far from the old jokes.",
+  "c24": "Swift on the server — share code with your iOS app.",
+  "c25": "Scala — functional power on the JVM; data-heavy systems.",
+  "c26": "Clojure — a Lisp on the JVM; small expert teams, very stable cores.",
+  "c27": "C++ — when every microsecond is money: trading, games, embedded.",
+  "c28": "gRPC — typed, binary, fast service-to-service calls; the microservices standard.",
+  "c29": "GraphQL — clients ask for exactly the data they need; one endpoint, typed schema.",
+  "c30": "WebSocket — a connection that stays open both ways; chat, live dashboards, games."
+ },
+ "platformsMissing": [
+  "Desktop apps (Electron, Tauri)",
+  "CLI tools",
+  "IoT / embedded",
+  "Edge functions (Cloudflare Workers, Lambda@Edge)",
+  "Data / ML services",
+  "Games"
+ ]
 }

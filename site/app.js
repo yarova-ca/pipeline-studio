@@ -1194,6 +1194,7 @@ window.setMode=(m)=>{
 
 // ════ GUIDED — the TurboTax interview: one decision per screen ═══════════════
 let GSTEP=0;
+let GNAV={platform:null,category:null,all:false};
 const TERMS_TOP=['SBOM','OIDC','MFA','FIPS','ORM','lockfile','container','registry','cluster','CI','SAST','middleware','MFA'];
 function linkify(text){
   let out=esc(text);
@@ -1271,8 +1272,9 @@ window.gPick=(axis,id)=>{
   renderGuided();
 };
 window.startGuided=()=>{GSTEP=0;setMode('guided');};
-window.gJump=(i)=>{GSTEP=i;renderGuided();$('#guided').scrollTop=0;};
-window.gGo=(d)=>{GSTEP=Math.max(0,Math.min((K.guided.steps||[]).length,GSTEP+d));renderGuided();
+window.gJump=(i)=>{GSTEP=i;GNAV={platform:null,category:null,all:false};renderGuided();$('#guided').scrollTop=0;};
+window.gNav=(k,v)=>{GNAV[k]=v;if(k==='platform'){GNAV.category=null;GNAV.all=false;}renderGuided();$('#guided').scrollTop=0;};
+window.gGo=(d)=>{GSTEP=Math.max(0,Math.min((K.guided.steps||[]).length,GSTEP+d));GNAV={platform:null,category:null,all:false};renderGuided();
   $('#guided').scrollTop=0;};
 window.gUseRec=()=>{
   const st=(K.guided.steps||[])[GSTEP];if(!st)return;
@@ -1289,7 +1291,42 @@ function renderGuided(){
   const opts=gOptions(st.axis);
   const picked=!!RS[st.axis];
   const pairHtml=st.pair?`<div class="gq" style="font-size:20px;margin-top:26px">…and the ingredient list (SBOM)</div>`+gOptions(st.pair).map(o=>gCard(st.pair,o)).join(''):'';
-  const filter=st.axis==='fw'?`<input class="gfilter" placeholder="Type to filter the ${opts.length} frameworks… (e.g. next, fastapi, go)" oninput="gFilter(this.value)">`:'';
+  // Decision 2 = the REAL flow: platform → kind → framework
+  let cascade='', filter='';
+  if(st.axis==='fw'&&!GNAV.all){
+    const fws=G.nodes.frameworks||[];
+    const cats=[...(G.nodes.categories||[])].sort((a,b)=>(parseInt(a.id.slice(1))||0)-(parseInt(b.id.slice(1))||0));
+    const devOf=(f)=>{try{const d=f.device;return Array.isArray(d)?d[0]:String(d).replace(/[\[\]']/g,'');}catch(e){return ''}};
+    const catsOf=(plat)=>cats.filter(c=>fws.some(f=>f.categoryId===c.id&&devOf(f)===plat));
+    const fwsOf=(cid)=>fws.filter(f=>f.categoryId===cid);
+    const dots=(n)=>`<span class="subdots">${[0,1,2].map(i=>`<i class="${i<n?'on':''}"></i>`).join('')}</span>`;
+    const crumb=()=>{const parts=[];
+      if(GNAV.platform)parts.push(`<button class="crumb" onclick="gNav('platform',null)">${esc((K.platformPlain[GNAV.platform]||{}).name||GNAV.platform)}</button>`);
+      if(GNAV.category)parts.push(`<button class="crumb" onclick="gNav('category',null)">${esc(nameById('categories',GNAV.category).replace(/^[^—]+— /,''))}</button>`);
+      return parts.length?`<div class="crumbs">${parts.join('<span class="sbsep">›</span>')}</div>`:'';};
+    if(!GNAV.platform){
+      cascade=dots(1)+crumb()+
+        `<h3 class="gsub">First — what are you building?</h3>`+
+        Object.entries(K.platformPlain||{}).map(([id,pp])=>{
+          const pc=catsOf(id), n=fws.filter(f=>devOf(f)===id).length;
+          return `<details class="gcard"><summary><span class="gname">${esc(pp.name)}</span><span class="gplain">${esc(pp.plain)} <b>${n} frameworks · ${pc.length} kinds.</b></span><button class="gpick" onclick="event.preventDefault();event.stopPropagation();gNav('platform','${id}')">this one</button></summary><div class="gbody"><div class="gjuri">${pc.map(c=>esc(c.name.replace(/^[^—]+— /,''))).join(' · ')}</div></div></details>`;}).join('')+
+        `<div class="scenenote">Not covered yet (honestly): ${(K.platformsMissing||[]).map(esc).join(' · ')}. These platforms arrive after this walk is perfect.</div>`+
+        `<div class="sub" style="margin-top:10px">Already know your framework? <button class="kmore" onclick="GNAV.all=true;renderGuided()">see all ${fws.length} →</button></div>`;
+    } else if(!GNAV.category){
+      cascade=dots(2)+crumb()+
+        `<h3 class="gsub">Which kind of ${esc(((K.platformPlain[GNAV.platform]||{}).name||'').toLowerCase())}?</h3>`+
+        catsOf(GNAV.platform).map(c=>{const list=fwsOf(c.id);
+          return `<details class="gcard"><summary><span class="gname">${esc(c.name.replace(/^[^—]+— /,''))}</span><span class="gplain">${esc((K.catPlain||{})[c.id]||'')}</span><button class="gpick" onclick="event.preventDefault();event.stopPropagation();gNav('category','${c.id}')">this kind</button></summary><div class="gbody"><div class="gjuri"><b>${list.length} frameworks:</b> ${list.map(f=>esc(f.name)).join(' · ')}</div></div></details>`;}).join('');
+    } else {
+      const list=fwsOf(GNAV.category);
+      cascade=dots(3)+crumb()+
+        `<h3 class="gsub">Now compare — the ${list.length} that actually compete</h3>`+
+        list.map(f=>gCard('fw',{id:f.id,name:f.name,plain:`${LANG_HUMAN[f.languageId]||f.languageId} · ${firstSentence(f.whenToUse||'')}`,node:'frameworks'})).join('');
+    }
+  }
+  if(st.axis==='fw'&&GNAV.all){
+    filter=`<input class="gfilter" placeholder="Type to filter the ${opts.length} frameworks… (e.g. next, fastapi, go)" oninput="gFilter(this.value)">`;
+  }
   el.innerHTML=`<div class="gwrap">
     <div class="gtop"><button class="gback" onclick="${GSTEP===0?"setMode('catalog');showWelcome()":'gGo(-1)'}">← back</button>
       <span class="gcount">decision ${GSTEP+1} of ${total} · scene ${st.scene}</span></div>
@@ -1297,7 +1334,7 @@ function renderGuided(){
     <h2 class="gq">${esc(st.title)}</h2>
     <p class="gwhy">${linkify(st.why)}</p>
     ${filter}
-    <div id="gcards">${opts.map(o=>gCard(st.axis,o)).join('')}</div>
+    <div id="gcards">${(st.axis==='fw'&&!GNAV.all)?cascade:opts.map(o=>gCard(st.axis,o)).join('')}</div>
     ${pairHtml}
     <div class="gfoot">
       ${picked?`<div class="gcons">✓ Locked in. <b>${esc(st.consequence)}</b></div>`:''}
