@@ -45,7 +45,9 @@ function col(idx,n,name,accent,bodyHtml,note,wide){
 
 // stage names of the journey (drives stepper + columns)
 // 9 stages ride the brand teal→lime gradient, left to right (on-brand progression)
-const STAGES=[
+// journey rails — catalog browses; build follows the real order:
+// repo → deps → container image → CI/CD → compliance → registry/gitops → cluster → platform → sign-off
+const STAGES_CATALOG=[
   ['catalog','Frameworks','#19C8A8'],
   ['build','Pipeline','#2FCD9D'],
   ['governance','Compliance','#44D292'],
@@ -56,6 +58,18 @@ const STAGES=[
   ['connect','Integrations','#B0ED59'],
   ['reference','Reference','#C6F24E'],
 ];
+const STAGES_BUILD=[
+  ['repo','Framework','#19C8A8'],
+  ['deps','Dependencies','#2FCD9D'],
+  ['image','Container image','#44D292'],
+  ['ci','CI/CD pipeline','#5AD886'],
+  ['governance','Compliance','#70DD7B'],
+  ['gitops','Registry → GitOps','#85E270'],
+  ['runtime','Cluster','#9BE864'],
+  ['platform','Platform','#B0ED59'],
+  ['signoff','Checklist','#C6F24E'],
+];
+let STAGES=STAGES_CATALOG;
 
 // ── columns ──────────────────────────────────────────────────────────────────
 function colFrameworks(){
@@ -230,6 +244,20 @@ function renderBoard(){
 function heroCounts(){
   const n=G.nodes;
   const integ=lensOn()?(n.integrations||[]).filter(g=>g.verticalId===LENS.vertical).length:(n.integrations||[]).length;
+  if(MODE==='build'){
+    const lens=!!RS.industry;
+    return [
+      {c:(n.frameworks||[]).length+' to pick from'},
+      {c:(n.pkgBuildDeep||[]).length+' managers + tools'},
+      {c:(n.runtimeDeep||[]).length+' runtimes · '+(n.images||[]).length+' images',req:lens},
+      {c:(n.stages||[]).length+' stages · '+(n.tools||[]).length+' tools'},
+      {c:lens?'apply vs not':'26 regimes',req:lens},
+      {c:'push · sign · sync'},
+      {c:(n.clusters||[]).length+' clusters',req:lens},
+      {c:'auth · obs · ORM',req:lens},
+      {c:'sign-off',req:lens},
+    ];
+  }
   return [
     {c:(n.frameworks||[]).length+' frameworks'},
     {c:(n.stages||[]).length+' stages · '+(n.invariants||[]).length+' invariants'},
@@ -740,15 +768,48 @@ function renderResolver(){
     (s.btList.length?grp(`build tools (${s.btList.length})`)+
       s.btList.map(p=>accRow('pkgBuildDeep','buildtool',p,p.id===s.buildtool?'chosen':'fit',p.id===s.buildtool?'selected':'applies',false)).join(''):''),ch('deps')));
 
-  // 2 CI/CD pipeline — same for all; ARGs resolved from your picks
-  P.push(rpanel(2,'#44D292','03','CI/CD pipeline',rtag('same','same for every framework'),
-    `${(G.nodes.stages||[]).length}-stage pipeline`,'Standard platform pipeline. Your choices flow in as build args:',
+  // 2 Container image — Docker first: images, build, runtime (pipeline builds THIS)
+  const runAll=(G.nodes.runtimeDeep||[]);
+  P.push(rpanel(2,'#44D292','03','Container image',rtag(s.baseTag,s.baseTag==='req'?'required by industry':s.baseTag==='you'?'your choice':'framework default'),
+    esc(baseName),esc(s.baseWhy)+' The CI/CD pipeline (next stage) builds exactly this image.',
+    forcedNote+cmdDocker+
+    grp(`base image — every option (${runAll.length})`)+
+    runAll.map(r=>{const req=reqRun.has(r.id);return accRow('runtimeDeep','runtime',r,r.id===s.base?'chosen':(req?'req':'avail'),r.id===s.base?'selected':(req?'lens recommends':'available'),r.id===s.base);}).join('')+
+    genImg,ch('img')));
+
+  // 3 CI/CD pipeline — every phase, every stage, every tool, lens additions
+  const toolsByStage={};(G.nodes.tools||[]).forEach(t=>{(toolsByStage[t.stage]||=[]).push(t);});
+  const stByPhase={};(G.nodes.stages||[]).forEach(st=>{(stByPhase[st.phaseId]||=[]).push(st);});
+  const deltaSrc=((G.pipelines||[]).find(p=>p.complianceDeltas&&p.complianceDeltas.length)||{}).complianceDeltas||[];
+  const myStds=[...reqStds(s)];
+  const myDeltas=deltaSrc.filter(d=>myStds.some(std=>String(d.standardId||d.standard||'').toLowerCase().includes(std)));
+  const stageRow=(st)=>{const tools=toolsByStage[st.name]||[];
+    const d=(st.type||'').toLowerCase().includes('sec')?'DevSecOps':discipline(st.name+' '+tools.map(t=>t.tool).join(' '));
+    const toolNames=tools.map(t=>t.tool).join(' · ')||'process stage';
+    const body=tools.length?tools.map(t=>
+      `<div class="krow"><span class="kk">tool</span><span class="kvv"><b>${esc(t.tool)}</b> · ${esc(t.license||'')}${/yes/i.test(t.mandatory||'')?' · mandatory':''}</span></div>`+
+      (t.whenToUse?`<div class="krow"><span class="kk">use when</span><span class="kvv">${esc(stripTags(t.whenToUse))}</span></div>`:'')+
+      (t.whenNot?`<div class="krow"><span class="kk">skip when</span><span class="kvv">${esc(stripTags(t.whenNot))}</span></div>`:'')+
+      (t.output?`<div class="krow"><span class="kk">output</span><span class="kvv">${esc(t.output)}${t.ciIntegration?' · '+esc(t.ciIntegration):''}</span></div>`:'')+
+      (t.primaryTradeoff?`<div class="krow"><span class="kk">trade-off</span><span class="kvv">${esc(stripTags(t.primaryTradeoff))}</span></div>`:'')
+    ).join('<div style="height:8px"></div>'):'<div class="sub">Process stage — enforced by pipeline configuration, no external tool.</div>';
+    return `<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc(st.name)}</span><span class="am">${esc(toolNames)}</span><span class="disc ${d.toLowerCase()}">${d}</span></summary><div class="accbody">${body}</div></details>`;};
+  const ciBody=(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>{
+    const sts=(stByPhase[p.id]||[]);
+    const adds=myDeltas.map(d=>{const txt=(d.phases||{})[p.phaseNum||('Phase '+p.order)]||(d.phases||{})[p.name];
+      return txt?`<div class="forcenote" style="margin-top:6px">🔶 <b>${esc(d.standard||d.standardId)}</b> adds: ${esc(stripTags(txt))}</div>`:'';}).join('');
+    return grp(`${p.label||p.name} — ${p.trigger||''} (${sts.length} stages)`)+sts.map(stageRow).join('')+adds;
+  }).join('');
+  const wfRows=((s.fw.shipped&&s.fw.shipped.workflows)||[]).map(w=>{const d=discipline((w.name||'')+' '+(w.jobs||[]).join(' '));
+    return `<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc((w.name||w.file).replace(/ — .*$/,''))}</span><span class="am">${esc((w.jobs||[]).join(', '))}</span><span class="disc ${d.toLowerCase()}">${d}</span></summary><div class="accbody"><div class="krow"><span class="kk">file</span><span class="kvv">${esc(w.file)}</span></div><div class="krow"><span class="kk">jobs</span><span class="kvv">${esc((w.jobs||[]).join(', '))}</span></div></div></details>`;}).join('');
+  const ciCmds=cmdBlock('commands — what the pipeline runs',[...CMD.deps,CMD.docker[0],...CMD.registry]);
+  P.push(rpanel(3,'#5AD886','04','CI/CD pipeline',rtag('same','same for every framework'),
+    `${(G.nodes.stages||[]).length} stages · ${(G.nodes.tools||[]).length} tools`,'Every phase, stage and tool. Your choices flow in as build args:',
     `<div class="rchips"><span class="chip">AUTH=${esc(s.auth.replace('auth-',''))}</span><span class="chip">ORM=${esc(s.orm.replace('orm-',''))}</span><span class="chip">RUNTIME=${esc(s.base)}</span><span class="chip">PKG=${esc(s.pkg)}</span></div>`+
-    grp('phases')+`<div class="phstrip">`+(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>`<span class="ph"><b>${esc(p.phaseNum||p.name)}</b> ${esc(p.name)}<span class="pht">${esc(p.trigger||'')}</span></span>`).join('<span class="sbsep">›</span>')+`</div>`+
-    grp(`this service's workflows (${((s.fw.shipped&&s.fw.shipped.workflows)||[]).length})`)+
-    ((s.fw.shipped&&s.fw.shipped.workflows)||[]).map(w=>{const d=discipline((w.name||'')+' '+(w.jobs||[]).join(' '));
-      return `<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc((w.name||w.file).replace(/ — .*$/,''))}</span><span class="am">${esc((w.jobs||[]).join(', '))}</span><span class="disc ${d.toLowerCase()}">${d}</span></summary><div class="accbody"><div class="krow"><span class="kk">file</span><span class="kvv">${esc(w.file)}</span></div><div class="krow"><span class="kk">jobs</span><span class="kvv">${esc((w.jobs||[]).join(', '))}</span></div></div></details>`;}).join('')+
-    genCI,ch('pipe')));
+    ciBody+
+    grp(`this service's workflows (${((s.fw.shipped&&s.fw.shipped.workflows)||[]).length})`)+wfRows+
+    genCI+ciCmds+
+    grp('then the image lands in the registry')+card('#5AD886','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null),ch('pipe')));
 
   // 3 Compliance — three clean groups: enforced / needs profile / not required
   const reqSet=new Set(s.regimes);
@@ -777,18 +838,9 @@ function renderResolver(){
     compBody=grp(`all regimes (${allC.length}) — pick an industry to see which apply`)+
       allC.map(c=>`<details class="acc"><summary><span class="caret">▸</span><span class="an">${esc(c.name)}</span><span class="am">${esc(c.fullName||'')}</span></summary><div class="accbody"><button class="kmore" onclick="openProfile('${c.id}')">full record →</button></div></details>`).join('');
   }
-  P.push(rpanel(3,'#5AD886','04','Compliance',s.rq?rtag('req',`${s.regimes.length} of ${allC.length} apply`):rtag('def','no industry'),
+  P.push(rpanel(4,'#70DD7B','05','Compliance',s.rq?rtag('req',`${s.regimes.length} of ${allC.length} apply`):rtag('def','no industry'),
     s.rq?`${s.regimes.length} of ${allC.length} apply`:'Pick an industry',
     s.rq?`${esc(s.rq.name)} mandates these. The enforced ones already ship controls in this service.`:'Compliance depends on the industry you serve.',compBody,ch('comp')));
-
-  // 4 Image & registry — every base image, choosable
-  const runAll=(G.nodes.runtimeDeep||[]);
-  P.push(rpanel(4,'#70DD7B','05','Image & registry',rtag(s.baseTag,s.baseTag==='req'?'required by industry':s.baseTag==='you'?'your choice':'framework default'),
-    esc(baseName),esc(s.baseWhy)+' Built, signed (cosign) + SBOM, pushed to GHCR.',
-    forcedNote+grp(`base image (${runAll.length})`)+
-    runAll.map(r=>{const req=reqRun.has(r.id);return accRow('runtimeDeep','runtime',r,r.id===s.base?'chosen':(req?'req':'avail'),r.id===s.base?'selected':(req?'lens recommends':'available'),r.id===s.base);}).join('')+
-    grp('registry')+card('#70DD7B','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null)+
-    genImg+cmdDocker+cmdReg,ch('img')));
 
   // 5 GitOps — info
   P.push(rpanel(5,'#85E270','06','GitOps delivery',rtag('same','same for every framework'),
@@ -878,6 +930,8 @@ window.setMode=(m)=>{
   MODE=m;
   document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
   const build=m==='build';
+  STAGES=build?STAGES_BUILD:STAGES_CATALOG;
+  renderHero();
   $("#builder").classList.toggle('on',build);
   const sb=$("#stackbar");if(sb)sb.classList.toggle('on',build);
   document.querySelector('.legend').style.display=build?'none':'';
