@@ -1,5 +1,9 @@
 import * as GEN from "./generators.js";
 let G=null, K={}, LENS={vertical:""}, REQ=null;
+// the user's decisions — made explicitly, persisted, never pre-made
+const DECIDED=JSON.parse(localStorage.getItem('ys-decided')||'{}');
+function decide(scene){DECIDED[scene]=true;localStorage.setItem('ys-decided',JSON.stringify(DECIDED));}
+
 let RA=new Set(),RO=new Set(),RG=new Set(),RC=new Set(),RT=new Set();
 const $=(s,r=document)=>r.querySelector(s);
 const esc=(s)=>String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -291,12 +295,13 @@ function heroCounts(){
 }
 function renderHero(){
   const counts=heroCounts();
-  $("#hrail").innerHTML=STAGES.map((s,i)=>
-    `<div class="hnode${counts[i].req?' req':''}" data-i="${i}" style="--accent:${s[2]}" tabindex="0" role="button"
+  $("#hrail").innerHTML=STAGES.map((s,i)=>{
+    const done=MODE==='build'&&DECIDED['s'+(i+1)];
+    return `<div class="hnode${counts[i].req?' req':''}${done?' done':''}" data-i="${i}" style="--accent:${s[2]}" tabindex="0" role="button"
        aria-label="${esc(s[1])}, jump to column"
        onclick="goCol(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goCol(${i})}">
-       <span class="dotn">${i+1}</span><span class="hl">${esc(s[1])}</span><span class="hc">${esc(counts[i].c)}</span>
-    </div>`
+       <span class="dotn">${done?'✓':i+1}</span><span class="hl">${esc(s[1])}</span><span class="hc">${esc(counts[i].c)}</span>
+    </div>`}
   ).join('');
 }
 window.goCol=(i)=>{const c=$(`#col-${i}`);if(c)c.scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'});
@@ -422,7 +427,7 @@ window.openRegistry=()=>openDrawer('GHCR — ghcr.io/yarova-ca',
 // Every stage shows ALL its options, marked applies/recommended/chosen/available.
 // Click any option = pick it; the whole path reflows.
 let MODE='catalog';
-const RS={fw:null,industry:'financial-services',category:'',complianceFocus:'',pkg:null,buildtool:null,orm:null,auth:null,obs:null,runtime:null,cluster:null,region:null,registry:'ghcr',signer:'cosign',sbom:'syft'};
+const RS={fw:null,industry:'',category:'',complianceFocus:'',pkg:null,buildtool:null,orm:null,auth:null,obs:null,runtime:null,cluster:null,region:null,registry:'ghcr',signer:'cosign',sbom:'syft'};
 let LASTR={};
 const LANG_DEFPKG={ts:'pnpm',js:'pnpm',py:'uv',go:'gomod',rust:'cargo',java:'maven',kotlin:'gradle',php:'composer',ruby:'bundler',csharp:'gomod',elixir:'gomod'};
 const LANG_ORM={ts:'orm-prisma',js:'orm-prisma',py:'orm-sqlalchemy',go:'orm-gorm',rust:'orm-sqlx'};
@@ -485,6 +490,7 @@ function ostate(id,chosenId,reqSet,recSet){
 }
 window.pickAxis=(axis,id)=>{
   RS[axis]=id;
+  if(axis==='industry'&&id){decide('s1');localStorage.setItem('ys-industry',id);}
   if(axis==='industry'){RS.auth=null;RS.obs=null;RS.cluster=null;RS.runtime=null;}
   if(axis==='fw'){RS.pkg=null;RS.buildtool=null;RS.orm=null;}
   refreshBuild();
@@ -889,17 +895,29 @@ function renderResolver(){
   // ── SCENE 1 · Who it's for ────────────────────────────────────────────────
   const ind=(G.nodes.industryRequirements||[]);
   const rqSel=s.rq;
-  const rulebook=rqSel?`<div class="rulebook"><div class="rbt">THE RULEBOOK — born here, enforced in every scene</div>
-    <div class="krow"><span class="kk">regimes</span><span class="kvv">${(rqSel.requiredRegimeIds||[]).length} apply: ${esc((rqSel.requiredRegimeIds||[]).map(id=>nameById('complianceProfiles',id)).join(', '))}</span></div>
-    <div class="krow"><span class="kk">auth bar</span><span class="kvv">${esc(firstSentence(rqSel.requiredAuth))} <i>(bites in Scene 4)</i></span></div>
-    <div class="krow"><span class="kk">observability bar</span><span class="kvv">${esc(firstSentence(rqSel.requiredObservability))} <i>(Scenes 4 & 11)</i></span></div>
-    <div class="krow"><span class="kk">data & residency</span><span class="kvv">${esc(firstSentence(rqSel.requiredDataControls))} <i>(Scenes 6 & 10)</i></span></div>
+  const regimeChip=(id)=>{const c=(G.nodes.complianceProfiles||[]).find(x=>x.id===id)||{};
+    return `<button class="regchip" onclick="openProfile('${id}')" title="${esc(c.fullName||'')}">${esc(c.name||id)}<span class="regfull">${esc(c.fullName||'')}</span></button>`;};
+  const bar=(label,text,where)=>{text=stripTags(String(text||''));
+    return `<details class="rbbar"><summary><span class="kk">${esc(label)}</span><span class="kvv">${esc(firstSentence(text))}</span><span class="caret">▸</span></summary><div class="rbfull">${esc(text)}<div class="rbwhere">${esc(where)}</div></div></details>`;};
+  const rulebook=rqSel?`<div class="rulebook"><div class="rbt">THE RULEBOOK — born from your choice, enforced in every scene</div>
+    <div class="kk" style="margin:2px 0 5px">the ${(rqSel.requiredRegimeIds||[]).length} rule-sets that apply — tap any to read it plainly</div>
+    <div class="regwrap">${(rqSel.requiredRegimeIds||[]).map(regimeChip).join('')}</div>
+    ${bar('auth bar',rqSel.requiredAuth,'This bites in Scene 4 — Write the app.')}
+    ${bar('observability bar',rqSel.requiredObservability,'This bites in Scenes 4 and 11.')}
+    ${bar('data & residency',rqSel.requiredDataControls,'This bites in Scenes 6 and 10.')}
     <div class="krow"><span class="kk">image bar</span><span class="kvv">${esc((rqSel.recommendedRuntimeIds||[]).join(' · '))} <i>(Scene 6)</i></span></div>
     <div class="krow"><span class="kk">cluster bar</span><span class="kvv">${esc((rqSel.recommendedClusterIds||[]).map(id=>nameById('clusters',id)).join(' · '))} <i>(Scene 10)</i></span></div>
-    </div>`:'<div class="sub">Pick your industry — the rulebook is written here, before any code.</div>';
-  P.push(rpanel(0,'#19C8A8','SCENE 1','Who it’s for',rqSel?rtag('req','the rulebook'):rtag('def','pick below'),
-    rqSel?esc(rqSel.name):'Pick the industry',
-    'Before any code exists, the customer decides the rules. Every scene below reads this rulebook.',
+    </div>
+    <div class="decided"><span>✓ Decision made — <b>${esc(rqSel.name)}</b></span>
+      <button class="continue" onclick="goCol(1)">Continue to Scene 2 — pick your framework →</button></div>`
+  :`<div class="decision-ask"><div class="dnum">DECISION №1</div>
+     <div class="dq2">Who are you building for?</div>
+     <div class="sub">Nothing is chosen for you. Pick below — your rulebook appears the moment you choose.</div>
+     <div class="sub" style="margin-top:6px">Not sure yet? <button class="kmore" onclick="pickAxis('industry','technology')">Technology / SaaS is the safe general start →</button></div>
+   </div>`;
+  P.push(rpanel(0,'#19C8A8','SCENE 1','Who it’s for',rqSel?rtag('you','your decision'):rtag('def','undecided'),
+    rqSel?esc(rqSel.name):'Decide: who is this for?',
+    rqSel?'Your choice wrote the rulebook below. Every scene now reads it.':'Before any code exists, the customer decides the rules. This is the first decision — yours.',
     rulebook+
     grp('pick your industry (16)')+ind.map(r=>{const sel=r.id===RS.industry;
       return `<div class="irow ${sel?'sel':''}" tabindex="0" role="button" onclick="pickAxis('industry','${r.id}')" onkeydown="if(event.key==='Enter'){pickAxis('industry','${r.id}')}"><b>${esc(r.name)}</b><span class="am">${(r.requiredRegimeIds||[]).length} regimes · ${esc(firstSentence((r.keyRisks||[])[0]||''))}</span>${sel?'<span class="kchk">✓ selected</span>':''}</div>`;}).join('')+
@@ -1151,9 +1169,15 @@ function renderBuilder(){
   $("#pFw").onchange=e=>pickAxis('fw',e.target.value);
   $("#pInd").onchange=e=>pickAxis('industry',e.target.value);
 }
-function refreshBuild(){renderBuilder();renderResolver();}
+function refreshBuild(){renderBuilder();renderHero();renderResolver();}
 window.setMode=(m)=>{
-  MODE=m;
+  MODE=m==='guided'?'build':m;  // guided shares build state/lens
+  hideWelcome();
+  const g=$('#guided'),tr=$('#track');
+  if(g)g.hidden=(m!=='guided');
+  if(tr)tr.style.display=(m==='guided')?'none':'';
+  ['hero','builder','stackbar','lensInfo'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display=(m==='guided')?'none':'';});
+  if(m==='guided'){document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('on',b.dataset.m==='guided'));renderGuided();return;}
   document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
   const build=m==='build';
   STAGES=build?STAGES_BUILD:STAGES_CATALOG;
@@ -1168,6 +1192,164 @@ window.setMode=(m)=>{
   } else { renderLensInfo();renderBoard(); }
 };
 
+// ════ GUIDED — the TurboTax interview: one decision per screen ═══════════════
+let GSTEP=0;
+const TERMS_TOP=['SBOM','OIDC','MFA','FIPS','ORM','lockfile','container','registry','cluster','CI','SAST','middleware','MFA'];
+function linkify(text){
+  let out=esc(text);
+  for(const t of (K.glossary||[])){
+    if(!TERMS_TOP.some(x=>x.toLowerCase()===t.term.toLowerCase()))continue;
+    const re=new RegExp('\\b('+t.term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')\\b','i');
+    if(re.test(out))out=out.replace(re,(m)=>`<span class="term" onclick="event.stopPropagation();showPop(this)" data-def="${esc(t.def)}" data-t="${esc(t.term)}">${m}</span>`);
+  }
+  return out;
+}
+window.showPop=(el)=>{
+  document.querySelectorAll('.pop').forEach(x=>x.remove());
+  const d=document.createElement('div');d.className='pop';
+  d.innerHTML=`<b>${el.dataset.t}</b> — ${esc(el.dataset.def)}`;
+  el.appendChild(d);
+  setTimeout(()=>document.addEventListener('click',()=>d.remove(),{once:true}),0);
+};
+function juriLine(rq){
+  const J=K.jurisdictions||{};
+  const groups={'Canada — federal':[], 'Provincial':[], 'If you serve the US':[], 'If you serve the EU':[], 'Global / contractual':[]};
+  for(const id of (rq.requiredRegimeIds||[])){
+    const j=J[id]||''; const name=nameById('complianceProfiles',id);
+    if(/^Federal Canada/.test(j))groups['Canada — federal'].push(name);
+    else if(/only —|only$|Québec only|Ontario only|Alberta only|British Columbia only/.test(j))groups['Provincial'].push(name.replace('-Quebec',''));
+    else if(/^United States|^California/.test(j))groups['If you serve the US'].push(name);
+    else if(/^European Union/.test(j))groups['If you serve the EU'].push(name);
+    else groups['Global / contractual'].push(name);
+  }
+  return Object.entries(groups).filter(([,v])=>v.length)
+    .map(([k,v])=>`<b>${k}:</b> ${v.join(', ')}`).join(' · ');
+}
+function gOptions(axis){
+  const s=resolveStack();
+  if(axis==='industry')return (G.nodes.industryRequirements||[]).map(r=>({id:r.id,name:r.name,
+    plain:firstSentence((r.keyRisks||[])[0]||'')+' is the risk this rulebook exists to stop.',
+    juri:juriLine(r), node:'industryRequirements', rec:false, req:false}));
+  if(axis==='fw')return (G.nodes.frameworks||[]).map(f=>({id:f.id,name:f.name,
+    plain:`${LANG_HUMAN[f.languageId]||f.languageId} · ${firstSentence(f.whenToUse||'')}`,
+    node:'frameworks',rec:false}));
+  if(axis==='pkg')return (G.nodes.pkgBuildDeep||[]).filter(p=>p.kind==='pkg-mgr'&&langMatch(p.language,s.lang)).map(p=>({id:p.id,name:p.name,
+    plain:firstSentence(p.what||''),node:'pkgBuildDeep',rec:p.id===s.pkgDef}));
+  if(axis==='auth')return (G.nodes.authDeep||[]).map(a=>({id:a.id,name:a.name,
+    plain:firstSentence(a.what||''),node:'authDeep',req:(s.rq?.requiredAuthIds||[]).includes(a.id)}));
+  if(axis==='orm')return ormsFor(s.lang).map(o=>({id:o.id,name:o.name,
+    plain:firstSentence(o.what||''),node:'ormDeep',rec:o.id===s.ormDef}));
+  if(axis==='obs')return (G.nodes.observabilityDeep||[]).map(o=>({id:o.id,name:o.name,
+    plain:firstSentence(o.what||''),node:'observabilityDeep',req:(s.rq?.requiredObservabilityIds||[]).includes(o.id)}));
+  if(axis==='runtime')return (G.nodes.runtimeDeep||[]).map(r=>({id:r.id,name:r.name,
+    plain:`${r.baseOs||''} · ${r.sizeMb?r.sizeMb+' MB':''}${r.fipsCertified==='yes'?' · FIPS-validated':''}`,
+    node:'runtimeDeep',req:(s.rq?.recommendedRuntimeIds||[]).includes(r.id)}));
+  if(axis==='registry')return (K.registries||[]).map(r=>({id:r.id,name:r.name,
+    plain:r.pick||'',kjson:r,req:false,rec:r.id==='ghcr'}));
+  if(axis==='signer')return (K.signers||[]).map(r=>({id:r.id,name:r.name,plain:r.pick||'',kjson:r,rec:r.id==='cosign'}));
+  if(axis==='sbom')return (K.sbomTools||[]).map(r=>({id:r.id,name:r.name,plain:r.pick||'',kjson:r,rec:r.id==='syft'}));
+  if(axis==='cluster')return (G.nodes.clusters||[]).map(c=>({id:c.id,name:c.name,
+    plain:`${c.cloud||''} — ${c.secretIdentity||''} workload identity`,node:'clusters',req:(s.rq?.recommendedClusterIds||[]).includes(c.id)}));
+  return [];
+}
+function gCard(axis,o){
+  const picked=RS[axis]===o.id;
+  const body=o.node&&KFIELDS[o.node]?(KFIELDS[o.node]||[]).map(([k,l])=>{const v=kval((find(o.node,o.id)||{})[k]);return v?`<div class="krow"><span class="kk">${esc(l)}</span><span class="kvv">${esc(v)}</span></div>`:'';}).join('')
+    :o.kjson?Object.entries(o.kjson).filter(([k,v])=>!['id','name'].includes(k)&&v&&typeof v==='string').map(([k,v])=>`<div class="krow"><span class="kk">${esc(k)}</span><span class="kvv">${esc(v)}</span></div>`).join(''):'';
+  return `<details class="gcard${picked?' picked':''}">
+    <summary><span class="gname">${esc(o.name)}</span><span class="gplain">${linkify(o.plain||'')}</span>
+      ${o.req?'<span class="gtag req">your rulebook requires</span>':o.rec?'<span class="gtag rec">recommended</span>':''}
+      <button class="gpick" onclick="event.preventDefault();event.stopPropagation();gPick('${axis}','${o.id}')">${picked?'chosen':'choose'}</button>
+    </summary>
+    <div class="gbody">${o.juri?`<div class="gjuri">${o.juri}</div>`:''}${body||'<div class="sub">Tap choose — full detail lives in the flow.</div>'}</div>
+  </details>`;
+}
+window.gPick=(axis,id)=>{
+  pickAxis(axis,id);
+  const st=(K.guided.steps||[]).find(x=>x.axis===axis)||(K.guided.steps||[])[GSTEP];
+  if(st){decide('g'+st.axis);decide('s'+st.scene);}  // lights the scene ✓ on the flow rail
+  renderGuided();
+};
+window.startGuided=()=>{GSTEP=0;setMode('guided');};
+window.gJump=(i)=>{GSTEP=i;renderGuided();$('#guided').scrollTop=0;};
+window.gGo=(d)=>{GSTEP=Math.max(0,Math.min((K.guided.steps||[]).length,GSTEP+d));renderGuided();
+  $('#guided').scrollTop=0;};
+window.gUseRec=()=>{
+  const st=(K.guided.steps||[])[GSTEP];if(!st)return;
+  const opts=gOptions(st.axis);const rec=opts.find(o=>o.req)||opts.find(o=>o.rec)||opts[0];
+  if(rec)gPick(st.axis,rec.id);
+  if(st.pair){const p2=gOptions(st.pair);const r2=p2.find(o=>o.rec)||p2[0];if(r2)pickAxis(st.pair,r2.id);}
+};
+function renderGuided(){
+  const steps=(K.guided&&K.guided.steps)||[];
+  const total=steps.length+1; // + review
+  const el=$('#guided'); if(!el)return;
+  if(GSTEP>=steps.length){el.innerHTML=gReview(total);return;}
+  const st=steps[GSTEP];
+  const opts=gOptions(st.axis);
+  const picked=!!RS[st.axis];
+  const pairHtml=st.pair?`<div class="gq" style="font-size:20px;margin-top:26px">…and the ingredient list (SBOM)</div>`+gOptions(st.pair).map(o=>gCard(st.pair,o)).join(''):'';
+  const filter=st.axis==='fw'?`<input class="gfilter" placeholder="Type to filter the ${opts.length} frameworks… (e.g. next, fastapi, go)" oninput="gFilter(this.value)">`:'';
+  el.innerHTML=`<div class="gwrap">
+    <div class="gtop"><button class="gback" onclick="${GSTEP===0?"setMode('catalog');showWelcome()":'gGo(-1)'}">← back</button>
+      <span class="gcount">decision ${GSTEP+1} of ${total} · scene ${st.scene}</span></div>
+    <div class="gprog"><i style="width:${Math.round((GSTEP)/total*100)}%"></i></div>
+    <h2 class="gq">${esc(st.title)}</h2>
+    <p class="gwhy">${linkify(st.why)}</p>
+    ${filter}
+    <div id="gcards">${opts.map(o=>gCard(st.axis,o)).join('')}</div>
+    ${pairHtml}
+    <div class="gfoot">
+      ${picked?`<div class="gcons">✓ Locked in. <b>${esc(st.consequence)}</b></div>`:''}
+      <button class="gnext" ${picked?'':'disabled'} onclick="gGo(1)">Continue →</button>
+      <button class="gskip" onclick="gUseRec()">use the recommended and continue</button>
+    </div>
+  </div>`;
+  if(picked){} // continue enabled
+}
+window.gFilter=(v)=>{v=v.toLowerCase();
+  document.querySelectorAll('#gcards .gcard').forEach(c=>{c.style.display=c.textContent.toLowerCase().includes(v)?'':'none';});};
+function gReview(total){
+  const s=resolveStack();
+  const steps=(K.guided&&K.guided.steps)||[];
+  const row=(label,axis,val)=>`<div class="grev"><span class="k2">${esc(label)}</span><b>${esc(val)}</b>
+    <button onclick="gJump(${steps.findIndex(x=>x.axis===axis)})">change</button></div>`;
+  const CFG=buildConfig(s),GF=genFiles(CFG);
+  const files=[['Dockerfile',GF.dockerfile],['.github/workflows/main.yml',GF.mainwf],['.github/workflows/pr.yml',GF.prwf],['helm/values-prod.yaml',GF.helm],['.pre-commit-config.yaml',GF.precommit]];
+  CFID=0;
+  return `<div class="gwrap">
+    <div class="gtop"><button class="gback" onclick="gGo(-1)">← back</button>
+      <span class="gcount">decision ${total} of ${total} · review</span></div>
+    <div class="gprog"><i style="width:100%"></i></div>
+    <h2 class="gq">Your build — every decision, made by you</h2>
+    <p class="gwhy">Change anything. Then take your real files — they follow your choices exactly.</p>
+    ${row('built for','industry',RS.industry?nameById('verticals',RS.industry):'—')}
+    ${row('framework','fw',s.fw.name)}
+    ${row('packages','pkg',nameById('pkgBuildDeep',s.pkg))}
+    ${row('sign-in','auth',nameById('authDeep',s.auth))}
+    ${row('database','orm',nameById('ormDeep',s.orm))}
+    ${row('health signals','obs',nameById('observabilityDeep',s.obs))}
+    ${row('container base','runtime',(G.nodes.runtimeDeep||[]).find(r=>r.id===s.base)?.name||s.base)}
+    ${row('image warehouse','registry',(K.registries||[]).find(r=>r.id===RS.registry)?.name||'GHCR')}
+    ${row('proof of origin','signer',((K.signers||[]).find(x=>x.id===RS.signer)?.name||'cosign')+' + '+((K.sbomTools||[]).find(x=>x.id===RS.sbom)?.name||'syft'))}
+    ${row('runs on','cluster',nameById('clusters',s.cluster))}
+    <h2 class="gq" style="font-size:21px;margin-top:30px">Your real files — generated from those choices</h2>
+    ${files.map(([n,c])=>fileAcc(n,c)).join('')}
+    <div class="gfoot">
+      <button class="gnext" onclick="setMode('build');setTimeout(()=>goCol(0),250)">Walk the full 18-scene map →</button>
+      <button class="gskip" onclick="window.print()">print / save this build</button>
+    </div>
+  </div>`;
+}
+function showWelcome(){
+  const w=$('#welcome');if(!w)return;
+  const has=Object.keys(DECIDED).length>0;
+  w.hidden=false;
+  const r=$('#wresume');
+  if(r){r.hidden=!has; if(has)r.innerHTML=`You have a build in progress — <button onclick="hideWelcome();startGuided()">resume it →</button>`;}
+}
+window.hideWelcome=()=>{const w=$('#welcome');if(w)w.hidden=true;};
+
 async function boot(){
   try{ const [g,k]=await Promise.all([fetch("graph.json"),fetch("knowledge.json")]);
     G=await g.json(); K=k.ok?await k.json():{}; }
@@ -1179,8 +1361,12 @@ async function boot(){
   if(h.get('lens')&&(G.nodes.verticals||[]).some(v=>v.id===h.get('lens'))){lv.value=h.get('lens');setLens(h.get('lens'));}
   lv.onchange=e=>{setLens(e.target.value);location.hash=e.target.value?`lens=${e.target.value}`:'';renderLensInfo();renderHero();renderBoard();};
   renderHero();renderLensInfo();renderBoard();
+  // first run → welcome; returning → resume offer
+  if(!location.hash){ showWelcome(); }
   // deep link: #scene=N&industry=id opens build mode at that scene with that lens
   const hh=new URLSearchParams(location.hash.slice(1));
+  const saved=localStorage.getItem('ys-industry');
+  if(saved&&(G.nodes.industryRequirements||[]).some(r=>r.id===saved))RS.industry=saved;
   if(hh.get('scene')){
     if(hh.get('industry')&&(G.nodes.industryRequirements||[]).some(r=>r.id===hh.get('industry')))RS.industry=hh.get('industry');
     setMode('build');

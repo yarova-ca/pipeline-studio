@@ -1474,5 +1474,108 @@
    "Annually",
    "Pen-test (PCI/OSFI rulebooks) · full DR failover · postmortem-actions audit"
   ]
- ]
+ ],
+ "jurisdictions": {
+  "pipeda": "Federal Canada — private-sector orgs in every province without their own substantially-similar law",
+  "phipa": "Ontario only — personal health information (custodians + their vendors)",
+  "pipa-ab": "Alberta only — private sector (replaces PIPEDA inside Alberta)",
+  "pipa-bc": "British Columbia only — private sector (replaces PIPEDA inside BC)",
+  "law25-quebec": "Québec only — any business handling Québec residents' data, wherever you are",
+  "osfi-b13": "Federal Canada — banks, insurers and federally-regulated financial institutions",
+  "osfi-b10": "Federal Canada — third-party risk for the same institutions",
+  "fintrac-pcmltfa": "Federal Canada — anyone moving money: banks, MSBs, real estate, casinos",
+  "pci-dss-4": "Global — contractual: applies the moment you touch payment cards, any country",
+  "hipaa": "United States — only if you handle US patients' health data",
+  "soc1": "Global — voluntary attestation your enterprise customers ask for",
+  "soc2-typeii": "Global — voluntary attestation; the default ask in B2B sales",
+  "iso27001": "Global — voluntary certification; the international security baseline",
+  "iso27017": "Global — cloud-specific add-on to ISO 27001",
+  "fedramp-mod": "United States — selling cloud to US federal agencies",
+  "fedramp-high": "United States — high-impact US federal workloads",
+  "fips-140-3": "US/Canada governments — validated crypto modules; Canada recognizes via CCCS",
+  "cmmc-l2": "United States — US defense supply chain contracts",
+  "nerc-cip": "US + Canadian interconnected grid — bulk electric system operators",
+  "gdpr": "European Union — applies if you serve EU residents, wherever you are",
+  "ccpa": "California — applies at revenue/volume thresholds serving Californians",
+  "glba": "United States — US financial institutions",
+  "sox": "United States — US-listed public companies",
+  "ffiec": "United States — US banking regulators' IT handbook",
+  "soci": "Australia (+ Canadian critical-infra equivalents) — critical infrastructure duties",
+  "dora": "European Union — financial entities + their ICT providers serving the EU"
+ },
+ "guided": {
+  "steps": [
+   {
+    "axis": "industry",
+    "scene": 1,
+    "title": "Who are you building for?",
+    "why": "This single choice writes your rulebook: which laws apply, where your data must live, how strong sign-in must be. Everything after reads it.",
+    "consequence": "Writes the rulebook every later decision must obey."
+   },
+   {
+    "axis": "fw",
+    "scene": 2,
+    "title": "Pick your framework",
+    "why": "The framework is your foundation — it sets your language, your hiring pool, and what 'idiomatic' means for the next five years.",
+    "consequence": "Sets the language — package manager, ORM and Dockerfile all follow it."
+   },
+   {
+    "axis": "pkg",
+    "scene": 3,
+    "title": "Pick your package manager",
+    "why": "It creates the lockfile — the frozen list of exact versions that makes every build identical, on your laptop and in CI.",
+    "consequence": "Sets the install command in CI and the Dockerfile's dependency layer."
+   },
+   {
+    "axis": "auth",
+    "scene": 4,
+    "title": "How will people sign in?",
+    "why": "Broken authentication is the #1 web risk. Your industry's rulebook may already demand MFA (a second proof beyond the password).",
+    "consequence": "Becomes middleware in your app and an AUTH build-arg in CI."
+   },
+   {
+    "axis": "orm",
+    "scene": 4,
+    "title": "How will the app talk to the database?",
+    "why": "An ORM maps code objects to database rows. The right one gives type-safety — wrong queries caught before they run.",
+    "consequence": "Shapes your data layer and migrations from day one."
+   },
+   {
+    "axis": "obs",
+    "scene": 4,
+    "title": "How will the service report its own health?",
+    "why": "Logs, metrics, traces — the three signals. Regulated industries require audit-grade logging; everyone needs to see failures before users do.",
+    "consequence": "Wired into the app now; Scene 11's dashboards read it later."
+   },
+   {
+    "axis": "runtime",
+    "scene": 6,
+    "title": "Pick the container base",
+    "why": "The base image is the floor your app stands on. Smaller floor, fewer holes. Some rulebooks force FIPS-validated crypto floors.",
+    "consequence": "Rewrites the FROM line of your generated Dockerfile — literally."
+   },
+   {
+    "axis": "registry",
+    "scene": 8,
+    "title": "Where will your images live?",
+    "why": "The registry is the warehouse for your sealed app. Same-cloud pulls are faster; OIDC means no stored passwords; residency may be a rule.",
+    "consequence": "Rewrites your CI workflow's push/login steps to that registry."
+   },
+   {
+    "axis": "signer",
+    "scene": 8,
+    "title": "How will you prove the image is yours?",
+    "why": "Signing seals the image; the SBOM lists its ingredients. Together they answer the auditor's 'where did this come from?'",
+    "consequence": "Sets the signing + SBOM steps in your main workflow.",
+    "pair": "sbom"
+   },
+   {
+    "axis": "cluster",
+    "scene": 10,
+    "title": "Where will it run?",
+    "why": "The cluster is the fleet of machines running your containers. Your rulebook may prefer private, Canadian-region, or OpenShift.",
+    "consequence": "Sets the provisioning commands and where Argo CD deploys."
+   }
+  ]
+ }
 }

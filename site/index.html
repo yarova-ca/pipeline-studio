@@ -596,6 +596,74 @@
   .runbook ol{margin:4px 0 4px 20px;padding:0;font-size:13px;line-height:1.7}
   .runbook li{margin-bottom:4px}
 
+  /* ════ GUIDED — the product interview ════ */
+  .welcome{position:fixed;inset:0;z-index:40;background:
+    radial-gradient(900px 480px at 80% -10%,rgba(25,200,168,.10),transparent 60%),
+    radial-gradient(700px 500px at 10% 110%,rgba(198,242,78,.10),transparent 60%),#FFFFFF;
+    display:flex;align-items:center;justify-content:center;padding:24px}
+  .welcome[hidden]{display:none}
+  .wv{max-width:620px}
+  .wv h1{font-family:var(--fdisplay);font-size:clamp(30px,5vw,44px);letter-spacing:-.03em;line-height:1.12;margin:0 0 14px;color:var(--ink)}
+  .wp{font-size:16px;line-height:1.65;color:var(--ink2);margin:0 0 26px}
+  .wbtns{display:flex;gap:12px;flex-wrap:wrap}
+  .wstart{background:linear-gradient(135deg,#19C8A8,#C6F24E);color:#0E0F11;border:0;border-radius:999px;
+    padding:14px 28px;font:inherit;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(25,200,168,.25)}
+  .wstart:hover{transform:translateY(-2px)}
+  .walt{background:none;border:1px solid var(--hair2);border-radius:999px;padding:14px 22px;font:inherit;font-size:14px;color:var(--ink2);cursor:pointer}
+  .walt:hover{border-color:#19C8A8;color:var(--teal)}
+  .wresume{margin-top:18px;font-size:13px;color:var(--ink2)}
+  .wresume button{background:none;border:0;color:var(--teal);font:inherit;cursor:pointer;text-decoration:underline}
+  .guided{flex:1 1 auto;min-height:0;overflow-y:auto;background:#fff}
+  .guided[hidden]{display:none}
+  .gwrap{max-width:760px;margin:0 auto;padding:34px 22px 80px}
+  .gtop{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+  .gback{background:none;border:1px solid var(--hair2);border-radius:999px;padding:6px 14px;font:inherit;font-size:12px;color:var(--ink2);cursor:pointer}
+  .gback:hover{border-color:#19C8A8;color:var(--teal)}
+  .gcount{font-family:var(--fmono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+  .gprog{height:5px;border-radius:999px;background:var(--surface3,#EFEEE9);overflow:hidden;margin:10px 0 30px}
+  .gprog i{display:block;height:100%;background:linear-gradient(90deg,#19C8A8,#C6F24E);border-radius:999px;transition:width .35s var(--ease)}
+  .gq{font-family:var(--fdisplay);font-size:clamp(24px,3.6vw,33px);letter-spacing:-.025em;line-height:1.15;margin:0 0 10px;color:var(--ink)}
+  .gwhy{font-size:14.5px;line-height:1.65;color:var(--ink2);margin:0 0 26px;max-width:640px}
+  .gfilter{width:100%;border:1px solid var(--hair2);border-radius:12px;padding:11px 15px;font:inherit;font-size:14px;margin-bottom:14px;background:#fff}
+  .gfilter:focus{outline:none;border-color:#19C8A8;box-shadow:0 0 0 3px rgba(25,200,168,.15)}
+  details.gcard{border:1px solid var(--hair);border-radius:16px;background:#fff;margin-bottom:10px;
+    box-shadow:var(--sh-1);transition:.16s var(--ease);overflow:hidden}
+  details.gcard:hover{box-shadow:var(--sh-2);transform:translateY(-1px)}
+  details.gcard summary{list-style:none;display:flex;align-items:center;gap:13px;padding:15px 17px;cursor:pointer}
+  details.gcard summary::-webkit-details-marker{display:none}
+  .gname{font-family:var(--fdisplay);font-size:16.5px;font-weight:650;letter-spacing:-.015em;white-space:nowrap}
+  .gplain{font-size:13px;color:var(--ink2);line-height:1.5;flex:1;min-width:0}
+  .gtag{flex:0 0 auto;font-size:9.5px;font-family:var(--fmono);letter-spacing:.08em;text-transform:uppercase;
+    border:1px solid currentColor;border-radius:999px;padding:3px 10px}
+  .gtag.rec{color:var(--teal)} .gtag.req{color:var(--gold)}
+  .gpick{flex:0 0 auto;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:9px 20px;
+    font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+  .gpick:hover{background:#0B7A66}
+  details.gcard.picked{border-color:#0B7A66;box-shadow:0 0 0 2px #0B7A66,var(--sh-2)}
+  details.gcard.picked .gpick{background:#0B7A66}
+  details.gcard.picked .gpick::before{content:"✓ "}
+  .gbody{padding:2px 17px 15px;border-top:1px solid var(--hair)}
+  .gbody .krow{grid-template-columns:130px 1fr}
+  .gjuri{font-size:12px;color:var(--ink2);line-height:1.55;padding:9px 12px;background:var(--surface);border-radius:10px;margin:9px 0 3px}
+  .gjuri b{color:var(--teal);font-family:var(--fmono);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+  .gfoot{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,#fff 30%);padding:18px 0 6px;margin-top:24px}
+  .gcons{font-size:13px;color:var(--ink2);margin-bottom:12px}
+  .gcons b{color:var(--teal)}
+  .gnext{background:linear-gradient(135deg,#19C8A8,#C6F24E);color:#0E0F11;border:0;border-radius:999px;
+    padding:13px 30px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 22px rgba(25,200,168,.22)}
+  .gnext:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+  .gskip{background:none;border:0;color:var(--ink3);font:inherit;font-size:13px;cursor:pointer;margin-left:14px;text-decoration:underline}
+  .gskip:hover{color:var(--teal)}
+  .term{text-decoration:underline dotted;text-underline-offset:3px;cursor:help;position:relative}
+  .pop{position:absolute;left:0;top:130%;z-index:50;width:300px;background:#0E0F11;color:#F4F3EF;border-radius:12px;
+    padding:11px 13px;font-size:12.5px;line-height:1.55;box-shadow:0 14px 40px rgba(14,15,17,.3)}
+  .pop b{color:#C6F24E}
+  .grev{border:1px solid var(--hair);border-radius:14px;padding:13px 16px;margin-bottom:9px;display:flex;align-items:center;gap:12px;background:#fff;box-shadow:var(--sh-1)}
+  .grev .k2{font-family:var(--fmono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);width:120px;flex:0 0 auto}
+  .grev b{font-family:var(--fdisplay);font-size:15px}
+  .grev button{margin-left:auto;background:none;border:1px solid var(--hair2);border-radius:999px;padding:5px 14px;font:inherit;font-size:12px;color:var(--ink2);cursor:pointer}
+  .grev button:hover{border-color:#19C8A8;color:var(--teal)}
+
   /* readable type: body text in Outfit, mono only for code + micro-labels */
   .accbody .krow{grid-template-columns:130px 1fr}
   .accbody .krow .kvv,.kcard .krow .kvv{font-family:var(--fbody);font-size:12.5px;line-height:1.55}
@@ -663,8 +731,9 @@
     <span class="toolname">Studio</span>
   </div>
   <div class="modes" role="tablist" aria-label="View mode">
+    <button class="mode" data-m="guided" role="tab" onclick="setMode('guided')">Guided</button>
+    <button class="mode" data-m="build" role="tab" onclick="setMode('build')">The flow</button>
     <button class="mode on" data-m="catalog" role="tab" onclick="setMode('catalog')">Catalog</button>
-    <button class="mode" data-m="build" role="tab" onclick="setMode('build')">Build a stack</button>
   </div>
   <button class="gloss" onclick="openGlossary()" title="Glossary — every term, plainly">? glossary</button>
   <div class="legend">
@@ -687,6 +756,21 @@
 <div class="stackbar" id="stackbar" aria-label="Your current stack"></div>
 <div class="lensinfo" id="lensInfo" role="status"></div>
 
+<section id="welcome" class="welcome" hidden>
+  <div class="wv">
+    <img src="yarova-logo-light.png" alt="Yarova" style="height:34px;margin-bottom:18px">
+    <h1>Build a real service.<br>Start to finish. No step skipped.</h1>
+    <p class="wp">Pick who it's for and we decide everything together — framework, sign-in,
+    container, pipeline, cluster — in plain words, one decision at a time.
+    At the end: your real files, ready to ship, and the full 18-scene map behind them.</p>
+    <div class="wbtns">
+      <button class="wstart" onclick="startGuided()">Start building →</button>
+      <button class="walt" onclick="setMode('build')">I know my way — explore the full map</button>
+    </div>
+    <div class="wresume" id="wresume" hidden></div>
+  </div>
+</section>
+<section id="guided" class="guided" hidden></section>
 <div class="track" id="track"><div class="err">Loading…</div></div>
 
 <div class="scrim" id="scrim" onclick="closeDrawer()"></div>
