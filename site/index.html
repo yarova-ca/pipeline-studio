@@ -370,6 +370,31 @@
   .krow{display:grid;grid-template-columns:118px 1fr;gap:4px 10px;font-size:11.5px;padding:2px 0;line-height:1.45}
   .krow .kk{color:var(--ink3);font-family:var(--fmono);font-size:10px;text-transform:uppercase;letter-spacing:.05em}
   .krow .kvv{color:var(--ink2)}
+  /* discipline badges */
+  .disc{font-size:8.5px;font-family:var(--fmono);text-transform:uppercase;letter-spacing:.07em;padding:1px 7px;border-radius:20px;border:1px solid currentColor;vertical-align:middle}
+  .disc.devops{color:var(--teal)} .disc.devsecops{color:var(--gold)} .disc.sre{color:#5DE5CD}
+  /* shipped libraries */
+  .libwrap{display:flex;flex-wrap:wrap;gap:6px}
+  .lib{font-size:11px;font-family:var(--fmono);border:1px solid var(--hair);border-radius:8px;padding:3px 9px;color:var(--ink2)}
+  .libv{color:var(--ink3)}
+  /* decision checklist */
+  .chk{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border:1px solid var(--hair);border-left:3px solid var(--hair2);border-radius:11px;margin-bottom:7px;background:var(--panel)}
+  .chk.gap{border-left-color:#e8615a} .chk.forced{border-left-color:var(--gold)} .chk.ok{border-left-color:var(--teal)}
+  .chki{font-size:14px;line-height:1.3;flex:0 0 auto;width:16px;text-align:center}
+  .chk.gap .chki{color:#e8615a} .chk.forced .chki{color:var(--gold)} .chk.ok .chki{color:var(--teal)} .chk.note .chki{color:var(--ink3)}
+  .chkq{font-size:13px;font-weight:600;letter-spacing:-.01em}
+  .chkn{font-size:11px;color:var(--ink3);margin-top:2px;line-height:1.45}
+  /* ════ left-to-right FLOW — smooth, always visible, not rigid snap columns ════ */
+  .track,.track.lensed{scroll-snap-type:none;scroll-behavior:smooth}
+  .col{flex:0 0 560px;scroll-snap-align:none}
+  .col.wide{flex-basis:680px}
+  .col:not(:last-child)::after{content:"";position:absolute;right:-1px;top:64px;bottom:0;width:1px;
+    background:linear-gradient(180deg,var(--accent,var(--teal)),transparent 40%);opacity:.4}
+  .arrow,.rconn{display:flex;align-items:center;justify-content:center;right:-13px;top:60px;width:26px;height:26px;
+    border-radius:50%;background:var(--bg0);border:1px solid var(--hair2);color:var(--accent,var(--teal));font-size:14px;opacity:1}
+  /* generated files shown complete — generous height, full content */
+  .gencode{max-height:560px}
+  .cmdcode{max-height:none}
 
   /* selectable option rows in resolver panels */
   .opt{position:relative;display:flex;flex-direction:column;gap:3px;padding:11px 13px;margin-bottom:8px;
