@@ -384,6 +384,39 @@
   .chk.gap .chki{color:#e8615a} .chk.forced .chki{color:var(--gold)} .chk.ok .chki{color:var(--teal)} .chk.note .chki{color:var(--ink3)}
   .chkq{font-size:13px;font-weight:600;letter-spacing:-.01em}
   .chkn{font-size:11px;color:var(--ink3);margin-top:2px;line-height:1.45}
+  /* ════ accordion rows — scannable one-liners, full knowledge expands in-flow ════ */
+  details.acc{border:1px solid var(--hair);border-left:3px solid var(--hair2);border-radius:12px;margin-bottom:7px;background:var(--panel);overflow:hidden}
+  details.acc summary{display:flex;align-items:center;gap:9px;padding:10px 13px;cursor:pointer;list-style:none;user-select:none}
+  details.acc summary::-webkit-details-marker{display:none}
+  details.acc summary:hover{background:rgba(244,243,239,.025)}
+  details.acc summary .an{font-size:13.5px;font-weight:650;font-family:var(--fdisplay);letter-spacing:-.01em;white-space:nowrap}
+  details.acc summary .am{font-size:11px;color:var(--ink3);font-family:var(--fmono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+  details.acc summary .caret{flex:0 0 auto;color:var(--ink3);font-size:10px;transition:transform .18s var(--ease)}
+  details.acc[open] summary .caret{transform:rotate(90deg)}
+  details.acc[open]{border-color:var(--hair2)}
+  .accbody{padding:4px 13px 12px;border-top:1px solid var(--hair)}
+  .accbody .krow{grid-template-columns:128px 1fr;padding:4px 0}
+  .accbody .krow .kvv{color:var(--ink2);line-height:1.55}
+  details.acc.chosen{border-color:var(--teal);border-left-color:var(--teal);background:rgba(25,200,168,.05)}
+  details.acc.req{border-left-color:var(--gold)}
+  details.acc.gap{border-left-color:#e8615a}
+  details.acc.fit{border-left-color:var(--teal)}
+  details.acc.dim{opacity:.55}
+  details.acc.dim:hover{opacity:1}
+  .aselect{flex:0 0 auto;background:none;border:1px solid var(--hair2);color:var(--ink2);border-radius:8px;font-size:10px;font-family:var(--fmono);padding:3px 11px;cursor:pointer;transition:.15s}
+  .aselect:hover{border-color:var(--teal);color:var(--teal)}
+  .aselect.on{border-color:var(--teal);color:var(--teal);background:rgba(25,200,168,.1)}
+  /* file accordions */
+  details.facc{border:1px solid var(--hair);border-radius:11px;margin-bottom:7px;background:#0a0b0d;overflow:hidden}
+  details.facc summary{display:flex;align-items:center;gap:9px;padding:8px 12px;cursor:pointer;list-style:none;background:var(--surface2,#1C1F28)}
+  details.facc summary::-webkit-details-marker{display:none}
+  details.facc summary .genname{flex:1}
+  /* middleware status strip */
+  .mwstrip{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+  .mw{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-family:var(--fmono);border:1px solid var(--hair);border-radius:20px;padding:4px 12px;color:var(--ink2)}
+  .mw.on{border-color:rgba(25,200,168,.4);color:var(--teal)}
+  .mw.gapped{border-color:rgba(232,97,90,.5);color:#e8615a}
+
   /* ════ left-to-right FLOW — smooth, always visible, not rigid snap columns ════ */
   .track,.track.lensed{scroll-snap-type:none;scroll-behavior:smooth}
   .col{flex:0 0 560px;scroll-snap-align:none}
@@ -395,6 +428,36 @@
   /* generated files shown complete — generous height, full content */
   .gencode{max-height:560px}
   .cmdcode{max-height:none}
+
+  /* ════ product polish: stack bar, phase strip, type scale ════ */
+  .stackbar{display:none;align-items:center;gap:8px;padding:9px 22px;border-bottom:1px solid var(--hair);
+    background:linear-gradient(180deg,rgba(25,200,168,.05),transparent);overflow-x:auto;white-space:nowrap;flex:0 0 auto}
+  .stackbar.on{display:flex}
+  .sblabel{font-size:10px;font-family:var(--fmono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);flex:0 0 auto}
+  .sbchip{background:var(--glass);border:1px solid var(--hair2);color:var(--ink);border-radius:20px;
+    padding:4px 13px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:.15s;flex:0 0 auto}
+  .sbchip:hover{border-color:var(--teal);color:var(--teal)}
+  .sbsep{color:var(--ink3);font-size:11px;flex:0 0 auto}
+  .sbhealth{margin-left:auto;font-size:11px;font-family:var(--fmono);padding:4px 12px;border-radius:20px;border:1px solid currentColor;flex:0 0 auto}
+  .sbhealth.good{color:var(--teal)} .sbhealth.bad{color:#e8615a}
+  .phstrip{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+  .ph{display:inline-flex;flex-direction:column;border:1px solid var(--hair);border-radius:10px;padding:6px 11px;font-size:11.5px;background:var(--glass)}
+  .ph b{font-family:var(--fmono);font-size:10px;color:var(--teal);letter-spacing:.06em}
+  .pht{font-size:10px;color:var(--ink3)}
+  .forcenote{border:1px solid rgba(255,184,0,.4);border-radius:12px;background:rgba(255,184,0,.07);
+    padding:10px 13px;font-size:12.5px;margin-bottom:10px;line-height:1.5}
+  .forcenote b{color:var(--gold)}
+  .compstat{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .cs{font-size:11.5px;font-family:var(--fmono);border:1px solid var(--hair2);border-radius:20px;padding:4px 12px;color:var(--ink2)}
+  .cs.good{border-color:rgba(25,200,168,.4);color:var(--teal)}
+  .cs.bad{border-color:rgba(232,97,90,.5);color:#e8615a}
+  /* readable type: body text in Outfit, mono only for code + micro-labels */
+  .accbody .krow{grid-template-columns:130px 1fr}
+  .accbody .krow .kvv,.kcard .krow .kvv{font-family:var(--fbody);font-size:12.5px;line-height:1.55}
+  details.acc summary .am{font-family:var(--fbody);font-size:11.5px}
+  .colbody{padding:18px 16px}
+  .grp{margin:22px 0 10px}
+  .colbody>.grp:first-child,.colbody>div:first-child .grp{margin-top:0}
 
   /* selectable option rows in resolver panels */
   .opt{position:relative;display:flex;flex-direction:column;gap:3px;padding:11px 13px;margin-bottom:8px;
@@ -475,6 +538,7 @@
   <div class="hrail" id="hrail"></div>
 </section>
 <div class="builder" id="builder" aria-label="Stack inputs"></div>
+<div class="stackbar" id="stackbar" aria-label="Your current stack"></div>
 <div class="lensinfo" id="lensInfo" role="status"></div>
 
 <div class="track" id="track"><div class="err">Loading…</div></div>

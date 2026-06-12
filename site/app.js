@@ -537,7 +537,7 @@ function decisionsFor(s){
   for(const id of (s.regimes||[])){
     const std=(REGIME_TO_STD[id]||[])[0], c=std&&compByStd[std];
     D.compliance.push({q:nameById('complianceProfiles',id),answer:c?'profile shipped':'no shipped profile',options:[],verdict:c?'required':'gap',
-      why:c?('Forces '+((c.buildArgs&&Object.keys(c.buildArgs).length)?Object.entries(c.buildArgs).map(([k,v])=>k+'='+v).join(', '):'controls only')+'. Controls: '+((c.requiredControls||[]).slice(0,4).join(', ')||'—')+'.'):'Required by industry, but the service ships no profile for it.'});
+      why:c?('Forces '+((c.buildArgs&&Object.keys(c.buildArgs).length)?Object.entries(c.buildArgs).map(([k,v])=>k+'='+v).join(', '):'controls only')+'. Controls: '+((c.requiredControls||[]).slice(0,4).join(', ')||'—')+'.'):'Needs a compliance profile.'});
   }
   // platform middleware
   D.platform.push({q:'Auth',answer:mw.auth?nameById('authDeep',s.auth):'none',options:(G.nodes.authDeep||[]).map(a=>a.name),verdict:mw.auth?(reqAuth?'required':'set'):(reqAuth?'gap':'off'),why:reqAuth?(mw.auth?'Required by compliance — present.':'Required by '+[...stds].join('/')+' — MISSING.'):'Auth middleware shipped.',disc:'DevSecOps'});
@@ -627,18 +627,44 @@ function discipline(text){
   return'DevOps';
 }
 function discTag(text){const d=discipline(text);return `<span class="disc ${d.toLowerCase()}">${d}</span>`;}
-function kval(v){ if(v==null||v==='')return''; if(Array.isArray(v))return v.join(', '); if(typeof v==='object')return Object.entries(v).slice(0,4).map(([k,x])=>`${k}: ${x}`).join(' · '); return String(v); }
-function richCard(node,axis,o,state,tag){
-  const rows=(KFIELDS[node]||[]).map(([k,l])=>{const v=kval(o[k]);return v?`<div class="krow"><span class="kk">${esc(l)}</span><span class="kvv">${esc(v.length>180?v.slice(0,180)+'…':v)}</span></div>`:'';}).join('');
-  return `<div class="kcard ${state}" tabindex="0" role="button" aria-pressed="${state==='chosen'}" onclick="pickAxis('${axis}','${o.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickAxis('${axis}','${o.id}')}">`+
-    `<div class="khead"><b>${esc(o.name)}</b>${tag?`<span class="ktag ${state}">${esc(tag)}</span>`:''}${state==='chosen'?'<span class="kchk">✓ selected</span>':''}`+
-    `<button class="kmore" tabindex="-1" onclick="event.stopPropagation();openDeep('${node}','${o.id}')">full knowledge →</button></div>${rows}</div>`;
-}
+function kval(v){ if(v==null||v==='')return''; if(Array.isArray(v))return v.join(', '); if(typeof v==='object')return Object.entries(v).map(([k,x])=>`${k}: ${x}`).join('  ·  '); return String(v); }
 const langName=(l)=>LANG_HUMAN[l]||l;
-// read-only knowledge card (e.g. the chosen framework) — opens full in drawer
+// one clean line for a collapsed row — a complete sentence, never a mid-word cut
+function firstSentence(t){t=stripTags(String(t||''));const i=t.indexOf('. ');if(i>0&&i<150)return t.slice(0,i+1);if(t.length<=150)return t;const sp=t.lastIndexOf(' ',147);return t.slice(0,sp>60?sp:147)+'.';}
+function essence(node,o){
+  if(node==='runtimeDeep')return `${o.baseOs||''} · ${o.sizeMb?o.sizeMb+' MB':''} · ${o.fipsCertified==='yes'?'FIPS':'no FIPS'}`;
+  if(node==='clusters')return `${o.cloud||''} · ${o.secretIdentity||''}`;
+  if(node==='ormDeep')return `${(o.language||[]).join('/')||''}${o.typeSafety?' · '+firstSentence(o.typeSafety):''}`;
+  if(node==='pkgBuildDeep')return `${o.language||''} · ${firstSentence(o.what)}`;
+  return firstSentence(o.what||o.howItWorks||'');
+}
+// option as an accordion row: one-line summary, full knowledge expands in flow
+function accRow(node,axis,o,state,tag,open){
+  const rows=(KFIELDS[node]||[]).map(([k,l])=>{const v=kval(o[k]);return v?`<div class="krow"><span class="kk">${esc(l)}</span><span class="kvv">${esc(v)}</span></div>`:'';}).join('');
+  const sel=axis?`<button class="aselect${state==='chosen'?' on':''}" onclick="event.preventDefault();event.stopPropagation();pickAxis('${axis}','${o.id}')">${state==='chosen'?'✓ selected':'select'}</button>`:'';
+  return `<details class="acc ${state}"${open?' open':''}><summary><span class="caret">▸</span><span class="an">${esc(o.name)}</span><span class="am">${esc(essence(node,o))}</span>${tag?`<span class="ktag ${state}">${esc(tag)}</span>`:''}${sel}</summary><div class="accbody">${rows}</div></details>`;
+}
+// generated file as a named row; expand → the complete file
+function fileAcc(name,text,open){
+  if(!text||typeof text!=='string')return'';
+  const id='cf'+(CFID++);
+  return `<details class="facc"${open?' open':''}><summary><span class="caret">▸</span><span class="genname">${esc(name)}</span><span class="sub">${text.split('\n').length} lines</span><button class="gencopy" onclick="event.preventDefault();event.stopPropagation();copyCode('${id}',this)">copy</button></summary><pre class="gencode" id="${id}">${esc(text)}</pre></details>`;
+}
+// the chosen framework's knowledge, open in the flow (full text, no cuts)
 function kcardRO(node,o,tag,drawer){
-  const rows=(KFIELDS[node]||[]).map(([k,l])=>{const v=kval(o[k]);return v?`<div class="krow"><span class="kk">${esc(l)}</span><span class="kvv">${esc(v.length>200?v.slice(0,200)+'…':v)}</span></div>`:'';}).join('');
-  return `<div class="kcard chosen"><div class="khead"><b>${esc(o.name)}</b>${tag?`<span class="ktag chosen">${esc(tag)}</span>`:''}<button class="kmore" onclick="${drawer}">full knowledge →</button></div>${rows}</div>`;
+  const rows=(KFIELDS[node]||[]).map(([k,l])=>{const v=kval(o[k]);return v?`<div class="krow"><span class="kk">${esc(l)}</span><span class="kvv">${esc(v)}</span></div>`:'';}).join('');
+  return `<div class="kcard chosen"><div class="khead"><b>${esc(o.name)}</b>${tag?`<span class="ktag chosen">${esc(tag)}</span>`:''}<button class="kmore" onclick="${drawer}">full record →</button></div>${rows}</div>`;
+}
+// the stack bar — your current stack, always visible, chips jump to stages
+function renderStackBar(s,DEC){
+  const el=$("#stackbar"); if(!el)return;
+  const gaps=[...(DEC.compliance||[]),...(DEC.platform||[])].filter(d=>d.verdict==='gap').length;
+  const rt=(G.nodes.runtimeDeep||[]).find(r=>r.id===s.base);
+  const short=(t)=>String(t||'').split(' (')[0].split(' — ')[0];
+  const chips=[[0,s.fw.name],[1,short(nameById('pkgBuildDeep',s.pkg))],[4,short(rt?rt.name:s.base)],[5,'Argo CD'],[6,short(nameById('clusters',s.cluster))],[7,short(nameById('authDeep',s.auth))],[7,short(nameById('observabilityDeep',s.obs))],[7,short(nameById('ormDeep',s.orm))]];
+  el.innerHTML=`<span class="sblabel">your stack</span>`+
+    chips.map(([i,n])=>`<button class="sbchip" onclick="goCol(${i})">${esc(n)}</button>`).join('<span class="sbsep">›</span>')+
+    `<span class="sbhealth ${gaps?'bad':'good'}">${s.rq?s.regimes.length+' regimes · '+gaps+' gap'+(gaps===1?'':'s'):'no industry lens'}</span>`;
 }
 function libBlock(s){
   const libs=((s.fw.shipped&&s.fw.shipped.libraries)||[]).filter(l=>l.direct);
@@ -670,18 +696,20 @@ function renderResolver(){
   const ch=(k)=>LASTR[k]!=null&&LASTR[k]!==cur[k];
   const P=[];
 
-  // real-code files for the current cursor — regenerated live on every change
+  // real-code files for the current cursor — named rows, expand to the complete file
   CFID=0;
   const CFG=buildConfig(s), GF=genFiles(CFG);
-  const genCI=grp('Generated files — copy & ship')+codeFile('.github/workflows/main.yml',GF.mainwf)+codeFile('.github/workflows/pr.yml',GF.prwf)+codeFile('.pre-commit-config.yaml',GF.precommit);
-  const genImg=grp('Generated files')+codeFile('Dockerfile',GF.dockerfile)+codeFile('.dockerignore',GF.dockerignore);
-  const genGit=grp('Generated files')+codeFile('helm/values-prod.yaml',GF.helm)+codeFile('kustomize/base/kustomization.yaml',GF.kbase)+codeFile('kustomize/base/deployment.yaml',GF.kdeploy);
-  const genCluster=grp('Generated manifests')+Object.entries(GF.deploy||{}).map(([n,c])=>codeFile(n,c)).join('');
+  const genCI=grp('files (3)')+fileAcc('.github/workflows/main.yml',GF.mainwf,true)+fileAcc('.github/workflows/pr.yml',GF.prwf)+fileAcc('.pre-commit-config.yaml',GF.precommit);
+  const genImg=grp('files (2)')+fileAcc('Dockerfile',GF.dockerfile,true)+fileAcc('.dockerignore',GF.dockerignore);
+  const genGit=grp('files (3)')+fileAcc('helm/values-prod.yaml',GF.helm)+fileAcc('kustomize/base/kustomization.yaml',GF.kbase)+fileAcc('kustomize/base/deployment.yaml',GF.kdeploy);
+  const deployEntries=Object.entries(GF.deploy||{});
+  const genCluster=grp(`manifests (${deployEntries.length})`)+deployEntries.map(([n,c])=>fileAcc(n,c)).join('');
 
-  // every real decision for this service+lens, grouped by stage
+  // decisions: consumed by the checklist + the forced-runtime callout (no duplicate card walls)
   const DEC=decisionsFor(s);
-  const decDeps=decBlock(DEC.deps), decBuild=decBlock(DEC.build), decComp=decBlock(DEC.compliance),
-        decCI=decBlock(DEC.ci), decGit=decBlock(DEC.gitops), decCluster=decBlock(DEC.cluster), decPlat=decBlock(DEC.platform);
+  const forced=(DEC.build||[]).filter(d=>d.verdict==='forced');
+  const forcedNote=forced.length?`<div class="forcenote">🔒 ${forced.map(d=>`<b>${esc(d.q)}</b> → ${esc(d.answer)}`).join(' · ')}<div class="sub">${esc(stripTags(forced[0].why||''))}</div></div>`:'';
+  renderStackBar(s,DEC);
   // run-these commands for this service+lens
   const CMD=commandsFor(s);
   const cmdScaffold=cmdBlock('commands — scaffold',CMD.scaffold), cmdDeps=cmdBlock('commands — install',CMD.deps),
@@ -702,53 +730,80 @@ function renderResolver(){
   const pkgReq=new Set(), pkgRec=new Set([s.pkgDef]);
   P.push(rpanel(1,'#2FCD9D','02','Dependencies',rtag(s.pkgUser?'you':'rec',s.pkgUser?'your choice':'recommended default'),
     esc(nameById('pkgBuildDeep',s.pkg)),`Package manager + build tool for ${esc(LANG_HUMAN[s.lang]||s.lang)}. Lockfile committed; CI uses frozen install.`,
-    decDeps+grp(`package managers (${s.pkgList.length})`)+
-    (G.nodes.pkgBuildDeep||[]).filter(p=>p.kind==='pkg-mgr').map(p=>{const fit=langMatch(p.language,s.lang);return richCard('pkgBuildDeep','pkg',p,p.id===s.pkg?'chosen':(fit?'fit':'dim'),p.id===s.pkg?'selected':(fit?'applies · '+langName(s.lang):'other language'));}).join('')+
-    (s.btList.length?grp(`build tools (${s.btList.length})`)+s.btList.map(p=>opt('buildtool',p.id,p.name,p.what?String(p.what).slice(0,40):'',ostate(p.id,s.buildtool,new Set(),new Set()),`openPkg('${p.id}')`)).join(''):'')+cmdDeps,ch('deps')));
+    cmdDeps+
+    (()=>{const all=(G.nodes.pkgBuildDeep||[]).filter(p=>p.kind==='pkg-mgr');
+      const fits=all.filter(p=>langMatch(p.language,s.lang)), others=all.filter(p=>!langMatch(p.language,s.lang));
+      return grp(`package managers for ${langName(s.lang)} (${fits.length})`)+
+        fits.map(p=>accRow('pkgBuildDeep','pkg',p,p.id===s.pkg?'chosen':'fit',p.id===s.pkg?'selected':'applies',p.id===s.pkg)).join('')+
+        grp(`other languages (${others.length})`)+
+        others.map(p=>accRow('pkgBuildDeep','pkg',p,'dim','not here',false)).join('');})()+
+    (s.btList.length?grp(`build tools (${s.btList.length})`)+
+      s.btList.map(p=>accRow('pkgBuildDeep','buildtool',p,p.id===s.buildtool?'chosen':'fit',p.id===s.buildtool?'selected':'applies',false)).join(''):''),ch('deps')));
 
   // 2 CI/CD pipeline — same for all; ARGs resolved from your picks
   P.push(rpanel(2,'#44D292','03','CI/CD pipeline',rtag('same','same for every framework'),
     `${(G.nodes.stages||[]).length}-stage pipeline`,'Standard platform pipeline. Your choices flow in as build args:',
     `<div class="rchips"><span class="chip">AUTH=${esc(s.auth.replace('auth-',''))}</span><span class="chip">ORM=${esc(s.orm.replace('orm-',''))}</span><span class="chip">RUNTIME=${esc(s.base)}</span><span class="chip">PKG=${esc(s.pkg)}</span></div>`+
-    decCI+grp('phases')+(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>card('#44D292',p.label||p.name,p.trigger||'',`goCol(1)`,'',null)).join('')+genCI,ch('pipe')));
+    grp('phases')+`<div class="phstrip">`+(G.nodes.phases||[]).sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>`<span class="ph"><b>${esc(p.phaseNum||p.name)}</b> ${esc(p.name)}<span class="pht">${esc(p.trigger||'')}</span></span>`).join('<span class="sbsep">›</span>')+`</div>`+
+    grp(`this service's workflows (${((s.fw.shipped&&s.fw.shipped.workflows)||[]).length})`)+
+    ((s.fw.shipped&&s.fw.shipped.workflows)||[]).map(w=>{const d=discipline((w.name||'')+' '+(w.jobs||[]).join(' '));
+      return `<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc((w.name||w.file).replace(/ — .*$/,''))}</span><span class="am">${esc((w.jobs||[]).join(', '))}</span><span class="disc ${d.toLowerCase()}">${d}</span></summary><div class="accbody"><div class="krow"><span class="kk">file</span><span class="kvv">${esc(w.file)}</span></div><div class="krow"><span class="kk">jobs</span><span class="kvv">${esc((w.jobs||[]).join(', '))}</span></div></div></details>`;}).join('')+
+    genCI,ch('pipe')));
 
-  // 3 Compliance — ALL 26, what applies vs what does not
+  // 3 Compliance — three clean groups: enforced / needs profile / not required
   const reqSet=new Set(s.regimes);
   const allC=(G.nodes.complianceProfiles||[]);
+  const shComp={};((s.fw.shipped&&s.fw.shipped.shippedCompliance)||[]).forEach(c=>shComp[c.standard]=c);
+  const stdOf=(id)=>(REGIME_TO_STD[id]||[])[0];
+  const enforced=[...reqSet].filter(id=>shComp[stdOf(id)]);
+  const needsProfile=[...reqSet].filter(id=>!shComp[stdOf(id)]);
+  const notReq=allC.filter(c=>!reqSet.has(c.id));
+  const profileLine=(id)=>{const c=shComp[stdOf(id)],p=allC.find(x=>x.id===id);
+    const fb=c.buildArgs&&Object.keys(c.buildArgs).length?Object.entries(c.buildArgs).map(([k,v])=>k+'='+v).join(', '):'';
+    return `<details class="acc req" open><summary><span class="caret">▸</span><span class="an">${esc(p?p.name:id)}</span><span class="am">${esc(p?(p.fullName||''):'')}</span><span class="ktag req">enforced</span></summary><div class="accbody">`+
+      (fb?`<div class="krow"><span class="kk">forces</span><span class="kvv">${esc(fb)}</span></div>`:'')+
+      ((c.requiredControls||[]).length?`<div class="krow"><span class="kk">controls</span><span class="kvv">${esc(c.requiredControls.join(', '))}</span></div>`:'')+
+      `<div class="krow"><span class="kk">profile</span><span class="kvv">${esc(c.file||'')}</span></div>`+
+      `<div style="margin-top:6px"><button class="kmore" onclick="openProfile('${id}')">full record →</button></div></div></details>`;};
   let compBody;
   if(s.rq){
-    compBody=grp(`applies to ${esc(s.rq.name)} (${s.regimes.length})`)+
-      allC.filter(c=>reqSet.has(c.id)).map(c=>card('#FFB800',c.name,c.fullName||c.regulator||'','openProfile(\''+c.id+'\')','req',null)).join('')+
-      grp(`available, not required here (${allC.length-s.regimes.length})`)+
-      allC.filter(c=>!reqSet.has(c.id)).map(c=>card('var(--hair)',c.name,c.fullName||'','openProfile(\''+c.id+'\')','dim',null)).join('');
+    compBody=`<div class="compstat"><span class="cs">${s.regimes.length} of ${allC.length} apply</span><span class="cs good">${enforced.length} enforced by this service</span><span class="cs ${needsProfile.length?'bad':'good'}">${needsProfile.length} need profiles</span></div>`+
+      grp(`enforced by this service (${enforced.length})`)+enforced.map(profileLine).join('')+
+      (needsProfile.length?grp(`required — profiles to add (${needsProfile.length})`)+
+        `<details class="acc gap"><summary><span class="caret">▸</span><span class="an">${needsProfile.length} regimes need a compliance profile</span><span class="am">${esc(needsProfile.map(id=>nameById('complianceProfiles',id)).join(' · '))}</span><span class="ktag gap">gap</span></summary><div class="accbody"><div class="sub" style="margin-bottom:6px">${esc(s.rq.name)} requires these, and this service ships no profile for them yet. Each links to its full record:</div>${needsProfile.map(id=>`<button class="kmore" style="margin:0 6px 6px 0" onclick="openProfile('${id}')">${esc(nameById('complianceProfiles',id))} →</button>`).join('')}</div></details>`:'')+
+      grp(`not required for ${esc(s.rq.name)} (${notReq.length})`)+
+      `<details class="acc dim"><summary><span class="caret">▸</span><span class="an">${notReq.length} other regimes</span><span class="am">available if you expand into other industries</span></summary><div class="accbody">${notReq.map(c=>`<button class="kmore" style="margin:0 6px 6px 0" onclick="openProfile('${c.id}')">${esc(c.name)} →</button>`).join('')}</div></details>`;
   } else {
     compBody=grp(`all regimes (${allC.length}) — pick an industry to see which apply`)+
-      allC.map(c=>card('var(--hair)',c.name,c.fullName||'','openProfile(\''+c.id+'\')','',null)).join('');
+      allC.map(c=>`<details class="acc"><summary><span class="caret">▸</span><span class="an">${esc(c.name)}</span><span class="am">${esc(c.fullName||'')}</span></summary><div class="accbody"><button class="kmore" onclick="openProfile('${c.id}')">full record →</button></div></details>`).join('');
   }
   P.push(rpanel(3,'#5AD886','04','Compliance',s.rq?rtag('req',`${s.regimes.length} of ${allC.length} apply`):rtag('def','no industry'),
     s.rq?`${s.regimes.length} of ${allC.length} apply`:'Pick an industry',
-    s.rq?`${esc(s.rq.name)} mandates the gold ones. Each forces controls into the pipeline.`:'Compliance depends on the industry you serve.',decComp+compBody,ch('comp')));
+    s.rq?`${esc(s.rq.name)} mandates these. The enforced ones already ship controls in this service.`:'Compliance depends on the industry you serve.',compBody,ch('comp')));
 
   // 4 Image & registry — every base image, choosable
   const runAll=(G.nodes.runtimeDeep||[]);
   P.push(rpanel(4,'#70DD7B','05','Image & registry',rtag(s.baseTag,s.baseTag==='req'?'required by industry':s.baseTag==='you'?'your choice':'framework default'),
     esc(baseName),esc(s.baseWhy)+' Built, signed (cosign) + SBOM, pushed to GHCR.',
-    decBuild+grp(`base image (${runAll.length})`)+
-    runAll.map(r=>{const req=reqRun.has(r.id);return richCard('runtimeDeep','runtime',r,r.id===s.base?'chosen':(req?'req':'avail'),r.id===s.base?'selected':(req?'recommended · lens':'available'));}).join('')+
-    grp('registry')+card('#70DD7B','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null)+genImg+cmdDocker+cmdReg,ch('img')));
+    forcedNote+grp(`base image (${runAll.length})`)+
+    runAll.map(r=>{const req=reqRun.has(r.id);return accRow('runtimeDeep','runtime',r,r.id===s.base?'chosen':(req?'req':'avail'),r.id===s.base?'selected':(req?'lens recommends':'available'),r.id===s.base);}).join('')+
+    grp('registry')+card('#70DD7B','GHCR — ghcr.io/yarova-ca','signed image + SBOM · :sha :sha-fips','openRegistry()','',null)+
+    genImg+cmdDocker+cmdReg,ch('img')));
 
   // 5 GitOps — info
   P.push(rpanel(5,'#85E270','06','GitOps delivery',rtag('same','same for every framework'),
     'Argo CD + Helm + Kustomize','Git declares desired state. Argo CD syncs it to the cluster.',
-    decGit+grp(`tools (${(G.nodes.gitopsTools||[]).length})`)+(G.nodes.gitopsTools||[]).map(t=>card('#85E270',t.name,`${t.role||''} · open detail`,`openGitops('${t.id}')`,'',null)).join('')+genGit+cmdGitops,ch('gitops')));
+    grp(`tools (${(G.nodes.gitopsTools||[]).length})`)+(G.nodes.gitopsTools||[]).map(t=>`<details class="acc fit"><summary><span class="caret">▸</span><span class="an">${esc(t.name)}</span><span class="am">${esc(t.role||'')}${t.version?' · v'+esc(t.version):''}</span></summary><div class="accbody">${t.what?`<div class="krow"><span class="kk">what</span><span class="kvv">${esc(stripTags(t.what))}</span></div>`:''}${t.syncInterval?`<div class="krow"><span class="kk">sync interval</span><span class="kvv">${esc(t.syncInterval)}</span></div>`:''}${t.decisionChosen?`<div class="krow"><span class="kk">decision</span><span class="kvv">${esc(t.decisionChosen)}</span></div>`:''}<div style="margin-top:6px"><button class="kmore" onclick="openGitops('${t.id}')">full record →</button></div></div></details>`).join('')+
+    `<div class="sub" style="margin:8px 0">This service ships ${((s.fw.shipped&&s.fw.shipped.helmValuesFiles)||[]).length} Helm values files and ${((s.fw.shipped&&s.fw.shipped.kustomizeOverlays)||[]).length} Kustomize overlays (${esc(((s.fw.shipped&&s.fw.shipped.kustomizeOverlays)||[]).join(' / '))}).</div>`+
+    genGit+cmdGitops,ch('gitops')));
 
   // 6 Cluster — every cluster, choosable
   const [ct,ctx]=pickTag(s.clusterUser,s.clusterReq);
   const clReq=new Set(s.rq?.recommendedClusterIds||[]);
   P.push(rpanel(6,'#9BE864','07','Deploy cluster',rtag(ct,ctx),
     esc(nameById('clusters',s.cluster)),s.rq?`${esc(s.rq.name)} recommends the gold ones. ${(G.nodes.clusterComponents||[]).length} platform components run here.`:`${(G.nodes.clusterComponents||[]).length} platform components.`,
-    decCluster+grp(`clusters (${(G.nodes.clusters||[]).length})`)+
-    (G.nodes.clusters||[]).map(c=>{const req=clReq.has(c.id);return richCard('clusters','cluster',c,c.id===s.cluster?'chosen':(req?'req':'avail'),c.id===s.cluster?'selected':(req?'recommended · lens':'available'));}).join('')+
+    grp(`clusters (${(G.nodes.clusters||[]).length})`)+
+    (G.nodes.clusters||[]).map(c=>{const req=clReq.has(c.id);return accRow('clusters','cluster',c,c.id===s.cluster?'chosen':(req?'req':'avail'),c.id===s.cluster?'selected':(req?'lens recommends':'available'),c.id===s.cluster);}).join('')+
     `<div class="sub" style="margin-top:8px">Hub-and-spoke: one Argo CD → every cluster.</div>`+genCluster+cmdCluster,ch('cluster')));
 
   // 7 Platform — auth, observability, ORM, all choosable
@@ -756,12 +811,25 @@ function renderResolver(){
   const authReqS=new Set(s.rq?.requiredAuthIds||[]), obsReqS=new Set(s.rq?.requiredObservabilityIds||[]), ormRec=new Set([s.ormDef]);
   P.push(rpanel(7,'#B0ED59','08','Platform',rtag(at,'auth: '+atx),
     esc(nameById('authDeep',s.auth)),'Auth, observability and database layer — pick any:',
-    decPlat+grp(`auth (${(G.nodes.authDeep||[]).length})`)+
-    (G.nodes.authDeep||[]).map(a=>{const req=authReqS.has(a.id);return richCard('authDeep','auth',a,a.id===s.auth?'chosen':(req?'req':'avail'),a.id===s.auth?'selected':(req?'required · lens':'available'));}).join('')+
-    grp(`observability (${(G.nodes.observabilityDeep||[]).length})`)+
-    (G.nodes.observabilityDeep||[]).map(o=>{const req=obsReqS.has(o.id);return richCard('observabilityDeep','obs',o,o.id===s.obs?'chosen':(req?'req':'avail'),o.id===s.obs?'selected':(req?'required · lens':'available'));}).join('')+
-    grp(`ORM for ${esc(LANG_HUMAN[s.lang]||s.lang)} (${s.ormList.length})`)+
-    (G.nodes.ormDeep||[]).map(o=>{const fit=(o.language||o.languages||[]).some(L=>langMatch(L,s.lang))||o.id==='orm-none';return richCard('ormDeep','orm',o,o.id===s.orm?'chosen':(fit?'fit':'dim'),o.id===s.orm?'selected':(fit?'fits '+langName(s.lang):'other language'));}).join(''),ch('plat')));
+    (()=>{const mw=(s.fw.shipped&&s.fw.shipped.middleware)||{};
+      const needAudit=[...reqStds(s)].some(x=>['hipaa','pci'].includes(x));
+      const cell=(label,on,gap)=>`<span class="mw ${on?'on':(gap?'gapped':'')}">${on?'✓':(gap?'✗':'—')} ${label}${gap?' · gap':''}</span>`;
+      return grp('shipped middleware — this service')+`<div class="mwstrip">`+
+        cell('auth',mw.auth,!mw.auth&&authReqS.size>0)+cell('audit log',mw.audit,!mw.audit&&needAudit)+
+        cell('RBAC',mw.rbac,false)+cell('circuit breaker',mw.circuitBreaker,false)+
+        `<span class="mw ${s.fw.shipped&&s.fw.shipped.observabilityDetected?'on':''}">${s.fw.shipped&&s.fw.shipped.observabilityDetected?'✓':'—'} observability</span></div>`;})()+
+    (()=>{const order=(arr,chosenId,reqS,fitFn)=>[...arr].sort((a,b)=>{
+        const w=(o)=>o.id===chosenId?0:(reqS&&reqS.has(o.id)?1:(fitFn&&fitFn(o)?2:3));return w(a)-w(b);});
+      const auth=order(G.nodes.authDeep||[],s.auth,authReqS);
+      const obs=order(G.nodes.observabilityDeep||[],s.obs,obsReqS);
+      const fitOrm=(o)=>(o.language||o.languages||[]).some(L=>langMatch(L,s.lang))||o.id==='orm-none';
+      const orm=order(G.nodes.ormDeep||[],s.orm,null,fitOrm);
+      return grp(`auth (${auth.length})`)+
+        auth.map(a=>{const req=authReqS.has(a.id);return accRow('authDeep','auth',a,a.id===s.auth?'chosen':(req?'req':'avail'),a.id===s.auth?'selected':(req?'lens requires':'available'),a.id===s.auth);}).join('')+
+        grp(`observability (${obs.length})`)+
+        obs.map(o=>{const req=obsReqS.has(o.id);return accRow('observabilityDeep','obs',o,o.id===s.obs?'chosen':(req?'req':'avail'),o.id===s.obs?'selected':(req?'lens requires':'available'),o.id===s.obs);}).join('')+
+        grp(`ORM / data layer (${orm.length})`)+
+        orm.map(o=>{const fit=fitOrm(o);return accRow('ormDeep','orm',o,o.id===s.orm?'chosen':(fit?'fit':'dim'),o.id===s.orm?'selected':(fit?'fits '+langName(s.lang):'other language'),o.id===s.orm);}).join('');})(),ch('plat')));
 
   // 8 Integrations — info, by industry
   let intBody,intVal,intTag;
@@ -811,6 +879,7 @@ window.setMode=(m)=>{
   document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
   const build=m==='build';
   $("#builder").classList.toggle('on',build);
+  const sb=$("#stackbar");if(sb)sb.classList.toggle('on',build);
   document.querySelector('.legend').style.display=build?'none':'';
   document.querySelector('.lens').style.display=build?'none':'';
   if(build){ if(!RS.fw)RS.fw=(G.nodes.frameworks||[])[0]?.id;
