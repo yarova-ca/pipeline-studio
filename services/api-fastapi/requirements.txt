@@ -1,0 +1,23 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-dotenv==1.0.1
+# ORM + migrations
+sqlalchemy==2.0.36
+alembic==1.14.0
+asyncpg==0.30.0
+aiosqlite==0.20.0
+# Auth
+python-jose[cryptography]==3.3.0
+# OAuth HTTP calls
+httpx==0.28.1
+# Structured logging
+structlog==24.4.0
+# Rate limiting
+slowapi==0.1.9
+# OpenTelemetry — guarded by OTEL_ENABLED=true in main.py
+opentelemetry-sdk==1.27.0
+opentelemetry-exporter-otlp-proto-grpc==1.27.0
+opentelemetry-instrumentation-fastapi==0.48b0
+# Testing
+pytest==8.3.0
+pytest-asyncio==0.24.0

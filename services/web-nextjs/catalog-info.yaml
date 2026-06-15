@@ -1,0 +1,36 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 01-nextjs
+  title: "Next.js"
+  description: |
+    Runnable service starter for Next.js.
+    Includes: health endpoints, Dockerfile (all RUNTIME axes), tests,
+    GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
+  tags:
+    - javascript
+  - typescript
+  - node
+  - ssr
+  - tier-2
+  - ssr
+  - tier-1
+  annotations:
+    github.com/project-slug: yarova-ca/pipeline-studio
+    backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/01-nextjs
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: pipeline-platform
+  providesApis: []
+  dependsOn: []
+  profile:
+    displayName: "Next.js"
+  metadata:
+    tier: 1
+    tierStatus: maintained
+    language: typescript
+    pattern: ssr
+    port: 3000
