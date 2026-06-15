@@ -24,6 +24,9 @@ func jwtSecret() ([]byte, error) {
 	if s == "" {
 		return nil, errors.New("JWT_SECRET env var is not set")
 	}
+	if len(s) < 32 {
+		return nil, errors.New("JWT_SECRET must be at least 32 characters")
+	}
 	return []byte(s), nil
 }
 

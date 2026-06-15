@@ -15,6 +15,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/yarova-ca/16-gin/internal/db"
+	"github.com/yarova-ca/16-gin/internal/metrics"
 	"github.com/yarova-ca/16-gin/internal/routes"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -85,6 +86,11 @@ func initOTel(ctx context.Context) func(context.Context) error {
 }
 
 func main() {
+	// I-1: fail fast on missing or weak required config.
+	if len(os.Getenv("JWT_SECRET")) < 32 {
+		log.Fatal("FATAL: JWT_SECRET must be set and at least 32 characters")
+	}
+
 	// JSON structured logging — stdlib slog, Go 1.21+.
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		Level: slog.LevelInfo,
@@ -132,6 +138,7 @@ func buildRouter() *gin.Engine {
 
 	// ── Security headers ───────────────────────────────────────────────────
 	r.Use(SecurityHeaders())
+	r.Use(metrics.Middleware())
 
 	// ── Request ID ─────────────────────────────────────────────────────────
 	r.Use(RequestID())
@@ -167,6 +174,8 @@ func buildRouter() *gin.Engine {
 		}
 		c.Next()
 	})
+
+	r.GET("/metrics", metrics.Handler())
 
 	// Core health endpoints.
 	r.GET("/", func(c *gin.Context) {
