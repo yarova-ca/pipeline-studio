@@ -8,8 +8,9 @@
     setRenderState, setLens, setGSTEP, setGNAV,
     renderHeroHtml, renderLensInfoHtml, renderStackBarHtml, renderBuilderHtml,
     renderBoard, renderResolver, renderGuidedHtml, gOptions,
-    STAGES_CATALOG, fullNode,
+    STAGES_CATALOG, fullNode, getRepoFiles, getRepoName,
   } from './lib/render.js';
+  import JSZip from 'jszip';
   import './app.css';
 
   let viewVal = 'welcome';
@@ -125,6 +126,25 @@
     gnav.set({platform:null,category:null,all:false});
     view.set('guided');
   }
+
+  // ── Express path — 2 plain questions, the engine fills the other 9 axes ───────
+  // Default framework per "what are you building". Real ids (numeric-prefixed).
+  const EXPRESS_FW = { 'frontend-web':'01-nextjs', 'mobile':'09-expo', 'backend':'15-fastapi', 'protocol':'15-fastapi' };
+  let expressStep = 0;      // 0 = what are you building, 1 = who is it for
+  let expressBuild = '';
+  function startExpress(){ expressStep=0; expressBuild=''; view.set('express'); }
+  function expressPickBuild(platformId){ expressBuild=platformId; expressStep=1; }
+  function expressPickIndustry(industryId){
+    // set ONLY framework + industry; resolveStack derives pkg/auth/orm/obs/runtime/cluster defaults.
+    pick('fw', EXPRESS_FW[expressBuild] || '01-nextjs');
+    pick('industry', industryId);
+    const steps=(getK()?.guided?.steps||[]);
+    gstep.set(steps.length);   // jump straight to the result/repo screen
+    view.set('guided');
+    doRenderGuided();
+  }
+  $: platformPlain = isReady && getK() ? Object.entries(getK().platformPlain||{}) : [];
+  $: industriesPlain = isReady && getG() ? (getG().nodes.industryRequirements||[]) : [];
   // Shown when an onclick references an id that no longer exists in the data.
   function missing(id){
     openDrawer('Not found', `<div class="sub">No record found for <code>${id}</code>.<br>The page data may be out of date. Try reloading.</div>`);
@@ -262,6 +282,26 @@
     window.copyAllFiles = (btn) => {
       const el=document.getElementById('allfiles'); if(!el) return;
       navigator.clipboard.writeText(el.value||'').then(()=>{ if(btn){const t=btn.textContent;btn.textContent='✓ all files copied!';setTimeout(()=>{btn.textContent=t;},2000);}}).catch(()=>{});
+    };
+    window.downloadRepo = async (btn) => {
+      const label = btn ? btn.textContent : '';
+      if(btn){ btn.disabled=true; btn.textContent='zipping…'; }
+      try {
+        const files = getRepoFiles();              // {path: contents}
+        const name = getRepoName() || 'pipeline';
+        const zip = new JSZip();
+        const root = zip.folder(name);
+        for(const [path, contents] of Object.entries(files)) root.file(path, contents);
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `${name}.zip`;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url), 1000);
+        if(btn){ btn.textContent='✓ downloaded'; setTimeout(()=>{ btn.textContent=label; btn.disabled=false; }, 2200); }
+      } catch(e){
+        if(btn){ btn.textContent='download failed — retry'; btn.disabled=false; }
+      }
     };
     window.gGo = (dir) => {
       const K=getK(); if(!K) return;
@@ -409,15 +449,14 @@
 {#if viewVal==='welcome'}
   <section class="welcome">
     <div class="wv">
-      <img src="/yarova-logo-light.png" alt="Yarova" style="height:34px;margin-bottom:18px" />
-      <h1>Build a real service.<br>Start to finish. No step skipped.</h1>
-      <p class="wp">Pick who it's for and we decide everything together — framework, sign-in,
-      container, pipeline, cluster — in plain words, one decision at a time.
-      At the end: your real files, ready to ship, and the full 18-scene map behind them.</p>
+      <img src="/yarova-logo-light.png" alt="Yarova" style="height:32px;margin-bottom:16px" />
+      <h1>Your whole delivery pipeline.<br>Built in two questions.</h1>
+      <p class="wp">Tell us what you're building and who it's for.
+      We assemble the entire setup — container, tests, deploy, security, monitoring —
+      and hand you a repo you download and run. No DevOps knowledge needed.</p>
       <div class="wbtns">
-        <button class="wstart" onclick={()=>startGuided(false)}>Start building →</button>
-        <button class="walt" onclick={()=>{ mode='build'; view.set('flow'); renderBuild(); }}>I know my way — explore the full map</button>
-        <button class="walt" onclick={()=>{ mode='catalog'; view.set('flow'); renderCatalog(); }}>Browse the catalog</button>
+        <button class="wstart" onclick={()=>startExpress()}>Build my pipeline →</button>
+        <button class="walt" onclick={()=>startGuided(false)}>I know my stack — choose every detail</button>
       </div>
       {#if canResume}
         <div class="wresume show">
@@ -447,10 +486,45 @@
           {/if}
         </div>
       {/if}
-      {#if getG()}
-        <div class="wstats">
-          {(getG().nodes.frameworks||[]).length} frameworks · 18 build scenes · 26 compliance regimes ·
-          {(getG().nodes.clusters||[]).length} cluster targets · {(getG().nodes.industryRequirements||[]).length} industry lenses
+      <div class="wmore">
+        <button onclick={()=>{ mode='build'; view.set('flow'); renderBuild(); }}>explore the full map</button>
+        <span>·</span>
+        <button onclick={()=>{ mode='catalog'; view.set('flow'); renderCatalog(); }}>browse the catalog</button>
+      </div>
+    </div>
+  </section>
+
+{:else if viewVal==='express'}
+  <section class="welcome">
+    <div class="ev">
+      <div class="ev-top">
+        <button class="gback" onclick={()=> expressStep===0 ? view.set('welcome') : (expressStep=0)}>← back</button>
+        <span class="ev-count">question {expressStep+1} of 2</span>
+      </div>
+      {#if expressStep===0}
+        <h2 class="ev-q">What are you building?</h2>
+        <p class="ev-sub">Pick the closest. You can change anything later.</p>
+        <div class="ev-opts">
+          {#each platformPlain as [id, p]}
+            <button class="ev-opt" onclick={()=>expressPickBuild(id)}>
+              <span class="ev-opt-name">{p.name}</span>
+              <span class="ev-opt-plain">{p.plain}</span>
+            </button>
+          {/each}
+        </div>
+      {:else}
+        <h2 class="ev-q">Who is it for?</h2>
+        <p class="ev-sub">This sets your security + compliance rules. Pick the closest.</p>
+        <div class="ev-opts">
+          <button class="ev-opt" onclick={()=>expressPickIndustry('technology')}>
+            <span class="ev-opt-name">Not sure / just trying it</span>
+            <span class="ev-opt-plain">Safe general defaults — change later.</span>
+          </button>
+          {#each industriesPlain as r}
+            <button class="ev-opt compact" onclick={()=>expressPickIndustry(r.id)}>
+              <span class="ev-opt-name">{r.name}</span>
+            </button>
+          {/each}
         </div>
       {/if}
     </div>

@@ -982,3 +982,74 @@ details.gcard.recd { border-color: var(--border-accent); box-shadow: 0 0 0 1px v
 .oc.alternative:hover { opacity: 1; }
 .oc-badge.alt { color: var(--ink2); border-color: var(--border-hover); background: rgba(14,15,17,.03); }
 .oc-foryou.alternative { background: rgba(14,15,17,.03); color: var(--ink2); }
+
+/* ── 36. The deliverable: result-screen repo hero + download ──────────────── */
+.repo-hero {
+  text-align: center; margin: 6px 0 22px; padding: 26px 22px;
+  border: 1px solid var(--border-accent); border-radius: var(--r-xl);
+  background: linear-gradient(160deg, var(--wash-teal), var(--wash-lime));
+  box-shadow: var(--shadow-md);
+}
+.repo-badge {
+  display: inline-block; font-family: var(--fmono); font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em; color: var(--accent);
+  background: var(--surface-0); border-radius: var(--r-full); padding: 5px 14px; margin-bottom: 12px;
+}
+.repo-name {
+  font-family: var(--fmono); font-size: 26px; font-weight: 600; color: var(--ink);
+  word-break: break-all; line-height: 1.15;
+}
+.repo-meta { margin-top: 7px; font-size: 13px; color: var(--ink2); }
+.repo-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 18px 0 4px; }
+.repo-dl {
+  border: 0; border-radius: var(--r-full); padding: 13px 28px;
+  background: var(--accent); color: #fff; font-family: var(--fbody);
+  font-size: 15.5px; font-weight: 700; cursor: pointer; transition: .15s var(--ease);
+  box-shadow: var(--glow-teal);
+}
+.repo-dl:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.repo-dl:disabled { opacity: .7; cursor: progress; transform: none; }
+.repo-copy {
+  border: 1px solid var(--border-hover); background: var(--surface-0); color: var(--ink2);
+  border-radius: var(--r-full); padding: 13px 20px; font: inherit; font-size: 13.5px; cursor: pointer;
+}
+.repo-copy:hover { border-color: var(--accent); color: var(--accent); }
+.repo-stack { margin-top: 14px; font-family: var(--fmono); font-size: 12px; color: var(--ink3); }
+.repo-files { margin-top: 18px; border: 1px solid var(--border); border-radius: var(--r-lg); padding: 10px 14px; }
+.repo-files > summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--ink); }
+
+/* ── 37. Missing styles found in the teardown (build-scene decision blocks) ── */
+.decision-ask {
+  padding: 18px 20px; border: 1px solid var(--border-accent); border-radius: var(--r-lg);
+  background: var(--wash-teal); margin: 8px 0 14px;
+}
+.dnum {
+  font-family: var(--fmono); font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--accent);
+}
+.dq2 { font-family: var(--fdisplay); font-size: 21px; color: var(--ink); margin: 4px 0 8px; line-height: 1.25; }
+.compline { padding: 8px 0; border-bottom: 1px solid var(--border); }
+.compline b { font-size: 14px; color: var(--ink); }
+
+/* ── 38. Express path — 2 plain questions, no jargon ─────────────────────── */
+.ev { width: min(680px, 92vw); margin: 0 auto; }
+.ev-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.ev-count { font-family: var(--fmono); font-size: 12px; color: var(--ink3); }
+.ev-q { font-family: var(--fdisplay); font-size: 30px; line-height: 1.15; color: var(--ink); margin: 0 0 6px; }
+.ev-sub { font-size: 15px; color: var(--ink2); margin: 0 0 22px; }
+.ev-opts { display: grid; gap: 12px; }
+.ev-opt {
+  text-align: left; display: flex; flex-direction: column; gap: 4px;
+  padding: 18px 20px; border: 1px solid var(--border-hover); border-radius: var(--r-lg);
+  background: var(--surface-0); cursor: pointer; transition: .15s var(--ease);
+}
+.ev-opt:hover { border-color: var(--accent); background: var(--wash-teal); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.ev-opt-name { font-family: var(--fdisplay); font-size: 18px; font-weight: 600; color: var(--ink); }
+.ev-opt-plain { font-size: 14px; color: var(--ink2); }
+.ev-opt.compact { flex-direction: row; align-items: center; padding: 13px 18px; }
+.ev-opt.compact .ev-opt-name { font-size: 15.5px; font-weight: 500; }
+
+/* welcome: outcome-first tweaks */
+.wmore { margin-top: 22px; display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--ink3); }
+.wmore button { background: none; border: 0; color: var(--ink3); font: inherit; cursor: pointer; text-decoration: underline; padding: 0; }
+.wmore button:hover { color: var(--accent); }
