@@ -115,6 +115,17 @@ body {
 }
 a { color: var(--accent); text-decoration: none; }
 
+/* The mount node must fill the body's flex column and be a flex column itself,
+   so the header stays fixed and the scrollable .track gets a real height.
+   Without this, .track (flex:1) has no height reference and the columns
+   collapse into vertical "walls". */
+#app {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 /* ── 4. Header ─────────────────────────────────────────────────────────── */
 header {
   height: 60px;
