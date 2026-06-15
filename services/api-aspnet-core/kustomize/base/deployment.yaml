@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 19-aspnet-core
+  labels:
+    app: 19-aspnet-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 19-aspnet-core
+  template:
+    metadata:
+      labels:
+        app: 19-aspnet-core
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: 19-aspnet-core
+          image: ghcr.io/yarova-ca/19-aspnet-core:latest
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
