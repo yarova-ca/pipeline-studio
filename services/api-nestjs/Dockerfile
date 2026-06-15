@@ -14,6 +14,8 @@ COPY --from=build /app/package.json ./
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
+# The industry compliance profiles are read at runtime to flip controls.
+COPY --from=build /app/compliance ./compliance
 RUN useradd -r -u 10001 appuser && chown -R appuser /app
 USER appuser
 EXPOSE 3000
