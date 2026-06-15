@@ -1,0 +1,43 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 28-go-grpc
+  title: "Go gRPC"
+  description: |
+    Runnable service starter for Go gRPC.
+    Includes: health endpoints, Dockerfile (all RUNTIME axes), tests,
+    GitHub Actions (6 phases), Helm chart, Kustomize overlays, compliance configs.
+  tags:
+    - go
+  - golang
+  - spa
+  - tier-2
+  - backend
+  - tier-2
+  - backend
+  - tier-1
+  - backend
+  - tier-2
+  - backend
+  - tier-1
+  - grpc
+  - tier-1
+  annotations:
+    github.com/project-slug: yarova-ca/pipeline-studio
+    backstage.io/source-location: url:https://github.com/yarova-ca/pipeline-studio/tree/main/services/28-go-grpc
+    backstage.io/techdocs-ref: url:https://github.com/yarova-ca/pipeline-studio/tree/main
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: pipeline-platform
+  providesApis: []
+  dependsOn: []
+  profile:
+    displayName: "Go gRPC"
+  metadata:
+    tier: 1
+    tierStatus: maintained
+    language: go
+    pattern: grpc
+    port: 50051
