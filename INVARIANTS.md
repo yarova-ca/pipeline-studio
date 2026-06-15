@@ -148,3 +148,105 @@ Checked: branch protection requires the checks.
 A service is fellow-level only when all 23 hold, each with a passing test.
 NestJS is the gold standard: it implements every one first.
 Every other service copies this exact law.
+
+---
+
+## Architecture tiers — which invariants apply where
+
+The 23 invariants above are server-shaped.
+A pure client (browser app, mobile app, static site) has no DB, no readiness, no server auth guard.
+So each framework maps to a tier, and the tier decides which invariants apply.
+
+The principle: **every scenario is covered by real code, with no security gap.**
+A client never holds data or secrets — its backend-for-frontend (BFF) does, and the BFF holds all 23.
+
+| Tier | What it is | Frameworks | Invariants |
+|---|---|---|---|
+| A — Server | Owns data + auth. API, protocol, edge. | NestJS, FastAPI, Gin, Spring, ASP.NET, Axum, Rails, Laravel, Ktor, Phoenix, gRPC, GraphQL, WebSocket, Hono | All 23 (I-1…I-23) |
+| B — Full-stack SSR | Has its own server tier + a rendered client. | Next.js, Nuxt, SvelteKit, Angular SSR | All 23 on the server routes + C-1…C-11 on the client |
+| C — Pure frontend / static | No server of its own. Ships with a BFF. | React (SPA), Astro (static) | BFF is a Tier-A service (all 23) + C-1…C-11 on the client |
+| D — Mobile client | Native/RN app. Ships with a BFF. | Expo, Flutter | BFF is a Tier-A service (all 23) + C-1…C-11 + M-1…M-4 on the app |
+
+---
+
+### The client invariants (C-1…C-11) — Tiers B, C, D
+
+**C-1. No secret ships in the client bundle.**
+Enforced: only `PUBLIC_`/`NEXT_PUBLIC_`-prefixed env reaches the client; a build scan greps the bundle.
+Checked: a test greps the built bundle for known secret patterns and asserts none.
+
+**C-2. The build fails on missing required public config.**
+Enforced: a typed env schema validated at build time.
+Checked: a build with a required public var unset asserts a non-zero exit.
+
+**C-3. The client calls only its own server or BFF.**
+Enforced: no third-party API key is embedded; all external calls proxy through the BFF.
+Checked: a test asserts no hardcoded third-party token in the bundle.
+
+**C-4. The auth token is stored securely.**
+Web: httpOnly, Secure, SameSite cookie — never `localStorage`.
+Mobile: Keychain (iOS) / Keystore (Android) — never plaintext.
+Checked: a test asserts the token is not written to web storage / plaintext.
+
+**C-5. Input is validated on the client and re-validated on the server.**
+Enforced: client validation is UX only; the BFF is the real gate (I-6).
+Checked: a test posts past the client and asserts the BFF rejects it.
+
+**C-6. The served HTML sets security headers and a CSP.**
+Enforced: the server/CDN sets CSP, `X-Content-Type-Options`, `Referrer-Policy`.
+Checked: a test asserts the headers on the document response.
+
+**C-7. No error is swallowed; every failure has a user-visible state.**
+Enforced: error boundaries; no empty catch.
+Checked: a test forces a fetch failure and asserts the error UI renders.
+
+**C-8. Client telemetry is structured and carries no PII.**
+Enforced: a typed logging/analytics wrapper; raw `console.log` is banned in prod.
+Checked: a no-console lint rule; a test asserts no PII field is sent.
+
+**C-9. The build is reproducible and dependency-audited.**
+Enforced: a committed lockfile; `npm audit` / `pub` audit in CI.
+Checked: CI fails on a high or critical advisory.
+
+**C-10. The artifact is hardened.**
+Web: the container runs as a non-root user on a minimal base.
+Mobile: the release build is signed.
+Checked: a test asserts the container user is not root / the build is signed.
+
+**C-11. Every client invariant has a test, and CI enforces it.**
+Enforced: the client test suite; the workflows must pass.
+Checked: CI runs the suite; branch protection requires it.
+
+---
+
+### The mobile invariants (M-1…M-4) — Tier D only
+
+**M-1. Secrets live in the platform secure store, never in the app bundle or source.**
+Checked: a test asserts no API secret in the compiled bundle.
+
+**M-2. The app pins or validates the BFF TLS certificate.**
+Checked: a test asserts a connection to a mismatched cert is refused.
+
+**M-3. The app degrades safely offline.**
+Trigger: no network.
+System: cached read-only state; writes queue or block with a clear message.
+User sees: an explicit offline banner. User can: retry when back online.
+
+**M-4. The release build strips debug logging and enables obfuscation.**
+Checked: CI asserts the release flavor has debug disabled.
+
+---
+
+### How the BFF pairs with a client
+
+For every Tier-C and Tier-D framework, the repo ships **two** runnable parts:
+
+```
+services/<name>/
+  app/      the client (React / Astro / Expo / Flutter) — C + M invariants
+  bff/      the backend-for-frontend (a Tier-A server) — all 23 invariants
+```
+
+The client talks only to its BFF.
+The BFF holds the data, the auth, the integrations, the secrets.
+This is how a "frontend" framework still reaches fellow-level: nothing is left insecure, every scenario has real code.
