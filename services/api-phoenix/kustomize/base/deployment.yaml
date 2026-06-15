@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 21-phoenix
+  labels:
+    app: 21-phoenix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 21-phoenix
+  template:
+    metadata:
+      labels:
+        app: 21-phoenix
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: 21-phoenix
+          image: ghcr.io/yarova-ca/21-phoenix:latest
+          ports:
+            - containerPort: 4000
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 4000
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 4000
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
