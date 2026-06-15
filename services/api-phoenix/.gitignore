@@ -1,0 +1,10 @@
+# .gitignore
+
+.env
+.env.local
+.env.*.local
+_build/
+deps/
+*.beam
+priv/static/
+.elixir_ls/

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 21-phoenix
+spec:
+  selector:
+    app: 21-phoenix
+  ports:
+    - port: 4000
+      targetPort: 4000
+      protocol: TCP
