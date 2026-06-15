@@ -11,6 +11,8 @@ RUN useradd -r -u 10001 app
 COPY --from=build --chown=app:app /app/.next/standalone ./
 COPY --from=build --chown=app:app /app/.next/static ./.next/static
 COPY --from=build --chown=app:app /app/public ./public
+# Industry compliance profiles are read at runtime to show the recipe.
+COPY --from=build --chown=app:app /app/compliance ./compliance
 USER app
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
