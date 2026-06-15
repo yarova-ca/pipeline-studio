@@ -1,0 +1,6 @@
+apiVersion: v2
+name: 17-spring-boot
+description: Spring Boot service — platform-studio
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
