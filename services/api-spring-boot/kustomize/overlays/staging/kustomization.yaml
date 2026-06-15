@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: staging
+resources:
+  - ../../base
+images:
+  - name: ghcr.io/yarova-ca/17-spring-boot
+    newTag: "staging"
+patches:
+  - target:
+      kind: Deployment
+      name: 17-spring-boot
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 2
