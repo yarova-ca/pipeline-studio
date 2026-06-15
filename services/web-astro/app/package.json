@@ -1,0 +1,15 @@
+{
+  "name": "web-astro-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prebuild": "node -e \"if(!process.env.PUBLIC_APP_NAME){console.error('FATAL: PUBLIC_APP_NAME must be set at build');process.exit(1)}\"",
+    "build": "astro build",
+    "dev": "astro dev",
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "astro": "^4.16.0"
+  }
+}

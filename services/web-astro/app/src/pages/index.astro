@@ -1,0 +1,25 @@
+---
+const appName = import.meta.env.PUBLIC_APP_NAME ?? 'Yarova'
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yarova — Astro</title>
+  </head>
+  <body>
+    <main>
+      <h1>Yarova — Astro golden client</h1>
+      <p>App name: {appName}</p>
+      <p>Active industry profile (via BFF): <span id="profile">…</span></p>
+    </main>
+    <script>
+      // C-3: calls only its own origin; the static server proxies to the BFF.
+      fetch('/compliance')
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('bff'))))
+        .then((d) => { document.getElementById('profile').textContent = d.profile })
+        .catch(() => { document.getElementById('profile').textContent = 'unavailable — retry' })
+    </script>
+  </body>
+</html>
