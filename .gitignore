@@ -6,3 +6,10 @@ node_modules/
 # Build artifacts — CI rebuilds these from app/ on every deploy
 site-app/
 dist/
+
+# service build artifacts
+services/**/node_modules/
+services/**/dist/
+services/**/.next/
+services/**/.angular/
+services/**/__pycache__/
