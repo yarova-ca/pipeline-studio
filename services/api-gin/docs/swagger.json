@@ -1,0 +1,128 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Gin Service API",
+    "version": "1.0.0",
+    "description": "pipeline-studio Gin service — health, auth, and user item CRUD"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" },
+      "apiKey": { "type": "apiKey", "in": "header", "name": "X-API-Key" }
+    }
+  },
+  "security": [{ "bearerAuth": [] }, { "apiKey": [] }],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["health"],
+        "summary": "Health check",
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/health/live": {
+      "get": {
+        "tags": ["health"],
+        "summary": "Liveness probe",
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "tags": ["health"],
+        "summary": "Readiness probe — checks DB connection",
+        "responses": {
+          "200": { "description": "ok" },
+          "503": { "description": "DB disconnected" }
+        }
+      }
+    },
+    "/auth/login": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "Redirect to GitHub OAuth",
+        "responses": { "302": { "description": "Redirect to GitHub" } }
+      }
+    },
+    "/auth/callback": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "GitHub OAuth callback — returns JWT",
+        "parameters": [
+          { "in": "query", "name": "code", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "JWT token" },
+          "401": { "description": "OAuth exchange failed" }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "Return current authenticated user",
+        "security": [{ "bearerAuth": [] }, { "apiKey": [] }],
+        "responses": {
+          "200": { "description": "User profile" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/auth/api-key": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Generate API key for current user",
+        "security": [{ "bearerAuth": [] }, { "apiKey": [] }],
+        "responses": { "200": { "description": "API key" }, "401": { "description": "Unauthorized" } }
+      },
+      "delete": {
+        "tags": ["auth"],
+        "summary": "Revoke current user API key",
+        "security": [{ "bearerAuth": [] }, { "apiKey": [] }],
+        "responses": { "204": { "description": "Revoked" }, "401": { "description": "Unauthorized" } }
+      }
+    },
+    "/users/me/items": {
+      "get": {
+        "tags": ["users"],
+        "summary": "List all items for current user",
+        "security": [{ "bearerAuth": [] }, { "apiKey": [] }],
+        "responses": { "200": { "description": "Items list" }, "401": { "description": "Unauthorized" } }
+      },
+      "post": {
+        "tags": ["users"],
+        "summary": "Create an item",
+        "security": [{ "bearerAuth": [] }, { "apiKey": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "required": ["title"], "properties": { "title": { "type": "string" }, "description": { "type": "string" } } } } }
+        },
+        "responses": { "201": { "description": "Item created" }, "400": { "description": "title required" }, "401": { "description": "Unauthorized" } }
+      }
+    },
+    "/users/me/items/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get one item",
+        "security": [{ "bearerAuth": [] }, { "apiKey": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Item" }, "404": { "description": "Not found" } }
+      },
+      "put": {
+        "tags": ["users"],
+        "summary": "Update an item",
+        "security": [{ "bearerAuth": [] }, { "apiKey": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+        "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "title": { "type": "string" }, "description": { "type": "string" } } } } } },
+        "responses": { "200": { "description": "Updated item" }, "404": { "description": "Not found" } }
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "Delete an item",
+        "security": [{ "bearerAuth": [] }, { "apiKey": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }],
+        "responses": { "204": { "description": "Deleted" }, "404": { "description": "Not found" } }
+      }
+    }
+  }
+}

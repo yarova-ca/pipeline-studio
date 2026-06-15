@@ -1,0 +1,8 @@
+# .gitignore
+
+.env
+.env.local
+.env.*.local
+bin/
+*.test
+vendor/
