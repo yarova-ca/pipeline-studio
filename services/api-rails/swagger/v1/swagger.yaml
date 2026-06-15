@@ -1,0 +1,41 @@
+---
+openapi: 3.0.1
+info:
+  title: Rails Service API
+  version: 1.0.0
+  description: 22-rails canonical service
+paths:
+  /:
+    get:
+      summary: Hello endpoint
+      tags:
+        - health
+      responses:
+        '200':
+          description: success
+  /health:
+    get:
+      summary: Liveness check
+      tags:
+        - health
+      responses:
+        '200':
+          description: ok
+  /health/live:
+    get:
+      summary: Kubernetes liveness probe
+      tags:
+        - health
+      responses:
+        '200':
+          description: ok
+  /health/ready:
+    get:
+      summary: Kubernetes readiness probe — checks DB connectivity
+      tags:
+        - health
+      responses:
+        '200':
+          description: db connected
+        '503':
+          description: db disconnected

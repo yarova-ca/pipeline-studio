@@ -1,0 +1,19 @@
+default: &default
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *default
+  adapter: sqlite3
+  database: storage/development.sqlite3
+
+test:
+  <<: *default
+  adapter: sqlite3
+  database: ":memory:"
+
+# Production uses PostgreSQL, configured entirely from DATABASE_URL.
+production:
+  <<: *default
+  adapter: postgresql
+  url: <%= ENV['DATABASE_URL'] %>

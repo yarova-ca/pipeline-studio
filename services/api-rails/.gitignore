@@ -1,0 +1,10 @@
+# .gitignore
+
+.env
+.env.local
+.env.*.local
+.bundle/
+vendor/bundle/
+log/
+tmp/
+*.gem
