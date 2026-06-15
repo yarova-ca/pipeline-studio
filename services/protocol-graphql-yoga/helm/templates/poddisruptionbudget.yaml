@@ -1,0 +1,13 @@
+{{- if ge (int .Values.replicaCount) 2 }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "29-graphql-yoga.fullname" . }}
+  labels:
+    {{- include "29-graphql-yoga.labels" . | nindent 4 }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      {{- include "29-graphql-yoga.selectorLabels" . | nindent 6 }}
+{{- end }}
