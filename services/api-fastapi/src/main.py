@@ -143,3 +143,39 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8080")))
+
+
+# ── I-13: Prometheus metrics (golden signals) ─────────────────────────────────
+import time  # noqa: E402
+from prometheus_client import Histogram, generate_latest, CONTENT_TYPE_LATEST  # noqa: E402
+from starlette.responses import Response as _Resp  # noqa: E402
+
+HTTP_DURATION = Histogram(
+    "http_request_duration_seconds", "HTTP request duration in seconds",
+    ["method", "path", "status"],
+)
+
+
+@app.middleware("http")
+async def _metrics_mw(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    HTTP_DURATION.labels(request.method, request.url.path, str(response.status_code)).observe(
+        time.perf_counter() - start
+    )
+    return response
+
+
+@app.get("/metrics")
+def metrics() -> _Resp:
+    return _Resp(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+
+# ── I-9: unhandled errors never leak a stack trace to the client ──────────────
+from fastapi.responses import JSONResponse  # noqa: E402
+
+
+@app.exception_handler(Exception)
+async def _unhandled(request: Request, exc: Exception) -> JSONResponse:
+    logger.error("unhandled_error", path=request.url.path, error=type(exc).__name__)
+    return JSONResponse(status_code=500, content={"statusCode": 500, "error": "Internal server error"})
