@@ -1,0 +1,14 @@
+{
+  "name": "web-nuxt",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "start": "node .output/server/index.mjs"
+  },
+  "dependencies": {
+    "nuxt": "^3.13.0",
+    "prom-client": "^15.1.3"
+  }
+}
