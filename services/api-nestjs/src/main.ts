@@ -9,12 +9,17 @@ import { logger } from './logger'
 import { AllExceptionsFilter } from './common/exceptions.filter'
 import { requestId } from './common/request-id.middleware'
 import { metricsMiddleware } from './common/metrics'
+import { compliance } from './compliance/compliance'
+import { auditLog } from './compliance/audit.middleware'
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule)
   app.use(requestId)
-  app.use(helmet())
+  // When the active profile requires encryption in transit (HIPAA/PCI/FedRAMP),
+  // enforce HSTS so browsers refuse plaintext. Switching the profile toggles it.
+  app.use(helmet({ hsts: compliance.encryptionInTransit ? { maxAge: 31536000 } : false }))
   app.use(metricsMiddleware)
+  app.use(auditLog)
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }))
   app.useGlobalFilters(new AllExceptionsFilter())
   app.enableShutdownHooks()
