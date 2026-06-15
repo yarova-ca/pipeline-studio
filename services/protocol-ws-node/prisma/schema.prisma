@@ -1,0 +1,41 @@
+// Prisma schema for 14-express
+// Prisma: type-safe ORM that generates a query client from this schema.
+//
+// Apply to DB: npx prisma migrate dev --name init
+// Generate client: npx prisma generate
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  apiKey    String?  @unique @map("api_key")
+  provider  String   @default("local")  // "local" | "github" | "google"
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  items Item[]
+
+  @@map("users")
+}
+
+model Item {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  userId      String   @map("user_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("items")
+}
