@@ -1,0 +1,2249 @@
+{
+ "_meta": {
+  "sourceType": "authored",
+  "what": "Authored knowledge layer for the 13-scene platform: CI tool alternatives, signers, SBOM tools, registries, frontend observability, SRE pack, scene notes. graph.json stays the extracted truth; this file is the curated truth.",
+  "updated": "2026-06-12"
+ },
+ "ciAlternatives": [
+  {
+   "slot": "SAST",
+   "what": "Static analysis — finds vulnerable code patterns without running the app",
+   "options": [
+    {
+     "name": "CodeQL",
+     "license": "Free on GitHub repos",
+     "pick": "GitHub-hosted code — deepest dataflow analysis, zero infra",
+     "avoid": "Non-GitHub forges (paid) or air-gapped runners",
+     "tradeoff": "vs Semgrep: deeper taint tracking, slower scans, GitHub-bound"
+    },
+    {
+     "name": "Semgrep",
+     "license": "OSS engine, paid cloud",
+     "pick": "Fast custom rules, any CI, monorepos",
+     "avoid": "You need cross-function taint flow on the free tier",
+     "tradeoff": "vs CodeQL: minutes faster, rules are simpler but shallower"
+    },
+    {
+     "name": "SonarQube",
+     "license": "OSS Community + paid",
+     "pick": "Quality gates + security in one dashboard, self-hosted mandates",
+     "avoid": "You only want security findings — heavier to run",
+     "tradeoff": "vs both: adds maintainability metrics, needs its own server"
+    }
+   ]
+  },
+  {
+   "slot": "SCA",
+   "what": "Dependency scanning — known CVEs in the libraries you import",
+   "options": [
+    {
+     "name": "Dependabot",
+     "license": "Free on GitHub",
+     "pick": "Default on GitHub — alerts + auto-PRs with zero setup",
+     "avoid": "Monorepos needing grouped, scheduled updates",
+     "tradeoff": "vs Renovate: simpler, far less configurable"
+    },
+    {
+     "name": "Renovate",
+     "license": "OSS",
+     "pick": "Grouped updates, schedules, monorepos, any forge",
+     "avoid": "You want zero config files",
+     "tradeoff": "vs Dependabot: more power, more config to own"
+    },
+    {
+     "name": "Trivy",
+     "license": "Apache 2.0",
+     "pick": "One scanner for deps + images + IaC in CI",
+     "avoid": "You need auto-fix PRs (it only reports)",
+     "tradeoff": "vs Snyk: free and local, no fix suggestions"
+    },
+    {
+     "name": "Snyk",
+     "license": "Paid (free tier)",
+     "pick": "Fix PRs + reachability analysis + dev-friendly UI",
+     "avoid": "Budget-zero or fully air-gapped",
+     "tradeoff": "vs Trivy: better fixes, costs money, cloud-dependent"
+    }
+   ]
+  },
+  {
+   "slot": "Secrets",
+   "what": "Secret scanning — credentials committed into the repo",
+   "options": [
+    {
+     "name": "Gitleaks",
+     "license": "MIT",
+     "pick": "Fast regex+entropy scan in pre-commit AND CI",
+     "avoid": "You need verified-secret checks (it flags patterns only)",
+     "tradeoff": "vs TruffleHog: lighter, no live credential verification"
+    },
+    {
+     "name": "TruffleHog",
+     "license": "AGPL/paid",
+     "pick": "Verifies if found secrets are LIVE against providers",
+     "avoid": "Air-gapped CI (verification calls out)",
+     "tradeoff": "vs Gitleaks: fewer false positives, slower, heavier"
+    },
+    {
+     "name": "GitHub Push Protection",
+     "license": "Free public / GHAS private",
+     "pick": "Blocks the push itself — secrets never land",
+     "avoid": "Non-GitHub remotes",
+     "tradeoff": "vs both: earliest gate, GitHub-only, fixed patterns"
+    }
+   ]
+  },
+  {
+   "slot": "IaC scan",
+   "what": "Infrastructure-as-code scanning — misconfigured Terraform/K8s/Docker",
+   "options": [
+    {
+     "name": "Checkov",
+     "license": "Apache 2.0",
+     "pick": "Widest coverage: Terraform, K8s, Docker, Helm, ARM",
+     "avoid": "You want graph-aware Terraform-only depth",
+     "tradeoff": "vs tfsec: broader targets, noisier defaults"
+    },
+    {
+     "name": "Trivy (config)",
+     "license": "Apache 2.0",
+     "pick": "Already using Trivy — one tool, one report format",
+     "avoid": "Deep policy customisation needs",
+     "tradeoff": "vs Checkov: fewer built-in policies, simpler ops"
+    },
+    {
+     "name": "KICS",
+     "license": "Apache 2.0",
+     "pick": "Checkmarx-backed query library, many platforms",
+     "avoid": "Smallest-footprint pipelines",
+     "tradeoff": "vs Checkov: comparable coverage, less community momentum"
+    }
+   ]
+  },
+  {
+   "slot": "License scan",
+   "what": "License compliance — what licenses your dependencies carry",
+   "options": [
+    {
+     "name": "license-checker / pip-licenses",
+     "license": "OSS",
+     "pick": "Per-ecosystem CLI, free, runs anywhere",
+     "avoid": "You need org-wide policy + legal workflows",
+     "tradeoff": "vs FOSSA: free but per-language and report-only"
+    },
+    {
+     "name": "FOSSA",
+     "license": "Paid",
+     "pick": "Org policy engine, legal reporting, attribution docs",
+     "avoid": "Single small service on a budget",
+     "tradeoff": "vs CLIs: complete governance, costs real money"
+    }
+   ]
+  },
+  {
+   "slot": "DAST",
+   "what": "Dynamic testing — attacks the RUNNING app like an outsider",
+   "options": [
+    {
+     "name": "OWASP ZAP",
+     "license": "Apache 2.0",
+     "pick": "Free baseline scan of a deployed preview env",
+     "avoid": "No running environment exists in CI",
+     "tradeoff": "vs Nuclei: full proxy/spider, slower, heavier"
+    },
+    {
+     "name": "Nuclei",
+     "license": "MIT",
+     "pick": "Fast template-based checks on known CVE patterns",
+     "avoid": "You need authenticated, stateful crawling",
+     "tradeoff": "vs ZAP: seconds-fast, template-bound depth"
+    }
+   ]
+  }
+ ],
+ "signers": [
+  {
+   "name": "cosign (Sigstore)",
+   "pick": "Keyless signing via CI OIDC — no key management at all",
+   "avoid": "Policy mandates long-lived org keys outside Sigstore",
+   "tradeoff": "vs Notation: zero key ops, depends on Sigstore infra",
+   "command": "cosign sign --yes $IMAGE@$DIGEST",
+   "id": "cosign"
+  },
+  {
+   "name": "Notation (CNCF)",
+   "pick": "Enterprise PKI — sign with your own certificate chain",
+   "avoid": "You don't run a PKI and don't want to",
+   "tradeoff": "vs cosign: your keys your control, you own rotation",
+   "command": "notation sign $IMAGE@$DIGEST",
+   "id": "notation"
+  }
+ ],
+ "sbomTools": [
+  {
+   "name": "syft",
+   "format": "SPDX + CycloneDX",
+   "pick": "Default: fast, accurate, pairs with cosign attest",
+   "avoid": "—",
+   "command": "syft $IMAGE -o spdx-json > sbom.spdx.json",
+   "id": "syft"
+  },
+  {
+   "name": "cdxgen",
+   "format": "CycloneDX",
+   "pick": "CycloneDX-first orgs and OWASP toolchains",
+   "avoid": "SPDX-mandated environments",
+   "command": "cdxgen -o sbom.cdx.json",
+   "id": "cdxgen"
+  },
+  {
+   "name": "trivy sbom",
+   "format": "SPDX + CycloneDX",
+   "pick": "Already running Trivy — one tool fewer",
+   "avoid": "—",
+   "command": "trivy image --format spdx-json -o sbom.json $IMAGE",
+   "id": "trivy"
+  }
+ ],
+ "registries": [
+  {
+   "name": "GHCR",
+   "oidc": true,
+   "pick": "GitHub Actions default — GITHUB_TOKEN auth, zero stored secrets",
+   "setup": "No OIDC setup needed; enable branch protection + secret scanning",
+   "residency": "GitHub-managed (US/global)",
+   "id": "ghcr",
+   "login": "echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin",
+   "host": "ghcr.io/yarova-ca"
+  },
+  {
+   "name": "Amazon ECR",
+   "oidc": true,
+   "pick": "Deploying into AWS/EKS — same-cloud pulls, IAM-native",
+   "setup": "Create repo with scanOnPush; add OIDC provider + IAM role for the repo",
+   "residency": "Your AWS region (ca-central-1 for Canada)",
+   "id": "ecr",
+   "login": "aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com",
+   "host": "$AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com"
+  },
+  {
+   "name": "Google Artifact Registry",
+   "oidc": true,
+   "pick": "GKE deployments — workload-identity pulls",
+   "setup": "gcloud artifacts repositories create + Workload Identity Federation for GitHub",
+   "residency": "Your GCP region",
+   "id": "gar",
+   "login": "gcloud auth configure-docker $REGION-docker.pkg.dev",
+   "host": "$REGION-docker.pkg.dev/$PROJECT/apps"
+  },
+  {
+   "name": "Azure ACR",
+   "oidc": true,
+   "pick": "AKS deployments — managed-identity pulls",
+   "setup": "az acr create + federated credential for the GitHub repo",
+   "residency": "Your Azure region (Canada Central)",
+   "id": "acr",
+   "login": "az acr login --name $ACR_NAME",
+   "host": "$ACR_NAME.azurecr.io"
+  },
+  {
+   "name": "Harbor",
+   "oidc": false,
+   "pick": "Self-hosted mandate — on-prem, air-gapped, sovereignty",
+   "setup": "Deploy Harbor (Helm), create robot account, store its token as a CI secret",
+   "residency": "Wherever YOU run it — full control",
+   "id": "harbor",
+   "login": "docker login $HARBOR_HOST -u 'robot$ci' -p $HARBOR_TOKEN",
+   "host": "$HARBOR_HOST/apps"
+  },
+  {
+   "name": "Quay.io",
+   "oidc": false,
+   "pick": "Red Hat ecosystem, built-in Clair scanning",
+   "setup": "Create robot account; token as CI secret",
+   "residency": "Red Hat-managed",
+   "id": "quay",
+   "login": "docker login quay.io -u $QUAY_ROBOT -p $QUAY_TOKEN",
+   "host": "quay.io/yarova"
+  },
+  {
+   "name": "Docker Hub",
+   "oidc": false,
+   "pick": "Public OSS images with the widest reach",
+   "avoid": "Private enterprise images (rate limits, weaker controls)",
+   "setup": "Access token as CI secret",
+   "residency": "Docker-managed (US)",
+   "id": "dockerhub",
+   "login": "docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN",
+   "host": "docker.io/yarova"
+  },
+  {
+   "name": "JFrog Artifactory",
+   "oidc": false,
+   "pick": "One registry for containers + npm + maven + generic artifacts",
+   "setup": "Repo + access token; optional OIDC on paid tiers",
+   "residency": "Self-hosted or JFrog cloud region",
+   "id": "jfrog",
+   "login": "docker login $JFROG_REGISTRY -u $JFROG_USER -p $JFROG_TOKEN",
+   "host": "$JFROG_REGISTRY/apps"
+  },
+  {
+   "name": "Nexus Repository",
+   "oidc": false,
+   "pick": "Existing Nexus shop — keep one artifact store",
+   "setup": "Docker-hosted repo + user token as CI secret",
+   "residency": "Self-hosted",
+   "id": "nexus",
+   "login": "docker login $NEXUS_HOST -u $NEXUS_USER -p $NEXUS_TOKEN",
+   "host": "$NEXUS_HOST/apps"
+  }
+ ],
+ "frontendObservability": [
+  {
+   "name": "Sentry",
+   "what": "Error tracking + session replay for the browser",
+   "pick": "Default for FE errors — source-mapped stack traces, releases",
+   "avoid": "Strict data-residency without self-hosting (or use their EU/self-host)",
+   "tradeoff": "vs Faro: richer errors/replay, separate backend from your metrics"
+  },
+  {
+   "name": "web-vitals",
+   "what": "Google's library for LCP/INP/CLS — real-user performance",
+   "pick": "Always — 2KB, feeds Core Web Vitals to any backend",
+   "avoid": "—",
+   "tradeoff": "Numbers only; pair with an error tracker"
+  },
+  {
+   "name": "OpenTelemetry Web",
+   "what": "OTel SDK for the browser — traces from click to backend",
+   "pick": "You already run OTel server-side and want ONE pipeline end-to-end",
+   "avoid": "Quick setups — browser OTel is still maturing",
+   "tradeoff": "vs Sentry: unified vendor-neutral traces, weaker error UX"
+  },
+  {
+   "name": "Grafana Faro",
+   "what": "Grafana's FE SDK — logs, errors, vitals into Loki/Tempo",
+   "pick": "Grafana LGTM stack shops — FE lands in the same dashboards",
+   "avoid": "Non-Grafana backends",
+   "tradeoff": "vs Sentry: one stack, younger product"
+  },
+  {
+   "name": "Datadog RUM",
+   "what": "Real-user monitoring in Datadog",
+   "pick": "Already paying Datadog — FE joins your APM traces",
+   "avoid": "Cost-sensitive (RUM sessions add up fast)",
+   "tradeoff": "vs OSS: turnkey, per-session pricing"
+  }
+ ],
+ "sre": {
+  "goldenSignals": [
+   {
+    "signal": "Latency",
+    "measure": "p50/p95/p99 request duration",
+    "alertWhen": "p99 > SLO for 5m"
+   },
+   {
+    "signal": "Traffic",
+    "measure": "requests/sec per route",
+    "alertWhen": "drops 50% vs 1h baseline"
+   },
+   {
+    "signal": "Errors",
+    "measure": "5xx rate as % of requests",
+    "alertWhen": "> 1% for 5m (tighten per SLO)"
+   },
+   {
+    "signal": "Saturation",
+    "measure": "CPU/memory vs limits, queue depth",
+    "alertWhen": "> 80% of limit for 10m"
+   }
+  ],
+  "sloStarter": "Availability SLO 99.9% monthly (43m error budget). Burn-rate alerts: page at 14.4x/1h, ticket at 6x/6h. Why 99.9: one nine cheaper than your dependencies' composite.",
+  "alertPack": [
+   "Pod crash-looping (restarts > 3 in 10m)",
+   "Deployment replicas unavailable > 5m",
+   "Certificate expiry < 14 days",
+   "PVC > 85% full",
+   "Error-budget burn > 14.4x over 1h"
+  ],
+  "retentionNote": "Log/audit retention is regime-driven — see the rulebook: PCI 1yr (3m hot), HIPAA 6yr, OSFI/B-13 7yr, SOC 2 1yr typical-evidence window defined in your policy."
+ },
+ "sceneNotes": {
+  "1": "The industry choice changes the RULES, never the steps. Every industry walks the same 18 scenes; the lens only marks which rules bite.",
+  "2": "No industry forces a framework — choose freely. It only sets your language, which then decides package manager, ORM and base image.",
+  "3": "Scaffold + git rules are the SAME for every industry — branch protection, CODEOWNERS, signed commits. Regulated industries only ADD reviewers/evidence on top.",
+  "4": "Auth, data layer and observability are the SAME code patterns for every industry. What changes: whether a regime FORCES auth/audit on — not how you write it.",
+  "5": "The local loop is the SAME for every industry. Pre-commit hooks are universal hygiene; no regime changes them.",
+  "6": "The Dockerfile is structurally identical everywhere — multi-stage, non-root, minimal base. Regulated industries only swap the base (FIPS) and add scan gates.",
+  "7": "The PR gate runs the same checks for every industry. Regulated ones raise thresholds and add reviewers — they never remove a gate.",
+  "8": "The build → sign → SBOM → push flow is identical everywhere. Compliance changes WHICH registry/runtime, never the supply-chain steps.",
+  "9": "Helm/Kustomize structure is the SAME for every industry. What changes per industry is the VALUES (replicas, regions, network policy) — not the mechanism.",
+  "10": "Argo CD hub-and-spoke is the same for every industry. What changes: which cluster (data residency) and the network/policy values — not the mechanism.",
+  "11": "The four golden signals are universal. Regimes change RETENTION and whether alerts page a human — Scene 1's rulebook decides that.",
+  "12": "Integrations are the one mostly industry-SPECIFIC scene — a bank talks to payment rails, a hospital to an EHR. The gateway + auth pattern in front is the same.",
+  "13": "The audit is the same shape for every industry — every Scene-1 rule traced to where it's met. Only the LIST of rules differs.",
+  "14": "The weekly update loop is identical everywhere — a bot opens PRs, you merge while small. Some regimes require a logged approval for majors.",
+  "15": "Platform upgrades follow the same staging-first path everywhere. Regulated ones add a change-control record; the technical steps don't change.",
+  "16": "Rotate-backup-drill is universal hygiene. Regimes set the FREQUENCY and evidence retention — not the mechanism.",
+  "17": "The incident path — page, mitigate, learn — is the same everywhere. Regulated industries add a regulator-notification clock; the runbook is otherwise identical.",
+  "18": "The quarterly EOL / cost / sunset review is the same for every industry. Retention and archival rules at retirement come from Scene 1's rulebook."
+ },
+ "glossary": [
+  {
+   "term": "SBOM",
+   "full": "Software Bill of Materials",
+   "def": "A machine-readable inventory of every library, OS package, and dependency inside a container image. Like an ingredients list for software."
+  },
+  {
+   "term": "SLSA",
+   "full": "Supply chain Levels for Software Artifacts",
+   "def": "A security framework defining integrity levels for the build process. Level 3 requires an isolated build job with signed provenance. Pronounced \"salsa\"."
+  },
+  {
+   "term": "DAST",
+   "full": "Dynamic Application Security Testing",
+   "def": "A scanner that attacks your running application like an external attacker. Sends malicious HTTP inputs and checks for vulnerable responses. OWASP ZAP is the most common open-source DAST tool."
+  },
+  {
+   "term": "SAST",
+   "full": "Static Application Security Testing",
+   "def": "A scanner that reads source code without running it to find security bug patterns. Semgrep and CodeQL are examples. Catches injection, hardcoded secrets, OWASP Top 10."
+  },
+  {
+   "term": "SCA",
+   "full": "Software Composition Analysis",
+   "def": "Scans package manifests (package.json, go.mod, requirements.txt) for known CVEs in open-source dependencies. The \"dependency audit\" category of security scanning."
+  },
+  {
+   "term": "IaC Scan",
+   "full": "Infrastructure-as-Code Scan",
+   "def": "Scans Dockerfile, Kubernetes YAML, and Terraform files for security misconfigurations. Checkov is the most common open-source tool. Maps findings to CIS benchmarks."
+  },
+  {
+   "term": "CVE",
+   "full": "Common Vulnerabilities and Exposures",
+   "def": "A public database entry for a known security vulnerability. Format: CVE-YEAR-NUMBER. Severity rated by CVSS score. CRITICAL = 9.0+, HIGH = 7.0–8.9, MEDIUM = 4.0–6.9."
+  },
+  {
+   "term": "CVSS",
+   "full": "Common Vulnerability Scoring System",
+   "def": "A 0–10 score for vulnerability severity. CRITICAL ≥9.0. HIGH 7.0–8.9. MEDIUM 4.0–6.9. LOW 0.1–3.9. Informational = 0."
+  },
+  {
+   "term": "distroless",
+   "full": "",
+   "def": "A minimal container base image containing only the application runtime — no shell, no package manager, no OS tools. Created by Google. Dramatically smaller attack surface than Alpine or Debian."
+  },
+  {
+   "term": "keyless signing",
+   "full": "",
+   "def": "Signing without a stored private key. The signing key is derived from a short-lived OIDC identity token. The key exists only for the duration of the signing operation — nothing persists."
+  },
+  {
+   "term": "Sigstore",
+   "full": "",
+   "def": "An open-source project providing free infrastructure for signing software artifacts. Components: cosign (signing tool), Rekor (transparency log), Fulcio (certificate authority for OIDC-based certs)."
+  },
+  {
+   "term": "Rekor",
+   "full": "",
+   "def": "A public, append-only transparency log for software signing events. Every cosign signing operation creates an immutable entry. Anyone can verify when and how an artifact was signed."
+  },
+  {
+   "term": "OIDC",
+   "full": "OpenID Connect",
+   "def": "An authentication protocol that lets a service (like a CI runner) prove its identity without a stored password. The CI provider issues a short-lived signed token that the registry IAM policy trusts."
+  },
+  {
+   "term": "SARIF",
+   "full": "Static Analysis Results Interchange Format",
+   "def": "A JSON standard for reporting security scan results. GitHub Security tab reads SARIF files natively. Every scanner in this pipeline outputs SARIF format."
+  },
+  {
+   "term": "SPDX",
+   "full": "Software Package Data Exchange",
+   "def": "An ISO standard for describing software packages and their licenses. SPDX-JSON is the machine-readable format used for SBOMs in this pipeline. Each package gets an SPDX license identifier."
+  },
+  {
+   "term": "PURL",
+   "full": "Package URL",
+   "def": "A standard identifier for software packages across all ecosystems. Format: pkg:TYPE/NAMESPACE/NAME@VERSION. Example: pkg:npm/%40angular/core@17.0.0. Used in SBOMs."
+  },
+  {
+   "term": "OSV",
+   "full": "Open Source Vulnerabilities",
+   "def": "A vulnerability database for open-source software, maintained by Google. More comprehensive for open-source than NVD alone. Used by Trivy and dependency-review-action."
+  },
+  {
+   "term": "multi-stage build",
+   "full": "",
+   "def": "A Dockerfile pattern with multiple FROM stages. The builder stage compiles the code. The runtime stage copies only the compiled output — discarding all build tools. Result: smaller, more secure final image."
+  },
+  {
+   "term": "pre-commit",
+   "full": "",
+   "def": "A framework for managing and running git commit hooks. The same hooks run locally (before each commit) and in CI (to catch --no-verify bypasses). Hook list stored in .pre-commit-config.yaml."
+  },
+  {
+   "term": "admission control",
+   "full": "",
+   "def": "A Kubernetes mechanism that intercepts API requests before they are persisted. Kyverno and OPA Gatekeeper act as admission controllers to enforce policies at pod deploy time."
+  },
+  {
+   "term": "Kyverno",
+   "full": "",
+   "def": "A Kubernetes policy engine that enforces rules at pod admission. Used in this pipeline to verify cosign signatures before any pod starts. Configured as fail-closed (I-20)."
+  },
+  {
+   "term": "canary rollout",
+   "full": "",
+   "def": "A deployment pattern where new code receives a small % of traffic (e.g., 5%) while the rest stays on old code. Traffic shifts to 100% if error rate stays low. Rolls back automatically if error rate spikes."
+  },
+  {
+   "term": "OWASP Top 10",
+   "full": "",
+   "def": "The 10 most critical web application security risks, published annually by OWASP. Includes injection, broken access control, XSS, cryptographic failures. SAST tools check code for these patterns."
+  },
+  {
+   "term": "Semgrep",
+   "full": "",
+   "def": "A fast open-source SAST tool that matches code patterns using rule files written in YAML. 1200+ security rules available. Used in S3 for OWASP Top-10 scanning across all language stacks."
+  },
+  {
+   "term": "Trivy",
+   "full": "",
+   "def": "An open-source vulnerability scanner by Aqua Security. Scans container images, SBOMs, and filesystems for CVEs. Supports SARIF output. Default tool for container scanning in this pipeline."
+  },
+  {
+   "term": "Checkov",
+   "full": "",
+   "def": "An open-source IaC scanner by Bridgecrew. Checks Dockerfile, K8s YAML, Terraform against 2000+ security rules. Maps every finding to a CIS benchmark or CVE identifier."
+  },
+  {
+   "term": "Gitleaks",
+   "full": "",
+   "def": "An open-source secret scanner. Detects API keys, passwords, private keys in git history and staged files using regex patterns for 150+ secret types. Runs in pre-commit and in CI."
+  },
+  {
+   "term": "FOSSA",
+   "full": "",
+   "def": "A commercial license compliance tool. Scans dependency trees to detect open-source licenses conflicting with commercial use. Used in S3b. Blocks GPL/AGPL in commercial projects."
+  },
+  {
+   "term": "Syft",
+   "full": "",
+   "def": "An open-source SBOM generator by Anchore. Reads container images and filesystems, identifies every package, and produces SBOMs in SPDX-JSON or CycloneDX format. Used in S8a."
+  },
+  {
+   "term": "k6",
+   "full": "",
+   "def": "An open-source load testing tool written in Go. Test scripts are written in JavaScript. Measures p50/p95/p99 latency, throughput (req/s), and error rate under simulated concurrent load."
+  },
+  {
+   "term": "Falco",
+   "full": "",
+   "def": "An open-source runtime security tool. Uses eBPF to monitor syscalls inside running containers. Alerts when containers do unexpected things: spawn shells, write outside expected paths, make unusual network connections."
+  },
+  {
+   "term": "eBPF",
+   "full": "Extended Berkeley Packet Filter",
+   "def": "A Linux kernel technology that runs sandboxed programs in the kernel for observability and security. Falco uses it to monitor container syscalls without modifying the kernel or containers."
+  },
+  {
+   "term": "Codecov",
+   "full": "",
+   "def": "A code coverage reporting service. Tracks test coverage percentage over time and comments on PRs when coverage decreases. Enforces Invariant I-9."
+  },
+  {
+   "term": "Dependabot",
+   "full": "",
+   "def": "A GitHub service that automatically creates PRs to update outdated dependencies. Paired with branch protection (I-15), it keeps CVE counts low without manual effort."
+  },
+  {
+   "term": "Renovate",
+   "full": "",
+   "def": "An open-source alternative to Dependabot. Supports more package managers and more configuration options. Creates automatic update PRs for dependencies and GitHub Actions versions."
+  },
+  {
+   "term": "CSR",
+   "full": "Client-Side Rendering",
+   "def": "All HTML is built in the browser using JavaScript. The server returns an empty shell HTML + JS bundle. Frameworks: React SPA, Vue + Vite, Angular. Runtime image: nginx (static file server, no Node.js). Port: 80."
+  },
+  {
+   "term": "SSR",
+   "full": "Server-Side Rendering",
+   "def": "HTML is built on the server on every request. The server runs JavaScript to produce HTML before sending to the browser. Frameworks: Remix, SvelteKit. Runtime image: Node.js or distroless/nodejs. Port: 3000+."
+  },
+  {
+   "term": "SSG",
+   "full": "Static Site Generation",
+   "def": "HTML is built at CI build time, not at request time. The server returns pre-built HTML files. Frameworks: Gatsby, Astro (default). Runtime image: nginx. Port: 80. No server attack surface at runtime."
+  },
+  {
+   "term": "ISR",
+   "full": "Incremental Static Regeneration",
+   "def": "Next.js feature. Pages are pre-built at build time (SSG), then re-generated in the background after a revalidation period. Combines SSG speed with near-real-time content updates. Requires a running Node.js server."
+  },
+  {
+   "term": "attestation",
+   "full": "",
+   "def": "A cryptographic statement attached to a container image in the registry. Created by cosign. Contains machine-readable data (like an SBOM or SLSA provenance) plus a signature that proves the CI system produced it. Stored as OCI artifact (.att suffix)."
+  },
+  {
+   "term": "in-toto",
+   "full": "",
+   "def": "The standard file format for SLSA provenance attestations. File extension: .intoto.jsonl. Contains a signed envelope with: builder identity, source commit, build steps, and output digest. Verifiable with slsa-verifier."
+  },
+  {
+   "term": "multi-arch",
+   "full": "",
+   "def": "A container image that contains binaries for multiple CPU architectures (linux/amd64 + linux/arm64). Built with docker buildx --platform. Required when deploying to ARM nodes (AWS Graviton, Apple Silicon dev machines)."
+  },
+  {
+   "term": "buildx",
+   "full": "",
+   "def": "Docker CLI plugin that extends docker build with multi-platform support, layer cache export, and BuildKit features. Required for linux/amd64 + linux/arm64 cross-compilation in CI. Enabled by docker/setup-buildx-action@v3."
+  },
+  {
+   "term": "QEMU",
+   "full": "Quick Emulator",
+   "def": "A processor emulator used in multi-arch builds to run ARM binaries on amd64 CI runners. Required when cross-compiling languages that do not support native cross-compilation (non-Go). Installed by docker/setup-qemu-action@v3."
+  },
+  {
+   "term": "AST",
+   "full": "Abstract Syntax Tree",
+   "def": "A tree representation of source code structure used by SAST tools. Semgrep parses code into ASTs to apply pattern-matching security rules without executing the code."
+  },
+  {
+   "term": "fetch-depth:0",
+   "full": "",
+   "def": "A Git checkout option that fetches the full commit history instead of only the latest commit. Required by Gitleaks to scan all historical commits for leaked secrets."
+  },
+  {
+   "term": "Argo Rollouts",
+   "full": "",
+   "def": "A Kubernetes controller that extends Deployments with canary, blue-green, and analysis-based promotion. Used in Phase 4 for progressive delivery with automatic error-rate rollback."
+  },
+  {
+   "term": "Flux",
+   "full": "",
+   "def": "A GitOps controller that pulls desired state from Git and applies it to the cluster — same pull model as Argo CD, but without Argo's built-in UI."
+  },
+  {
+   "term": "container",
+   "full": "",
+   "def": "A sealed box holding your app and everything it needs, so it runs identically on any computer. Docker is the tool that builds and runs them."
+  },
+  {
+   "term": "registry",
+   "full": "",
+   "def": "The warehouse where container images are stored and versioned. CI pushes images in; clusters pull images out. GHCR, ECR and Harbor are registries."
+  },
+  {
+   "term": "cluster",
+   "full": "",
+   "def": "A group of machines that run your containers together, managed by Kubernetes. It restarts crashed apps and spreads load automatically."
+  },
+  {
+   "term": "CI",
+   "full": "Continuous Integration",
+   "def": "Robots that build and test every code change automatically, before it can be merged. GitHub Actions is the CI used here."
+  },
+  {
+   "term": "ORM",
+   "full": "Object-Relational Mapper",
+   "def": "A library that lets your code talk to the database using normal objects instead of hand-written SQL. Prisma and GORM are ORMs."
+  },
+  {
+   "term": "MFA",
+   "full": "Multi-Factor Authentication",
+   "def": "A second proof beyond the password — a phone prompt, code, or security key. Stops stolen-password logins."
+  },
+  {
+   "term": "FIPS",
+   "full": "FIPS 140-3",
+   "def": "A US/Canada government standard for validated encryption modules. Regulated industries must run crypto that passed this validation."
+  },
+  {
+   "term": "lockfile",
+   "full": "",
+   "def": "The exact, frozen list of every dependency version your project uses. It makes every install identical — on your laptop and in CI."
+  },
+  {
+   "term": "middleware",
+   "full": "",
+   "def": "Code that runs on every request before your logic — checking sign-in, writing audit logs, counting metrics."
+  },
+  {
+   "term": "hydration",
+   "def": "Attaching JavaScript to server-rendered HTML so the page becomes interactive."
+  },
+  {
+   "term": "Zone.js",
+   "def": "An older Angular helper that watches for changes to refresh the screen."
+  },
+  {
+   "term": "acr",
+   "def": "A token claim stating how strongly the user's identity was verified."
+  },
+  {
+   "term": "amr",
+   "def": "A token claim listing how the user proved identity (password, MFA)."
+  },
+  {
+   "term": "JWKS",
+   "def": "The public keys a server publishes so others can verify its tokens."
+  },
+  {
+   "term": "PKCE",
+   "def": "A check that stops a stolen login code from being reused."
+  },
+  {
+   "term": "FAPI",
+   "def": "A hardened OAuth profile built for banking-level security."
+  },
+  {
+   "term": "SPIFFE",
+   "def": "A standard giving each service a verifiable identity in a mesh."
+  },
+  {
+   "term": "JWS",
+   "def": "A signed piece of data you can verify was not changed."
+  },
+  {
+   "term": "JARM",
+   "def": "A way to return OAuth responses signed, so they can't be tampered with."
+  },
+  {
+   "term": "PAR",
+   "def": "Sending login parameters server-to-server first, so they can't be altered."
+  },
+  {
+   "term": "DCR",
+   "def": "Apps registering themselves with the login server automatically."
+  },
+  {
+   "term": "DPoP",
+   "def": "Binds a token to one app, so a stolen token is useless."
+  },
+  {
+   "term": "Signals",
+   "def": "Angular's modern, fine-grained way to track and update changing values."
+  }
+ ],
+ "scenes": {
+  "1": {
+   "plain": "Every product is built FOR someone. Pick who — a bank, a hospital, a store. That choice writes the rulebook every later step must obey.",
+   "youHave": "the rulebook — the rules your service must follow",
+   "next": "pick the tool you'll build with"
+  },
+  "2": {
+   "plain": "A framework is a ready-made foundation so you don't build from zero. Pick the one that fits what you're making.",
+   "youHave": "your foundation chosen, with its strengths and limits known",
+   "next": "create the project"
+  },
+  "3": {
+   "plain": "Scaffolding creates your project's folder and files in one command. The repo (your project's shared home with history) is born here, with safety rules on it.",
+   "youHave": "a real project on GitHub that rejects unsafe changes",
+   "next": "write the actual app"
+  },
+  "4": {
+   "plain": "Now you write the app itself — and three things go IN the code: sign-in (auth), talking to the database (ORM), and self-reporting (observability: logs, metrics, traces).",
+   "youHave": "an app that authenticates, stores data, and reports its own health",
+   "next": "a fast loop to work in"
+  },
+  "5": {
+   "plain": "The loop you live in: run the app, see changes instantly, and every save gets auto-checked for mistakes and leaked passwords before it leaves your machine.",
+   "youHave": "a dev loop that catches problems before anyone else sees them",
+   "next": "pack the app into a container"
+  },
+  "6": {
+   "plain": "A container is a sealed box holding your app and everything it needs, so it runs the same on any computer. This step picks the box and writes its recipe (Dockerfile).",
+   "youHave": "a container image — your app, sealed and portable",
+   "next": "guard the main branch"
+  },
+  "7": {
+   "plain": "Before any change joins the main code, robots inspect it: tests, code scans, secret leaks, bad licenses. A PR (pull request — a proposed change) only passes clean.",
+   "youHave": "a gate that blocks bad code automatically",
+   "next": "build and publish for real"
+  },
+  "8": {
+   "plain": "When a change is accepted, the real build runs: the container is built, signed (tamper-proof seal), gets an ingredient list (SBOM), and is pushed to the registry (the image warehouse).",
+   "youHave": "a signed, traceable image in the warehouse",
+   "next": "declare what should run"
+  },
+  "9": {
+   "plain": "You never deploy by hand. You write DOWN what should run — in Git. Helm and Kustomize are the two ways to write per-environment settings (dev vs prod).",
+   "youHave": "your desired state written down, reviewable like code",
+   "next": "let the robot make it real"
+  },
+  "10": {
+   "plain": "A controller (Argo CD) constantly compares what Git says vs what the cluster (the machines that run containers) actually runs — and fixes the difference. One controller, every cluster.",
+   "youHave": "your app running in the cluster, kept in sync automatically",
+   "next": "watch it live"
+  },
+  "11": {
+   "plain": "Running is not done. Watch four signals — speed, traffic, errors, fullness — and let alerts wake you only when the user experience is truly at risk.",
+   "youHave": "eyes on the service: dashboards, alerts, an error budget",
+   "next": "connect to the outside world"
+  },
+  "12": {
+   "plain": "Real services talk to others — payments, identity, government systems. Each connection goes through a gateway (a guarded front door) with its own sign-in.",
+   "youHave": "your industry's external connections, mapped and guarded",
+   "next": "prove it all"
+  },
+  "13": {
+   "plain": "The close of the story: every rule from Scene 1, checked. Met, forced, or gap. Release when the gaps are closed — and you can show an auditor exactly why.",
+   "youHave": "a service you can defend in an audit",
+   "next": "ship it"
+  },
+  "14": {
+   "plain": "Software rots quietly. Every week, small updates arrive — libraries, base images. A robot opens the update PRs; you review and merge while they're still small.",
+   "youHave": "a service that stays current in small, safe steps",
+   "next": "upgrade the platform underneath"
+  },
+  "15": {
+   "plain": "The platform under you moves too — Kubernetes versions retire on a schedule whether you act or not. Upgrade staging first, soak, then prod, on YOUR calendar.",
+   "youHave": "a platform upgraded on your terms, never the provider's deadline",
+   "next": "protect what's running"
+  },
+  "16": {
+   "plain": "Certificates expire. Secrets age. Disks fail. Rotation is automated — but a backup you never restored is a wish, not a backup. Drill the restore.",
+   "youHave": "automated rotation + a restore you have actually proven",
+   "next": "be ready when it breaks anyway"
+  },
+  "17": {
+   "plain": "Something will break at 2am. The difference between a blip and a disaster is a calm, written path: page → acknowledge → mitigate → learn, blamelessly.",
+   "youHave": "an on-call that follows a runbook, not adrenaline",
+   "next": "keep the whole thing worth running"
+  },
+  "18": {
+   "plain": "Every quarter, look up: what's reaching end-of-life, what's bleeding money, what should retire. Evolving on purpose is what keeps the platform young.",
+   "youHave": "a stack with no surprise end-of-life and no zombie spend",
+   "next": "back to Scene 14 — the loop continues"
+  }
+ },
+ "appImpl": {
+  "nodejs": [
+   {
+    "file": "src/observability.ts",
+    "what": "Structured logs + metrics + traces — the app reports itself",
+    "code": "import pino from 'pino';\nimport client from 'prom-client';\nimport { NodeSDK } from '@opentelemetry/sdk-node';\nimport { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';\n\n// logs: one JSON line per event - machines can read them\nexport const log = pino({ level: process.env.LOG_LEVEL ?? 'info' });\n\n// metrics: counters/histograms scraped at /metrics\nclient.collectDefaultMetrics();\nexport const httpDuration = new client.Histogram({\n  name: 'http_request_duration_seconds',\n  help: 'request duration',\n  labelNames: ['method', 'route', 'status'],\n});\nexport const metricsText = () => client.register.metrics();\n\n// traces: follow one request across services\nnew NodeSDK({ instrumentations: [getNodeAutoInstrumentations()] }).start();"
+   },
+   {
+    "file": "src/auth.ts",
+    "what": "Verify the caller's token on every protected request",
+    "code": "import { jwtVerify, createRemoteJWKSet } from 'jose';\n\nconst JWKS = createRemoteJWKSet(new URL(process.env.OIDC_JWKS_URL!));\n\n// returns the user claims, or throws 401\nexport async function requireUser(authHeader?: string) {\n  const token = authHeader?.replace(/^Bearer /, '');\n  if (!token) throw Object.assign(new Error('missing token'), { status: 401 });\n  const { payload } = await jwtVerify(token, JWKS, {\n    issuer: process.env.OIDC_ISSUER,\n    audience: process.env.OIDC_AUDIENCE,\n  });\n  return payload; // { sub, email, roles, ... }\n}"
+   },
+   {
+    "file": "src/web-vitals.ts",
+    "what": "Frontend: real-user speed numbers sent to your backend",
+    "code": "import { onLCP, onINP, onCLS } from 'web-vitals';\n\nconst send = (m: { name: string; value: number }) =>\n  navigator.sendBeacon('/api/vitals', JSON.stringify(m));\n\nonLCP(send); onINP(send); onCLS(send);"
+   }
+  ],
+  "python": [
+   {
+    "file": "app/observability.py",
+    "what": "Structured logs + metrics + traces",
+    "code": "import structlog\nfrom prometheus_client import Counter, Histogram, generate_latest\nfrom opentelemetry.instrumentation.fastapi import FastAPIInstrumentor\n\nlog = structlog.get_logger()\nhttp_duration = Histogram('http_request_duration_seconds', 'request duration', ['method', 'route', 'status'])\n\ndef metrics_text():\n    return generate_latest()\n\n# call once at startup: FastAPIInstrumentor.instrument_app(app)"
+   },
+   {
+    "file": "app/auth.py",
+    "what": "Verify the caller's token",
+    "code": "import os, jwt\nfrom jwt import PyJWKClient\nfrom fastapi import HTTPException, Header\n\n_jwks = PyJWKClient(os.environ['OIDC_JWKS_URL'])\n\ndef require_user(authorization: str = Header(None)):\n    if not authorization:\n        raise HTTPException(401, 'missing token')\n    token = authorization.removeprefix('Bearer ')\n    key = _jwks.get_signing_key_from_jwt(token).key\n    return jwt.decode(token, key, algorithms=['RS256'],\n                      audience=os.environ['OIDC_AUDIENCE'],\n                      issuer=os.environ['OIDC_ISSUER'])"
+   }
+  ],
+  "go": [
+   {
+    "file": "internal/obs/obs.go",
+    "what": "Structured logs + metrics",
+    "code": "package obs\n\nimport (\n\t\"log/slog\"\n\t\"os\"\n\n\t\"github.com/prometheus/client_golang/prometheus\"\n\t\"github.com/prometheus/client_golang/prometheus/promauto\"\n)\n\nvar Log = slog.New(slog.NewJSONHandler(os.Stdout, nil))\n\nvar HTTPDuration = promauto.NewHistogramVec(prometheus.HistogramOpts{\n\tName: \"http_request_duration_seconds\",\n\tHelp: \"request duration\",\n}, []string{\"method\", \"route\", \"status\"})"
+   }
+  ],
+  "java": [
+   {
+    "file": "src/main/java/app/Observability.java",
+    "what": "Structured logs + metrics — the app reports itself",
+    "code": "package app;\n\nimport io.micrometer.core.instrument.MeterRegistry;\nimport io.micrometer.core.instrument.Timer;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport org.springframework.stereotype.Component;\n\n// logs: SLF4J + logback-json → one JSON line per event\n// metrics: Micrometer auto-exposes GET /actuator/prometheus\n// traces: add micrometer-tracing-bridge-otel for spans\n@Component\npublic class Observability {\n  public static final Logger log = LoggerFactory.getLogger(\"app\");\n  public final Timer httpDuration;\n  public Observability(MeterRegistry reg) {\n    this.httpDuration = Timer.builder(\"http_request_duration_seconds\")\n        .description(\"request duration\").register(reg);\n  }\n}"
+   },
+   {
+    "file": "src/main/java/app/SecurityConfig.java",
+    "what": "Verify the caller's token on every protected request",
+    "code": "package app;\n\nimport org.springframework.context.annotation.Bean;\nimport org.springframework.context.annotation.Configuration;\nimport org.springframework.security.config.annotation.web.builders.HttpSecurity;\nimport org.springframework.security.web.SecurityFilterChain;\n\n// Spring Security resource server verifies the JWT against your OIDC issuer.\n// application.yml:\n//   spring.security.oauth2.resourceserver.jwt.issuer-uri: ${OIDC_ISSUER}\n@Configuration\npublic class SecurityConfig {\n  @Bean\n  SecurityFilterChain chain(HttpSecurity http) throws Exception {\n    http.authorizeHttpRequests(a -> a\n            .requestMatchers(\"/health\", \"/actuator/**\").permitAll()\n            .anyRequest().authenticated())\n        .oauth2ResourceServer(o -> o.jwt(j -> {}));\n    return http.build();\n  }\n}"
+   }
+  ],
+  "kotlin": [
+   {
+    "file": "src/main/kotlin/Observability.kt",
+    "what": "Structured logs + metrics",
+    "code": "import io.ktor.server.application.*\nimport io.ktor.server.metrics.micrometer.*\nimport io.micrometer.prometheusmetrics.PrometheusConfig\nimport io.micrometer.prometheusmetrics.PrometheusMeterRegistry\nimport io.github.oshai.kotlinlogging.KotlinLogging\n\n// logs: kotlin-logging emits structured lines; metrics: Micrometer → GET /metrics\nval log = KotlinLogging.logger {}\nval registry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)\n\nfun Application.installObservability() {\n    install(MicrometerMetrics) { this.registry = registry }\n}"
+   },
+   {
+    "file": "src/main/kotlin/Auth.kt",
+    "what": "Verify the caller's token",
+    "code": "import com.auth0.jwk.JwkProviderBuilder\nimport io.ktor.server.application.*\nimport io.ktor.server.auth.*\nimport io.ktor.server.auth.jwt.*\nimport java.net.URI\nimport java.util.concurrent.TimeUnit\n\n// Verifies the bearer token against your OIDC JWKS endpoint.\nfun Application.installAuth() {\n    val issuer = System.getenv(\"OIDC_ISSUER\")\n    val audience = System.getenv(\"OIDC_AUDIENCE\")\n    val jwks = JwkProviderBuilder(URI(System.getenv(\"OIDC_JWKS_URL\")).toURL())\n        .cached(10, 24, TimeUnit.HOURS).build()\n    install(Authentication) {\n        jwt {\n            verifier(jwks, issuer)\n            validate { c -> if (c.payload.audience.contains(audience)) JWTPrincipal(c.payload) else null }\n        }\n    }\n}"
+   }
+  ],
+  "rust": [
+   {
+    "file": "src/obs.rs",
+    "what": "Structured logs + metrics",
+    "code": "use metrics_exporter_prometheus::PrometheusBuilder;\nuse tracing_subscriber::{fmt, EnvFilter};\n\n// logs: tracing emits structured JSON; metrics: Prometheus recorder for GET /metrics\npub fn init() {\n    fmt().json()\n        .with_env_filter(EnvFilter::from_default_env())\n        .init();\n    PrometheusBuilder::new()\n        .install_recorder()\n        .expect(\"install prometheus recorder\");\n}"
+   },
+   {
+    "file": "src/auth.rs",
+    "what": "Verify the caller's token",
+    "code": "use jsonwebtoken::{decode, decode_header, jwk::JwkSet, Algorithm, DecodingKey, Validation};\nuse serde::Deserialize;\n\n#[derive(Deserialize)]\npub struct Claims { pub sub: String, pub exp: usize }\n\n// Verifies a bearer token against your OIDC JWKS (fetch + cache the set at startup).\npub fn verify(token: &str, jwks: &JwkSet, audience: &str, issuer: &str) -> Result<Claims, String> {\n    let kid = decode_header(token).map_err(|e| e.to_string())?.kid.ok_or(\"no kid\")?;\n    let jwk = jwks.find(&kid).ok_or(\"unknown key\")?;\n    let key = DecodingKey::from_jwk(jwk).map_err(|e| e.to_string())?;\n    let mut v = Validation::new(Algorithm::RS256);\n    v.set_audience(&[audience]);\n    v.set_issuer(&[issuer]);\n    decode::<Claims>(token, &key, &v).map(|d| d.claims).map_err(|e| e.to_string())\n}"
+   }
+  ],
+  "ruby": [
+   {
+    "file": "config/initializers/observability.rb",
+    "what": "Structured logs + metrics",
+    "code": "require 'semantic_logger'\nrequire 'prometheus/client'\n\n# logs: one JSON line per event\nSemanticLogger.add_appender(io: $stdout, formatter: :json)\nRails.logger = SemanticLogger['app']\n\n# metrics: registry scraped at /metrics (mount Prometheus::Middleware::Exporter)\nPROM = Prometheus::Client.registry\nHTTP_DURATION = PROM.histogram(:http_request_duration_seconds,\n  docstring: 'request duration', labels: [:method, :route, :status])"
+   },
+   {
+    "file": "app/controllers/concerns/authenticatable.rb",
+    "what": "Verify the caller's token",
+    "code": "require 'jwt'\nrequire 'net/http'\n\n# Verifies the caller's token against your OIDC JWKS on every protected action.\nmodule Authenticatable\n  extend ActiveSupport::Concern\n  included { before_action :require_user }\n\n  def require_user\n    token = request.headers['Authorization'].to_s.delete_prefix('Bearer ')\n    jwks = JSON.parse(Net::HTTP.get(URI(ENV['OIDC_JWKS_URL'])))\n    @claims, = JWT.decode(token, nil, true,\n      algorithms: ['RS256'], jwks: jwks,\n      aud: ENV['OIDC_AUDIENCE'], verify_aud: true,\n      iss: ENV['OIDC_ISSUER'], verify_iss: true)\n  rescue JWT::DecodeError\n    render json: { error: 'unauthorized' }, status: 401\n  end\nend"
+   }
+  ],
+  "php": [
+   {
+    "file": "app/Providers/ObservabilityProvider.php",
+    "what": "Structured logs + metrics",
+    "code": "<?php\nnamespace App\\Providers;\n\nuse Illuminate\\Support\\ServiceProvider;\nuse Prometheus\\CollectorRegistry;\nuse Prometheus\\Storage\\InMemory;\n\n// logs: Monolog JSON — set 'formatter' => JsonFormatter::class in config/logging.php\n// metrics: promphp/prometheus_client_php exposed at GET /metrics\nclass ObservabilityProvider extends ServiceProvider\n{\n    public function register(): void\n    {\n        $this->app->singleton(CollectorRegistry::class,\n            fn () => new CollectorRegistry(new InMemory()));\n    }\n}"
+   },
+   {
+    "file": "app/Http/Middleware/VerifyJwt.php",
+    "what": "Verify the caller's token",
+    "code": "<?php\nnamespace App\\Http\\Middleware;\n\nuse Closure;\nuse Firebase\\JWT\\JWT;\nuse Firebase\\JWT\\JWK;\n\n// Verifies the bearer token against your OIDC JWKS on every protected route.\nclass VerifyJwt\n{\n    public function handle($request, Closure $next)\n    {\n        $token = str_replace('Bearer ', '', $request->header('Authorization', ''));\n        $jwks = json_decode(file_get_contents(env('OIDC_JWKS_URL')), true);\n        try {\n            $claims = JWT::decode($token, JWK::parseKeySet($jwks));\n            $request->attributes->set('claims', $claims);\n        } catch (\\Throwable $e) {\n            return response()->json(['error' => 'unauthorized'], 401);\n        }\n        return $next($request);\n    }\n}"
+   }
+  ],
+  "elixir": [
+   {
+    "file": "lib/app/observability.ex",
+    "what": "Structured logs + metrics",
+    "code": "defmodule App.Observability do\n  # logs: LoggerJSON for one JSON line per event\n  # metrics: Telemetry + TelemetryMetricsPrometheus exposes GET /metrics\n  def metrics do\n    [\n      Telemetry.Metrics.distribution(\"http.request.duration.seconds\",\n        event_name: [:phoenix, :endpoint, :stop],\n        measurement: :duration, unit: {:native, :second},\n        tags: [:method, :route, :status])\n    ]\n  end\nend\n# config: config :logger, :default_handler,\n#   formatter: {LoggerJSON.Formatters.Basic, []}"
+   },
+   {
+    "file": "lib/app_web/plugs/require_user.ex",
+    "what": "Verify the caller's token",
+    "code": "defmodule AppWeb.Plugs.RequireUser do\n  # Verifies the bearer token against your OIDC issuer using Joken.\n  import Plug.Conn\n\n  def init(opts), do: opts\n\n  def call(conn, _opts) do\n    with [\"Bearer \" <> token] <- get_req_header(conn, \"authorization\"),\n         {:ok, claims} <- App.Token.verify_and_validate(token) do\n      assign(conn, :claims, claims)\n    else\n      _ -> conn |> send_resp(401, \"unauthorized\") |> halt()\n    end\n  end\nend"
+   }
+  ],
+  "swift": [
+   {
+    "file": "Sources/App/Observability.swift",
+    "what": "Structured logs + metrics",
+    "code": "import Vapor\nimport Metrics\nimport Prometheus\n\n// logs: Vapor's Logger emits structured output\n// metrics: swift-prometheus backs swift-metrics, scraped at GET /metrics\npublic func bootstrapObservability(_ app: Application) {\n    let prom = PrometheusCollectorRegistry()\n    MetricsSystem.bootstrap(PrometheusMetricsFactory(registry: prom))\n    app.get(\"metrics\") { _ -> String in\n        var buf = [UInt8]()\n        prom.emit(into: &buf)\n        return String(decoding: buf, as: UTF8.self)\n    }\n}"
+   },
+   {
+    "file": "Sources/App/RequireUser.swift",
+    "what": "Verify the caller's token",
+    "code": "import Vapor\nimport JWT\n\n// Verifies the bearer token against your OIDC keys (load the JWKS at startup).\nstruct UserClaims: JWTPayload {\n    let sub: SubjectClaim\n    let aud: AudienceClaim\n    let exp: ExpirationClaim\n    func verify(using signer: JWTSigner) throws { try exp.verifyNotExpired() }\n}\n\nstruct RequireUser: AsyncMiddleware {\n    func respond(to req: Request, chainingTo next: AsyncResponder) async throws -> Response {\n        let claims = try req.jwt.verify(as: UserClaims.self)\n        req.auth.login(claims)\n        return try await next.respond(to: req)\n    }\n}"
+   }
+  ],
+  "dotnet": [
+   {
+    "file": "Observability.cs",
+    "what": "Structured logs + metrics + traces",
+    "code": "using OpenTelemetry.Metrics;\nusing OpenTelemetry.Trace;\nusing Serilog;\n\n// logs: Serilog JSON to stdout; metrics + traces: OpenTelemetry → Prometheus /metrics\npublic static class Observability\n{\n    public static void AddObservability(this WebApplicationBuilder b)\n    {\n        b.Host.UseSerilog((_, cfg) =>\n            cfg.WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter()));\n        b.Services.AddOpenTelemetry()\n            .WithMetrics(m => m.AddAspNetCoreInstrumentation().AddPrometheusExporter())\n            .WithTracing(t => t.AddAspNetCoreInstrumentation());\n    }\n}"
+   },
+   {
+    "file": "Auth.cs",
+    "what": "Verify the caller's token",
+    "code": "using Microsoft.AspNetCore.Authentication.JwtBearer;\n\n// Verifies the caller's JWT against your OIDC issuer on every protected endpoint.\npublic static class Auth\n{\n    public static void AddJwtAuth(this WebApplicationBuilder b)\n    {\n        b.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)\n            .AddJwtBearer(o =>\n            {\n                o.Authority = Environment.GetEnvironmentVariable(\"OIDC_ISSUER\");\n                o.Audience = Environment.GetEnvironmentVariable(\"OIDC_AUDIENCE\");\n            });\n        b.Services.AddAuthorization();\n    }\n}"
+   }
+  ]
+ },
+ "clusterProvision": {
+  "eks": {
+   "tool": "eksctl",
+   "commands": [
+    {
+     "label": "Create the cluster",
+     "cmd": "eksctl create cluster --name prod --region ca-central-1 --nodes 3 --node-type m6i.large --with-oidc",
+     "expect": "~15 min; ends with 'EKS cluster \"prod\" is ready'"
+    },
+    {
+     "label": "Point kubectl at it",
+     "cmd": "aws eks update-kubeconfig --name prod --region ca-central-1",
+     "expect": "Added new context to kubeconfig"
+    }
+   ]
+  },
+  "gke": {
+   "tool": "gcloud",
+   "commands": [
+    {
+     "label": "Create the cluster (autopilot)",
+     "cmd": "gcloud container clusters create-auto prod --region northamerica-northeast1",
+     "expect": "~7 min; kubeconfig entry generated"
+    },
+    {
+     "label": "Point kubectl at it",
+     "cmd": "gcloud container clusters get-credentials prod --region northamerica-northeast1",
+     "expect": "kubeconfig entry generated for prod"
+    }
+   ]
+  },
+  "aks": {
+   "tool": "az",
+   "commands": [
+    {
+     "label": "Create the cluster",
+     "cmd": "az aks create -g prod-rg -n prod --node-count 3 --enable-oidc-issuer --enable-workload-identity",
+     "expect": "~10 min; JSON description of the cluster"
+    },
+    {
+     "label": "Point kubectl at it",
+     "cmd": "az aks get-credentials -g prod-rg -n prod",
+     "expect": "Merged \"prod\" as current context"
+    }
+   ]
+  },
+  "openshift": {
+   "tool": "openshift-install / ARO",
+   "commands": [
+    {
+     "label": "Managed on Azure (ARO)",
+     "cmd": "az aro create -g prod-rg -n prod --vnet aro-vnet --master-subnet master --worker-subnet worker",
+     "expect": "~35 min; cluster JSON with consoleProfile URL"
+    },
+    {
+     "label": "Self-managed (IPI)",
+     "cmd": "openshift-install create cluster --dir=prod --log-level=info",
+     "expect": "~40 min; kubeadmin password printed at the end"
+    }
+   ]
+  }
+ },
+ "sceneStd": {
+  "1": {
+   "who": "The founder or product owner",
+   "when": "Before the repo exists",
+   "prereqs": [
+    "Nothing installed — just the decision"
+   ],
+   "skipWhen": "Never. Even an internal tool has a user and rules.",
+   "threat": "Building to the wrong rules. Retrofitting compliance after launch costs 10–100× and can mean fines.",
+   "rejected": {
+    "path": "“Pick the rules later, build first”",
+    "why": "Scenes 4, 6, 7 and 10 are SHAPED by these rules — later means rebuilding them."
+   },
+   "doneWhen": "Your industry chip shows in the stack bar, and the rulebook lists your regimes.",
+   "breaks": [
+    {
+     "symptom": "Wrong industry discovered after launch",
+     "fix": "Re-run Scenes 4–13 against the new rulebook; the audit shows exactly what changes."
+    }
+   ],
+   "time": "5 minutes",
+   "cost": "Free",
+   "docs": "https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/"
+  },
+  "2": {
+   "who": "The tech lead, with the team",
+   "when": "After Scene 1, before any code",
+   "prereqs": [
+    "The rulebook from Scene 1"
+   ],
+   "skipWhen": "Never — even ‘no framework’ is a framework choice with consequences.",
+   "threat": "Hype-driven choice. A dead-end framework means a full rewrite in 18 months.",
+   "rejected": {
+    "path": "Build framework-free from scratch",
+    "why": "You re-implement routing, auth and security alone — and fail the audits the framework community already passed."
+   },
+   "doneWhen": "The scaffold command for your pick runs successfully in Scene 3.",
+   "breaks": [
+    {
+     "symptom": "Framework goes unmaintained later",
+     "fix": "Scene 18 catches it at the quarterly EOL review; plan the migration there."
+    }
+   ],
+   "time": "1–2 hours of honest comparison",
+   "cost": "Free",
+   "docs": "dynamic:framework"
+  },
+  "3": {
+   "who": "Any developer",
+   "when": "Day one of the project",
+   "prereqs": [
+    "git installed",
+    "A GitHub account",
+    "The language runtime (Node 22 / Python 3.12 / Go 1.23)"
+   ],
+   "skipWhen": "Never. The lockfile and branch protection born here protect every later scene.",
+   "threat": "Typosquatted packages — one mistyped scaffold name installs an attacker's code (supply-chain attack).",
+   "rejected": {
+    "path": "Create folders and files by hand",
+    "why": "Hand-rolled projects drift: no lockfile, no hygiene, no two alike."
+   },
+   "doneWhen": "The repo exists on GitHub, main is protected, and the lockfile is committed.",
+   "breaks": [
+    {
+     "symptom": "npx fails with engine error",
+     "fix": "Your Node is too old — install 22 LTS, re-run."
+    },
+    {
+     "symptom": "Push rejected",
+     "fix": "That's branch protection working — open a PR instead."
+    }
+   ],
+   "time": "15 minutes",
+   "cost": "Free",
+   "docs": "https://docs.github.com/en/repositories"
+  },
+  "4": {
+   "who": "The application developers",
+   "when": "The first real coding days",
+   "prereqs": [
+    "Scene 3 done",
+    "Your identity provider's issuer URL + audience (or dev defaults)"
+   ],
+   "skipWhen": "Auth may be ‘none’ ONLY for an internal prototype with zero personal data — and the audit will say so.",
+   "threat": "Broken authentication — the OWASP #1. Account takeover, and breaches you can't even see without audit logs.",
+   "rejected": {
+    "path": "Write your own auth/crypto",
+    "why": "OIDC is a verified protocol; home-made auth fails real attacks and real audits."
+   },
+   "doneWhen": "A login round-trips locally and /metrics returns live numbers.",
+   "breaks": [
+    {
+     "symptom": "401 on every request",
+     "fix": "JWKS URL or issuer env is wrong — print the env, compare with your IdP."
+    },
+    {
+     "symptom": "No metrics",
+     "fix": "The /metrics route isn't mounted — wire metricsText() to a route."
+    }
+   ],
+   "time": "Half a day to two days",
+   "cost": "Libraries free; managed IdPs (Auth0/Entra) bill per user",
+   "docs": "https://openid.net/developers/how-connect-works/"
+  },
+  "5": {
+   "who": "Every developer, every day",
+   "when": "From the first commit on",
+   "prereqs": [
+    "Scene 3 done",
+    "pre-commit installed (pipx install pre-commit)"
+   ],
+   "skipWhen": "Hooks: never — they cost seconds. Heavy scans stay in CI, not here.",
+   "threat": "A committed secret. Leaked keys are scraped and abused within minutes of reaching GitHub.",
+   "rejected": {
+    "path": "“CI will catch it”",
+    "why": "By the time CI sees a pushed secret, it is already public history."
+   },
+   "doneWhen": "A commit containing a fake secret is BLOCKED on your machine.",
+   "breaks": [
+    {
+     "symptom": "Hooks feel slow",
+     "fix": "Scope them to changed files; heavy checks belong in Scene 7."
+    },
+    {
+     "symptom": "False-positive secret",
+     "fix": "Add a scoped allowlist entry in the gitleaks config — never disable the hook."
+    }
+   ],
+   "time": "30 minutes once",
+   "cost": "Free",
+   "docs": "https://pre-commit.com"
+  },
+  "6": {
+   "who": "Developer + platform engineer",
+   "when": "Once the app runs locally",
+   "prereqs": [
+    "Docker running (docker version answers)",
+    "Scene 5 build passes"
+   ],
+   "skipWhen": "Only for serverless-zip deploys with no containers anywhere — rare on this platform.",
+   "threat": "A bloated, vulnerable base image — every extra package is attack surface you now own.",
+   "rejected": {
+    "path": "One fat ubuntu image for everything",
+    "why": "10× the size, hundreds of CVE findings, slow pulls — for zero benefit."
+   },
+   "doneWhen": "docker run answers on /health from the sealed container.",
+   "breaks": [
+    {
+     "symptom": "Works locally, dies in the container",
+     "fix": "Port or env var missing — compare ENV/EXPOSE with your local run."
+    },
+    {
+     "symptom": "Crash on alpine only",
+     "fix": "glibc-vs-musl issue — switch to slim or distroless."
+    }
+   ],
+   "time": "1–3 hours",
+   "cost": "Free",
+   "docs": "https://docs.docker.com/build/"
+  },
+  "7": {
+   "who": "Platform sets the gates; every dev lives under them",
+   "when": "Before the second contributor joins",
+   "prereqs": [
+    "Repo on GitHub",
+    "Scene 5 hooks (the gates mirror them)"
+   ],
+   "skipWhen": "A solo throwaway may drop DAST. Secrets and dependency scans: never.",
+   "threat": "One malicious or careless PR reaching main unreviewed — that's how most real breaches start.",
+   "rejected": {
+    "path": "Trust-based merging, no gates",
+    "why": "One bad merge is a prod incident with no evidence trail for the audit."
+   },
+   "doneWhen": "A test PR with a seeded fake secret fails the gate, red.",
+   "breaks": [
+    {
+     "symptom": "Flaky gate",
+     "fix": "Pin the tool versions; rerun; never mark the gate optional."
+    },
+    {
+     "symptom": "Slow queue",
+     "fix": "Cache dependencies; run gates in parallel."
+    }
+   ],
+   "time": "Half a day once",
+   "cost": "GitHub-hosted minutes are free for public repos; private repos bill past the free tier",
+   "docs": "https://docs.github.com/en/actions"
+  },
+  "8": {
+   "who": "Platform / release engineer",
+   "when": "First merge to main",
+   "prereqs": [
+    "Registry account + role for your pick (see the registries below)",
+    "Scene 7 green"
+   ],
+   "skipWhen": "Never for anything that deploys. Unsigned images are unverifiable.",
+   "threat": "Tampering between build and deploy. Signing + SBOM close the supply-chain gap.",
+   "rejected": {
+    "path": "Push images from a laptop",
+    "why": "Untraceable artifacts: no provenance, no signature, no audit answer to ‘where did this image come from?’"
+   },
+   "doneWhen": "cosign verify (or notation verify) passes against the pushed digest.",
+   "breaks": [
+    {
+     "symptom": "Push returns 403",
+     "fix": "Login/role wrong — re-run the registry's login command; check the OIDC role."
+    },
+    {
+     "symptom": "Keyless signing fails in CI",
+     "fix": "The workflow needs permissions: id-token: write."
+    }
+   ],
+   "time": "1–2 hours",
+   "cost": "Registry storage — free tiers exist (GHCR free for public)",
+   "docs": "https://docs.sigstore.dev"
+  },
+  "9": {
+   "who": "Platform + app dev together",
+   "when": "Before the first deploy",
+   "prereqs": [
+    "Scene 8 image in the registry",
+    "helm + kustomize CLIs installed"
+   ],
+   "skipWhen": "A single-env hobby project can use raw manifests — until the second environment appears.",
+   "threat": "Snowflake environments — config drift nobody can see or reproduce.",
+   "rejected": {
+    "path": "kubectl edit on the live cluster",
+    "why": "Untracked changes vanish on the next sync and skip every review."
+   },
+   "doneWhen": "kustomize build renders cleanly for every environment.",
+   "breaks": [
+    {
+     "symptom": "Prod differs from staging mysteriously",
+     "fix": "diff the overlays — the drift is visible in Git, fix it there."
+    },
+    {
+     "symptom": "Helm schema error",
+     "fix": "helm lint; check values types against the chart."
+    }
+   ],
+   "time": "2–4 hours first time",
+   "cost": "Free",
+   "docs": "https://kustomize.io"
+  },
+  "10": {
+   "who": "Platform team owns it; developers consume it",
+   "when": "Once manifests exist",
+   "prereqs": [
+    "A cluster (or create it right here)",
+    "argocd CLI + access",
+    "Scene 9 manifests in Git"
+   ],
+   "skipWhen": "Only when there is no cluster at all (pure serverless).",
+   "threat": "Manual deploys: nobody knows who changed what; drift accumulates silently.",
+   "rejected": {
+    "path": "CI runs kubectl apply with cluster credentials",
+    "why": "Cluster creds in CI = huge blast radius, and nothing reconciles drift afterwards."
+   },
+   "doneWhen": "The Argo app reports Synced + Healthy.",
+   "breaks": [
+    {
+     "symptom": "ImagePullBackOff",
+     "fix": "Registry pull secret missing — wire it per the registry setup in Scene 8."
+    },
+    {
+     "symptom": "Endless OutOfSync",
+     "fix": "An immutable field or hook loops — check argocd app diff."
+    }
+   ],
+   "time": "Cluster: 15–40 min. App onboarding: 30 min.",
+   "cost": "The cluster is the real cost — roughly $150–300+/month for 3 small nodes",
+   "docs": "https://argo-cd.readthedocs.io"
+  },
+  "11": {
+   "who": "SRE / on-call, with the devs",
+   "when": "The day the service goes live",
+   "prereqs": [
+    "Scene 10 running",
+    "Prometheus stack installed (it's in the Scene 10 components)"
+   ],
+   "skipWhen": "Alerts: never. Full tracing can wait at very small scale — say so in the audit.",
+   "threat": "Silent failure — users discover the outage before you do.",
+   "rejected": {
+    "path": "Grep the logs when someone complains",
+    "why": "No SLO, no paging, no early warning — and complaints arrive after the damage."
+   },
+   "doneWhen": "A test alert fires and reaches your channel/phone.",
+   "breaks": [
+    {
+     "symptom": "Alert storm",
+     "fix": "Switch to burn-rate alerts (the SLO starter above) — page on budget burn, not every blip."
+    },
+    {
+     "symptom": "No metrics scraped",
+     "fix": "Check the scrape annotations/ServiceMonitor on the deployment."
+    }
+   ],
+   "time": "Half a day",
+   "cost": "OSS stack free; SaaS observability bills per GB ingested",
+   "docs": "https://sre.google/sre-book/monitoring-distributed-systems/"
+  },
+  "12": {
+   "who": "App dev + the partner's integration team",
+   "when": "When the product needs the outside world",
+   "prereqs": [
+    "Gateway credentials per integration",
+    "A sandbox environment from the partner"
+   ],
+   "skipWhen": "Only if the service truly talks to nothing external — rare and usually temporary.",
+   "threat": "A third-party breach reaching you through over-scoped, never-rotated credentials.",
+   "rejected": {
+    "path": "Direct point-to-point calls from app code",
+    "why": "No throttle, no audit, no single place to rotate or cut access."
+   },
+   "doneWhen": "A sandbox call round-trips through the gateway with scoped credentials.",
+   "breaks": [
+    {
+     "symptom": "mTLS handshake fails",
+     "fix": "A cert expired — rotate it; Scene 16 automates this."
+    },
+    {
+     "symptom": "Rate-limited",
+     "fix": "Honour the partner's limits — add backoff at the gateway."
+    }
+   ],
+   "time": "Days per integration — the partner sets the pace",
+   "cost": "Per-partner; gateways have free tiers",
+   "docs": "https://owasp.org/API-Security/"
+  },
+  "13": {
+   "who": "Founder/lead signs; an auditor reads",
+   "when": "Before first real users",
+   "prereqs": [
+    "Scenes 1–12 done honestly"
+   ],
+   "skipWhen": "Never for a regulated industry. For a hobby, it's still 30 free minutes of truth.",
+   "threat": "Shipping with silent gaps — found later by an auditor, or worse, by a breach.",
+   "rejected": {
+    "path": "“We'll audit after launch”",
+    "why": "Evidence captured while building is cheap; reconstructing it later costs 10×."
+   },
+   "doneWhen": "Zero red gaps — or every gap has an owner and a date.",
+   "breaks": [
+    {
+     "symptom": "A gap can't be closed now",
+     "fix": "Document the compensating control + owner + date; that line IS audit language."
+    }
+   ],
+   "time": "1–2 hours",
+   "cost": "Free",
+   "docs": "https://www.cisa.gov/secure-by-design"
+  },
+  "14": {
+   "who": "The whole team; a robot opens the PRs",
+   "when": "Weekly, forever",
+   "prereqs": [
+    "Renovate or Dependabot enabled",
+    "Tests you trust (they are the safety net)"
+   ],
+   "skipWhen": "Never — rot compounds. Pausing for a release week is fine; stopping is not.",
+   "threat": "A known-CVE dependency sitting unpatched — the Equifax pattern.",
+   "rejected": {
+    "path": "Big quarterly upgrade parties",
+    "why": "Ninety small, safe merges beat one risky big-bang every time."
+   },
+   "doneWhen": "This week's update PRs are merged or consciously triaged.",
+   "breaks": [
+    {
+     "symptom": "An update PR breaks the build",
+     "fix": "That's the system working — read the changelog, adapt, or pin with a dated TODO."
+    },
+    {
+     "symptom": "Lockfile conflicts pile up",
+     "fix": "Let the bot rebase: re-run it; merge oldest first."
+    }
+   ],
+   "time": "30 minutes a week",
+   "cost": "Free",
+   "docs": "https://docs.renovatebot.com"
+  },
+  "15": {
+   "who": "Platform team, in a maintenance window",
+   "when": "Quarterly, or when the provider announces EOL",
+   "prereqs": [
+    "Scene 14 current (small deltas upgrade safely)",
+    "A staging cluster",
+    "Fresh backups (Scene 16)"
+   ],
+   "skipWhen": "Never — Kubernetes versions retire on the provider's calendar whether you act or not.",
+   "threat": "A forced emergency upgrade at end-of-life, with zero test time.",
+   "rejected": {
+    "path": "Pin versions forever",
+    "why": "Patches stop arriving, and managed providers force-upgrade control planes anyway."
+   },
+   "doneWhen": "Staging upgraded + one week soak, then prod by the same path.",
+   "breaks": [
+    {
+     "symptom": "Removed APIs break charts",
+     "fix": "Run pluto detect-files BEFORE upgrading; fix manifests first."
+    },
+    {
+     "symptom": "Addon incompatible",
+     "fix": "Upgrade order: control plane → nodes → addons; check each addon's matrix."
+    }
+   ],
+   "time": "Half to two days, quarterly",
+   "cost": "Possible node-replacement hours",
+   "docs": "https://kubernetes.io/releases/"
+  },
+  "16": {
+   "who": "Platform/SRE; automation does the rotating",
+   "when": "Set up once; drill quarterly",
+   "prereqs": [
+    "cert-manager + External Secrets installed (Scene 10 components)",
+    "A backup target (object storage bucket)"
+   ],
+   "skipWhen": "Never. Expiry does not negotiate.",
+   "threat": "An expired certificate taking prod down — or a backup that turns out unrestorable mid-disaster.",
+   "rejected": {
+    "path": "Manual annual renewals on a calendar reminder",
+    "why": "Humans forget; certificates don't."
+   },
+   "doneWhen": "A restore DRILL succeeded into a scratch namespace this quarter.",
+   "breaks": [
+    {
+     "symptom": "Backups silently failing",
+     "fix": "Alert on the backup job itself — a missing backup is a page, not a surprise."
+    },
+    {
+     "symptom": "Secret rotated but pods use the old one",
+     "fix": "Add a reloader so deployments restart on secret change."
+    }
+   ],
+   "time": "A day to set up; 2-hour drill each quarter",
+   "cost": "Object storage for backups",
+   "docs": "https://cert-manager.io/docs/"
+  },
+  "17": {
+   "who": "The on-call rotation — eventually everyone",
+   "when": "Before the first real incident, not after",
+   "prereqs": [
+    "Scene 11 alerts live",
+    "A paging tool wired",
+    "Runbooks linked FROM the alerts"
+   ],
+   "skipWhen": "Never in production. The 2am page is a when, not an if.",
+   "threat": "Chaos during an incident multiplies the damage — and for Financial Services, the OSFI 24-hour reporting clock is already running.",
+   "rejected": {
+    "path": "Hero debugging live in prod",
+    "why": "Untracked mid-incident changes are how incident #1 births incident #2."
+   },
+   "doneWhen": "One game-day completed: page → acknowledge → mitigate → blameless postmortem.",
+   "breaks": [
+    {
+     "symptom": "An alert fires with no runbook",
+     "fix": "Mitigate, then write the runbook the same day — that alert now has an owner."
+    },
+    {
+     "symptom": "The same incident repeats",
+     "fix": "The postmortem actions weren't done — they go on the board with owners, now."
+    }
+   ],
+   "time": "A day for the process + quarterly game-days",
+   "cost": "Paging tools have free tiers",
+   "docs": "https://sre.google/sre-book/managing-incidents/"
+  },
+  "18": {
+   "who": "Lead + finance, together",
+   "when": "Quarterly, half a day",
+   "prereqs": [
+    "The version pins this studio tracks",
+    "A cost dashboard from your cloud"
+   ],
+   "skipWhen": "Never past the first year — entropy and spend only grow.",
+   "threat": "Running end-of-life software you can no longer patch — and zombie services bleeding money.",
+   "rejected": {
+    "path": "Keep everything running forever",
+    "why": "Every running thing is attack surface plus spend; sunset is a feature."
+   },
+   "doneWhen": "This quarter's review done: EOL list empty or planned; top-3 cost actions taken.",
+   "breaks": [
+    {
+     "symptom": "Something hits EOL with no upgrade path",
+     "fix": "Isolate it (network policy), plan the replacement, set the date."
+    },
+    {
+     "symptom": "Orphan resources accumulating",
+     "fix": "Tag everything; sweep untagged monthly."
+    }
+   ],
+   "time": "Half a day, quarterly",
+   "cost": "This scene SAVES money",
+   "docs": "https://endoflife.date"
+  }
+ },
+ "act3": {
+  "14": {
+   "auto": [
+    [
+     "Renovate opens update PRs",
+     "you review + merge"
+    ],
+    [
+     "Tests run on every update PR",
+     "you fix what they catch"
+    ],
+    [
+     "Base images rebuilt on schedule (Scene 8 workflow)",
+     "you watch the scan deltas"
+    ]
+   ],
+   "commands": [
+    {
+     "label": "See this week's update PRs",
+     "cmd": "gh pr list --label dependencies --state open",
+     "expect": "the open update PRs, oldest first"
+    },
+    {
+     "label": "Check what's outdated right now",
+     "cmd": "npm outdated || pip list --outdated || go list -u -m all",
+     "expect": "current vs latest versions, per package"
+    }
+   ]
+  },
+  "15": {
+   "auto": [
+    [
+     "Provider patches the control plane within a minor",
+     "you choose WHEN minors/majors happen"
+    ],
+    [
+     "Argo re-syncs apps after node rotation",
+     "you run the upgrade order"
+    ]
+   ],
+   "commands": [
+    {
+     "label": "Find removed APIs before upgrading",
+     "cmd": "pluto detect-files -d kustomize/",
+     "expect": "a table of deprecated/removed APIs (empty = safe)"
+    },
+    {
+     "label": "Upgrade the cluster (your provider)",
+     "cmd": "eksctl upgrade cluster --name prod --approve   # or: gcloud container clusters upgrade / az aks upgrade",
+     "expect": "control plane on the next minor"
+    },
+    {
+     "label": "Then nodes, then addons",
+     "cmd": "eksctl upgrade nodegroup --cluster prod --name ng-1",
+     "expect": "nodes rotated to the new version"
+    }
+   ]
+  },
+  "16": {
+   "auto": [
+    [
+     "cert-manager renews certificates",
+     "you alert if renewal fails"
+    ],
+    [
+     "External Secrets syncs rotated secrets",
+     "you add a reloader for pods"
+    ],
+    [
+     "Velero takes scheduled backups",
+     "you DRILL the restore quarterly"
+    ]
+   ],
+   "commands": [
+    {
+     "label": "Check certificate health",
+     "cmd": "kubectl get certificates -A",
+     "expect": "READY True on every cert"
+    },
+    {
+     "label": "Take a backup now",
+     "cmd": "velero backup create pre-drill --include-namespaces prod",
+     "expect": "Backup request \"pre-drill\" submitted"
+    },
+    {
+     "label": "THE DRILL — restore into scratch",
+     "cmd": "velero restore create --from-backup pre-drill --namespace-mappings prod:drill",
+     "expect": "the app comes up in the drill namespace"
+    }
+   ]
+  },
+  "17": {
+   "sev": [
+    [
+     "SEV1",
+     "users down / data at risk",
+     "page now, all hands, 24h regulator clock may start"
+    ],
+    [
+     "SEV2",
+     "degraded, workaround exists",
+     "page on-call, fix in hours"
+    ],
+    [
+     "SEV3",
+     "minor, no user impact",
+     "ticket, fix this week"
+    ]
+   ],
+   "runbook": [
+    "Acknowledge the page (stop the escalation).",
+    "Open the linked runbook — follow it, don't improvise.",
+    "Mitigate FIRST (rollback/scale/failover). Root cause comes later.",
+    "Note times + actions in the incident channel as you go.",
+    "Declare resolved; schedule the blameless postmortem within 48h.",
+    "Postmortem: timeline, causes, action items WITH owners."
+   ],
+   "commands": [
+    {
+     "label": "Roll back fast (GitOps way)",
+     "cmd": "git revert HEAD && git push   # Argo syncs the rollback",
+     "expect": "previous version live within the sync interval"
+    },
+    {
+     "label": "Or pause sync and roll back direct",
+     "cmd": "argocd app set APP --sync-policy none && kubectl rollout undo deploy/APP -n prod",
+     "expect": "deployment rolled back; re-enable sync after"
+    }
+   ]
+  },
+  "18": {
+   "auto": [
+    [
+     "This studio pins every version (148 tracked)",
+     "you review the EOL list quarterly"
+    ],
+    [
+     "Cloud bills tag by resource",
+     "you act on the top 3 costs"
+    ]
+   ],
+   "commands": [
+    {
+     "label": "Check a component's end-of-life",
+     "cmd": "open https://endoflife.date/kubernetes   # one page per major product",
+     "expect": "dates — plan upgrades BEFORE the red ones"
+    },
+    {
+     "label": "Find untagged (orphan) cloud resources",
+     "cmd": "aws resourcegroupstaggingapi get-resources --tags-per-page 100 | jq '.ResourceTagMappingList[] | select(.Tags==[])'",
+     "expect": "resources nobody owns — candidates to sweep"
+    }
+   ]
+  }
+ },
+ "maintCalendar": [
+  [
+   "Weekly",
+   "Merge/triage update PRs (S14) · scan alert noise (S11)"
+  ],
+  [
+   "Monthly",
+   "Base-image rebuild lands (S8 auto) · sweep orphan resources (S18)"
+  ],
+  [
+   "Quarterly",
+   "K8s upgrade (S15) · restore DRILL (S16) · game-day (S17) · EOL + cost review (S18) · access review (rulebook)"
+  ],
+  [
+   "Annually",
+   "Pen-test (PCI/OSFI rulebooks) · full DR failover · postmortem-actions audit"
+  ]
+ ],
+ "jurisdictions": {
+  "pipeda": "Federal Canada — private-sector orgs in every province without their own substantially-similar law",
+  "phipa": "Ontario only — personal health information (custodians + their vendors)",
+  "pipa-ab": "Alberta only — private sector (replaces PIPEDA inside Alberta)",
+  "pipa-bc": "British Columbia only — private sector (replaces PIPEDA inside BC)",
+  "law25-quebec": "Québec only — any business handling Québec residents' data, wherever you are",
+  "osfi-b13": "Federal Canada — banks, insurers and federally-regulated financial institutions",
+  "osfi-b10": "Federal Canada — third-party risk for the same institutions",
+  "fintrac-pcmltfa": "Federal Canada — anyone moving money: banks, MSBs, real estate, casinos",
+  "pci-dss-4": "Global — contractual: applies the moment you touch payment cards, any country",
+  "hipaa": "United States — only if you handle US patients' health data",
+  "soc1": "Global — voluntary attestation your enterprise customers ask for",
+  "soc2-typeii": "Global — voluntary attestation; the default ask in B2B sales",
+  "iso27001": "Global — voluntary certification; the international security baseline",
+  "iso27017": "Global — cloud-specific add-on to ISO 27001",
+  "fedramp-mod": "United States — selling cloud to US federal agencies",
+  "fedramp-high": "United States — high-impact US federal workloads",
+  "fips-140-3": "US/Canada governments — validated crypto modules; Canada recognizes via CCCS",
+  "cmmc-l2": "United States — US defense supply chain contracts",
+  "nerc-cip": "US + Canadian interconnected grid — bulk electric system operators",
+  "gdpr": "European Union — applies if you serve EU residents, wherever you are",
+  "ccpa": "California — applies at revenue/volume thresholds serving Californians",
+  "glba": "United States — US financial institutions",
+  "sox": "United States — US-listed public companies",
+  "ffiec": "United States — US banking regulators' IT handbook",
+  "soci": "Australia (+ Canadian critical-infra equivalents) — critical infrastructure duties",
+  "dora": "European Union — financial entities + their ICT providers serving the EU"
+ },
+ "guided": {
+  "steps": [
+   {
+    "axis": "industry",
+    "scene": 1,
+    "title": "Who are you building for?",
+    "why": "This single choice writes your rulebook: which laws apply, where your data must live, how strong sign-in must be. Everything after reads it.",
+    "consequence": "Writes the rulebook every later decision must obey."
+   },
+   {
+    "axis": "fw",
+    "scene": 2,
+    "title": "Pick your framework",
+    "why": "The framework is your foundation — it sets your language, your hiring pool, and what 'idiomatic' means for the next five years.",
+    "consequence": "Sets the language — package manager, ORM and Dockerfile all follow it."
+   },
+   {
+    "axis": "pkg",
+    "scene": 3,
+    "title": "Pick your package manager",
+    "why": "It creates the lockfile — the frozen list of exact versions that makes every build identical, on your laptop and in CI.",
+    "consequence": "Sets the install command in CI and the Dockerfile's dependency layer."
+   },
+   {
+    "axis": "auth",
+    "scene": 4,
+    "title": "How will people sign in?",
+    "why": "Broken authentication is the #1 web risk. Your industry's rulebook may already demand MFA (a second proof beyond the password).",
+    "consequence": "Becomes middleware in your app and an AUTH build-arg in CI."
+   },
+   {
+    "axis": "orm",
+    "scene": 4,
+    "title": "How will the app talk to the database?",
+    "why": "An ORM maps code objects to database rows. The right one gives type-safety — wrong queries caught before they run.",
+    "consequence": "Shapes your data layer and migrations from day one."
+   },
+   {
+    "axis": "obs",
+    "scene": 4,
+    "title": "How will the service report its own health?",
+    "why": "Logs, metrics, traces — the three signals. Regulated industries require audit-grade logging; everyone needs to see failures before users do.",
+    "consequence": "Wired into the app now; Scene 11's dashboards read it later."
+   },
+   {
+    "axis": "runtime",
+    "scene": 6,
+    "title": "Pick the container base",
+    "why": "The base image is the floor your app stands on. Smaller floor, fewer holes. Some rulebooks force FIPS-validated crypto floors.",
+    "consequence": "Rewrites the FROM line of your generated Dockerfile — literally."
+   },
+   {
+    "axis": "registry",
+    "scene": 8,
+    "title": "Where will your images live?",
+    "why": "The registry is the warehouse for your sealed app. Same-cloud pulls are faster; OIDC means no stored passwords; residency may be a rule.",
+    "consequence": "Rewrites your CI workflow's push/login steps to that registry."
+   },
+   {
+    "axis": "signer",
+    "scene": 8,
+    "title": "How will you prove the image is yours?",
+    "why": "Signing seals the image; the SBOM lists its ingredients. Together they answer the auditor's 'where did this come from?'",
+    "consequence": "Sets the signing + SBOM steps in your main workflow.",
+    "pair": "sbom"
+   },
+   {
+    "axis": "cluster",
+    "scene": 10,
+    "title": "Where will it run?",
+    "why": "The cluster is the fleet of machines running your containers. Your rulebook may prefer private, Canadian-region, or OpenShift.",
+    "consequence": "Sets the provisioning commands and where Argo CD deploys."
+   }
+  ]
+ },
+ "platformPlain": {
+  "frontend-web": {
+   "name": "A web app",
+   "plain": "What users see and click in a browser."
+  },
+  "mobile": {
+   "name": "A mobile app",
+   "plain": "Installs on phones — App Store and Play Store."
+  },
+  "backend": {
+   "name": "A backend service",
+   "plain": "The API and logic behind apps — no screen of its own."
+  },
+  "protocol": {
+   "name": "A real-time / protocol service",
+   "plain": "Live connections and typed APIs — gRPC, GraphQL, WebSocket."
+  }
+ },
+ "catPlain": {
+  "c1": "Pages render on the server first — fast first paint and SEO; the browser takes over after.",
+  "c2": "The browser builds everything — instant app feel after load; SEO needs extra work.",
+  "c3": "Pages are pre-built at publish time — unbeatably fast for content that rarely changes.",
+  "c4": "Mostly static pages with small interactive islands — content sites that need a little app.",
+  "c5": "No hydration replay at all — the page resumes where the server left off; fastest interactivity.",
+  "c6": "Renders at the CDN edge, close to every user — lowest latency worldwide.",
+  "c7": "The server streams HTML as it's ready — users see content before the page finishes.",
+  "c8": "Many teams ship one site as independent pieces — for large orgs, not small apps.",
+  "c9": "One JavaScript codebase, real iOS + Android apps — the common cross-platform path.",
+  "c10": "One codebase, not JavaScript (Dart/Kotlin/C#) — native-feel performance.",
+  "c11": "Swift, Apple's tools only — the deepest iOS experience.",
+  "c12": "Kotlin, Google's tools only — the deepest Android experience.",
+  "c13": "A website that installs like an app — no app store, one codebase, some limits.",
+  "c14": "JavaScript/TypeScript on the server — your web team's language, end to end.",
+  "c15": "Python — fast to write, the data/AI ecosystem next door.",
+  "c16": "Go — small fast binaries, effortless concurrency; the cloud-native default.",
+  "c17": "Java — the enterprise workhorse: mature, staffed, audited everywhere.",
+  "c18": "Kotlin on the JVM — Java's ecosystem with a modern language.",
+  "c19": ".NET / C# — Microsoft's stack; first-class on Azure and in enterprises.",
+  "c20": "Rust — maximum speed and safety; steeper learning curve, no garbage collector.",
+  "c21": "Elixir — millions of cheap live connections; built for always-on systems.",
+  "c22": "Ruby — developer happiness and speed-to-market; Rails carries whole products.",
+  "c23": "PHP — runs most of the web; modern frameworks are far from the old jokes.",
+  "c24": "Swift on the server — share code with your iOS app.",
+  "c25": "Scala — functional power on the JVM; data-heavy systems.",
+  "c26": "Clojure — a Lisp on the JVM; small expert teams, very stable cores.",
+  "c27": "C++ — when every microsecond is money: trading, games, embedded.",
+  "c28": "gRPC — typed, binary, fast service-to-service calls; the microservices standard.",
+  "c29": "GraphQL — clients ask for exactly the data they need; one endpoint, typed schema.",
+  "c30": "WebSocket — a connection that stays open both ways; chat, live dashboards, games."
+ },
+ "platformsMissing": [
+  "Desktop apps (Electron, Tauri)",
+  "CLI tools",
+  "IoT / embedded",
+  "Edge functions (Cloudflare Workers, Lambda@Edge)",
+  "Data / ML services",
+  "Games"
+ ],
+ "industryPlain": {
+  "financial-services": "Banks, lenders, money apps — the heaviest money-movement rules in Canada.",
+  "healthcare-and-life-sciences": "Hospitals, clinics, health apps — patient data has its own provincial laws.",
+  "government-and-public-sector": "Serving government — citizen data must stay sovereign and classified-safe.",
+  "defense-and-intelligence": "Defence work — classified data, security clearances, export controls.",
+  "energy-and-environment": "Power, pipelines, utilities — systems that move physical things safely.",
+  "technology": "Software companies and SaaS — the lightest rulebook; B2B buyers ask for SOC 2.",
+  "telecommunications": "Networks and carriers — critical infrastructure with privacy duties.",
+  "retail-and-commerce": "Stores and e-commerce — the moment you take cards, card rules apply.",
+  "manufacturing-and-industrial": "Factories and industrial systems — uptime and supply-chain security.",
+  "media-and-entertainment": "Content, streaming, games-adjacent — piracy and audience privacy.",
+  "education": "Schools and ed-tech — students' records are protected data.",
+  "transportation-and-logistics": "Moving people and goods — control systems and critical infrastructure.",
+  "real-estate-and-construction": "Property and building — wire-fraud is the classic attack here.",
+  "agriculture": "Farms and food chains — traceability rules for recalls.",
+  "legal-and-professional-services": "Law and consulting firms — client confidentiality above all.",
+  "non-profit-and-social": "Charities and NGOs — donor trust and donation card data."
+ },
+ "optionPlain": {
+  "auth": {
+   "auth-oidc": [
+    "The standard “Sign in with…” — proves WHO the user is.",
+    "for people"
+   ],
+   "auth-oauth2-mfa": [
+    "Sign-in plus a second proof — a phone prompt or security key.",
+    "for people"
+   ],
+   "auth-oauth2": [
+    "Lets an app act for a user with limited permissions.",
+    "for people"
+   ],
+   "auth-jwt": [
+    "A signed pass-card your API checks on every request.",
+    "for APIs"
+   ],
+   "auth-mtls": [
+    "Machines prove themselves to EACH OTHER with certificates.",
+    "machine ↔ machine"
+   ],
+   "auth-apikey": [
+    "A long password for another PROGRAM, not a person.",
+    "for programs"
+   ],
+   "auth-saml": [
+    "Big-company single sign-on — the older enterprise standard.",
+    "for people"
+   ],
+   "auth-none": [
+    "No sign-in at all. Only for throwaway demos with no real data.",
+    "nothing protected"
+   ],
+   "auth-all": [
+    "The full stack: user sign-in + MFA + machine certificates. What regulated industries actually run.",
+    "people + machines"
+   ]
+  },
+  "obs": {
+   "observability-otel": [
+    "One standard way to emit logs, metrics and traces — works with every backend.",
+    "the wiring"
+   ],
+   "observability-prometheus": [
+    "Counts and timings, scraped and graphed — the metrics standard.",
+    "metrics"
+   ],
+   "observability-grafana-stack": [
+    "Grafana's full open-source set: logs + traces + metrics dashboards.",
+    "full stack, self-run"
+   ],
+   "observability-elastic": [
+    "Search-everything logs — also the audit/SIEM choice for regulated shops.",
+    "logs + audit"
+   ],
+   "observability-datadog": [
+    "Everything as a paid service — fastest to start, bills per GB.",
+    "full stack, paid"
+   ],
+   "observability-none": [
+    "Flying blind. The service can't tell you it's failing.",
+    "nothing"
+   ]
+  },
+  "orm": {
+   "orm-prisma": [
+    "Define your data once, get type-safe queries — the friendly default.",
+    "TypeScript"
+   ],
+   "orm-typeorm": [
+    "Classic decorator-style models — mature, lots of examples.",
+    "TypeScript"
+   ],
+   "orm-drizzle": [
+    "SQL-first and featherweight — you stay close to the database.",
+    "TypeScript"
+   ],
+   "orm-sqlalchemy": [
+    "Python's standard for talking to databases — powerful and everywhere.",
+    "Python"
+   ],
+   "orm-tortoise": [
+    "Async-first Python models — pairs naturally with FastAPI.",
+    "Python"
+   ],
+   "orm-gorm": [
+    "Go's most-used database layer — conventions over ceremony.",
+    "Go"
+   ],
+   "orm-ent": [
+    "Schema-as-code with generated, type-safe queries.",
+    "Go"
+   ],
+   "orm-sqlx": [
+    "No magic: you write SQL, it checks it at compile time.",
+    "Go/Rust"
+   ],
+   "orm-none": [
+    "Raw SQL by hand — full control, all responsibility.",
+    "any"
+   ]
+  },
+  "runtime": {
+   "alpine": [
+    "Tiny with a shell — easy to debug, musl quirks exist.",
+    "8 MB"
+   ],
+   "slim": [
+    "Small Debian — maximum compatibility, no surprises.",
+    "~75 MB"
+   ],
+   "distroless": [
+    "No shell, no package manager — almost nothing to attack.",
+    "the secure default"
+   ],
+   "fips": [
+    "Government-validated crypto build — what FIPS rulebooks demand.",
+    "regulated"
+   ],
+   "ubi-micro": [
+    "Red Hat's minimal base — enterprise support paths.",
+    "enterprise"
+   ],
+   "ubi-minimal": [
+    "Red Hat's small-but-toolable base.",
+    "enterprise"
+   ],
+   "scratch": [
+    "Literally empty — for static Go/Rust binaries only.",
+    "0 MB"
+   ],
+   "wolfi": [
+    "Chainguard's zero-CVE-target distro — fresh and minimal.",
+    "modern"
+   ],
+   "azure-linux": [
+    "Microsoft's container Linux — Azure-aligned shops.",
+    "Azure"
+   ]
+  },
+  "cluster": {
+   "eks": [
+    "Kubernetes run by AWS — the most common choice.",
+    "AWS"
+   ],
+   "gke": [
+    "Kubernetes run by Google — the smoothest autopilot.",
+    "Google Cloud"
+   ],
+   "aks": [
+    "Kubernetes run by Microsoft — natural for Azure shops.",
+    "Azure"
+   ],
+   "openshift": [
+    "Red Hat's hardened Kubernetes — banks and governments pick it.",
+    "regulated / on-prem"
+   ]
+  },
+  "pkg": {
+   "npm": [
+    "The installer that comes with Node — nothing to set up.",
+    "default, simple"
+   ],
+   "pnpm": [
+    "Faster installs that save disk by storing each package once.",
+    "best for monorepos"
+   ],
+   "yarn": [
+    "A fast installer with a rich plugin system.",
+    "plugin ecosystems"
+   ],
+   "bun": [
+    "An all-in-one tool that installs and runs JavaScript very fast.",
+    "speed-first"
+   ],
+   "pip": [
+    "Python's built-in package installer.",
+    "Python default"
+   ],
+   "poetry": [
+    "Python installer that also manages your project and lockfile.",
+    "Python projects"
+   ],
+   "uv": [
+    "A very fast Python installer written in Rust.",
+    "Python, speed-first"
+   ],
+   "gomod": [
+    "Go's built-in dependency system — no extra tool needed.",
+    "Go default"
+   ],
+   "cargo": [
+    "Rust's official build-and-package tool.",
+    "Rust default"
+   ],
+   "maven": [
+    "The long-standing Java build and dependency tool.",
+    "Java, stable"
+   ],
+   "gradle": [
+    "A flexible build tool for Java, Kotlin and Android.",
+    "JVM + Android"
+   ],
+   "composer": [
+    "PHP's standard dependency manager.",
+    "PHP default"
+   ],
+   "bundler": [
+    "Ruby's standard dependency manager.",
+    "Ruby default"
+   ],
+   "tsc": [
+    "The official TypeScript compiler — turns typed code into JavaScript.",
+    "TypeScript"
+   ],
+   "esbuild": [
+    "An extremely fast bundler written in Go.",
+    "speed-first"
+   ],
+   "swc": [
+    "A fast Rust-based compiler, a drop-in for Babel.",
+    "speed-first"
+   ],
+   "webpack": [
+    "The mature, highly configurable bundler.",
+    "complex apps"
+   ],
+   "vite": [
+    "A modern dev server and bundler with instant startup.",
+    "modern default"
+   ],
+   "turbopack": [
+    "Next.js's Rust bundler, built for very large apps.",
+    "Next.js, large apps"
+   ]
+  },
+  "registry": {
+   "ghcr": [
+    "GitHub's image store — zero setup with GitHub Actions.",
+    "GitHub default"
+   ],
+   "ecr": [
+    "Amazon's image store — the natural pick on AWS.",
+    "AWS"
+   ],
+   "gar": [
+    "Google Cloud's image store.",
+    "Google Cloud"
+   ],
+   "acr": [
+    "Azure's image store.",
+    "Azure"
+   ],
+   "harbor": [
+    "An image store you host yourself, with built-in scanning.",
+    "self-hosted"
+   ],
+   "quay": [
+    "Red Hat's image store, with built-in security scanning.",
+    "Red Hat / OpenShift"
+   ],
+   "dockerhub": [
+    "The original public image store — easy, but rate-limited.",
+    "public, simple"
+   ],
+   "jfrog": [
+    "An enterprise artifact store for many package types.",
+    "enterprise"
+   ],
+   "nexus": [
+    "A self-hosted artifact store for many package types.",
+    "self-hosted enterprise"
+   ]
+  },
+  "signer": {
+   "cosign": [
+    "Seals your image so tampering shows — no keys to manage.",
+    "default, keyless"
+   ],
+   "notation": [
+    "Signs images using your own certificate authority.",
+    "your own keys / CA"
+   ]
+  },
+  "sbom": {
+   "syft": [
+    "Lists every ingredient inside your image — the standard tool.",
+    "default"
+   ],
+   "cdxgen": [
+    "Builds the ingredient list in the CycloneDX format.",
+    "CycloneDX shops"
+   ],
+   "trivy": [
+    "Scans for vulnerabilities and can also produce the list.",
+    "scan + list in one"
+   ]
+  }
+ },
+ "ruleLine": {
+  "auth": "Your rulebook for {IND}: people must sign in with a second proof (MFA), and services must verify each other. One pick below covers all of it — that's the recommendation.",
+  "obs": "Your rulebook for {IND} demands audit-grade logging. The recommendation below satisfies it.",
+  "runtime": "Your rulebook for {IND} requires validated-crypto (FIPS) bases. The recommendation below is one.",
+  "cluster": "Your rulebook for {IND} prefers private, regulated-ready clusters. The recommendation below fits."
+ },
+ "primer": {
+  "what": "A deployment pipeline is the automated path your code takes from your laptop to running in front of real users.",
+  "why": "Doing those steps by hand is slow and easy to get wrong. The pipeline does them the same way every time, so a mistake can't quietly ship.",
+  "steps": [
+   [
+    "Decide the rules",
+    "Who is this for? A bank and a blog follow different laws. That choice sets every rule below."
+   ],
+   [
+    "Write the app",
+    "Pick a framework, write your code, add sign-in and a database."
+   ],
+   [
+    "Seal it in a box",
+    "Package the app into a container — a sealed box that runs the same everywhere."
+   ],
+   [
+    "Check every change",
+    "Before code is allowed in, robots run tests and scan for security holes."
+   ],
+   [
+    "Build, sign, store",
+    "The approved code is built, cryptographically signed, and saved to a registry."
+   ],
+   [
+    "Deploy by writing it down",
+    "You declare what should run in Git. A controller makes the cluster match."
+   ],
+   [
+    "Watch it run",
+    "Track speed, traffic, errors. Get paged before users notice."
+   ],
+   [
+    "Keep it alive",
+    "Update weekly, patch the platform, rotate secrets, and have a 2am plan."
+   ]
+  ],
+  "promise": "This tool walks all of that, one decision at a time, in plain words. At the end you have real files you can commit.",
+  "jargonNote": "Every underlined term has a plain-English definition — tap it. Nothing here assumes you already know the words."
+ },
+ "relevance": {
+  "auth": {
+   "auth-mtls": {
+    "audience": "machine",
+    "note": "Built for service-to-service calls, not human sign-in. Pick it backend-to-backend, not for a login page."
+   },
+   "auth-apikey": {
+    "audience": "machine",
+    "note": "Identifies an app, not a person. Use for machine callers, not human login."
+   },
+   "auth-none": {
+    "audience": "none",
+    "note": "No sign-in at all. Fine for public read-only pages; never where user data or a regime is involved."
+   }
+  },
+  "orm": {
+   "orm-none": {
+    "audience": "advanced",
+    "note": "No database layer. Fine for stateless APIs; pick a real ORM once you store data."
+   }
+  },
+  "obs": {
+   "observability-none": {
+    "audience": "advanced",
+    "note": "No monitoring. Acceptable for a throwaway demo only; never for anything users depend on."
+   }
+  },
+  "runtime": {
+   "scratch": {
+    "audience": "advanced",
+    "note": "Empty base — no shell, no libc. Only for static Go/Rust binaries; hard to debug for beginners."
+   }
+  }
+ }
+}

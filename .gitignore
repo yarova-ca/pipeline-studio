@@ -2,3 +2,7 @@ node_modules/
 .wrangler/
 .DS_Store
 *.log
+
+# Build artifacts — CI rebuilds these from app/ on every deploy
+site-app/
+dist/
