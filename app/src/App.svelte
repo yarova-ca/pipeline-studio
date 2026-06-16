@@ -4,7 +4,7 @@
   import { loadAll } from './lib/data.js';
   import {
     STEP_ORDER, DECISION_STEPS, deviceGroups, frameworksForDevice,
-    buildBlueprint, repoLink, gOptions, buildComplianceMatrix
+    buildBlueprint, repoLink, gOptions, buildComplianceMatrix, catalogOptions
   } from './lib/wizard.js';
   import './app.css';
 
@@ -17,7 +17,7 @@
   $: stepKey = STEP_ORDER[step];
   $: total   = STEP_ORDER.length;
   $: decStep = DECISION_STEPS.find(d => d.axis === stepKey);
-  $: opts    = (decStep && $ready) ? gOptions(stepKey, $rs) : [];
+  $: opts    = (decStep && $ready) ? (catalogOptions(stepKey, $rs) || gOptions(stepKey, $rs)) : [];
   $: rec     = opts.find(o => o.rec) || opts[0];
   $: devices = $ready ? deviceGroups() : [];
   $: fwGroups = (stepKey === 'fw' && chosenDevice && $ready) ? frameworksForDevice(chosenDevice) : [];

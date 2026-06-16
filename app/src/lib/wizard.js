@@ -14,6 +14,31 @@ function catalogDevice(fw){
   return 'backend';
 }
 
+// Catalog-backed options for a decision step — device + language filtered.
+// Returns null when no catalog or the axis is not catalog-backed (App falls back to gOptions).
+const CAT_AXIS = { pkg:'package_managers', auth:'auth', orm:'orm', obs:'observability', cluster:'deploy_targets' };
+const LANG_DEFAULT_PKG = { ts:'pnpm', js:'pnpm', py:'uv', go:'gomod', rust:'cargo', java:'maven', kotlin:'gradle', csharp:'nuget', elixir:'mix', ruby:'bundler', php:'composer', swift:'swiftpm' };
+const LANG_DEFAULT_ORM = { ts:'orm-prisma', js:'orm-prisma', py:'orm-sqlalchemy', go:'orm-gorm', rust:'orm-sqlx', java:'orm-jpa-hibernate', kotlin:'orm-exposed', csharp:'orm-efcore', elixir:'orm-ecto', ruby:'orm-activerecord', php:'orm-eloquent' };
+
+export function catalogOptions(axis, rs){
+  const cat=getCatalog(); if(!cat) return null;
+  const key=CAT_AXIS[axis]; if(!key) return null;
+  const s=resolveStack(rs); const device=catalogDevice(s.fw); const lang=s.lang;
+  let items=(cat.axes[key]||[]).filter(o=>!o.applies_to || o.applies_to.includes(device));
+  if(axis==='pkg' || axis==='orm'){
+    items=items.filter(o=>!o.languages || o.languages.includes('all') || o.languages.includes(lang));
+  }
+  if(!items.length) return null;
+  let recId;
+  if(axis==='pkg') recId=LANG_DEFAULT_PKG[lang];
+  else if(axis==='orm') recId=LANG_DEFAULT_ORM[lang];
+  else if(axis==='auth') recId = device==='mobile-app' ? 'auth-oauth2-pkce' : 'auth-oidc';
+  else if(axis==='obs') recId = device==='mobile-app' ? 'observability-mobile-rum' : device==='edge' ? 'observability-edge-analytics' : 'observability-otel';
+  else if(axis==='cluster') recId = device==='edge' ? 'cloudflare-workers' : device==='mobile-app' ? 'app-stores' : (device==='web-ssr'||device==='web-static') ? 'vercel' : 'eks';
+  if(!items.some(o=>o.id===recId)) recId=items[0].id;
+  return items.map(o=>({ id:o.id, name:o.name, plain:o.note||o.cloud||'', rec:o.id===recId }));
+}
+
 // The compliance matrix for the result step: controls × the industry's regimes,
 // filtered to the framework's device. Same keys for every industry — just on/off.
 export function buildComplianceMatrix(rs){
