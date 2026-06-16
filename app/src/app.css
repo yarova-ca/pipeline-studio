@@ -389,6 +389,12 @@ select:hover { border-color: var(--accent); box-shadow: 0 0 0 3px var(--wash-tea
 .chip.req { border-color: rgba(180,83,9,.45); background: rgba(180,83,9,.07); color: var(--scarcity); }
 .chip.keep { border-color: var(--border-accent); background: var(--wash-teal); color: var(--accent); }
 .chip.gap { border-color: rgba(180,35,24,.45); color: var(--danger); }
+.chip.built { border-color: var(--border-accent); background: var(--wash-teal); color: var(--accent); font-weight: 600; }
+.chip.soon { border-color: var(--border); background: rgba(14,15,17,.03); color: var(--ink3); }
+.statusbar { font-size: 12.5px; line-height: 1.5; padding: 11px 13px; border-radius: 10px; margin-bottom: 14px; border: 1px solid var(--border); }
+.statusbar.built { border-color: var(--border-accent); background: var(--wash-teal); color: var(--ink); }
+.statusbar.built a { font-weight: 600; }
+.statusbar.soon { background: rgba(14,15,17,.03); color: var(--ink2); }
 
 /* ── 12. Cluster / layer ────────────────────────────────────────────────── */
 .hubwrap { margin: 0 0 16px; padding: 16px; border: 1px solid var(--border); border-radius: var(--r-xl); background: var(--surface-1); }
