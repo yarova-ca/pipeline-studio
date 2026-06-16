@@ -3,15 +3,17 @@
 namespace App\Support;
 
 // Industry compliance profile, read at startup.
-// One repo serves every industry; COMPLIANCE_PROFILE flips a few controls.
+// One repo serves every industry; COMPLIANCE_PROFILE flips the active profile.
+// Profiles live in compliance/profiles.json — one generated catalog, 30 profiles,
+// every profile carrying the same control keys (uniform on/off).
 class Compliance
 {
     public string $profile = 'baseline';
-    public bool $auditLogging = false;
-    public int $sessionTimeoutSeconds = 8 * 60 * 60;
-    public bool $mfaRequired = false;
-    public bool $encryptionInTransit = false;
-    public array $required = [];
+    public string $name = '';
+    public string $jurisdiction = '';
+
+    /** @var array<string, bool|int|float|string> */
+    public array $controls = [];
 
     private static ?Compliance $instance = null;
 
@@ -26,55 +28,51 @@ class Compliance
     public function __construct()
     {
         $profile = strtolower(getenv('COMPLIANCE_PROFILE') ?: 'baseline');
-        $valid = ['baseline', 'hipaa', 'pci', 'fedramp', 'fips', 'pipeda'];
-        if (!in_array($profile, $valid, true)) {
+
+        $catalog = self::loadCatalog();
+        $profiles = $catalog['profiles'] ?? [];
+
+        if (!isset($profiles[$profile]) || !is_array($profiles[$profile])) {
+            // A named profile with no matching entry must fail loud.
             fwrite(STDERR, "FATAL: unknown COMPLIANCE_PROFILE: {$profile}\n");
             exit(1);
         }
+
+        $entry = $profiles[$profile];
         $this->profile = $profile;
-        if ($profile === 'baseline') {
-            return;
-        }
+        $this->name = (string) ($entry['name'] ?? '');
+        $this->jurisdiction = (string) ($entry['jurisdiction'] ?? '');
+        $this->controls = is_array($entry['controls'] ?? null) ? $entry['controls'] : [];
+    }
 
-        $path = base_path('compliance/' . $profile . '.yaml');
-        $text = @file_get_contents($path);
-        if ($text === false) {
-            // A named profile with no readable file must fail loud.
-            fwrite(STDERR, "FATAL: compliance profile not loadable: {$profile}\n");
-            exit(1);
+    /**
+     * Read and decode compliance/profiles.json.
+     * Looks under base_path() first, then the current working directory.
+     *
+     * @return array<string, mixed>
+     */
+    public static function loadCatalog(): array
+    {
+        $candidates = [];
+        if (function_exists('base_path')) {
+            $candidates[] = base_path('compliance/profiles.json');
         }
+        $candidates[] = getcwd() . '/compliance/profiles.json';
 
-        $inBlock = false;
-        foreach (explode("\n", $text) as $line) {
-            if (str_starts_with($line, 'required_controls:')) {
-                $inBlock = true;
+        foreach ($candidates as $path) {
+            $text = @file_get_contents($path);
+            if ($text === false) {
                 continue;
             }
-            if (!$inBlock) {
-                continue;
+            $data = json_decode($text, true);
+            if (!is_array($data)) {
+                fwrite(STDERR, "FATAL: compliance/profiles.json is not valid JSON: {$path}\n");
+                exit(1);
             }
-            $t = ltrim($line);
-            if (str_starts_with($t, '- ')) {
-                $kv = explode(':', substr($t, 2), 2);
-                if (count($kv) === 2) {
-                    $key = trim($kv[0]);
-                    $val = trim(explode('#', $kv[1], 2)[0]);
-                    $val = trim($val, "\"'");
-                    $this->required[$key] = $val;
-                    if ($key === 'audit_logging') {
-                        $this->auditLogging = $val === 'true';
-                    } elseif ($key === 'mfa_required') {
-                        $this->mfaRequired = $val === 'true';
-                    } elseif ($key === 'encryption_in_transit') {
-                        $this->encryptionInTransit = $val === 'true';
-                    } elseif ($key === 'session_timeout' && is_numeric($val)) {
-                        $this->sessionTimeoutSeconds = (int) $val;
-                    }
-                }
-            } elseif ($line !== '' && !ctype_space($line[0])) {
-                // Reached the next top-level key (e.g. pipeline_additions).
-                break;
-            }
+            return $data;
         }
+
+        fwrite(STDERR, "FATAL: compliance/profiles.json not loadable\n");
+        exit(1);
     }
 }

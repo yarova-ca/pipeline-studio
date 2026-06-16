@@ -23,11 +23,8 @@ public class ComplianceController {
     public Map<String, Object> current() {
         return Map.of(
                 "profile", compliance.getProfile(),
-                "controls", Map.of(
-                        "auditLogging", compliance.isAuditLogging(),
-                        "sessionTimeoutSeconds", compliance.getSessionTimeoutSeconds(),
-                        "mfaRequired", compliance.isMfaRequired(),
-                        "encryptionInTransit", compliance.isEncryptionInTransit()),
-                "required", compliance.getRequired());
+                "name", compliance.getName(),
+                "jurisdiction", compliance.getJurisdiction(),
+                "controls", compliance.getControls());
     }
 }

@@ -36,7 +36,7 @@ pub fn sign_token(user_id: &str, email: &str, name: &str) -> Result<String, AppE
         email: email.to_owned(),
         name: name.to_owned(),
         // Session length is set by the active industry profile (HIPAA → 15 min).
-        exp: now + crate::compliance::active().session_timeout_seconds,
+        exp: now + crate::compliance::active().session_timeout_seconds(),
     };
 
     let key = EncodingKey::from_secret(secret()?.as_bytes());

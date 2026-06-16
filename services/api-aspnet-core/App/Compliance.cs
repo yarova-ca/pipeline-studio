@@ -1,67 +1,108 @@
+using System.Text.Json;
+
 namespace App;
 
 // Industry compliance profile, read at startup.
-// One repo serves every industry; COMPLIANCE_PROFILE flips a few controls.
+// One repo serves every industry; COMPLIANCE_PROFILE picks one profile
+// out of compliance/profiles.json. The controls flip at boot, no rebuild.
 public class Compliance
 {
-    private static readonly HashSet<string> Valid =
-        new() { "baseline", "hipaa", "pci", "fedramp", "fips", "pipeda" };
+    public string Profile { get; }
+    public string Name { get; }
+    public string Jurisdiction { get; }
 
-    public string Profile { get; } = "baseline";
-    public bool AuditLogging { get; }
-    public long SessionTimeoutSeconds { get; } = 8 * 60 * 60;
-    public bool MfaRequired { get; }
-    public bool EncryptionInTransit { get; }
-    public Dictionary<string, string> Required { get; } = new();
+    // Raw control values for the active profile. Values are bool/number/string,
+    // kept as JsonElement so /compliance serves them with their original JSON type.
+    public IReadOnlyDictionary<string, JsonElement> Controls { get; }
+
+    // JWT lifetime in seconds. Driven by the profile's session_timeout_seconds
+    // control (HIPAA/ITSG-33 → 900s). A 0 or missing value means "no profile
+    // limit", so fall back to the prior 8-hour default.
+    public long SessionTimeoutSeconds
+    {
+        get
+        {
+            if (Controls.TryGetValue("session_timeout_seconds", out var v)
+                && v.ValueKind == JsonValueKind.Number
+                && v.TryGetInt64(out var seconds)
+                && seconds > 0)
+            {
+                return seconds;
+            }
+            return 8 * 60 * 60;
+        }
+    }
 
     public Compliance()
     {
-        var profile = (Environment.GetEnvironmentVariable("COMPLIANCE_PROFILE") ?? "baseline").ToLowerInvariant();
-        if (!Valid.Contains(profile))
+        var profile = (Environment.GetEnvironmentVariable("COMPLIANCE_PROFILE") ?? "baseline").Trim();
+
+        var path = ResolveProfilesPath();
+        if (path is null)
         {
-            Console.Error.WriteLine($"FATAL: unknown COMPLIANCE_PROFILE: {profile}");
+            Console.Error.WriteLine("FATAL: compliance/profiles.json not found");
             Environment.Exit(1);
         }
-        Profile = profile;
-        if (profile == "baseline") return;
 
-        string[] lines;
+        Catalog catalog;
         try
         {
-            lines = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), "compliance", $"{profile}.yaml"));
+            using var stream = File.OpenRead(path!);
+            catalog = JsonSerializer.Deserialize<Catalog>(stream, JsonOptions)
+                ?? throw new InvalidOperationException("profiles.json deserialized to null");
         }
         catch (Exception e)
         {
-            // A named profile with no readable file must fail loud.
-            Console.Error.WriteLine($"FATAL: compliance profile not loadable: {profile}: {e.Message}");
+            Console.Error.WriteLine($"FATAL: compliance/profiles.json not loadable: {e.Message}");
             Environment.Exit(1);
-            return;
+            throw; // unreachable; keeps the compiler happy about non-null fields below.
         }
 
-        var inBlock = false;
-        foreach (var line in lines)
+        if (!catalog.Profiles.TryGetValue(profile, out var active))
         {
-            if (line.StartsWith("required_controls:")) { inBlock = true; continue; }
-            if (!inBlock) continue;
-            var t = line.TrimStart();
-            if (t.StartsWith("- "))
-            {
-                var kv = t[2..].Split(':', 2);
-                if (kv.Length != 2) continue;
-                var key = kv[0].Trim();
-                var val = kv[1].Split('#', 2)[0].Trim().Trim('"', '\'');
-                Required[key] = val;
-                switch (key)
-                {
-                    case "audit_logging": AuditLogging = val == "true"; break;
-                    case "mfa_required": MfaRequired = val == "true"; break;
-                    case "encryption_in_transit": EncryptionInTransit = val == "true"; break;
-                    case "session_timeout":
-                        if (long.TryParse(val, out var n)) SessionTimeoutSeconds = n;
-                        break;
-                }
-            }
-            else if (line.Length > 0 && !char.IsWhiteSpace(line[0])) break;
+            Console.Error.WriteLine($"FATAL: unknown COMPLIANCE_PROFILE: {profile}");
+            Environment.Exit(1);
+            throw new InvalidOperationException();
         }
+
+        Profile = profile;
+        Name = active.Name;
+        Jurisdiction = active.Jurisdiction;
+        Controls = active.Controls;
+    }
+
+    // Look for compliance/profiles.json next to the running app, then in the
+    // working directory, then by walking up the tree (tests run from bin/).
+    private static string? ResolveProfilesPath()
+    {
+        var roots = new[] { AppContext.BaseDirectory, Directory.GetCurrentDirectory() };
+        foreach (var root in roots)
+        {
+            var dir = new DirectoryInfo(root);
+            while (dir is not null)
+            {
+                var candidate = Path.Combine(dir.FullName, "compliance", "profiles.json");
+                if (File.Exists(candidate)) return candidate;
+                dir = dir.Parent;
+            }
+        }
+        return null;
+    }
+
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+    };
+
+    private sealed class Catalog
+    {
+        public Dictionary<string, ProfileEntry> Profiles { get; set; } = new();
+    }
+
+    private sealed class ProfileEntry
+    {
+        public string Name { get; set; } = "";
+        public string Jurisdiction { get; set; } = "";
+        public Dictionary<string, JsonElement> Controls { get; set; } = new();
     }
 }

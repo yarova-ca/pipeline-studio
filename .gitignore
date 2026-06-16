@@ -13,3 +13,14 @@ services/**/dist/
 services/**/.next/
 services/**/.angular/
 services/**/__pycache__/
+services/**/.venv/
+services/**/target/
+services/**/build/
+services/**/bin/
+services/**/obj/
+services/**/_build/
+services/**/deps/
+services/**/.gradle/
+services/**/vendor/
+services/**/.pytest_cache/
+**/*.class

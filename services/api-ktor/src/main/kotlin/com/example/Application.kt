@@ -35,18 +35,11 @@ data class HealthResponse(val status: String, val version: String? = null, val d
 data class ErrorResponse(val error: String)
 
 @Serializable
-data class ComplianceControls(
-    val auditLogging: Boolean,
-    val sessionTimeoutSeconds: Long,
-    val mfaRequired: Boolean,
-    val encryptionInTransit: Boolean,
-)
-
-@Serializable
 data class ComplianceResponse(
     val profile: String,
-    val controls: ComplianceControls,
-    val required: Map<String, String>,
+    val name: String,
+    val jurisdiction: String,
+    val controls: Map<String, kotlinx.serialization.json.JsonElement>,
 )
 
 // I-7: minimal OpenAPI 3.0 spec, served from the code at /docs.json.
@@ -186,13 +179,9 @@ fun Application.module() {
             call.respond(
                 ComplianceResponse(
                     profile = Compliance.profile,
-                    controls = ComplianceControls(
-                        Compliance.auditLogging,
-                        Compliance.sessionTimeoutSeconds,
-                        Compliance.mfaRequired,
-                        Compliance.encryptionInTransit,
-                    ),
-                    required = Compliance.required,
+                    name = Compliance.name,
+                    jurisdiction = Compliance.jurisdiction,
+                    controls = Compliance.controls,
                 )
             )
         }

@@ -120,7 +120,8 @@ public class AuthControllerTests : IClassFixture<WebApplicationFactory<Program>>
         name = "Test User";
 
         var jwtService = new JwtService(
-            new TestConfiguration("dev-secret-change-in-production-must-be-at-least-32-chars"));
+            new TestConfiguration("dev-secret-change-in-production-must-be-at-least-32-chars"),
+            new App.Compliance());
 
         var token = jwtService.GenerateToken(userId, email, name);
 

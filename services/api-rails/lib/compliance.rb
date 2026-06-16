@@ -1,51 +1,54 @@
 # Industry compliance profile, read at startup.
-# One repo serves every industry; COMPLIANCE_PROFILE flips a few controls.
-require 'yaml'
+# One repo serves every industry; COMPLIANCE_PROFILE picks one of the
+# generated profiles in compliance/profiles.json. The controls flip at
+# boot, no rebuild.
+require 'json'
 
 module Compliance
-  VALID = %w[baseline hipaa pci fedramp fips pipeda].freeze
+  CATALOG_FILE = 'profiles.json'.freeze
 
   def self.active
     @active ||= load_profile
   end
 
+  # Test hook — drop the memoized profile so a new ENV value is picked up.
+  def self.reset!
+    @active = nil
+  end
+
+  def self.catalog_path
+    base = defined?(Rails) && Rails.respond_to?(:root) && Rails.root ? Rails.root.to_s : Dir.pwd
+    candidate = File.join(base, 'compliance', CATALOG_FILE)
+    return candidate if File.exist?(candidate)
+
+    # Fall back to the working directory when not running under Rails.
+    File.join(Dir.pwd, 'compliance', CATALOG_FILE)
+  end
+
+  def self.load_catalog
+    path = catalog_path
+    JSON.parse(File.read(path))
+  rescue StandardError => e
+    warn "FATAL: compliance catalog not loadable: #{path}: #{e.message}"
+    exit 1
+  end
+
   def self.load_profile
-    profile = (ENV['COMPLIANCE_PROFILE'] || 'baseline').downcase
-    unless VALID.include?(profile)
-      warn "FATAL: unknown COMPLIANCE_PROFILE: #{profile}"
+    name = ENV['COMPLIANCE_PROFILE'] || 'baseline'
+    catalog = load_catalog
+    profiles = catalog['profiles'] || {}
+
+    entry = profiles[name]
+    unless entry
+      warn "FATAL: unknown COMPLIANCE_PROFILE: #{name}"
       exit 1
     end
 
-    c = {
-      profile: profile,
-      audit_logging: false,
-      session_timeout_seconds: 8 * 60 * 60,
-      mfa_required: false,
-      encryption_in_transit: false,
-      required: {}
+    {
+      profile: name,
+      name: entry['name'],
+      jurisdiction: entry['jurisdiction'],
+      controls: entry['controls'] || {}
     }
-    return c if profile == 'baseline'
-
-    path = File.join(Dir.pwd, 'compliance', "#{profile}.yaml")
-    begin
-      doc = YAML.safe_load(File.read(path))
-    rescue StandardError => e
-      # A named profile with no readable file must fail loud.
-      warn "FATAL: compliance profile not loadable: #{profile}: #{e.message}"
-      exit 1
-    end
-
-    (doc['required_controls'] || []).each do |entry|
-      entry.each do |k, v|
-        c[:required][k] = v
-        case k
-        when 'audit_logging' then c[:audit_logging] = v == true
-        when 'mfa_required' then c[:mfa_required] = v == true
-        when 'encryption_in_transit' then c[:encryption_in_transit] = v == true
-        when 'session_timeout' then c[:session_timeout_seconds] = v.to_i if v
-        end
-      end
-    end
-    c
   end
 end

@@ -7,7 +7,14 @@ defmodule App.Auth.Token do
   """
 
   # Session length is set by the active industry profile (HIPAA → 15 min).
-  defp ttl_seconds, do: App.Compliance.active().session_timeout_seconds
+  # Read from the profile's session_timeout_seconds control; 0/missing → 8h default.
+  @default_ttl_seconds 8 * 60 * 60
+  defp ttl_seconds do
+    case App.Compliance.active().controls["session_timeout_seconds"] do
+      n when is_integer(n) and n > 0 -> n
+      _ -> @default_ttl_seconds
+    end
+  end
 
   defp secret do
     Application.get_env(:app, AppWeb.Endpoint)[:secret_key_base] ||

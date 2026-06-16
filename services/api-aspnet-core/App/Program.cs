@@ -152,14 +152,9 @@ app.MapMetrics();
 app.MapGet("/compliance", (App.Compliance c) => Results.Json(new
 {
     profile = c.Profile,
-    controls = new
-    {
-        auditLogging = c.AuditLogging,
-        sessionTimeoutSeconds = c.SessionTimeoutSeconds,
-        mfaRequired = c.MfaRequired,
-        encryptionInTransit = c.EncryptionInTransit,
-    },
-    required = c.Required,
+    name = c.Name,
+    jurisdiction = c.Jurisdiction,
+    controls = c.Controls,
 })).AllowAnonymous();
 
 // /health/ready checks DB connectivity — returns 503 when DB is down.

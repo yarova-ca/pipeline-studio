@@ -196,14 +196,10 @@ func buildRouter() *gin.Engine {
 	r.GET("/compliance", func(c *gin.Context) {
 		a := compliance.Active
 		c.JSON(http.StatusOK, gin.H{
-			"profile": a.Profile,
-			"controls": gin.H{
-				"auditLogging":          a.AuditLogging,
-				"sessionTimeoutSeconds": a.SessionTimeoutSeconds,
-				"mfaRequired":           a.MfaRequired,
-				"encryptionInTransit":   a.EncryptionInTransit,
-			},
-			"required": a.Required,
+			"profile":      a.Profile,
+			"name":         a.Name,
+			"jurisdiction": a.Jurisdiction,
+			"controls":     a.Controls,
 		})
 	})
 
