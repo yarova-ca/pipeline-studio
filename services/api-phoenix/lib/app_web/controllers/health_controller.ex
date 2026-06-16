@@ -7,6 +7,22 @@ defmodule AppWeb.HealthController do
   def health(conn, _params), do: json(conn, %{status: "ok", version: "1.0.0"})
   def liveness(conn, _params), do: json(conn, %{status: "ok"})
 
+  # The active industry profile and controls. Switch with COMPLIANCE_PROFILE.
+  def compliance(conn, _params) do
+    c = App.Compliance.active()
+
+    json(conn, %{
+      profile: c.profile,
+      controls: %{
+        auditLogging: c.audit_logging,
+        sessionTimeoutSeconds: c.session_timeout_seconds,
+        mfaRequired: c.mfa_required,
+        encryptionInTransit: c.encryption_in_transit
+      },
+      required: c.required
+    })
+  end
+
   @doc """
   DB-checking readiness probe.
   Returns 503 when the database is unreachable so k8s removes the pod

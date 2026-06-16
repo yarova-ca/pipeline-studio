@@ -16,8 +16,8 @@ pub struct Claims {
     pub exp: u64,
 }
 
-/// Expiry window: 8 hours.
-/// Why 8h: matches a standard workday session; short enough to limit replay risk.
+/// Default expiry window when no industry profile overrides it: 8 hours.
+#[allow(dead_code)]
 const TOKEN_EXPIRY_SECS: u64 = 8 * 60 * 60;
 
 fn secret() -> Result<String, AppError> {
@@ -35,7 +35,8 @@ pub fn sign_token(user_id: &str, email: &str, name: &str) -> Result<String, AppE
         sub: user_id.to_owned(),
         email: email.to_owned(),
         name: name.to_owned(),
-        exp: now + TOKEN_EXPIRY_SECS,
+        // Session length is set by the active industry profile (HIPAA → 15 min).
+        exp: now + crate::compliance::active().session_timeout_seconds,
     };
 
     let key = EncodingKey::from_secret(secret()?.as_bytes());

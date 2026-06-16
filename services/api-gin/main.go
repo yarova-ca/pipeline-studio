@@ -14,6 +14,7 @@ import (
 	"github.com/google/uuid"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/yarova-ca/16-gin/internal/compliance"
 	"github.com/yarova-ca/16-gin/internal/db"
 	"github.com/yarova-ca/16-gin/internal/metrics"
 	"github.com/yarova-ca/16-gin/internal/routes"
@@ -188,6 +189,22 @@ func buildRouter() *gin.Engine {
 
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok", "version": "1.0.0"})
+	})
+
+	// The active industry profile and the controls in effect. Switch with
+	// COMPLIANCE_PROFILE — the controls flip at boot, no rebuild.
+	r.GET("/compliance", func(c *gin.Context) {
+		a := compliance.Active
+		c.JSON(http.StatusOK, gin.H{
+			"profile": a.Profile,
+			"controls": gin.H{
+				"auditLogging":          a.AuditLogging,
+				"sessionTimeoutSeconds": a.SessionTimeoutSeconds,
+				"mfaRequired":           a.MfaRequired,
+				"encryptionInTransit":   a.EncryptionInTransit,
+			},
+			"required": a.Required,
+		})
 	})
 
 	r.GET("/health/live", func(c *gin.Context) {

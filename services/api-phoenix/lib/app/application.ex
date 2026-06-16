@@ -5,6 +5,9 @@ defmodule App.Application do
     # I-13: create the metrics table before the endpoint serves traffic.
     AppWeb.Metrics.setup()
 
+    # Load the active industry profile (fails loud on a bad profile).
+    App.Compliance.setup()
+
     # OpenTelemetry — enabled only when OTEL_ENABLED=true.
     # The opentelemetry_phoenix integration hooks into Phoenix telemetry events
     # and exports spans to the configured OTLP endpoint.

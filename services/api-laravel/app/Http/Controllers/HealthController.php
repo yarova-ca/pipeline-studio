@@ -59,6 +59,25 @@ class HealthController extends Controller
     }
 
     /**
+     * The active industry profile and the controls in effect.
+     * Switch with COMPLIANCE_PROFILE — the controls flip at boot, no rebuild.
+     */
+    public function compliance(): JsonResponse
+    {
+        $c = \App\Support\Compliance::active();
+        return response()->json([
+            'profile' => $c->profile,
+            'controls' => [
+                'auditLogging' => $c->auditLogging,
+                'sessionTimeoutSeconds' => $c->sessionTimeoutSeconds,
+                'mfaRequired' => $c->mfaRequired,
+                'encryptionInTransit' => $c->encryptionInTransit,
+            ],
+            'required' => $c->required,
+        ]);
+    }
+
+    /**
      * DB-checking readiness probe.
      * Returns 503 when the database is unreachable so k8s removes the pod
      * from the load balancer until the connection recovers.

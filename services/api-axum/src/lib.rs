@@ -4,6 +4,7 @@
 //! Integration tests in tests/ import from this crate via `use axum_service::...`.
 
 pub mod auth;
+pub mod compliance;
 pub mod db;
 pub mod errors;
 pub mod routes;
@@ -105,6 +106,12 @@ async fn openapi_spec() -> Json<utoipa::openapi::OpenApi> {
     Json(ApiDoc::openapi())
 }
 
+// The active industry profile and the controls in effect. Switch with
+// COMPLIANCE_PROFILE — the controls flip at boot, no rebuild.
+async fn compliance_status() -> Json<crate::compliance::Controls> {
+    Json(crate::compliance::active().clone())
+}
+
 // I-17: hardening response headers on every reply.
 async fn security_headers(req: axum::extract::Request, next: axum::middleware::Next) -> axum::response::Response {
     let mut res = next.run(req).await;
@@ -156,6 +163,7 @@ pub fn app(pool: Option<PgPool>) -> Router {
                 .merge(health_routes)
                 .merge(ready)
                 .route("/docs.json", get(openapi_spec))
+                .route("/compliance", get(compliance_status))
                 .layer(axum::middleware::from_fn(security_headers))
                 .layer(TraceLayer::new_for_http())
                 .with_state(p)
@@ -181,6 +189,7 @@ pub fn app(pool: Option<PgPool>) -> Router {
                 .merge(health_routes)
                 .route("/health/ready", get(readiness_no_db))
                 .route("/docs.json", get(openapi_spec))
+                .route("/compliance", get(compliance_status))
                 .layer(axum::middleware::from_fn(security_headers))
                 .layer(TraceLayer::new_for_http())
         }

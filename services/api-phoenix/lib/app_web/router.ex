@@ -22,6 +22,7 @@ defmodule AppWeb.Router do
     get "/health", HealthController, :health
     get "/health/live", HealthController, :liveness
     get "/health/ready", HealthController, :readiness
+    get "/compliance", HealthController, :compliance
   end
 
   # Metrics — no rate limiting so Prometheus scrapes are never throttled.

@@ -21,7 +21,8 @@ object JwtService {
 
     fun signToken(userId: String, email: String, name: String): String {
         val now        = System.currentTimeMillis()
-        val expiryMs   = 8L * 60 * 60 * 1000
+        // Session length is set by the active industry profile (HIPAA → 15 min).
+        val expiryMs   = com.example.Compliance.sessionTimeoutSeconds * 1000
 
         return JWT.create()
             .withIssuer("pipeline-studio")

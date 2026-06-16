@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace App.Auth;
 
-public class JwtService(IConfiguration configuration)
+public class JwtService(IConfiguration configuration, App.Compliance compliance)
 {
     private readonly string _secret = configuration["JWT_SECRET"]
         ?? throw new InvalidOperationException("JWT_SECRET is not configured.");
@@ -27,7 +27,8 @@ public class JwtService(IConfiguration configuration)
             issuer: "pipeline-studio",
             audience: "pipeline-studio",
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(8),
+            // Session length is set by the active industry profile (HIPAA → 15 min).
+            expires: DateTime.UtcNow.AddSeconds(compliance.SessionTimeoutSeconds),
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

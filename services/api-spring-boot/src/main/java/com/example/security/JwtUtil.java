@@ -14,11 +14,11 @@ import java.util.UUID;
 @Component
 public class JwtUtil {
 
-    private static final long EXPIRY_MS = 8L * 60 * 60 * 1000; // 8 hours
-
     private final SecretKey signingKey;
+    private final com.example.config.Compliance compliance;
 
-    public JwtUtil(@Value("${app.jwt.secret}") String secret) {
+    public JwtUtil(@Value("${app.jwt.secret}") String secret, com.example.config.Compliance compliance) {
+        this.compliance = compliance;
         // Pad secret to at least 256 bits for HS256
         String padded = secret.length() < 32
                 ? secret + "0".repeat(32 - secret.length())
@@ -28,7 +28,8 @@ public class JwtUtil {
 
     public String generateToken(UUID userId, String email, String name) {
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + EXPIRY_MS);
+        // Session length is set by the active industry profile (HIPAA → 15 min).
+        Date expiry = new Date(now.getTime() + compliance.getSessionTimeoutSeconds() * 1000);
 
         return Jwts.builder()
                 .subject(userId.toString())

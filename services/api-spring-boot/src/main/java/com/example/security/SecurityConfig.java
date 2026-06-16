@@ -38,6 +38,7 @@ public class SecurityConfig {
                     .requestMatchers("/auth/login").permitAll()
                     .requestMatchers("/auth/callback").permitAll()
                     .requestMatchers("/dev/token").permitAll()
+                    .requestMatchers("/compliance").permitAll()
                     // Everything else requires authentication
                     .anyRequest().authenticated())
             .addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
