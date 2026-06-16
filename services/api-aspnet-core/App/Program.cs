@@ -58,6 +58,7 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddSingleton<App.Compliance>();
 builder.Services.AddSingleton<JwtService>();
 
 // ---- Rate limiting ----
@@ -145,6 +146,21 @@ app.MapControllers();
 
 // I-13: Prometheus scrape endpoint.
 app.MapMetrics();
+
+// The active industry profile and the controls in effect. Switch with
+// COMPLIANCE_PROFILE — the controls flip at boot, no rebuild.
+app.MapGet("/compliance", (App.Compliance c) => Results.Json(new
+{
+    profile = c.Profile,
+    controls = new
+    {
+        auditLogging = c.AuditLogging,
+        sessionTimeoutSeconds = c.SessionTimeoutSeconds,
+        mfaRequired = c.MfaRequired,
+        encryptionInTransit = c.EncryptionInTransit,
+    },
+    required = c.Required,
+})).AllowAnonymous();
 
 // /health/ready checks DB connectivity — returns 503 when DB is down.
 app.MapHealthChecks("/health/ready", new HealthCheckOptions

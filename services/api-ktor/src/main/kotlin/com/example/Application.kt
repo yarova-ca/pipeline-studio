@@ -34,6 +34,21 @@ data class HealthResponse(val status: String, val version: String? = null, val d
 @Serializable
 data class ErrorResponse(val error: String)
 
+@Serializable
+data class ComplianceControls(
+    val auditLogging: Boolean,
+    val sessionTimeoutSeconds: Long,
+    val mfaRequired: Boolean,
+    val encryptionInTransit: Boolean,
+)
+
+@Serializable
+data class ComplianceResponse(
+    val profile: String,
+    val controls: ComplianceControls,
+    val required: Map<String, String>,
+)
+
 // I-7: minimal OpenAPI 3.0 spec, served from the code at /docs.json.
 private val OPENAPI_SPEC = """
 {
@@ -165,6 +180,21 @@ fun Application.module() {
         // I-7: OpenAPI spec served from the code.
         get("/docs.json") {
             call.respondText(OPENAPI_SPEC, ContentType.Application.Json)
+        }
+        // The active industry profile and controls. Switch with COMPLIANCE_PROFILE.
+        get("/compliance") {
+            call.respond(
+                ComplianceResponse(
+                    profile = Compliance.profile,
+                    controls = ComplianceControls(
+                        Compliance.auditLogging,
+                        Compliance.sessionTimeoutSeconds,
+                        Compliance.mfaRequired,
+                        Compliance.encryptionInTransit,
+                    ),
+                    required = Compliance.required,
+                )
+            )
         }
 
         // DB-checking readiness probe.

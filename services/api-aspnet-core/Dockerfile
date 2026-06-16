@@ -10,6 +10,8 @@ RUN dotnet publish App/19-aspnet-core.csproj -c Release -o /app/out --no-self-co
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/out ./
+# Industry compliance profiles are read at runtime from the working directory.
+COPY compliance ./compliance
 ENV PORT=8080
 EXPOSE 8080
 # I-19: the aspnet image ships a non-root 'app' user (uid 1654).

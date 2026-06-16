@@ -134,7 +134,8 @@ class AuthController extends Controller
             'email' => $user->email,
             'name'  => $user->name,
             'iat'   => $now,
-            'exp'   => $now + 8 * 3600,
+            // Session length is set by the active industry profile (HIPAA → 15 min).
+            'exp'   => $now + \App\Support\Compliance::active()->sessionTimeoutSeconds,
         ];
 
         return JWT::encode($payload, $secret, 'HS256');

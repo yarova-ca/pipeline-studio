@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/yarova-ca/16-gin/internal/compliance"
 )
 
 // Claims holds the fields embedded in every signed JWT.
@@ -43,8 +44,9 @@ func SignToken(userID, email, name string) (string, error) {
 		Name:   name,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   userID,
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(8 * time.Hour)),
+			IssuedAt: jwt.NewNumericDate(time.Now()),
+			// Session length is set by the active industry profile (HIPAA → 15 min).
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(compliance.Active.SessionTimeoutSeconds) * time.Second)),
 		},
 	}
 

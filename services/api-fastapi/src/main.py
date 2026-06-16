@@ -119,6 +119,24 @@ def health() -> dict:
     return {"status": "ok", "version": "1.0.0"}
 
 
+# The active industry profile and the controls in effect. Switch with
+# COMPLIANCE_PROFILE — this endpoint proves the controls changed, no rebuild.
+@app.get("/compliance")
+def compliance_status() -> dict:
+    from src.compliance import compliance
+
+    return {
+        "profile": compliance.profile,
+        "controls": {
+            "auditLogging": compliance.audit_logging,
+            "sessionTimeoutSeconds": compliance.session_timeout_seconds,
+            "mfaRequired": compliance.mfa_required,
+            "encryptionInTransit": compliance.encryption_in_transit,
+        },
+        "required": compliance.required,
+    }
+
+
 @app.get("/health/live")
 def liveness() -> dict:
     return {"status": "ok"}

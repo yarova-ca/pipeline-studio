@@ -6,6 +6,8 @@ from typing import Optional
 
 from jose import JWTError, jwt
 
+from src.compliance import compliance
+
 # Fix 2: Require JWT_SECRET at startup — no insecure fallback allowed.
 # Why: a hardcoded fallback secret means any dev token is valid in prod.
 _raw_secret = os.getenv("JWT_SECRET")
@@ -35,7 +37,8 @@ def create_access_token(user_id: int, email: str, name: str) -> str:
         "email": email,
         "name": name,
         "iat": now,
-        "exp": now + timedelta(hours=JWT_EXPIRY_HOURS),
+        # Session length is set by the active industry profile (HIPAA → 15 min).
+        "exp": now + timedelta(seconds=compliance.session_timeout_seconds),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 

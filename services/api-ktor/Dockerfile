@@ -10,6 +10,8 @@ RUN gradle --no-daemon shadowJar
 FROM gcr.io/distroless/java21-debian12:nonroot AS runtime
 WORKDIR /app
 COPY --from=build /app/build/libs/*-all.jar app.jar
+# Industry compliance profiles are read at runtime from the working directory.
+COPY compliance ./compliance
 ENV SERVER_PORT=8080
 EXPOSE 8080
 USER nonroot

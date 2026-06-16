@@ -19,6 +19,9 @@ Route::get('/health/ready', [HealthController::class, 'readiness']);
 // I-13: Prometheus metrics — not rate limited.
 Route::get('/metrics', [MetricsController::class, 'index']);
 
+// Active industry profile and controls — switch with COMPLIANCE_PROFILE.
+Route::get('/compliance', [HealthController::class, 'compliance']);
+
 // All other routes — rate limited to 100 requests per minute per IP.
 Route::middleware(RateLimit::class)->group(function () {
     // Auth — public

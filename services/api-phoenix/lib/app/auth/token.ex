@@ -6,7 +6,8 @@ defmodule App.Auth.Token do
   Algorithm: HS256 signed with SECRET_KEY_BASE.
   """
 
-  @ttl_seconds 8 * 60 * 60
+  # Session length is set by the active industry profile (HIPAA → 15 min).
+  defp ttl_seconds, do: App.Compliance.active().session_timeout_seconds
 
   defp secret do
     Application.get_env(:app, AppWeb.Endpoint)[:secret_key_base] ||
@@ -26,7 +27,7 @@ defmodule App.Auth.Token do
       "email" => email,
       "name" => name,
       "iat" => now,
-      "exp" => now + @ttl_seconds
+      "exp" => now + ttl_seconds()
     }
 
     jwk = JOSE.JWK.from_oct(secret())

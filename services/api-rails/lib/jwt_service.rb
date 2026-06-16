@@ -1,11 +1,12 @@
 require 'jwt'
+require_relative 'compliance'
 
 class JwtService
   ALGORITHM = 'HS256'.freeze
-  TTL_SECONDS = 8 * 60 * 60 # 8 hours
 
   def self.encode(payload)
-    exp = Time.now.to_i + TTL_SECONDS
+    # Session length is set by the active industry profile (HIPAA → 15 min).
+    exp = Time.now.to_i + Compliance.active[:session_timeout_seconds]
     claims = payload.merge(exp: exp, iat: Time.now.to_i)
     JWT.encode(claims, secret, ALGORITHM)
   end

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get '/health', to: 'health#health'
   get '/health/live', to: 'health#liveness'
   get '/health/ready', to: 'health#readiness'
+  get '/compliance', to: 'health#compliance'
 
   scope '/auth' do
     get  'login',    to: 'auth#login'
