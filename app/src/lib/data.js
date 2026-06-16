@@ -1,7 +1,11 @@
 // Loads the single sources ONCE: graph.json (extracted truth),
-// knowledge.json (authored truth), generators.js (file emitters).
+// knowledge.json (authored truth), generators.js (file emitters),
+// catalog.json (canonical compliance + axis catalog).
 import { initCtx } from './logic.js';
 import { ready, loadError } from './stores.js';
+
+let CATALOG = null;
+export const getCatalog = () => CATALOG;
 
 async function fetchJson(path){
   let r;
@@ -15,15 +19,17 @@ async function fetchJson(path){
 export async function loadAll(){
   loadError.set(null);
   try {
-    const [g,k,GEN]=await Promise.all([
+    const [g,k,GEN,cat]=await Promise.all([
       fetchJson('/graph.json'),
       fetchJson('/knowledge.json'),
       import(/* @vite-ignore */ '/generators.js').catch(e=>{
         throw new Error(`generators.js failed to load. ${e.message||e}`);
       }),
+      fetchJson('/catalog.json').catch(()=>null), // optional — studio still works without it
     ]);
     if(!g?.nodes) throw new Error('graph.json loaded but has no "nodes" — data is malformed.');
     if(!k) throw new Error('knowledge.json loaded but is empty.');
+    CATALOG = cat;
     initCtx(g,k,GEN);
     ready.set(true);
   } catch(e){

@@ -4,7 +4,7 @@
   import { loadAll } from './lib/data.js';
   import {
     STEP_ORDER, DECISION_STEPS, deviceGroups, frameworksForDevice,
-    buildBlueprint, repoLink, gOptions
+    buildBlueprint, repoLink, gOptions, buildComplianceMatrix
   } from './lib/wizard.js';
   import './app.css';
 
@@ -22,6 +22,7 @@
   $: devices = $ready ? deviceGroups() : [];
   $: fwGroups = (stepKey === 'fw' && chosenDevice && $ready) ? frameworksForDevice(chosenDevice) : [];
   $: bp = (stepKey === 'result' && $ready && $rs.fw) ? buildBlueprint($rs) : null;
+  $: matrix = (stepKey === 'result' && $ready && $rs.fw) ? buildComplianceMatrix($rs) : null;
 
   function next(){ if(step < total - 1){ step++; showAll = false; } }
   function back(){ if(step > 0){ step--; showAll = false; } }
@@ -202,6 +203,34 @@
           <div class="sum-row"><span class="sum-k">{k}</span><span class="sum-v">{v}</span></div>
         {/each}
       </div>
+
+      <!-- compliance matrix — same controls for every industry, just on/off -->
+      {#if matrix}
+        <h2 class="sec">Compliance — {matrix.controlCount} controls · same keys, just on/off</h2>
+        <div class="matrix-wrap">
+          <table class="matrix">
+            <thead>
+              <tr>
+                <th class="mx-ctrl">Control</th>
+                {#each matrix.regimes as r}
+                  <th class="mx-reg" title={r.name}>{r.id}<span class="mx-pri {r.priority}">{r.priority}</span></th>
+                {/each}
+              </tr>
+            </thead>
+            <tbody>
+              {#each matrix.rows as row}
+                <tr>
+                  <td class="mx-ctrl">{row.label}</td>
+                  {#each row.cells as c}
+                    <td class="mx-cell {c.on ? 'on' : 'off'}">{c.value}</td>
+                  {/each}
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+        <p class="wz-plain mx-note">Switch with one env var: <code>COMPLIANCE_PROFILE</code>. No code change. No rebuild.</p>
+      {/if}
 
       <!-- the full pipeline: phases → stages → tools -->
       <h2 class="sec">Your full pipeline — {bp.phases.length} phases · {bp.stageCount} stages · {bp.toolCount} tools</h2>

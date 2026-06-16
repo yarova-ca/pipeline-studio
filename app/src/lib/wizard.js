@@ -2,6 +2,48 @@
 // One straight path: device → framework → decisions → full pipeline blueprint.
 // Reuses logic.js (resolveStack, gOptions, decisionsFor, commandsFor) — no new truth here.
 import { getG, resolveStack, gOptions, decisionsFor, commandsFor, nameById, firstSentence, stripTags } from './logic.js';
+import { getCatalog } from './data.js';
+
+// Map a framework's coarse device to a catalog device type.
+function catalogDevice(fw){
+  const d = Array.isArray(fw.device) ? fw.device[0] : String(fw.device||'');
+  if (d === 'frontend-web') return 'web-ssr';
+  if (d === 'mobile') return 'mobile-app';
+  if (d === 'protocol') return 'protocol';
+  if ((fw.id||'').includes('hono') || d === 'edge') return 'edge';
+  return 'backend';
+}
+
+// The compliance matrix for the result step: controls × the industry's regimes,
+// filtered to the framework's device. Same keys for every industry — just on/off.
+export function buildComplianceMatrix(rs){
+  const G=getG(); const cat=getCatalog();
+  if(!cat) return null;
+  const fw=resolveStack(rs).fw;
+  const device=catalogDevice(fw);
+  const controls=cat.compliance.controls;
+  const keys=Object.keys(controls).filter(c=>controls[c].applies_to.includes(device));
+
+  const ind=(G.nodes.industryRequirements||[]).find(r=>r.id===rs.industry);
+  let regimeIds=(ind?.requiredRegimeIds||[]).filter(id=>cat.compliance.regimes[id]);
+  if(!regimeIds.length) regimeIds=['pipeda']; // no industry → show the Canadian baseline regime
+
+  const fmt=(v)=> v===true?'on' : v===false?'off' : (v===0||v==='none')?'—' : String(v);
+  const rows=keys.map(k=>({
+    key:k, label:controls[k].label,
+    cells: regimeIds.map(rid=>{
+      const enf=cat.compliance.regimes[rid].enforces||{};
+      const v = (k in enf) ? enf[k] : controls[k].default;
+      return { regime:rid, value:fmt(v), on:!(v===false||v===0||v==='none') };
+    })
+  }));
+  return {
+    device,
+    regimes: regimeIds.map(id=>({ id, name:cat.compliance.regimes[id].name, priority:cat.compliance.regimes[id].priority })),
+    rows,
+    controlCount:keys.length,
+  };
+}
 
 // ── The decision steps, in order. Each is one screen. ──────────────────────────
 // axis matches an rs key + a gOptions(axis) case. plain = ≤10-word meaning.
