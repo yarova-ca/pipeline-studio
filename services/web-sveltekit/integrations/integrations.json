@@ -1,0 +1,240 @@
+{
+  "version": 1,
+  "note": "Fill the config_keys in your env to activate an integration. Each ships a placeholder client + example endpoint.",
+  "canada": [
+    {
+      "id": "int-gckey",
+      "name": "GCKey / Sign-In Canada",
+      "category": "identity",
+      "auth": "oidc",
+      "config_keys": [
+        "GCKEY_ISSUER_URL",
+        "GCKEY_CLIENT_ID",
+        "GCKEY_CLIENT_SECRET",
+        "GCKEY_REDIRECT_URI"
+      ],
+      "example_endpoint": "/integrations/gckey/example",
+      "verticals": [
+        "government-and-public-sector"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-provincial-bcid",
+      "name": "BC Services Card / provincial IDP",
+      "category": "identity",
+      "auth": "oidc",
+      "config_keys": [
+        "PROVINCIAL_BCID_ISSUER_URL",
+        "PROVINCIAL_BCID_CLIENT_ID",
+        "PROVINCIAL_BCID_CLIENT_SECRET",
+        "PROVINCIAL_BCID_REDIRECT_URI"
+      ],
+      "example_endpoint": "/integrations/provincial-bcid/example",
+      "verticals": [
+        "government-and-public-sector"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-interac",
+      "name": "Interac e-Transfer",
+      "category": "payments",
+      "auth": "api-key",
+      "config_keys": [
+        "INTERAC_BASE_URL",
+        "INTERAC_API_KEY"
+      ],
+      "example_endpoint": "/integrations/interac/example",
+      "verticals": [
+        "financial-services",
+        "retail-and-commerce"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-payments-canada",
+      "name": "Payments Canada (RTR)",
+      "category": "payments",
+      "auth": "mtls",
+      "config_keys": [
+        "PAYMENTS_CANADA_BASE_URL",
+        "PAYMENTS_CANADA_CLIENT_CERT_PATH",
+        "PAYMENTS_CANADA_CLIENT_KEY_PATH",
+        "PAYMENTS_CANADA_CA_CERT_PATH"
+      ],
+      "example_endpoint": "/integrations/payments-canada/example",
+      "verticals": [
+        "financial-services"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-cra",
+      "name": "CRA (Canada Revenue Agency) APIs",
+      "category": "government",
+      "auth": "oauth2",
+      "config_keys": [
+        "CRA_TOKEN_URL",
+        "CRA_CLIENT_ID",
+        "CRA_CLIENT_SECRET",
+        "CRA_SCOPES"
+      ],
+      "example_endpoint": "/integrations/cra/example",
+      "verticals": [
+        "financial-services",
+        "legal-and-professional-services"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-canada-post",
+      "name": "Canada Post (AddressComplete / shipping)",
+      "category": "logistics",
+      "auth": "api-key",
+      "config_keys": [
+        "CANADA_POST_BASE_URL",
+        "CANADA_POST_API_KEY"
+      ],
+      "example_endpoint": "/integrations/canada-post/example",
+      "verticals": [
+        "retail-and-commerce",
+        "transportation-and-logistics"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-ohip-olis",
+      "name": "Ontario OLIS / provincial health",
+      "category": "health",
+      "auth": "mtls",
+      "config_keys": [
+        "OHIP_OLIS_BASE_URL",
+        "OHIP_OLIS_CLIENT_CERT_PATH",
+        "OHIP_OLIS_CLIENT_KEY_PATH",
+        "OHIP_OLIS_CA_CERT_PATH"
+      ],
+      "example_endpoint": "/integrations/ohip-olis/example",
+      "verticals": [
+        "healthcare-and-life-sciences"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-fintrac-report",
+      "name": "FINTRAC reporting (FINTRAC API)",
+      "category": "compliance",
+      "auth": "mtls",
+      "config_keys": [
+        "FINTRAC_REPORT_BASE_URL",
+        "FINTRAC_REPORT_CLIENT_CERT_PATH",
+        "FINTRAC_REPORT_CLIENT_KEY_PATH",
+        "FINTRAC_REPORT_CA_CERT_PATH"
+      ],
+      "example_endpoint": "/integrations/fintrac-report/example",
+      "verticals": [
+        "financial-services"
+      ],
+      "status": "placeholder"
+    }
+  ],
+  "common": [
+    {
+      "id": "int-stripe",
+      "name": "Stripe",
+      "category": "payments",
+      "auth": "api-key",
+      "config_keys": [
+        "STRIPE_BASE_URL",
+        "STRIPE_API_KEY"
+      ],
+      "example_endpoint": "/integrations/stripe/example",
+      "verticals": [
+        "retail-and-commerce",
+        "financial-services"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-salesforce",
+      "name": "Salesforce",
+      "category": "crm",
+      "auth": "oauth2",
+      "config_keys": [
+        "SALESFORCE_TOKEN_URL",
+        "SALESFORCE_CLIENT_ID",
+        "SALESFORCE_CLIENT_SECRET",
+        "SALESFORCE_SCOPES"
+      ],
+      "example_endpoint": "/integrations/salesforce/example",
+      "verticals": [
+        "retail-and-commerce",
+        "technology"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-twilio",
+      "name": "Twilio (SMS)",
+      "category": "messaging",
+      "auth": "api-key",
+      "config_keys": [
+        "TWILIO_BASE_URL",
+        "TWILIO_API_KEY"
+      ],
+      "example_endpoint": "/integrations/twilio/example",
+      "verticals": [
+        "all"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-sendgrid",
+      "name": "SendGrid (email)",
+      "category": "messaging",
+      "auth": "api-key",
+      "config_keys": [
+        "SENDGRID_BASE_URL",
+        "SENDGRID_API_KEY"
+      ],
+      "example_endpoint": "/integrations/sendgrid/example",
+      "verticals": [
+        "all"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-s3",
+      "name": "AWS S3 (object storage)",
+      "category": "storage",
+      "auth": "api-key",
+      "config_keys": [
+        "S3_BASE_URL",
+        "S3_API_KEY"
+      ],
+      "example_endpoint": "/integrations/s3/example",
+      "verticals": [
+        "all"
+      ],
+      "status": "placeholder"
+    },
+    {
+      "id": "int-servicenow",
+      "name": "ServiceNow (ITSM)",
+      "category": "itsm",
+      "auth": "oauth2",
+      "config_keys": [
+        "SERVICENOW_TOKEN_URL",
+        "SERVICENOW_CLIENT_ID",
+        "SERVICENOW_CLIENT_SECRET",
+        "SERVICENOW_SCOPES"
+      ],
+      "example_endpoint": "/integrations/servicenow/example",
+      "verticals": [
+        "technology",
+        "government-and-public-sector"
+      ],
+      "status": "placeholder"
+    }
+  ]
+}

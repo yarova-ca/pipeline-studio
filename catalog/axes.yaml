@@ -139,3 +139,12 @@ integrations_canada:
   - { id: int-canada-post,  name: "Canada Post (AddressComplete / shipping)", category: logistics, auth: api-key, verticals: [retail-and-commerce, transportation-and-logistics] }
   - { id: int-ohip-olis,    name: "Ontario OLIS / provincial health", category: health, auth: mtls, verticals: [healthcare-and-life-sciences] }
   - { id: int-fintrac-report, name: "FINTRAC reporting (FINTRAC API)", category: compliance, auth: mtls, verticals: [financial-services] }
+
+# Common global integrations — available to every industry, Canada-compatible.
+integrations_common:
+  - { id: int-stripe,     name: "Stripe",        category: payments, auth: api-key, verticals: [retail-and-commerce, financial-services] }
+  - { id: int-salesforce, name: "Salesforce",    category: crm,      auth: oauth2,  verticals: [retail-and-commerce, technology] }
+  - { id: int-twilio,     name: "Twilio (SMS)",  category: messaging, auth: api-key, verticals: [all] }
+  - { id: int-sendgrid,   name: "SendGrid (email)", category: messaging, auth: api-key, verticals: [all] }
+  - { id: int-s3,         name: "AWS S3 (object storage)", category: storage, auth: api-key, verticals: [all] }
+  - { id: int-servicenow, name: "ServiceNow (ITSM)", category: itsm,  auth: oauth2,  verticals: [technology, government-and-public-sector] }
