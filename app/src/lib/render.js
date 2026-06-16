@@ -247,9 +247,10 @@ export function colFrameworks(){
   let h='';
   for(const cat of cats){const fws=fwByCat[cat.id]||[]; if(!fws.length)continue;
     h+=`<div class="grp" style="color:${CAT_COLOR(cat.id)}">${esc(cat.name)}</div>`;
-    for(const f of fws) h+=card(CAT_COLOR(cat.id),f.name,`${(f.languages||[f.languageId]).filter(Boolean).join('/')} · ${f.maturity||f.tier||''}`,`openFw('${f.id}')`,'',null);
+    for(const f of fws) h+=card(CAT_COLOR(cat.id),f.name,`${(f.languages||[f.languageId]).filter(Boolean).join('/')} · ${f.maturity||f.tier||''}`,`openFw('${f.id}')`,'', f.built?{cls:'built',text:'✓ Built'}:{cls:'soon',text:'planned'});
   }
-  return col(0,'01 · catalog','Frameworks','#0B7A66',h,`${(G.nodes.frameworks||[]).length} frameworks · front-end → back-end. Any one is a valid start — choose by need.`);
+  const nBuilt=(G.nodes.frameworks||[]).filter(f=>f.built).length;
+  return col(0,'01 · catalog','Frameworks','#0B7A66',h,`${(G.nodes.frameworks||[]).length} frameworks · ${nBuilt} golden repos built, rest planned. Any one is a valid start.`);
 }
 export function colPipeline(){
   const G=getG();

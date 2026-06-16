@@ -243,7 +243,10 @@
     window.showWelcome = () => { view.set('welcome'); };
     window.openFw = (id) => {
       const fw=(getG()?.nodes.frameworks||[]).find(f=>f.id===id); if(!fw)return missing(id);
-      openDrawer(fw.name, fullNode(fw, (KFIELDS.frameworks||[]).map(([k,l])=>[k,l]), ['shipped']));
+      const status = fw.built
+        ? `<div class="statusbar built">✅ <b>Golden repo built — fellow-level.</b> All 23 invariants verified, Docker-tested. <a href="${fw.repoUrl}" target="_blank" rel="noopener">View the real code →</a></div>`
+        : `<div class="statusbar soon">🕓 <b>Platform team yet to build.</b> The studio covers this framework; the golden repo is planned.</div>`;
+      openDrawer(fw.name, status + fullNode(fw, (KFIELDS.frameworks||[]).map(([k,l])=>[k,l]), ['shipped']));
     };
     window.openStage = (id) => {
       const st=(getG()?.nodes.stages||[]).find(s=>s.id===id); if(!st)return missing(id);
@@ -259,7 +262,12 @@
     };
     window.openProfile = (id) => {
       const p=(getG()?.nodes.complianceProfiles||[]).find(x=>x.id===id); if(!p)return missing(id);
-      openDrawer(p.name, fullNode(p, [['fullName','Full name'],['regulator','Regulator'],['scope','Scope'],['what','What it covers'],['keyControls','Key controls'],['sourcePage','Source']], null));
+      const IMPL={hipaa:'hipaa','pci-dss-4':'pci',pci:'pci',fedramp:'fedramp',fips:'fips',pipeda:'pipeda'};
+      const env=IMPL[id];
+      const sw = env
+        ? `<div class="statusbar built">🔀 <b>Switch on the fly.</b> Set <code>COMPLIANCE_PROFILE=${env}</code> on any golden repo — the controls flip at boot. One env var, no code change, no rebuild. The repo ships <code>compliance/${env}.yaml</code>; <code>GET /compliance</code> reports the active profile.</div>`
+        : `<div class="statusbar soon">🔀 <b>Industry switch model.</b> Golden repos ship 5 profiles — hipaa, pci, fips, fedramp, pipeda — via <code>COMPLIANCE_PROFILE</code>. This regime maps to the closest of those.</div>`;
+      openDrawer(p.name, sw + fullNode(p, [['fullName','Full name'],['regulator','Regulator'],['scope','Scope'],['what','What it covers'],['keyControls','Key controls'],['sourcePage','Source']], null));
     };
     window.openRegistry = () => openDrawer('GHCR — GitHub Container Registry', '<div class="sub">GitHub\'s built-in OCI registry. Signed images + SBOM attestations stored alongside.</div>');
     window.openImage = (id) => { const img=(getG()?.nodes.images||[]).find(x=>x.id===id); if(!img)return missing(id); openDrawer(img.name, fullNode(img, null, null)); };
