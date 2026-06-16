@@ -22,7 +22,7 @@ app.use('*', async (c, next) => {
   c.header('X-Content-Type-Options', 'nosniff')
   c.header('X-Frame-Options', 'DENY')
   c.header('Referrer-Policy', 'strict-origin-when-cross-origin')
-  if (compliance.encryptionInTransit) {
+  if (compliance.controls.encryption_in_transit === true) {
     c.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
   }
 })
@@ -80,13 +80,9 @@ app.get('/metrics', async (c) => {
 app.get('/compliance', (c) =>
   c.json({
     profile: compliance.profile,
-    controls: {
-      auditLogging: compliance.auditLogging,
-      sessionTimeoutSeconds: compliance.sessionTimeoutSeconds,
-      mfaRequired: compliance.mfaRequired,
-      encryptionInTransit: compliance.encryptionInTransit,
-    },
-    required: compliance.required,
+    name: compliance.name,
+    jurisdiction: compliance.jurisdiction,
+    controls: compliance.controls,
   }),
 )
 
@@ -125,17 +121,25 @@ app.use('/users/*', async (c, next) => {
 
 app.get('/users/me', (c) => c.json(c.get('user')))
 
+// Token TTL comes from the active profile. 0 means "no profile-imposed limit"
+// in the catalog, so fall back to an 8-hour default.
+const sessionTimeoutSeconds =
+  typeof compliance.controls.session_timeout_seconds === 'number' &&
+  compliance.controls.session_timeout_seconds > 0
+    ? compliance.controls.session_timeout_seconds
+    : 8 * 60 * 60
+
 // Issue a token for a known user (TTL set by the active industry profile).
 export function signToken(user: AuthUser): string {
   return jwt.sign(user, config.JWT_SECRET, {
-    expiresIn: compliance.sessionTimeoutSeconds,
+    expiresIn: sessionTimeoutSeconds,
     issuer: config.JWT_ISSUER,
     audience: config.JWT_AUDIENCE,
   })
 }
 
 logger.info(
-  { port: config.PORT, profile: compliance.profile, sessionTimeoutSeconds: compliance.sessionTimeoutSeconds },
+  { port: config.PORT, profile: compliance.profile, sessionTimeoutSeconds },
   'hono edge service starting',
 )
 

@@ -74,7 +74,7 @@ controls:
     label: "Where data may physically live"
     type: enum         # none | canada | canada-quebec | us | eu | local
     default: none
-    applies_to: [backend, web-ssr, edge, mobile-bff]
+    applies_to: [backend, web-ssr, edge, mobile-bff, protocol]
 
   breach_notification_hours:
     label: "Max hours to report a breach (0 = none)"

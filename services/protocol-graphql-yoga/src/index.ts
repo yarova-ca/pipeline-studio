@@ -9,6 +9,7 @@ import { logger } from './logger'
 import { register, httpDuration } from './metrics'
 import { prisma } from './db/client'
 import { buildContext, GraphQLContext } from './auth/context'
+import { activeCompliance } from './compliance'
 
 // I-1: refuse to boot on missing or weak config.
 if ((process.env.JWT_SECRET ?? '').length < 32) {
@@ -80,6 +81,10 @@ async function handler(req: IncomingMessage, res: ServerResponse): Promise<void>
       return json(503, { status: 'error', db: 'disconnected' })
     }
   }
+
+  // Reports the active industry profile and its controls. Switch with
+  // COMPLIANCE_PROFILE — the recipe changes with no code change, no rebuild.
+  if (url.startsWith('/compliance')) return json(200, activeCompliance())
 
   // I-13: Prometheus metrics.
   if (url.startsWith('/metrics')) {

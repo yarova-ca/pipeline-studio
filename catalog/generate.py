@@ -19,10 +19,17 @@ SERVICE_DEVICE = {
     'api-rails':'backend','api-spring-boot':'backend',
     'web-nextjs':'web-ssr','web-nuxt':'web-ssr','web-sveltekit':'web-ssr',
     'web-angular-ssr':'web-ssr','web-astro':'web-ssr',
-    'web-react':'web-static',
     'edge-hono':'edge',
-    'mobile-expo':'mobile-app','mobile-flutter':'mobile-app',
     'protocol-grpc':'protocol','protocol-ws-node':'protocol','protocol-graphql-yoga':'protocol',
+}
+
+# Split services = a client app + a backend-for-frontend (BFF). The BFF holds the
+# real compliance surface, so its profiles.json goes under bff/compliance with a
+# backend-grade device. The client carries no server-side compliance file.
+SPLIT_SERVICE_DEVICE = {
+    'web-react':'backend',       # the bff is a backend
+    'mobile-expo':'mobile-bff',
+    'mobile-flutter':'mobile-bff',
 }
 
 def load():
@@ -63,10 +70,25 @@ def write_service(svc, device, cat):
         json.dump(data, f, indent=2)
     return path, len(data['profiles']), len(data['controlMeta'])
 
+def write_split(svc, device, cat):
+    data = resolve_for_device(cat, device)
+    out_dir = os.path.join(ROOT,'services',svc,'bff','compliance')
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir,'profiles.json')
+    with open(path,'w') as f:
+        json.dump(data, f, indent=2)
+    return path, len(data['profiles']), len(data['controlMeta'])
+
 def main():
     cat = load()
-    targets = sys.argv[1:] or list(SERVICE_DEVICE.keys())
+    all_services = {**SERVICE_DEVICE, **SPLIT_SERVICE_DEVICE}
+    targets = sys.argv[1:] or list(all_services.keys())
     for svc in targets:
+        if svc in SPLIT_SERVICE_DEVICE:
+            device = SPLIT_SERVICE_DEVICE[svc]
+            path, nprof, nctrl = write_split(svc, device, cat)
+            print(f"OK {svc:22} device={device:11} profiles={nprof} controls={nctrl} (bff/)")
+            continue
         device = SERVICE_DEVICE.get(svc)
         if not device:
             print(f"SKIP {svc} — no device mapping"); continue

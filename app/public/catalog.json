@@ -97,7 +97,8 @@
      "backend",
      "web-ssr",
      "edge",
-     "mobile-bff"
+     "mobile-bff",
+     "protocol"
     ]
    },
    "breach_notification_hours": {

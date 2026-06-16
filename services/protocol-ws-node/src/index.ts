@@ -8,6 +8,7 @@ import { logger } from './logger'
 import { register, httpDuration, wsConnections } from './metrics'
 import { authenticateUpgrade } from './auth/ws-auth'
 import { prisma } from './db/client'
+import { activeCompliance } from './compliance'
 
 // I-1: refuse to boot on missing or weak config.
 const jwtSecret = process.env.JWT_SECRET ?? ''
@@ -51,6 +52,11 @@ const server = http.createServer(async (req, res) => {
       logger.error({ err }, 'health/ready db check failed')
       return done(503, { status: 'error', db: 'disconnected' })
     }
+  }
+
+  // Active compliance profile (chosen at runtime by COMPLIANCE_PROFILE).
+  if (url.startsWith('/compliance')) {
+    return done(200, activeCompliance())
   }
 
   // I-13: Prometheus metrics.

@@ -5,9 +5,9 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import * as client from 'prom-client';
+import { activeCompliance } from './compliance';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -24,30 +24,6 @@ const httpDuration = new client.Histogram({
   buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5],
   registers: [registry],
 });
-
-// The active industry profile, read from the shared compliance/*.yaml.
-function activeCompliance(): { profile: string; required: Record<string, unknown> } {
-  const profile = (process.env['COMPLIANCE_PROFILE'] ?? 'baseline').toLowerCase();
-  if (profile === 'baseline') return { profile, required: {} };
-  try {
-    const text = readFileSync(join(process.cwd(), 'compliance', `${profile}.yaml`), 'utf8');
-    const required: Record<string, unknown> = {};
-    let inBlock = false;
-    for (const line of text.split('\n')) {
-      if (line.startsWith('required_controls:')) { inBlock = true; continue; }
-      if (inBlock) {
-        const m = line.match(/^\s*-\s*([a-z_]+):\s*(.+?)\s*$/);
-        if (m) {
-          const raw = m[2].replace(/^["']|["']$/g, '');
-          required[m[1]] = raw === 'true' ? true : raw === 'false' ? false : /^\d+$/.test(raw) ? Number(raw) : raw;
-        } else if (/^\S/.test(line)) break;
-      }
-    }
-    return { profile, required };
-  } catch {
-    return { profile, required: {} };
-  }
-}
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
