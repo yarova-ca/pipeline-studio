@@ -1,0 +1,10 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+!*.tfvars.example
+
+# Keep lock files out of this template repo; regenerate per checkout.
+.terraform.lock.hcl

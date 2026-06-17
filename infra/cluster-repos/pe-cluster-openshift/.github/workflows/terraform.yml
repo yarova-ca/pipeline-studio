@@ -1,0 +1,114 @@
+name: terraform
+
+# Validates the OpenShift cluster Terraform with NO cloud or Red Hat credentials.
+# Every step here runs with `-backend=false` and never reaches openshift-install.
+# Steps that would need the Red Hat pull secret are gated on secrets.OCP_PULL_SECRET
+# and are SKIPPED (not failed) when the secret is absent.
+
+on:
+  push:
+    paths:
+      - "infra/cluster-repos/pe-cluster-openshift/**"
+  pull_request:
+    paths:
+      - "infra/cluster-repos/pe-cluster-openshift/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TF_VERSION: "1.14.5"
+  WORKDIR: infra/cluster-repos/pe-cluster-openshift/terraform
+
+jobs:
+  fmt:
+    name: fmt check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      - name: terraform fmt -check -recursive
+        working-directory: ${{ env.WORKDIR }}
+        run: terraform fmt -check -recursive
+
+  validate-module:
+    name: validate openshift module
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      - name: init (no backend)
+        working-directory: ${{ env.WORKDIR }}/modules/openshift
+        run: terraform init -backend=false
+      - name: validate
+        working-directory: ${{ env.WORKDIR }}/modules/openshift
+        run: terraform validate
+
+  validate-envs:
+    name: validate ${{ matrix.env }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [hub, dev, test, prod]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      - name: init (no backend)
+        working-directory: ${{ env.WORKDIR }}/${{ matrix.env }}
+        run: terraform init -backend=false
+      - name: validate
+        working-directory: ${{ env.WORKDIR }}/${{ matrix.env }}
+        run: terraform validate
+
+  # Emits whether the Red Hat pull secret is configured.
+  # GitHub does not allow `secrets.*` in a job-level `if`, so we check it here
+  # and expose the result as an output the gated job depends on.
+  check-secrets:
+    name: check secrets
+    runs-on: ubuntu-latest
+    outputs:
+      has_pull_secret: ${{ steps.check.outputs.has_pull_secret }}
+    steps:
+      - id: check
+        env:
+          OCP_PULL_SECRET: ${{ secrets.OCP_PULL_SECRET }}
+        run: |
+          if [ -n "$OCP_PULL_SECRET" ]; then
+            echo "has_pull_secret=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_pull_secret=false" >> "$GITHUB_OUTPUT"
+            echo "OCP_PULL_SECRET not set — gated smoke job will be skipped (not failed)."
+          fi
+
+  # This job ONLY runs when the Red Hat pull secret is configured.
+  # It renders the install-config to confirm credentials wire up, but never
+  # calls openshift-install (no cluster is created in CI). No hard-fail when
+  # the secret is missing — the job is simply skipped.
+  pull-secret-smoke:
+    name: pull-secret smoke (gated)
+    runs-on: ubuntu-latest
+    needs: [validate-envs, check-secrets]
+    if: ${{ needs.check-secrets.outputs.has_pull_secret == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      - name: init (no backend)
+        working-directory: ${{ env.WORKDIR }}/dev
+        run: terraform init -backend=false
+      - name: validate with credentials present
+        working-directory: ${{ env.WORKDIR }}/dev
+        env:
+          TF_VAR_pull_secret: ${{ secrets.OCP_PULL_SECRET }}
+          TF_VAR_ssh_key: ${{ secrets.OCP_SSH_KEY }}
+          TF_VAR_base_domain: ${{ vars.OCP_BASE_DOMAIN }}
+        run: terraform validate

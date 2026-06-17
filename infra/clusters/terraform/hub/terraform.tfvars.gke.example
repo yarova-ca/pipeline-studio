@@ -1,0 +1,4 @@
+cloud          = "gke"
+cluster_name   = "pipeline-hub"
+region         = "us-central1"
+gke_project_id = "YOUR_GCP_PROJECT_ID"

@@ -1,0 +1,2 @@
+cluster_name = "pipeline-hub"
+region       = "us-east-1"
