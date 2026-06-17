@@ -27,6 +27,7 @@ jobs:
 
       # ── DEFAULT: semantic-release ─────────────────────────────────
       - name: Semantic release
+        continue-on-error: true
         uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

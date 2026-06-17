@@ -18,19 +18,23 @@ permissions:
 
 jobs:
 
+  # The whole notify job no-ops when SLACK_WEBHOOK_URL is not configured.
+  # `secrets` cannot be read in a job-level `if:`, so the secret is mapped
+  # into a job-level env var and every step is gated on it.
   notify:
     if: github.event.workflow_run.conclusion != 'skipped'
     runs-on: ubuntu-24.04
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       # ── DEFAULT: Slack ────────────────────────────────────────────
       - uses: slackapi/slack-github-action@v1
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         with:
           payload: |
-            {{
+            {
               "text": "Pipeline ${{ github.event.workflow_run.conclusion }}: ASP.NET Core 9 — ${{ github.event.workflow_run.head_sha }}"
-            }}
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            }
       #
       # ── ALTERNATIVE: Microsoft Teams ──────────────────────────────
       # - uses: aliencube/microsoft-teams-actions@v0.8.0

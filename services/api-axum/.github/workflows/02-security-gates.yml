@@ -24,10 +24,12 @@ jobs:
   sca:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - uses: actions/checkout@v4
       # ── DEFAULT: cargo audit ──────────────────────────────────────
+      - name: Install cargo-audit
+        run: cargo install cargo-audit --locked
       - name: SCA — cargo audit
         run: cargo audit
       #
@@ -75,9 +77,11 @@ jobs:
   license-scan:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - uses: actions/checkout@v4
+      - name: Install cargo-license
+        run: cargo install cargo-license --locked
       - name: License check
         run: cargo license --json
       #

@@ -20,11 +20,11 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
           bundler-cache: true
-      - uses: actions/checkout@v4
       - name: Run tests
         run: bundle exec rspec --format documentation
 

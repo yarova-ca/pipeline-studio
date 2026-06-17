@@ -21,9 +21,12 @@ jobs:
   notify:
     if: github.event.workflow_run.conclusion != 'skipped'
     runs-on: ubuntu-24.04
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      # ── DEFAULT: Slack ────────────────────────────────────────────
-      - uses: slackapi/slack-github-action@v1
+      # ── DEFAULT: Slack (skipped when SLACK_WEBHOOK_URL secret unset) ─
+      - if: ${{ env.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {{

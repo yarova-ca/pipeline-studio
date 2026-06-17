@@ -21,16 +21,17 @@ jobs:
   notify:
     if: github.event.workflow_run.conclusion != 'skipped'
     runs-on: ubuntu-24.04
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      # ── DEFAULT: Slack ────────────────────────────────────────────
-      - uses: slackapi/slack-github-action@v1
+      # ── DEFAULT: Slack (skipped when SLACK_WEBHOOK_URL secret is unset) ─
+      - if: ${{ env.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {{
               "text": "Pipeline ${{ github.event.workflow_run.conclusion }}: Gin 1.10 — ${{ github.event.workflow_run.head_sha }}"
             }}
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       #
       # ── ALTERNATIVE: Microsoft Teams ──────────────────────────────
       # - uses: aliencube/microsoft-teams-actions@v0.8.0

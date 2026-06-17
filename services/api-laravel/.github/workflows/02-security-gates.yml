@@ -24,11 +24,11 @@ jobs:
   sca:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           tools: composer:v2
-      - uses: actions/checkout@v4
       # ── DEFAULT: composer audit ──────────────────────────────────────
       - name: SCA — composer audit
         run: composer audit
@@ -77,11 +77,11 @@ jobs:
   license-scan:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           tools: composer:v2
-      - uses: actions/checkout@v4
       - name: License check
         run: vendor/bin/composer-license-checker check
       #

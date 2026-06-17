@@ -24,11 +24,11 @@ jobs:
   sca:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
-      - uses: actions/checkout@v4
       # ── DEFAULT: pip-audit ──────────────────────────────────────
       - name: SCA — pip-audit
         run: pip-audit --vulnerability-service pypi
@@ -87,11 +87,11 @@ jobs:
   license-scan:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
-      - uses: actions/checkout@v4
       - name: License check
         run: pip-licenses --format=json --output-file=licenses.json
       #

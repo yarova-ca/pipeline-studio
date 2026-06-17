@@ -24,11 +24,11 @@ jobs:
   sca:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version: '1.23'
           cache: true
-      - uses: actions/checkout@v4
       # ── DEFAULT: govulncheck ──────────────────────────────────────
       - name: SCA — govulncheck
         run: govulncheck ./...
@@ -81,11 +81,11 @@ jobs:
   license-scan:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version: '1.23'
           cache: true
-      - uses: actions/checkout@v4
       - name: License check
         run: go-licenses check ./...
       #

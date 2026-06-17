@@ -21,9 +21,18 @@ jobs:
   notify:
     if: github.event.workflow_run.conclusion != 'skipped'
     runs-on: ubuntu-24.04
+    # Gate whole job on SLACK_WEBHOOK_URL — secrets context is not allowed in
+    # job-level 'if', so the secret is mapped to a job env var and every step
+    # is gated on it. With no secret set, the only step is skipped and the job
+    # passes green.
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
+      - uses: actions/checkout@v4
       # ── DEFAULT: Slack ────────────────────────────────────────────
-      - uses: slackapi/slack-github-action@v1
+      - name: Slack notify
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {{
