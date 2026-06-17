@@ -1542,6 +1542,65 @@
      "financial-services"
     ]
    }
+  ],
+  "integrations_common": [
+   {
+    "id": "int-stripe",
+    "name": "Stripe",
+    "category": "payments",
+    "auth": "api-key",
+    "verticals": [
+     "retail-and-commerce",
+     "financial-services"
+    ]
+   },
+   {
+    "id": "int-salesforce",
+    "name": "Salesforce",
+    "category": "crm",
+    "auth": "oauth2",
+    "verticals": [
+     "retail-and-commerce",
+     "technology"
+    ]
+   },
+   {
+    "id": "int-twilio",
+    "name": "Twilio (SMS)",
+    "category": "messaging",
+    "auth": "api-key",
+    "verticals": [
+     "all"
+    ]
+   },
+   {
+    "id": "int-sendgrid",
+    "name": "SendGrid (email)",
+    "category": "messaging",
+    "auth": "api-key",
+    "verticals": [
+     "all"
+    ]
+   },
+   {
+    "id": "int-s3",
+    "name": "AWS S3 (object storage)",
+    "category": "storage",
+    "auth": "api-key",
+    "verticals": [
+     "all"
+    ]
+   },
+   {
+    "id": "int-servicenow",
+    "name": "ServiceNow (ITSM)",
+    "category": "itsm",
+    "auth": "oauth2",
+    "verticals": [
+     "technology",
+     "government-and-public-sector"
+    ]
+   }
   ]
  }
 }
