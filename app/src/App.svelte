@@ -4,7 +4,7 @@
   import { loadAll } from './lib/data.js';
   import {
     STEP_ORDER, DECISION_STEPS, deviceGroups, frameworksForDevice,
-    buildBlueprint, repoLink, gOptions, buildComplianceMatrix, catalogOptions
+    buildBlueprint, repoLink, gOptions, buildComplianceMatrix, catalogOptions, integrationsList
   } from './lib/wizard.js';
   import './app.css';
 
@@ -23,6 +23,7 @@
   $: fwGroups = (stepKey === 'fw' && chosenDevice && $ready) ? frameworksForDevice(chosenDevice) : [];
   $: bp = (stepKey === 'result' && $ready && $rs.fw) ? buildBlueprint($rs) : null;
   $: matrix = (stepKey === 'result' && $ready && $rs.fw) ? buildComplianceMatrix($rs) : null;
+  $: integrations = (stepKey === 'result' && $ready) ? integrationsList() : null;
 
   function next(){ if(step < total - 1){ step++; showAll = false; } }
   function back(){ if(step > 0){ step--; showAll = false; } }
@@ -232,16 +233,16 @@
         <p class="wz-plain mx-note">Switch with one env var: <code>COMPLIANCE_PROFILE</code>. No code change. No rebuild.</p>
       {/if}
 
-      <!-- the full pipeline: phases → stages → tools -->
-      <h2 class="sec">Your full pipeline — {bp.phases.length} phases · {bp.stageCount} stages · {bp.toolCount} tools</h2>
-      {#each bp.phases as p}
-        <div class="phase">
-          <button class="phase-head" onclick={()=>openPhase = openPhase===p.id ? null : p.id}
-            aria-expanded={openPhase===p.id}>
-            <span class="phase-name">{p.name}</span>
-            <span class="phase-meta">{p.stages.length} stages {openPhase===p.id ? '▾' : '▸'}</span>
-          </button>
-          {#if openPhase===p.id}
+      <!-- the full pipeline: phases → stages → tools (expanded top-to-bottom) -->
+      <h2 class="sec">Your full pipeline — start to end · {bp.phases.length} phases · {bp.stageCount} stages · {bp.toolCount} tools</h2>
+      <p class="wz-plain">Every phase, stage and tool the pipeline runs. Top to bottom.</p>
+      {#each bp.phases as p, pi}
+        <div class="phase open">
+          <div class="phase-head static">
+            <span class="phase-name"><span class="phase-num">{pi+1}</span> {p.name}</span>
+            <span class="phase-meta">{p.stages.length} stages</span>
+          </div>
+          {#if true}
             <div class="phase-body">
               {#each p.stages as st}
                 <div class="stage">
@@ -272,6 +273,20 @@
           {/if}
         </div>
       {/each}
+
+      <!-- integrations the repo can connect to -->
+      {#if integrations}
+        <h2 class="sec">Integrations — connect to outside systems</h2>
+        <p class="wz-plain">Each ships a client + config keys. Fill the env to activate. Canada-first.</p>
+        <div class="integ-grid">
+          {#each integrations.canada as i}
+            <div class="integ ca"><span class="integ-name">{i.name}</span><span class="integ-meta">{i.category} · {i.auth} · <b>CA</b></span></div>
+          {/each}
+          {#each integrations.common as i}
+            <div class="integ"><span class="integ-name">{i.name}</span><span class="integ-meta">{i.category} · {i.auth}</span></div>
+          {/each}
+        </div>
+      {/if}
 
       <!-- runnable recipe -->
       {#if bp.commands && bp.commands.docker}

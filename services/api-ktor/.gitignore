@@ -9,3 +9,6 @@ build/
 *.class
 *.jar
 !*-all.jar
+
+# Gradle wrapper jar must be committed so ./gradlew works in CI
+!gradle/wrapper/gradle-wrapper.jar
