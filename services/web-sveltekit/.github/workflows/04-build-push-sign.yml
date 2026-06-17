@@ -198,7 +198,7 @@ jobs:
         run: cosign sign --yes $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
 
       - name: Generate SBOM
-        uses: anchore/syft-action@v1
+        uses: anchore/sbom-action@v0
         with:
           image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           output-file: sbom.spdx.json
