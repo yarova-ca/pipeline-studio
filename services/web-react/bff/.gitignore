@@ -5,6 +5,7 @@
 .env.*.local
 node_modules/
 dist/
+src/generated/
 build/
 .next/
 .output/

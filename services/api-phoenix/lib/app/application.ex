@@ -11,8 +11,14 @@ defmodule App.Application do
     # OpenTelemetry — enabled only when OTEL_ENABLED=true.
     # The opentelemetry_phoenix integration hooks into Phoenix telemetry events
     # and exports spans to the configured OTLP endpoint.
+    #
+    # opentelemetry_phoenix 2.0 replaced the Erlang :opentelemetry_phoenix.setup/0
+    # with the Elixir OpentelemetryPhoenix.setup/1, which requires an :adapter.
+    # We run Cowboy (plug_cowboy), so the Cowboy HTTP spans come from
+    # :opentelemetry_cowboy.setup/0 plus adapter: :cowboy2.
     if System.get_env("OTEL_ENABLED") == "true" do
-      :opentelemetry_phoenix.setup()
+      :opentelemetry_cowboy.setup()
+      OpentelemetryPhoenix.setup(adapter: :cowboy2)
     end
 
     # JSON structured logging — LoggerJSON formats all Logger calls as JSON.

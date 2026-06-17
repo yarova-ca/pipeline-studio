@@ -1,14 +1,20 @@
-import { defineConfig, env } from 'prisma/config'
+import { defineConfig } from 'prisma/config'
 
-// Prisma 7 moved the connection URL out of schema.prisma into this config file.
-// The CLI (generate/migrate) reads the datasource URL from here; the runtime
-// client connects via the @prisma/adapter-pg driver adapter (see src/db.ts).
+// Prisma 7 moved the datasource connection URL out of schema.prisma and into
+// this config file. The CLI (migrate / generate) reads the URL from here; the
+// runtime PrismaClient connects via the @prisma/adapter-pg driver adapter
+// (see src/db.ts) using the same DATABASE_URL env var.
+//
+// `prisma generate` does not connect to the database, so DATABASE_URL may be
+// absent at build/test time (e.g. in the Docker build stage or CI before a DB
+// exists). Fall back to a placeholder so generate never fails for a missing
+// URL; migrate still needs a real URL and will use the env value when present.
 export default defineConfig({
   schema: 'prisma/schema.prisma',
   migrations: {
     path: 'prisma/migrations',
   },
   datasource: {
-    url: env('DATABASE_URL'),
+    url: process.env.DATABASE_URL ?? 'postgresql://placeholder:placeholder@localhost:5432/placeholder',
   },
 })

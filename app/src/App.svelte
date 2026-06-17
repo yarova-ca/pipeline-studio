@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { ready, loadError } from './lib/stores.js';
   import { loadAll } from './lib/data.js';
   import { platformScale } from './lib/wizard.js';
@@ -7,6 +7,7 @@
     primer, frameworkChapters, pipeline, decisionChapters, complianceChapter,
     proofRepos, glossary, detailFor, regimeDetail, adrs, adrDetail, clusterRepos,
   } from './lib/guide.js';
+  import { roleConsole, rolePage } from './lib/roles.js';
   import './app.css';
 
   let retrying = false;
@@ -14,6 +15,8 @@
   let glossOpen = false;
   let glossQuery = '';
   let industry = 'baseline'; // for the compliance lens
+  let view = 'guide';        // 'guide' | 'roles' | 'role'
+  let roleId = null;         // selected role when view==='role'
 
   // chapters (computed once ready)
   $: P   = $ready ? primer() : null;
@@ -26,6 +29,8 @@
   $: adrList = $ready ? adrs() : [];
   $: clusters = $ready ? clusterRepos() : [];
   $: gloss = $ready ? glossary() : [];
+  $: roleList = $ready ? roleConsole() : [];
+  $: role = (view==='role' && roleId) ? rolePage(roleId) : null;
   $: glossList = gloss.filter(g => !glossQuery || (g.term+' '+(g.def||'')).toLowerCase().includes(glossQuery.toLowerCase()));
 
   const LANG = { ts:'TypeScript', js:'JavaScript', py:'Python', go:'Go', rust:'Rust', java:'Java',
@@ -38,7 +43,13 @@
   function openRegime(id){ drawer = regimeDetail(id); }
   function openAdr(id){ drawer = adrDetail(id); }
   function closeDrawer(){ drawer = null; }
-  function jump(id){ document.getElementById('ch-'+id)?.scrollIntoView({behavior:'smooth'}); }
+  async function jump(id){ if(view!=='guide'){ view='guide'; await tick(); } document.getElementById('ch-'+id)?.scrollIntoView({behavior:'smooth'}); }
+  // Roles lens
+  function openRoles(){ view='roles'; roleId=null; drawer=null; window.scrollTo(0,0); }
+  function openRole(id){ roleId=id; view='role'; drawer=null; window.scrollTo(0,0); }
+  function backToRoles(){ view='roles'; roleId=null; window.scrollTo(0,0); }
+  // An ADR reference inside a role page → jump to the ADR chapter + open it.
+  async function openAdrRef(ref){ view='guide'; await tick(); document.getElementById('ch-adr')?.scrollIntoView({behavior:'smooth'}); const num=ref.label.replace('ADR-',''); const real=adrList.find(a=>a.num===num); if(real) openAdr(real.id); }
 
   async function attemptLoad(){ retrying = true; try { await loadAll(); } catch(e){} finally { retrying = false; } }
   onMount(attemptLoad);
@@ -117,11 +128,13 @@
     <img class="wordmark" src="/yarova-logo-light.png" alt="Yarova" /><span class="toolname">Studio</span>
   </div>
   <nav class="gd-nav">
-    {#each NAV as [id, label]}<button onclick={()=>jump(id)}>{label}</button>{/each}
+    {#each NAV as [id, label]}<button class:active={view==='guide'} onclick={()=>jump(id)}>{label}</button>{/each}
+    <button class="roles-nav" class:active={view==='roles'||view==='role'} onclick={openRoles}>Roles ▸</button>
   </nav>
   <button class="btn ghost gloss-btn" onclick={()=>{glossOpen=true;}}>? glossary</button>
 </header>
 
+{#if view==='guide'}
 <main class="gd">
 
   <!-- Chapter 0 — PURPOSE (the locked page) -->
@@ -347,6 +360,99 @@
     </div>
   </section>
 </main>
+{/if}
+
+<!-- ROLES LENS — index of the 9 roles -->
+{#if view==='roles'}
+<main class="gd">
+  <section class="gd-sec rl-index">
+    <span class="pp-kicker">The operating model — who runs the platform</span>
+    <h1 class="gd-h1">Step into a role. Run it.</h1>
+    <p class="gd-lead">Every role on the platform team is a full page.
+    Its mission, what it owns, what it does (and how often), the decisions in its hands,
+    the layers it works, and the exact task you hand an AI agent. Click a role to open it.</p>
+    <div class="rl-grid">
+      {#each roleList as r}
+        <button class="rl-card" class:consumer={r.consumer} onclick={()=>openRole(r.id)}>
+          <span class="rl-n">{r.n}</span>
+          <span class="rl-t">{r.title}</span>
+          <span class="rl-p">{r.plain}</span>
+          <span class="rl-open">Open role ▸</span>
+        </button>
+      {/each}
+    </div>
+  </section>
+</main>
+{/if}
+
+<!-- ROLE PAGE — one role, fully operable -->
+{#if view==='role' && role}
+<main class="gd rl-page">
+  <button class="rl-back" onclick={backToRoles}>‹ All roles</button>
+  <div class="rl-head" class:consumer={role.consumer}>
+    <span class="rl-head-n">Role {role.n} of 9</span>
+    <h1 class="gd-h1">{role.title}</h1>
+    <p class="rl-mission">{role.mission}</p>
+    <p class="rl-plain">{role.plain}</p>
+  </div>
+
+  <div class="rl-cols">
+    <section class="rl-block">
+      <h2 class="rl-bh">Owns</h2>
+      <p class="rl-bn">What this role is accountable for.</p>
+      <ul class="rl-list">{#each role.owns as o}<li>{o}</li>{/each}</ul>
+    </section>
+
+    <section class="rl-block">
+      <h2 class="rl-bh">Does</h2>
+      <p class="rl-bn">The real recurring work — and how often.</p>
+      <div class="rl-does">
+        {#each role.does as d}
+          <div class="rl-do"><span class="rl-when">{d.when}</span><span class="rl-task">{d.task}</span></div>
+        {/each}
+      </div>
+    </section>
+  </div>
+
+  <section class="rl-block">
+    <h2 class="rl-bh">Decides</h2>
+    <p class="rl-bn">{role.decidesNote || 'The decisions of record in this role’s hands. Click to read the ADR.'}</p>
+    {#if role.decides.length}
+      <div class="rl-adrs">
+        {#each role.decides as a}
+          <button class="rl-adr" onclick={()=>openAdrRef(a)}>
+            <span class="rl-adr-n">{a.label}</span><span class="rl-adr-t">{a.title}</span>
+          </button>
+        {/each}
+      </div>
+    {:else}
+      <p class="rl-empty">Makes no platform decisions — consumes the paved road.</p>
+    {/if}
+  </section>
+
+  <div class="rl-cols">
+    <section class="rl-block">
+      <h2 class="rl-bh">Layers worked</h2>
+      <p class="rl-bn">{role.layersNote || 'Where on the paved road this role operates.'}</p>
+      <div class="rl-layers">{#each role.layers as L}<span class="rl-layer">{L}</span>{/each}</div>
+    </section>
+
+    <section class="rl-block">
+      <h2 class="rl-bh">Definition of done</h2>
+      <p class="rl-bn">This role’s work is done only when these hold.</p>
+      <ul class="rl-list">{#each role.dod as d}<li>{d}</li>{/each}</ul>
+    </section>
+  </div>
+
+  <section class="rl-block rl-dispatch">
+    <h2 class="rl-bh">Dispatch to AI</h2>
+    <p class="rl-bn">Acting as this role, hand one of these to Claude. Copy, fill the &lt;blanks&gt;, run.</p>
+    {#each role.dispatch as t}
+      <div class="rl-disp"><code>{t}</code><button class="rl-copy" onclick={()=>navigator.clipboard?.writeText(t)}>copy</button></div>
+    {/each}
+  </section>
+</main>
+{/if}
 
 <!-- detail drawer -->
 {#if drawer}

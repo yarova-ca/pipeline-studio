@@ -1,5 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  runtime             = "nodejs"
+  // The BFF compiles to CommonJS (node dist/index.js). Emit a CommonJS client
+  // with extensionless relative imports so tsc resolves them under node16.
+  moduleFormat        = "cjs"
+  importFileExtension = ""
 }
 
 datasource db {
