@@ -19,13 +19,33 @@ jobs:
 
   test:
     runs-on: ubuntu-24.04
+    # NOTE: No Postgres service container is provisioned here.
+    # Every test mocks the DB session via app.dependency_overrides[get_db],
+    # so no test opens a real database connection. The app's default
+    # DATABASE_URL (sqlite+aiosqlite) is never even reached in tests.
+    # If a future test hits a real DB, add a postgres:16 service container
+    # and point DATABASE_URL at postgresql://app:app@localhost:5432/app_test.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
+      # Install runtime + test deps so `pytest` exists on PATH.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          pip install pytest pytest-cov httpx
       - name: Run tests
+        env:
+          # JWT_SECRET is required at import time by src/auth/jwt.py
+          # (RuntimeError if unset or < 32 chars). Tests import the app,
+          # so it must be present. Test-only value, not a real secret.
+          JWT_SECRET: test-secret-at-least-32-characters-long
+          # App default is sqlite+aiosqlite; set explicitly for clarity.
+          # Unused at runtime because every test mocks get_db.
+          DATABASE_URL: sqlite+aiosqlite:///./test.db
         run: pytest --cov=. --cov-report=xml
 
       # ── OPTIONAL: Codecov coverage upload ─────────────────────────

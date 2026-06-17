@@ -16,6 +16,10 @@ class AuthRoutesTest {
 
     private fun testApp(block: suspend ApplicationTestBuilder.() -> Unit) = testApplication {
         application { module() }
+        // Force the module to run so DatabaseFactory.init() calls Database.connect()
+        // before any seed transaction inside a test. testApplication boots lazily,
+        // so without this the seed fails with "call Database.connect() before using this code".
+        startApplication()
         block()
     }
 

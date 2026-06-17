@@ -19,14 +19,46 @@ jobs:
 
   test:
     runs-on: ubuntu-24.04
+
+    # ── Postgres service container ────────────────────────────────────
+    # The app uses Prisma + Postgres. The health/ready test runs a real
+    # `SELECT 1` against this DB, so a live Postgres must be present in CI.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          POSTGRES_DB: app_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U app -d app_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Generate Prisma client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: postgresql://app:app@localhost:5432/app_test
+      - name: Apply Prisma schema to test DB
+        run: npx prisma db push --skip-generate
+        env:
+          DATABASE_URL: postgresql://app:app@localhost:5432/app_test
       - name: Run tests
         run: npm test -- --coverage --coverageReporters=lcov
+        env:
+          DATABASE_URL: postgresql://app:app@localhost:5432/app_test
+          JWT_SECRET: test-secret-at-least-32-characters-long
 
       # ── OPTIONAL: Codecov coverage upload ─────────────────────────
       # - uses: codecov/codecov-action@v4

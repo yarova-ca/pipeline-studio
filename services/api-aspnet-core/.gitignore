@@ -6,5 +6,6 @@
 bin/
 obj/
 out/
+TestResults/
 *.user
 .vs/

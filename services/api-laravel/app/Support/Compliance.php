@@ -12,6 +12,11 @@ class Compliance
     public string $name = '';
     public string $jurisdiction = '';
 
+    // JWT/session lifetime in seconds for the active profile.
+    // Derived from the session_timeout_seconds control; falls back to 1h
+    // when the profile sets no limit (control value 0), so tokens stay usable.
+    public int $sessionTimeoutSeconds = 3600;
+
     /** @var array<string, bool|int|float|string> */
     public array $controls = [];
 
@@ -43,6 +48,9 @@ class Compliance
         $this->name = (string) ($entry['name'] ?? '');
         $this->jurisdiction = (string) ($entry['jurisdiction'] ?? '');
         $this->controls = is_array($entry['controls'] ?? null) ? $entry['controls'] : [];
+
+        $timeout = (int) ($this->controls['session_timeout_seconds'] ?? 0);
+        $this->sessionTimeoutSeconds = $timeout > 0 ? $timeout : 3600;
     }
 
     /**

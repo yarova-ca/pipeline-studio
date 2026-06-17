@@ -26,7 +26,7 @@ jobs:
           go-version: '1.23'
           cache: true
       - name: Run tests
-        run: go test ./... -coverprofile=coverage.out
+        run: go test ./...
 
       # ── OPTIONAL: Codecov coverage upload ─────────────────────────
       # - uses: codecov/codecov-action@v4

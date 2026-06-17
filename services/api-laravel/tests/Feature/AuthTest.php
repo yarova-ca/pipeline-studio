@@ -53,6 +53,10 @@ class AuthTest extends TestCase
 
     public function test_dev_token_returns_token_in_local_env(): void
     {
+        // The /dev/token route is gated to the local environment only.
+        // Force local for this assertion so the gate is exercised, not bypassed.
+        $this->app->detectEnvironment(fn () => 'local');
+
         $this->postJson('/dev/token', ['email' => 'dev@example.com'])
             ->assertStatus(200)
             ->assertJsonStructure(['token', 'user']);

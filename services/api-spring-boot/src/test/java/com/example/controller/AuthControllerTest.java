@@ -48,10 +48,10 @@ class AuthControllerTest {
 
     @BeforeEach
     void setUp() {
-        testUser = new User("test@example.com", "Test User", "dev");
-        // Set ID via reflection-free approach: save triggers UUID generation.
-        // For tests we assign a fixed UUID using a helper constructor path.
         UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+        testUser = new User("test@example.com", "Test User", "dev");
+        // Replicate what JPA assigns on persist — the mock never runs @GeneratedValue.
+        testUser.setId(userId);
 
         // Replicate what JPA would do — expose through the mock
         when(userRepository.findByApiKey(VALID_API_KEY)).thenReturn(Optional.of(testUser));

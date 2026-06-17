@@ -1,3 +1,5 @@
+require_relative '../../lib/jwt_service'
+
 class AuthController < ActionController::API
   include Authenticatable
 

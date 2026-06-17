@@ -11,8 +11,13 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object DatabaseFactory {
 
     fun init() {
+        // No DATABASE_URL → in-memory H2 in PostgreSQL-compatibility mode.
+        // MODE=PostgreSQL makes H2 match the Postgres production dialect, so the
+        // Exposed DDL/DML that runs against Postgres also runs unchanged here.
+        // A random database name per init isolates each test: every testApplication
+        // boot gets a fresh empty schema, so re-seeding the same row never collides.
         val databaseUrl = System.getenv("DATABASE_URL")
-            ?: "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
+            ?: "jdbc:h2:mem:test_${java.util.UUID.randomUUID()};MODE=PostgreSQL;DB_CLOSE_DELAY=-1"
 
         val config = HikariConfig().apply {
             jdbcUrl = databaseUrl

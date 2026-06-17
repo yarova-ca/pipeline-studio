@@ -1,0 +1,39 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 04 — Test  |  06 Edge Rendering — Hono 4.7
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Hono repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "04 Test — Hono 4.7"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: bff
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: bff/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
+      # ── OPTIONAL: Codecov ─────────────────────────────────────────
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}

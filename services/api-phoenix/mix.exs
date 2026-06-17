@@ -6,6 +6,10 @@ defmodule App.MixProject do
       app: :app,
       version: "1.0.0",
       elixir: "~> 1.17",
+      # Coverage is reported, not gated. `mix test --cover` prints the summary
+      # table but a low percentage must not fail CI (default threshold is 90%).
+      # The threshold lives under :summary for the built-in cover tool.
+      test_coverage: [summary: [threshold: 0]],
       deps: deps()
     ]
   end

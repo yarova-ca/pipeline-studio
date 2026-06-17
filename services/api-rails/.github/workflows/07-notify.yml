@@ -19,21 +19,23 @@ permissions:
 jobs:
 
   notify:
-    # Whole job gated on SLACK_WEBHOOK_URL — skipped (green) when secret is absent.
-    # secrets context is not allowed in job-level if, so it is surfaced via env.
-    if: ${{ github.event.workflow_run.conclusion != 'skipped' && env.SLACK_WEBHOOK_URL != '' }}
+    # env (and secrets) are not available in a job-level if, so the
+    # SLACK_WEBHOOK_URL gate lives on the Slack step below instead.
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
     runs-on: ubuntu-24.04
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
+      - uses: actions/checkout@v4
       # ── DEFAULT: Slack ────────────────────────────────────────────
+      # Step skipped (job stays green) when SLACK_WEBHOOK_URL is absent.
       - uses: slackapi/slack-github-action@v1
         if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         with:
           payload: |
-            {{
+            {
               "text": "Pipeline ${{ github.event.workflow_run.conclusion }}: Rails 8.0 — ${{ github.event.workflow_run.head_sha }}"
-            }}
+            }
       #
       # ── ALTERNATIVE: Microsoft Teams ──────────────────────────────
       # - uses: aliencube/microsoft-teams-actions@v0.8.0

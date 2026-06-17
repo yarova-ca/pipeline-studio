@@ -1,0 +1,63 @@
+# ════════════════════════════════════════════════════════════════════
+# Stage 03 — Build Artifact  |  06 Edge Rendering — Hono 4.7
+# Output: edge bundle
+# No Docker image is built — this framework targets mobile/edge platforms.
+# Runs on: every push and pull_request to main
+# Copy to: .github/workflows/ in your Hono repo
+# ════════════════════════════════════════════════════════════════════
+
+name: "03 Build Artifact — Hono 4.7"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+
+  build:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: bff
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: bff/package-lock.json
+      # ── DEFAULT: npm build ──────────────────────
+      - name: Install dependencies
+        run: npm ci
+      - name: Build — npm
+        run: npm run build
+      #
+      # ── ALTERNATIVE: yarn ────────────────────────────────────────
+      # - name: Build — yarn
+      #   run: yarn install --frozen-lockfile && yarn build
+      #
+      # ── ALTERNATIVE: pnpm ────────────────────────────────────────
+      # - name: Build — pnpm
+      #   run: pnpm install --frozen-lockfile && pnpm build
+      #
+      # ── ALTERNATIVE: bun ─────────────────────────────────────────
+      # - name: Build — bun
+      #   run: bun install --frozen-lockfile && bun run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: edge-bundle
+          path: |
+            bff/build/
+            bff/dist/
+            bff/*.apk
+            bff/*.ipa
+            bff/*.aab
+            bff/*.msix
+          retention-days: 30

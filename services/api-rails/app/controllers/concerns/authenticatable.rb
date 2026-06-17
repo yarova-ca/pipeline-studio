@@ -1,3 +1,5 @@
+require_relative '../../../lib/jwt_service'
+
 module Authenticatable
   extend ActiveSupport::Concern
 

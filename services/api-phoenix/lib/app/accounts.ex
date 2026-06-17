@@ -8,7 +8,13 @@ defmodule App.Accounts do
   alias App.Accounts.User
 
   def get_user(id) do
+    # id comes from an untrusted JWT "sub" claim. The users.id column is a
+    # binary_id (UUID), so a malformed value would raise Ecto.Query.CastError.
+    # Treat a non-castable id as "no such user" (nil) so the auth plug returns
+    # 401 instead of crashing with a 500.
     Repo.get(User, id)
+  rescue
+    Ecto.Query.CastError -> nil
   end
 
   def get_user_by_email(email) do

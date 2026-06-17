@@ -72,13 +72,21 @@ func TestListItems_ValidJWT_Returns200EmptySlice(t *testing.T) {
 		t.Fatalf("expected 200, got %d — body: %s", w.Code, w.Body.String())
 	}
 
-	var items []interface{}
-	if err := json.Unmarshal(w.Body.Bytes(), &items); err != nil {
+	// The list endpoint returns a pagination envelope:
+	// {"items": [...], "total": N, "limit": N, "offset": N}.
+	var resp struct {
+		Items []interface{} `json:"items"`
+		Total int64         `json:"total"`
+	}
+	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("decode response: %v", err)
 	}
 	// New user has no items — expect an empty array, not null.
-	if items == nil {
+	if resp.Items == nil {
 		t.Fatal("expected an empty array, got null")
+	}
+	if len(resp.Items) != 0 {
+		t.Fatalf("expected 0 items for new user, got %d", len(resp.Items))
 	}
 }
 

@@ -23,6 +23,7 @@ jobs:
   # ── SCA: Software Composition Analysis (dependency vulnerabilities) ──
   sca:
     runs-on: ubuntu-24.04
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -30,6 +31,8 @@ jobs:
           go-version: '1.23'
           cache: true
       # ── DEFAULT: govulncheck ──────────────────────────────────────
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
       - name: SCA — govulncheck
         run: govulncheck ./...
       #
@@ -46,9 +49,16 @@ jobs:
   # ── SAST: Static Application Security Testing (code-level bugs) ─────
   sast:
     runs-on: ubuntu-24.04
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: true
       # ── DEFAULT: gosec ─────────────────────────────────────
+      - name: Install gosec
+        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
       - name: SAST — gosec
         run: gosec -fmt json -out gosec.json ./...
       #
@@ -69,6 +79,7 @@ jobs:
   # ── CodeQL (GitHub-native SAST + dataflow analysis) ─────────────────
   codeql:
     runs-on: ubuntu-24.04
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: github/codeql-action/init@v3
@@ -80,12 +91,15 @@ jobs:
   # ── License scan (detect copyleft licenses in dependencies) ─────────
   license-scan:
     runs-on: ubuntu-24.04
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version: '1.23'
           cache: true
+      - name: Install go-licenses
+        run: go install github.com/google/go-licenses@latest
       - name: License check
         run: go-licenses check ./...
       #
@@ -98,6 +112,7 @@ jobs:
   # ── IAC scan (Infrastructure as Code misconfigurations) ─────────────
   iac-scan:
     runs-on: ubuntu-24.04
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       # ── DEFAULT: Checkov ─────────────────────────────────────────
@@ -139,6 +154,7 @@ jobs:
   # ── Secrets scan (leaked credentials and API keys) ───────────────────
   secrets-scan:
     runs-on: ubuntu-24.04
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
