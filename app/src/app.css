@@ -1384,3 +1384,40 @@ details.gcard.recd { border-color: var(--border-accent); box-shadow: 0 0 0 1px v
 .gd-rows dd { margin: 4px 0 0; font-size: 14px; color: var(--ink); line-height: 1.5; }
 .gd-search { width: 100%; padding: 9px 12px; border: 1px solid var(--border-hover); border-radius: 8px; margin-bottom: 14px; font: inherit; }
 .gd-term { padding: 9px 0; border-bottom: 1px solid var(--border); } .gd-term b { display: block; font-size: 14px; } .gd-term span { font-size: 13px; color: var(--ink2); }
+
+/* ── Purpose page (the locked first page) ─────────────────────────────────── */
+.gd-purpose { padding-top: 40px; }
+.pp-hero { padding: 24px 0 36px; }
+.pp-kicker { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: var(--wash-teal); padding: 6px 12px; border-radius: 999px; margin-bottom: 16px; }
+.pp-pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 12px; margin-bottom: 8px; }
+.pp-pillar { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: var(--surface-2); }
+.pp-pt { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+.pp-pd { font-size: 14px; color: var(--ink2); line-height: 1.5; }
+
+.pp-roles { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px,1fr)); gap: 12px; }
+.pp-role { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: var(--surface-2); }
+.pp-role.consumer { border-color: var(--border-accent); background: var(--wash-teal); }
+.pp-role-h { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 15px; margin-bottom: 10px; }
+.pp-rn { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--brand-gradient); color: #06281f; font-size: 12px; font-weight: 700; flex: 0 0 auto; }
+.pp-role dl { margin: 0; display: grid; grid-template-columns: 80px 1fr; gap: 4px 10px; }
+.pp-role dt { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--accent); font-weight: 700; padding-top: 2px; }
+.pp-role dd { margin: 0; font-size: 13.5px; color: var(--ink); line-height: 1.45; }
+.pp-role .pp-note-d { color: var(--ink3); font-style: italic; }
+
+.pp-life { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 10px; }
+.pp-life-step { border: 1px solid var(--border); border-radius: 10px; padding: 13px 14px; background: var(--surface-2); display: flex; flex-direction: column; gap: 3px; }
+.pp-life-step .pp-ls { width: 22px; height: 22px; border-radius: 50%; background: var(--surface-3); color: var(--ink2); font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+.pp-life-step b { font-size: 14px; } .pp-life-step span:last-child { font-size: 13px; color: var(--ink2); line-height: 1.45; }
+
+.pp-flow { font-family: var(--fmono); font-size: 13.5px; line-height: 1.9; color: var(--ink); background: var(--brand-black); color: #C6F24E; padding: 18px 20px; border-radius: 12px; margin-bottom: 12px; }
+.pp-test { margin-top: 16px; border-left: 3px solid var(--brand-teal); background: var(--wash-teal); padding: 14px 18px; border-radius: 0 12px 12px 0; font-size: 14.5px; line-height: 1.55; color: var(--ink); }
+
+/* purpose-page layers + status */
+.pp-layers { display: grid; gap: 8px; }
+.pp-layer { display: grid; grid-template-columns: 150px 1fr auto; gap: 14px; align-items: center; border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; background: var(--surface-2); }
+@media (max-width: 720px){ .pp-layer { grid-template-columns: 1fr; gap: 4px; } }
+.pp-ln { font-weight: 700; font-size: 14px; }
+.pp-lw { font-size: 13px; color: var(--ink2); }
+.pp-ls2 { display: flex; gap: 8px; flex-wrap: wrap; }
+.pp-ls2 .ok { font-size: 12px; color: var(--accent); background: var(--wash-teal); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+.pp-ls2 .soon { font-size: 12px; color: #8a6d00; background: var(--wash-lime); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
