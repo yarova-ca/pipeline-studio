@@ -3,7 +3,7 @@
 # OpenShift-only repo: this workspace calls the openshift module directly.
 
 terraform {
-  required_version = ">= 1.6"
+  required_version = ">= 1.12"
   backend "s3" {}
 }
 

@@ -2,7 +2,7 @@
 # Stage 03 — PR Build + Container Scan  |  17 Java — Spring Boot 3.4
 # Runs on: pull_request to main ONLY — no image push to registry
 # Requires: Dockerfile in repo root with --target runtime stage
-# Runtime image: gcr.io/distroless/java21-debian12
+# Runtime image: gcr.io/distroless/java25-debian13
 # Copy to: .github/workflows/ in your Spring Boot repo
 # ════════════════════════════════════════════════════════════════════
 

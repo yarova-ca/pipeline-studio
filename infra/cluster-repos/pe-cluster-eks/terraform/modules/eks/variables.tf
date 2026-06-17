@@ -14,7 +14,7 @@ variable "region" {
 variable "kubernetes_version" {
   type        = string
   description = "EKS Kubernetes control plane version."
-  default     = "1.31"
+  default     = "1.34"
 }
 
 variable "node_instance_type" {

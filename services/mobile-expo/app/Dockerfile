@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.6
 # The native app ships to the stores; this image builds and serves the web
 # target so the client is verifiable in CI, behind the same BFF proxy.
-FROM node:22-bookworm-slim AS build
+FROM node:24-bookworm-slim AS build
 WORKDIR /app
 COPY package.json ./
 RUN npm install --no-audit --no-fund
@@ -10,7 +10,7 @@ ARG EXPO_PUBLIC_BFF_URL=""
 ENV EXPO_PUBLIC_BFF_URL=${EXPO_PUBLIC_BFF_URL}
 RUN npx expo export --platform web --output-dir dist
 
-FROM node:22-bookworm-slim AS runtime
+FROM node:24-bookworm-slim AS runtime
 WORKDIR /app
 ENV NODE_ENV=production PORT=8080
 COPY --from=build /app/dist ./dist

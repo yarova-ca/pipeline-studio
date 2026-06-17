@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.6
-# Build: Maven + Temurin 21. Runtime: distroless java21, non-root.
-FROM maven:3.9-eclipse-temurin-21 AS build
+# Build: Maven + Temurin 25. Runtime: distroless java25, non-root.
+FROM maven:3.9-eclipse-temurin-25 AS build
 WORKDIR /app
 COPY pom.xml ./
 RUN mvn -B -q dependency:go-offline
@@ -9,7 +9,7 @@ COPY compliance ./compliance
 RUN mvn -B -q package -DskipTests
 
 # I-19: distroless java runtime runs as the built-in nonroot user.
-FROM gcr.io/distroless/java21-debian12:nonroot AS runtime
+FROM gcr.io/distroless/java25-debian13:nonroot AS runtime
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 # Industry compliance profiles are read at runtime from the working directory.

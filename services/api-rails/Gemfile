@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 ruby '>= 3.3.0'
 
-gem 'rails', '~> 8.0'
-gem 'puma', '~> 6.4'
+gem 'rails', '~> 8.1'
+gem 'puma', '~> 6.6'
 gem 'dotenv-rails', '~> 3.1'
-gem 'jwt', '~> 2.9'
-gem 'pg', '~> 1.5'
+gem 'jwt', '~> 3.2'
+gem 'pg', '~> 1.6'
 
 # JSON structured logging — emits one JSON object per request to stdout
 gem 'lograge', '~> 0.14'
@@ -23,11 +23,11 @@ gem 'opentelemetry-instrumentation-rails', '~> 0.32'
 gem 'opentelemetry-instrumentation-active_record', '~> 0.8'
 
 # OpenAPI docs via rswag
-gem 'rswag-api', '~> 2.14'
-gem 'rswag-ui', '~> 2.14'
+gem 'rswag-api', '~> 2.17'
+gem 'rswag-ui', '~> 2.17'
 
 group :development, :test do
-  gem 'rspec-rails', '~> 7.0'
-  gem 'rswag-specs', '~> 2.14'
+  gem 'rspec-rails', '~> 8.0'
+  gem 'rswag-specs', '~> 2.17'
   gem 'sqlite3', '~> 2.0'
 end

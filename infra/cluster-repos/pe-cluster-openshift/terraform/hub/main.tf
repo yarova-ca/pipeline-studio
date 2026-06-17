@@ -5,7 +5,7 @@
 # OpenShift-only repo: this workspace calls the openshift module directly.
 
 terraform {
-  required_version = ">= 1.6"
+  required_version = ">= 1.12"
 
   # State backend. Configure via -backend-config flags at init time, e.g.:
   #   terraform init -backend-config="bucket=..." -backend-config="key=clusters/hub/terraform.tfstate"

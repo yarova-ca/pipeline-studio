@@ -10,7 +10,7 @@ Bundler.require(*Rails.groups)
 
 module PipelineStudio
   class Application < Rails::Application
-    config.load_defaults 8.0
+    config.load_defaults 8.1
     config.api_only = true
 
     # I-1: refuse to boot on missing or weak config.

@@ -18,9 +18,18 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 )
+
+// Validator is implemented by request messages that enforce their own
+// constraints. I-6: any non-exempt request that implements Validator is
+// checked before reaching the handler; a violation maps to INVALID_ARGUMENT.
+type Validator interface {
+	Validate() error
+}
 
 type healthServer struct{ grpc_health_v1.UnimplementedHealthServer }
 
@@ -53,8 +62,9 @@ func chainedUnary(
 	wrapped := handler
 	if !authExempt(info.FullMethod) {
 		// I-3: every non-exempt method is authenticated.
+		// I-6: after auth, validate the request before the handler runs.
 		wrapped = func(c context.Context, r interface{}) (interface{}, error) {
-			return auth.UnaryAuthInterceptor(c, r, info, handler)
+			return auth.UnaryAuthInterceptor(c, r, info, validatingHandler(handler))
 		}
 	}
 	resp, err := wrapped(ctx, req)
@@ -64,6 +74,20 @@ func chainedUnary(
 	}
 	grpcDuration.WithLabelValues(info.FullMethod, code).Observe(time.Since(start).Seconds())
 	return resp, err
+}
+
+// validatingHandler runs request validation just before the real handler.
+// I-6: a request implementing Validator whose Validate() fails is rejected
+// with INVALID_ARGUMENT and never reaches the handler.
+func validatingHandler(handler grpc.UnaryHandler) grpc.UnaryHandler {
+	return func(c context.Context, r interface{}) (interface{}, error) {
+		if v, ok := r.(Validator); ok {
+			if err := v.Validate(); err != nil {
+				return nil, status.Error(codes.InvalidArgument, err.Error())
+			}
+		}
+		return handler(c, r)
+	}
 }
 
 // I-17: security headers on every HTTP sidecar response.

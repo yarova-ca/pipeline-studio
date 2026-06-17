@@ -180,8 +180,24 @@ def metrics() -> _Resp:
     return _Resp(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
-# ── I-9: unhandled errors never leak a stack trace to the client ──────────────
+# ── I-6: unknown / invalid body fields are rejected with 400 ──────────────────
+# Pydantic models set model_config={"extra": "forbid"}; an unknown field raises
+# RequestValidationError, which FastAPI maps to 422 by default. The Yarova
+# platform contract (and the NestJS gold-standard suite) requires 400 for a
+# malformed request body, so this handler downgrades 422 → 400.
+from fastapi.exceptions import RequestValidationError  # noqa: E402
 from fastapi.responses import JSONResponse  # noqa: E402
+
+
+@app.exception_handler(RequestValidationError)
+async def _validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
+    return JSONResponse(
+        status_code=400,
+        content={"statusCode": 400, "error": "Bad Request", "detail": exc.errors()},
+    )
+
+
+# ── I-9: unhandled errors never leak a stack trace to the client ──────────────
 
 
 @app.exception_handler(Exception)

@@ -1,11 +1,11 @@
 # syntax=docker/dockerfile:1.6
 # Vendor: composer. Runtime: php 8.3-cli with pgsql + apcu, non-root.
-FROM composer:2.7 AS vendor
+FROM composer:2.8 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --ignore-platform-reqs --prefer-dist --no-interaction
 
-FROM php:8.3-cli AS runtime
+FROM php:8.4-cli AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev libonig-dev \
  && docker-php-ext-install pdo pdo_pgsql mbstring bcmath \
  && pecl install apcu && docker-php-ext-enable apcu \

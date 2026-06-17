@@ -18,7 +18,7 @@ serde         = { version = "1",   features = ["derive"] }
 serde_json    = "1"
 tokio         = { version = "1",   features = ["macros", "rt-multi-thread"] }
 tower         = { version = "0.5", features = ["limit", "util", "buffer"] }
-tower-http    = { version = "0.6", features = ["trace"] }
+tower-http    = { version = "0.7", features = ["trace"] }
 dotenvy       = "0.15"
 chrono        = { version = "0.4", features = ["serde"] }
 tracing       = "0.1"
@@ -27,22 +27,24 @@ tracing       = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 
 # OpenTelemetry — guarded by OTEL_ENABLED=true
-opentelemetry       = { version = "0.24", features = ["trace"] }
-opentelemetry-otlp  = { version = "0.17", features = ["grpc-tonic"] }
-opentelemetry_sdk   = { version = "0.24", features = ["rt-tokio"] }
+opentelemetry       = { version = "0.32", features = ["trace"] }
+opentelemetry-otlp  = { version = "0.32", features = ["grpc-tonic"] }
+opentelemetry_sdk   = { version = "0.32", features = ["trace"] }
 
 # OpenAPI docs via utoipa
-utoipa              = { version = "4", features = ["axum_extras"] }
+utoipa              = { version = "5", features = ["axum_extras"] }
 
 # ORM / DB
-sqlx = { version = "0.8", features = ["postgres", "uuid", "chrono", "runtime-tokio", "macros"] }
+sqlx = { version = "0.9", features = ["postgres", "uuid", "chrono", "runtime-tokio", "tls-rustls", "macros"] }
 
-# Auth
-jsonwebtoken = "9"
+# Auth — v10 requires an explicit crypto backend feature; rust_crypto is the
+# pure-Rust HS256 backend matching the previous v9 behaviour (from_secret HMAC).
+jsonwebtoken = { version = "10", features = ["rust_crypto"] }
 uuid         = { version = "1",   features = ["v4", "serde"] }
 
-# GitHub OAuth — HTTP client used in auth/callback
-reqwest = { version = "0.12", features = ["json"] }
+# GitHub OAuth — HTTP client used in auth/callback.
+# v0.13 gates .form() behind the "form" feature; auth/callback uses .form().
+reqwest = { version = "0.13", features = ["json", "form"] }
 
 [dev-dependencies]
 http-body-util   = "0.1"

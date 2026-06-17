@@ -9,10 +9,10 @@
 #   - Cloud credentials for the chosen platform (AWS/GCP/Azure env or none for bare-metal).
 
 terraform {
-  required_version = ">= 1.6"
+  required_version = ">= 1.12"
   required_providers {
-    null  = { source = "hashicorp/null", version = "~> 3.0" }
-    local = { source = "hashicorp/local", version = "~> 2.0" }
+    null  = { source = "hashicorp/null", version = "~> 3.3" }
+    local = { source = "hashicorp/local", version = "~> 2.9" }
   }
 }
 

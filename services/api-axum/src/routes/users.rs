@@ -11,6 +11,7 @@ use uuid::Uuid;
 use crate::auth::middleware::AuthUser;
 use crate::db::models::ItemBody;
 use crate::errors::AppError;
+use crate::extract::ValidatedJson;
 
 // ---------------------------------------------------------------------------
 // Router
@@ -68,7 +69,7 @@ async fn list_items(
 async fn create_item(
     State(pool): State<PgPool>,
     auth: AuthUser,
-    Json(body): Json<ItemBody>,
+    ValidatedJson(body): ValidatedJson<ItemBody>,
 ) -> Result<(StatusCode, Json<serde_json::Value>), AppError> {
     let title = body
         .title
@@ -142,7 +143,7 @@ async fn update_item(
     State(pool): State<PgPool>,
     auth: AuthUser,
     Path(id): Path<String>,
-    Json(body): Json<ItemBody>,
+    ValidatedJson(body): ValidatedJson<ItemBody>,
 ) -> Result<Json<serde_json::Value>, AppError> {
     // Confirm ownership before updating.
     let existing = sqlx::query_as::<_, ItemPartial>(

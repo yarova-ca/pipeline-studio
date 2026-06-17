@@ -15,19 +15,25 @@ fn init_logging() {
 /// Initialise OpenTelemetry when OTEL_ENABLED=true.
 /// Returns a shutdown guard. No-op when the env var is absent.
 #[cfg(not(test))]
-fn init_otel() -> Option<opentelemetry_sdk::trace::TracerProvider> {
+fn init_otel() -> Option<opentelemetry_sdk::trace::SdkTracerProvider> {
     if env::var("OTEL_ENABLED").as_deref() != Ok("true") {
         return None;
     }
-    use opentelemetry::trace::TracerProvider as _;
-    use opentelemetry_sdk::{runtime, trace as sdktrace};
+    use opentelemetry_otlp::SpanExporter;
+    use opentelemetry_sdk::trace::SdkTracerProvider;
 
     // service.name is set via the OTEL_RESOURCE_ATTRIBUTES env var
     // (e.g. service.name=20-axum) — the standard OTel resource convention.
-    let exporter = opentelemetry_otlp::new_exporter().tonic().build_span_exporter()
+    //
+    // OTel-rust 0.28+ API: SpanExporter::builder().with_tonic().build(),
+    // SdkTracerProvider (renamed from TracerProvider), and the batch processor
+    // no longer takes a runtime — it spawns its own background thread.
+    let exporter = SpanExporter::builder()
+        .with_tonic()
+        .build()
         .expect("failed to build OTLP exporter");
-    let provider = sdktrace::TracerProvider::builder()
-        .with_batch_exporter(exporter, runtime::Tokio)
+    let provider = SdkTracerProvider::builder()
+        .with_batch_exporter(exporter)
         .build();
     opentelemetry::global::set_tracer_provider(provider.clone());
     tracing::info!(endpoint = ?env::var("OTEL_EXPORTER_OTLP_ENDPOINT").ok(), "otel enabled");

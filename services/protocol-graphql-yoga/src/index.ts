@@ -12,7 +12,8 @@ import { buildContext, GraphQLContext } from './auth/context'
 import { activeCompliance } from './compliance'
 
 // I-1: refuse to boot on missing or weak config.
-if ((process.env.JWT_SECRET ?? '').length < 32) {
+// Guarded so the module can be imported under test without exiting the process.
+if (require.main === module && (process.env.JWT_SECRET ?? '').length < 32) {
   logger.error('FATAL: JWT_SECRET must be set and at least 32 characters')
   process.exit(1)
 }
@@ -56,7 +57,7 @@ function setSecurityHeaders(res: ServerResponse): void {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
 }
 
-async function handler(req: IncomingMessage, res: ServerResponse): Promise<void> {
+export async function handler(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const start = process.hrtime.bigint()
   setSecurityHeaders(res)
   const url = req.url ?? '/'
@@ -98,8 +99,7 @@ async function handler(req: IncomingMessage, res: ServerResponse): Promise<void>
   return yoga(req, res)
 }
 
-const port = parseInt(process.env.PORT ?? '4000', 10)
-const server = createServer((req, res) => {
+export const server = createServer((req, res) => {
   handler(req, res).catch((err) => {
     logger.error({ err }, 'unhandled request error')
     if (!res.headersSent) {
@@ -107,10 +107,6 @@ const server = createServer((req, res) => {
       res.end(JSON.stringify({ error: 'Internal server error' }))
     }
   })
-})
-
-server.listen(port, () => {
-  logger.info({ port }, 'graphql yoga server started')
 })
 
 // I-11: drain cleanly on SIGTERM.
@@ -121,5 +117,13 @@ function shutdown(signal: string): void {
   })
   setTimeout(() => process.exit(1), 10_000).unref()
 }
-process.on('SIGTERM', () => shutdown('SIGTERM'))
-process.on('SIGINT', () => shutdown('SIGINT'))
+
+// Only bind the port + signal handlers when run directly (not when imported by tests).
+if (require.main === module) {
+  const port = parseInt(process.env.PORT ?? '4000', 10)
+  server.listen(port, () => {
+    logger.info({ port }, 'graphql yoga server started')
+  })
+  process.on('SIGTERM', () => shutdown('SIGTERM'))
+  process.on('SIGINT', () => shutdown('SIGINT'))
+}

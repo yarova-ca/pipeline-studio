@@ -1,5 +1,6 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
+import { z } from 'zod'
 import jwt from 'jsonwebtoken'
 import { config } from './config'
 import { logger } from './logger'
@@ -13,7 +14,7 @@ interface AuthUser {
   name: string
 }
 
-const app = new Hono<{ Variables: { user: AuthUser } }>()
+export const app = new Hono<{ Variables: { user: AuthUser } }>()
 
 // I-17: security headers on every response. HSTS only when the active
 // industry profile requires encryption in transit.
@@ -121,6 +122,34 @@ app.use('/users/*', async (c, next) => {
 
 app.get('/users/me', (c) => c.json(c.get('user')))
 
+// I-6: a protected POST route with STRICT input validation. The schema is
+// .strict(), so any unknown/extra field is rejected with 400 — a tampered or
+// over-posted body never reaches business logic.
+const updateProfileSchema = z
+  .object({
+    name: z.string().min(1).max(200),
+    email: z.string().email(),
+  })
+  .strict()
+
+app.post('/users/me', async (c) => {
+  let body: unknown
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+  const result = updateProfileSchema.safeParse(body)
+  if (!result.success) {
+    return c.json(
+      { error: 'Invalid request body', details: result.error.flatten().fieldErrors },
+      400,
+    )
+  }
+  const user = c.get('user')
+  return c.json({ id: user.id, name: result.data.name, email: result.data.email })
+})
+
 // Issue a token for a known user (TTL set by the active industry profile).
 const sessionTimeoutSeconds =
   typeof compliance.controls.session_timeout_seconds === 'number'
@@ -139,15 +168,19 @@ logger.info(
   'hono edge service starting',
 )
 
-const server = serve({ fetch: app.fetch, port: config.PORT, hostname: '0.0.0.0' })
+// Only bind a port and install signal handlers when run as the entrypoint.
+// Under test the module is imported for app.fetch(), so we must not listen.
+if (process.env.NODE_ENV !== 'test') {
+  const server = serve({ fetch: app.fetch, port: config.PORT, hostname: '0.0.0.0' })
 
-// I-11: drain cleanly on SIGTERM.
-function shutdown(signal: string): void {
-  logger.info({ signal }, 'shutting down')
-  server.close(() => {
-    prisma.$disconnect().finally(() => process.exit(0))
-  })
-  setTimeout(() => process.exit(1), 10_000).unref()
+  // I-11: drain cleanly on SIGTERM.
+  const shutdown = (signal: string): void => {
+    logger.info({ signal }, 'shutting down')
+    server.close(() => {
+      prisma.$disconnect().finally(() => process.exit(0))
+    })
+    setTimeout(() => process.exit(1), 10_000).unref()
+  }
+  process.on('SIGTERM', () => shutdown('SIGTERM'))
+  process.on('SIGINT', () => shutdown('SIGINT'))
 }
-process.on('SIGTERM', () => shutdown('SIGTERM'))
-process.on('SIGINT', () => shutdown('SIGINT'))

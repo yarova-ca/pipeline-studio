@@ -3,12 +3,12 @@
 # Why dedicated hub: if prod cluster is overloaded, hub remains available for management.
 
 terraform {
-  required_version = ">= 1.6"
+  required_version = ">= 1.12"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
     }
   }
 

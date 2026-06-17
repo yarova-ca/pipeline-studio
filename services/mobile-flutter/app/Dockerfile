@@ -9,7 +9,7 @@ COPY pubspec.yaml ./
 COPY lib ./lib
 RUN flutter pub get && flutter build web --release
 
-FROM node:22-bookworm-slim AS runtime
+FROM node:24-bookworm-slim AS runtime
 WORKDIR /app
 ENV NODE_ENV=production PORT=8080
 COPY --from=build /app/build/web ./dist

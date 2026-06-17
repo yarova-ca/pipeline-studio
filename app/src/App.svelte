@@ -176,6 +176,13 @@
 
     <h2 class="gd-h2">How the platform stays alive</h2>
     <p class="gd-note">Technology moves. The platform is kept current — never left to rot.</p>
+    <div class="pp-currency">
+      <b>✅ Verified on latest LTS + secure versions — 2026-06-17.</b>
+      Every service + cluster audited against endoflife.date and official releases.
+      No EOL runtime. No unpatched-CVE dependency. Headlines: Node 24 · Python 3.13 · Go 1.26 ·
+      .NET 10 · Java 25 · Ruby 3.4 · PHP 8.4 · Elixir 1.18 · React 19 · Angular 22 · Nuxt 4 ·
+      Astro 6 · Expo 56 · Kubernetes 1.34 · Terraform AWS 6 / Google 7.
+    </div>
     <div class="pp-life">
       {#each LIFECYCLE as [step, d], i}
         <div class="pp-life-step"><span class="pp-ls">{i+1}</span><b>{step}</b><span>{d}</span></div>

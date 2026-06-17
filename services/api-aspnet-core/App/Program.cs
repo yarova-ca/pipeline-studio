@@ -101,7 +101,16 @@ if (string.Equals(Environment.GetEnvironmentVariable("OTEL_ENABLED"), "true", St
 }
 
 // ---- Controllers ----
-builder.Services.AddControllers();
+// I-6: reject request bodies that carry unknown JSON fields.
+// System.Text.Json ignores unmapped members by default; flip to Disallow so a
+// typo or injected extra field fails the bind and returns 400 instead of being
+// silently dropped.
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.UnmappedMemberHandling =
+            System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow;
+    });
 
 // ---- OpenAPI / Swagger ----
 builder.Services.AddEndpointsApiExplorer();

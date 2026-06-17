@@ -19,9 +19,16 @@ class UserItemController extends Controller
         return response()->json($items);
     }
 
+    // Client-supplied fields allowed on an item write.
+    private const ALLOWED_ITEM_FIELDS = ['title', 'description'];
+
     // POST /users/me/items
     public function store(Request $request): JsonResponse
     {
+        if ($reject = $this->rejectUnknownFields($request)) {
+            return $reject;
+        }
+
         $data = $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -30,6 +37,23 @@ class UserItemController extends Controller
         $item = auth()->user()->items()->create($data);
 
         return response()->json($item, 201);
+    }
+
+    // I-6: 400 when the body carries a field outside ALLOWED_ITEM_FIELDS.
+    // Laravel's validate() silently ignores unknown keys, so an explicit
+    // strict check is required for "unknown fields rejected" to hold.
+    private function rejectUnknownFields(Request $request): ?JsonResponse
+    {
+        $unknown = array_diff(array_keys($request->all()), self::ALLOWED_ITEM_FIELDS);
+
+        if (count($unknown) > 0) {
+            return response()->json(
+                ['error' => 'Unknown field(s): ' . implode(', ', $unknown)],
+                400,
+            );
+        }
+
+        return null;
     }
 
     // GET /users/me/items/{id}

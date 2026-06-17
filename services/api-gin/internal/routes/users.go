@@ -1,13 +1,37 @@
 package routes
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	ginauth "github.com/yarova-ca/16-gin/internal/auth"
 	"github.com/yarova-ca/16-gin/internal/db"
 )
+
+// bindStrictJSON decodes the request body into dst, rejecting any unknown
+// JSON field with an error. Gin's ShouldBindJSON silently ignores unknown
+// fields; this enforces I-6 (unknown body fields → 400) so clients cannot
+// smuggle extra data past validation.
+func bindStrictJSON(c *gin.Context, dst interface{}) error {
+	dec := json.NewDecoder(c.Request.Body)
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(dst); err != nil {
+		return err
+	}
+	return validateBinding(dst)
+}
+
+// validateBinding runs Gin's struct validator (binding tags) over dst so the
+// strict decoder keeps the same required/min/max checks ShouldBindJSON applied.
+func validateBinding(dst interface{}) error {
+	if binding.Validator == nil {
+		return nil
+	}
+	return binding.Validator.ValidateStruct(dst)
+}
 
 // RegisterUsers mounts all /users routes on the provided engine.
 // All routes require authentication via RequireAuth middleware.
@@ -75,8 +99,8 @@ func handleCreateItem(c *gin.Context) {
 		Title       string  `json:"title" binding:"required,min=1,max=500"`
 		Description *string `json:"description" binding:"omitempty,max=2000"`
 	}
-	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "title is required and must be 1–500 characters"})
+	if err := bindStrictJSON(c, &body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "title is required and must be 1–500 characters; unknown fields are rejected"})
 		return
 	}
 
