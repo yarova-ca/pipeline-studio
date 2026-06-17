@@ -5,13 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>App</RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <!-- Compliance catalog read at boot by Compliance.cs. Copied to the build
-         output so the loader finds it via AppContext.BaseDirectory in tests too. -->
-    <Content Include="../compliance/profiles.json" Link="compliance/profiles.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  <!-- Compliance catalog is copied into the runtime image by the Dockerfile and
+       resolved at runtime via cwd / a parent-dir walk. It is NOT a build Content
+       item: the docker build stage copies only App/, so a ../compliance Content
+       reference would break `dotnet publish`. -->
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
