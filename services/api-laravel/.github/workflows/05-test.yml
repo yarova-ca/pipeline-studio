@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
       - name: Run tests
-        run: vendor/bin/phpunit --coverage-clover coverage.xml
+        run: vendor/bin/phpunit
 
       # ── OPTIONAL: Codecov coverage upload ─────────────────────────
       # - uses: codecov/codecov-action@v4
