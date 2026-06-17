@@ -5,7 +5,7 @@
   import { platformScale } from './lib/wizard.js';
   import {
     primer, frameworkChapters, pipeline, decisionChapters, complianceChapter,
-    proofRepos, glossary, detailFor, regimeDetail,
+    proofRepos, glossary, detailFor, regimeDetail, adrs, adrDetail, clusterRepos,
   } from './lib/guide.js';
   import './app.css';
 
@@ -23,16 +23,20 @@
   $: decCh = $ready ? decisionChapters() : [];
   $: comp = $ready ? complianceChapter() : null;
   $: repos = $ready ? proofRepos() : [];
+  $: adrList = $ready ? adrs() : [];
+  $: clusters = $ready ? clusterRepos() : [];
   $: gloss = $ready ? glossary() : [];
   $: glossList = gloss.filter(g => !glossQuery || (g.term+' '+(g.def||'')).toLowerCase().includes(glossQuery.toLowerCase()));
 
   const LANG = { ts:'TypeScript', js:'JavaScript', py:'Python', go:'Go', rust:'Rust', java:'Java',
     kotlin:'Kotlin', php:'PHP', ruby:'Ruby', csharp:'.NET', elixir:'Elixir', dart:'Dart', swift:'Swift' };
   const NAV = [['what','What it is'],['frameworks','Frameworks'],['pipeline','The pipeline'],
-    ['decisions','The decisions'],['compliance','Compliance'],['proof','Proof']];
+    ['decisions','The decisions'],['adr','Decisions of record'],['clusters','Clusters'],
+    ['compliance','Compliance'],['proof','Proof']];
 
   function open(kind, id){ drawer = detailFor(kind, id); }
   function openRegime(id){ drawer = regimeDetail(id); }
+  function openAdr(id){ drawer = adrDetail(id); }
   function closeDrawer(){ drawer = null; }
   function jump(id){ document.getElementById('ch-'+id)?.scrollIntoView({behavior:'smooth'}); }
 
@@ -56,7 +60,7 @@
     ['Invariants','laws per service-category + per cluster','25 defined','wire as tests'],
     ['Compliance','16 industries × 29 regimes','catalog live','—'],
     ['CI/CD','DevOps · DevSecOps · SRE pipeline','22 services green','—'],
-    ['ADRs','the decision + why, recorded','—','to author per decision'],
+    ['ADRs','the decision + why, recorded','12 authored','—'],
   ];
   // Director of Platform Engineering = leads the team that builds the paved road.
   const ROLES = [
@@ -262,6 +266,40 @@
       </div>
     {/each}
   </section>
+
+  <!-- Chapter 3b — decisions of record (ADRs) -->
+  {#if adrList.length}
+    <section id="ch-adr" class="gd-sec">
+      <h2 class="gd-h2">The decisions of record — why the platform is built this way</h2>
+      <p class="gd-note">An ADR = Architecture Decision Record. One locked choice + why + what was rejected. Click any to read it.</p>
+      <div class="gd-adrs">
+        {#each adrList as a}
+          <button class="gd-adr" onclick={()=>openAdr(a.id)}>
+            <span class="gd-adr-n">ADR-{a.num}</span>
+            <span class="gd-adr-t">{a.title}</span>
+            <span class="gd-adr-s">{a.status}</span>
+          </button>
+        {/each}
+      </div>
+    </section>
+  {/if}
+
+  <!-- Chapter 3c — clusters (the runtime, per cloud) -->
+  {#if clusters.length}
+    <section id="ch-clusters" class="gd-sec">
+      <h2 class="gd-h2">The clusters — where apps actually run</h2>
+      <p class="gd-note">Hub-and-spoke: one real repo per cloud. Terraform + platform install, runnable today. Click to open on GitHub.</p>
+      <div class="gd-repos">
+        {#each clusters as c}
+          <a class="gd-repo cl" href={c.url} target="_blank" rel="noopener">
+            <b>{c.name}</b><span class="gd-repo-cloud">{c.cloud}</span>
+            <span class="gd-repo-what">{c.what}</span>
+            <span class="ci">✓ {c.repo}</span>
+          </a>
+        {/each}
+      </div>
+    </section>
+  {/if}
 
   <!-- Chapter 4 — compliance -->
   {#if comp}

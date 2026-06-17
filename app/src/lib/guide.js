@@ -3,7 +3,7 @@
 // explanations (what / why / when / trade-off) for every element, so a beginner
 // reads the studio and understands platform engineering start to end.
 import { getG, getK, firstSentence, stripTags } from './logic.js';
-import { getCatalog } from './data.js';
+import { getCatalog, getAdrs } from './data.js';
 import { discipline } from './wizard.js';
 
 const clean = (s) => stripTags(String(s == null ? '' : s)).trim();
@@ -119,6 +119,46 @@ export function regimeDetail(id) {
   const on = Object.entries(r.enforces||{}).map(([k,v]) =>
     [ctrls[k]?.label || k, v === true ? 'on' : String(v)]);
   return { title: r.name, lead: r.jurisdiction, rows: on };
+}
+
+// ── Chapter — the decisions of record (ADRs) ───────────────────────────────
+// Each ADR is one locked decision: why it exists, what was rejected, the cost.
+const num = (id) => id.split('-')[0];           // "0003-..." → "0003"
+const adrName = (id) => id.replace(/^\d+-/, '').replace(/-/g,' '); // slug → words
+export function adrs() {
+  const a = getAdrs();
+  if (!a?.adrs) return [];
+  return a.adrs.map(d => ({ id:d.id, num:num(d.id), title:d.title, status:d.status }));
+}
+// Full labeled explanation for one ADR — drives the detail drawer.
+export function adrDetail(id) {
+  const a = getAdrs(); if (!a?.adrs) return null;
+  const d = a.adrs.find(x => x.id === id); if (!d) return null;
+  const rows = [
+    ['Status', clean(d.status)],
+    ['The problem', clean(d.context)],
+    ['The decision', clean(d.decision)],
+    ['Why', clean(d.why)],
+    ['Rejected alternative', clean(d.rejected)],
+    ['Consequence accepted', clean(d.consequences)],
+  ].filter(([,v]) => v);
+  return { title: `ADR-${num(d.id)} — ${d.title}`, lead: clean(d.decision), rows };
+}
+
+// ── Chapter — the clusters (real per-cloud repos) ──────────────────────────
+// Hub-and-spoke: one repo per cloud, each a runnable Terraform + platform stack.
+const CLUSTER_REPOS = [
+  { cloud:'AWS',        name:'Amazon EKS',        repo:'pe-cluster-eks',
+    what:'Elastic Kubernetes Service — managed Kubernetes on AWS.' },
+  { cloud:'Google',     name:'Google GKE',        repo:'pe-cluster-gke',
+    what:'Google Kubernetes Engine — managed Kubernetes on GCP.' },
+  { cloud:'Azure',      name:'Azure AKS',         repo:'pe-cluster-aks',
+    what:'Azure Kubernetes Service — managed Kubernetes on Azure.' },
+  { cloud:'Red Hat',    name:'OpenShift',         repo:'pe-cluster-openshift',
+    what:'OpenShift — Kubernetes plus Red Hat platform tooling.' },
+];
+export function clusterRepos() {
+  return CLUSTER_REPOS.map(c => ({ ...c, url:`https://github.com/yarova-ca/${c.repo}` }));
 }
 
 // Glossary (71 plain-English term definitions).

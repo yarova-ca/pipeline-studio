@@ -1,0 +1,124 @@
+{
+ "adrs": [
+  {
+   "id": "0001-golden-repos-per-framework",
+   "title": "Golden repos: one real repo per framework",
+   "status": "Accepted",
+   "context": "The platform must ship working code for 106 frameworks, not advice.\nA code generator emits unverified output that nobody has built or run.\nDevelopers need a repo they can clone, build, and deploy today.",
+   "decision": "Ship one real, runnable golden repo per framework under `services/<name>/`, hand-written and verified \u2014 not generated on demand.",
+   "why": "- Each repo is verified locally: build green, container builds, runs, `/health` answers.\n- A real repo can hold all 23 invariants with a passing test for each.\n- A developer clones it, writes app code, sets URLs/keys \u2014 nothing else.\n- Generated code cannot be proven correct; a committed repo can.",
+   "rejected": "- Code generator / scaffolding CLI \u2014 output is never built or verified; quality drifts per run.\n- A single mono-framework starter \u2014 does not cover 106 stacks or their tier differences.\n- Docs-only guidance \u2014 leaves the hard 90% (CI, deploy, security) unwritten.",
+   "consequences": "- Easy: every shipped framework is a proven artifact with real output behind it.\n- Easy: NestJS is the gold standard; other repos copy its exact law.\n- Harder: 106 repos must be built and maintained by hand; ~84 still show \"platform team yet to build.\"\n- Trade-off accepted: slower coverage in exchange for code that actually runs."
+  },
+  {
+   "id": "0002-repo-naming-convention",
+   "title": "Repo naming: pe-<category>-<framework> and pe-cluster-<cloud>",
+   "status": "Accepted",
+   "context": "The platform spans 106 service repos plus per-cloud cluster repos.\nWithout a fixed naming law, repos are unfindable and tooling cannot match them.\nThe studio, ArgoCD, and CI all need a predictable name to resolve a repo.",
+   "decision": "Name every service repo `pe-<category>-<framework>` and every cluster repo `pe-cluster-<cloud>`.",
+   "why": "- `pe-` prefix groups all platform-engineering repos under one sortable namespace.\n- `<category>` (api, web, edge, mobile, protocol) maps directly to the invariant tier.\n- `<framework>` is unique and human-readable: `pe-api-nestjs`, `pe-web-nextjs`.\n- Cluster repos already follow it: `pe-cluster-eks`, `pe-cluster-aks`, `pe-cluster-gke`, `pe-cluster-openshift`.",
+   "rejected": "- Free-form names \u2014 unsearchable; no machine mapping from framework to repo.\n- Framework-only names (`nestjs`) \u2014 collides with upstream names; no category signal.\n- One monorepo for everything \u2014 loses per-repo ownership, CI scope, and clone-and-go.",
+   "consequences": "- Easy: studio and ArgoCD derive a repo name from a chosen framework deterministically.\n- Easy: cluster repos are obvious by cloud; one repo per cloud target.\n- Harder: renaming a framework or category means renaming its repo.\n- Trade-off accepted: a rigid scheme over naming freedom."
+  },
+  {
+   "id": "0003-hub-and-spoke-cluster-topology",
+   "title": "Hub-and-spoke cluster topology",
+   "status": "Accepted",
+   "context": "The platform runs dev, test, and prod environments, possibly across clouds.\nRunning ArgoCD inside every environment multiplies control planes and blast radius.\nOne management plane must drive many workload clusters.",
+   "decision": "Use a hub-and-spoke topology: a hub cluster runs ArgoCD and management tools; dev, test, and prod are spokes that run only workloads.",
+   "why": "- One ArgoCD on the hub manages every spoke \u2014 single pane, single source of truth.\n- Spokes hold no control plane; the hub registers them and creates an ApplicationSet.\n- Per-spoke policy differs by env: dev/test Kyverno audit, prod Kyverno enforce.\n- `register-spoke.sh` wires a spoke to the hub; `verify.sh` runs a 10-check go-live gate.",
+   "rejected": "- ArgoCD per environment \u2014 N control planes to patch, secure, and reconcile.\n- A single shared cluster with namespaces \u2014 no real prod isolation; one failure domain.\n- Push-based CI deploy with no GitOps controller \u2014 loses drift detection and self-heal.",
+   "consequences": "- Easy: add a new spoke by provisioning it and registering with the hub.\n- Easy: prod gets strict isolation (3+ replicas, HA NAT, enforce mode).\n- Harder: the hub is a critical dependency; if the hub is down, no syncs run.\n- Trade-off accepted: one central management cluster to protect, in exchange for uniform control."
+  },
+  {
+   "id": "0004-gitops-argocd-only-deploy-path",
+   "title": "GitOps with ArgoCD as the only deploy path",
+   "status": "Accepted",
+   "context": "Deploys done by hand or by ad-hoc CI `kubectl apply` drift from what is in Git.\nAuditors and operators need one answer to \"what is running, and why.\"\nThe hub already runs ArgoCD as the single management plane.",
+   "decision": "Make ArgoCD the only path that changes a cluster; Git is the sole source of desired state.",
+   "why": "- Desired state lives in Git; ArgoCD reconciles and self-heals drift.\n- Every change is a reviewable, revertable commit \u2014 full audit trail.\n- CI builds, signs, and pushes images; it never deploys directly.\n- Prod adds a GitHub environment gate for manual approval before the merge that triggers sync.",
+   "rejected": "- CI `kubectl apply` / `helm upgrade` from pipelines \u2014 no drift detection; cluster diverges from Git.\n- Manual `kubectl` by operators \u2014 unauditable; no single source of truth.\n- Flux instead of ArgoCD \u2014 viable, but ArgoCD is already the installed hub controller.",
+   "consequences": "- Easy: rollback is a git revert; the cluster state is always reconstructable from Git.\n- Easy: access to clusters narrows \u2014 humans change Git, not the cluster.\n- Harder: every change must go through Git even for urgent fixes.\n- Trade-off accepted: no out-of-band hotfix; speed traded for auditability."
+  },
+  {
+   "id": "0005-keyless-signing-cosign-sbom-syft",
+   "title": "Keyless image signing (cosign) + SBOM (Syft)",
+   "status": "Accepted",
+   "context": "Regulated buyers require supply-chain proof: who built an image and what is in it.\nLong-lived signing keys leak and must be rotated and guarded.\nInvariant I-20 requires every build to be reproducible and attested.",
+   "decision": "Sign every image with cosign keyless (OIDC identity) and attach a Syft-generated SBOM at build time.",
+   "why": "- Keyless cosign uses the CI OIDC identity \u2014 no signing key to store, leak, or rotate.\n- Syft SBOM lists every package in the image \u2014 answers \"what is in it\" for auditors.\n- `04-build-push-sign.yml` runs both steps in CI per service.\n- The compliance catalog defaults `image_signing` and `sbom_required` to on for everyone.",
+   "rejected": "- Long-lived cosign key pair \u2014 a secret to manage and a single point of compromise.\n- No signing \u2014 fails I-20 and regulated supply-chain requirements (OSFI B-10, ISO 27017).\n- SBOM only on demand \u2014 auditors need it attached to the artifact, not regenerated later.",
+   "consequences": "- Easy: any consumer verifies provenance against the CI OIDC identity with no shared secret.\n- Easy: SBOM ships with every image; supply-chain questions answer from the artifact.\n- Harder: verification depends on the OIDC issuer and a transparency log being reachable.\n- Trade-off accepted: a dependency on the keyless trust root over self-managed keys."
+  },
+  {
+   "id": "0006-canonical-compliance-catalog",
+   "title": "Canonical compliance catalog, one COMPLIANCE_PROFILE flag",
+   "status": "Accepted",
+   "context": "The platform must serve ~30 compliance regimes across Canada, US, EU, and global.\nEncoding each regime separately in each service produces drift and gaps.\nA control added once must reach all services and the studio.",
+   "decision": "Define one canonical control catalog in `catalog/compliance.yaml`; every regime flips the same keys, and one `COMPLIANCE_PROFILE` env selects the regime at runtime. Canada regimes come first.",
+   "why": "- Uniform controls: every regime references the same key set (e.g. `audit_logging`, `data_residency`).\n- One change in the catalog propagates to all 22 services plus the studio matrix view.\n- `COMPLIANCE_PROFILE` flips a regime per service \u2014 verified by per-service compliance tests.\n- Canada-first ordering: PIPEDA, Privacy Act, ITSG-33, Law 25 lead the catalog.",
+   "rejected": "- Per-service hand-coded compliance \u2014 drifts; a control gets fixed in one service, missed in others.\n- A separate config schema per regime \u2014 no uniform keys; the studio cannot build one matrix.\n- A code branch per regime \u2014 unmaintainable across 22 services \u00d7 30 regimes.",
+   "consequences": "- Easy: switching a service from PIPEDA to HIPAA is one env value.\n- Easy: the studio renders one matrix from the single catalog.\n- Harder: every new control must declare its type, default, and device scope in one place.\n- Trade-off accepted: the catalog is a shared bottleneck all changes route through."
+  },
+  {
+   "id": "0007-per-device-compliance",
+   "title": "Per-device compliance scoping",
+   "status": "Accepted",
+   "context": "Controls are not meaningful on every kind of service.\n`encryption_at_rest` needs a datastore; a static frontend has none.\nApplying every control everywhere produces false failures and noise.",
+   "decision": "Every control declares `applies_to` device types; a control applies to a service only when its device type matches.",
+   "why": "- Device types are fixed: backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol.\n- `encryption_at_rest` applies only to backend, web-ssr, mobile-bff \u2014 the ones with a datastore.\n- `accessibility_wcag` applies only to UI devices: web-ssr, web-static, mobile-app.\n- A service is scored against the controls valid for its device type, not all controls.",
+   "rejected": "- Apply every control to every service \u2014 false negatives on controls that make no sense there.\n- Manual per-service control lists \u2014 drifts from the catalog; duplicates the catalog's intent.\n- Skip scoping, document exceptions in prose \u2014 unauditable and easy to forget.",
+   "consequences": "- Easy: a static frontend is never failed for lacking a database control.\n- Easy: the studio filters the visible controls by the chosen device type.\n- Harder: every new control must correctly enumerate its `applies_to` set.\n- Trade-off accepted: more metadata per control in exchange for accurate, device-correct scoring."
+  },
+  {
+   "id": "0008-invariants-as-definition-of-done",
+   "title": "Invariants as the definition of \"done\"",
+   "status": "Accepted",
+   "context": "\"Claude says done\" and \"it builds\" are not proof a service is secure or correct.\nDifferent authors hold different bars across 106 repos.\nThe platform needs one objective, testable definition of done.",
+   "decision": "A service or cluster is \"done\" only when every invariant that applies to its tier holds and has a passing test.",
+   "why": "- INVARIANTS.md lists 23 server laws, 11 client laws (C-1\u2026C-11), 4 mobile laws (M-1\u2026M-4).\n- Each invariant names the guarantee, what enforces it, and the test that checks it.\n- Tier (A server, B SSR, C frontend, D mobile) decides which invariants apply.\n- CI is the enforcer \u2014 lint, typecheck, test, scan, build must pass; nothing merges red (I-23).",
+   "rejected": "- Subjective code review as the bar \u2014 varies by reviewer; not reproducible.\n- A docs checklist with no tests \u2014 claims without proof; rots silently.\n- Per-repo ad-hoc test suites \u2014 no shared law; gaps differ per repo.",
+   "consequences": "- Easy: \"is it done?\" is a binary CI result, identical across every repo.\n- Easy: a frontend reaches fellow-level via its BFF holding all 23 \u2014 no security gap.\n- Harder: every invariant needs a real failing-then-passing test before merge.\n- Trade-off accepted: more test surface up front in exchange for a uniform, provable bar."
+  },
+  {
+   "id": "0009-ship-both-helm-and-kustomize",
+   "title": "Ship both Helm and Kustomize per service",
+   "status": "Accepted",
+   "context": "Teams are split on Kubernetes packaging: some standardize on Helm, some on Kustomize.\nForcing one tool blocks adoption by teams committed to the other.\nEach service must deploy on whichever the consuming team already uses.",
+   "decision": "Ship both a Helm chart and a Kustomize overlay set in every service repo; the deploying team picks one.",
+   "why": "- `services/<name>/helm/` and `services/<name>/kustomize/` both exist and both deploy the service.\n- A Helm-standard team uses the chart; a Kustomize-standard team uses the overlays.\n- ArgoCD supports both natively as application sources \u2014 no tool lock-in at the platform.\n- Neither tool is privileged; the choice is made at deploy time, not at build time.",
+   "rejected": "- Helm only \u2014 blocks teams whose GitOps standard is Kustomize.\n- Kustomize only \u2014 blocks teams whose package registry and tooling are Helm.\n- A custom packaging tool \u2014 one more thing to learn; no ecosystem.",
+   "consequences": "- Easy: a team deploys with the tool it already runs \u2014 zero migration.\n- Easy: ArgoCD points at either path with no platform change.\n- Harder: two deploy definitions per service must stay in sync.\n- Trade-off accepted: duplicate manifests to maintain in exchange for universal adoption."
+  },
+  {
+   "id": "0010-multi-cloud-terraform-modules",
+   "title": "Multi-cloud via Terraform modules behind one interface",
+   "status": "Accepted",
+   "context": "Buyers run on AWS, GCP, Azure, and on-prem OpenShift.\nHand-written per-cloud cluster setup diverges and is unportable.\nThe same dev/test/prod shape must provision on any supported cloud.",
+   "decision": "Provision clusters with Terraform modules (EKS, AKS, GKE, OpenShift) behind one workspace interface, selected by a `cloud` variable.",
+   "why": "- One module per cloud lives under `infra/clusters/terraform/modules/`.\n- A spoke workspace runs `terraform apply -var=\"cloud=eks\"` (or gke, aks, openshift).\n- The hub/dev/test/prod workspaces are cloud-agnostic; the module hides cloud specifics.\n- Each cloud module bakes in workload identity: IRSA (EKS), Workload Identity (GKE), Managed Identity (AKS).",
+   "rejected": "- Per-cloud bespoke scripts \u2014 no shared interface; each cloud drifts independently.\n- A single-cloud lock-in (EKS only) \u2014 excludes GCP, Azure, and on-prem buyers.\n- A higher abstraction (Crossplane/Pulumi) \u2014 new tool and runtime; Terraform is already the standard here.",
+   "consequences": "- Easy: switch a spoke's cloud by changing one variable, same workspace shape.\n- Easy: GKE Autopilot recommended for the hub \u2014 zero node management.\n- Harder: four cloud modules must each track upstream provider and cloud API changes.\n- Trade-off accepted: maintaining four modules in exchange for true cloud portability."
+  },
+  {
+   "id": "0011-security-gates-report-not-block",
+   "title": "Security gates report-not-block in the template",
+   "status": "Accepted",
+   "context": "A golden repo is a starting template, cloned into many different risk contexts.\nA hard-blocking scan on first clone stops a developer before they ship anything.\nDifferent consumers carry different CVE and policy tolerances.",
+   "decision": "Ship security scans as report-not-block in the template; consumers tighten them to blocking for prod.",
+   "why": "- `02-security-gates.yml` runs scans with `continue-on-error: true` \u2014 findings report, do not block.\n- A fresh clone builds and runs so the developer reaches a working state immediately.\n- Comments in the workflows show how to flip Trivy to `--exit-code 1` for blocking (e.g. PCI DSS).\n- The consumer owns the prod risk decision; the template ships visibility, not a hard wall.",
+   "rejected": "- Block on every finding by default \u2014 first clone fails before any app code exists; adoption dies.\n- No scans at all \u2014 invariant I-21 (no high/critical CVE) has nothing to enforce.\n- Block in template, document how to relax \u2014 wrong default; safe-but-unusable out of the box.",
+   "consequences": "- Easy: a cloned repo builds and runs day one, with findings visible.\n- Easy: a prod consumer flips one flag to make CVEs blocking.\n- Harder: an inattentive team could ship to prod with gates still in report mode.\n- Trade-off accepted: a usable default over a safe-by-force default; prod hardening is the consumer's step."
+  },
+  {
+   "id": "0012-studio-is-a-knowledge-guide",
+   "title": "The studio is a knowledge guide, not a code generator",
+   "status": "Accepted",
+   "context": "Users need to understand the platform and choose a stack across 106 frameworks.\nA generator that emits code produces unverified output and hides the reasoning.\nThe real, verified code already lives in the golden repos.",
+   "decision": "Build the studio (`app/`) as a knowledge guide that teaches and links to real repos \u2014 it never generates code.",
+   "why": "- The studio covers all 106 frameworks: knowledge, guidance, the per-industry recipe.\n- Two ways in: Express (2 plain questions) or Custom (full control) \u2014 both explain every choice.\n- It reads `catalog/` and links to the real `services/` repos and the compliance matrix.\n- A framework with no golden repo shows \"platform team yet to build\" \u2014 honest, not fabricated.",
+   "rejected": "- A code generator in the studio \u2014 emits unverified code; contradicts ADR-0001's real-repos rule.\n- A wizard that copies a repo and rewrites it \u2014 re-introduces unverified mutation.\n- Docs site with no decision flow \u2014 does not help a user choose a stack for their industry.",
+   "consequences": "- Easy: every link points to code that was actually built, run, and verified.\n- Easy: the studio teaches the \"why\" behind each choice, not just the \"what.\"\n- Harder: the studio cannot offer a one-click new project for unbuilt frameworks.\n- Trade-off accepted: guidance over generation; coverage gated on real repos existing."
+  }
+ ]
+}
