@@ -193,7 +193,7 @@ jobs:
         uses: sigstore/cosign-installer@v3
 
       - name: Sign image (keyless OIDC — no stored private key)
-        run: cosign sign --yes $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
+        run: cosign sign --yes $REGISTRY/$IMAGE_NAME:${{ github.sha }}
 
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
@@ -205,7 +205,7 @@ jobs:
         run: |
           cosign attest --yes \
             --predicate sbom.spdx.json \
-            $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
+            $REGISTRY/$IMAGE_NAME:${{ github.sha }}
 
   # ── SLSA Level 3 provenance (needs image digest from build-push-sign) ─
   # DISABLED: the reusable slsa-github-generator workflow re-pushes to GHCR

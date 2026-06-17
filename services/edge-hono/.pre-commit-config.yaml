@@ -1,9 +1,9 @@
-# Non-mutating checks only. check-yaml is omitted: Helm templates use Go
-# templating ({{ }}) which is not valid standalone YAML.
+# Content-parsing hooks (check-yaml/check-json) are omitted: Helm uses Go
+# templates and tsconfig files are JSONC — both are valid in context but not
+# parseable as plain YAML/JSON. These two hooks never parse file contents.
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-      - id: check-json
       - id: check-merge-conflict
       - id: check-added-large-files
