@@ -39,6 +39,17 @@ export function catalogOptions(axis, rs){
   return items.map(o=>({ id:o.id, name:o.name, plain:o.note||o.cloud||'', rec:o.id===recId }));
 }
 
+// Integrations the golden repo can connect to (from the canonical catalog).
+// Each ships a placeholder client + config keys; the developer fills them in.
+export function integrationsList(){
+  const cat=getCatalog();
+  if(!cat || !cat.axes) return null;
+  const ca=cat.axes.integrations_canada||[];
+  const common=cat.axes.integrations_common||[];
+  if(!ca.length && !common.length) return null;
+  return { canada:ca, common };
+}
+
 // The compliance matrix for the result step: controls × the industry's regimes,
 // filtered to the framework's device. Same keys for every industry — just on/off.
 export function buildComplianceMatrix(rs){
