@@ -1,0 +1,108 @@
+name: terraform
+
+# Validates the EKS module and every env workspace.
+# fmt + init -backend=false + validate always run (no cloud creds needed).
+# plan runs ONLY when secrets.AWS_ROLE_ARN is configured. Missing creds never hard-fail.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform.yml"
+  pull_request:
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform.yml"
+
+permissions:
+  contents: read
+  id-token: write # required for AWS OIDC role assumption
+
+env:
+  TF_VERSION: "1.14.5"
+
+jobs:
+  fmt:
+    name: fmt check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      - name: terraform fmt -check
+        run: terraform fmt -check -recursive terraform
+
+  validate:
+    name: validate (${{ matrix.dir }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dir:
+          - terraform/modules/eks
+          - terraform/hub
+          - terraform/dev
+          - terraform/test
+          - terraform/prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      - name: terraform init (no backend)
+        working-directory: ${{ matrix.dir }}
+        run: terraform init -backend=false
+      - name: terraform validate
+        working-directory: ${{ matrix.dir }}
+        run: terraform validate
+
+  plan:
+    name: plan (${{ matrix.dir }})
+    needs: validate
+    runs-on: ubuntu-latest
+    # Gate: only run when an AWS role is configured. Skipped cleanly otherwise.
+    if: ${{ github.event_name == 'pull_request' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        dir:
+          - terraform/hub
+          - terraform/dev
+          - terraform/test
+          - terraform/prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for AWS credentials
+        id: creds
+        run: |
+          if [ -n "${{ secrets.AWS_ROLE_ARN }}" ]; then
+            echo "have_creds=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "have_creds=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::AWS_ROLE_ARN not set — skipping terraform plan for ${{ matrix.dir }}."
+          fi
+
+      - uses: hashicorp/setup-terraform@v3
+        if: steps.creds.outputs.have_creds == 'true'
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Configure AWS credentials
+        if: steps.creds.outputs.have_creds == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
+
+      - name: terraform init + plan
+        if: steps.creds.outputs.have_creds == 'true'
+        working-directory: ${{ matrix.dir }}
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="key=clusters/$(basename "${{ matrix.dir }}")/terraform.tfstate" \
+            -backend-config="region=${{ secrets.AWS_REGION || 'us-east-1' }}"
+          terraform plan -no-color

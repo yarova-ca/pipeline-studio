@@ -24,3 +24,9 @@ services/**/.gradle/
 services/**/vendor/
 services/**/.pytest_cache/
 **/*.class
+
+# terraform artifacts
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*

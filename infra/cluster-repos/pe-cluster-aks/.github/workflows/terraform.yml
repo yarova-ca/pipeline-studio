@@ -1,0 +1,113 @@
+name: terraform
+
+# Validates the AKS module and every env workspace.
+# fmt + init (no backend) + validate always run.
+# plan runs only when AZURE_CLIENT_ID secret exists — never hard-fails on missing creds.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform.yml"
+  pull_request:
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform.yml"
+
+permissions:
+  contents: read
+  id-token: write # required for Azure OIDC federation when creds exist
+
+env:
+  TF_IN_AUTOMATION: "true"
+
+jobs:
+  fmt:
+    name: fmt check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.5
+      - name: terraform fmt -check
+        run: terraform fmt -check -recursive terraform
+
+  validate:
+    name: validate (${{ matrix.dir }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dir:
+          - terraform/modules/aks
+          - terraform/hub
+          - terraform/dev
+          - terraform/test
+          - terraform/prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.5
+      - name: terraform init (no backend)
+        run: terraform -chdir=${{ matrix.dir }} init -backend=false -input=false
+      - name: terraform validate
+        run: terraform -chdir=${{ matrix.dir }} validate
+
+  plan:
+    name: plan (${{ matrix.dir }})
+    runs-on: ubuntu-latest
+    needs: validate
+    # Only run when Azure creds are configured. No hard-fail when the secret is absent.
+    if: ${{ vars.RUN_PLAN == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        dir:
+          - terraform/hub
+          - terraform/dev
+          - terraform/test
+          - terraform/prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Azure credentials
+        id: creds
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        run: |
+          if [ -n "$AZURE_CLIENT_ID" ]; then
+            echo "have_creds=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "have_creds=false" >> "$GITHUB_OUTPUT"
+            echo "AZURE_CLIENT_ID not set — skipping plan (not an error)."
+          fi
+
+      - uses: azure/login@v2
+        if: ${{ steps.creds.outputs.have_creds == 'true' }}
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: hashicorp/setup-terraform@v3
+        if: ${{ steps.creds.outputs.have_creds == 'true' }}
+        with:
+          terraform_version: 1.14.5
+
+      - name: terraform init + plan
+        if: ${{ steps.creds.outputs.have_creds == 'true' }}
+        env:
+          ARM_USE_OIDC: "true"
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: |
+          terraform -chdir=${{ matrix.dir }} init -input=false \
+            -backend-config="resource_group_name=${{ vars.TFSTATE_RG }}" \
+            -backend-config="storage_account_name=${{ vars.TFSTATE_SA }}" \
+            -backend-config="container_name=${{ vars.TFSTATE_CONTAINER }}" \
+            -backend-config="key=clusters/$(basename ${{ matrix.dir }}).tfstate"
+          terraform -chdir=${{ matrix.dir }} plan -input=false
