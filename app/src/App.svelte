@@ -40,6 +40,59 @@
   onMount(attemptLoad);
 
   function onKey(e){ if(e.key==='Escape'){ drawer=null; glossOpen=false; } }
+
+  // ── Purpose page content (authored — the platform org, plain words) ───────
+  const PILLARS = [
+    ['What the platform offers','Every framework, pipeline, security gate, compliance rule, cluster, deploy target.'],
+    ['Who runs the platform','A platform team, from director to engineer — each owning a clear slice.'],
+    ['How it stays alive','Patched, upgraded, modernized, versioned — as technology moves.'],
+    ['How anyone uses it','Pick a stack → ship to registry + ArgoCD → maintain it. Guided, explained.'],
+  ];
+  // Honest status — what is real code vs designed. Studio shows this everywhere.
+  const LAYERS = [
+    ['Services','frameworks → golden repos','22 built','84 designed'],
+    ['Clusters','EKS · AKS · GKE · OpenShift, hub-and-spoke','Terraform exists','to complete + repo-ize'],
+    ['Serverless / edge','Workers · Lambda · Cloud Run','edge-hono built','rest designed'],
+    ['Invariants','laws per service-category + per cluster','25 defined','wire as tests'],
+    ['Compliance','16 industries × 29 regimes','catalog live','—'],
+    ['CI/CD','DevOps · DevSecOps · SRE pipeline','22 services green','—'],
+    ['ADRs','the decision + why, recorded','—','to author per decision'],
+  ];
+  // Director of Platform Engineering = leads the team that builds the paved road.
+  const ROLES = [
+    { role:'Director of Platform Engineering', owns:'Vision, roadmap, strategy, budget, hiring.',
+      does:'Decides what the platform supports next + the trade-offs.', ships:'The 1–3 year platform direction.' },
+    { role:'Platform Engineering Lead', owns:'Team delivery, priorities, unblocking.',
+      does:'Turns the roadmap into shipped work.', ships:'Roadmap items, on time.' },
+    { role:'Platform / IDP Engineer', owns:'The golden paths — templates, this studio, self-service.',
+      does:'Builds so a developer ships without filing tickets.', ships:'Self-service that just works.',
+      note:'IDP = Internal Developer Platform (self-service tooling).' },
+    { role:'DevOps Engineer', owns:'CI/CD pipelines, automation, infra-as-code.',
+      does:'Wires build → test → deploy, fully automated.', ships:'The pipeline every repo uses.',
+      note:'CI/CD = the automated build-and-ship pipeline. Infra-as-code = infra defined in files.' },
+    { role:'DevSecOps Engineer', owns:'Security gates — SCA, SAST, secrets, signing, SBOM, compliance.',
+      does:'Makes sure nothing ships unscanned or unsigned.', ships:'A provable, secure supply chain.',
+      note:'SCA = scans dependencies. SAST = scans your code. SBOM = the ingredient list.' },
+    { role:'SRE — Site Reliability Engineer', owns:'Reliability — SLOs, observability, on-call, rollouts.',
+      does:'Keeps it up; handles incidents; tunes performance.', ships:'Uptime + fast recovery.',
+      note:'SLO = a measurable reliability target. Observability = seeing what the app does.' },
+    { role:'Cloud / Infrastructure Engineer', owns:'Clusters, networking, identity, cost.',
+      does:'Provides + tunes the runtime apps land on.', ships:'The cluster + its guardrails.' },
+    { role:'Release / Delivery Engineer', owns:'Promotions across environments, GitOps, ArgoCD.',
+      does:'Moves code safely dev → test → prod.', ships:'A controlled path to production.',
+      note:'GitOps = git is the source of truth; ArgoCD syncs git → cluster.' },
+    { role:'Product / Application Developer', owns:'Their app code — nothing else.',
+      does:'Picks a golden path + writes features.', ships:'The product. The platform does the rest.',
+      note:'This is the consumer — the person the whole platform serves.' },
+  ];
+  const LIFECYCLE = [
+    ['Create','The team builds a golden repo per framework — real, runnable.'],
+    ['Patch','Renovate + Dependabot open PRs for new dependency versions, weekly.'],
+    ['Upgrade','Framework + tool versions bump on a schedule; CI proves they still pass.'],
+    ['Modernize','Aging tech is replaced before it rots — driven by the roadmap.'],
+    ['Version','Every release is tagged + signed; you always know what is running.'],
+    ['Retire','Deprecated paths are marked, then removed — with a migration note.'],
+  ];
 </script>
 
 <svelte:window on:keydown={onKey} />
@@ -67,25 +120,88 @@
 
 <main class="gd">
 
-  <!-- Chapter 0 — what is this -->
-  <section id="ch-what" class="gd-hero">
-    <h1 class="gd-h1">Understand the whole platform.<br>Start to end.</h1>
-    <p class="gd-lead">Every framework. Every pipeline phase. Every tool, decision, and compliance rule.
-    Explained in plain words. Click anything to learn what it is and why it matters.</p>
-    {#if scale}
-      <div class="gd-scale">
-        <span><b>{scale.frameworks}</b> frameworks</span><span><b>{scale.phases}</b> phases</span>
-        <span><b>{scale.stages}</b> stages</span><span><b>{scale.tools}</b> tools</span>
-        <span><b>{scale.regimes}</b> compliance regimes</span><span><b>{scale.built}</b> real repos</span>
-      </div>
-    {/if}
-    {#if P}
-      <div class="gd-primer">
-        <p class="primer-what">{P.what}</p>
-        <p><b>Why it matters:</b> {P.why}</p>
-        {#if P.steps}<ol>{#each P.steps as [n,d]}<li><b>{n}.</b> {d}</li>{/each}</ol>{/if}
-      </div>
-    {/if}
+  <!-- Chapter 0 — PURPOSE (the locked page) -->
+  <section id="ch-what" class="gd-purpose">
+    <div class="pp-hero">
+      <span class="pp-kicker">Platform Engineering — explained, end to end</span>
+      <h1 class="gd-h1">The whole platform.<br>Who runs it. How you build on it.</h1>
+      <p class="gd-lead">One guide to a complete platform-engineering organization.
+      What it offers, who maintains it, how it evolves, and how anyone ships a product on it.
+      Plain words. Nothing to memorize.</p>
+      {#if scale}
+        <div class="gd-scale">
+          <span><b>{scale.frameworks}</b> frameworks</span><span><b>{scale.phases}</b> phases</span>
+          <span><b>{scale.stages}</b> stages</span><span><b>{scale.tools}</b> tools</span>
+          <span><b>{scale.regimes}</b> compliance regimes</span><span><b>{scale.built}</b> real repos</span>
+        </div>
+      {/if}
+    </div>
+
+    <h2 class="gd-h2">What this studio is</h2>
+    <div class="pp-pillars">
+      {#each PILLARS as [t, d]}<div class="pp-pillar"><div class="pp-pt">{t}</div><div class="pp-pd">{d}</div></div>{/each}
+    </div>
+
+    <h2 class="gd-h2">The platform — every layer + its status</h2>
+    <p class="gd-note">Honest by design. ✅ = real code you can open. 🕓 = designed + explained, repo planned.</p>
+    <div class="pp-layers">
+      {#each LAYERS as [name, what, built, todo]}
+        <div class="pp-layer">
+          <div class="pp-ln">{name}</div>
+          <div class="pp-lw">{what}</div>
+          <div class="pp-ls2">{#if built!=='—'}<span class="ok">✅ {built}</span>{/if}{#if todo!=='—'}<span class="soon">🕓 {todo}</span>{/if}</div>
+        </div>
+      {/each}
+    </div>
+
+    <h2 class="gd-h2">Who runs the platform</h2>
+    <p class="gd-note">A platform team builds + maintains the paved road. Every role owns a clear slice.</p>
+    <div class="pp-roles">
+      {#each ROLES as r, i}
+        <div class="pp-role" class:consumer={i===ROLES.length-1}>
+          <div class="pp-role-h"><span class="pp-rn">{i+1}</span>{r.role}</div>
+          <dl>
+            <dt>Owns</dt><dd>{r.owns}</dd>
+            <dt>Does</dt><dd>{r.does}</dd>
+            <dt>Ships</dt><dd>{r.ships}</dd>
+            {#if r.note}<dt>Plain terms</dt><dd class="pp-note-d">{r.note}</dd>{/if}
+          </dl>
+        </div>
+      {/each}
+    </div>
+
+    <h2 class="gd-h2">How the platform stays alive</h2>
+    <p class="gd-note">Technology moves. The platform is kept current — never left to rot.</p>
+    <div class="pp-life">
+      {#each LIFECYCLE as [step, d], i}
+        <div class="pp-life-step"><span class="pp-ls">{i+1}</span><b>{step}</b><span>{d}</span></div>
+      {/each}
+    </div>
+
+    <h2 class="gd-h2">Two things keep it correct</h2>
+    <div class="pp-pillars">
+      <div class="pp-pillar"><div class="pp-pt">Invariants</div>
+        <div class="pp-pd">A law that must always hold, proven by a test.
+        Different per service-category and per cluster. Example: every service exposes /health.</div></div>
+      <div class="pp-pillar"><div class="pp-pt">ADRs</div>
+        <div class="pp-pd">Architecture Decision Record — the decision + why, written down.
+        So a choice is never re-argued, and a newcomer learns the reasoning.</div></div>
+    </div>
+
+    <h2 class="gd-h2">How you use it to build</h2>
+    <p class="gd-note">You pick ONE stack. The studio still shows ALL of it, so every choice is clear.</p>
+    <div class="pp-flow">
+      Industry → Framework → Package + build → Auth → Data → Observability →
+      Runtime → Security gates → Registry (image pushed) → Sign + SBOM →
+      ArgoCD (deploy + auto-sync) → Promotions + monitor
+    </div>
+    <p class="gd-note">Each step below is narrated: what it is, your options, what to use for your case, why.</p>
+
+    <div class="pp-test">
+      <b>The test of this studio:</b>
+      a newcomer reads it → understands the platform org + can act in it.
+      A builder reads it → ships + maintains a product. No prior expertise needed.
+    </div>
   </section>
 
   <!-- Chapter 1 — frameworks -->
