@@ -218,7 +218,7 @@ jobs:
   #     registry-password: ${{ secrets.GITHUB_TOKEN }}
 
 # ── Compliance delta checklist ─────────────────────────────────────
-# FIPS 140-2/3:  use --target runtime-fips (block above, wired for N/A)
+# FIPS 140-2/3:  use --target runtime (block above, wired for N/A)
 # PCI DSS v4.0:  trivy --severity CRITICAL --exit-code 1 (already set)
 # HIPAA:         add step: semgrep --config p/hipaa .
 # FedRAMP:       FIPS image required + SLSA Level 3 (both above)

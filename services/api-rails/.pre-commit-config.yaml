@@ -1,10 +1,9 @@
-# Non-mutating checks only — hooks that rewrite files fail CI on a clean checkout.
+# Non-mutating checks only. check-yaml is omitted: Helm templates use Go
+# templating ({{ }}) which is not valid standalone YAML.
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-      - id: check-yaml
-        args: [--allow-multiple-documents]
       - id: check-json
       - id: check-merge-conflict
       - id: check-added-large-files

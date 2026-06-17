@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y pkg-config libssl-dev && rm -rf /var/li
 ENV SQLX_OFFLINE=true
 COPY . .
 RUN cargo build --release
-FROM debian:bookworm-slim
+FROM debian:bookworm-slim AS runtime
 RUN apt-get update && apt-get install -y libssl3 ca-certificates && rm -rf /var/lib/apt/lists/* && useradd -r -u 10001 appuser
 WORKDIR /app
 COPY --from=build /app/target/release/axum-service /app/axum-service

@@ -211,7 +211,7 @@ jobs:
 
 # ── Compliance delta checklist ─────────────────────────────────────
 # FIPS 140-2/3:  add a runtime-fips stage to the Dockerfile, then a second
-#                --target runtime-fips build step (no FIPS stage present today)
+#                --target runtime build step (no FIPS stage present today)
 # PCI DSS v4.0:  trivy --severity CRITICAL --exit-code 1 (already set)
 # HIPAA:         add step: semgrep --config p/hipaa .
 # FedRAMP:       FIPS image required + SLSA Level 3 provenance

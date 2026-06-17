@@ -133,10 +133,10 @@ jobs:
             -t $REGISTRY/$IMAGE_NAME:latest \
             .
 
-      - name: Build and push — FIPS image (--target runtime-fips)
+      - name: Build and push — FIPS image (--target runtime)
         run: |
           docker buildx build --platform linux/amd64 \
-            --push --target runtime-fips \
+            --push --target runtime \
             -t $REGISTRY/$IMAGE_NAME:${{ github.sha }}-fips \
             .
           # FIPS runtime: mcr.microsoft.com/dotnet/aspnet:9.0-cbl-mariner2.0-fips
@@ -228,7 +228,7 @@ jobs:
   #     registry-password: ${{ secrets.GITHUB_TOKEN }}
 
 # ── Compliance delta checklist ─────────────────────────────────────
-# FIPS 140-2/3:  use --target runtime-fips (block above, wired for mcr.microsoft.com/dotnet/aspnet:9.0-cbl-mariner2.0-fips)
+# FIPS 140-2/3:  use --target runtime (block above, wired for mcr.microsoft.com/dotnet/aspnet:9.0-cbl-mariner2.0-fips)
 # PCI DSS v4.0:  trivy --severity CRITICAL --exit-code 1 (already set)
 # HIPAA:         add step: semgrep --config p/hipaa .
 # FedRAMP:       FIPS image required + SLSA Level 3 (both above)
