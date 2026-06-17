@@ -51,7 +51,7 @@
   // Honest status — what is real code vs designed. Studio shows this everywhere.
   const LAYERS = [
     ['Services','frameworks → golden repos','22 built','84 designed'],
-    ['Clusters','EKS · AKS · GKE · OpenShift, hub-and-spoke','Terraform exists','to complete + repo-ize'],
+    ['Clusters','EKS · AKS · GKE · OpenShift, hub-and-spoke','4 repos built','—'],
     ['Serverless / edge','Workers · Lambda · Cloud Run','edge-hono built','rest designed'],
     ['Invariants','laws per service-category + per cluster','25 defined','wire as tests'],
     ['Compliance','16 industries × 29 regimes','catalog live','—'],
