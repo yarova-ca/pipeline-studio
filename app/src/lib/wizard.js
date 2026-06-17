@@ -102,6 +102,76 @@ export const DECISION_STEPS = [
     why:'Helm + Kustomize ship per-environment; the cluster admits only signed images.' },
 ];
 
+// Classify a tool/stage into an engineering discipline (for color-coding).
+// DevSecOps = security/supply-chain. SRE = reliability/observability. DevOps = the rest.
+export function discipline(text){
+  const t=String(text||'').toLowerCase();
+  if(/sast|sca\b|codeql|secret|sign|cosign|sbom|trivy|iac|scan|compliance|vuln|license|slsa|kyverno|gitleaks|semgrep|checkov|snyk|dependabot|attest/.test(t)) return 'DevSecOps';
+  if(/observ|otel|metric|prom|grafana|loki|tempo|slo|sla|incident|alert|notif|rollout|monitor|dast|perf|datadog|elastic/.test(t)) return 'SRE';
+  return 'DevOps';
+}
+
+// The WHOLE platform, one structure — every phase, stage, tool, axis, regime.
+// Powers the comprehensive blueprint view (nothing hidden).
+export function platformMap(){
+  const G=getG(); const cat=getCatalog();
+  if(!G) return null;
+  const N=G.nodes;
+  const counts={ DevOps:0, DevSecOps:0, SRE:0 };
+
+  const phases=(N.phases||[]).map(p=>{
+    const stages=(N.stages||[]).filter(s=>s.phaseId===p.id).sort((a,b)=>(a.order||0)-(b.order||0)).map(st=>{
+      const tools=(N.tools||[]).filter(t=>t.phaseId===p.id && t.stage===st.name).map(t=>{
+        const d=discipline((t.tool||t.name)+' '+(t.stageType||st.type||''));
+        counts[d]=(counts[d]||0)+1;
+        return { name:t.tool||t.name, discipline:d, mandatory:!!t.mandatory };
+      });
+      return { name:st.name, discipline:discipline(st.name+' '+(st.type||'')), tools };
+    });
+    return { id:p.id, name:p.name||p.label, stages };
+  }).filter(p=>p.stages.length);
+
+  const axis=(label, arr, fmt)=>({ label, count:(arr||[]).length, options:(arr||[]).map(fmt) });
+  const axes=[
+    axis('Frameworks', N.frameworks, f=>({name:f.name, built:!!f.built})),
+    axis('Languages', N.languages, l=>({name:l.name||l.label||l.id})),
+    axis('Auth', cat?.axes?.auth, a=>({name:a.name})),
+    axis('Data / ORM', cat?.axes?.orm, o=>({name:o.name})),
+    axis('Package managers', cat?.axes?.package_managers, p=>({name:p.name})),
+    axis('Runtime bases', N.runtimeDeep, r=>({name:r.name})),
+    axis('Observability', cat?.axes?.observability, o=>({name:o.name})),
+    axis('Deploy targets', cat?.axes?.deploy_targets, d=>({name:d.name})),
+    axis('Clusters', N.clusters, c=>({name:c.name})),
+  ].filter(a=>a.count);
+
+  let compliance=null;
+  if(cat){
+    const ctrls=Object.keys(cat.compliance.controls);
+    const regimes=Object.entries(cat.compliance.regimes).map(([id,r])=>({id,name:r.name,priority:r.priority}));
+    const rows=ctrls.map(c=>({
+      key:c, label:cat.compliance.controls[c].label,
+      cells:regimes.map(rg=>{
+        const v=(cat.compliance.regimes[rg.id].enforces||{})[c];
+        const on=!(v===undefined||v===false||v===0||v==='none');
+        return { on, regime:rg.id };
+      })
+    }));
+    compliance={ controls:ctrls.length, regimes, rows };
+  }
+
+  const integrations = cat ? [...(cat.axes.integrations_canada||[]), ...(cat.axes.integrations_common||[])]
+    .map(i=>({name:i.name, ca:(i.verticals? cat.axes.integrations_canada.includes(i):false)})) : [];
+  const builtRepos=(N.frameworks||[]).filter(f=>f.built).map(f=>({name:f.name, url:f.repoUrl}));
+
+  return {
+    scale:{ frameworks:(N.frameworks||[]).length, built:builtRepos.length,
+      phases:phases.length, stages:phases.reduce((n,p)=>n+p.stages.length,0),
+      tools:phases.reduce((n,p)=>n+p.stages.reduce((m,s)=>m+s.tools.length,0),0),
+      regimes:compliance?compliance.regimes.length:0, integrations:integrations.length },
+    disciplines:counts, phases, axes, compliance, integrations, builtRepos,
+  };
+}
+
 // Data-driven scale of the whole platform — proof of completeness, not hardcoded.
 export function platformScale(){
   const G=getG(); const cat=getCatalog();

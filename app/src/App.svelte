@@ -4,15 +4,19 @@
   import { loadAll } from './lib/data.js';
   import {
     STEP_ORDER, DECISION_STEPS, deviceGroups, frameworksForDevice,
-    buildBlueprint, repoLink, gOptions, buildComplianceMatrix, catalogOptions, integrationsList, platformScale
+    buildBlueprint, repoLink, gOptions, buildComplianceMatrix, catalogOptions, integrationsList, platformScale, platformMap
   } from './lib/wizard.js';
   import './app.css';
 
+  let view = 'blueprint';       // 'blueprint' (whole platform) | 'wizard' (configure)
   let step = 0;                 // index into STEP_ORDER
   let chosenDevice = '';        // device id picked on step 0
   let showAll = false;          // "see other options" expander on a decision step
   let retrying = false;
   let openPhase = null;         // which blueprint phase is expanded
+  $: pmap = ($ready && view==='blueprint') ? platformMap() : null;
+  const DISC = { DevOps:'do', DevSecOps:'sec', SRE:'sre' };
+  function enterWizard(){ view='wizard'; step=0; chosenDevice=''; }
 
   $: stepKey = STEP_ORDER[step];
   $: total   = STEP_ORDER.length;
@@ -36,7 +40,7 @@
   function skipIndustry(){ pick('industry', ''); next(); }
   function accept(){ if(rec){ pick(stepKey, rec.id); } next(); }
   function pickOption(id){ pick(stepKey, id); next(); }
-  function restart(){ step = 0; chosenDevice = ''; showAll = false; }
+  function restart(){ view='blueprint'; step = 0; chosenDevice = ''; showAll = false; }
 
   async function attemptLoad(){
     retrying = true;
@@ -69,15 +73,123 @@
     <img class="wordmark" src="/yarova-logo-light.png" alt="Yarova" />
     <span class="toolname">Studio</span>
   </div>
-  <div class="wz-progress" aria-label="Progress">
-    {#each STEP_ORDER as k, i}
-      <button class="dot" class:on={i===step} class:done={i<step}
-        title={k} aria-label={`Step ${i+1}`} onclick={()=>{ if(i<step) goto(i); }}></button>
-    {/each}
-  </div>
-  <div class="wz-count">Step {step+1} of {total}</div>
+  {#if view==='wizard'}
+    <div class="wz-progress" aria-label="Progress">
+      {#each STEP_ORDER as k, i}
+        <button class="dot" class:on={i===step} class:done={i<step}
+          title={k} aria-label={`Step ${i+1}`} onclick={()=>{ if(i<step) goto(i); }}></button>
+      {/each}
+    </div>
+    <div class="wz-count">Step {step+1} of {total}</div>
+  {:else}
+    <div class="wz-progress"></div>
+    <button class="btn primary" onclick={enterWizard}>Configure my repo →</button>
+  {/if}
 </header>
 
+{#if view==='blueprint' && pmap}
+  <main class="bp">
+    <!-- at a glance -->
+    <section class="bp-hero">
+      <h1 class="bp-h1">The whole platform — one blueprint.</h1>
+      <p class="bp-sub">Every decision, phase, stage, tool, regime. DevOps + DevSecOps + SRE. Nothing hidden.</p>
+      <div class="bp-scale">
+        <span><b>{pmap.scale.frameworks}</b> frameworks</span>
+        <span><b>{pmap.scale.built}</b> real repos</span>
+        <span><b>{pmap.scale.phases}</b> phases</span>
+        <span><b>{pmap.scale.stages}</b> stages</span>
+        <span><b>{pmap.scale.tools}</b> tools</span>
+        <span><b>{pmap.scale.regimes}</b> compliance regimes</span>
+        <span><b>{pmap.scale.integrations}</b> integrations</span>
+      </div>
+      <div class="bp-legend">
+        <span class="disc do"><i class="dot"></i>DevOps <b>{pmap.disciplines.DevOps}</b></span>
+        <span class="disc sec"><i class="dot"></i>DevSecOps <b>{pmap.disciplines.DevSecOps}</b></span>
+        <span class="disc sre"><i class="dot"></i>SRE <b>{pmap.disciplines.SRE}</b></span>
+      </div>
+    </section>
+
+    <!-- the pipeline: every phase → stage → tool, color by discipline -->
+    <section class="bp-sec">
+      <h2 class="bp-h2">The pipeline — start to end</h2>
+      <div class="bp-phases">
+        {#each pmap.phases as p, pi}
+          <div class="bp-phase">
+            <div class="bp-phase-head"><span class="bp-pnum">{pi+1}</span>{p.name}</div>
+            <div class="bp-stages">
+              {#each p.stages as st}
+                <div class="bp-stage">
+                  <div class="bp-stage-name {DISC[st.discipline]}">{st.name}</div>
+                  <div class="bp-tools">
+                    {#each st.tools as t}
+                      <span class="bp-tool {DISC[t.discipline]}" title={t.discipline}>{t.name}</span>
+                    {/each}
+                    {#if !st.tools.length}<span class="bp-tool none">platform default</span>{/if}
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+        {/each}
+      </div>
+    </section>
+
+    <!-- every decision axis -->
+    <section class="bp-sec">
+      <h2 class="bp-h2">Every decision — all options</h2>
+      <div class="bp-axes">
+        {#each pmap.axes as a}
+          <div class="bp-axis">
+            <div class="bp-axis-head">{a.label} <span class="bp-axis-n">{a.count}</span></div>
+            <div class="bp-axis-opts">
+              {#each a.options.slice(0,18) as o}
+                <span class="bp-opt" class:built={o.built}>{o.name}{#if o.built} ✓{/if}</span>
+              {/each}
+              {#if a.options.length>18}<span class="bp-opt more">+{a.options.length-18} more</span>{/if}
+            </div>
+          </div>
+        {/each}
+      </div>
+    </section>
+
+    <!-- compliance grid -->
+    {#if pmap.compliance}
+      <section class="bp-sec">
+        <h2 class="bp-h2">Compliance — {pmap.compliance.controls} controls × {pmap.compliance.regimes.length} regimes</h2>
+        <p class="bp-note">Same controls for every industry. A profile just flips them on/off. Canada-first.</p>
+        <div class="bp-matrix-wrap">
+          <table class="bp-matrix">
+            <thead><tr><th>Control</th>{#each pmap.compliance.regimes as r}<th class="rg {r.priority}" title={r.name}>{r.id}</th>{/each}</tr></thead>
+            <tbody>
+              {#each pmap.compliance.rows as row}
+                <tr><td class="ctrl">{row.label}</td>{#each row.cells as c}<td class="cell {c.on?'on':''}">{c.on?'●':''}</td>{/each}</tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    {/if}
+
+    <!-- integrations + real repos -->
+    <section class="bp-sec">
+      <h2 class="bp-h2">Integrations ({pmap.integrations.length}) + real repos ({pmap.builtRepos.length})</h2>
+      <div class="bp-chips">
+        {#each pmap.integrations as i}<span class="bp-chip">{i.name}</span>{/each}
+      </div>
+      <div class="bp-repos">
+        {#each pmap.builtRepos as r}
+          <a class="bp-repo" href={r.url} target="_blank" rel="noopener">{r.name} <span class="ci">✓ CI</span></a>
+        {/each}
+      </div>
+    </section>
+
+    <section class="bp-cta">
+      <h2 class="bp-h2">Want this for your stack?</h2>
+      <button class="btn primary big" onclick={enterWizard}>Configure my repo →</button>
+    </section>
+  </main>
+
+{:else if view==='wizard'}
 <main class="wz-main">
 
   <!-- STEP: device ─────────────────────────────────────────────────────────── -->
@@ -350,4 +462,5 @@
   {/if}
 
 </main>
+{/if}
 {/if}
