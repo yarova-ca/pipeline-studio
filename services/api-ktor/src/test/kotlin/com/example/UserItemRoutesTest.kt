@@ -20,6 +20,11 @@ class UserItemRoutesTest {
     private fun testApp(block: suspend ApplicationTestBuilder.() -> Unit) = testApplication {
         application { module() }
 
+        // Force the module to run so DatabaseFactory.init() calls Database.connect()
+        // before the seed transaction below. testApplication boots lazily otherwise,
+        // and the seed would fail with "call Database.connect() before using this code".
+        startApplication()
+
         // Seed user in H2 in-memory DB before each test block
         transaction {
             Users.insert {
@@ -73,7 +78,10 @@ class UserItemRoutesTest {
                 it[id]          = itemId
                 it[title]       = "Fetchable Item"
                 it[description] = null
-                it[Items.userId] = userId
+                // Qualify the test field: inside Items.insert {} the receiver is the
+                // Items table, so a bare "userId" resolves to the Items.userId column,
+                // not this test's UUID field. That shadowing inserted the column name.
+                it[Items.userId] = this@UserItemRoutesTest.userId
             }
         }
 
@@ -113,7 +121,9 @@ class UserItemRoutesTest {
                 it[Items.id]     = itemId
                 it[title]        = "Old Title"
                 it[description]  = null
-                it[Items.userId] = userId
+                // Qualify: inside Items.insert {} a bare "userId" is the Items.userId
+                // column (receiver member), not this test's UUID field.
+                it[Items.userId] = this@UserItemRoutesTest.userId
             }
         }
 
@@ -134,7 +144,9 @@ class UserItemRoutesTest {
                 it[Items.id]     = itemId
                 it[title]        = "Delete Me"
                 it[description]  = null
-                it[Items.userId] = userId
+                // Qualify: inside Items.insert {} a bare "userId" is the Items.userId
+                // column (receiver member), not this test's UUID field.
+                it[Items.userId] = this@UserItemRoutesTest.userId
             }
         }
 

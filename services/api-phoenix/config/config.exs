@@ -17,3 +17,10 @@ config :logger, :default_handler,
 # Hammer rate-limit backend: in-memory ETS, 4h key expiry.
 config :hammer,
   backend: {Hammer.Backend.ETS, [expiry_ms: 60_000 * 60 * 4, cleanup_interval_ms: 60_000 * 10]}
+
+# Load environment-specific compile-time config when the file exists.
+# Only config/test.exs exists today; dev/prod runtime config lives in runtime.exs.
+# Without this, App.Repo never receives its :database key in test and Postgrex fails.
+if File.exists?(Path.join(__DIR__, "#{config_env()}.exs")) do
+  import_config "#{config_env()}.exs"
+end

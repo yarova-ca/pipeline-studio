@@ -11,6 +11,10 @@ from typing import Dict, Optional, Union
 
 ControlValue = Union[str, int, bool]
 
+# Default token lifetime when the active profile sets session_timeout_seconds
+# to 0 ("off"). Matches the 8-hour JWT_EXPIRY_HOURS baseline in src/auth/jwt.py.
+_DEFAULT_SESSION_TIMEOUT_SECONDS = 8 * 60 * 60
+
 
 class Compliance:
     def __init__(self) -> None:
@@ -29,6 +33,22 @@ class Compliance:
             self.name = p.get("name", "")
             self.jurisdiction = p.get("jurisdiction", "")
             self.controls = p.get("controls", {})
+
+    @property
+    def session_timeout_seconds(self) -> int:
+        """Idle session timeout for the active profile, in seconds.
+
+        Read from the profile's session_timeout_seconds control.
+        Per the control catalog, a value of 0 means "off" — no
+        compliance-mandated timeout — so fall back to the default
+        8-hour token lifetime (28800 seconds) in that case.
+        """
+        value = self.controls.get("session_timeout_seconds", 0)
+        try:
+            seconds = int(value)
+        except (TypeError, ValueError):
+            seconds = 0
+        return seconds if seconds > 0 else _DEFAULT_SESSION_TIMEOUT_SECONDS
 
     def view(self) -> dict:
         return {

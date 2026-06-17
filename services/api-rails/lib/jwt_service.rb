@@ -4,12 +4,22 @@ require_relative 'compliance'
 class JwtService
   ALGORITHM = 'HS256'.freeze
 
+  # Fallback token lifetime when the active profile sets no timeout (value 0).
+  DEFAULT_TTL_SECONDS = 86_400
+
   def self.encode(payload)
     # Session length is set by the active industry profile (HIPAA → 15 min).
-    exp = Time.now.to_i + Compliance.active[:session_timeout_seconds]
-    claims = payload.merge(exp: exp, iat: Time.now.to_i)
+    # The value lives under the profile controls; 0 means "no profile-imposed
+    # limit", so fall back to the default lifetime to keep tokens valid.
+    claims = payload.merge(exp: Time.now.to_i + ttl_seconds, iat: Time.now.to_i)
     JWT.encode(claims, secret, ALGORITHM)
   end
+
+  def self.ttl_seconds
+    configured = Compliance.active[:controls]['session_timeout_seconds'].to_i
+    configured.positive? ? configured : DEFAULT_TTL_SECONDS
+  end
+  private_class_method :ttl_seconds
 
   def self.decode(token)
     decoded = JWT.decode(token, secret, true, algorithm: ALGORITHM)

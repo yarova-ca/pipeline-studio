@@ -58,19 +58,39 @@ class _MockScalars:
 
 
 class _MockExecuteResult:
-    def __init__(self, result):
+    def __init__(self, result, count=0):
         self._result = result
+        self._count = count
 
     def scalars(self):
         return _MockScalars(self._result)
 
+    def scalar_one(self):
+        # Used by the paginated list route's COUNT(*) query.
+        return self._count
+
 
 def _make_db_session(execute_result, item_to_add: Optional[MagicMock] = None) -> object:
-    """Build an async session mock returning execute_result from execute()."""
+    """Build an async session mock returning execute_result from execute().
+
+    The paginated list route runs two queries per request:
+      1. the items page (returns execute_result via scalars().all())
+      2. a COUNT(*) total (returns the row count via scalar_one())
+    The mock serves the items result first, then a count result.
+    """
+
+    _list_total = len(execute_result) if isinstance(execute_result, list) else 0
 
     class _Session:
+        def __init__(self):
+            self._execute_calls = 0
+
         async def execute(self, *args, **kwargs):
-            return _MockExecuteResult(execute_result)
+            self._execute_calls += 1
+            # Second execute() in list_items is the COUNT(*) query.
+            if self._execute_calls >= 2:
+                return _MockExecuteResult(None, count=_list_total)
+            return _MockExecuteResult(execute_result, count=_list_total)
 
         def add(self, obj):
             # Simulate DB assigning an id.
@@ -111,7 +131,7 @@ def _make_db_session(execute_result, item_to_add: Optional[MagicMock] = None) ->
 
 @pytest.mark.asyncio
 async def test_list_items_returns_200():
-    """GET /users/me/items → 200 with a list of items."""
+    """GET /users/me/items → 200 with a paginated page of items."""
     items = [_make_item(1, "Item One"), _make_item(2, "Item Two")]
 
     async def _mock_db():
@@ -126,9 +146,13 @@ async def test_list_items_returns_200():
             )
         assert r.status_code == 200
         body = r.json()
-        assert isinstance(body, list)
-        assert len(body) == 2
-        assert body[0]["title"] == "Item One"
+        # Route returns a PaginatedItemsResponse, not a bare list.
+        assert isinstance(body["items"], list)
+        assert len(body["items"]) == 2
+        assert body["items"][0]["title"] == "Item One"
+        assert body["total"] == 2
+        assert body["limit"] == 20
+        assert body["offset"] == 0
     finally:
         app.dependency_overrides.pop(get_db, None)
 

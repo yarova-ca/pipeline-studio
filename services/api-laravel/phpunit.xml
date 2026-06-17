@@ -12,6 +12,8 @@
         <env name="APP_ENV" value="testing"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
+        <!-- array cache needs no DB table; rate limiter works without a cache migration -->
+        <env name="CACHE_STORE" value="array"/>
         <env name="APP_KEY" value="base64:dGVzdC1rZXktMzItY2hhcnMteHh4eHh4eHh4eHh4eHg="/>
         <env name="JWT_SECRET" value="test-secret-32-chars-long-minimum"/>
     </php>

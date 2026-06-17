@@ -43,7 +43,7 @@ fun Route.userItemRoutes() {
                             id          = row[Items.id].value.toString(),
                             title       = row[Items.title],
                             description = row[Items.description],
-                            userId      = row[Items.userId].toString(),
+                            userId      = row[Items.userId].value.toString(),
                         )
                     }
             }
@@ -92,7 +92,7 @@ fun Route.userItemRoutes() {
                             id          = row[Items.id].value.toString(),
                             title       = row[Items.title],
                             description = row[Items.description],
-                            userId      = row[Items.userId].toString(),
+                            userId      = row[Items.userId].value.toString(),
                         )
                     }
             }
@@ -129,7 +129,7 @@ fun Route.userItemRoutes() {
                             id          = row[Items.id].value.toString(),
                             title       = row[Items.title],
                             description = row[Items.description],
-                            userId      = row[Items.userId].toString(),
+                            userId      = row[Items.userId].value.toString(),
                         )
                     }
             }
