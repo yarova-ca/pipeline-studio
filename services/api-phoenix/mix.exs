@@ -38,6 +38,10 @@ defmodule App.MixProject do
       {:opentelemetry_api, "~> 1.5"},
       {:opentelemetry_exporter, "~> 1.10"},
       {:opentelemetry_phoenix, "~> 2.0"},
+      # opentelemetry_phoenix 2.0 split HTTP-server spans into a per-adapter
+      # package. The Cowboy adapter (we use plug_cowboy) needs this dependency,
+      # otherwise OpentelemetryPhoenix.setup(adapter: :cowboy2) raises at boot.
+      {:opentelemetry_cowboy, "~> 1.0"},
 
       # OpenAPI spec via open_api_spex — spec served at /api/openapi.json
       {:open_api_spex, "~> 3.22"}

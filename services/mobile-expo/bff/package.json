@@ -6,6 +6,7 @@
     "build": "prisma generate && tsc",
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
+    "pretest": "prisma generate",
     "test": "vitest run"
   },
   "dependencies": {
