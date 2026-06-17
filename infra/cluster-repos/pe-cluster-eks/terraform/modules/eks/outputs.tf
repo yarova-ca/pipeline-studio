@@ -27,12 +27,12 @@ output "vpc_id" {
 
 output "eso_irsa_role_arn" {
   description = "IAM role ARN to annotate on the ESO ServiceAccount."
-  value       = module.eso_irsa.iam_role_arn
+  value       = module.eso_irsa.arn # v6 renamed output iam_role_arn -> arn
 }
 
 output "argocd_irsa_role_arn" {
   description = "IAM role ARN to annotate on the ArgoCD application-controller ServiceAccount."
-  value       = module.argocd_irsa.iam_role_arn
+  value       = module.argocd_irsa.arn # v6 renamed output iam_role_arn -> arn
 }
 
 output "kubeconfig_command" {

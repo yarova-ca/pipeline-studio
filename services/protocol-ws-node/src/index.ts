@@ -11,8 +11,9 @@ import { prisma } from './db/client'
 import { activeCompliance } from './compliance'
 
 // I-1: refuse to boot on missing or weak config.
+// Guarded so the module can be imported under test without exiting the process.
 const jwtSecret = process.env.JWT_SECRET ?? ''
-if (jwtSecret.length < 32) {
+if (require.main === module && jwtSecret.length < 32) {
   logger.error('FATAL: JWT_SECRET must be set and at least 32 characters')
   process.exit(1)
 }
@@ -26,7 +27,7 @@ function setSecurityHeaders(res: http.ServerResponse): void {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
 }
 
-const server = http.createServer(async (req, res) => {
+export const server = http.createServer(async (req, res) => {
   const start = process.hrtime.bigint()
   setSecurityHeaders(res)
   const url = req.url ?? '/'
@@ -104,10 +105,6 @@ wss.on('connection', (ws: WebSocket) => {
   })
 })
 
-server.listen(port, () => {
-  logger.info({ port }, 'websocket server started')
-})
-
 // I-11: drain cleanly on SIGTERM.
 function shutdown(signal: string): void {
   logger.info({ signal }, 'shutting down')
@@ -117,5 +114,12 @@ function shutdown(signal: string): void {
   })
   setTimeout(() => process.exit(1), 10_000).unref()
 }
-process.on('SIGTERM', () => shutdown('SIGTERM'))
-process.on('SIGINT', () => shutdown('SIGINT'))
+
+// Only bind the port + signal handlers when run directly (not when imported by tests).
+if (require.main === module) {
+  server.listen(port, () => {
+    logger.info({ port }, 'websocket server started')
+  })
+  process.on('SIGTERM', () => shutdown('SIGTERM'))
+  process.on('SIGINT', () => shutdown('SIGINT'))
+}

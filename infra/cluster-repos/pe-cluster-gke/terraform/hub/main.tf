@@ -3,11 +3,11 @@
 # Why dedicated hub: if prod cluster is overloaded, hub remains available for management.
 
 terraform {
-  required_version = ">= 1.6"
+  required_version = ">= 1.12"
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 5.0"
+      version = "~> 7.0"
     }
   }
   backend "gcs" {

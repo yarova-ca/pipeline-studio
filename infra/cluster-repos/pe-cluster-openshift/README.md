@@ -47,7 +47,7 @@ pe-cluster-openshift/
 |---|---|---|
 | terraform | >= 1.6 (tested 1.14.5) | plan / apply |
 | openshift-install | match target OCP version | apply only |
-| oc | >= 4.14 | platform install + verify |
+| oc | >= 4.20 | platform install + verify |
 | helm | >= 3.14 | platform install |
 | argocd CLI | >= 2.10 | register-spoke |
 

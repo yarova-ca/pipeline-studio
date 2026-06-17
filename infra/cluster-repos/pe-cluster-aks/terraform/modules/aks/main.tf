@@ -4,11 +4,11 @@
 # OIDC issuer + Workload Identity: lets pods federate to Azure AD (used by ESO).
 
 terraform {
-  required_version = ">= 1.6"
+  required_version = ">= 1.12"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.0"
+      version = "~> 4.77" # latest 4.x as of 2026-06; no 5.x GA yet
     }
   }
 }
@@ -30,7 +30,7 @@ variable "location" {
 
 variable "kubernetes_version" {
   type        = string
-  default     = "1.31"
+  default     = "1.34"
   description = "Kubernetes minor version for the control plane and node pool."
 }
 

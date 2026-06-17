@@ -28,12 +28,20 @@ router = APIRouter()
 
 class ItemCreate(BaseModel):
     # Fix 5: Add Field max_length validation to prevent unbounded string inputs.
+    # I-6: extra="forbid" rejects unknown body fields (mass-assignment guard).
+    # Why: silently ignoring unknown fields hides client/contract bugs and
+    # lets attackers probe for accepted-but-undocumented fields.
+    model_config = {"extra": "forbid"}
+
     title: str = Field(..., min_length=1, max_length=500)
     description: Optional[str] = Field(None, max_length=2000)
 
 
 class ItemUpdate(BaseModel):
     # Fix 5: Apply same length limits to update schema.
+    # I-6: extra="forbid" — same unknown-field rejection on update.
+    model_config = {"extra": "forbid"}
+
     title: Optional[str] = Field(None, min_length=1, max_length=500)
     description: Optional[str] = Field(None, max_length=2000)
 

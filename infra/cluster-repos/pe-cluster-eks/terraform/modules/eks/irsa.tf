@@ -8,10 +8,12 @@ data "aws_caller_identity" "current" {}
 # External Secrets Operator reads secrets from AWS Secrets Manager + SSM Parameter Store.
 # This role grants read-only access to those stores.
 module "eso_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.0"
+  # v6 renamed the submodule: iam-role-for-service-accounts-eks -> iam-role-for-service-accounts.
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.0"
 
-  role_name = "${var.cluster_name}-eso"
+  # v6 renamed: role_name -> name, role_policy_arns -> policies, output iam_role_arn -> arn.
+  name = "${var.cluster_name}-eso"
 
   # Built-in policy in the submodule granting Secrets Manager + SSM read access.
   attach_external_secrets_policy = true
@@ -57,11 +59,11 @@ resource "aws_iam_policy" "argocd_ecr_read" {
 }
 
 module "argocd_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.0"
 
-  role_name        = "${var.cluster_name}-argocd"
-  role_policy_arns = { ecr = aws_iam_policy.argocd_ecr_read.arn }
+  name     = "${var.cluster_name}-argocd"
+  policies = { ecr = aws_iam_policy.argocd_ecr_read.arn }
 
   oidc_providers = {
     main = {

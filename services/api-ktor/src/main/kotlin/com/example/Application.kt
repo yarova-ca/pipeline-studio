@@ -11,6 +11,8 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.metrics.micrometer.*
 import io.micrometer.prometheusmetrics.PrometheusConfig
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
@@ -109,7 +111,22 @@ fun initOTel() {
 
 fun Application.module() {
     install(ContentNegotiation) {
+        // Default kotlinx Json: ignoreUnknownKeys = false (strict).
+        // I-6: an unknown JSON field therefore throws during call.receive(),
+        // and the StatusPages handler below maps that failure to 400 (not 500).
         json()
+    }
+
+    // I-6: a malformed body or unknown JSON field must surface as 400, never 500.
+    // Ktor wraps a kotlinx SerializationException from call.receive() in a
+    // BadRequestException; StatusPages maps both to a clean 400 response.
+    install(StatusPages) {
+        exception<BadRequestException> { call, _ ->
+            call.respond(HttpStatusCode.BadRequest, ErrorResponse("Invalid request body"))
+        }
+        exception<kotlinx.serialization.SerializationException> { call, _ ->
+            call.respond(HttpStatusCode.BadRequest, ErrorResponse("Invalid request body"))
+        }
     }
 
     // I-17: security headers on every response.
@@ -123,6 +140,10 @@ fun Application.module() {
     val prometheusRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     install(MicrometerMetrics) {
         registry = prometheusRegistry
+        // I-13: emit the canonical request-duration golden signal.
+        // Micrometer's Prometheus naming appends "_seconds" to this Timer,
+        // so /metrics exposes http_request_duration_seconds.
+        metricName = "http_request_duration"
     }
 
     // Structured JSON logging for each request via CallLogging plugin.

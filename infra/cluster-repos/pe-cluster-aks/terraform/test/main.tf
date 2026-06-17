@@ -2,11 +2,11 @@
 # 2 replicas per service. Production-like resource limits.
 
 terraform {
-  required_version = ">= 1.6"
+  required_version = ">= 1.12"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.0"
+      version = "~> 4.77" # latest 4.x as of 2026-06; no 5.x GA yet
     }
   }
   backend "azurerm" {

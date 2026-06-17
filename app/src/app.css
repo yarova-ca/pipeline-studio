@@ -1435,3 +1435,7 @@ details.gcard.recd { border-color: var(--border-accent); box-shadow: 0 0 0 1px v
 .pp-ls2 { display: flex; gap: 8px; flex-wrap: wrap; }
 .pp-ls2 .ok { font-size: 12px; color: var(--accent); background: var(--wash-teal); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
 .pp-ls2 .soon { font-size: 12px; color: #8a6d00; background: var(--wash-lime); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+
+/* currency verification block (purpose page) */
+.pp-currency { border-left: 3px solid var(--brand-teal); background: var(--wash-teal); padding: 14px 18px; border-radius: 0 12px 12px 0; font-size: 14px; line-height: 1.6; color: var(--ink); margin-bottom: 16px; }
+.pp-currency b { display: block; margin-bottom: 4px; color: var(--accent); }

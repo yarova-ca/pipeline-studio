@@ -3,6 +3,17 @@ class UserItemsController < ActionController::API
 
   before_action :find_item, only: %i[show update destroy]
 
+  # I-6: reject any unknown body field on writes. Rails strong params silently
+  # IGNORE unknown keys, so an explicit check is required to make "unknown
+  # fields rejected" genuinely hold and return 400.
+  before_action :reject_unknown_item_fields, only: %i[create update]
+
+  # The only client-supplied fields allowed on an item write.
+  PERMITTED_ITEM_KEYS = %w[title description].freeze
+
+  # Rails-internal/request params that are never client item data.
+  RESERVED_PARAM_KEYS = %w[controller action format id item].freeze
+
   # GET /items — list all items for current user
   def index
     items = @current_user.items.order(created_at: :desc)
@@ -41,6 +52,24 @@ class UserItemsController < ActionController::API
   end
 
   private
+
+  # I-6: 400 when the request carries a field outside PERMITTED_ITEM_KEYS.
+  # Looks under params[:item] when nested, otherwise the flat top-level params
+  # (minus Rails-internal keys). Matches both shapes item_params accepts.
+  def reject_unknown_item_fields
+    supplied =
+      if params[:item].respond_to?(:keys)
+        params[:item].keys.map(&:to_s)
+      else
+        params.keys.map(&:to_s) - RESERVED_PARAM_KEYS
+      end
+
+    unknown = supplied - PERMITTED_ITEM_KEYS
+    return if unknown.empty?
+
+    render json: { error: "Unknown field(s): #{unknown.join(', ')}" },
+           status: :bad_request
+  end
 
   def find_item
     @item = @current_user.items.find_by(id: params[:id])

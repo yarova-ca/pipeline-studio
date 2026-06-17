@@ -2,7 +2,7 @@
 # Stage 04 — Build / Push / Sign + SLSA  |  18 Kotlin — Ktor 3.5
 # Runs on: push to main ONLY
 # Pushes to: GHCR (default) — see ALTERNATIVE registry blocks below
-# Runtime image: gcr.io/distroless/java21-debian12
+# Runtime image: gcr.io/distroless/java25-debian13
 # FIPS image:    registry.access.redhat.com/ubi9/openjdk-21-runtime
 # Copy to: .github/workflows/ in your Ktor repo
 # ════════════════════════════════════════════════════════════════════
@@ -114,7 +114,7 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '25'
           distribution: 'temurin'
           cache: 'gradle'
 

@@ -1,6 +1,11 @@
 // Full-stack SSR (Tier B). The Nitro server holds the invariants; data and auth
 // live in a BFF reached via BFF_URL.
 export default defineNuxtConfig({
+  // Nuxt 4: pin the major-version behaviour explicitly so the build is
+  // deterministic and does not silently shift if the default changes.
+  future: {
+    compatibilityVersion: 4,
+  },
   compatibilityDate: '2025-01-01',
   ssr: true,
   // I-17 + C-6: security headers and a CSP on every response.

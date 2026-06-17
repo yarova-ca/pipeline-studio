@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import jwt from 'jsonwebtoken'
+import { z } from 'zod'
 import { config } from './config'
 import { logger } from './logger'
 import { register, httpDuration } from './metrics'
@@ -13,7 +14,7 @@ interface AuthUser {
   name: string
 }
 
-const app = new Hono<{ Variables: { user: AuthUser } }>()
+export const app = new Hono<{ Variables: { user: AuthUser } }>()
 
 // I-17: security headers on every response. HSTS only when the active
 // industry profile requires encryption in transit.
@@ -121,6 +122,29 @@ app.use('/users/*', async (c, next) => {
 
 app.get('/users/me', (c) => c.json(c.get('user')))
 
+// I-6: protected POST with strict body validation. Unknown/extra fields are
+// rejected with 400 — `.strict()` makes the schema reject any unexpected key.
+const profilePatchSchema = z
+  .object({
+    name: z.string().min(1).max(200),
+  })
+  .strict()
+
+app.post('/users/me', async (c) => {
+  let body: unknown
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+  const parsed = profilePatchSchema.safeParse(body)
+  if (!parsed.success) {
+    return c.json({ error: 'Invalid request body', details: parsed.error.flatten().fieldErrors }, 400)
+  }
+  const user = c.get('user')
+  return c.json({ ...user, name: parsed.data.name })
+})
+
 // Issue a token for a known user (TTL set by the active industry profile).
 // session_timeout_seconds === 0 means "no idle timeout" — default to 8h.
 function sessionTimeoutSeconds(): number {
@@ -136,20 +160,29 @@ export function signToken(user: AuthUser): string {
   })
 }
 
-logger.info(
-  { port: config.PORT, profile: compliance.profile, sessionTimeoutSeconds: sessionTimeoutSeconds() },
-  'hono edge service starting',
-)
+// Boot the listener only when run as the entry point — not when imported by
+// tests. Importing the module then just builds the Hono app (no open socket,
+// no hanging process), so the invariant suite can call app.request(...).
+function bootstrap(): void {
+  logger.info(
+    { port: config.PORT, profile: compliance.profile, sessionTimeoutSeconds: sessionTimeoutSeconds() },
+    'hono edge service starting',
+  )
 
-const server = serve({ fetch: app.fetch, port: config.PORT, hostname: '0.0.0.0' })
+  const server = serve({ fetch: app.fetch, port: config.PORT, hostname: '0.0.0.0' })
 
-// I-11: drain cleanly on SIGTERM.
-function shutdown(signal: string): void {
-  logger.info({ signal }, 'shutting down')
-  server.close(() => {
-    prisma.$disconnect().finally(() => process.exit(0))
-  })
-  setTimeout(() => process.exit(1), 10_000).unref()
+  // I-11: drain cleanly on SIGTERM.
+  function shutdown(signal: string): void {
+    logger.info({ signal }, 'shutting down')
+    server.close(() => {
+      prisma.$disconnect().finally(() => process.exit(0))
+    })
+    setTimeout(() => process.exit(1), 10_000).unref()
+  }
+  process.on('SIGTERM', () => shutdown('SIGTERM'))
+  process.on('SIGINT', () => shutdown('SIGINT'))
 }
-process.on('SIGTERM', () => shutdown('SIGTERM'))
-process.on('SIGINT', () => shutdown('SIGINT'))
+
+if (process.env.NODE_ENV !== 'test') {
+  bootstrap()
+}

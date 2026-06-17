@@ -22,7 +22,7 @@ locals {
 # ── VPC for the cluster ─────────────────────────────────────────────────────
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   name = "${var.cluster_name}-vpc"
   cidr = var.vpc_cidr
@@ -54,21 +54,31 @@ module "vpc" {
 # ── EKS cluster + managed node group ────────────────────────────────────────
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.0"
+  version = "~> 21.0"
 
-  cluster_name    = var.cluster_name
-  cluster_version = var.kubernetes_version
+  # v21 stripped the cluster_* prefix from these inputs:
+  #   cluster_name -> name, cluster_version -> kubernetes_version,
+  #   cluster_endpoint_public_access -> endpoint_public_access,
+  #   cluster_addons -> addons.
+  name               = var.cluster_name
+  kubernetes_version = var.kubernetes_version
 
-  cluster_endpoint_public_access = true
+  endpoint_public_access = true
+
+  # v21 default authentication_mode is API and cluster creator gets no
+  # implicit admin. Grant the Terraform caller admin via an access entry so
+  # the apply identity retains kubectl access (matches v20 behaviour).
+  enable_cluster_creator_admin_permissions = true
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
   # Enable IRSA — provisions the OIDC provider IRSA roles bind to.
+  # Still supported on the root module in v21 (removal was Karpenter-only).
   enable_irsa = true
 
-  # Core add-ons managed by EKS.
-  cluster_addons = {
+  # Core add-ons managed by EKS (cluster_addons -> addons in v21).
+  addons = {
     coredns            = {}
     kube-proxy         = {}
     vpc-cni            = {}

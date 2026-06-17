@@ -5,6 +5,9 @@ defmodule AppWeb.UserItemController do
   alias App.Catalog
   alias AppWeb.Plugs.RequireAuth
 
+  # I-6: the only client-supplied fields allowed on an item write.
+  @allowed_item_fields ["title", "description"]
+
   # All actions require authentication.
   # RequireAuth is applied at the pipeline level in the router.
 
@@ -16,6 +19,13 @@ defmodule AppWeb.UserItemController do
 
   # POST /items — create item for current user
   def create(conn, params) do
+    case unknown_fields(params) do
+      [] -> do_create(conn, params)
+      unknown -> reject_unknown(conn, unknown)
+    end
+  end
+
+  defp do_create(conn, params) do
     attrs = Map.take(params, ["title", "description"])
 
     case Catalog.create_item(attrs, conn.assigns.current_user.id) do
@@ -82,6 +92,23 @@ defmodule AppWeb.UserItemController do
   end
 
   # --- Private helpers ---
+
+  # I-6: keys present in the body that are not allowed item fields.
+  # Phoenix's Map.take silently drops unknowns, so an explicit strict check
+  # is required for "unknown fields rejected" to genuinely hold (returns 400).
+  # Ignores the routed path param "id" which is not client item data.
+  defp unknown_fields(params) do
+    params
+    |> Map.keys()
+    |> Enum.map(&to_string/1)
+    |> Enum.reject(&(&1 in @allowed_item_fields or &1 == "id"))
+  end
+
+  defp reject_unknown(conn, unknown) do
+    conn
+    |> put_status(400)
+    |> json(%{error: "Unknown field(s): #{Enum.join(unknown, ", ")}"})
+  end
 
   defp item_json(item) do
     %{

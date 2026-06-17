@@ -27,7 +27,11 @@ pub struct Item {
 }
 
 /// Request body for creating or updating an item.
+///
+/// I-6: `deny_unknown_fields` makes serde reject any extra/unknown JSON key
+/// with a deserialization error, which Axum's `Json` extractor surfaces as 400.
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ItemBody {
     pub title: Option<String>,
     pub description: Option<String>,

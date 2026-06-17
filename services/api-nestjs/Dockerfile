@@ -1,4 +1,4 @@
-FROM node:22-slim AS build
+FROM node:24-slim AS build
 WORKDIR /app
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 COPY package.json ./
@@ -6,7 +6,7 @@ RUN npm install --legacy-peer-deps
 COPY . .
 RUN npx prisma generate 2>/dev/null || true
 RUN npm run build
-FROM node:22-slim AS runtime
+FROM node:24-slim AS runtime
 WORKDIR /app
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 ENV PORT=3000 NODE_ENV=production OTEL_ENABLED=false DATABASE_URL="file:./dev.db"

@@ -31,16 +31,16 @@ public class UserItemController {
 
     @PostMapping
     public ResponseEntity<Item> createItem(
-            @RequestBody Map<String, String> body,
+            @RequestBody CreateItemRequest body,
             Authentication authentication) {
 
-        String title = body.get("title");
+        String title = body.getTitle();
         if (title == null || title.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "title is required");
         }
 
         UUID userId = principal(authentication).getId();
-        Item item = itemService.createItem(userId, title, body.get("description"));
+        Item item = itemService.createItem(userId, title, body.getDescription());
         return ResponseEntity.status(HttpStatus.CREATED).body(item);
     }
 

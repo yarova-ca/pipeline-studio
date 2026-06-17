@@ -7,6 +7,8 @@ pub mod auth;
 pub mod compliance;
 pub mod db;
 pub mod errors;
+pub mod extract;
+pub mod metrics;
 pub mod routes;
 
 use axum::{
@@ -106,6 +108,23 @@ async fn openapi_spec() -> Json<utoipa::openapi::OpenApi> {
     Json(ApiDoc::openapi())
 }
 
+// I-13: Prometheus metrics endpoint — exposes the request-duration golden signal.
+async fn metrics_handler() -> impl IntoResponse {
+    (
+        [(
+            axum::http::header::CONTENT_TYPE,
+            "text/plain; version=0.0.4; charset=utf-8",
+        )],
+        crate::metrics::render(),
+    )
+}
+
+// I-13: middleware that times every request and records the latency histogram.
+async fn record_metrics(req: axum::extract::Request, next: axum::middleware::Next) -> axum::response::Response {
+    let _timer = crate::metrics::Timer::start();
+    next.run(req).await
+}
+
 // The active industry profile and the controls in effect. Switch with
 // COMPLIANCE_PROFILE — the controls flip at boot, no rebuild.
 async fn compliance_status() -> Json<crate::compliance::Controls> {
@@ -139,7 +158,8 @@ pub fn app(pool: Option<PgPool>) -> Router {
         Some(p) => {
             let health_routes = Router::new()
                 .route("/health", get(health))
-                .route("/health/live", get(liveness));
+                .route("/health/live", get(liveness))
+                .route("/metrics", get(metrics_handler));
 
             let limited = Router::new()
                 .route("/", get(hello))
@@ -165,13 +185,15 @@ pub fn app(pool: Option<PgPool>) -> Router {
                 .route("/docs.json", get(openapi_spec))
                 .route("/compliance", get(compliance_status))
                 .layer(axum::middleware::from_fn(security_headers))
+                .layer(axum::middleware::from_fn(record_metrics))
                 .layer(TraceLayer::new_for_http())
                 .with_state(p)
         }
         None => {
             let health_routes = Router::new()
                 .route("/health", get(health))
-                .route("/health/live", get(liveness));
+                .route("/health/live", get(liveness))
+                .route("/metrics", get(metrics_handler));
 
             let limited = Router::new()
                 .route("/", get(hello))
@@ -191,6 +213,7 @@ pub fn app(pool: Option<PgPool>) -> Router {
                 .route("/docs.json", get(openapi_spec))
                 .route("/compliance", get(compliance_status))
                 .layer(axum::middleware::from_fn(security_headers))
+                .layer(axum::middleware::from_fn(record_metrics))
                 .layer(TraceLayer::new_for_http())
         }
     }

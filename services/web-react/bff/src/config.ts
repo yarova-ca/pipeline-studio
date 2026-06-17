@@ -15,7 +15,7 @@ const schema = z.object({
 const parsed = schema.safeParse(process.env)
 if (!parsed.success) {
   // Never print secret values — only which keys are invalid.
-  console.error('FATAL: invalid configuration:', JSON.stringify(parsed.error.flatten().fieldErrors))
+  console.error('FATAL: invalid configuration:', JSON.stringify(z.flattenError(parsed.error).fieldErrors))
   process.exit(1)
 }
 

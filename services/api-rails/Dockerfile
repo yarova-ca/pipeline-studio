@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.6
-# Build: Ruby 3.3 (native gem toolchain). Runtime: ruby:3.3-slim, non-root.
-FROM ruby:3.3 AS build
+# Build: Ruby 3.3 (native gem toolchain). Runtime: ruby:3.4-slim, non-root.
+FROM ruby:3.4 AS build
 WORKDIR /app
 COPY Gemfile Gemfile.lock ./
 RUN bundle config set --local without 'development test' \
@@ -8,7 +8,7 @@ RUN bundle config set --local without 'development test' \
  && bundle install --jobs 4
 COPY . .
 
-FROM ruby:3.3-slim AS runtime
+FROM ruby:3.4-slim AS runtime
 WORKDIR /app
 # libpq5 is the runtime shared library the pg gem links against.
 RUN apt-get update && apt-get install -y --no-install-recommends libpq5 \

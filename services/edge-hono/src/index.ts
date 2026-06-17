@@ -1,5 +1,6 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
+import { z } from 'zod'
 import jwt from 'jsonwebtoken'
 import { config } from './config'
 import { logger } from './logger'
@@ -122,6 +123,31 @@ app.use('/users/*', async (c, next) => {
 
 app.get('/users/me', (c) => c.json(c.get('user')))
 
+// I-6: a protected mutation that rejects unknown fields. The body schema is
+// `.strict()` so any field not in the contract makes the request fail closed
+// with 400 — a tampered or over-posted payload never reaches persistence.
+const profileUpdateSchema = z
+  .object({
+    name: z.string().min(1).max(200),
+    bio: z.string().max(1000).optional(),
+  })
+  .strict()
+
+app.post('/users/profile', async (c) => {
+  let body: unknown
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+  const parsed = profileUpdateSchema.safeParse(body)
+  if (!parsed.success) {
+    return c.json({ error: 'Invalid request', details: parsed.error.flatten() }, 400)
+  }
+  const user = c.get('user')
+  return c.json({ id: user.id, name: parsed.data.name, bio: parsed.data.bio ?? null })
+})
+
 // Token TTL. The uniform control catalog has no per-profile session timeout,
 // so the service uses a fixed 8-hour TTL across every profile.
 const SESSION_TTL_SECONDS = 8 * 60 * 60
@@ -135,20 +161,33 @@ export function signToken(user: AuthUser): string {
   })
 }
 
-logger.info(
-  { port: config.PORT, profile: compliance.profile, name: compliance.name },
-  'hono edge service starting',
-)
+// The app is exported so the invariant suite can drive it in-process via
+// `app.request(...)` without binding a real port.
+export { app }
 
-const server = serve({ fetch: app.fetch, port: config.PORT, hostname: '0.0.0.0' })
+// Only bind a listening socket when run as the entrypoint. Under test
+// (NODE_ENV === 'test', set by vitest) the module is imported, not served,
+// so importing it never opens a port or registers signal handlers.
+function start(): void {
+  logger.info(
+    { port: config.PORT, profile: compliance.profile, name: compliance.name },
+    'hono edge service starting',
+  )
 
-// I-11: drain cleanly on SIGTERM.
-function shutdown(signal: string): void {
-  logger.info({ signal }, 'shutting down')
-  server.close(() => {
-    prisma.$disconnect().finally(() => process.exit(0))
-  })
-  setTimeout(() => process.exit(1), 10_000).unref()
+  const server = serve({ fetch: app.fetch, port: config.PORT, hostname: '0.0.0.0' })
+
+  // I-11: drain cleanly on SIGTERM.
+  function shutdown(signal: string): void {
+    logger.info({ signal }, 'shutting down')
+    server.close(() => {
+      prisma.$disconnect().finally(() => process.exit(0))
+    })
+    setTimeout(() => process.exit(1), 10_000).unref()
+  }
+  process.on('SIGTERM', () => shutdown('SIGTERM'))
+  process.on('SIGINT', () => shutdown('SIGINT'))
 }
-process.on('SIGTERM', () => shutdown('SIGTERM'))
-process.on('SIGINT', () => shutdown('SIGINT'))
+
+if (config.NODE_ENV !== 'test') {
+  start()
+}

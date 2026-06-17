@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.6
 # Build: Elixir 1.17 + Erlang 27 → mix release. Runtime: debian-slim, non-root.
-FROM hexpm/elixir:1.17.3-erlang-27.1.2-debian-bookworm-20260610-slim AS build
+FROM hexpm/elixir:1.18.4-erlang-28.2-debian-bookworm-20260202-slim AS build
 WORKDIR /app
 ENV MIX_ENV=prod
 RUN mix local.hex --force && mix local.rebar --force
