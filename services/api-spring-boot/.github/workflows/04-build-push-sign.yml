@@ -118,9 +118,6 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      # ── DEFAULT: mvn build ──────────────────────
-      - name: App build
-        run: mvn -B package --file pom.xml -DskipTests
       #
       # ── ALTERNATIVE: Gradle ──────────────────────────────────────
       # - name: Build — Gradle

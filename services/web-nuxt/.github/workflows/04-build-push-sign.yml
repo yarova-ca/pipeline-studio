@@ -116,9 +116,6 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
-      # ── DEFAULT: npm build (nuxt build) ─────────────────────────
-      - name: App build
-        run: npm ci && npm run build
       #
       # ── ALTERNATIVE: yarn ────────────────────────────────────────
       # - name: Build — yarn

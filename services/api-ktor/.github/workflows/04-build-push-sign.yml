@@ -118,9 +118,6 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      # ── DEFAULT: ./gradlew build ──────────────────────
-      - name: App build
-        run: ./gradlew build -x test
       #
       # ── ALTERNATIVE: Gradle ──────────────────────────────────────
       # - name: Build — Gradle

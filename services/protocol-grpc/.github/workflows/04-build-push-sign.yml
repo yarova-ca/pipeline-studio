@@ -117,9 +117,6 @@ jobs:
           go-version: '1.23'
           cache: true
 
-      # ── DEFAULT: CGO_ENABLED=0 build ──────────────────────
-      - name: App build
-        run: CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app ./...
 
 
       - name: Build and push — standard image (--target runtime)

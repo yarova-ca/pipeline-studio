@@ -117,9 +117,6 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: true
 
-      # ── DEFAULT: bundle build ──────────────────────
-      - name: App build
-        run: bundle install --without development test
 
 
       - name: Build and push — standard image (--target runtime)

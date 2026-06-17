@@ -117,9 +117,6 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      # ── DEFAULT: pip build ──────────────────────
-      - name: App build
-        run: pip install -r requirements.txt
       #
       # ── ALTERNATIVE: poetry ──────────────────────────────────────
       # - name: Build — poetry

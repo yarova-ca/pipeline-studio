@@ -117,9 +117,6 @@ jobs:
           elixir-version: '1.17'
           otp-version: '27'
 
-      # ── DEFAULT: MIX_ENV=prod build ──────────────────────
-      - name: App build
-        run: MIX_ENV=prod mix do deps.get, release
 
 
       - name: Build and push — standard image (--target runtime)

@@ -115,9 +115,6 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
 
-      # ── DEFAULT: cargo build ──────────────────────
-      - name: App build
-        run: cargo build --release --target x86_64-unknown-linux-musl
 
 
       - name: Build and push — standard image (--target runtime)

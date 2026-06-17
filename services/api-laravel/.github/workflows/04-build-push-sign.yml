@@ -117,9 +117,6 @@ jobs:
           php-version: '8.3'
           tools: composer:v2
 
-      # ── DEFAULT: composer build ──────────────────────
-      - name: App build
-        run: composer install --no-dev --optimize-autoloader
 
 
       - name: Build and push — standard image (--target runtime)
