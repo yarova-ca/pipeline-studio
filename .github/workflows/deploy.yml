@@ -29,22 +29,24 @@ jobs:
         working-directory: app
         run: npm run build   # outputs ../site-app
 
-      - name: Diagnose Pages project (production branch + domains)
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          echo "::group::projects"
-          curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects" \
-            | python3 -c "import sys,json; d=json.load(sys.stdin); [print(p['name'],'| prod_branch=',p.get('production_branch'),'| domains=',p.get('domains')) for p in d.get('result',[])]"
-          echo "::endgroup::"
-
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Deploy to the project's PRODUCTION branch (main) so the custom domain
-          # studio.yarova.ca updates. --branch=production created preview-only deploys.
-          command: pages deploy site-app --project-name=yarova-studio --branch=main
+          # yarova-studio's production branch IS "production" → this is a real
+          # production deploy (updates yarova-studio.pages.dev + custom domains).
+          command: pages deploy site-app --project-name=yarova-studio --branch=production
+
+      - name: Attach studio.yarova.ca custom domain to yarova-studio
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          # Idempotent: attaches the domain so the wizard is served at studio.yarova.ca.
+          curl -s -X POST \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/yarova-studio/domains" \
+            --data '{"name":"studio.yarova.ca"}' \
+            | python3 -c "import sys,json; d=json.load(sys.stdin); print('attach ok=',d.get('success'),'errors=',d.get('errors'))"
