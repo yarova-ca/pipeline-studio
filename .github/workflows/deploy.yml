@@ -34,4 +34,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy site-app --project-name=yarova-studio --branch=production
+          # Deploy to the project's PRODUCTION branch (main) so the custom domain
+          # studio.yarova.ca updates. --branch=production created preview-only deploys.
+          command: pages deploy site-app --project-name=yarova-studio --branch=main
