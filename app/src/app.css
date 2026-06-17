@@ -1204,6 +1204,27 @@ details.gcard.recd { border-color: var(--border-accent); box-shadow: 0 0 0 1px v
 .integ-meta { font-size: 12px; color: var(--ink3); font-family: var(--fmono); }
 .integ.ca .integ-meta b { color: var(--accent); }
 
+/* Act 1 — the promise */
+.promise { margin-bottom: 40px; }
+.promise-h { font-size: 34px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px; color: var(--ink); }
+.promise-p { font-size: 17px; color: var(--ink2); line-height: 1.5; margin: 0 0 22px; max-width: 640px; }
+.scale { display: flex; flex-wrap: wrap; gap: 10px; }
+.scale span { font-size: 13px; color: var(--ink2); background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; }
+.scale b { color: var(--accent); font-size: 15px; margin-right: 3px; }
+
+/* Act 2 — per-step insight */
+.insight { border-left: 3px solid var(--brand-teal); background: var(--wash-teal); padding: 12px 16px; border-radius: 0 10px 10px 0; font-size: 14px; color: var(--ink2); line-height: 1.5; margin-bottom: 22px; }
+.insight-tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); margin-right: 8px; }
+
+/* Act 3 — the closing proof */
+.proof { margin-top: 40px; padding: 28px; border-radius: 16px; background: var(--wash-teal); border: 1px solid var(--border-accent); }
+.proof-h { font-size: 22px; margin: 0 0 8px; color: var(--ink); }
+.proof-p { font-size: 15px; color: var(--ink2); margin: 0 0 18px; }
+.proof-badges { display: flex; flex-wrap: wrap; gap: 10px; }
+.proof-b { font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px; }
+.proof-b.ok { color: var(--accent); background: var(--surface-2); border: 1px solid var(--border-accent); }
+.proof-b.soon { color: #8a6d00; background: var(--surface-2); border: 1px solid var(--border); }
+
 /* compliance matrix — same controls for every industry, just on/off */
 .matrix-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
 .matrix { border-collapse: collapse; width: 100%; font-size: 13px; }

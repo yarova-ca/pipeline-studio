@@ -4,7 +4,7 @@
   import { loadAll } from './lib/data.js';
   import {
     STEP_ORDER, DECISION_STEPS, deviceGroups, frameworksForDevice,
-    buildBlueprint, repoLink, gOptions, buildComplianceMatrix, catalogOptions, integrationsList
+    buildBlueprint, repoLink, gOptions, buildComplianceMatrix, catalogOptions, integrationsList, platformScale
   } from './lib/wizard.js';
   import './app.css';
 
@@ -20,6 +20,7 @@
   $: opts    = (decStep && $ready) ? (catalogOptions(stepKey, $rs) || gOptions(stepKey, $rs)) : [];
   $: rec     = opts.find(o => o.rec) || opts[0];
   $: devices = $ready ? deviceGroups() : [];
+  $: scale = $ready ? platformScale() : null;
   $: fwGroups = (stepKey === 'fw' && chosenDevice && $ready) ? frameworksForDevice(chosenDevice) : [];
   $: bp = (stepKey === 'result' && $ready && $rs.fw) ? buildBlueprint($rs) : null;
   $: matrix = (stepKey === 'result' && $ready && $rs.fw) ? buildComplianceMatrix($rs) : null;
@@ -82,6 +83,23 @@
   <!-- STEP: device ─────────────────────────────────────────────────────────── -->
   {#if stepKey === 'device'}
     <section class="wz-card">
+      <!-- Act 1 — the promise -->
+      <div class="promise">
+        <h1 class="promise-h">You write the app code.<br>Everything else is already built.</h1>
+        <p class="promise-p">Container, CI, security, compliance, observability, integrations — done and verified.
+        You plug in keys. Nothing else.</p>
+        {#if scale}
+          <div class="scale">
+            <span><b>{scale.frameworks}</b> frameworks</span>
+            <span><b>{scale.built}</b> with real code</span>
+            <span><b>{scale.regimes}</b> compliance regimes</span>
+            <span><b>{scale.phases}</b> phases</span>
+            <span><b>{scale.stages}</b> stages</span>
+            <span><b>{scale.tools}</b> tools</span>
+            <span><b>{scale.integrations}</b> integrations</span>
+          </div>
+        {/if}
+      </div>
       <h1 class="wz-q">What are you building?</h1>
       <p class="wz-plain">Pick the closest. Nothing is hidden — every framework is reachable.</p>
       <div class="wz-grid two">
@@ -148,6 +166,10 @@
       <div class="wz-top"><button class="btn ghost" onclick={back}>← back</button></div>
       <h1 class="wz-q">{decStep.title}</h1>
       <p class="wz-plain">{decStep.plain}</p>
+
+      {#if decStep.why}
+        <div class="insight"><span class="insight-tag">Why it matters</span> {decStep.why}</div>
+      {/if}
 
       {#if rec}
         <div class="rec">
@@ -303,6 +325,23 @@
           {/each}
         </div>
       {/if}
+
+      <!-- Act 3 — the closing proof -->
+      <div class="proof">
+        <h2 class="proof-h">That is the entire pipeline — start to end.</h2>
+        <p class="proof-p">Nothing left for you to wire. You set keys; everything above is built.</p>
+        <div class="proof-badges">
+          {#if bp.built}
+            <span class="proof-b ok">✅ real, verified code</span>
+            <span class="proof-b ok">✅ tested in CI</span>
+            <span class="proof-b ok">✅ signed images + SBOM</span>
+          {:else}
+            <span class="proof-b soon">🕓 recipe + generated starter</span>
+            <span class="proof-b ok">✅ same pipeline as the built repos</span>
+          {/if}
+          <span class="proof-b ok">✅ Canada-first compliance, one env var</span>
+        </div>
+      </div>
 
       <div class="result-foot">
         <button class="btn ghost" onclick={restart}>↺ start over</button>

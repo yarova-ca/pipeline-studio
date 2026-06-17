@@ -84,15 +84,39 @@ export function buildComplianceMatrix(rs){
 // ── The decision steps, in order. Each is one screen. ──────────────────────────
 // axis matches an rs key + a gOptions(axis) case. plain = ≤10-word meaning.
 export const DECISION_STEPS = [
-  { axis:'pkg',      title:'Package manager',        plain:'how dependencies install in CI.' },
-  { axis:'auth',     title:'How users log in',       plain:'who is allowed in, and how.' },
-  { axis:'orm',      title:'How the app reads data',  plain:'the database access layer.' },
-  { axis:'obs',      title:'Logs, metrics, traces',  plain:'how you see what the app does.' },
-  { axis:'runtime',  title:'Container base image',   plain:'the OS layer your code runs on.' },
-  { axis:'registry', title:'Where images live',      plain:'the store for built containers.' },
-  { axis:'signer',   title:'Proving the image is yours', plain:'a signature stops tampering.' },
-  { axis:'cluster',  title:'Where it deploys',       plain:'the server it runs on.' },
+  { axis:'pkg',      title:'Package manager',        plain:'how dependencies install in CI.',
+    why:'A locked install means the same versions every build — no "works on my machine".' },
+  { axis:'auth',     title:'How users log in',       plain:'who is allowed in, and how.',
+    why:'Every route is authenticated by default. Tokens are verified for signature, expiry, issuer.' },
+  { axis:'orm',      title:'How the app reads data',  plain:'the database access layer.',
+    why:'Typed queries stop SQL injection and catch schema mistakes at build time.' },
+  { axis:'obs',      title:'Logs, metrics, traces',  plain:'how you see what the app does.',
+    why:'Structured JSON logs + metrics ship on day one — you can debug production from the start.' },
+  { axis:'runtime',  title:'Container base image',   plain:'the OS layer your code runs on.',
+    why:'A minimal base shrinks the attack surface; FIPS bases satisfy government crypto rules.' },
+  { axis:'registry', title:'Where images live',      plain:'the store for built containers.',
+    why:'Images are pushed signed, with an SBOM attached — the supply chain is provable.' },
+  { axis:'signer',   title:'Proving the image is yours', plain:'a signature stops tampering.',
+    why:'Keyless signing ties each image to the exact CI run that built it. No stored keys.' },
+  { axis:'cluster',  title:'Where it deploys',       plain:'the server it runs on.',
+    why:'Helm + Kustomize ship per-environment; the cluster admits only signed images.' },
 ];
+
+// Data-driven scale of the whole platform — proof of completeness, not hardcoded.
+export function platformScale(){
+  const G=getG(); const cat=getCatalog();
+  const fw=(G?.nodes?.frameworks)||[];
+  return {
+    frameworks: fw.length,
+    built: fw.filter(f=>f.built).length,
+    languages: (G?.nodes?.languages||[]).length,
+    regimes: cat ? Object.keys(cat.compliance.regimes).length : (G?.nodes?.complianceProfiles||[]).length,
+    phases: (G?.nodes?.phases||[]).length,
+    stages: (G?.nodes?.stages||[]).length,
+    tools: (G?.nodes?.tools||[]).length,
+    integrations: cat ? ((cat.axes.integrations_canada||[]).length + (cat.axes.integrations_common||[]).length) : 0,
+  };
+}
 
 // The full ordered path the wizard walks. 'device' + 'fw' + 'industry' are special.
 export const STEP_ORDER = ['device','fw','industry', ...DECISION_STEPS.map(s=>s.axis), 'result'];
