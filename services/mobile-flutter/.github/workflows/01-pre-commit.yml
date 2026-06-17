@@ -20,6 +20,9 @@ jobs:
 
   pre-commit:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: bff
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

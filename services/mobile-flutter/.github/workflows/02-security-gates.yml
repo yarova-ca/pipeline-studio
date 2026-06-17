@@ -24,12 +24,16 @@ jobs:
   sca:
     runs-on: ubuntu-24.04
     continue-on-error: true
+    defaults:
+      run:
+        working-directory: bff
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: bff/package-lock.json
       # ── DEFAULT: npm audit ──────────────────────────────────────
       - name: SCA — npm audit
         run: npm audit --audit-level=high
@@ -58,6 +62,9 @@ jobs:
   sast:
     runs-on: ubuntu-24.04
     continue-on-error: true
+    defaults:
+      run:
+        working-directory: bff
     steps:
       - uses: actions/checkout@v4
       # ── DEFAULT: Semgrep ─────────────────────────────────────────
@@ -85,6 +92,9 @@ jobs:
   codeql:
     runs-on: ubuntu-24.04
     continue-on-error: true
+    defaults:
+      run:
+        working-directory: bff
     steps:
       - uses: actions/checkout@v4
       - uses: github/codeql-action/init@v3
@@ -97,12 +107,16 @@ jobs:
   license-scan:
     runs-on: ubuntu-24.04
     continue-on-error: true
+    defaults:
+      run:
+        working-directory: bff
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: bff/package-lock.json
       - name: License check
         run: npx license-checker --production --failOn 'GPL;AGPL'
       #
@@ -116,6 +130,9 @@ jobs:
   iac-scan:
     runs-on: ubuntu-24.04
     continue-on-error: true
+    defaults:
+      run:
+        working-directory: bff
     steps:
       - uses: actions/checkout@v4
       # ── DEFAULT: Checkov ─────────────────────────────────────────
@@ -158,6 +175,9 @@ jobs:
   secrets-scan:
     runs-on: ubuntu-24.04
     continue-on-error: true
+    defaults:
+      run:
+        working-directory: bff
     steps:
       - uses: actions/checkout@v4
         with:

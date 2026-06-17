@@ -17,14 +17,17 @@ jobs:
 
   release:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: bff
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       # ── DEFAULT: semantic-release ─────────────────────────────────
       - name: Semantic release
-        uses: cycjimmy/semantic-release-action@v4
         continue-on-error: true
+        uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #
@@ -37,11 +40,13 @@ jobs:
     needs: release
     if: always()
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: bff
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      - uses: actions/checkout@v4
-      # ── DEFAULT: Slack (gated — runs only when SLACK_WEBHOOK_URL is set) ──
+      # ── DEFAULT: Slack ────────────────────────────────────────────
       - uses: slackapi/slack-github-action@v1
         if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         with:

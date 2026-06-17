@@ -21,12 +21,16 @@ jobs:
 
   build:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: bff
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
+          cache-dependency-path: bff/package-lock.json
       # ── DEFAULT: npm build ──────────────────────
       - name: Install deps
         run: npm ci
@@ -50,10 +54,10 @@ jobs:
         with:
           name: edge-bundle
           path: |
-            build/
-            dist/
-            *.apk
-            *.ipa
-            *.aab
-            *.msix
+            bff/build/
+            bff/dist/
+            bff/*.apk
+            bff/*.ipa
+            bff/*.aab
+            bff/*.msix
           retention-days: 30

@@ -25,6 +25,8 @@ jobs:
       - name: Semantic release
         uses: cycjimmy/semantic-release-action@v4
         continue-on-error: true
+        with:
+          working_directory: bff
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #
@@ -40,7 +42,8 @@ jobs:
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      # ── DEFAULT: Slack ────────────────────────────────────────────
+      - uses: actions/checkout@v4
+      # ── DEFAULT: Slack (gated — runs only when SLACK_WEBHOOK_URL is set) ──
       - uses: slackapi/slack-github-action@v1
         if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         with:
