@@ -1,0 +1,538 @@
+# ════════════════════════════════════════════════════════════════════
+# Yarova Platform — Canonical Compliance Catalog
+# ════════════════════════════════════════════════════════════════════
+# What this is: the ONE source of truth for every compliance regime.
+# Who reads it: the studio (matrix view) + the per-service profile generator.
+# The law: a control added here propagates to all 22 services + the studio.
+#
+# Priority: Canada first. US + EU + global included for full coverage.
+# Model: a fixed control catalog. Every regime flips the SAME keys on/off.
+# Per device: every control declares which device types it applies to.
+# ════════════════════════════════════════════════════════════════════
+
+version: 1
+
+# ── Device types — every service maps to one ──────────────────────────
+# backend     = api-* services (own DB, own container)
+# web-ssr     = server-rendered web (Next.js, Nuxt, SvelteKit, Angular SSR)
+# web-static  = static/SPA frontends (no server at runtime)
+# edge        = edge runtime (Cloudflare Workers — Hono)
+# mobile-app  = the device client binary (Expo, Flutter)
+# mobile-bff  = backend-for-frontend behind a mobile app
+# protocol    = gRPC / WebSocket / GraphQL transport services
+devices: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol]
+
+# ── Control catalog — uniform keys. Every regime references these. ────
+# type: bool | enum | number
+# default: the baseline value when no regime enforces it
+# applies_to: device types where the control is meaningful
+controls:
+
+  encryption_in_transit:
+    label: "Encryption in transit (TLS 1.2+)"
+    type: bool
+    default: true        # on for everyone — never ship plaintext
+    applies_to: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol]
+
+  encryption_at_rest:
+    label: "Encryption at rest (AES-256)"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, mobile-bff]   # needs a datastore
+
+  audit_logging:
+    label: "Audit logging (who did what, when)"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, edge, mobile-bff, protocol]
+
+  immutable_audit:
+    label: "Tamper-proof audit log (append-only)"
+    type: bool
+    default: false
+    applies_to: [backend, mobile-bff]
+
+  mfa_required:
+    label: "Multi-factor authentication"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, mobile-bff]
+
+  rbac:
+    label: "Role-based access control"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, edge, mobile-bff, protocol]
+
+  session_timeout_seconds:
+    label: "Idle session timeout (seconds; 0 = off)"
+    type: number
+    default: 0
+    applies_to: [backend, web-ssr, mobile-app, mobile-bff]
+
+  data_residency:
+    label: "Where data may physically live"
+    type: enum         # none | canada | canada-quebec | us | eu | local
+    default: none
+    applies_to: [backend, web-ssr, edge, mobile-bff, protocol]
+
+  breach_notification_hours:
+    label: "Max hours to report a breach (0 = none)"
+    type: number
+    default: 0
+    applies_to: [backend, web-ssr, mobile-bff]
+
+  log_retention_days:
+    label: "Minimum log retention (days)"
+    type: number
+    default: 30
+    applies_to: [backend, web-ssr, edge, mobile-bff, protocol]
+
+  fips_crypto:
+    label: "FIPS 140-3 validated crypto (UBI9 FIPS base)"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, mobile-bff, protocol]   # container-level
+
+  waf_required:
+    label: "Web application firewall in front"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, edge, mobile-bff]
+
+  pan_tokenization:
+    label: "Never store card PAN — tokenize"
+    type: bool
+    default: false
+    applies_to: [backend, mobile-bff]
+
+  pen_test_annual:
+    label: "Annual penetration test"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, edge, mobile-bff, protocol]
+
+  continuous_monitoring:
+    label: "Continuous vulnerability monitoring"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, edge, mobile-bff, protocol]
+
+  consent_management:
+    label: "Explicit consent before data collection"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, web-static, mobile-app, mobile-bff]
+
+  privacy_by_design:
+    label: "Privacy controls built in, not bolted on"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol]
+
+  accessibility_wcag:
+    label: "Accessibility standard for the UI"
+    type: enum         # none | wcag-2.1-aa | wcag-2.2-aa
+    default: none
+    applies_to: [web-ssr, web-static, mobile-app]   # UI only
+
+  incident_response_plan:
+    label: "Documented incident response plan"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, edge, mobile-bff, protocol]
+
+  vulnerability_scanning:
+    label: "SCA + SAST in CI"
+    type: bool
+    default: true       # on for everyone — it is free in CI
+    applies_to: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol]
+
+  sbom_required:
+    label: "Software bill of materials at build"
+    type: bool
+    default: true
+    applies_to: [backend, web-ssr, web-static, edge, mobile-bff, protocol]
+
+  image_signing:
+    label: "Sign the container image (cosign)"
+    type: bool
+    default: true
+    applies_to: [backend, web-ssr, mobile-bff, protocol]   # has a container
+
+  third_party_risk:
+    label: "Third-party / vendor risk controls"
+    type: bool
+    default: false
+    applies_to: [backend, web-ssr, mobile-bff]
+
+  aml_screening:
+    label: "Anti-money-laundering screening"
+    type: bool
+    default: false
+    applies_to: [backend, mobile-bff]
+
+# ── Regimes — Canada first, then US, EU, global ───────────────────────
+# Each lists only the controls it ENFORCES. Unlisted = the control default.
+# region values feed data_residency. priority: canada | us | eu | global
+regimes:
+
+  # ─────────────── CANADA — federal ───────────────
+  pipeda:
+    name: PIPEDA
+    priority: canada
+    jurisdiction: "Federal Canada — private sector, provinces without their own law"
+    enforces:
+      consent_management: true
+      privacy_by_design: true
+      breach_notification_hours: 72
+      data_residency: canada
+      audit_logging: true
+      log_retention_days: 365
+
+  privacy-act:
+    name: Privacy Act (federal public sector)
+    priority: canada
+    jurisdiction: "Federal Canada — government institutions handling personal data"
+    enforces:
+      consent_management: true
+      privacy_by_design: true
+      data_residency: canada
+      audit_logging: true
+      immutable_audit: true
+      rbac: true
+      log_retention_days: 730
+
+  itsg-33:
+    name: ITSG-33 / Protected B (CCCS Medium)
+    priority: canada
+    jurisdiction: "Federal Canada — government cloud workloads (CCCS Medium profile)"
+    enforces:
+      fips_crypto: true
+      data_residency: canada
+      audit_logging: true
+      immutable_audit: true
+      rbac: true
+      mfa_required: true
+      encryption_at_rest: true
+      continuous_monitoring: true
+      incident_response_plan: true
+      session_timeout_seconds: 900
+      log_retention_days: 730
+      pen_test_annual: true
+
+  osfi-b13:
+    name: OSFI B-13
+    priority: canada
+    jurisdiction: "Federal Canada — banks, insurers, federally-regulated FIs"
+    enforces:
+      audit_logging: true
+      immutable_audit: true
+      rbac: true
+      mfa_required: true
+      encryption_at_rest: true
+      continuous_monitoring: true
+      incident_response_plan: true
+      pen_test_annual: true
+      data_residency: canada
+      log_retention_days: 2555
+
+  osfi-b10:
+    name: OSFI B-10
+    priority: canada
+    jurisdiction: "Federal Canada — third-party / vendor risk for FIs"
+    enforces:
+      third_party_risk: true
+      sbom_required: true
+      continuous_monitoring: true
+      incident_response_plan: true
+
+  fintrac-pcmltfa:
+    name: FINTRAC (PCMLTFA)
+    priority: canada
+    jurisdiction: "Federal Canada — money services, banks, anyone moving money"
+    enforces:
+      aml_screening: true
+      audit_logging: true
+      immutable_audit: true
+      data_residency: canada
+      log_retention_days: 1825
+
+  aoda-aca:
+    name: AODA / Accessible Canada Act (WCAG)
+    priority: canada
+    jurisdiction: "Ontario (AODA) + Federal (ACA) — public-facing UIs"
+    enforces:
+      accessibility_wcag: wcag-2.2-aa
+
+  fips-140-3:
+    name: FIPS 140-3 (CCCS-recognized in Canada)
+    priority: canada
+    jurisdiction: "US + Canada governments — validated crypto modules"
+    enforces:
+      fips_crypto: true
+      encryption_in_transit: true
+      encryption_at_rest: true
+
+  # ─────────────── CANADA — provincial ───────────────
+  law25-quebec:
+    name: Law 25 (Québec)
+    priority: canada
+    jurisdiction: "Québec — any business handling Québec residents' data"
+    enforces:
+      consent_management: true
+      privacy_by_design: true
+      breach_notification_hours: 72
+      data_residency: canada-quebec
+      audit_logging: true
+      incident_response_plan: true
+
+  phipa:
+    name: PHIPA (Ontario health)
+    priority: canada
+    jurisdiction: "Ontario — personal health information custodians + vendors"
+    enforces:
+      audit_logging: true
+      immutable_audit: true
+      encryption_in_transit: true
+      encryption_at_rest: true
+      rbac: true
+      mfa_required: true
+      session_timeout_seconds: 900
+      data_residency: canada
+      breach_notification_hours: 72
+      log_retention_days: 3650
+
+  pipa-bc:
+    name: PIPA-BC
+    priority: canada
+    jurisdiction: "British Columbia — private sector"
+    enforces:
+      consent_management: true
+      privacy_by_design: true
+      data_residency: canada
+      audit_logging: true
+
+  pipa-ab:
+    name: PIPA-AB
+    priority: canada
+    jurisdiction: "Alberta — private sector"
+    enforces:
+      consent_management: true
+      privacy_by_design: true
+      breach_notification_hours: 72
+      data_residency: canada
+      audit_logging: true
+
+  # ─────────────── United States ───────────────
+  hipaa:
+    name: HIPAA (US health)
+    priority: us
+    jurisdiction: "United States — US patients' health data (PHI)"
+    enforces:
+      audit_logging: true
+      immutable_audit: true
+      encryption_in_transit: true
+      encryption_at_rest: true
+      rbac: true
+      mfa_required: true
+      session_timeout_seconds: 900
+      data_residency: us
+      breach_notification_hours: 1440
+      log_retention_days: 2190
+
+  fedramp-mod:
+    name: FedRAMP Moderate
+    priority: us
+    jurisdiction: "United States — selling cloud to US federal agencies"
+    enforces:
+      fips_crypto: true
+      audit_logging: true
+      immutable_audit: true
+      rbac: true
+      mfa_required: true
+      encryption_at_rest: true
+      continuous_monitoring: true
+      incident_response_plan: true
+      session_timeout_seconds: 900
+      data_residency: us
+      log_retention_days: 1095
+      pen_test_annual: true
+
+  fedramp-high:
+    name: FedRAMP High
+    priority: us
+    jurisdiction: "United States — high-impact US federal workloads"
+    enforces:
+      fips_crypto: true
+      audit_logging: true
+      immutable_audit: true
+      rbac: true
+      mfa_required: true
+      encryption_at_rest: true
+      continuous_monitoring: true
+      incident_response_plan: true
+      session_timeout_seconds: 600
+      data_residency: us
+      log_retention_days: 1095
+      pen_test_annual: true
+
+  cmmc-l2:
+    name: CMMC Level 2
+    priority: us
+    jurisdiction: "United States — US defense supply chain"
+    enforces:
+      fips_crypto: true
+      audit_logging: true
+      rbac: true
+      mfa_required: true
+      encryption_at_rest: true
+      incident_response_plan: true
+      log_retention_days: 365
+
+  glba:
+    name: GLBA
+    priority: us
+    jurisdiction: "United States — US financial institutions"
+    enforces:
+      audit_logging: true
+      encryption_at_rest: true
+      rbac: true
+      incident_response_plan: true
+      third_party_risk: true
+
+  sox:
+    name: SOX
+    priority: us
+    jurisdiction: "United States — US-listed public companies"
+    enforces:
+      audit_logging: true
+      immutable_audit: true
+      rbac: true
+      log_retention_days: 2555
+
+  ffiec:
+    name: FFIEC
+    priority: us
+    jurisdiction: "United States — US banking regulators' IT handbook"
+    enforces:
+      audit_logging: true
+      mfa_required: true
+      continuous_monitoring: true
+      incident_response_plan: true
+      pen_test_annual: true
+
+  ccpa:
+    name: CCPA / CPRA
+    priority: us
+    jurisdiction: "California — serving California residents at thresholds"
+    enforces:
+      consent_management: true
+      privacy_by_design: true
+      data_residency: us
+      audit_logging: true
+
+  # ─────────────── European Union ───────────────
+  gdpr:
+    name: GDPR
+    priority: eu
+    jurisdiction: "European Union — serving EU residents, wherever you are"
+    enforces:
+      consent_management: true
+      privacy_by_design: true
+      breach_notification_hours: 72
+      data_residency: eu
+      audit_logging: true
+      encryption_at_rest: true
+
+  dora:
+    name: DORA
+    priority: eu
+    jurisdiction: "European Union — financial entities + their ICT providers"
+    enforces:
+      continuous_monitoring: true
+      incident_response_plan: true
+      third_party_risk: true
+      pen_test_annual: true
+      immutable_audit: true
+
+  # ─────────────── Global / voluntary / cross-border ───────────────
+  pci-dss-4:
+    name: PCI DSS v4.0
+    priority: global
+    jurisdiction: "Global — the moment you touch payment cards"
+    enforces:
+      pan_tokenization: true
+      waf_required: true
+      encryption_in_transit: true
+      encryption_at_rest: true
+      audit_logging: true
+      pen_test_annual: true
+      log_retention_days: 365
+
+  soc1:
+    name: SOC 1
+    priority: global
+    jurisdiction: "Global — voluntary attestation for financial-reporting controls"
+    enforces:
+      audit_logging: true
+      rbac: true
+      log_retention_days: 90
+
+  soc2-typeii:
+    name: SOC 2 Type II
+    priority: global
+    jurisdiction: "Global — the default B2B security attestation"
+    enforces:
+      audit_logging: true
+      rbac: true
+      mfa_required: true
+      continuous_monitoring: true
+      incident_response_plan: true
+      encryption_at_rest: true
+      log_retention_days: 90
+
+  iso27001:
+    name: ISO 27001
+    priority: global
+    jurisdiction: "Global — the international security baseline certification"
+    enforces:
+      audit_logging: true
+      rbac: true
+      continuous_monitoring: true
+      incident_response_plan: true
+      third_party_risk: true
+      log_retention_days: 1825
+
+  iso27017:
+    name: ISO 27017
+    priority: global
+    jurisdiction: "Global — cloud-specific add-on to ISO 27001"
+    enforces:
+      audit_logging: true
+      continuous_monitoring: true
+      encryption_at_rest: true
+      sbom_required: true
+
+  nerc-cip:
+    name: NERC CIP
+    priority: global
+    jurisdiction: "US + Canada interconnected grid — bulk electric operators"
+    enforces:
+      audit_logging: true
+      immutable_audit: true
+      rbac: true
+      mfa_required: true
+      continuous_monitoring: true
+      incident_response_plan: true
+      pen_test_annual: true
+
+  soci:
+    name: SOCI
+    priority: global
+    jurisdiction: "Australia + Canadian critical-infra equivalents"
+    enforces:
+      audit_logging: true
+      continuous_monitoring: true
+      incident_response_plan: true
+      third_party_risk: true

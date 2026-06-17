@@ -24,11 +24,11 @@ jobs:
   sca:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
           bundler-cache: true
-      - uses: actions/checkout@v4
       # ── DEFAULT: bundler-audit ──────────────────────────────────────
       - name: SCA — bundler-audit
         run: bundle exec bundle-audit check --update
@@ -77,11 +77,11 @@ jobs:
   license-scan:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
           bundler-cache: true
-      - uses: actions/checkout@v4
       - name: License check
         run: bundle exec license_finder
       #

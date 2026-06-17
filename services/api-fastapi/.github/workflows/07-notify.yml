@@ -21,16 +21,20 @@ jobs:
   notify:
     if: github.event.workflow_run.conclusion != 'skipped'
     runs-on: ubuntu-24.04
+    # Map the secret to a job env so step-level if can read it.
+    # The 'secrets' context is NOT allowed in a job-level if, so we gate
+    # the Slack step instead — it is skipped when SLACK_WEBHOOK_URL is absent.
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      # ── DEFAULT: Slack ────────────────────────────────────────────
-      - uses: slackapi/slack-github-action@v1
+      # ── DEFAULT: Slack (skipped when SLACK_WEBHOOK_URL is absent) ──
+      - if: ${{ env.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {{
               "text": "Pipeline ${{ github.event.workflow_run.conclusion }}: FastAPI 0.115 — ${{ github.event.workflow_run.head_sha }}"
             }}
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       #
       # ── ALTERNATIVE: Microsoft Teams ──────────────────────────────
       # - uses: aliencube/microsoft-teams-actions@v0.8.0

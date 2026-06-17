@@ -24,11 +24,11 @@ jobs:
   sca:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
-      - uses: actions/checkout@v4
       # ── DEFAULT: npm audit ──────────────────────────────────────
       - name: SCA — npm audit
         run: npm audit --audit-level=high
@@ -94,11 +94,11 @@ jobs:
   license-scan:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
-      - uses: actions/checkout@v4
       - name: License check
         run: npx license-checker --production --failOn 'GPL;AGPL'
       #

@@ -125,16 +125,7 @@ def health() -> dict:
 def compliance_status() -> dict:
     from src.compliance import compliance
 
-    return {
-        "profile": compliance.profile,
-        "controls": {
-            "auditLogging": compliance.audit_logging,
-            "sessionTimeoutSeconds": compliance.session_timeout_seconds,
-            "mfaRequired": compliance.mfa_required,
-            "encryptionInTransit": compliance.encryption_in_transit,
-        },
-        "required": compliance.required,
-    }
+    return compliance.view()
 
 
 @app.get("/health/live")

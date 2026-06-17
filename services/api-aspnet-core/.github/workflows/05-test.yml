@@ -20,20 +20,25 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0'
-      - uses: actions/checkout@v4
+          # Projects target net8.0; install 8.0 runtime alongside the 9.0 SDK.
+          dotnet-version: |
+            8.0
+            9.0
       - name: Run tests
-        run: dotnet test --collect:"XPlat Code Coverage"
+        run: dotnet test Tests/Tests.csproj --collect:"XPlat Code Coverage"
 
       # ── OPTIONAL: Codecov coverage upload ─────────────────────────
       # - uses: codecov/codecov-action@v4
+      #   if: ${{ secrets.CODECOV_TOKEN != '' }}
       #   with:
       #     token: ${{ secrets.CODECOV_TOKEN }}
 
       # ── OPTIONAL: SonarCloud (requires SONAR_TOKEN secret) ────────
       # - name: SonarCloud analysis
+      #   if: ${{ secrets.SONAR_TOKEN != '' }}
       #   uses: SonarSource/sonarcloud-github-action@master
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

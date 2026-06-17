@@ -24,13 +24,18 @@ jobs:
   sca:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0'
-      - uses: actions/checkout@v4
+          # Projects target net8.0; install 8.0 runtime alongside the 9.0 SDK.
+          dotnet-version: |
+            8.0
+            9.0
+      - name: Restore
+        run: dotnet restore App/19-aspnet-core.csproj
       # ── DEFAULT: dotnet vulnerable packages ──────────────────────────────────────
       - name: SCA — dotnet vulnerable packages
-        run: dotnet list package --vulnerable --include-transitive
+        run: dotnet list App/19-aspnet-core.csproj package --vulnerable --include-transitive
       #
       # ── ALTERNATIVE: OWASP Dependency-Check ──────────────────────
       # - name: SCA — OWASP Dependency-Check
@@ -43,6 +48,7 @@ jobs:
       #
       # ── ALTERNATIVE: Snyk (requires SNYK_TOKEN secret) ───────────
       # - name: SCA — Snyk .NET
+      #   if: ${{ secrets.SNYK_TOKEN != '' }}
       #   uses: snyk/actions/dotnet@master
       #   env:
       #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -81,15 +87,23 @@ jobs:
   license-scan:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0'
-      - uses: actions/checkout@v4
+          # Projects target net8.0; install 8.0 runtime alongside the 9.0 SDK.
+          dotnet-version: |
+            8.0
+            9.0
+      - name: Restore
+        run: dotnet restore App/19-aspnet-core.csproj
+      - name: Install license tool
+        run: dotnet tool install --global dotnet-project-licenses
       - name: License check
-        run: dotnet-project-licenses --input . --output licenses.json
+        run: dotnet-project-licenses --input App/19-aspnet-core.csproj --output-directory . --json --output-file licenses.json
       #
       # ── ALTERNATIVE: FOSSA (commercial, full license intelligence) ─
       # - name: License scan — FOSSA
+      #   if: ${{ secrets.FOSSA_API_KEY != '' }}
       #   uses: fossas/fossa-action@main
       #   with:
       #     api-key: ${{ secrets.FOSSA_API_KEY }}

@@ -219,19 +219,22 @@ jobs:
             $REGISTRY/$IMAGE_NAME@${{ steps.push.outputs.digest }}
 
   # ── SLSA Level 3 provenance (needs image digest from build-push-sign) ─
-  slsa-provenance:
-    needs: build-push-sign
-    permissions:
-      actions: read
-      id-token: write
-      packages: write
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2
-    with:
-      image: ghcr.io/${{ github.repository }}
-      digest: ${{ needs.build-push-sign.outputs.image-digest }}
-    secrets:
-      registry-username: ${{ github.actor }}
-      registry-password: ${{ secrets.GITHUB_TOKEN }}
+  # DISABLED on public repos: the slsa-github-generator reusable workflow
+  # fails at 0s startup unless called from a trusted context. Re-enable by
+  # uncommenting once SLSA provenance is required.
+  # slsa-provenance:
+  #   needs: build-push-sign
+  #   permissions:
+  #     actions: read
+  #     id-token: write
+  #     packages: write
+  #   uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2
+  #   with:
+  #     image: ghcr.io/${{ github.repository }}
+  #     digest: ${{ needs.build-push-sign.outputs.image-digest }}
+  #   secrets:
+  #     registry-username: ${{ github.actor }}
+  #     registry-password: ${{ secrets.GITHUB_TOKEN }}
 
 # ── Compliance delta checklist ─────────────────────────────────────
 # FIPS 140-2/3:  use --target runtime-fips (block above, wired for registry.access.redhat.com/ubi9/nodejs-22-minimal)

@@ -13,13 +13,9 @@ defmodule AppWeb.HealthController do
 
     json(conn, %{
       profile: c.profile,
-      controls: %{
-        auditLogging: c.audit_logging,
-        sessionTimeoutSeconds: c.session_timeout_seconds,
-        mfaRequired: c.mfa_required,
-        encryptionInTransit: c.encryption_in_transit
-      },
-      required: c.required
+      name: c.name,
+      jurisdiction: c.jurisdiction,
+      controls: c.controls
     })
   end
 

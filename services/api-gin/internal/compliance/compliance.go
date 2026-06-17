@@ -1,86 +1,92 @@
 // Package compliance reads the active industry profile at startup.
-// One repo serves every industry; COMPLIANCE_PROFILE flips a few controls.
+// One repo serves every industry; COMPLIANCE_PROFILE flips a set of controls.
+//
+// Profiles live in compliance/profiles.json (generated, catalog-versioned).
+// Every profile shares the same control keys; only the values differ.
 package compliance
 
 import (
-	"bufio"
+	"encoding/json"
 	"log"
 	"os"
 	"path/filepath"
-	"strconv"
-	"strings"
-	"unicode"
 )
 
-// Controls are the runtime effects derived from the active profile.
+// Controls is the active profile resolved at boot.
+//
+// Controls holds the raw per-control map plus a few derived fields the rest
+// of the service reads directly (for example session length in jwt.go).
 type Controls struct {
-	Profile               string            `json:"profile"`
-	AuditLogging          bool              `json:"auditLogging"`
-	SessionTimeoutSeconds int               `json:"sessionTimeoutSeconds"`
-	MfaRequired           bool              `json:"mfaRequired"`
-	EncryptionInTransit   bool              `json:"encryptionInTransit"`
-	Required              map[string]string `json:"required"`
+	Profile      string                 `json:"profile"`
+	Name         string                 `json:"name"`
+	Jurisdiction string                 `json:"jurisdiction"`
+	Controls     map[string]interface{} `json:"controls"`
+
+	// SessionTimeoutSeconds is derived from controls["session_timeout_seconds"].
+	// Default 8h when the control is absent.
+	SessionTimeoutSeconds int `json:"-"`
+}
+
+// profilesFile is the on-disk shape of compliance/profiles.json.
+type profilesFile struct {
+	Device         string                 `json:"device"`
+	CatalogVersion int                    `json:"catalogVersion"`
+	Profiles       map[string]profileSpec `json:"profiles"`
+}
+
+type profileSpec struct {
+	Name         string                 `json:"name"`
+	Priority     string                 `json:"priority"`
+	Jurisdiction string                 `json:"jurisdiction"`
+	Controls     map[string]interface{} `json:"controls"`
 }
 
 // Active is the profile this process booted with.
 var Active = load()
 
 func load() Controls {
-	profile := strings.ToLower(envOr("COMPLIANCE_PROFILE", "baseline"))
-	valid := map[string]bool{"baseline": true, "hipaa": true, "pci": true, "fedramp": true, "fips": true, "pipeda": true}
-	if !valid[profile] {
+	profile := envOr("COMPLIANCE_PROFILE", "baseline")
+
+	// Safe default returned when the catalog cannot be read at all. This keeps
+	// importing packages (whose working dir is not the service root, e.g. test
+	// binaries) loadable; the service itself runs from the root where the file
+	// resolves and a missing/garbled catalog there is a real fail-loud below.
+	fallback := Controls{Profile: profile, SessionTimeoutSeconds: 8 * 60 * 60, Controls: map[string]interface{}{}}
+
+	wd, _ := os.Getwd()
+	raw, err := os.ReadFile(filepath.Join(wd, "compliance", "profiles.json"))
+	if err != nil {
+		if os.IsNotExist(err) {
+			return fallback
+		}
+		log.Fatalf("FATAL: compliance profiles not loadable: %v", err)
+	}
+
+	var pf profilesFile
+	if err := json.Unmarshal(raw, &pf); err != nil {
+		log.Fatalf("FATAL: compliance profiles unparseable: %v", err)
+	}
+
+	spec, ok := pf.Profiles[profile]
+	if !ok {
 		log.Fatalf("FATAL: unknown COMPLIANCE_PROFILE: %s", profile)
 	}
 
-	c := Controls{Profile: profile, SessionTimeoutSeconds: 8 * 60 * 60, Required: map[string]string{}}
-	if profile == "baseline" {
-		return c
+	c := Controls{
+		Profile:               profile,
+		Name:                  spec.Name,
+		Jurisdiction:          spec.Jurisdiction,
+		Controls:              spec.Controls,
+		SessionTimeoutSeconds: 8 * 60 * 60,
 	}
 
-	wd, _ := os.Getwd()
-	f, err := os.Open(filepath.Join(wd, "compliance", profile+".yaml"))
-	if err != nil {
-		// A named profile with no readable file must fail loud.
-		log.Fatalf("FATAL: compliance profile not loadable: %s: %v", profile, err)
+	// Derive session length from the control map when present.
+	if v, ok := spec.Controls["session_timeout_seconds"]; ok {
+		if n, ok := v.(float64); ok && n > 0 {
+			c.SessionTimeoutSeconds = int(n)
+		}
 	}
-	defer f.Close()
 
-	inBlock := false
-	sc := bufio.NewScanner(f)
-	for sc.Scan() {
-		line := sc.Text()
-		if strings.HasPrefix(line, "required_controls:") {
-			inBlock = true
-			continue
-		}
-		if !inBlock {
-			continue
-		}
-		t := strings.TrimSpace(line)
-		if strings.HasPrefix(t, "- ") {
-			kv := strings.SplitN(t[2:], ":", 2)
-			if len(kv) != 2 {
-				continue
-			}
-			key := strings.TrimSpace(kv[0])
-			val := strings.Trim(strings.TrimSpace(strings.SplitN(kv[1], "#", 2)[0]), "\"'")
-			c.Required[key] = val
-			switch key {
-			case "audit_logging":
-				c.AuditLogging = val == "true"
-			case "mfa_required":
-				c.MfaRequired = val == "true"
-			case "encryption_in_transit":
-				c.EncryptionInTransit = val == "true"
-			case "session_timeout":
-				if n, e := strconv.Atoi(val); e == nil {
-					c.SessionTimeoutSeconds = n
-				}
-			}
-		} else if len(line) > 0 && !unicode.IsSpace(rune(line[0])) {
-			break
-		}
-	}
 	return c
 }
 

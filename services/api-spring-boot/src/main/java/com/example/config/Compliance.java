@@ -1,90 +1,101 @@
 package com.example.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
- * Industry compliance profile, read at startup.
- * One repo serves every industry; COMPLIANCE_PROFILE flips a few controls.
+ * Industry compliance profile, read at startup from compliance/profiles.json.
+ * One repo serves every industry; COMPLIANCE_PROFILE flips a whole catalog of controls.
  */
 @Component
 public class Compliance {
 
-    private static final Set<String> VALID =
-            Set.of("baseline", "hipaa", "pci", "fedramp", "fips", "pipeda");
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private String profile = "baseline";
-    private boolean auditLogging = false;
-    private long sessionTimeoutSeconds = 8L * 60 * 60;
-    private boolean mfaRequired = false;
-    private boolean encryptionInTransit = false;
-    private final Map<String, String> required = new LinkedHashMap<>();
+    private String name = "";
+    private String jurisdiction = "";
+    private final Map<String, Object> controls = new LinkedHashMap<>();
 
     @PostConstruct
     public void init() {
-        String p = System.getenv().getOrDefault("COMPLIANCE_PROFILE", "baseline").toLowerCase();
-        if (!VALID.contains(p)) {
-            System.err.println("FATAL: unknown COMPLIANCE_PROFILE: " + p);
-            System.exit(1);
-        }
-        this.profile = p;
-        if (p.equals("baseline")) {
-            return;
-        }
+        String p = System.getenv().getOrDefault("COMPLIANCE_PROFILE", "baseline");
         try {
-            List<String> lines = Files.readAllLines(Path.of("compliance", p + ".yaml"));
-            boolean inBlock = false;
-            for (String line : lines) {
-                if (line.startsWith("required_controls:")) {
-                    inBlock = true;
-                    continue;
-                }
-                if (!inBlock) {
-                    continue;
-                }
-                String t = line.strip();
-                if (t.startsWith("- ")) {
-                    String[] kv = t.substring(2).split(":", 2);
-                    if (kv.length == 2) {
-                        String key = kv[0].strip();
-                        String val = kv[1].split("#", 2)[0].strip().replaceAll("^[\"']|[\"']$", "");
-                        required.put(key, val);
-                        switch (key) {
-                            case "audit_logging" -> auditLogging = "true".equals(val);
-                            case "mfa_required" -> mfaRequired = "true".equals(val);
-                            case "encryption_in_transit" -> encryptionInTransit = "true".equals(val);
-                            case "session_timeout" -> {
-                                try {
-                                    sessionTimeoutSeconds = Long.parseLong(val);
-                                } catch (NumberFormatException ignored) {
-                                    // keep default
-                                }
-                            }
-                            default -> { }
-                        }
-                    }
-                } else if (!line.isEmpty() && !Character.isWhitespace(line.charAt(0))) {
-                    break;
-                }
-            }
+            load(p);
         } catch (Exception e) {
-            // A named profile with no readable file must fail loud.
-            System.err.println("FATAL: compliance profile not loadable: " + p + ": " + e.getMessage());
+            // A compliance profile that cannot be loaded must fail loud.
+            System.err.println("FATAL: compliance profiles not loadable: " + p + ": " + e.getMessage());
             System.exit(1);
         }
     }
 
+    /**
+     * Loads the named profile from compliance/profiles.json into this bean.
+     * Throws IllegalArgumentException when the profile is not present in the catalog.
+     */
+    void load(String p) throws Exception {
+        JsonNode root = MAPPER.readTree(readProfilesJson());
+        JsonNode selected = root.path("profiles").path(p);
+        if (selected.isMissingNode()) {
+            throw new IllegalArgumentException("unknown COMPLIANCE_PROFILE: " + p);
+        }
+        this.profile = p;
+        this.name = selected.path("name").asText("");
+        this.jurisdiction = selected.path("jurisdiction").asText("");
+        this.controls.clear();
+        selected.path("controls").fields()
+                .forEachRemaining(e -> controls.put(e.getKey(), unwrap(e.getValue())));
+    }
+
+    private byte[] readProfilesJson() throws Exception {
+        // Prefer the working-dir file; fall back to the classpath copy.
+        Path onDisk = Path.of("compliance", "profiles.json");
+        if (Files.isReadable(onDisk)) {
+            return Files.readAllBytes(onDisk);
+        }
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("compliance/profiles.json")) {
+            if (in == null) {
+                throw new IllegalStateException("compliance/profiles.json not found on disk or classpath");
+            }
+            return in.readAllBytes();
+        }
+    }
+
+    private static Object unwrap(JsonNode v) {
+        if (v.isBoolean()) {
+            return v.asBoolean();
+        }
+        if (v.isNumber()) {
+            return v.numberValue();
+        }
+        return v.asText();
+    }
+
     public String getProfile() { return profile; }
-    public boolean isAuditLogging() { return auditLogging; }
-    public long getSessionTimeoutSeconds() { return sessionTimeoutSeconds; }
-    public boolean isMfaRequired() { return mfaRequired; }
-    public boolean isEncryptionInTransit() { return encryptionInTransit; }
-    public Map<String, String> getRequired() { return required; }
+
+    public String getName() { return name; }
+
+    public String getJurisdiction() { return jurisdiction; }
+
+    public Map<String, Object> getControls() { return controls; }
+
+    /**
+     * Idle session timeout in seconds, read from the active profile.
+     * Used by JwtUtil to set token expiry. Defaults to 8 hours when absent.
+     */
+    public long getSessionTimeoutSeconds() {
+        Object v = controls.get("session_timeout_seconds");
+        if (v instanceof Number n) {
+            return n.longValue();
+        }
+        return 8L * 60 * 60;
+    }
 }

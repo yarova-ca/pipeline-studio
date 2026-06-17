@@ -19,15 +19,21 @@ jobs:
 
   test:
     runs-on: ubuntu-24.04
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
-      - uses: actions/checkout@v4
+      - name: Install deps
+        run: npm ci
       - name: Run tests
         run: npm test -- --coverage
-      # ── OPTIONAL: Codecov ─────────────────────────────────────────
-      # - uses: codecov/codecov-action@v4
-      #   with:
-      #     token: ${{ secrets.CODECOV_TOKEN }}
+      # ── OPTIONAL: Codecov (gated — runs only when CODECOV_TOKEN is set) ──
+      - name: Upload coverage to Codecov
+        if: ${{ env.CODECOV_TOKEN != '' }}
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

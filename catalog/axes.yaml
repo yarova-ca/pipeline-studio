@@ -1,0 +1,150 @@
+# ════════════════════════════════════════════════════════════════════
+# Yarova Platform — Canonical Axis Catalog
+# ════════════════════════════════════════════════════════════════════
+# What this is: the ONE source for every non-compliance decision axis.
+# Who reads it: the studio (per-device filtering) + service generators.
+# The law: add an option here once → it reaches all 22 services + the studio.
+#
+# Every option declares applies_to — the device types where it is valid.
+# devices: backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol
+# ════════════════════════════════════════════════════════════════════
+
+version: 1
+
+# ── ORM / data layer — add the 6 languages the studio was missing ─────
+# ORM = code that reads/writes the database.
+orm:
+  # existing (kept)
+  - { id: orm-prisma,       name: Prisma,         languages: [ts, js],        applies_to: [backend, web-ssr, mobile-bff] }
+  - { id: orm-typeorm,      name: TypeORM,        languages: [ts, js],        applies_to: [backend, web-ssr, mobile-bff] }
+  - { id: orm-drizzle,      name: Drizzle ORM,    languages: [ts, js],        applies_to: [backend, web-ssr, edge, mobile-bff] }
+  - { id: orm-sqlalchemy,   name: SQLAlchemy,     languages: [py],            applies_to: [backend, mobile-bff] }
+  - { id: orm-tortoise,     name: Tortoise ORM,   languages: [py],            applies_to: [backend, mobile-bff] }
+  - { id: orm-gorm,         name: GORM,           languages: [go],            applies_to: [backend, mobile-bff] }
+  - { id: orm-ent,          name: Ent,            languages: [go],            applies_to: [backend, mobile-bff] }
+  - { id: orm-sqlx,         name: sqlx,           languages: [go, rust],      applies_to: [backend, mobile-bff] }
+  # ADDED — match the languages the 22 services actually use
+  - { id: orm-jpa-hibernate, name: Spring Data JPA / Hibernate, languages: [java], applies_to: [backend, mobile-bff] }
+  - { id: orm-exposed,      name: Exposed,        languages: [kotlin],        applies_to: [backend, mobile-bff] }
+  - { id: orm-efcore,       name: EF Core,        languages: [csharp],        applies_to: [backend, mobile-bff] }
+  - { id: orm-ecto,         name: Ecto,           languages: [elixir],        applies_to: [backend, mobile-bff] }
+  - { id: orm-activerecord, name: ActiveRecord,   languages: [ruby],          applies_to: [backend, mobile-bff] }
+  - { id: orm-eloquent,     name: Eloquent,       languages: [php],           applies_to: [backend, mobile-bff] }
+  - { id: orm-none,         name: "none (raw SQL / no DB)", languages: [all],  applies_to: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol] }
+
+# ── Package managers — add NuGet, Mix, SwiftPM ────────────────────────
+# package manager = installs and pins dependencies.
+package_managers:
+  - { id: npm,      name: npm,      languages: [ts, js], applies_to: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol] }
+  - { id: pnpm,     name: pnpm,     languages: [ts, js], applies_to: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol] }
+  - { id: yarn,     name: yarn,     languages: [ts, js], applies_to: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol] }
+  - { id: bun,      name: bun,      languages: [ts, js], applies_to: [backend, web-ssr, edge, mobile-bff] }
+  - { id: pip,      name: pip,      languages: [py],     applies_to: [backend, mobile-bff] }
+  - { id: poetry,   name: Poetry,   languages: [py],     applies_to: [backend, mobile-bff] }
+  - { id: uv,       name: uv,       languages: [py],     applies_to: [backend, mobile-bff] }
+  - { id: gomod,    name: Go modules, languages: [go],   applies_to: [backend, mobile-bff, protocol] }
+  - { id: cargo,    name: Cargo,    languages: [rust],   applies_to: [backend, mobile-bff, protocol] }
+  - { id: maven,    name: Maven,    languages: [java],   applies_to: [backend, mobile-bff] }
+  - { id: gradle,   name: Gradle,   languages: [java, kotlin], applies_to: [backend, mobile-app, mobile-bff] }
+  - { id: composer, name: Composer, languages: [php],    applies_to: [backend, mobile-bff] }
+  - { id: bundler,  name: Bundler,  languages: [ruby],   applies_to: [backend, mobile-bff] }
+  # ADDED
+  - { id: nuget,    name: NuGet,    languages: [csharp], applies_to: [backend, mobile-bff] }
+  - { id: mix,      name: Mix (Hex), languages: [elixir], applies_to: [backend, mobile-bff] }
+  - { id: swiftpm,  name: Swift Package Manager, languages: [swift], applies_to: [backend, mobile-app] }
+
+# ── Deploy targets — add edge + serverless + managed (was K8s only) ───
+# deploy target = where the running container/app lives.
+deploy_targets:
+  # Kubernetes (existing)
+  - { id: eks,       name: EKS,       kind: kubernetes, cloud: AWS,   applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  - { id: gke,       name: GKE,       kind: kubernetes, cloud: GCP,   applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  - { id: aks,       name: AKS,       kind: kubernetes, cloud: Azure, applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  - { id: openshift, name: OpenShift, kind: kubernetes, cloud: "Multi/on-prem", applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  # ADDED — edge
+  - { id: cloudflare-workers, name: Cloudflare Workers, kind: edge, cloud: Cloudflare, applies_to: [edge, web-static] }
+  # ADDED — serverless
+  - { id: aws-lambda, name: AWS Lambda,   kind: serverless, cloud: AWS, applies_to: [backend, mobile-bff, protocol] }
+  - { id: gcp-cloud-run, name: Google Cloud Run, kind: managed-container, cloud: GCP, applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  - { id: aws-ecs-fargate, name: AWS ECS Fargate, kind: managed-container, cloud: AWS, applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  # ADDED — frontend hosting
+  - { id: vercel,  name: Vercel,  kind: frontend-host, cloud: Vercel,  applies_to: [web-ssr, web-static] }
+  - { id: netlify, name: Netlify, kind: frontend-host, cloud: Netlify, applies_to: [web-ssr, web-static] }
+  # ADDED — mobile distribution (the "deploy target" for an app binary)
+  - { id: app-stores, name: App Store + Google Play, kind: app-store, cloud: "Apple/Google", applies_to: [mobile-app] }
+
+# ── Auth — add PKCE (mobile) + passkeys/WebAuthn ──────────────────────
+# auth = who is allowed in, and how they prove it.
+auth:
+  - { id: auth-none,        name: "None (anonymous)",       applies_to: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol] }
+  - { id: auth-jwt,         name: "JWT (bearer token)",     applies_to: [backend, web-ssr, edge, mobile-bff, protocol] }
+  - { id: auth-oauth2,      name: "OAuth 2.1",              applies_to: [backend, web-ssr, mobile-bff] }
+  - { id: auth-apikey,      name: "API key",                applies_to: [backend, edge, protocol] }
+  - { id: auth-oauth2-mfa,  name: "OAuth 2.1 + MFA",        applies_to: [backend, web-ssr, mobile-bff] }
+  - { id: auth-mtls,        name: "Mutual TLS (mTLS)",      applies_to: [backend, mobile-bff, protocol] }
+  - { id: auth-saml,        name: "SAML 2.0",               applies_to: [backend, web-ssr, mobile-bff] }
+  - { id: auth-oidc,        name: "OpenID Connect (OIDC)",  applies_to: [backend, web-ssr, mobile-bff] }
+  # ADDED
+  - { id: auth-oauth2-pkce, name: "OAuth 2.1 + PKCE",       applies_to: [mobile-app, web-static], note: "PKCE = proof-key for public clients (no secret)" }
+  - { id: auth-passkeys,    name: "Passkeys / WebAuthn",    applies_to: [web-ssr, web-static, mobile-app], note: "passwordless device-bound login" }
+  - { id: auth-all,         name: "Layered (defense-in-depth)", applies_to: [backend, web-ssr, mobile-bff] }
+
+# ── Observability — add mobile RUM + edge logs ────────────────────────
+# observability = how you see what the running app is doing.
+observability:
+  - { id: observability-none,          name: "None",                  applies_to: [backend, web-ssr, web-static, edge, mobile-app, mobile-bff, protocol] }
+  - { id: observability-otel,          name: "OpenTelemetry (OTel)",  applies_to: [backend, web-ssr, edge, mobile-bff, protocol] }
+  - { id: observability-prometheus,    name: "Prometheus",            applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  - { id: observability-datadog,       name: "Datadog",               applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  - { id: observability-grafana-stack, name: "Grafana stack (LGTM)",  applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  - { id: observability-elastic,       name: "Elastic (ELK)",         applies_to: [backend, web-ssr, mobile-bff, protocol] }
+  # ADDED
+  - { id: observability-mobile-rum,    name: "Mobile RUM (Sentry / Crashlytics)", applies_to: [mobile-app], note: "RUM = real-user monitoring: crashes + in-app perf" }
+  - { id: observability-edge-analytics, name: "Edge analytics + Workers logs",    applies_to: [edge], note: "Cloudflare Workers logs + analytics engine" }
+
+# ── Regions — Canada first, then add US + EU ──────────────────────────
+# region = where data may physically sit (feeds data_residency).
+regions:
+  # Canada (priority) — all provinces + territories
+  - { id: ca-bc, name: "British Columbia", country: canada }
+  - { id: ca-ab, name: "Alberta",          country: canada }
+  - { id: ca-sk, name: "Saskatchewan",     country: canada }
+  - { id: ca-mb, name: "Manitoba",         country: canada }
+  - { id: ca-on, name: "Ontario",          country: canada }
+  - { id: ca-qc, name: "Québec",           country: canada }
+  - { id: ca-nb, name: "New Brunswick",    country: canada }
+  - { id: ca-ns, name: "Nova Scotia",      country: canada }
+  - { id: ca-pe, name: "Prince Edward Island", country: canada }
+  - { id: ca-nl, name: "Newfoundland and Labrador", country: canada }
+  - { id: ca-yt, name: "Yukon",            country: canada }
+  - { id: ca-nt, name: "Northwest Territories", country: canada }
+  - { id: ca-nu, name: "Nunavut",          country: canada }
+  # ADDED — United States
+  - { id: us-east, name: "US East (N. Virginia)", country: us }
+  - { id: us-west, name: "US West (Oregon)",      country: us }
+  - { id: us-central, name: "US Central (Iowa)",  country: us }
+  # ADDED — European Union + UK
+  - { id: eu-west,    name: "EU West (Ireland)",     country: eu }
+  - { id: eu-central, name: "EU Central (Frankfurt)", country: eu }
+  - { id: uk-south,   name: "UK South (London)",      country: uk }
+
+# ── Integrations — add Canada-specific external systems ───────────────
+# integration = a connection to an outside system (CRM, payments, identity).
+integrations_canada:
+  - { id: int-gckey,        name: "GCKey / Sign-In Canada", category: identity, auth: oidc,   verticals: [government-and-public-sector] }
+  - { id: int-provincial-bcid, name: "BC Services Card / provincial IDP", category: identity, auth: oidc, verticals: [government-and-public-sector] }
+  - { id: int-interac,      name: "Interac e-Transfer",     category: payments, auth: api-key, verticals: [financial-services, retail-and-commerce] }
+  - { id: int-payments-canada, name: "Payments Canada (RTR)", category: payments, auth: mtls, verticals: [financial-services] }
+  - { id: int-cra,          name: "CRA (Canada Revenue Agency) APIs", category: government, auth: oauth2, verticals: [financial-services, legal-and-professional-services] }
+  - { id: int-canada-post,  name: "Canada Post (AddressComplete / shipping)", category: logistics, auth: api-key, verticals: [retail-and-commerce, transportation-and-logistics] }
+  - { id: int-ohip-olis,    name: "Ontario OLIS / provincial health", category: health, auth: mtls, verticals: [healthcare-and-life-sciences] }
+  - { id: int-fintrac-report, name: "FINTRAC reporting (FINTRAC API)", category: compliance, auth: mtls, verticals: [financial-services] }
+
+# Common global integrations — available to every industry, Canada-compatible.
+integrations_common:
+  - { id: int-stripe,     name: "Stripe",        category: payments, auth: api-key, verticals: [retail-and-commerce, financial-services] }
+  - { id: int-salesforce, name: "Salesforce",    category: crm,      auth: oauth2,  verticals: [retail-and-commerce, technology] }
+  - { id: int-twilio,     name: "Twilio (SMS)",  category: messaging, auth: api-key, verticals: [all] }
+  - { id: int-sendgrid,   name: "SendGrid (email)", category: messaging, auth: api-key, verticals: [all] }
+  - { id: int-s3,         name: "AWS S3 (object storage)", category: storage, auth: api-key, verticals: [all] }
+  - { id: int-servicenow, name: "ServiceNow (ITSM)", category: itsm,  auth: oauth2,  verticals: [technology, government-and-public-sector] }

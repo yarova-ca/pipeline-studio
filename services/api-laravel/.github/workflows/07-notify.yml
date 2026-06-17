@@ -18,8 +18,26 @@ permissions:
 
 jobs:
 
+  # ── Guard: secrets are not available in a job-level if, so detect the
+  # webhook here and expose it as an output the notify job gates on. ──
+  check-secret:
+    runs-on: ubuntu-24.04
+    outputs:
+      has-slack: ${{ steps.check.outputs.has-slack }}
+    steps:
+      - id: check
+        run: |
+          if [ -n "${SLACK_WEBHOOK_URL}" ]; then
+            echo "has-slack=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has-slack=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
   notify:
-    if: github.event.workflow_run.conclusion != 'skipped'
+    needs: check-secret
+    if: ${{ needs.check-secret.outputs.has-slack == 'true' && github.event.workflow_run.conclusion != 'skipped' }}
     runs-on: ubuntu-24.04
     steps:
       # ── DEFAULT: Slack ────────────────────────────────────────────

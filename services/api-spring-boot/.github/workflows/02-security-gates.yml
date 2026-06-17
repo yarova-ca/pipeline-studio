@@ -24,12 +24,12 @@ jobs:
   sca:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
-      - uses: actions/checkout@v4
       # ── DEFAULT: OWASP Dependency-Check ──────────────────────────────────────
       - name: SCA — OWASP Dependency-Check
         run: mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7
@@ -78,12 +78,12 @@ jobs:
   license-scan:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
-      - uses: actions/checkout@v4
       - name: License check
         run: mvn license:check
       #

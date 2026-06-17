@@ -6,6 +6,13 @@
     <RootNamespace>App</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Compliance catalog read at boot by Compliance.cs. Copied to the build
+         output so the loader finds it via AppContext.BaseDirectory in tests too. -->
+    <Content Include="../compliance/profiles.json" Link="compliance/profiles.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />

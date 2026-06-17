@@ -18,8 +18,27 @@ permissions:
 
 jobs:
 
+  # ── Guard: detect SLACK_WEBHOOK_URL (secrets unavailable in job-level if) ─
+  check-secret:
+    runs-on: ubuntu-24.04
+    outputs:
+      has-slack: ${{ steps.check.outputs.has-slack }}
+    steps:
+      - name: Check for SLACK_WEBHOOK_URL
+        id: check
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            echo "has-slack=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has-slack=false" >> "$GITHUB_OUTPUT"
+          fi
+
   notify:
-    if: github.event.workflow_run.conclusion != 'skipped'
+    # Gate whole job on SLACK_WEBHOOK_URL — skips cleanly when secret absent.
+    needs: check-secret
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' && needs.check-secret.outputs.has-slack == 'true' }}
     runs-on: ubuntu-24.04
     steps:
       # ── DEFAULT: Slack ────────────────────────────────────────────

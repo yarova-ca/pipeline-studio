@@ -19,11 +19,17 @@ permissions:
 jobs:
 
   notify:
-    if: github.event.workflow_run.conclusion != 'skipped'
+    # Gate the whole job on the SLACK_WEBHOOK_URL secret being set.
+    # secrets.* is not available in job-level if, so map it to an env var first.
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
     runs-on: ubuntu-24.04
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       # ── DEFAULT: Slack ────────────────────────────────────────────
-      - uses: slackapi/slack-github-action@v1
+      - name: Slack notify
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {{

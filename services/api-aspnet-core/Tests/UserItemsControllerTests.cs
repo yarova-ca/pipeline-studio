@@ -164,7 +164,7 @@ public class UserItemsControllerTests
         });
         await db.SaveChangesAsync();
 
-        var jwtService = new JwtService(new TestConfiguration(JwtSecret));
+        var jwtService = new JwtService(new TestConfiguration(JwtSecret), new App.Compliance());
         var token = jwtService.GenerateToken(userId, email, "Test User");
 
         var client = factory.CreateClient();

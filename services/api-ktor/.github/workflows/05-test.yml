@@ -20,22 +20,24 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: 'gradle'
-      - uses: actions/checkout@v4
       - name: Run tests
         run: ./gradlew test
 
       # ── OPTIONAL: Codecov coverage upload ─────────────────────────
-      # - uses: codecov/codecov-action@v4
+      # - if: ${{ secrets.CODECOV_TOKEN != '' }}
+      #   uses: codecov/codecov-action@v4
       #   with:
       #     token: ${{ secrets.CODECOV_TOKEN }}
 
       # ── OPTIONAL: SonarCloud (requires SONAR_TOKEN secret) ────────
-      # - name: SonarCloud analysis
+      # - if: ${{ secrets.SONAR_TOKEN != '' }}
+      #   name: SonarCloud analysis
       #   uses: SonarSource/sonarcloud-github-action@master
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

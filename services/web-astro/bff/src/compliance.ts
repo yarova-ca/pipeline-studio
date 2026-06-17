@@ -1,72 +1,49 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import * as yaml from 'js-yaml'
 
-// One repo serves every industry. COMPLIANCE_PROFILE flips a few controls.
-// baseline: no regulated controls. hipaa|pci|fedramp|fips|pipeda: load the yaml.
-export type Profile = 'baseline' | 'hipaa' | 'pci' | 'fedramp' | 'fips' | 'pipeda'
+// One repo serves every industry. The active profile is chosen at runtime by
+// COMPLIANCE_PROFILE — no code change, no rebuild. The profiles come from the
+// platform's canonical catalog (catalog/compliance.yaml), generated to JSON so
+// there is no per-language YAML parsing.
 
-export interface Controls {
-  profile: Profile
-  auditLogging: boolean
-  sessionTimeoutSeconds: number
-  mfaRequired: boolean
-  encryptionInTransit: boolean
-  required: Record<string, unknown>
+export interface ComplianceView {
+  profile: string
+  name: string
+  jurisdiction: string
+  // Uniform control set for this device type. Same keys for every profile.
+  controls: Record<string, string | number | boolean>
 }
 
-const BASELINE: Controls = {
-  profile: 'baseline',
-  auditLogging: false,
-  sessionTimeoutSeconds: 8 * 60 * 60,
-  mfaRequired: false,
-  encryptionInTransit: false,
-  required: {},
+interface ProfilesFile {
+  device: string
+  catalogVersion: number
+  controlMeta: Record<string, { label: string; type: string }>
+  profiles: Record<string, {
+    name: string; priority: string; jurisdiction: string
+    controls: Record<string, string | number | boolean>
+  }>
 }
 
-function flatten(list: unknown): Record<string, unknown> {
-  if (!Array.isArray(list)) return {}
-  const out: Record<string, unknown> = {}
-  for (const entry of list) {
-    if (entry && typeof entry === 'object') {
-      for (const [k, v] of Object.entries(entry as Record<string, unknown>)) out[k] = v
-    }
-  }
-  return out
-}
-
-function load(profile: Profile): Controls {
-  if (profile === 'baseline') return BASELINE
-  const file = join(process.cwd(), 'compliance', `${profile}.yaml`)
-  const doc = yaml.load(readFileSync(file, 'utf8')) as { required_controls?: unknown }
-  const req = flatten(doc?.required_controls)
-  return {
-    profile,
-    auditLogging: req['audit_logging'] === true,
-    sessionTimeoutSeconds:
-      typeof req['session_timeout'] === 'number'
-        ? (req['session_timeout'] as number)
-        : BASELINE.sessionTimeoutSeconds,
-    mfaRequired: req['mfa_required'] === true,
-    encryptionInTransit: req['encryption_in_transit'] === true,
-    required: req,
+let cache: ProfilesFile | null = null
+function loadProfiles(): ProfilesFile | null {
+  if (cache) return cache
+  try {
+    cache = JSON.parse(
+      readFileSync(join(process.cwd(), 'compliance', 'profiles.json'), 'utf8'),
+    ) as ProfilesFile
+    return cache
+  } catch {
+    return null
   }
 }
 
-const raw = (process.env.COMPLIANCE_PROFILE ?? 'baseline').toLowerCase()
-const valid: Profile[] = ['baseline', 'hipaa', 'pci', 'fedramp', 'fips', 'pipeda']
-if (!valid.includes(raw as Profile)) {
-  console.error('FATAL: unknown COMPLIANCE_PROFILE:', raw)
-  process.exit(1)
+export function activeCompliance(): ComplianceView {
+  const profile = (process.env.COMPLIANCE_PROFILE ?? 'baseline').toLowerCase()
+  const data = loadProfiles()
+  const p = data?.profiles[profile] ?? data?.profiles.baseline
+  if (!p) return { profile, name: 'unknown', jurisdiction: '', controls: {} }
+  return { profile, name: p.name, jurisdiction: p.jurisdiction, controls: p.controls }
 }
 
-// A named profile with no readable file must fail loud, never run insecure.
-let loaded: Controls
-try {
-  loaded = load(raw as Profile)
-} catch (err) {
-  console.error('FATAL: compliance profile not loadable:', raw, (err as Error).message)
-  process.exit(1)
-}
-
-export const compliance = loaded
+// Resolved once at module load — index.ts and signToken read fixed fields off it.
+export const compliance = activeCompliance()

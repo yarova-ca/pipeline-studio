@@ -67,13 +67,9 @@ class HealthController extends Controller
         $c = \App\Support\Compliance::active();
         return response()->json([
             'profile' => $c->profile,
-            'controls' => [
-                'auditLogging' => $c->auditLogging,
-                'sessionTimeoutSeconds' => $c->sessionTimeoutSeconds,
-                'mfaRequired' => $c->mfaRequired,
-                'encryptionInTransit' => $c->encryptionInTransit,
-            ],
-            'required' => $c->required,
+            'name' => $c->name,
+            'jurisdiction' => $c->jurisdiction,
+            'controls' => $c->controls,
         ]);
     }
 

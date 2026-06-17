@@ -14,13 +14,9 @@ export class ComplianceController {
   current() {
     return {
       profile: compliance.profile,
-      controls: {
-        auditLogging: compliance.auditLogging,
-        sessionTimeoutSeconds: compliance.sessionTimeoutSeconds,
-        mfaRequired: compliance.mfaRequired,
-        encryptionInTransit: compliance.encryptionInTransit,
-      },
-      required: compliance.required,
+      name: compliance.name,
+      jurisdiction: compliance.jurisdiction,
+      controls: compliance.controls,
     }
   }
 }

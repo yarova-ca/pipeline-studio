@@ -21,16 +21,19 @@ jobs:
   notify:
     if: github.event.workflow_run.conclusion != 'skipped'
     runs-on: ubuntu-24.04
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      # ── DEFAULT: Slack ────────────────────────────────────────────
+      # ── DEFAULT: Slack (skipped when SLACK_WEBHOOK_URL is unset) ───
       - uses: slackapi/slack-github-action@v1
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         with:
           payload: |
             {{
               "text": "Pipeline ${{ github.event.workflow_run.conclusion }}: Express 5.0 — ${{ github.event.workflow_run.head_sha }}"
             }}
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
       #
       # ── ALTERNATIVE: Microsoft Teams ──────────────────────────────
       # - uses: aliencube/microsoft-teams-actions@v0.8.0
